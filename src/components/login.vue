@@ -74,9 +74,9 @@ export default {
         loginPwd:this.formValidate.password
       }).then(res=>{
         if(res.code==200){
-          sessionStorage.setItem("token",res.data.token)
-          sessionStorage.setItem("userId",res.data.userId)
-          sessionStorage.setItem("userName",res.data.userName)
+          localStorage.setItem("token",res.data.token)
+          localStorage.setItem("userId",res.data.userId)
+          localStorage.setItem("userName",res.data.userName)
           this.$router.push({ name: "index"});
         }else{
           this.$Message.info("密码或账号不正确!")

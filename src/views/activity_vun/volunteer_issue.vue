@@ -20,11 +20,11 @@
                 <div class="upload" v-if='image == null'>
                     <div class="file" @click="()=>{ this.$refs.files.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                      <p>+</p>
+                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                     </div>
                 </div>
                 <img class="imgs" v-else :src="image"/>
-                <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
+                <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg()"/>
               </div>
             </li>
             <li>
@@ -42,8 +42,8 @@
               <Row>
                 <Col :span="12">
                   <DatePicker
-                    type="daterange"
-                    :value="date"
+                    type="datetimerange"
+                    v-model="dateOne"
                     @on-change="handleChange"
                     placement="bottom-end"
                     placeholder="Select date"
@@ -58,10 +58,11 @@
                 <Col span="12">
                   <DatePicker
                    @on-change="handleChangeTwo"
-                    type="daterange"
-                    placement="bottom-end"
-                    placeholder="Select date"
-                    style="width: 300px"
+                   v-model="dateTwo"
+                  type="datetimerange"
+                  placement="bottom-end"
+                  placeholder="Select date"
+                  style="width: 300px"
                   ></DatePicker>
                 </Col>
               </Row>
@@ -78,25 +79,25 @@
                  <Input v-model="judge" placeholder="Enter something..." @on-change='changeInput'/>
                  <div class="juge-drap" v-if="showJudge">
                    <div class="drap-item" v-for="(item,index) in judgeList" :key='index' @click="getOwn(index)">
-                     {{ item.name }}
+                     {{ item.result }}
                    </div>
                  </div>
               </div>
             </li>
             <li class="jobs">
               <span>招募岗位</span>
-              <p>
-                <span>志愿者-摄影岗位</span>
-                <span>10人</span>
+              <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)">
+                <span>{{ item.userPositionName }}</span>
+                <span>{{ item.recruitNum }}人</span>
                 <span>
                   详情
-                  <Icon type="md-close-circle" />
+                  <Icon type="ios-trash" @click.stop="deletUserPost(index)"/>
                 </span>
               </p>
             </li>
             <li>
-              <p class="adds">
-                <router-link :to='{name:"volunteer_compile"}'>+新增招募角色</router-link>
+              <p class="adds" @click="jump(-1)">
+              +新增招募角色
               </p>
             </li>
             <li>
@@ -129,13 +130,12 @@
             </li>
             <li>
               <span>活动分类</span>
-              <Select v-model="actveType" style="width:300px">
+              <Select v-model="args.coActCatTypeList[0].typeDicId" style="width:300px" :label-in-value='true'  @on-change='changeSelect'>
                 <Option
                   v-for="(item,index) in array"
-                  :value="index"
+                  :value="item.dicId"
                   :key="index"
-                  @on-change='changeSelect'
-                >{{ item.label }}</Option>
+                >{{ item.name }}</Option>
               </Select>
             </li>
             <li class="active-cost">
@@ -171,30 +171,34 @@
                       <i-input placeholder="请输入反馈内容" class="txt" v-model="item.detailText" type="textarea" :disabled="isDisb"/>
                     </div>
                     <div class="ls-item flex-between" v-else-if=' item.typeFlag === 1 '>
-                      <i-input placeholder="请输入单文本标题" v-model="item.detailText" :disabled="isDisb"/><img @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <i-input placeholder="请输入单文本标题" v-model="item.detailText" :disabled="isDisb"/>
+                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                     </div>
                     <div class="ls-item flex-between" v-else-if=' item.typeFlag === 6 '>
-                      <i-input placeholder="请输入多行文本标题" v-model="item.detailText" :disabled="isDisb"/><img @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <i-input placeholder="请输入多行文本标题" v-model="item.detailText" :disabled="isDisb"/>
+                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                     </div>
                     <div class="ls-item"  v-else-if='item.typeFlag === 3 '>
                       <div class="flex-between">
-                        <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb"/><img @click="deleItem(index,null)" v-if='!isDisb'/>
+                        <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb"/>
+                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                       </div>
                       <div class="item flex-between" v-for="(val,i) in item.arr" :key='i'>
                         <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
-                        <img @click="deleItem(index,i)" v-if='!isDisb'/>
+                       <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
                       </div>
-                      <div class="item-add" @click="addSignIput(index)" v-if='!isDisb'>+</div>
+                      <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
                     </div>
                     <div class="ls-item" v-else>
                       <div class="flex-between">
-                        <i-input placeholder="请输入多选标题" v-model="item.detailText" :disabled="isDisb"/><img @click="deleItem(index,null)" v-if='!isDisb'/>
+                        <i-input placeholder="请输入多选标题" v-model="item.detailText" :disabled="isDisb"/>
+                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                       </div>
                       <div class="item flex-between" v-for="(val,i) in item.arr" :key='i'>
                         <input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
-                        <img @click="deleItem(index,i)" v-if='!isDisb'/>
+                       <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
                       </div>
-                      <div class="item-add" @click="addSignIput(index)" v-if='!isDisb'>+</div>
+                      <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
                     </div>
                   </div>
                    <div class="add">
@@ -207,7 +211,7 @@
               </li>
               <li>
                 <span class="active-span">受益群体人数</span>
-                <Input v-model="value" placeholder="Enter something..." style="width: 200px" />
+                <Input v-model="args.memberGroupNum" placeholder="Enter something..." style="width: 200px" />
               </li>
             </ul>
             <p class="active-adds">
@@ -216,13 +220,13 @@
             <p class="active-adds">
               <Radio v-model="single">
                 我同意
-                <a @click="rule()">《活动发布规则》</a>
+                <a>《活动发布规则》</a>
               </Radio>
             </p>
           </div>
           <div class="btns">
-            <Button>存为草稿</Button>
-            <Button type="success" @click="sumbmit()" >提交申请</Button>
+            <Button @click="sumbmit(8)">存为草稿</Button>
+            <Button type="success" @click="sumbmit(1)" >提交申请</Button>
           </div>
         </div>
       </div>
@@ -231,33 +235,20 @@
 </template>
 
 <script>
-import {getActiveType,getActiveLimit,getActiveSign,getOrgTeam,getOrgId,orgimgdel,getAdr } from '@/request/api'
+import {getActiveType,getActiveLimit,getActiveSign,getOrgTeam,getOrgId,orgimgdel,saveActive } from '@/request/api'
 import { getAdressId } from '@/libs/utils'
 import wangeditor from'_c/wangeditor'
 import { upload }from '@/request/http' 
-
+import { filterNull } from '@/libs/utils'
   export default {
     data() {
         return {
             navigation1: {
                 head: "志愿者活动发布(志愿者)"
             },
-            cityList: [
-                {
-                    value: "New York",
-                    label: "New York"
-                },
-                {
-                    value: "London",
-                    label: "London"
-                }
-            ],
-            model1: "",
-            value: "",
-            animal: "",
-            switch1: false,
             single: true,
-            date:'',
+            dateTwo:[],
+            dateOne:[],
 
             feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
             isDisb:false,
@@ -283,7 +274,9 @@ import { upload }from '@/request/http'
             showJudge:false,
             zhaStart:null,
             zhaEnd:null,
+            isEdit:2,
             orgList:[],
+            ab:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'],
             args:{
               isNeedCertMould:null,
               name:null,
@@ -315,10 +308,21 @@ import { upload }from '@/request/http'
               voluYy: null,
               volunteerMsgFlag: null,
               isNeedVolu: null,
-              coActCatTypeList: null,
-              coActivityUserConfParamList: []
+              coActCatTypeList: [{
+                typeDicId: null,
+                typeDicName: null,
+                typeFlag: 3
+              }],
+              coActivityUserConfParamList: [],
+               sysId:2,
+              typeFlag:3,
+              isNeedVolu:0,
+              isMouldFlag:1,
+              isWorkAct:1,
+              channel:2,
             },
-            image:null
+            image:null,
+            once:false
         };
     },
 
@@ -330,10 +334,22 @@ import { upload }from '@/request/http'
       this.initData()
       this.getMap()
     },
-    mounted () {
-      console.log('2222222222')
-    },
     methods: {
+      deletUserPost(i){
+        this.$delete(this.args.coActivityUserConfParamList,i)
+      },
+      jump(i){
+        let data = {
+          zhaEnd:this.zhaEnd,
+          zhaStart:this.zhaStart,
+          isDisb:this.isDisb,
+          args:this.args,
+          judge:this.judge,
+          image:this.image
+        }
+        sessionStorage.setItem('data',JSON.stringify(data))
+        this.$router.push({ name: 'volunteer_compile',params: { i } })
+      },
       deleItem(i,m){
         let feed = this.feed
         if (m !== null) {
@@ -375,6 +391,19 @@ import { upload }from '@/request/http'
         this.train[0].detailText = html
       },
       initData(){
+        this.userId = localStorage.getItem("userId")
+        let data = JSON.parse(sessionStorage.getItem('data'))
+        if(data){
+          this.args = data.args
+          this.isDisb = data.isDisb
+          this.zhaStart = data.zhaStart
+          this.zhaEnd = data.zhaEnd 
+          this.judge = data.judge
+          this.dateOne = [data.args.startAt,data.args.endAt]
+          this.dateTwo = [data.zhaStart,data.zhaEnd]
+          this.image = data.image
+          console.log(this.dateOne,this.dateTwo)
+        }
         getOrgTeam().then(res => {
           this.orgList = res.data
         })
@@ -386,14 +415,15 @@ import { upload }from '@/request/http'
         let file = this.$refs.files.files[0]
          const dataForm = new FormData()
         dataForm.append('file', file)
-        orgimg(dataForm).then(res => {
-
+        upload(dataForm).then(res => {
+          var reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = (e) => {
+            this.image = e.target.result
+            this.args.pic = res.data
+          }
         })
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = (e) => {
-          this.image = e.target.result
-        }
+       
       },
       cancelImg(){
         orgimgdel({path:this.data.args.pic}).then(res => {
@@ -403,33 +433,35 @@ import { upload }from '@/request/http'
       handleChange(e){
         this.args.startAt = e[0]
         this.args.endAt = e[1]
+        this.dateOne = e
       },
       handleChangeTwo(e){
         this.zhaStart = e[0]
         this.zhaEnd = e[1]
+        this.dateTwo = e
       },
       changeInput(e){
         let param = e.data
         getOrgId({ orgId:this.args.orgId, param}).then(res => {
           this.judgeList = res.data
-          this.showJudge = res.date.length == 0?false:true
+          this.showJudge = res.data.length == 0?false:true
           this.args.ownerUserId = null
           this.args.ownerUserName = null
           this.args.ownerUserTel = null
         })
       },
       getOwn(i){
-        let item = this.data.judgeList[i]
+        let item = this.judgeList[i]
         this.judge = item.result,
         this.args.ownerUserId = item.userId,
         this.args.ownerUserName = item.userName,
         this.args.ownerUserTel = item.tel,
         this.showJudge = false
       },
-      changeSelect(i){
+      changeSelect(e){
         this.args.coActCatTypeList = [{
-          typeDicId: this.array[i].dicId,
-          typeDicName: this.array[i].name,
+          typeDicId: e.value,
+          typeDicName: e.label,
           typeFlag: 3
         }]
       },
@@ -437,11 +469,12 @@ import { upload }from '@/request/http'
           window.addEventListener('message', (event)=> {
             var loc = event.data;
             if (loc && loc.module == 'locationPicker') {
+              console.log(loc,"000000")
             let geocoder = new qq.maps.Geocoder({
                 complete:(result)=>{
                   let obj = result.detail.addressComponents
                   let arr = getAdressId(obj.province,obj.city,obj.district)
-                  console.log(arr,obj)
+                  console.log(arr,obj,"000000")
                   this.args.provinceId = arr[0]
                   this.args.cityId = arr[1]
                   this.args.districtId = arr[2]
@@ -455,13 +488,101 @@ import { upload }from '@/request/http'
             }
         }, false)
       },
-      sumbmit(){
-        saveActive().then(res => {
-
+      sumbmit(i){
+        let item = this.args
+        if(i==1){
+          if (this.single == false) {
+            this.$Message.warning('你没有同意发布规则')
+            return
+          } else if (item.name == null || item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.pay == null || item.detail == null || this.args.ownerUserName == null) {
+            this.$Message.warning('报名项填写不完整')
+            return
+          } else if (this.args.ownerUserId == null) {
+             this.$Message.warning('现在负责人没有对应的归属团队')
+            return
+          }
+        
+        }else{
+          if (item.name == null){
+            this.$Message.warning('至少填写活动名称')
+            return
+          }
+          if (item.isFeedback == 1 && item.coActivityUserConfParamList.length == 0){
+            this.$Message.warning('反馈填写，岗位必须填写')
+            return
+          }
+          if (item.isTrain == 1 &&item.coActivityUserConfParamList.length == 0) {
+            this.$Message.warning('培训填写，岗位必须填写')
+            return
+          }
+        }
+        if(this.once)return
+        this.once = true
+        let list = item.coActivityUserConfParamList
+        for (let i = 0, len = list.length; i < len; i++) {
+          list[i].coActivityItemList = this.dealSelect(list[i].coActivityItemList)
+        }
+        this.dealData(list, item.startAt)
+        item.coActivityUserConfParamList = list
+        if (this.isEdit !== 1){
+          item.status = i
+        }else{
+          item.activityId = this.data.activityId
+        }
+        item.userId = this.userId
+        if(i == 1){
+          item.releaseTime = this.getTime()
+        }
+        let obj = filterNull(item)
+        obj.title = obj.name
+        saveActive(obj).then(res => {
+          this.once = false
+          if(res.code == 200){
+            this.$Message.success('发布成功')
+          }
         })
       },
-      rule() {
-          this.$router.push({ name: "rule_text" });
+      dealData(list, startAt){
+        let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : []
+        let train = this.isTrain == 1 ? this.train : []
+        let zhaStart = this.zhaStart
+        let zhaEnd = this.zhaEnd 
+        for(let i=0,len=list.length;i<len;i++){
+          list[i].isFeedback = this.isFeedback
+          list[i].isTrain = this.isTrain
+          list[i].coDetailList = [...ls, ...train]
+          list[i].enrollEndtime = zhaEnd 
+          list[i].enrollStarttime = zhaStart
+          list[i].outrollStarttime = zhaStart
+          list[i].outrollEndtime = startAt
+        }
+      },
+      dealSelect(list){
+        if(list.length !== 0){
+          for (let i = 0, len = list.length; i < len; i++) {
+            if (list[i].arr) {
+              let arr = list[i].arr
+              let ar = this.ab
+              for (let m = 0, len = arr.length; m < len; m++) {
+                list[i][`answer${ar[m]}`] = arr[m].value
+              }
+            }
+          }
+          return list
+        }else{
+          return []
+        }
+    
+      },
+      getTime(){
+        const date = new Date()
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1
+        const day = date.getDate()
+        const hour = date.getHours()
+        const mine = date.getMinutes()
+        const ss = date.getSeconds()
+        return `${year}-${month}-${day} ${hour}:${mine}:00`
       },
       apply(){
           this.$router.push({name:'volunteer_apply'})
@@ -511,6 +632,8 @@ import { upload }from '@/request/http'
                   height: 50px;
                   line-height: 50px;
                   text-align: center;
+                  background: green;
+                  color: #fff;
                 }
               }
             }
@@ -682,9 +805,6 @@ import { upload }from '@/request/http'
     height: 150px;
     width: 300px;
     .cancel{
-      width: 30px;
-      height: 30px;
-      background: #000;
       position: absolute;
       top: 10px;
       right: 10px;

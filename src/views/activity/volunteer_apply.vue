@@ -108,6 +108,8 @@
 </template>
 
 <script>
+import { getSingList } from '@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -209,10 +211,35 @@ export default {
           time: "受益方",
           userstype: "admin"
         }
-      ]
+      ],
+
+      args:{
+        name:null,
+        validFlag:null,
+        createAt:null,
+        page:null
+      },
+      page:1,
+      sumPage:1,
     };
   },
-  methods: {}
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList(){
+      let args = this.args
+      args.page = {
+        page: this.page,
+        size:10
+      }
+      args = filterNull(args)
+      console.log(args,getSingList)
+      getSingList(args).then(res => {
+      
+      })
+    }
+  }
 };
 </script>
 

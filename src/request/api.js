@@ -5,7 +5,6 @@ import { get, post, posts, postdel, gets } from './http'
 
 
 
-
 //登陆
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
@@ -397,9 +396,10 @@ export const signPost = p => posts('/activity-manage/apply/sign/jobs', p) //招�
 
 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag
-export const getActiveLimit = p => post('/volunteer-manager/apply/sign/limits', p)// 活动限制项
+export const getActiveLimit = p => posts('/volunteer-manager/apply/sign/limits', p)// 活动限制项
 export const getActiveSign = p => get('/volunteer-manager/queryActivityItem', p) //活动报名项
 export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询归属团队
-export const saveActive = p => post('/volunteer-manager/saveVolunteerActivity', p)//保存
-export const getOrgId = p => get("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
-export const getGood = p => post("/volunteer-manager/applySigenFirst", p)//优先
+export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity',p)//保存
+export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
+export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
+export const getSingList = p => posts("/volunteer-manager/queryCoItem",p)
