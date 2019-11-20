@@ -264,7 +264,8 @@
           </Menu>
         </Header>
         <Layout>
-          <Sider hide-trigger :style="{position: 'fixed','padding-top': '73px', height: '100vh', left: 0, overflow: 'auto'}">
+          <!-- :style="{position: 'fixed','padding-top': '73px', height: '100vh', left: 0, overflow: 'auto'}" -->
+          <Sider hide-trigger>
             <div class="toggle-button">|||</div>
             <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
               <Submenu :name="index+1" v-for="(item, index) in this.$router.options.routes" :key="index" v-if="item.meta.title">
@@ -415,16 +416,16 @@ export default {
 }
 .main-content {
   padding: 0 20px 20px;
-  padding-left: 200px;
-  padding-top: 73px;
+  // padding-left: 200px;
+  // padding-top: 73px;
 }
-.ivu-layout-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 999;
-}
+// .ivu-layout-header {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   z-index: 999;
+// }
 .ivu-layout .ivu-layout-header,
 .ivu-layout-header .ivu-menu {
   // position:relative;
