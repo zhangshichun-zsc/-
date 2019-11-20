@@ -9,334 +9,372 @@
           <li>
             <span>招募类型</span>
             <div>
-              <i-select :model.sync="model1" style="width:200px">
-                <i-option
-                  v-for="(item,index) in cityList"
-                  :value="item.value"
+              <Select v-model="oneRole.roleName" style="width:200px">
+                <Option
+                  v-for="(item,index) in signTypeList"
+                  :value="item.name"
                   :key="index"
-                >{{ item.label }}</i-option>
-              </i-select>
-              <i-input :value.sync="value" placeholder="请输入..." style="width: 200px"></i-input>
+                  @click.native="getType(item)"
+                >{{ item.name }}</Option>
+              </Select>
+              <Select v-model="oneRole.positionName" style="width:200px">
+                <Option
+                  v-for="(item,index) in signPostList"
+                  :value="item.name"
+                  :key="index"
+                  @click.native="getPost(item)"
+                >{{ item.name }}</Option>
+              </Select>
             </div>
           </li>
           <li>
             <span>岗位职责</span>
-            <i-input type="textarea" placeholder="请输入..." style="width: 600px"></i-input>
+            <Input
+              type="textarea"
+              v-model="oneRole.positionComments"
+              placeholder="请输入..."
+              style="width: 600px"
+            ></Input>
           </li>
           <li>
             <span>模式</span>
-            <Checkbox-group :model.sync="fruit">
-              <Checkbox value="先到先得">先到先得</Checkbox>
-              <Checkbox value="预约型">预约型</Checkbox>
+            <Checkbox-group v-model="oneRole.zmType">
+              <Checkbox label="1">先到先得</Checkbox>
+              <Checkbox label="2">预约型</Checkbox>
             </Checkbox-group>
           </li>
-          <li>
-            <span>票价</span>
-            <div class="tables">
-              <table>
-                <tr>
-                  <th>票价</th>
-                  <th>VIP价</th>
-                  <th>数量</th>
-                  <th>可预约数量</th>
-                  <th>可获得积分</th>
-                  <th>操作</th>
-                </tr>
-                <tr>
-                  <td>
-                    <i-input :value.sync="value" placeholder="请输入..." style="width: 90px"></i-input>
-                  </td>
-                  <td>
-                    <i-input :value.sync="value" placeholder="请输入..." style="width: 90px"></i-input>
-                  </td>
-                  <td>
-                    <i-input :value.sync="value" placeholder="请输入..." style="width: 90px"></i-input>
-                  </td>
-                  <td>
-                    <i-input :value.sync="value" placeholder="请输入..." style="width: 90px"></i-input>
-                  </td>
-                  <td>
-                    <i-input :value.sync="value" placeholder="请输入..." style="width: 90px"></i-input>
-                  </td>
-                  <td>
-                    <Icon type="ios-close-circle" />
-                  </td>
-                </tr>
-              </table>
-              <div class="audit">
-                <span class="audit-span">是否审核</span>
-                <i-switch v-model="switch1" @on-change="change" />
-                <span>报名后需要我审核</span>
-              </div>
-            </div>
-          </li>
-          <li>
-            <span>退款设置</span>
-            <div class="refund">
-              <p>
-                支持退款
-                <i-switch @on-change="change"></i-switch>
-              </p>
-              <div class="refund-div">
-                <RadioGroup v-model="animal" vertical>
-                  <Radio label="金斑蝶">活动结束前均可退款</Radio>
-                  <Radio label="爪哇犀牛">
-                    活动结束
-                    <Input v-model="value" placeholder="Enter something..." style="width: 80px" />天可退款
-                  </Radio>
-                </RadioGroup>
-              </div>
-            </div>
-          </li>
-          <li>
-            <span>是否发放补助</span>
-            <div class="li-subsidy">
-              <RadioGroup v-model="animal">
-                <Radio label="爪哇犀牛">是</Radio>
-                <Radio label="金斑蝶">否</Radio>
-              </RadioGroup>
-              <div class="li-subsidys">
-                <p>
-                  <span>补助类型：</span>
+          <li v-if="oneRole.zmType==2">
+            <ul>
+              <li>
+                <span>票价</span>
+                <div class="tables">
+                  <table>
+                    <tr>
+                      <th>票价</th>
+                      <th>VIP价</th>
+                      <th>数量</th>
+                      <th>可预约数量</th>
+                      <th>可获得积分</th>
+                      <th>操作</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Input :value.sync="value" placeholder="请输入..." style="width: 90px"></Input>
+                      </td>
+                      <td>
+                        <Input :value.sync="value" placeholder="请输入..." style="width: 90px"></Input>
+                      </td>
+                      <td>
+                        <Input :value.sync="value" placeholder="请输入..." style="width: 90px"></Input>
+                      </td>
+                      <td>
+                        <Input :value.sync="value" placeholder="请输入..." style="width: 90px"></Input>
+                      </td>
+                      <td>
+                        <Input :value.sync="value" placeholder="请输入..." style="width: 90px"></Input>
+                      </td>
+                      <td>
+                        <Icon type="ios-close-circle" />
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="audit">
+                    <span class="audit-span">是否审核</span>
+                    <i-switch v-model="switch1" @on-change="change" />
+                    <span>报名后需要我审核</span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span>退款设置</span>
+                <div class="refund">
+                  <p>
+                    支持退款
+                    <i-switch @on-change="change"></i-switch>
+                  </p>
+                  <div class="refund-div">
+                    <RadioGroup v-model="animal" vertical>
+                      <Radio label="金斑蝶">活动结束前均可退款</Radio>
+                      <Radio label="爪哇犀牛">
+                        活动结束
+                        <Input
+                          v-model="value"
+                          placeholder="Enter something..."
+                          style="width: 80px"
+                        />天可退款
+                      </Radio>
+                    </RadioGroup>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span>是否发放补助</span>
+                <div class="li-subsidy">
                   <RadioGroup v-model="animal">
-                    <Radio label="爪哇犀牛">现金</Radio>
-                    <Radio label="金斑蝶">物质</Radio>
+                    <Radio label="爪哇犀牛">是</Radio>
+                    <Radio label="金斑蝶">否</Radio>
                   </RadioGroup>
-                </p>
-                <p>
-                  <span>物资类型：</span>
-                  <Input v-model="value" placeholder="Enter something..." style="width: 150px" />
-                  <Select v-model="model1" style="width:100px" v-if="subsidys">
-                    <Option
-                      v-for="item in cityList"
-                      :value="item.value"
-                      :key="item.value"
-                    >{{ item.label }}</Option>
-                  </Select>
-                  <Input
-                    v-model="value"
-                    placeholder="Enter something..."
-                    style="width: 100px"
-                    v-if="subsidys"
-                  />
-                </p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <span>限制设置</span>
-            <div class="impose">
-              <table>
-                <tr>
-                  <th>限制项</th>
-                  <th>限制项条件</th>
-                  <th>操作</th>
-                </tr>
-                <tr>
-                  <td>年龄</td>
-                  <td>
-                    <Input v-model="value" placeholder="Enter something..." style="width: 70px" />
-                    <b>——</b>
-                    <Input v-model="value" placeholder="Enter something..." style="width: 70px" />
-                  </td>
-                  <td>
-                    <Icon type="ios-close-circle" />
-                  </td>
-                </tr>
-              </table>
-              <div class="impose-text">
-                <a>+新增限制条件</a>
-              </div>
-              <div class="impose-div">
-                <span>常用限制项</span>
-                <Button>是否爸爸陪同</Button>
-                <Button>VIP专属</Button>
-                <Button>性别</Button>
-              </div>
-            </div>
-          </li>
-          <li>
-            <span>优先限制</span>
-            <div class="impose">
-              <table>
-                <tr>
-                  <th>优先级别</th>
-                  <th>优先项</th>
-                  <th>操作</th>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>VIP优先</td>
-                  <td>
-                    <Icon type="ios-close-circle" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>未参加优先</td>
-                  <td>
-                    <Icon type="ios-close-circle" />
-                  </td>
-                </tr>
-              </table>
-              <div class="impose-text">
-                <a>+新增优先条件</a>
-              </div>
-              <div class="impose-div">
-                <span>优先规则项</span>
-                <Button>隔1次参加</Button>
-                <Button>隔2次参加</Button>
-                <Button class="takes">参与过往期活动</Button>
-                <Button>爸爸陪同</Button>
-              </div>
-            </div>
-          </li>
-          <li v-if="others" class="other"><span>是否自动筛选替补人员</span><RadioGroup v-model="animal">
-        <Radio label="金斑蝶">是</Radio>
-        <Radio label="爪哇犀牛">否</Radio>
-
-    </RadioGroup></li>
-          <li v-if="others" class="other"><span>是否发放志愿证书</span><RadioGroup v-model="animal">
-        <Radio label="金斑蝶">是</Radio>
-        <Radio label="爪哇犀牛">否</Radio>
-
-    </RadioGroup></li>
-          <li>
-            <span>报名时间</span>
-            <Row>
-              <Col span="8">
-                <DatePicker
-                  type="daterange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width: 200px"
-                ></DatePicker>
-              </Col>
-            </Row>
-          </li>
-          <li>
-            <span>集合时间</span>
-            <Row>
-              <Col span="12">
-                <DatePicker
-                  type="daterange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width: 200px"
-                ></DatePicker>
-              </Col>
-            </Row>
-          </li>
-          <li>
-            <span>集合地址</span>
-            <Select v-model="model1" style="width:200px">
-              <Option
-                v-for="item in cityList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-            <Select v-model="model1" style="width:200px">
-              <Option
-                v-for="item in cityList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-            <Select v-model="model1" style="width:200px">
-              <Option
-                v-for="item in cityList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-          </li>
-          <li>
-            <span>取消时间</span>
-            <Row>
-              <Col span="12">
-                <DatePicker
-                  type="daterange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width: 200px"
-                ></DatePicker>
-              </Col>
-            </Row>
-          </li>
-          <li>
-            <span>报名项设置</span>
-            <div class="impose">
-              <table>
-                <tr>
-                  <th>报名项名称</th>
-                  <th>是否填写</th>
-                  <th>操作</th>
-                </tr>
-                <tr class="company">
-                  <td>公司</td>
-                  <td>
-                    <Radio v-model="single">必填</Radio>
-                  </td>
-                  <td>
-                    <Icon type="ios-close-circle" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Input v-model="value" placeholder="Enter something..." style="width: 100px" />
-                  </td>
-                  <td>
-                    <Radio v-model="single">必填</Radio>
-                  </td>
-                  <td>
-                    <Icon type="ios-close-circle" />
-                  </td>
-                </tr>
-              </table>
-              <div class="apply">
+                  <div class="li-subsidys">
+                    <p>
+                      <span>补助类型：</span>
+                      <RadioGroup v-model="animal">
+                        <Radio label="爪哇犀牛">现金</Radio>
+                        <Radio label="金斑蝶">物质</Radio>
+                      </RadioGroup>
+                    </p>
+                    <p>
+                      <span>物资类型：</span>
+                      <Input v-model="value" placeholder="Enter something..." style="width: 150px" />
+                      <Select v-model="model1" style="width:100px" v-if="subsidys">
+                        <Option
+                          v-for="item in cityList"
+                          :value="item.value"
+                          :key="item.value"
+                        >{{ item.label }}</Option>
+                      </Select>
+                      <Input
+                        v-model="value"
+                        placeholder="Enter something..."
+                        style="width: 100px"
+                        v-if="subsidys"
+                      />
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span>限制设置</span>
+                <div class="impose">
+                  <table>
+                    <tr>
+                      <th>限制项</th>
+                      <th>限制项条件</th>
+                      <th>操作</th>
+                    </tr>
+                    <tr>
+                      <td>年龄</td>
+                      <td>
+                        <Input
+                          v-model="value"
+                          placeholder="Enter something..."
+                          style="width: 70px"
+                        />
+                        <b>——</b>
+                        <Input
+                          v-model="value"
+                          placeholder="Enter something..."
+                          style="width: 70px"
+                        />
+                      </td>
+                      <td>
+                        <Icon type="ios-close-circle" />
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="impose-text">
+                    <a>+新增限制条件</a>
+                  </div>
+                  <div class="impose-div">
+                    <span>常用限制项</span>
+                    <Button>是否爸爸陪同</Button>
+                    <Button>VIP专属</Button>
+                    <Button>性别</Button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span>优先限制</span>
+                <div class="impose">
+                  <table>
+                    <tr>
+                      <th>优先级别</th>
+                      <th>优先项</th>
+                      <th>操作</th>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>VIP优先</td>
+                      <td>
+                        <Icon type="ios-close-circle" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>未参加优先</td>
+                      <td>
+                        <Icon type="ios-close-circle" />
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="impose-text">
+                    <a>+新增优先条件</a>
+                  </div>
+                  <div class="impose-div">
+                    <span>优先规则项</span>
+                    <Button>隔1次参加</Button>
+                    <Button>隔2次参加</Button>
+                    <Button class="takes">参与过往期活动</Button>
+                    <Button>爸爸陪同</Button>
+                  </div>
+                </div>
+              </li>
+              <li v-if="others" class="other">
+                <span>是否自动筛选替补人员</span>
                 <RadioGroup v-model="animal">
-                  <Radio label="金斑蝶">
-                    <Input v-model="value" placeholder="1" style="width: 100px" />
-                  </Radio>
-                  <Radio label="爪哇犀牛">
-                    <Input v-model="value" placeholder="2" style="width: 100px" />
-                  </Radio>
-                  <Radio label="印度黑羚">
-                    <Input v-model="value" placeholder="3" style="width: 100px" />
-                  </Radio>
-                  <Radio label="印度黑羚">
-                    <Input v-model="value" placeholder="4" style="width: 100px" />
-                  </Radio>
+                  <Radio label="金斑蝶">是</Radio>
+                  <Radio label="爪哇犀牛">否</Radio>
                 </RadioGroup>
-                <div class="adds">
-                  <a>新增报名项</a>
+              </li>
+              <li v-if="others" class="other">
+                <span>是否发放志愿证书</span>
+                <RadioGroup v-model="animal">
+                  <Radio label="金斑蝶">是</Radio>
+                  <Radio label="爪哇犀牛">否</Radio>
+                </RadioGroup>
+              </li>
+              <li>
+                <span>报名时间</span>
+                <Row>
+                  <Col span="8">
+                    <DatePicker
+                      type="daterange"
+                      placement="bottom-end"
+                      placeholder="Select date"
+                      style="width: 200px"
+                    ></DatePicker>
+                  </Col>
+                </Row>
+              </li>
+              <li>
+                <span>集合时间</span>
+                <Row>
+                  <Col span="12">
+                    <DatePicker
+                      type="daterange"
+                      placement="bottom-end"
+                      placeholder="Select date"
+                      style="width: 200px"
+                    ></DatePicker>
+                  </Col>
+                </Row>
+              </li>
+              <li>
+                <span>集合地址</span>
+                <Select v-model="model1" style="width:200px">
+                  <Option
+                    v-for="item in cityList"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+                <Select v-model="model1" style="width:200px">
+                  <Option
+                    v-for="item in cityList"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+                <Select v-model="model1" style="width:200px">
+                  <Option
+                    v-for="item in cityList"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+              </li>
+              <li>
+                <span>取消时间</span>
+                <Row>
+                  <Col span="12">
+                    <DatePicker
+                      type="daterange"
+                      placement="bottom-end"
+                      placeholder="Select date"
+                      style="width: 200px"
+                    ></DatePicker>
+                  </Col>
+                </Row>
+              </li>
+              <li>
+                <span>报名项设置</span>
+                <div class="impose">
+                  <table>
+                    <tr>
+                      <th>报名项名称</th>
+                      <th>是否填写</th>
+                      <th>操作</th>
+                    </tr>
+                    <tr class="company">
+                      <td>公司</td>
+                      <td>
+                        <Radio v-model="single">必填</Radio>
+                      </td>
+                      <td>
+                        <Icon type="ios-close-circle" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Input
+                          v-model="value"
+                          placeholder="Enter something..."
+                          style="width: 100px"
+                        />
+                      </td>
+                      <td>
+                        <Radio v-model="single">必填</Radio>
+                      </td>
+                      <td>
+                        <Icon type="ios-close-circle" />
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="apply">
+                    <RadioGroup v-model="animal">
+                      <Radio label="金斑蝶">
+                        <Input v-model="value" placeholder="1" style="width: 100px" />
+                      </Radio>
+                      <Radio label="爪哇犀牛">
+                        <Input v-model="value" placeholder="2" style="width: 100px" />
+                      </Radio>
+                      <Radio label="印度黑羚">
+                        <Input v-model="value" placeholder="3" style="width: 100px" />
+                      </Radio>
+                      <Radio label="印度黑羚">
+                        <Input v-model="value" placeholder="4" style="width: 100px" />
+                      </Radio>
+                    </RadioGroup>
+                    <div class="adds">
+                      <a>新增报名项</a>
+                    </div>
+                    <div class="apply-btn">
+                      <p class="apply-btn-p">
+                        <span>常用报名项</span>
+                        <Button>用餐人数</Button>
+                        <Button>出行方式</Button>
+                        <Button>徒步几公里</Button>
+                        <Button>备注</Button>
+                      </p>
+                      <p class="apply-btn-p">
+                        <span>自定义报名项</span>
+                        <Button>+单行文本</Button>
+                        <Button>+多行文本</Button>
+                        <Button>+单选题</Button>
+                        <Button>+多选题</Button>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div class="apply-btn">
-                  <p class="apply-btn-p">
-                    <span>常用报名项</span>
-                    <Button>用餐人数</Button>
-                    <Button>出行方式</Button>
-                    <Button>徒步几公里</Button>
-                    <Button>备注</Button>
-                  </p>
-                  <p class="apply-btn-p">
-                    <span>自定义报名项</span>
-                    <Button>+单行文本</Button>
-                    <Button>+多行文本</Button>
-                    <Button>+单选题</Button>
-                    <Button>+多选题</Button>
-                  </p>
+              </li>
+              <li>
+                <span>群二维码</span>
+                <div class="imgess">
+                  <img />
                 </div>
-              </div>
-            </div>
+              </li>
+            </ul>
           </li>
-          <li>
-            <span>群二维码</span>
-            <div class="imgess">
-              <img />
-            </div>
-          </li>
+
           <li>
             <span>培训内容</span>
             <i-switch v-model="switch1" @on-change="change" />
@@ -389,19 +427,27 @@
           </li>
         </ul>
       </div>
-      <div class="btns-foot"><Button>取消</Button><Button class="active">保存</Button></div>
+      <div class="btns-foot">
+        <Button>取消</Button>
+        <Button class="active">保存</Button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { signType, signPost } from "../../request/api";
+
 export default {
   data() {
     return {
+      oneRole: {},
+      signTypeList: [],
+      signPostList: [],
       navigation1: {
         head: "编辑招募报名项-受益方(会员)"
       },
-      animal:'',
+      animal: "",
       cityList: [
         {
           value: "beijing",
@@ -422,32 +468,58 @@ export default {
       others: true,
       // 富文本editor
       editor1: {
-        contents:''
+        contents: ""
       }
     };
   },
   mounted() {
-    var editor1 = new E('.editorElem1');
-    var editor2 = new E('.editorElem2');
-    editor1.customConfig.onchange = (html) => {
-      this.editorContent1 = html
-    };
-    editor2.customConfig.onchange = (html) => {
-      this.editorContent2 = html
-    };
-    editor1.create()
-    editor2.create()
+    // var editor1 = new E('.editorElem1');
+    // var editor2 = new E('.editorElem2');
+    // editor1.customConfig.onchange = (html) => {
+    //   this.editorContent1 = html
+    // };
+    // editor2.customConfig.onchange = (html) => {
+    //   this.editorContent2 = html
+    // };
+    // editor1.create()
+    // editor2.create()
   },
   components: {},
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getSignType();
+  },
 
   methods: {
     change(status) {
       this.$Message.info("开关状态：" + status);
-    }
+    },
+    //招募类型
+    getSignType() {
+      signType({}).then(res => {
+        console.log(res);
+        this.signTypeList = res.data.roles;
+      });
+    },
+    //招募类型
+    getType(val){
+      this.oneRole.roleName = val.name
+      this.oneRole.roleId = val.roleId
+      signPost({
+        roleId:val.roleId, 
+        name:val.name
+      }).then(res => {
+        console.log(res);
+        this.signPostList = res.data.voluJobs;
+      });
+    },
+    //招募岗位
+    getPost(val){
+      this.oneRole.positionName = val.name
+      this.oneRole.userPosition = val.roleId
+    },
   }
 };
 </script>
@@ -557,7 +629,7 @@ export default {
               border: #e4e4e4 1px solid;
             }
             td {
-              font-size:14px;
+              font-size: 14px;
               text-align: center;
               height: 50px;
               line-height: 50px;
@@ -636,21 +708,21 @@ export default {
           }
         }
 
-
-       .video,.photo{
+        .video,
+        .photo {
           height: 150px;
           width: 300px;
           background: #e4e4e4;
         }
       }
 
-      .rich-text{
+      .rich-text {
         display: flex;
         flex-direction: column;
-        span{
+        span {
           height: 30px;
         }
-        .rich-texts{
+        .rich-texts {
           height: 240px;
           width: 600px;
           background: #e4e4e4;
@@ -659,26 +731,26 @@ export default {
       }
     }
   }
-  .btns-foot{
+  .btns-foot {
     display: flex;
     justify-content: center;
     margin-top: 40px;
-    Button{
+    button {
       margin: 0 10px;
       width: 140px;
     }
-    .active{
+    .active {
       background: #339933;
       color: #ffffff;
     }
   }
 }
-.ivu-select-default{
-  margin-right:10px;
+.ivu-select-default {
+  margin-right: 10px;
 }
-.other{
-  span{
-    margin-right:20px;
+.other {
+  span {
+    margin-right: 20px;
   }
 }
 </style>
