@@ -1,3 +1,25 @@
+import { userExprotUrl } from "@/request/http";
+
+const urlEncode = function (param, key, encode) {
+  if (param == null) return '';
+  var paramStr = '';
+  var t = typeof (param);
+  if (t == 'string' || t == 'number' || t == 'boolean') {
+    paramStr += '&' + key + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
+  } else {
+    for (var i in param) {
+      var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i);
+      paramStr += urlEncode(param[i], k, encode);
+    }
+  }
+  return paramStr;
+}
+
+const userExprot = function (parame) {
+  let exportUrl = userExprotUrl + "?" + urlEncode(parame).substr(1)
+  window.open(exportUrl, '_blank')
+}
+
 export default {
   formatDate: function (timestamp) {
     let date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -61,7 +83,10 @@ export default {
       }
     }
     return obj
-  }
+  },
 
+  urlEncode,
+  userExprot
 
 }
+
