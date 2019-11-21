@@ -39,8 +39,8 @@
                 <Row>
                   <Col span="12">
                     <Date-picker
-                      format="yyyy-MM-dd"
-                      type="daterange"
+                      type="datetimerange" 
+                      format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择日期"
                       style="width: 300px"
@@ -116,7 +116,7 @@
           <div class="select">
             <span class="select-template">活动分类</span>
             <Select v-model="batch.actTypeName" style="width:340px">
-              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name">{{ item.name }}</Option>
+              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name" @click.native="getActiveTypeId(item)">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="select">
@@ -145,7 +145,8 @@
                   <span class="same_style">活动时间</span>
                   <i-col span="12">
                     <Date-picker
-                      type="daterange"
+                      type="datetimerange" 
+                      format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择日期"
                       style="width: 200px"
@@ -155,27 +156,7 @@
                 </li>
                 <li>
                   <span class="same_style">活动地址</span>
-                  <Select v-model="model1" style="width:200px">
-                    <Option
-                      v-for="item in part"
-                      :value="item.name"
-                      :key="item.name"
-                    >{{ item.name }}</Option>
-                  </Select>
-                  <Select v-model="model1" style="width:200px">
-                    <Option
-                      v-for="item in part"
-                      :value="item.name"
-                      :key="item.name"
-                    >{{ item.name }}</Option>
-                  </Select>
-                  <Select v-model="model1" style="width:200px">
-                    <Option
-                      v-for="item in part"
-                      :value="item.name"
-                      :key="item.name"
-                    >{{ item.name }}</Option>
-                  </Select>
+                  <span>请选择</span>
                 </li>
                 <li>
                   <span class="same_style">出行方式</span>
@@ -226,11 +207,12 @@
                 </li>
                 <li>
                   <span class="same_style">活动标签</span>
-                  <Select v-model="model1" style="width:340px" placeholder="请选择活动标签">
+                  <Select v-model="batch.actLabelName" style="width:340px" placeholder="请选择活动标签">
                     <Option
                       v-for="item in batchItemList.labels"
                       :value="item.name"
                       :key="item.name"
+                      @click.native="getActiveLabels(item)"
                     >{{ item.name }}</Option>
                   </Select>
                 </li>
@@ -241,7 +223,7 @@
             <p class="details-head">
               <span>活动详情</span>
             </p>
-            <Input type="textarea" :autosize="{minRows: 5,maxRows: 5}"></Input>
+            <wangeditor :labels="editor1" id="ed1"></wangeditor>
           </div>
 
           <div class="recruit">
@@ -290,20 +272,20 @@
               <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
             </RadioGroup>
             <i-col span="12" v-if='releaseTimeSelf'>
-              <Date-picker type="date" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
             </i-col>
           </div>
           <div class="button-food">
-            <i-button>预览</i-button>
-            <i-button>上一步</i-button>
-            <i-button @click="nexttwo()">下一步</i-button>
-            <i-button>存为草稿</i-button>
+            <Button>预览</Button>
+            <Button>上一步</Button>
+            <Button @click="nexttwo()">下一步</Button>
+            <Button @click="draft">存为草稿</Button>
           </div>
         </div>
       </div>
     </div>
     <div class="btn" v-if="selects">
-      <Button class="table-btn" @click="submit">存为草稿</Button>
+      <Button class="table-btn" @click="draft">存为草稿</Button>
       <Button class="table-btn" @click="nextone()">下一步</Button>
     </div>
 
@@ -369,6 +351,9 @@
         <Button class="table-btn active" @click="save()">保存</Button>
       </p>
     </div>
+    <div class="add" v-if="isAddRole">
+      <role></role>
+    </div>
     <!-- 第三步 -->
     <div class="content-three" v-if="three">
       <div class="main1">
@@ -393,8 +378,8 @@
             <Row>
               <Col span="12">
                 <Date-picker
-                  format="yyyy-MM-dd"
-                  type="daterange"
+                  type="datetimerange" 
+                  format="yyyy-MM-dd HH:mm"
                   placement="bottom-end"
                   placeholder="选择日期"
                   style="width: 300px"
@@ -475,8 +460,8 @@
         </p>
         <p class="btn-three">
           <Button>上一步</Button>
-          <Button>存为草稿</Button>
-          <Button type="success" disabled>提交审核</Button>
+          <Button @click="draft">存为草稿</Button>
+          <Button type="success" @click="submit">提交审核</Button>
         </p>
       </div>
     </div>
@@ -484,22 +469,15 @@
 </template>
 
 <script>
-import { projectItem, partner,signType,signPost,batchItem,leader,projectApproval } from "../../request/api";
+import { projectItem, partner,batchItem,leader,projectApproval } from "@/request/api";
+
+import role from "./compile_beneficiary.vue"
+
 export default {
   data() {
     return {
       projectMsg: {
-        categoryName: "",
-        categoryId: "",
-        budget: "",
-        startT: "",
-        endT: "",
-        batchName: "",
-        batchObjective: "",
-        partnerList: [],
-        orgName: "",
-        orgId: "",
-        recruitType: ""
+        partnerList: []
       },
       partner: {
         partName: "",
@@ -532,7 +510,6 @@ export default {
       itemsList: [],
       part: [],
       batchItemList:[],
-      signTypeList:[],
       editorContent1: "",
       navigation1: {
         head: "活动立项"
@@ -552,11 +529,13 @@ export default {
       tripSelf:false,
       addLeader:false,
       addWorker:false,
-      releaseTimeSelf:false
+      releaseTimeSelf:false,
+      isAddRole:false,
+      editor1:''
     };
   },
 
-  components: {},
+  components: {role},
 
   computed: {},
 
@@ -564,7 +543,6 @@ export default {
     this.getProjectItem();
     this.getPartner();
     this.getBatchItem();
-    this.getSignType()
   },
 
   methods: {
@@ -591,13 +569,6 @@ export default {
       }).then(res => {
         console.log(res);
         this.batchItemList = res.data
-      });
-    },
-    //招募类型
-    getSignType(){
-      signType({}).then(res => {
-        console.log(res);
-        this.signTypeList = res.data
       });
     },
     //新增合作方
@@ -690,6 +661,16 @@ export default {
     addAgrees() {
       this.partner.agrees.push(this.agrees);
     },
+    //活动分类
+    getActiveTypeId(val){
+      this.batch.actTypeName = val.name
+      this.batch.actTypeId = val.dicId
+    },
+    //活动标签
+    getActiveLabels(val){
+      this.batch.actLabelName = val.name
+      this.batch.actLabelId = val.dicId
+    },
     //活动日期
     getBatchDate(e){
       this.batch.startT = e[0];
@@ -759,7 +740,7 @@ export default {
     },
     //新增招募角色
     addRoles(){
-      
+      this.isAddRole = true
     },
     //删除工作人员
     deleteWorker(i){
@@ -826,6 +807,24 @@ export default {
     //提交
     submit() {
       console.log(this.projectMsg);
+      this.projectMsg.userId = 1
+      this.projectMsg.is_draft = 2
+      projectApproval(
+        this.projectMsg
+      ).then(res => {
+        console.log(res);
+      });
+    },
+    //提交
+    draft() {
+      console.log(this.projectMsg);
+      this.projectMsg.userId = 1
+      this.projectMsg.is_draft = 1
+      projectApproval(
+        this.projectMsg
+      ).then(res => {
+        console.log(res);
+      });
     }
   }
 };

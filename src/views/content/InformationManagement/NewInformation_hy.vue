@@ -214,7 +214,7 @@ export default {
     //提交
     Submission() {
       console.log(this.editorContent)
-      // this.getinquiryRel();
+      this.getinquiryRel();
     }
   },
   mounted() {
@@ -224,7 +224,6 @@ export default {
           console.log(html)
         }
         editor.create()
-        editor.txt.html('11233')
 
     this.orgimg = orgimg;
     this.getinquiryReltype();
