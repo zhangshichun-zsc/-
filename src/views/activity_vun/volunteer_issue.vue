@@ -1,6 +1,7 @@
 <!--志愿者活动发布（志愿者）-->
 <template>
   <div>
+    <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <p class="content-head">
@@ -69,9 +70,7 @@
             </li>
             <li>
               <span>>活动地址</span>
-                <iframe id="mapPage" width="100%" height="500px" frameborder=0
-  src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-</iframe>
+              <span @click="()=>{this.adr = true}">{{ args.address == null?"点击选中地址":args.address}}</span>
             </li>
             <li>
               <span>现场负责人</span>
@@ -238,6 +237,7 @@
 import {getActiveType,getActiveLimit,getActiveSign,getOrgTeam,getOrgId,orgimgdel,saveActive } from '@/request/api'
 import { getAdressId } from '@/libs/utils'
 import wangeditor from'_c/wangeditor'
+import adress from'_c/map'
 import { upload }from '@/request/http' 
 import { filterNull } from '@/libs/utils'
   export default {
@@ -249,7 +249,7 @@ import { filterNull } from '@/libs/utils'
             single: true,
             dateTwo:[],
             dateOne:[],
-
+            adr:false,
             feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
             isDisb:false,
             feed: [{
@@ -326,13 +326,10 @@ import { filterNull } from '@/libs/utils'
         };
     },
 
-    components: { wangeditor },
-
-    computed: {},
+    components: { wangeditor,adress },
 
     created() {
       this.initData()
-      this.getMap()
     },
     methods: {
       deletUserPost(i){
@@ -402,7 +399,6 @@ import { filterNull } from '@/libs/utils'
           this.dateOne = [data.args.startAt,data.args.endAt]
           this.dateTwo = [data.zhaStart,data.zhaEnd]
           this.image = data.image
-          console.log(this.dateOne,this.dateTwo)
         }
         getOrgTeam().then(res => {
           this.orgList = res.data
@@ -465,28 +461,9 @@ import { filterNull } from '@/libs/utils'
           typeFlag: 3
         }]
       },
-      getMap(){
-          window.addEventListener('message', (event)=> {
-            var loc = event.data;
-            if (loc && loc.module == 'locationPicker') {
-              console.log(loc,"000000")
-            let geocoder = new qq.maps.Geocoder({
-                complete:(result)=>{
-                  let obj = result.detail.addressComponents
-                  let arr = getAdressId(obj.province,obj.city,obj.district)
-                  console.log(arr,obj,"000000")
-                  this.args.provinceId = arr[0]
-                  this.args.cityId = arr[1]
-                  this.args.districtId = arr[2]
-                }
-            })
-            let coord=new qq.maps.LatLng(loc.latlng.lat,loc.latlng.lng)
-            geocoder.getAddress(coord)
-            this.args.address = loc.poiaddress
-            this.args.xx = loc.latlng.lat 
-            this.args.yy = loc.latlng.lng 
-            }
-        }, false)
+      getMap(e){
+        let args = this.args
+        this.args = Object.assign(args,e)
       },
       sumbmit(i){
         let item = this.args
@@ -550,7 +527,8 @@ import { filterNull } from '@/libs/utils'
         for(let i=0,len=list.length;i<len;i++){
           list[i].isFeedback = this.isFeedback
           list[i].isTrain = this.isTrain
-          list[i].coDetailList = [...ls, ...train]
+          list[i].coDetailList = ls
+          list[i].trainComments = train
           list[i].enrollEndtime = zhaEnd 
           list[i].enrollStarttime = zhaStart
           list[i].outrollStarttime = zhaStart
@@ -585,7 +563,7 @@ import { filterNull } from '@/libs/utils'
         return `${year}-${month}-${day} ${hour}:${mine}:00`
       },
       apply(){
-          this.$router.push({name:'volunteer_apply'})
+          this.$router.push({name:'volunteer_apply',params:{sysId:'2,3'}})
       }
     },
     mounted(){}

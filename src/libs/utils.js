@@ -55,7 +55,6 @@ export const filterNull = (args) => {
   let obj = {}
   for (let key in args) {
     if (args[key] !== null && args[key] !== ''&&args[key] !== undefined) {
-      console.log(args[key])
       if( Array.isArray(args[key]) && args[key].length !== 0){
         obj[key] = []
         for (let i = 0, len = args[key].length; i < len; i++) {

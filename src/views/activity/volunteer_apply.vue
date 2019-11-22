@@ -10,19 +10,19 @@
         </div>
         <div class="flex-center-end">
           <Button>收起筛选</Button>
-          <Button>查询结果</Button>
+          <Button @click="changeGet">查询结果</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>名称</span>
-          <Input size="small" placeholder="组织名称" class="inpt" />
+          <Input size="small" placeholder="组织名称" class="inpt" v-model="args.name"/>
         </div>
         <div class="flex-center-start">
           <span>有效状态</span>
-          <Select size="small" class="inpt">
-            <Option value="1">1</Option>
-            <Option value="1">1</Option>
+          <Select size="small" class="inpt" v-model="args.validFlag">
+            <Option value="1">有效状态</Option>
+            <Option value="0">无效状态</Option>
           </Select>
         </div>
         <div class="flex-center-start">
@@ -30,10 +30,13 @@
           <row>
             <i-col span="12" class="inpt">
               <Date-picker
-                type="daterange"
                 placement="bottom-end"
                 placeholder="选择日期"
                 style="width: 200px"
+                type="datetime" 
+                format="yyyy-MM-dd HH:mm"
+                v-model="args.createAt"
+                @on-change='changeDate'
               ></Date-picker>
             </i-col>
           </row>
@@ -45,92 +48,67 @@
         <div>
           <Icon type="md-reorder" size="20" />
           <span @click="handleSelectAll(true)">全选</span>
-          <Button class="table-btn" @click="modal1=true">新增常用报名项</Button>
-          <Modal v-model="modal1" title="新增常用报名项">
-               <Form :label-width="60"  ref="formValidate" :model="formValidate" :rules="ruleValidate">
-                 <FormItem label="内容" prop="content">
-                    <Tabs type="line" value="name1" v-model="formValidate.content" size="small">
-                       <TabPane label="单选题" name="name1">
-                          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
-                             <FormItem label="常用报名项名称：" prop="name">
-                                 <Input v-model="formValidate.name" placeholder="请输入标题" style="width:200px"></Input>
-                             </FormItem>
-                             <FormItem style="margin:10px 0 0 160px">
-                                   <Radio><Input placeholder="输入选项1"></Input></Radio>
-                             </FormItem>
-                             <FormItem style="margin:10px 0 0 160px">
-                                   <Radio><Input placeholder="输入选项2"></Input></Radio>
-                                   <div class="jia">+</div>
-                             </FormItem>
-                           </Form>  
-                       </TabPane>
-                       <TabPane label="多选题" name="name2">
-                         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
-                             <FormItem label="常用报名项名称：" prop="name">
-                                 <Input v-model="formValidate.name" placeholder="请输入标题" style="width:200px"></Input>
-                             </FormItem>
-                             <FormItem style="margin:10px 0 0 160px">
-                                   <Radio><Input placeholder="输入选项1"></Input></Radio>
-                             </FormItem>
-                             <FormItem style="margin:10px 0 0 160px">
-                                   <Radio><Input placeholder="输入选项2"></Input></Radio>
-                                   <div class="jia">+</div>
-                             </FormItem>
-                           </Form>  
-                       </TabPane>
-                       <TabPane label="单行文本" name="name3">
-                           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
-                             <FormItem label="常用报名项名称：" prop="name">
-                                 <Input v-model="formValidate.name" placeholder="请输入单行文本标题" style="width:200px"></Input>
-                             </FormItem>
-                           </Form>  
-                       </TabPane>
-                       <TabPane label="多行文本" name="name4">
-                           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
-                             <FormItem label="常用报名项名称：" prop="name">
-                                 <Input v-model="formValidate.name" placeholder="请输入多行文本标题" style="width:200px"></Input>
-                             </FormItem>
-                           </Form>  
-                       </TabPane>
-                    </Tabs>
-                 </FormItem>
-              </Form>                   
+          <Button class="table-btn" @click="showModal(null)">新增常用报名项</Button>
+          <Modal v-model="modal1" title="新增常用报名项" @on-ok='addOk'>
+            <Tabs type="line" value="name1" v-model="adds.typeFlag" size="small" >
+                <TabPane label="单选题" name="3">
+                  <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入标题" style="width:200px" v-model="adds.name"/></div>
+                  <div class="flex-start" v-for='(item,index) in items' :key='index'> <Radio/><Input :placeholder="'单选标题'"/></div>  
+                </TabPane>
+                <TabPane label="多选题" name="4">
+                 <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入标题" style="width:200px" v-model="adds.name"/></div>
+                  <div class="flex-start" v-for='(item,index) in items' :key='index'> <Radio/><Input :placeholder="'单选标题'"/></div>  
+                </TabPane>
+                <TabPane label="单行文本" name="1">
+                   <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入单行文本标题" style="width:200px" v-model="adds.name"/></div>
+                </TabPane>
+                <TabPane label="多行文本" name="6">
+                  <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入多行文本标题" style="width:200px" v-model="adds.name"/></div>
+                </TabPane>
+            </Tabs>                
         </Modal>
         </div>
       </div>
     </div>
     <Table border :columns="columns" :data="datax"></Table>
       <div class="pages">
-        <span>共10页/100条数据</span>
-         <Page :total="100" show-elevator></Page>
+        <span>共{{sumPage}}页/{{sumSize}}条数据</span>
+         <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
       </div>
   </div>
 </template>
 
 <script>
-import { getSingList } from '@/request/api'
+import { getSingList,addSignItem } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
-          formValidate: {
-                    content:'',
-                    name:''
-                },
-                ruleValidate: {
-                    content: [
-                        { required: true, message: '', trigger: 'change' }
-                    ],
-                    name: [
-                        { required: true, message: '标题不能为空', trigger: 'blur' }
-                    ],
-                },
+      ruleValidate: {
+          content: [
+              { required: true, message: '', trigger: 'change' }
+          ],
+          name: [
+              { required: true, message: '标题不能为空', trigger: 'blur' }
+          ],
+      },
       value: "",
       modal1:false,
       navigation1: {
         head: "常用报名项管理(志愿者)"
       },
-
+      
+      items:['',''],
+      type:{
+        1:'单行文本',
+        2: '图片',
+        3: '单选',
+        4: '所选',
+        5: '星级评价',
+        6: "多行文本",
+        7: '下拉',
+        8: "事件单行文本"
+      },
       columns: [
         {
           type: "selection",
@@ -140,16 +118,19 @@ export default {
         {
           title: "报名项名称",
           key: "name",
-          align: "center"
+          align: "center",
         },
         {
           title: "格式",
           key: "designation",
-          align: "center"
+          align: "center",
+          render: (h, params) => {
+          return h('span',this.type[params.row.typeFlag])
+        }
         },
         {
           title: "创建时间",
-          key: "project",
+          key: "createAt",
           align: "center"
         },
         {
@@ -159,11 +140,27 @@ export default {
         },
         {
           title: "有效状态",
-          key: "rule",
+          key: "validFlag",
           align: "center",
-           render: (h, params) => {
+          render: (h, params) => {
             return h('div', [
-              h('i-switch')
+              h('i-switch',{
+                props:{
+                  trueValue:1,
+                  falseValue:0,
+                  value: ~~params.row.validFlag
+                },
+                on: {
+                  "on-change": (e) => {
+                    let item = this.datax[e]
+                    this.adds.itemId = item.itemId
+                    this.adds.typeFlag = item.typeFlag
+                    this.adds.name = item.name
+                    this.adds.validFlag = e
+                    this.addOk()
+                  }
+                }
+              })
             ])
           }
         },
@@ -181,38 +178,15 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.modal1=true
+                    this.showModal(params.index)
                   }
                 }
-              }, '编辑'),
-              h('a', {
-                style: {
-                  marginRight: '5px',
-                  marginLeft: '5px',
-                  color: 'green'
-                }
-              }, '删除')
+              }, '编辑')
             ])
           }
         }
       ],
-      datax: [
-        {
-          name: "乘车人数",
-          designation: "单选题",
-          project: "2019-10-01",
-          time: "受益方",
-          userstype:'admin' 
-        },
-        {
-          name: "用餐人数",
-          designation: "多选题",
-          project: "2019-10-01",
-          time: "受益方",
-          userstype: "admin"
-        }
-      ],
-
+      datax: [],
       args:{
         name:null,
         validFlag:null,
@@ -220,7 +194,17 @@ export default {
         page:null
       },
       page:1,
+      size:10,
       sumPage:1,
+      sumSize:1,
+      adds:{
+        itemId:null,
+        sysId:2,
+        userId: this.$store.state.userId,
+        name:null,
+        typeFlag: "4",
+        validFlag:1
+      }
     };
   },
   created() {
@@ -231,13 +215,44 @@ export default {
       let args = this.args
       args.page = {
         page: this.page,
-        size:10
+        size: this.size
       }
       args = filterNull(args)
-      console.log(args,getSingList)
       getSingList(args).then(res => {
-      
+        this.sumSize = res.data.totalSize
+        this.datax = res.data.list
+        this.page = res.data.pageNum
+        this.sumPage = res.data.totalNum
       })
+    },
+    changePage(e){
+      this.page = e
+      this.getList()
+    },
+    changeGet(){
+      this.page = 1
+      this.getList()
+    },
+    showModal(e){
+      if(e != null){
+        let item = this.datax[e]
+        this.adds.itemId = item.itemId
+        this.adds.typeFlag = item.typeFlag
+        this.adds.name = item.name
+        this.adds.validFlag = item.validFlag
+      }else{
+        this.adds.itemId = null
+      }
+      this.modal1 = true
+    },
+    addOk(){
+      let adds = filterNull(this.adds)
+      addSignItem(adds).then(res => {
+
+      })
+    },
+    changeDate(e){
+      this.args.createAt = e
     }
   }
 };

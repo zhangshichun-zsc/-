@@ -211,7 +211,7 @@
 <script>
 import {getActiveType,getActiveSign,getActiveLimit,getGood } from '@/request/api'
 import { CITYSDATA } from '@/libs/sele'
-import { getAdressId } from '@/libs/utils'
+import { getAdressId,getAreaAdress } from '@/libs/utils'
 export default {
   data () {
     return {
@@ -312,8 +312,7 @@ export default {
       this.limit = limit
     },
     addLimitItem(item,index){
-      console.log(item)
-       this.$set(this.limitList[index],'disabled',true)
+      this.$set(this.limitList[index],'disabled',true)
       let limit = this.limit
       let data = item.ruleId == 4?[0,0,0]:item.ruleId ==3?['','']:item.data
       limit.push({

@@ -402,4 +402,8 @@ export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询�
 export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity',p)//保存
 export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
 export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
-export const getSingList = p => posts("/volunteer-manager/queryCoItem",p)
+export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
+export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p) 
+export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p) 
+export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) //
+export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
