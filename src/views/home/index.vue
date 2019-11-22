@@ -325,9 +325,9 @@ export default {
 
   created() {},
   mounted() {
-    // this.getHomeactivity();
-    // this.getHomeactpend();
-    // this.getHomeactwhole();
+    this.getHomeactivity();
+    this.getHomeactpend();
+    this.getHomeactwhole();
   },
   methods: {
     //首页-活动计数

@@ -12,14 +12,21 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
+
+          <div class="integral-center"  @click="Retractbtn">
+             <Icon type="ios-arrow-down" v-if="Retract==true" />
+              <Icon type="ios-arrow-up" v-if="Retract==false" />
+              <span v-if="Retract==true">
+                <a class="sai">收起筛选</a>
+              </span>
+              <span v-if="Retract==false">
+                <a class="sai">启用筛选</a>
+              </span>
           </div>
           <Button @click="query">查询结果</Button>
         </div>
       </div>
-      <div class="flex-center-start integral-body">
+      <div class="flex-center-start integral-body"  v-if="Retract==true">
         <div class="flex-center-start">
           <span>积分来源</span>
           <Select size="large" class="inpt" v-model="scoreRuleId">
@@ -145,7 +152,8 @@ export default {
       scoreRuleId: "",
       arrs: [],
       datas:'',
-      list:[]
+      list:[],
+      Retract:true
     };
   },
 
@@ -211,6 +219,11 @@ export default {
         }
         console.log(res);
       });
+    },
+     //收起筛选
+    Retractbtn() {
+      this.Retract = !this.Retract;
+      console.log(11);
     },
 
     //分页功能

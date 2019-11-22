@@ -359,7 +359,7 @@ export default {
         console.log(this.arr)
     },
 
-    //批量操作接口
+    //是否热门
     getAddressDel(index, del) {
       if (del == false) {
         this.batch = 6;
@@ -393,22 +393,26 @@ export default {
       });
     },
 
-    //批量操作
+     //批量操作
     batches() {
+      if (this.arr.length == 0) {
+        this.$Message.error("请至少选择一个");
+      } else {
         //操作接口
-      AddressDel({
-        informationIds: this.arr,
-        informationOprType: this.batch
-      }).then(res => {
-        if (res.code == 200) {
-          console.log(this.arr)
-          this.getAddressList();
-          this.$Message.info(res.msg);
-          this.status = false
-          this.$refs.selection.selectAll(this.status);
-        }
-        console.log(res);
-      });
+        AddressDel({
+          informationIds: this.arr,
+          informationOprType: this.batch
+        }).then(res => {
+          if (res.code == 200) {
+            console.log(this.arr);
+            this.getAddressList();
+            this.$Message.info(res.msg);
+            this.status = false;
+            this.$refs.selection.selectAll(this.status);
+          }
+          console.log(res);
+        });
+      }
     }
   },
   mounted() {

@@ -1,6 +1,7 @@
 <!-- 积分查询(志愿者) -->
 <template>
   <div class="integral">
+
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-between integral-top">

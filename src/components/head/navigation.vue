@@ -53,6 +53,7 @@ export default {
   background: #f3f3f3;
   border: 1px solid #e4e4e4;
   margin-bottom: 0px;
+  line-height: 50px;
 }
 .min .rig {
   margin-right: 20px;

@@ -53,7 +53,7 @@
           <div class="but">
             <Button @click="addBut()">新增</Button>
             <Button @click="MgtBut()">分类管理</Button>
-           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+            <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
@@ -61,7 +61,13 @@
             </Select>
           </div>
         </div>
-        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="data"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
       </div>
       <div class="pages">
         <div class="batch">
@@ -88,7 +94,7 @@
 </template>
 
 <script>
-import {formatDate} from '../../../request/datatime'
+import { formatDate } from "../../../request/datatime";
 import { AddressList, AddressType, AddressDel } from "../../../request/api";
 export default {
   data() {
@@ -101,7 +107,7 @@ export default {
         {
           type: "selection",
           width: 60,
-          align: "center",
+          align: "center"
         },
         {
           title: "封面图片",
@@ -146,7 +152,7 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e)
+                    console.log(e);
                     this.getAddressDel(params.row.informationId, e);
                   }
                 }
@@ -163,8 +169,8 @@ export default {
           title: "发布时间",
           key: "releaseTimestamp",
           align: "center",
-          render:(h,params)=>{
-              return h("div",formatDate(params.row.releaseTimestamp))
+          render: (h, params) => {
+            return h("div", formatDate(params.row.releaseTimestamp));
           }
         },
         {
@@ -176,27 +182,27 @@ export default {
               h(
                 "p",
 
-                ("收藏:"+params.row.collectionNum)
+                "收藏:" + params.row.collectionNum
               ),
               h(
                 "p",
                 {
                   style: {
                     marginRight: "5px",
-                    marginLeft: "5px",
-                  },
+                    marginLeft: "5px"
+                  }
                 },
-                ("阅读:"+params.row.readNum)
+                "阅读:" + params.row.readNum
               ),
               h(
                 "p",
                 {
                   style: {
                     marginRight: "5px",
-                    marginLeft: "5px",
-                  },
+                    marginLeft: "5px"
+                  }
                 },
-                ("评论:"+params.row.commentNUm)
+                "评论:" + params.row.commentNUm
               )
             ]);
           }
@@ -247,7 +253,7 @@ export default {
           }
         }
       ],
-       Article: [
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -258,7 +264,7 @@ export default {
       ],
       sort: "asc",
       BelongList: [
-        { value: '', label: "全部" },
+        { value: "", label: "全部" },
         { value: 1, label: "会员" },
         { value: 2, label: "志愿者" }
       ],
@@ -274,7 +280,7 @@ export default {
       dataCount: 0,
       pageSize: 10,
       title: null,
-      infomationType: '',
+      infomationType: "",
       type: [],
       sysType: 2,
       informationId: null,
@@ -282,7 +288,7 @@ export default {
       list: [],
       batch: null,
       informationIds: "",
-      arr:[]
+      arr: []
     };
   },
   //事件监听
@@ -292,10 +298,10 @@ export default {
   },
   methods: {
     addBut() {
-      this.$router.push({ name: "NewInformation_hy" });
+      this.$router.push({ name: "NewInformation_zyz" });
     },
     MgtBut() {
-      this.$router.push({ name: "InformationClassification_hy" });
+      this.$router.push({ name: "InformationClassification_zyz" });
     },
 
     //全选按钮
@@ -316,7 +322,11 @@ export default {
         sysType: this.sysType,
         title: this.title,
         infomationType: this.infomationType,
-        page: { page: this.page, size: this.size, sort: "createAt" + " " + this.sort}
+        page: {
+          page: this.page,
+          size: this.size,
+          sort: "createAt" + " " + this.sort
+        }
       }).then(res => {
         // this.data = res.data.list
         console.log(res);
@@ -338,29 +348,31 @@ export default {
     getAddressType() {
       AddressType().then(res => {
         console.log(res);
-        if(res.code==200){
+        if (res.code == 200) {
           this.type = res.data;
         }
       });
     },
 
-
     //每条数据单选框的状态
-    handleSelectionChange(val){
-      this.arr=val
-      console.log(this.arr)
-      if (this.arr.length == this.dataCount&&this.dataCount!=0||this.arr.length==this.size) {
+    handleSelectionChange(val) {
+      this.arr = val;
+      console.log(this.arr);
+      if (
+        (this.arr.length == this.dataCount && this.dataCount != 0) ||
+        this.arr.length == this.size
+      ) {
         this.status = true;
       } else {
         this.status = false;
       }
-       //选择的数据id
-        let arr = [];
-        for (let i = 0; i < this.arr.length; i++) {
-          arr.push(this.arr[i].informationId);
-        }
-        this.arr = arr.toString();
-        console.log(this.arr)
+      //选择的数据id
+      this.arr = val
+        .map(item => {
+          return item.informationId;
+        })
+        .toString();
+      console.log(this.arr);
     },
 
     //批量操作接口
@@ -399,23 +411,24 @@ export default {
 
     //批量操作
     batches() {
-
+      if (this.arr.length == 0) {
+        this.$Message.error("请至少选择一个");
+      } else {
         //操作接口
-      AddressDel({
-        informationIds: this.arr,
-        informationOprType: this.batch
-      }).then(res => {
-        if (res.code == 200) {
-          console.log(this.arr)
-          this.getAddressList();
-          this.$Message.info(res.msg);
-          this.status = false
-          this.$refs.selection.selectAll(this.status);
-        }
-        console.log(res);
-      });
-
-
+        AddressDel({
+          informationIds: this.arr,
+          informationOprType: this.batch
+        }).then(res => {
+          if (res.code == 200) {
+            console.log(this.arr);
+            this.getAddressList();
+            this.$Message.info(res.msg);
+            this.status = false;
+            this.$refs.selection.selectAll(this.status);
+          }
+          console.log(res);
+        });
+      }
     }
   },
   mounted() {

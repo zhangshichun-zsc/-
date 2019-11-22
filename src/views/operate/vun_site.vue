@@ -1,7 +1,8 @@
 <!-- 站内信消息(志愿者) -->
 <template>
   <div class="integral">
-    <div class="integral-header">
+    <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
+    <!-- <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-between integral-top">
         <div>
@@ -30,7 +31,7 @@
           </Row>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="flex-center-start">
@@ -38,71 +39,51 @@
           <span>数据列表</span>
         </div>
         <div class="flex-center-end">
-          <Button size="small" @click="modal1=true">发布消息</Button>
-          <Button size="small" @click="screen">群发消息</Button>
-          <Select size="small" class="inpt" placeholder="显示条数"></Select>
-          <Select size="small" class="inpt" placeholder="排序方式"></Select>
+          <Select v-model="size" style="width:120px" placeholder="显示条数">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
-        <Modal v-model="modal1" title="群发短信" >
-          <Form :model="formItem" :rules="ruleValidate" :label-width="150">
-            <FormItem label="发送站内信" prop="SendObject">
-              <Input v-model="formItem.input" placeholder="选择用户"></Input>
-            </FormItem>
-            <FormItem label="标题" prop="Title">
-              <Input v-model="formItem.input" ></Input>
-            </FormItem>
-            <FormItem label="内容" prop="Content">
-              <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 4,maxRows: 4}"></Input>
-              <p style="color: #9EA7B4;font-size: 12px;">站内信标题不能超过20个字，内容不能超过100个字。</p>
-            </FormItem>
-          </Form>
-        </Modal>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
-      <Modal v-model="modal2" title="查看消息" >
-        <h1 style="text-align: center;">秒杀专区暂时下线公告</h1>
-        <p style="text-align: center;color: #9EA7B4;">2017-08-02 15:47:44</p>
+      <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="data"
+        ></Table>
+      <Modal v-model="modal2" title="查看消息">
+        <h1 style="text-align: center;">{{obj.title}}</h1>
+        <p style="text-align: center;color: #9EA7B4;">{{obj.createAt}}</p>
         <Divider style="margin: 0.5rem 0;" />
-        <p>尊敬的用户，为了给您带来更好的体验，秒杀专区业务将于2017年4月26日22：00-2017年4月27日09:00期间进行系统升级，升级期间秒杀专区入口将暂时下线。升级后可正常充值和查看充值记录，请有需要的用户提前充值或者在系统升级后再充值。给您带来的不便，敬请谅解。感谢您一如既往的支持。</p>
+        <p>{{obj.content}}</p>
       </Modal>
       <div class="pages">
-        <Page :total="100" show-elevator show-total size="small" />
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { messageShort } from "@/request/api";
 export default {
   data() {
     return {
-       formItem: {
-        input: '',
-        select: '',
-        radio: 'male',
-        checkbox: [],
-        switch: true,
-        date: '',
-        time: '',
-        slider: [20, 50],
-        textarea: ''
-                },
-      modal1:false,
-      modal2:false,
-      ruleValidate:{
-        SendObject:[
-          { required: true, trigger: 'blur' }
-        ],
-        Title:[
-          { required: true, trigger: 'blur' }
-        ],
-        Content:[
-          { required: true, trigger: 'blur' }
-        ]
-      },
-        navigation1: {
+      modal2: false,
+
+      navigation1: {
         head: "站内信消息(志愿者)"
-       },
+      },
       columns: [
         {
           type: "selection",
@@ -111,9 +92,10 @@ export default {
         },
         {
           title: "编号",
-          key: "id",
+          key: "msgId",
           render: (h, params) => {
-            return h("div", "10001");
+            let num=(params.index+1)+(this.page-1)*(this.size)
+            return h("div",num);
           }
         },
         {
@@ -122,34 +104,16 @@ export default {
         },
         {
           title: "发布时间",
-          key: "pubulishtime",
-          render: (h, params) => {
-            return h("div", "2019-08-02 15:47:44");
-          }
+          key: "createAt",
+
         },
-        {
-          title: "发布人员",
-          key: "publisher",
-          algin: "center",
-          render: (h, params) => {
-            return h("div", "admin");
-          }
-        },
-        {
-          title: "接收对象",
-          key: "receiver",
-          algin: "center",
-          render: (h, params) => {
-            return h("div", "200人");
-          }
-        },
+
         {
           title: "操作",
           key: "action",
           align: "center",
           render: (h, params) => {
-            return h("div", [
-              h(
+            return h(
                 "a",
                 {
                   clssName: "action",
@@ -158,34 +122,40 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.modal2=true
-                      // this.$router.push({ name: 'integral_detail' })
+                      this.modal2 = true;
+                      this.obj=params.row
                     }
                   }
                 },
                 "查看"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
-              )
-            ]);
+              );
           }
         }
       ],
-      data: [
+      data: [],
 
-      ]
+      Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
+      ],
+      sorting: [
+        { value: "asc", label: "正序" },
+        { value: "desc", label: "倒序" }
+      ],
+      sort: "asc",
+      top: [
+        { name: "消息标题", type: "input", value: "" },
+        { name: "发布时间", type: "date", value: "" }
+      ],
+      sysId: 2,
+      channelFlag: 1,
+      page: 1,
+      size: 10,
+      content: "",
+      createAt: "",
+      dataCount: 0,
+      obj:{},
     };
   },
 
@@ -194,11 +164,44 @@ export default {
   computed: {},
 
   created() {},
-
+  //事件监听
+  watch: {
+    size: "getmessageShort",
+    sort: "getmessageShort"
+  },
+  mounted() {
+    this.getmessageShort();
+  },
   methods: {
-    screen(){
-      this.$router.push({name:'vun_screen'})
-    }
+    //消息短信
+    getmessageShort() {
+      messageShort({
+        sysId: this.sysId,
+        // content:this.content,
+        channelFlag: this.channelFlag,
+        // createAt:this.createAt,
+        page: { page: this.page, size: this.size }
+      }).then(res => {
+        if (res.code == 200) {
+          this.dataCount = res.data.totalSize;
+          this.data = res.data.list;
+        }
+        console.log(res);
+      });
+    },
+    //分页功能
+    changepages(index) {
+      this.page = index;
+      this.getmessageShort();
+    },
+
+    query(e) {
+      console.log(e)
+      this.content = e[0].value;
+      this.createAt = e[1].value;
+    },
+
+
   }
 };
 </script>
@@ -250,7 +253,7 @@ export default {
 .sdate {
   margin-left: 15px;
 }
-Button{
-    margin-right: 0.5rem;
+button {
+  margin-right: 0.5rem;
 }
 </style>

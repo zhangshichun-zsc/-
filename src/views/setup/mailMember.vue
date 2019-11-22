@@ -1,4 +1,4 @@
-<!--消息提醒(志愿者) -->
+<!--站内信消息提醒(会员) -->
 <template>
   <messages :navigation1='navigation1'></messages>
 </template>
@@ -9,9 +9,9 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "消息提醒(志愿者)",
-        sysId:2,
-        channelFlag:2
+        head: "站内信消息提醒(会员)",
+        sysId:1,
+        channelFlag:1
       },
 
     };
