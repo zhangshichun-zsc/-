@@ -5,7 +5,6 @@ import { get, post, posts, postdel, gets } from './http'
 
 
 
-
 //登陆
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
@@ -239,8 +238,25 @@ export const Userfilter = p => get('/user-filter/get-user-filter-page', p) //-�
 
 export const Userdetail = p => get('/user-list/user-detail-info', p) //-用户列表--获取用户详情
 
+export const getLabel = p => get('/user-list/get-label', p) // 获取所有标签
+
+export const SetUserLabel = p => posts('/user-list/batch-opr-label', p) // 设置用户标签
+
+export const getLevel = p => get('/user-list/get-level-info', p) // 获取用户等级
+
+// export const userExprot = p => get('/user-list/user-export', p=>{
+//     console.log
+// }) // 导出用户数据
+
+
+
 //  用户列表
 export const UserList = p => get('/user-list/get-user-page', p) //-用户列表--获取用户详情
+
+// 志愿者团队（共用）
+export const setBatch = p => post('/user-list/batch-opr-user', p) // 变更用户状态
+
+export const setsend = p => posts('/user-list/send-inner-msg', p) // 站内信
 
 
 
@@ -286,6 +302,9 @@ export const orgpage = p => posts('/org/getHomeList', p) //组织管理--组织�
 export const orgSetStatus = p => posts('/org/updateAdminAudit', p) // 审批
 
 export const orgGetInfo = p => get('/org/getHomeDetail', p) // 具体家长小组详情
+
+
+
 
 
 // 志愿者团队
@@ -446,9 +465,14 @@ export const signPost = p => posts('/activity-manage/apply/sign/jobs', p) //招�
 
 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag
-export const getActiveLimit = p => post('/volunteer-manager/apply/sign/limits', p)// 活动限制项
+export const getActiveLimit = p => posts('/volunteer-manager/apply/sign/limits', p)// 活动限制项
 export const getActiveSign = p => get('/volunteer-manager/queryActivityItem', p) //活动报名项
 export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询归属团队
-export const saveActive = p => post('/volunteer-manager/saveVolunteerActivity', p)//保存
-export const getOrgId = p => get("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
-export const getGood = p => post("/volunteer-manager/applySigenFirst", p)//优先
+export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity',p)//保存
+export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
+export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
+export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
+export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p) 
+export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p) 
+export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) //
+export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)

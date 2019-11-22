@@ -1,25 +1,21 @@
 <!-- 证书管理（共用） -->
 <template>
   <div>
-    <basicdata :navigation1="navigation1" @query="query"></basicdata>
+    <basicdata :navigation1="navigation1"></basicdata>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-         <Button @click="chackall()" style="border:0px;">
+          <!-- <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <span>已选择{{arr.length}}</span>
+          </Button> -->
+          <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
-          <Modal v-model="modal1" :title="'新增'+title">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+          <Modal v-model="modal1" title="修改" @on-ok='update' @on-cancel='cancel'>
+            <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
-                <Input v-model="formValidate.name"></Input>
+                <Input v-model="args.name"/>
               </FormItem>
             </Form>
-            <div slot="footer">
-              <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
-            </div>
           </Modal>
         </div>
       </div>
@@ -28,9 +24,8 @@
         border
         :columns="columns"
         :data="data1"
-        @on-selection-change="handleSelectionChange"
       ></Table>
-      <div class="pages">
+      <!-- <div class="pages">
         <Page
           :total="dataCount"
           show-elevator
@@ -40,22 +35,20 @@
           :page-size="pageSize"
           @on-change="changepages"
         />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import {formatDate} from '../../request/datatime'
-import basicdata from "../../components/basicdata";
+import basicdata from "../../components/basicdata"
+import { getActiveType,updateCard } from '@/request/api'
 export default {
   data() {
     return {
       navigation1: {
         head: "证书管理（共用）"
-      },
-      formValidate: {
-        name: ""
       },
       ruleValidate: {
         name: [{ required: true, message: "就业情况不能为空", trigger: "blur" }]
@@ -63,42 +56,42 @@ export default {
       title: "证书管理",
       columns: [
         {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "就业情况",
-          key: "EmploymentSituation"
+          key: "name"
         },
         {
           title: "创建时间",
-          key: "createtime",
-           render:(h,params)=>{
-              return h("div",formatDate(params.row.createtime))
-          }
+          key: "createAt",
         },
         {
           title: "创建人",
-          key: "creater"
+          key: "userName",
+          render: (h,params) => {
+            return h("span",params.row.userName?params.row.userName:'系统管理员')
+          }
         },
         {
           title: "有效状态",
-          key: "status",
+          key: "validFlag",
           algin: "center",
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
-                props: {
-                  value: params.row.hotFlag == 1
+            return h('div', [
+              h('i-switch',{
+                props:{
+                  trueValue:1,
+                  falseValue:0,
+                  value: ~~params.row.validFlag
                 },
                 on: {
-                  input: e => {
-                    console.log(e)
+                  "on-change": (e) => {
+                    this.args.name = params.row.name
+                    this.args.dicId = params.row.dicId
+                    this.args.validFlag = e
+                    this.update()
                   }
                 }
               })
-            ]);
+            ])
           }
         },
         {
@@ -116,25 +109,14 @@ export default {
                   },
                   on: {
                     click: () => {
+                      this.args.name = params.row.name
+                      this.args.dicId = params.row.dicId
+                      this.args.validFlag = params.row.validFlag
                       this.modal1 = true;
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
               )
             ]);
           }
@@ -142,12 +124,11 @@ export default {
       ],
       data1: [],
       modal1: false,
-      arr: [],
-       page: 1,
-      size: 10,
-      dataCount: 0,
-      pageSize: 10,
-      status:false
+      args:{
+        name:null,
+        dicId:null,
+        validFlag:null
+      }
     };
   },
 
@@ -155,60 +136,31 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList()
+  },
 
   methods: {
-    //查询
-    query(e) {
-      console.log(e);
-    },
-
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      console.log(this.status);
-      this.$refs.selection.selectAll(this.status);
-    },
-
-    //取消
-    modalCancel(){
-
-    },
-    //确定
-    modalOk(){
-
-    },
-
-    //每条数据单选框的状态
-    handleSelectionChange(val){
-      this.arr=val
-      console.log(this.arr)
-      if (this.arr.length == this.dataCount&&this.dataCount!=0||this.arr.length==this.size) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
-       //选择的数据id
-        let arr = [];
-        for (let i = 0; i < this.arr.length+1; i++) {
-          arr.push(this.arr[i].informationId);
+    getList(){
+      getActiveType({typeFlag:19}).then(res => {
+        if(res.code == 200){
+          this.data1 = res.data
         }
-        this.arr = arr.toString();
-        console.log(this.arr)
+      })
     },
-
-     //分页功能
-    changepages(index) {
-      this.page = index;
-      console.log(index);
-
+    update(){
+      updateCard(this.args).then(res => {
+        if(res.code == 200){
+          this.getList()
+          this.$Message.success('修改成功')
+          this.cancel()
+        }
+      })
     },
-
-    ok() {
-      this.$Message.info("新增成功");
-    },
-    cancel() {
-      this.$Message.info("新增失败");
+    cancel(){
+      this.args.name = null
+      this.args.dicId = null
+      this.args.validFlag = null
     }
   }
 };
