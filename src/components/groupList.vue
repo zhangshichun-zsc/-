@@ -55,8 +55,6 @@
           <span @click="handleSelectAll(true)">全选</span>
           <Button class="table-btn" @click='batchAdopt'>通过</Button>
           <Button class="table-btn" @click="batchRefuse">拒绝</Button>
-        </div>
-        <div>
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -64,6 +62,7 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
+
       </div>
       <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
@@ -133,7 +132,11 @@ export default {
         {
           title: '组织地址',
           key: 'address',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            let address = params.row
+            return h('span', address.provinceName + address.cityName + address.districtName)
+          }
         },
         {
           title: '负责人',

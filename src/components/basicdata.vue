@@ -37,14 +37,7 @@
           <span style="margin-right:20px">创建时间</span>
           <Row>
             <Col span="12">
-              <DatePicker
-                type="date"
-                placeholder="请选择日期"
-                style="width: 200px"
-                class="sdate"
-                :transfer="true"
-                v-model="search.createTimestamp"
-              ></DatePicker>
+            <DatePicker type="date" placeholder="请选择日期" style="width: 200px" class="sdate" :transfer="true" v-model="search.createTimestamp"></DatePicker>
             </Col>
           </Row>
         </div>
@@ -59,27 +52,27 @@ export default {
     return {
       typelist: [
         {
-          value: "",
-          name: "全部"
+          value: '',
+          name: '全部'
         },
         {
-          value: "1",
-          name: "有效"
+          value: '1',
+          name: '有效'
         },
         {
-          value: "0",
-          name: "无效"
+          value: '0',
+          name: '无效'
         }
       ],
       search: {
-        dicName: "",
-        validFlag: "",
-        createTimestamp: ""
+        dicName: '',
+        validFlag: '',
+        createTimestamp: ''
       },
       Retract: true
-    };
+    }
   },
-  props: ["navigation1"],
+  props: ['navigation1'],
 
   components: {},
 
@@ -90,15 +83,15 @@ export default {
   methods: {
     //查询
     query() {
-      this.$emit("query", this.search);
+      this.$emit('query', this.search)
     },
     //收起筛选
     Retractbtn() {
-      this.Retract = !this.Retract;
-      console.log(11);
+      this.Retract = !this.Retract
+      console.log(11)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .integral-header {

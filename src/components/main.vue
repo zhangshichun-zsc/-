@@ -416,16 +416,8 @@ export default {
 }
 .main-content {
   padding: 0 20px 20px;
-  // padding-left: 200px;
-  // padding-top: 73px;
 }
-// .ivu-layout-header {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   z-index: 999;
-// }
+
 .ivu-layout .ivu-layout-header,
 .ivu-layout-header .ivu-menu {
   // position:relative;
@@ -433,11 +425,11 @@ export default {
   // z-index: 2;
 }
 
-// .ivu-menu-horizontal {
-//   position:relative;
-//   background: #008e40 ;
-//   z-index: 2
-// }
+.flex-center-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .cm {
   background: red($color: #000000);
 }
