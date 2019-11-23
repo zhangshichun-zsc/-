@@ -1,7 +1,50 @@
 <!-- 证书管理（共用） -->
 <template>
   <div>
-    <basicdata :navigation1="navigation1"></basicdata>
+    <div class="integral-header">
+      <Navigation :labels="navigation1"></Navigation>
+      <div class="flex-center-between integral-top">
+        <div>
+          <Icon type="ios-search-outline" />
+          <span>筛选查询</span>
+        </div>
+        <div class="flex-center-end">
+          <div class="integral-center">
+            <Icon type="ios-arrow-down" />
+            <span>收起筛选</span>
+          </div>
+          <Button @click="queryMet()">查询结果</Button>
+        </div>
+      </div>
+      <div class="flex-center-start integral-body">
+        <div class="flex-center-start">
+          <span>名称</span>
+          <Input size="large" placeholder="基金名称" class="inpt" v-model="query.name" />
+        </div>
+        <div class="flex-center-start">
+          <span>有效状态</span>
+          <Select size="small" class="inpt" v-model="query.validFlag">
+            <Option value="1">有效状态</Option>
+            <Option value="0">无效状态</Option>
+          </Select>
+        </div>
+        <div class="flex-center-start">
+          <span>创建时间</span>
+          <Row>
+            <Col span="12">
+               <DatePicker
+                  type="datetimerange"
+                  @on-change="handleChange"
+                  placement="bottom-end"
+                  placeholder="Select date"
+                  style="width:300px"
+                  format="yyyy-MM-dd HH:mm"
+                ></DatePicker>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
@@ -25,17 +68,17 @@
         :columns="columns"
         :data="data1"
       ></Table>
-      <!-- <div class="pages">
+      <div class="pages">
         <Page
-          :total="dataCount"
+          :total="sumSize"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
-          :page-size="pageSize"
+          :page-size="params.size"
           @on-change="changepages"
         />
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +86,8 @@
 <script>
 import {formatDate} from '../../request/datatime'
 import basicdata from "../../components/basicdata"
-import { getActiveType,updateCard } from '@/request/api'
+import { getCard,updateCard } from '@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -122,8 +166,25 @@ export default {
           }
         }
       ],
+      query:{
+        name:null,
+        validFlag:null,
+        startAt:null,
+        endAt:null,
+      },
+      params:{
+        name:null,
+        validFlag:null,
+        startAt:null,
+        endAt:null,
+        page:{
+          page: 1,
+          size: 10
+        }
+      },
       data1: [],
       modal1: false,
+      sumSize:10,
       args:{
         name:null,
         dicId:null,
@@ -142,9 +203,12 @@ export default {
 
   methods: {
     getList(){
-      getActiveType({typeFlag:19}).then(res => {
+      getCard(filterNull(this.params)).then(res => {
         if(res.code == 200){
-          this.data1 = res.data
+          this.data1 = res.data.list
+          this.sumSize = res.data.totalSize
+          this.params.page = res.data.pageNum
+          this.sumPage = res.data.totalNum
         }
       })
     },
@@ -161,6 +225,18 @@ export default {
       this.args.name = null
       this.args.dicId = null
       this.args.validFlag = null
+    },
+    handleChange(e){
+      this.query.startAt = e[0]
+      this.query.endAt = e[1]
+    },
+    changepages(e){
+      this.params.page = e
+      this.getList()
+    },
+    queryMet(){
+      this.params = Object.assign(this.params,this.query)
+      this.getList()
     }
   }
 };
@@ -202,5 +278,27 @@ export default {
   transform: translateY(-50%);
   background: yellow;
   color: #000;
+}
+.integral-header {
+  border: 1px solid #eee;
+}
+.integral-header .integral-top {
+  padding: 15px 20px;
+  background: rgb(228, 228, 228);
+  border-bottom: 1px solid #eee;
+}
+.integral-header .integral-center {
+  margin: 0 20px;
+}
+.integral-header .integral-body {
+  padding: 20px;
+  background: #fff;
+}
+.integral-header .integral-body .flex-center-start .inpt {
+  width: 200px;
+  margin-left: 15px;
+}
+.integral-header .integral-body .flex-center-start {
+  margin-right: 20px;
 }
 </style>

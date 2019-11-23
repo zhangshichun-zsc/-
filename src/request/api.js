@@ -222,25 +222,8 @@ export const Userfilter = p => get('/user-filter/get-user-filter-page', p) //-�
 
 export const Userdetail = p => get('/user-list/user-detail-info', p) //-用户列表--获取用户详情
 
-export const getLabel = p => get('/user-list/get-label', p) // 获取所有标签
-
-export const SetUserLabel = p => posts('/user-list/batch-opr-label', p) // 设置用户标签
-
-export const getLevel = p => get('/user-list/get-level-info', p) // 获取用户等级
-
-// export const userExprot = p => get('/user-list/user-export', p=>{
-//     console.log
-// }) // 导出用户数据
-
-
-
 //  用户列表
 export const UserList = p => get('/user-list/get-user-page', p) //-用户列表--获取用户详情
-
-// 志愿者团队（共用）
-export const setBatch = p => post('/user-list/batch-opr-user', p) // 变更用户状态
-
-export const setsend = p => posts('/user-list/send-inner-msg', p) // 站内信
 
 
 
@@ -286,9 +269,6 @@ export const orgpage = p => posts('/org/getHomeList', p) //组织管理--组织�
 export const orgSetStatus = p => posts('/org/updateAdminAudit', p) // 审批
 
 export const orgGetInfo = p => get('/org/getHomeDetail', p) // 具体家长小组详情
-
-
-
 
 
 // 志愿者团队
@@ -427,3 +407,5 @@ export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p)
 export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p) 
 export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) //
 export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
+export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
+export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList",p)

@@ -18,7 +18,7 @@ const SERVICE_URL = {
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
     'http://192.168.0.5:8084/rhzg-web', // 王盛
   ],
-  API_INDEX: 4
+  API_INDEX: 3
 
 }
 
