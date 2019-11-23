@@ -186,6 +186,22 @@ export const InvitationDetailed = p => get('/invite-friends/get-invite-info', p)
 
 export const BiInvitationList = p => get('/invite-friends/get-invited-friends-page', p) //-获取被邀请人分页
 
+
+//短信消息
+export const messageShort = p => posts('/smMsg/getMsgList', p) //-短信消息
+
+export const messageremind = p => posts('/smMsg/getMsgMoudleList', p) //-消息提醒
+
+export const messagerestats = p => posts('/smMsg/msgMouldIsOk', p) //-消息提醒--修改状态
+
+export const WeChatmessage = p => posts('/smMsg/getWxMoulId', p) //-微信提醒
+
+export const WeChatmessageSee = p => get('/smMsg/getSsmDetail', p) //-微信提醒-查看
+
+export const WeChatmessagestats = p => posts('/smMsg/ssmIsOk', p) //-微信提醒-修改状态
+
+
+
 // export const Costbatch = p => post('/invite-friends/get-invite-friends-page', p)  //-邀请好友分页
 
 
@@ -335,11 +351,44 @@ export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建�
 
 export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
-export const roledel = p => get('/sysRole/delUserRole', p) //角色管理--删除
+export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
 export const roleAddto = p => posts('/sysRole/findOtherRoleUser', p) //角色管理--添加成员
 
 export const roleedit = p => posts('/sysRole/edicRoleUser', p) //角色管理--编辑成员
+
+//部门管理
+export const departmentlist = p => post('/web/dept/findAllDept', p) //部门管理--部门列表
+
+export const departmentsub = p => post('/web/dept/findLevelDept', p) //部门管理--查询下级部门
+
+export const departmentStatu = p => get('/web/dept/changgeStatus', p) //部门管理--修改启用状态
+
+export const departmentmember = p => posts('/web/dept/findDeptUser', p) //部门管理--查询部门成员
+
+export const departmentedit = p => posts('/web/dept/editDept', p) //部门管理--部门列表编辑
+
+export const departmentadd = p => posts('/web/dept/addDept', p) //部门管理--部门列表添加
+
+export const departmentStatus = p => get('/web/dept/changgeDeptUserStatus', p) //部门管理-部门成员-修改启用状态
+
+export const departmentSup = p => get('/web/dept/findUpDeptName', p) //部门管理--查询所有上级部门名称
+
+export const departmentall = p => get('/web/dept/findAllDeptName', p) //部门管理--查询所有部门名称
+
+
+//日志
+export const Journallist = p => posts('web/log/findAll', p) //日志信息-列表
+
+export const Journaldel = p => get('web/log/dellLog', p) //日志信息-删除日志信息
+
+
+
+
+
+
+
+
 
 
 //权限设置

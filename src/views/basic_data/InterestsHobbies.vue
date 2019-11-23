@@ -1,5 +1,5 @@
 
-<!-- 就业情况(会员) -->
+<!-- 兴趣爱好(会员) -->
 <template>
   <div>
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
@@ -53,15 +53,15 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "就业情况(会员)"
+        head: "兴趣爱好(会员)"
       },
       formValidate: {
         name: ""
       },
       ruleValidate: {
-        name: [{ required: true, message: "就业情况不能为空", trigger: "blur" }]
+        name: [{ required: true, message: "兴趣爱好不能为空", trigger: "blur" }]
       },
-      title: "就业情况",
+      title: "兴趣爱好",
       columns: [
         {
           type: "selection",
@@ -69,7 +69,7 @@ export default {
           align: "center"
         },
         {
-          title: "就业情况",
+          title: "兴趣爱好",
           key: "EmploymentSituation"
         },
         {

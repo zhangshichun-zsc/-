@@ -6,7 +6,7 @@
       <div class="con">
         <div class="title bk">
           <p>
-            <span>当前人员:*****</span>
+            <span>当前人员:{{obj?obj.sysRoleName:''}}</span>
           </p>
         </div>
         <div class="choose">
@@ -15,12 +15,23 @@
               <Row>
                 <Col span="8">
                   <Menu>
-                    <Submenu name="1" v-for="(item,index) in list" :key="index">
-                      <template slot="title">
-                        <Icon type="ios-paper" />{{item.parentName}}<Checkbox v-model="single"></Checkbox>
-                      </template>
-                      <MenuItem name="1-1" v-for="(value,keys) in item.list" :key="keys">{{value.name}} <Checkbox v-model="single"></Checkbox></MenuItem>
-                    </Submenu>
+                    <CheckboxGroup v-model="fruit">
+                      <Submenu :name="index" v-for="(item,index) in list" :key="index">
+                        <template slot="title">
+                          <Icon type="ios-paper" />
+                          {{item.parentName}}
+                          <!-- <Checkbox
+                            :indeterminate="indeterminate"
+                            :value="checkAll"
+                            @click.prevent.native="handleCheckAll"
+                          >全选</Checkbox> -->
+                        </template>
+                        <MenuItem name="1-1" v-for="(value,keys) in item.list" :key="keys">
+                          {{value.name}}
+                          <Checkbox :label="value.sysMenuId"></Checkbox>
+                        </MenuItem>
+                      </Submenu>
+                    </CheckboxGroup>
                   </Menu>
                 </Col>
               </Row>
@@ -34,7 +45,7 @@
 </template>
 
 <script>
-import {Permissionset} from '@/request/api'
+import { Permissionset,roleSetup} from "@/request/api";
 import Table from "iview/src/components/table/table";
 export default {
   components: { Table },
@@ -43,43 +54,45 @@ export default {
       navigation1: {
         head: "功能权限设置(共用)"
       },
-      single:false,
-      sysMenuIds:[],
-      sysRoleId:[],
-      list:[],
+      single: false,
+      sysRoleId: [],
+      list: [],
+      fruit: [],
+      obj:{}
     };
   },
-  methods:{
-
+  methods: {
     //查询
-    getPermissionset(){
-      Permissionset({
-      }).then(res=>{
-        if(res.code==200){
-          this.list=res.data
-        }else{
-          this.$Message.info(res.msg)
+    getPermissionset() {
+      Permissionset({}).then(res => {
+        if (res.code == 200) {
+          this.list = res.data;
+        } else {
+          this.$Message.info(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
-     // 角色权限设置
+    // 角色权限设置
     getroleSetup() {
       roleSetup({
-        sysRoleId:this.sysRoleId,
-        sysMenuIds:this.sysMenuIds,
+        sysRoleId: Number(this.obj.sysRoleId),
+        sysMenuIds: this.fruit
       }).then(res => {
         console.log(res);
       });
     },
+
     //保存
-    save(){
+    save() {
+      console.log(this.fruit);
       this.getroleSetup()
     }
   },
-  mounted(){
-    this.getPermissionset()
+  mounted() {
+    this.obj=this.$route.query.sysRoleId
+    this.getPermissionset();
   }
 };
 </script>
@@ -149,5 +162,9 @@ table td,
 .choose button {
   display: block;
   margin: auto;
+}
+.ivu-checkbox-wrapper .ivu-checkbox span{
+  display: none !important;
+
 }
 </style>

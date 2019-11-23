@@ -68,7 +68,7 @@ export default {
           align: "center"
         },
         {
-          title: "就业情况",
+          title: "教育经历",
           key: "EmploymentSituation"
         },
         {
