@@ -47,3 +47,23 @@ export const getAreaAdress = (provinces, cities, districts) => {
   }
   return adr
 }
+
+/**
+ *去掉传给后台值中的undfinde和null
+ */
+export const filterNull = (args) => {
+  let obj = {}
+  for (let key in args) {
+    if (args[key] !== null && args[key] !== ''&&args[key] !== undefined) {
+      if( Array.isArray(args[key]) && args[key].length !== 0){
+        obj[key] = []
+        for (let i = 0, len = args[key].length; i < len; i++) {
+          obj[key].push(filterNull(args[key][i]))
+        }
+      }else{
+        obj[key] = args[key]
+      }
+    }
+  }
+  return obj
+}

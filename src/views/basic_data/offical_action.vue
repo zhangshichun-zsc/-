@@ -48,20 +48,17 @@
         <div>
           全选
           <span>已选择{{arr.length}}人</span>
-          <Button class="table-btn" type="primary" @click="modal2 = true">新增活动分类</Button>
-          <!-- <Modal v-model="modal1" title="添加活动分类" @on-ok="ok" @on-cancel="cancel">
+          <Button class="table-btn" type="primary" @click="add">新增活动分类</Button>
+          <Modal v-model="modal2" :title=text >
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="活动分类" prop="name">
-                <Input v-model="dicNameone"></Input>
+              <FormItem label="活动名称" prop="dicNamemod">
+                <Input v-model="formValidate.dicNamemod" placeholder="环保" />
               </FormItem>
             </Form>
-          </Modal>-->
-          <Modal v-model="modal2" title="修改活动分类" @on-ok="oktwo" @on-cancel="canceltwo">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="活动名称" prop="name">
-                <Input v-model="dicNamemod" placeholder="环保"></Input>
-              </FormItem>
-            </Form>
+            <div slot="footer">
+              <Button type="text" size="large" @click="canceltwo">取消</Button>
+              <Button type="primary" size="large" @click="oktwo('formValidate')">确定</Button>
+            </div>
           </Modal>
         </div>
       </div>
@@ -104,10 +101,12 @@ export default {
         head: "官方活动分类管理(会员)"
       },
       formValidate: {
-        name: ""
+        dicNamemod: ""
       },
       ruleValidate: {
-        name: [{ required: true, message: "活动名称不能为空", trigger: "blur" }]
+        dicNamemod: [
+          { required: true, message: "活动名称不能为空", trigger: "blur" }
+        ]
       },
       // modal1: false,
       modal2: false,
@@ -171,9 +170,10 @@ export default {
                   },
                   on: {
                     click: () => {
+                      this.text = "编辑活动分类";
                       this.modal2 = true;
                       this.dicId = params.row.dicId;
-                      this.dicNamemod = params.row.dicName;
+                      this.formValidate.dicNamemod = params.row.dicName;
                     }
                   }
                 },
@@ -219,15 +219,16 @@ export default {
       dataCount: 0,
 
       dicName: "",
-      validFlag: "",
+      validFlags: "",
       createTimestamp: "",
-      dicNamemod: "",
+      // dicNamemod: "",
       validFlag: "",
       typeFlag: "",
       oprUserId: 1,
       statsdata: "",
       dicId: "",
-      arr: []
+      arr: [],
+      text: ""
     };
   },
 
@@ -267,13 +268,13 @@ export default {
     //修改模块状态
     getmodifystate(id, e) {
       if (e) {
-        this.validFlag = 1;
+        this.validFlags = 1;
       } else {
-        this.validFlag = 0;
+        this.validFlags = 0;
       }
       modifystate({
         dicId: id,
-        validFlag: this.validFlag
+        validFlag: this.validFlags
       }).then(res => {
         if (res.code == 200) {
           this.getOffactivities();
@@ -303,11 +304,12 @@ export default {
     getOffactivitemod(id) {
       Offactivitemod({
         dicId: this.dicId,
-        dicName: this.dicNamemod
+        dicName: this.formValidate.dicNamemod
       }).then(res => {
         if (res.code == 200) {
           this.getOffactivities();
           this.$Message.info("修改成功");
+          this.modal2=false
         } else {
           this.$Message.error(res.msg);
         }
@@ -318,10 +320,11 @@ export default {
     getOffactiviteadd() {
       Offactiviteadd({
         typeFlag: 8,
-        dicName: this.dicNamemod,
+        dicName: this.formValidate.dicNamemod,
         oprUserId: this.oprUserId
       }).then(res => {
         if (res.code == 200) {
+          this.modal2=false
           this.getOffactivities();
           this.$Message.info("添加成功");
         } else {
@@ -340,12 +343,21 @@ export default {
         this.getOffactiviteadd();
       }
     },
-    canceltwo() {},
+    //取消
+    canceltwo() {
+      this.modal2=false
+    },
+
+    //新增
+    add() {
+      this.formValidate.dicNamemod=''
+      this.text = "新增活动分类";
+      this.modal2 = true;
+    },
 
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getOffactivities();
     },
 
@@ -353,7 +365,6 @@ export default {
     query() {
       this.getOffactivities();
     },
-
     //每条数据单选框的状态
     handleSelectionChange(val) {
       this.arr = val;
@@ -366,21 +377,7 @@ export default {
       } else {
         this.status = false;
       }
-      //选择的数据id
-      let arr = [];
-      for (let i = 0; i < this.arr.length; i++) {
-        arr.push(this.arr[i].informationId);
-      }
-      this.arr = arr.toString();
-      console.log(this.arr);
     },
-
-    ok() {
-      this.$Message.info("新增成功");
-    },
-    cancel() {
-      this.$Message.info("新增失败");
-    }
   }
 };
 </script>

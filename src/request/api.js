@@ -5,7 +5,6 @@ import { get, post, posts, postdel, gets } from './http'
 
 
 
-
 //登陆
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
@@ -187,6 +186,22 @@ export const InvitationDetailed = p => get('/invite-friends/get-invite-info', p)
 
 export const BiInvitationList = p => get('/invite-friends/get-invited-friends-page', p) //-获取被邀请人分页
 
+
+//短信消息
+export const messageShort = p => posts('/smMsg/getMsgList', p) //-短信消息
+
+export const messageremind = p => posts('/smMsg/getMsgMoudleList', p) //-消息提醒
+
+export const messagerestats = p => posts('/smMsg/msgMouldIsOk', p) //-消息提醒--修改状态
+
+export const WeChatmessage = p => posts('/smMsg/getWxMoulId', p) //-微信提醒
+
+export const WeChatmessageSee = p => get('/smMsg/getSsmDetail', p) //-微信提醒-查看
+
+export const WeChatmessagestats = p => posts('/smMsg/ssmIsOk', p) //-微信提醒-修改状态
+
+
+
 // export const Costbatch = p => post('/invite-friends/get-invite-friends-page', p)  //-邀请好友分页
 
 
@@ -241,11 +256,6 @@ export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员�
 
 //  用户列表
 export const UserList = p => get('/user-list/get-user-page', p) //-用户列表--获取用户详情
-
-// 志愿者团队（共用）
-export const setBatch = p => post('/user-list/batch-opr-user', p) // 变更用户状态
-
-export const setsend = p => posts('/user-list/send-inner-msg', p) // 站内信
 
 
 
@@ -372,11 +382,44 @@ export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建�
 
 export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
-export const roledel = p => get('/sysRole/delUserRole', p) //角色管理--删除
+export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
 export const roleAddto = p => posts('/sysRole/findOtherRoleUser', p) //角色管理--添加成员
 
 export const roleedit = p => posts('/sysRole/edicRoleUser', p) //角色管理--编辑成员
+
+//部门管理
+export const departmentlist = p => post('/web/dept/findAllDept', p) //部门管理--部门列表
+
+export const departmentsub = p => post('/web/dept/findLevelDept', p) //部门管理--查询下级部门
+
+export const departmentStatu = p => get('/web/dept/changgeStatus', p) //部门管理--修改启用状态
+
+export const departmentmember = p => posts('/web/dept/findDeptUser', p) //部门管理--查询部门成员
+
+export const departmentedit = p => posts('/web/dept/editDept', p) //部门管理--部门列表编辑
+
+export const departmentadd = p => posts('/web/dept/addDept', p) //部门管理--部门列表添加
+
+export const departmentStatus = p => get('/web/dept/changgeDeptUserStatus', p) //部门管理-部门成员-修改启用状态
+
+export const departmentSup = p => get('/web/dept/findUpDeptName', p) //部门管理--查询所有上级部门名称
+
+export const departmentall = p => get('/web/dept/findAllDeptName', p) //部门管理--查询所有部门名称
+
+
+//日志
+export const Journallist = p => posts('web/log/findAll', p) //日志信息-列表
+
+export const Journaldel = p => get('web/log/dellLog', p) //日志信息-删除日志信息
+
+
+
+
+
+
+
+
 
 
 //权限设置
@@ -433,9 +476,16 @@ export const signPost = p => posts('/activity-manage/apply/sign/jobs', p) //招�
 
 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag
-export const getActiveLimit = p => post('/volunteer-manager/apply/sign/limits', p)// 活动限制项
+export const getActiveLimit = p => posts('/volunteer-manager/apply/sign/limits', p)// 活动限制项
 export const getActiveSign = p => get('/volunteer-manager/queryActivityItem', p) //活动报名项
 export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询归属团队
-export const saveActive = p => post('/volunteer-manager/saveVolunteerActivity', p)//保存
-export const getOrgId = p => get("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
-export const getGood = p => post("/volunteer-manager/applySigenFirst", p)//优先
+export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity', p)//保存
+export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
+export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
+export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
+export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p)
+export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p)
+export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) //
+export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
+export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
+export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList", p)

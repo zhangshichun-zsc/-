@@ -63,16 +63,16 @@ export default {
   methods: {
     getlogin() {
       login({
-        loginName: this.formValidate.user,
-        loginPwd: this.formValidate.password
-      }).then(res => {
-        if (res.code == 200) {
-          localStorage.setItem('token', res.data.token)
-          localStorage.setItem('userId', res.data.userId)
-          localStorage.setItem('userName', res.data.userName)
-          this.$router.push({ name: 'index' })
-        } else {
-          this.$Message.info('密码或账号不正确!')
+        loginName:this.formValidate.user,
+        loginPwd:this.formValidate.password
+      }).then(res=>{
+        if(res.code==200){
+          localStorage.setItem("token",res.data.token)
+          localStorage.setItem("userId",res.data.userId)
+          localStorage.setItem("userName",res.data.userName)
+          this.$router.push({ name: "index"});
+        }else{
+          this.$Message.info("密码或账号不正确!")
         }
         console.log(res.data)
       })

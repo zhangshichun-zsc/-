@@ -175,7 +175,16 @@ export default {
         {
           title: "组织分类",
           key: "orgType",
-          align: "center"
+          align: "center",
+          render: (h, params) => {
+            let orgType = params.row.orgType
+            let type = {
+              1: '机构',
+              2: '家长小组',
+              3: '自愿者小组'
+            }
+            return h('span', type[orgType])
+          }
         },
         {
           title: "组织地址",
@@ -184,12 +193,12 @@ export default {
         },
         {
           title: "负责人",
-          key: "ownerUserName",
+          key: "userName",
           align: "center"
         },
         {
           title: "人数",
-          key: "orgUserNum",
+          key: "num",
           align: "center"
         },
         {

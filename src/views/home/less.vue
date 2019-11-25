@@ -5,25 +5,32 @@
     <div class="zh">
       <p class="zh-sz">账户设置</p>
       <div class="zh-nr">
-        <div class="img"><img :src=uploadpath /></div>
-        <Upload action="//jsonplaceholder.typicode.com/posts/" :on-success="handleSuccess">
-        <Button icon="ios-cloud-upload-outline">上传头像</Button>
-    </Upload>
+        <div class="img">
+          <img :src="uploadpath" />
+        </div>
+        <Upload
+          :action=orgimg
+          :format="['jpg','jpeg','png']"
+          :show-upload-list=false
+          :on-success="handleSuccess"
+        >
+          <Button icon="ios-cloud-upload-outline">上传头像</Button>
+        </Upload>
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
           <FormItem label="用户名" prop="name">
-            <Input v-model="formValidate.name"></Input>
+            <Input v-model="formValidate.name" />
           </FormItem>
           <FormItem label="手机号" prop="mail">
-            <Input v-model="formValidate.mail"></Input>
+            <Input v-model="formValidate.mail" />
           </FormItem>
           <FormItem label="旧密码" prop="city">
-            <Input v-model="formValidate.mail"></Input>
+            <Input v-model="formValidate.mail" />
           </FormItem>
           <FormItem label="新密码" prop="city">
-            <Input v-model="formValidate.mail"></Input>
+            <Input v-model="formValidate.mail" />
           </FormItem>
           <FormItem label="确认密码" prop="city">
-            <Input v-model="formValidate.mail"></Input>
+            <Input v-model="formValidate.mail" />
           </FormItem>
           <FormItem>
             <Button type="success" @click="handleSubmit('formValidate')">提交</Button>
@@ -35,6 +42,7 @@
 </template>
 
 <script>
+import { orgimg } from "../../request/http";
 export default {
   data() {
     return {
@@ -46,7 +54,7 @@ export default {
         mail: "",
         city: ""
       },
-      uploadpath:'',
+      uploadpath: "",
       ruleValidate: {
         name: [
           {
@@ -74,7 +82,8 @@ export default {
             trigger: "change"
           }
         ]
-      }
+      },
+      orgimg: ""
     };
   },
 
@@ -83,6 +92,9 @@ export default {
   computed: {},
 
   created() {},
+  mounted() {
+    this.orgimg = orgimg;
+  },
 
   methods: {
     handleSubmit(name) {
@@ -99,9 +111,8 @@ export default {
     },
 
     //图片上传
-    handleSuccess(res,file){
-      this.uploadpath= file.name
-      console.log(res,file)
+    handleSuccess(res, file) {
+      console.log(res, file);
     }
   }
 };

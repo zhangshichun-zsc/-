@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import { getBooks } from '@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -178,7 +180,9 @@ export default {
         }
       ],
       data: [
-      ]
+      ],
+      page:1,
+      sumSize:10
     };
   },
 
@@ -186,9 +190,18 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList({page:1})
+  },
 
   methods: {
+    getList ({startAt,endAt,orgName}) {
+      getBooks(filterNull({page:{page:this.page,size:10},startAt,endAt,orgName})).then(res => {
+        this.sumSize = res.data.totalSize
+        this.data = res.data.list
+        this.page = res.data.pageNum
+      })
+    },
     ok() {
       this.$Message.info("新增成功");
     },

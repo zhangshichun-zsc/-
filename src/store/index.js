@@ -8,7 +8,7 @@ export default new Vuex.Store({
     token:localStorage.getItem('token') ? localStorage.getItem('token') : '',
     isLogin:localStorage.getItem('token') ? true: false,
     userName:localStorage.getItem('userName') ? localStorage.getItem('userName') : '',
-    userId:localStorage.getItem('userId') ? localStorage.getItem('userId') : ''
+    userId:localStorage.getItem('userId') ? localStorage.getItem('userId') : '17'
   },
   mutations: {
 

@@ -1,25 +1,64 @@
 <!-- 证书管理（共用） -->
 <template>
   <div>
-    <basicdata :navigation1="navigation1" @query="query"></basicdata>
+    <div class="integral-header">
+      <Navigation :labels="navigation1"></Navigation>
+      <div class="flex-center-between integral-top">
+        <div>
+          <Icon type="ios-search-outline" />
+          <span>筛选查询</span>
+        </div>
+        <div class="flex-center-end">
+          <div class="integral-center">
+            <Icon type="ios-arrow-down" />
+            <span>收起筛选</span>
+          </div>
+          <Button @click="queryMet()">查询结果</Button>
+        </div>
+      </div>
+      <div class="flex-center-start integral-body">
+        <div class="flex-center-start">
+          <span>名称</span>
+          <Input size="large" placeholder="基金名称" class="inpt" v-model="query.name" />
+        </div>
+        <div class="flex-center-start">
+          <span>有效状态</span>
+          <Select size="small" class="inpt" v-model="query.validFlag">
+            <Option value="1">有效状态</Option>
+            <Option value="0">无效状态</Option>
+          </Select>
+        </div>
+        <div class="flex-center-start">
+          <span>创建时间</span>
+          <Row>
+            <Col span="12">
+               <DatePicker
+                  type="datetimerange"
+                  @on-change="handleChange"
+                  placement="bottom-end"
+                  placeholder="Select date"
+                  style="width:300px"
+                  format="yyyy-MM-dd HH:mm"
+                ></DatePicker>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-         <Button @click="chackall()" style="border:0px;">
+          <!-- <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <span>已选择{{arr.length}}</span>
+          </Button> -->
+          <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
-          <Modal v-model="modal1" :title="'新增'+title">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+          <Modal v-model="modal1" title="修改" @on-ok='update' @on-cancel='cancel'>
+            <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
-                <Input v-model="formValidate.name"></Input>
+                <Input v-model="args.name"/>
               </FormItem>
             </Form>
-            <div slot="footer">
-              <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
-            </div>
           </Modal>
         </div>
       </div>
@@ -28,16 +67,15 @@
         border
         :columns="columns"
         :data="data1"
-        @on-selection-change="handleSelectionChange"
       ></Table>
       <div class="pages">
         <Page
-          :total="dataCount"
+          :total="sumSize"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
-          :page-size="pageSize"
+          :page-size="params.size"
           @on-change="changepages"
         />
       </div>
@@ -47,15 +85,14 @@
 
 <script>
 import {formatDate} from '../../request/datatime'
-import basicdata from "../../components/basicdata";
+import basicdata from "../../components/basicdata"
+import { getCard,updateCard } from '@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
       navigation1: {
         head: "证书管理（共用）"
-      },
-      formValidate: {
-        name: ""
       },
       ruleValidate: {
         name: [{ required: true, message: "就业情况不能为空", trigger: "blur" }]
@@ -63,42 +100,42 @@ export default {
       title: "证书管理",
       columns: [
         {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "就业情况",
-          key: "EmploymentSituation"
+          key: "name"
         },
         {
           title: "创建时间",
-          key: "createtime",
-           render:(h,params)=>{
-              return h("div",formatDate(params.row.createtime))
-          }
+          key: "createAt",
         },
         {
           title: "创建人",
-          key: "creater"
+          key: "userName",
+          render: (h,params) => {
+            return h("span",params.row.userName?params.row.userName:'系统管理员')
+          }
         },
         {
           title: "有效状态",
-          key: "status",
+          key: "validFlag",
           algin: "center",
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
-                props: {
-                  value: params.row.hotFlag == 1
+            return h('div', [
+              h('i-switch',{
+                props:{
+                  trueValue:1,
+                  falseValue:0,
+                  value: ~~params.row.validFlag
                 },
                 on: {
-                  input: e => {
-                    console.log(e)
+                  "on-change": (e) => {
+                    this.args.name = params.row.name
+                    this.args.dicId = params.row.dicId
+                    this.args.validFlag = e
+                    this.update()
                   }
                 }
               })
-            ]);
+            ])
           }
         },
         {
@@ -116,38 +153,43 @@ export default {
                   },
                   on: {
                     click: () => {
+                      this.args.name = params.row.name
+                      this.args.dicId = params.row.dicId
+                      this.args.validFlag = params.row.validFlag
                       this.modal1 = true;
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
               )
             ]);
           }
         }
       ],
+      query:{
+        name:null,
+        validFlag:null,
+        startAt:null,
+        endAt:null,
+      },
+      params:{
+        name:null,
+        validFlag:null,
+        startAt:null,
+        endAt:null,
+        page:{
+          page: 1,
+          size: 10
+        }
+      },
       data1: [],
       modal1: false,
-      arr: [],
-       page: 1,
-      size: 10,
-      dataCount: 0,
-      pageSize: 10,
-      status:false
+      sumSize:10,
+      args:{
+        name:null,
+        dicId:null,
+        validFlag:null
+      }
     };
   },
 
@@ -155,60 +197,46 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList()
+  },
 
   methods: {
-    //查询
-    query(e) {
-      console.log(e);
-    },
-
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      console.log(this.status);
-      this.$refs.selection.selectAll(this.status);
-    },
-
-    //取消
-    modalCancel(){
-
-    },
-    //确定
-    modalOk(){
-
-    },
-
-    //每条数据单选框的状态
-    handleSelectionChange(val){
-      this.arr=val
-      console.log(this.arr)
-      if (this.arr.length == this.dataCount&&this.dataCount!=0||this.arr.length==this.size) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
-       //选择的数据id
-        let arr = [];
-        for (let i = 0; i < this.arr.length+1; i++) {
-          arr.push(this.arr[i].informationId);
+    getList(){
+      getCard(filterNull(this.params)).then(res => {
+        if(res.code == 200){
+          this.data1 = res.data.list
+          this.sumSize = res.data.totalSize
+          this.params.page = res.data.pageNum
+          this.sumPage = res.data.totalNum
         }
-        this.arr = arr.toString();
-        console.log(this.arr)
+      })
     },
-
-     //分页功能
-    changepages(index) {
-      this.page = index;
-      console.log(index);
-
+    update(){
+      updateCard(this.args).then(res => {
+        if(res.code == 200){
+          this.getList()
+          this.$Message.success('修改成功')
+          this.cancel()
+        }
+      })
     },
-
-    ok() {
-      this.$Message.info("新增成功");
+    cancel(){
+      this.args.name = null
+      this.args.dicId = null
+      this.args.validFlag = null
     },
-    cancel() {
-      this.$Message.info("新增失败");
+    handleChange(e){
+      this.query.startAt = e[0]
+      this.query.endAt = e[1]
+    },
+    changepages(e){
+      this.params.page = e
+      this.getList()
+    },
+    queryMet(){
+      this.params = Object.assign(this.params,this.query)
+      this.getList()
     }
   }
 };
@@ -250,5 +278,27 @@ export default {
   transform: translateY(-50%);
   background: yellow;
   color: #000;
+}
+.integral-header {
+  border: 1px solid #eee;
+}
+.integral-header .integral-top {
+  padding: 15px 20px;
+  background: rgb(228, 228, 228);
+  border-bottom: 1px solid #eee;
+}
+.integral-header .integral-center {
+  margin: 0 20px;
+}
+.integral-header .integral-body {
+  padding: 20px;
+  background: #fff;
+}
+.integral-header .integral-body .flex-center-start .inpt {
+  width: 200px;
+  margin-left: 15px;
+}
+.integral-header .integral-body .flex-center-start {
+  margin-right: 20px;
 }
 </style>

@@ -68,7 +68,7 @@ export default {
           align: "center"
         },
         {
-          title: "就业情况",
+          title: "职业名称",
           key: "EmploymentSituation"
         },
         {
