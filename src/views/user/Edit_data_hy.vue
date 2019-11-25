@@ -685,10 +685,20 @@ export default {
     },
     // 跳转
     userDetaile() {
-      this.$router.push({ name: 'user_details_hy' })
+      this.$router.push({
+        name: 'user_details_hy',
+        query: {
+          userId: this.$route.query.userId
+        }
+      })
     },
     Log() {
-      this.$router.push({ name: 'Login_hy' })
+      this.$router.push({
+        name: 'Login_hy',
+        query: {
+          userId: this.$route.query.userId
+        }
+      })
     }
   }
 }

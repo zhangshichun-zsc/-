@@ -356,7 +356,7 @@ export default {
         name: 'parent'
       }
     }
-    // this.paramsObj.userId = localStorage.getItem('userId') || ''
+    this.paramsObj.userId = localStorage.getItem('userId') || ''
     this.getorgpage()
   },
   watch: {},

@@ -261,7 +261,7 @@
           <!--设置标签-->
           <Modal v-model="modal5" title="设置标签" @on-ok="onSetLabel">
             <CheckboxGroup v-model="labelcheckout">
-              <Checkbox v-for="item in labelList_c" :label="item.labelId">{{item.labelName}}</Checkbox>
+              <Checkbox v-for="item in labelList_c" :key='item.labelId' :label="item.labelId">{{item.labelName}}</Checkbox>
             </CheckboxGroup>
           </Modal>
 
