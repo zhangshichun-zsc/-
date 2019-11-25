@@ -15,8 +15,8 @@ const urlEncode = function (param, key, encode) {
   return paramStr;
 }
 
-const userExprot = function (parame) {
-  let exportUrl = userExprotUrl + "?" + urlEncode(parame).substr(1)
+const userExprot = function (hean, parame) {
+  let exportUrl = userExprotUrl + hean + "?" + urlEncode(parame).substr(1)
   window.open(exportUrl, '_blank')
 }
 

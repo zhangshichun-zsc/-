@@ -587,6 +587,16 @@ export default new Router({
                 component: () =>
                     import('@/views/organization/editDetail.vue')
             },
+            // 团队审批
+            {
+                path: 'teamApproval',
+                name: 'teamApproval',
+                meta: {
+                    icon: 'ios-navigate'
+                },
+                component: () =>
+                    import('@/views/organization/teamApproval.vue')
+            },
             {
                 path: 'volunteerGroup',
                 name: 'volunteerGroup',

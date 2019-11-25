@@ -1,4 +1,4 @@
-import { UserList, setBatch, setsend, getLabel, SetUserLabel, getLevel, userExprot, Userdetail } from "@/request/api";
+import { UserList, setBatch, setsend, getLabel, SetUserLabel, getLevel, userExprot, Userdetail, getVipPage, vipApproval, getVipUserInfo } from "@/request/api";
 
 const Public = {}
 
@@ -37,6 +37,20 @@ Public.GetLevel = function (parame) {
 Public.Userdetail = function (parame) {
     return Userdetail(parame)
 }
+
+Public.getVipPage = function (parame) {
+    return getVipPage(parame)
+}
+
+Public.vipApproval = function (parame) {
+    return vipApproval(parame)
+}
+
+
+Public.getVipUserInfo = function (parame) {
+    return getVipUserInfo(parame)
+}
+
 
 
 

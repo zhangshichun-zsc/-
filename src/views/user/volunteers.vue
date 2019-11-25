@@ -857,9 +857,9 @@ export default {
       if (this.isSenior) {
         exportUrl = this.util.remove({ size: this.totalSize, ...this.paramsSeniorObj })
       } else {
-        exportUrl = this.util.remove({ ...this.paramsObj })
+        exportUrl = this.util.remove({ size: this.totalSize, ...this.paramsObj })
       }
-      this.util.userExprot({ sysType: 2, page: 0, ...exportUrl })
+      this.util.userExprot('/user-list/user-export', { sysType: 2, page: 0, ...exportUrl })
     },
     // 获取标签
     getLabels(params) {
