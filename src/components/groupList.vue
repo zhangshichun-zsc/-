@@ -1,14 +1,14 @@
 <template>
   <div class="integral">
 
-    <Modal title="拒绝理由" v-model="modal8" :mask-closable="false">
+    <!-- <Modal title="拒绝理由" v-model="modal8" :mask-closable="false">
       <input class='rejbtn' type="textarea" v-model="value" placeholder='请输入原因'>
       <p v-show="isModel" class='tips'>请输入拒绝理由</p>
       <div slot="footer">
         <Button type="text" size="large" @click="modalCancel">取消</Button>
         <Button type="primary" size="large" @click="modalOk">确定</Button>
       </div>
-    </Modal>
+    </Modal> -->
 
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
@@ -24,7 +24,7 @@
           <span>组织名称</span>
           <Input size="small" placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
-        <div class="flex-center-start">
+        <div class="flex-center-start" v-if='!navigation1.name==="volunteer"'>
           <span>审核状态</span>
           <Select size='small' v-model="orgStatus" class="inpt">
             <Option value="0">全部</Option>
@@ -51,12 +51,17 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Icon type="md-reorder" size='20' />
-          <span @click="handleSelectAll(true)">全选</span>
-          <Button class="table-btn" @click='batchAdopt'>通过</Button>
-          <Button class="table-btn" @click="batchRefuse">拒绝</Button>
+          <!-- <Icon type="md-reorder" size='20' />
+          <span @click="handleSelectAll(true)">全选</span> -->
+          <span v-if='!navigation1.name==="volunteer"'>
+            <Button class="table-btn" @click='batchAdopt'>通过</Button>
+            <Button class="table-btn" @click="batchRefuse">拒绝</Button>
+          </span>
+          <Button type="info" style='margin-left: 10px;' ghost @click='jump'>
+            {{navigation1.name==="parent"?'家长小组 ':'志愿者团队'}}审批</Button>
         </div>
         <div>
+
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -64,6 +69,7 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
+
       </div>
       <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
@@ -73,7 +79,14 @@
 </template>
 
 <script>
-import { orgpage, orgSetStatus } from '../request/api'
+import {
+  orgpage,
+  orgSetStatus,
+  queryVouluteerOrgList,
+  modifyOrgMsg,
+  orgSetGroup
+} from '../request/api'
+import { setTimeout } from 'timers'
 export default {
   data() {
     return {
@@ -88,32 +101,7 @@ export default {
         {
           title: '组织名称',
           key: 'orgName',
-          align: 'center',
-          render: (h, params) => {
-            return h(
-              'span',
-              {
-                style: {
-                  color: 'blue',
-                  cursor: 'pointer'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push({
-                      path: '/organization/editDetail',
-                      query: {
-                        orgId: params.row.orgId,
-                        status: params.row.status,
-                        auditId: params.row.auditId,
-                        head: this.navigation1.name
-                      }
-                    })
-                  }
-                }
-              },
-              params.row.orgName
-            )
-          }
+          align: 'center'
         },
         {
           title: '组织分类',
@@ -133,7 +121,11 @@ export default {
         {
           title: '组织地址',
           key: 'address',
-          align: 'center'
+          align: 'center',
+          render: (h, params) => {
+            let address = params.row
+            return h('span', address.provinceName + address.cityName + address.districtName)
+          }
         },
         {
           title: '负责人',
@@ -155,14 +147,21 @@ export default {
           key: 'status',
           align: 'center',
           render: (h, params) => {
-            let status = params.row.status
-            let statu = {
-              1: '待审核',
-              2: '已审核',
-              3: '已拒绝'
+            let validFlag = params.row.validFlag
+            let state = {
+              0: '无效',
+              1: '有效'
             }
-
-            return h('span', statu[status])
+            return h(
+              'span',
+              {
+                style: {
+                  color: 'green',
+                  cursor: 'pointer'
+                }
+              },
+              state[validFlag]
+            )
           }
         },
         {
@@ -170,58 +169,78 @@ export default {
           key: 'action',
           align: 'center',
           render: (h, params) => {
+            let validFlag = params.row.validFlag
+            let state = {
+              0: '无效',
+              1: '有效'
+            }
+
             return h('div', [
               h(
                 'span',
                 {
                   clssName: 'action',
                   style: {
-                    color: params.row.status == 1 ? 'green' : '#ccc',
+                    color: 'green',
                     cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      if (params.row.status == 1) {
-                        this.batchAdopt(params.row.auditId)
-                      }
+                      let address = params.row
+                      localStorage.setItem(
+                        'city',
+                        address.provinceName + address.cityName + address.districtName
+                      )
+                      setTimeout(res => {
+                        this.$router.push({
+                          path: '/organization/editDetail',
+                          query: {
+                            orgId: params.row.orgId,
+                            head: this.navigation1.name
+                          }
+                        })
+                      }, 100)
                     }
                   }
                 },
-                '通过'
+                '查看'
               ),
               h(
-                'span',
+                'a',
                 {
                   style: {
                     marginRight: '5px',
                     marginLeft: '5px',
-                    color: params.row.status == 1 ? 'red' : '#ccc',
+                    color: 'green',
                     cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      if (params.row.status == 1) {
-                        this.showModal(params.row.auditId)
-                      }
+                      this.setModifyOrgMsg({
+                        validFlag: params.row.validFlag == 1 ? '0' : '1',
+                        orgId: params.row.orgId
+                      })
                     }
                   }
                 },
-                '拒绝'
+                `设为${validFlag == 1 ? '无效' : '有效'}`
               )
             ])
           }
         }
       ],
       data: [],
-      Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
+      Article: [
+        { value: 10, label: '显示10条' },
+        { value: 15, label: '显示15条' },
+        { value: 20, label: '显示20条' }
+      ],
       sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
       sort: 'asc',
       page: 1,
       size: 10,
       dataCount: 0,
       arr: [],
-      // status: false,
-      // sysType: '1',
       orgStatus: '0',
       orgName: '',
       address: '',
@@ -249,7 +268,7 @@ export default {
         startAt: this.startAt ? this.startAt.getTime() : '',
         endAt: this.endAt ? this.endAt.getTime() : ''
       })
-      if (this.navigation1.name === 'parent') {
+      if (this.$props.navigation1.name === 'parent') {
         orgpage(fromobj).then(res => {
           if (res.code == 200) {
             this.dataCount = res.data.totalSize
@@ -258,7 +277,12 @@ export default {
           console.log(res)
         })
       } else {
-        alert('请求志愿者团队的列表数据')
+        queryVouluteerOrgList(fromobj).then(res => {
+          if (res.code == 200) {
+            this.dataCount = res.data.totalSize
+            this.data = res.data.list
+          }
+        })
       }
     },
     // 家长小组审核
@@ -305,10 +329,32 @@ export default {
             }
           }
         })
-      } else {
-        alert('志愿者团队')
       }
     },
+    setModifyOrgMsg(params) {
+      if (this.navigation1.head === 'parent') {
+        console.log('掉用了家长小组的接口')
+        // 家长小组修改 无效，有效
+        orgSetGroup(params).then(res => {
+          if (res.code === 200) {
+            this.$Message.success('修改成功')
+            this.getorgpage()
+          } else {
+            this.$Message.error('修改失败')
+          }
+        })
+      } else {
+        modifyOrgMsg(params).then(res => {
+          if (res.code === 200) {
+            this.$Message.success('修改成功')
+            this.getorgpage()
+          } else {
+            this.$Message.error('修改失败')
+          }
+        })
+      }
+    },
+
     //查询结果
     query() {
       this.getorgpage()
@@ -402,14 +448,7 @@ export default {
     //选择内容
     handleSelectionChange(val) {
       this.arr = val
-      // if (
-      //   (this.arr.length == this.dataCount && this.dataCount != 0) ||
-      //   this.arr.length == this.size
-      // ) {
-      //   this.status = true
-      // } else {
-      //   this.status = false
-      // }
+
       let arr = []
       for (let i = 0; i < this.arr.length; i++) {
         arr.push(this.arr[i].auditId)
@@ -419,6 +458,14 @@ export default {
 
     handleSelectAll(status) {
       this.$refs.selection.selectAll(status)
+    },
+    jump() {
+      this.$router.push({
+        name: 'teamApproval',
+        query: {
+          head: this.navigation1.name
+        }
+      })
     }
   }
 }

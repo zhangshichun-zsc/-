@@ -91,25 +91,6 @@ export default {
           key: "agFile",
           width: "100px",
           align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "a",
-                {
-                  clssName: "action",
-                  style: {
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      //   this.$router.push({ name: 'vp_edquestion' })
-                    }
-                  }
-                },
-                "附件"
-              )
-            ]);
-          }
         },
         {
           title: "操作",
@@ -117,21 +98,6 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h(
-                "a",
-                {
-                  clssName: "action",
-                  style: {
-                    color: "#097276"
-                  },
-                  on: {
-                    click: () => {
-                      //   this.$router.push({ name: 'vp_edquestion' })
-                    }
-                  }
-                },
-                "上传附件"
-              ),
               h(
                 "a",
                 {

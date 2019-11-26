@@ -25,11 +25,11 @@
             <div class="paper-top flex-start">
               <p>
                 <Icon type="ios-heart" size="30" />
-                <span>收藏 1000</span>
+                <span>收藏 {{list.collectionNum}}</span>
               </p>
               <p>
                 <Icon type="ios-eye" size="30" />
-                <span>阅读 10000</span>
+                <span>阅读 {{list.readNum}}</span>
               </p>
             </div>
             <Divider />
@@ -76,11 +76,11 @@
             <div class="paper-top flex-start">
               <p>
                 <Icon type="ios-chatbubbles" size="30" />
-                <span>全部评论 100</span>
+                <span>全部评论 {{list.commentNUm}}</span>
               </p>
             </div>
             <Divider />
-            <div class="paper-con">
+            <!-- <div class="paper-con">
               <div class="reply">
                 <div class="portrait">
                   <Icon type="ios-person" size="80" />
@@ -99,7 +99,7 @@
                     <span>删除</span>
                   </p>
                 </div>
-              </div>
+              </div> -->
               <Divider />
             </div>
           </div>
@@ -150,7 +150,9 @@ export default {
       }).then(res => {
         console.log(res);
         if(res.code==200){
+
           this.list = res.data
+          this.list.releaseTimestamp=this.util.formatDate(res.data.releaseTimestamp)
         }
       });
     }

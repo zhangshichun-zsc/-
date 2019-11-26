@@ -32,7 +32,7 @@
             <Menu mode="horizontal" theme="dark" active-name="1">
               <div class="layout-logo">角色</div>
               <div class="btn1">
-                <Button @click="modal1=true">新建角色</Button>
+                <Button @click="newbtn">新建角色</Button>
                 <Modal v-model="modal1" title="新增常用报名项">
                   <Form
                     ref="formValidate"
@@ -48,7 +48,6 @@
                     </FormItem>
                     <Button @click="function1">权限设置</Button>
                   </Form>
-
                   <div slot="footer">
                     <Button type="text" size="large" @click="modalcancel()">取消</Button>
                     <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
@@ -66,7 +65,7 @@
           <Layout>
             <Sider hide-trigger :style="{background: '#008e40'}">
               <Menu
-                :active-name="`1-${this.role}`"
+                :active-name="`1-${role}`"
                 width="auto"
                 :open-names="['1']"
                 style="background-color: #008e40;color: white;"
@@ -204,7 +203,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "Add-members" });
+                      this.$router.push({
+                        name: "Add-members",
+                        query: { userId: params.row.userId, name: this.role }
+                      });
                     }
                   }
                 },
@@ -220,8 +222,12 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.ids = params.row.userId;
-                      this.getroledel();
+                      if (this.role == "") {
+                        this.$Message.error("请先选择角色");
+                      } else {
+                        this.ids = params.row.userId;
+                        this.getroledel();
+                      }
                     }
                   }
                 },
@@ -240,30 +246,36 @@ export default {
       List: [],
       listpage: "",
       ids: "",
-      add:'',
-      data1: this.getMockData(),
-      targetKeys1: this.getTargetKeys()
+      add: "",
+      // data1: this.getMockData(),
+      // targetKeys1: this.getTargetKeys()
+      data1: [],
+      targetKeys1: []
     };
   },
 
   watch: {
     role: "getrolenumquery"
   },
+  mounted() {
+    this.getrolenumquery();
+    this.getrolequery();
+  },
   methods: {
-
-
     getMockData() {
       let mockData = [];
-      for (let i = 1; i <= 20; i++) {
+      for (let i = 0; i < this.List.length; i++) {
         mockData.push({
-          key: i.toString(),
-          label: "Content " + i,
-          description: "The desc of content  " + i,
-          // disabled: Math.random() * 3 < 1
+          key: this.List[i].sysRoleId,
+          label: this.List[i].sysRoleName,
+          description: i
         });
       }
+      this.data1 = mockData;
       return mockData;
     },
+
+    //key值
     getTargetKeys() {
       return this.getMockData()
         .filter(() => Math.random() * 2 > 1)
@@ -301,6 +313,10 @@ export default {
       rolequery({}).then(res => {
         if (res.code == 200) {
           this.List = res.data;
+          if (this.List.length != 0) {
+            this.role = this.List[0].sysRoleName;
+            console.log(this.List[0].sysRoleName, `1-${this.role}`);
+          }
         }
         console.log(res);
       });
@@ -323,42 +339,15 @@ export default {
 
     //角色删除
     getroledel() {
+      this.add = this.List.filter(item => item.sysRoleName == this.role);
+      console.log(this.add);
       roledel({
         userIds: this.ids,
-        sysRoleId: this.role
+        sysRoleId: this.add[0].sysRoleId
       }).then(res => {
         if (res.code == 200) {
-        }
-        console.log(res);
-      });
-    },
-
-    //添加角色列表
-    getroleAddto() {
-      this.add=this.List.filter(item=>item.sysRoleId==this.role)
-      if(this.add.length!=0){
-         roleAddto({
-        sysRoleName: this.add[0].sysRoleName
-      }).then(res => {
-        if(res.code==200){
-          this.data1=res.data
-        }
-        console.log(res);
-      });
-      }
-
-    },
-
-    //编辑角色
-    getroleedit(obj) {
-      roleedit({
-        userName: obj.userName,
-        tel: obj.tel,
-        email: obj.email,
-        comments: obj.comments,
-        loginPwd: obj.loginPwd
-      }).then(res => {
-        if (res.code == 200) {
+          this.$Message.info("删除成功");
+          this.getrolenumquery();
         } else {
           this.$Message.error(res.msg);
         }
@@ -366,17 +355,38 @@ export default {
       });
     },
 
+    //添加角色列表
+    getroleAddto() {
+      this.add = this.List.filter(item => item.sysRoleName == this.role);
+      if (this.add.length != 0) {
+        roleAddto({
+          sysRoleName: this.add[0].sysRoleName
+        }).then(res => {
+          if (res.code == 200) {
+            this.data1 = res.data;
+          }
+          console.log(res);
+        });
+      }
+    },
+
     //新建成员
-    newadd(){
-      this.targetKeys1=this.List
-      this.modal2=true
+    newadd() {
+      this.getMockData();
+      this.getTargetKeys();
+      this.modal2 = true;
       this.getroleAddto()
+    },
+
+    //新建
+    newbtn() {
+      this.modal1 = true;
+      this.formValidate.name = "";
+      this.formValidate.sysRoleNames = "";
     },
 
     //查询
     querys() {
-
-      console.log(`1-${this.role}`);
       this.getrolenumquery();
     },
 
@@ -396,8 +406,6 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.formValidate.sysRoleNames = "";
-          this.formValidate.name = "";
           this.getrolenew();
         } else {
           this.$Message.error("Fail!");
@@ -411,16 +419,17 @@ export default {
       this.modal1 = false;
     },
 
-    addmember() {
-      this.$router.push({ name: "Add-members" });
-    },
+    // addmember() {
+    //   this.$router.push({ name: "Add-members" });
+    // },
     function1() {
-      this.$router.push({ name: "function" });
+      this.add = this.List.filter(item => item.sysRoleName == this.role);
+      console.log(this.add);
+      this.$router.push({
+        name: "function",
+        query: { sysRoleId: this.add[0] }
+      });
     }
-  },
-  mounted() {
-    this.getrolenumquery();
-    this.getrolequery();
   }
 };
 </script>

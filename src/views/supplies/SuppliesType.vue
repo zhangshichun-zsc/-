@@ -218,7 +218,7 @@ export default {
       size: 10,
       dataCount: 0,
       status: false,
-      arr: '',
+      arr: "",
       statues: "",
       sysId: 1,
       text: null,
@@ -391,19 +391,25 @@ export default {
 
     //批量删除
     batch(e) {
-      console.log(this.arr)
-      if (this.arr=='') {
-        this.$Message.error("请先选择");
-      } else {
-        if (e == "sanchu") {
-          this.getmaterialdel();
+      console.log(this.arr);
+      if (e == "sanchu") {
+        //选择的数据id
+        this.arr = this.arr.map(item => {
+          return item.dicId;
+        });
+        if (this.arr == null) {
+          this.$Message.error("请至少选择一个");
         } else {
-          this.arr = Array.of(e);
           console.log(this.arr);
           this.getmaterialdel();
         }
+      } else {
+        this.arr = Array.of(e);
+        console.log(this.arr);
+        this.getmaterialdel();
       }
     },
+
     //全选按钮
     chackall() {
       this.status = !this.status;
@@ -428,18 +434,11 @@ export default {
       } else {
         this.status = false;
       }
-      //选择的数据id
-      let arr = [];
-      for (let i = 0; i < this.arr.length; i++) {
-        arr.push(this.arr[i].dicId);
-      }
-      this.arr = arr;
-      console.log(this.arr);
     }
   },
-  created() {
-    this.getmaterialtypequery();
-  },
+  // created() {
+  //   this.getmaterialtypequery();
+  // },
   mounted() {
     this.getmaterialtypequery();
   }

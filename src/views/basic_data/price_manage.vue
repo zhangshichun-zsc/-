@@ -13,23 +13,33 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button>查询结果</Button>
+          <Button @click="getList()">查询结果</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>名称</span>
-          <Input size="large" placeholder="基金名称" class="inpt" />
+          <Input size="large" placeholder="基金名称" class="inpt" v-model="args.orgName" />
         </div>
         <div class="flex-center-start">
           <span>有效状态</span>
-          <Input size="large" placeholder="全部" class="inpt" />
+          <Select size="small" class="inpt" v-model="args.validFlag">
+            <Option value="1">有效状态</Option>
+            <Option value="0">无效状态</Option>
+          </Select>
         </div>
         <div class="flex-center-start">
           <span>创建时间</span>
           <Row>
             <Col span="12">
-              <DatePicker type="date" placeholder="请选择日期" style="width: 200px" class="sdate"></DatePicker>
+               <DatePicker
+                  type="datetimerange"
+                  @on-change="handleChange"
+                  placement="bottom-end"
+                  placeholder="Select date"
+                  style="width:300px"
+                  format="yyyy-MM-dd HH:mm"
+                ></DatePicker>
             </Col>
           </Row>
         </div>
@@ -40,45 +50,34 @@
         <div>
           全选
           <span>已选择0</span>
-          <Button class="table-btn">批量删除</Button>
-          <Button class="table-btn" @click="modal1 = true">新增</Button>
+          <Button class="table-btn" @click="deletes()">批量删除</Button>
+          <Button class="table-btn" @click="showModal(null)">新增</Button>
           <Modal v-model="modal1" title="新增基金" @on-ok="ok" @on-cancel="cancel">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="基金名称" prop="name">
-                   <Input v-model="formValidate.name" placeholder="请输入基金名称"></Input>
+            <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
+                 <FormItem label="基金名称" prop="orgName">
+                   <Input v-model="pams.orgName" placeholder="请输入基金名称"/>
                   </FormItem>
-                   <FormItem label="联系人员" prop="linker">
-                     <Input v-model="formValidate.link"></Input>
-                  </FormItem>
-                   <FormItem label="联系方式" >
-                     <Input></Input>
-                  </FormItem>
-              </Form>
-          </Modal>
-          <Modal v-model="modal2" title="修改基金" @on-ok="ok" @on-cancel="cancel">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="基金名称" prop="name">
-                   <Input v-model="formValidate.name" placeholder="请输入基金名称"></Input>
-                  </FormItem>
-                   <FormItem label="联系人员" prop="linker">
-                     <Input v-model="formValidate.link"></Input>
+                   <FormItem label="联系人员" prop="contactUserName">
+                     <Input v-model="pams.contactUserName"/>
                   </FormItem>
                    <FormItem label="联系方式" >
-                     <Input></Input>
+                     <Input v-model="args.contactUserPhone"/>
                   </FormItem>
               </Form>
           </Modal>
         </div>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+      <Table border :columns="columns" :data="data" @on-select='select' @on-select-cancel='select' @on-select-all='select' @on-select-all-cancel='select'></Table>
       <div class="pages">
-        <Page :total="100" show-elevator show-total size="small" />
+        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getfund,updateFun } from '@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -86,19 +85,14 @@ export default {
         head: "基金管理(会员)"
       },
       modal1: false,
-      modal2: false,
         formItem: {
         input: '',
-                },
-       formValidate:{
-          name:"",
-          linker:""
        },
        ruleValidate:{
           name: [
           { required: true, message: '基金名称不能为空', trigger: 'blur' }
                 ],
-          linker: [
+          contactUserName: [
           { required: true, message: '联系人员不能为空', trigger: 'blur' }
                 ]
        },
@@ -110,32 +104,44 @@ export default {
         },
         {
           title: "基金名称",
-          key: "pricename"
+          key: "orgName"
         },
         {
           title: "联系人",
-          key: "linker"
+          key: "contactUserName"
         },
         {
           title: "联系电话",
-          key: "phone",
-          render: (h, params) => {
-            return h("div", "13111111111");
-          }
+          key: "contactUserPhone",
         },
         {
           title: "创建时间",
-          key: "createtime",
-          render: (h, params) => {
-            return h("div", "2019-6-28 15:00");
-          }
+          key: "createAt",
         },
         {
           title: "有效状态",
-          key: "status",
+          key: "validFlag",
           algin: "center",
-          render: (h, params) => {
-            return h("div", [h("i-switch")]);
+           render: (h, params) => {
+            return h('div', [
+              h('i-switch',{
+                props:{
+                  trueValue:1,
+                  falseValue:0,
+                  value: ~~params.row.validFlag
+                },
+                on: {
+                  "on-change": (e) => {
+                    // let item = this.datax[e]
+                    // this.adds.itemId = item.itemId
+                    // this.adds.typeFlag = item.typeFlag
+                    // this.adds.name = item.name
+                    // this.adds.validFlag = e
+                    // this.addOk()
+                  }
+                }
+              })
+            ])
           }
         },
         {
@@ -145,31 +151,33 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "a",
+                "Button",
                 {
-                  clssName: "action",
-                  style: {
-                    color: "#097276"
+                  props:{
+                    type:'primary'
                   },
                   on: {
                     click: () => {
-                      this.modal2=true
-                      // this.$router.push({ name: 'integral_detail' })
+                      this.showModal(params.row)
                     }
                   }
                 },
                 "编辑"
               ),
               h(
-                "a",
+                "Button",
                 {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
+                 props:{
+                   type:'primary'
+                 },
                   on: {
-                    click: () => {}
+                    click: () => {
+                      this.pams.orgId = params.row.orgId
+                      this.pams.delFlag = 1
+                      this.pams.validFlag = params.row.validFlag
+                      this.list = []
+                      this.ok()
+                    }
                   }
                 },
                 "删除"
@@ -179,7 +187,32 @@ export default {
         }
       ],
       data: [
-      ]
+      ],
+      args:{
+        orgName:null,
+        startAt:null,
+        endAt: null,
+        validFlag:null,
+        page: {
+          page:1,
+          size:10
+        }
+      },
+      sumPage:1,
+      sumSize:1,
+      pams:{
+        orgId:null,//新增不
+		    sysId:1,
+		    orgType:4,
+		    orgName:null,
+		    businessDays:null,
+		    contactUserName:null,
+		    contactUserPhone:null,
+		    validFlag:1,
+        status:2,
+        delFlag:0,//1删除
+      },
+      list:[]
     };
   },
 
@@ -187,14 +220,72 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList()
+  },
 
   methods: {
+    getList(){
+      let args = filterNull(this.args)
+      getfund(args).then(res => {
+        this.sumSize = res.data.totalSize
+        this.data = res.data.list
+        this.args.page = res.data.pageNum
+        this.sumPage = res.data.totalNum
+      })
+    },
+    changePage(e){
+      this.args.page = e
+      this.getList()
+    },
+    handleChange(e){
+      this.args.startAt = e[0]
+      this.args.endAt = e[1]
+    },
+    showModal(e){
+      if(e == null){
+        this.cancel()
+      }else{
+        this.pams.orgId = e.orgId
+        this.pams.orgName = e.orgName
+        this.pams.businessDays = e.createAt
+        this.pams.contactUserName = e.contactUserName
+        this.pams.contactUserPhone = e.contactUserPhone
+      }
+      this.list = []
+      this.modal1 = true
+    },
     ok() {
-      this.$Message.info("新增成功");
+      let list = this.list
+      list.push(this.pams)
+      this.update()
+    },
+    update(list){
+       list = filterNull(list)
+      updateFun(list).then(res => {
+        if(res.code == 200){
+          this.$message.success('更新成功')
+          this.list = []
+          this.getList()
+        }
+      })
     },
     cancel() {
-      this.$Message.info("新增失败");
+      this.pams.orgId = null
+      this.pams.orgName = null
+      this.pams.businessDays =null
+      this.pams.contactUserName = null
+      this.pams.contactUserPhone = null
+    },
+    select(e){
+      this.list = e
+    },
+    deletes(){
+      let list = this.list
+      for(let item of list){
+        item.delFlag = 1
+      }
+      this.list = list
     }
   }
 };

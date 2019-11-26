@@ -5,7 +5,6 @@ import { get, post, posts, postdel, gets } from './http'
 
 
 
-
 //登陆
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
@@ -20,6 +19,7 @@ export const Homeactpend = p => get('/home/undeal-transaction', p) //首页--待
 
 export const Homeactwhole = p => get('/home/overview', p) // 首页--活动总览
 
+export const Setup = p => posts('/user-list/update-account', p) // 首页--用户设置
 
 
 
@@ -130,6 +130,12 @@ export const projectmanpage = p => get('/base-material/get-act-category-page', p
 
 export const Activitybudpage = p => get('/base-material/get-act-category-budge-page', p) //基础资料--活动预算分页
 
+export const Agreementclasslist = p => get('/agreement-manage/agree/type/list', p) //协议管理协议分类
+
+export const Agreementclassadd = p => posts('/agreement-manage/agree/type/set', p) //协议管理协议添加
+
+export const Agreementclassstats = p => posts('/agreement-manage/agree/type/del', p) //协议管理协议状态
+
 
 
 //智障类型
@@ -187,6 +193,22 @@ export const InvitationDetailed = p => get('/invite-friends/get-invite-info', p)
 
 export const BiInvitationList = p => get('/invite-friends/get-invited-friends-page', p) //-获取被邀请人分页
 
+
+//短信消息
+export const messageShort = p => posts('/smMsg/getMsgList', p) //-短信消息
+
+export const messageremind = p => posts('/smMsg/getMsgMoudleList', p) //-消息提醒
+
+export const messagerestats = p => posts('/smMsg/msgMouldIsOk', p) //-消息提醒--修改状态
+
+export const WeChatmessage = p => posts('/smMsg/getWxMoulId', p) //-微信提醒
+
+export const WeChatmessageSee = p => get('/smMsg/getSsmDetail', p) //-微信提醒-查看
+
+export const WeChatmessagestats = p => posts('/smMsg/ssmIsOk', p) //-微信提醒-修改状态
+
+
+
 // export const Costbatch = p => post('/invite-friends/get-invite-friends-page', p)  //-邀请好友分页
 
 
@@ -222,6 +244,22 @@ export const Userhistory = p => get('/user-list/get-login-his-page', p) //-用�
 export const Userfilter = p => get('/user-filter/get-user-filter-page', p) //-用户筛选--用户筛选分页
 
 export const Userdetail = p => get('/user-list/user-detail-info', p) //-用户列表--获取用户详情
+
+export const getLabel = p => get('/user-list/get-label', p) // 获取所有标签
+
+export const SetUserLabel = p => posts('/user-list/batch-opr-label', p) // 设置用户标签
+
+export const getLevel = p => get('/user-list/get-level-info', p) // 获取用户等级
+
+export const getVipPage = p => get('/user-list/get-vip-page', p) //获取 vip审核 列表
+
+export const vipApproval = p => posts('/user-list/batch-opt-vip', p) //vip  审批 or 拒绝
+
+export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员编辑
+
+
+
+
 
 //  用户列表
 export const UserList = p => get('/user-list/get-user-page', p) //-用户列表--获取用户详情
@@ -269,12 +307,27 @@ export const orgpage = p => posts('/org/getHomeList', p) //组织管理--组织�
 
 export const orgSetStatus = p => posts('/org/updateAdminAudit', p) // 审批
 
+export const orgSetGroup = p => posts('/org/updateHomeGroup', p) // 设置有效，and 无效
+
 export const orgGetInfo = p => get('/org/getHomeDetail', p) // 具体家长小组详情
 
+export const getIsConfig = p => get('/org/getIsConfig', p) // 判断当前用户下有没有审批权限
 
 // 志愿者团队
 
+export const queryVouluteerOrgList = p => posts('/volunteer-manager/queryVouluteerOrgList', p) //获取志愿者团队列表
 
+
+export const auditCreateCoOrg = p => posts('/volunteer-manager/auditCreateCoOrg', p) //审批志愿者团队 同伙 and 拒绝
+
+export const modifyOrgMsg = p => posts('/volunteer-manager/modifyOrgMsg', p) // 设置 无效/有效
+
+export const queryVolunteerOrgDetail = p => get('/volunteer-manager/queryVolunteerOrgDetail', p) // 获取详情
+
+
+
+//  审批
+export const queryAuditList = p => posts('/volunteer-manager/queryAuditList', p) // 审批页面详情
 
 
 
@@ -336,11 +389,44 @@ export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建�
 
 export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
-export const roledel = p => get('/sysRole/delUserRole', p) //角色管理--删除
+export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
 export const roleAddto = p => posts('/sysRole/findOtherRoleUser', p) //角色管理--添加成员
 
 export const roleedit = p => posts('/sysRole/edicRoleUser', p) //角色管理--编辑成员
+
+//部门管理
+export const departmentlist = p => get('/web/dept/findAllDept', p) //部门管理--部门列表
+
+export const departmentsub = p => get('/web/dept/findLevelDept', p) //部门管理--查询下级部门
+
+export const departmentStatu = p => get('/web/dept/changgeStatus', p) //部门管理--修改启用状态
+
+export const departmentmember = p => posts('/web/dept/findDeptUser', p) //部门管理--查询部门成员
+
+export const departmentedit = p => posts('/web/dept/editDept', p) //部门管理--部门列表编辑
+
+export const departmentadd = p => posts('/web/dept/addDept', p) //部门管理--部门列表添加
+
+export const departmentStatus = p => get('/web/dept/changgeDeptUserStatus', p) //部门管理-部门成员-修改启用状态
+
+export const departmentSup = p => get('/web/dept/findUpDeptName', p) //部门管理--查询所有上级部门名称
+
+export const departmentall = p => get('/web/dept/findAllDeptName', p) //部门管理--查询所有部门名称
+
+
+//日志
+export const Journallist = p => posts('web/log/findAll', p) //日志信息-列表
+
+export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除日志信息
+
+
+
+
+
+
+
+
 
 
 //权限设置
@@ -403,9 +489,19 @@ export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动
 
 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag
-export const getActiveLimit = p => post('/volunteer-manager/apply/sign/limits', p)// 活动限制项
+export const getActiveLimit = p => posts('/volunteer-manager/apply/sign/limits', p)// 活动限制项
 export const getActiveSign = p => get('/volunteer-manager/queryActivityItem', p) //活动报名项
 export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询归属团队
-export const saveActive = p => post('/volunteer-manager/saveVolunteerActivity', p)//保存
-export const getOrgId = p => get("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
-export const getGood = p => post("/volunteer-manager/applySigenFirst", p)//优先
+export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity', p)//保存
+export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
+export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
+export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
+export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p) 
+export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p) 
+export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) 
+export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
+export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
+export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList",p)
+export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail',p)//证书详情
+export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould",p) //
+export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould",p)//团队

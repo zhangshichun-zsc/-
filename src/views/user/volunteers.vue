@@ -9,8 +9,8 @@
         <div class="flex-center-end">
           <div class="integral-center">
             <Icon type="ios-arrow-down" /><span>收起筛选</span></div>
-          <Button>查询结果</Button>
-          <Button>高级检索</Button>
+          <Button @click='getInfo'>查询结果</Button>
+          <Button @click='getSenior'>高级检索</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">
@@ -23,8 +23,13 @@
           <Input size="large" v-model="paramsObj.orgName" placeholder="团队名称" class="inpt" />
         </div>
         <div class="flex-center-start">
-          <span>服务时长:</span>
-          <TimePicker type="time" placeholder="请选择时间时间" class="inpt" size='large'></TimePicker>
+          <!-- <span>服务时长:</span>
+          <TimePicker type="time" placeholder="请选择时间时间" class="inpt" size='large'></TimePicker> -->
+
+          <span>提交日期</span>
+          <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 200px"></DatePicker>
+          <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 200px"></DatePicker>
+
         </div>
         <div class="flex-center-start">
           <span>标签:</span>
@@ -41,7 +46,7 @@
         </div>
         <div>
           <!--群发短信-->
-          <Modal v-model="modal1" title="群发短信" @on-ok="ok" @on-cancel="cancel">
+          <Modal v-model="modal1" title="群发短信" @on-ok="ok" @on-cancel="cancel" :mask-closable="false">
             <Form ref="formValidate1" :model="formValidate1" :rules="ruleValidate1" :label-width="120">
               <FormItem label="发送对象：" prop="tag">
                 <p>
@@ -63,8 +68,8 @@
               </FormItem>
             </Form>
           </Modal>
-          <Dropdown>
-            <Button @click="modal1 = true">
+          <Dropdown trigger="click">
+            <Button @click="modal1 = true" disabled>
               群发短信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -74,12 +79,12 @@
             </DropdownMenu>
           </Dropdown>
           <!--群发站内信-->
-          <Modal v-model="modal2" title="群发站内信" @on-ok="ok" @on-cancel="cancel">
+          <Modal v-model="modal2" title="群发站内信" @on-ok="onStation" @on-cancel="onStation" :mask-closable="false">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
               <FormItem label="发送对象：" prop="tag">
                 <p>
                   <span>共</span>
-                  <span class="red">20</span>
+                  <span class="red">{{this.ALLLIST.length}}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
@@ -87,19 +92,19 @@
                 <Input v-model="formValidate2.title"></Input>
               </FormItem>
               <FormItem label="内容：" prop="content">
-                <Input v-model="formValidate2.content" type="textarea" :autosize="{minRows: 5,maxRows: 8}"></Input>
+                <Input v-model="formValidate2.msg" type="textarea" :autosize="{minRows: 5,maxRows: 8}"></Input>
                 <p style="font-size: 12px;">站内信标题不能超过20个字，内容不能超过100个字。</p>
               </FormItem>
             </Form>
           </Modal>
-          <Dropdown>
-            <Button @click="modal2 = true">
+          <Dropdown @on-click='isALL'>
+            <Button @click="ismodal2">
               群发站内信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
             <DropdownMenu slot="list">
-              <DropdownItem>选中用户</DropdownItem>
-              <DropdownItem>全部用户</DropdownItem>
+              <DropdownItem name="ON" ref="ON" :selected="Sele2.ON">选中用户</DropdownItem>
+              <DropdownItem name="ALL" :selected="Sele2.ALL"> 全部用户</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           <!--微信推送-->
@@ -243,8 +248,8 @@
               </Modal>
             </ButtonGroup>
           </Modal>
-          <Dropdown>
-            <Button @click="modal3 = true">
+          <Dropdown trigger="click">
+            <Button @click="modal3 = true" disabled>
               微信推送
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -254,39 +259,33 @@
             </DropdownMenu>
           </Dropdown>
           <!--设置标签-->
-          <Modal v-model="modal4" title="设置标签" @on-ok="ok" @on-cancel="cancel">
-            <Checkbox v-for="item1 in label1" :name="item1">{{item1}}</Checkbox>
+          <Modal v-model="modal5" title="设置标签" @on-ok="onSetLabel">
+            <CheckboxGroup v-model="labelcheckout">
+              <Checkbox v-for="item in labelList_c" :key='item.labelId' :label="item.labelId">{{item.labelName}}</Checkbox>
+            </CheckboxGroup>
           </Modal>
-          <Dropdown>
-            <Button @click="modal4 = true">
-              设置标签
-              <Icon type="md-arrow-dropdown"></Icon>
-            </Button>
-            <DropdownMenu slot="list">
-              <DropdownItem>选中用户</DropdownItem>
-              <DropdownItem>全部用户</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+
+          <Button @click="onLabel">
+            设置标签
+          </Button>
+
           <!--导出数据-->
           <Dropdown>
-            <Button>
+            <Button @click="onExport">
               导出数据
-              <Icon type="md-arrow-dropdown"></Icon>
             </Button>
-            <DropdownMenu slot="list">
-              <DropdownItem>选中用户</DropdownItem>
-              <DropdownItem>全部用户</DropdownItem>
-            </DropdownMenu>
+
           </Dropdown>
-        </div>
-        <div>
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Icon type="ios-cog-outline" size='30' class="table-btn" @click="()=>{ this.isShow = true }" />
+        </div>
+        <div>
+
+          <!-- TODO 自定义表头数据  <Icon type="ios-cog-outline" size='30' class="table-btn" @click="()=>{ this.isShow = true }" /> -->
           <Modal v-model="isShow" title="自定义展示字段">
             <div class="model">
               <div>目前显示字段顺序</div>
@@ -347,18 +346,88 @@
           </Modal>
         </div>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+      <Table border ref="volunteerSel" :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
-          <Checkbox>全选</Checkbox>
-          <Select placeholder="批量操作" style="width: 150px">
+          <Checkbox v-model="ALLINFO">全选</Checkbox>
+          <Select placeholder="批量操作" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Button style="margin-left: 10px">确定</Button>
+          <Button style="margin-left: 10px" @click='batchOperation'>确定</Button>
         </div>
         <Page :total="totalSize" @on-change='onPage' show-elevator show-total size='small' />
       </div>
     </div>
+
+    <Modal title="二维码" v-model="modal4" style='text-align: center;' :closable='false'>
+      <div class='bg'>
+        <img :src="QRCode" alt="二维码">
+      </div>
+      <div slot="footer">
+        <Button type="text" size="large" @click="modalCancel">取消</Button>
+        <Button type="primary" size="large" @click="modalCancel">确定</Button>
+      </div>
+
+    </Modal>
+    <Modal title="高级检索" v-model="modalSenior" :closable='false'>
+      <Form ref="formCustom" :model="paramsSeniorObj">
+        <Row>
+          <Col span="12">
+          <FormItem label="" class='formitem'>
+            <p>用户账号：</p>
+            <Input type="text" style="width:200px" v-model="paramsSeniorObj.account"></Input>
+          </FormItem>
+          </Col>
+          <Col span="12">
+          <FormItem label="">
+            <p>用户昵称：</p>
+            <Input type="text" style="width:200px" v-model="paramsSeniorObj.nickname"></Input>
+          </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+          <FormItem label="" class='formitem'>
+            <p>会员等级</p>
+            <Select style="width:200px" v-model="paramsSeniorObj.levelId">
+              <Option v-for="item in vipGrade" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Col>
+          <Col span="12">
+          <FormItem label="">
+            <p>用户标签：</p>
+            <Select style="width:200px" v-model="paramsSeniorObj.labelId">
+              <Option v-for="item in labelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+          <FormItem label="" class='formitem'>
+            <p>注册时间/时间段</p>
+            <Col span="12">
+            <DatePicker type="date" placeholder="请选择开始时间" v-model="registrationStartTimeStamp" style="width: 200px;"></DatePicker>
+            </Col>
+          </FormItem>
+          </Col>
+          <Col span="12">
+          <FormItem label="" class='formitem'>
+            <p style='font-size: 0;'>000</p>
+            <DatePicker type="date" placeholder="请选择结束时间" v-model="registrationEndTimeStamp" style="width: 200px"></DatePicker>
+          </FormItem>
+          </Col>
+        </Row>
+
+      </Form>
+      <div slot="footer">
+        <Button type="text" size="large" @click="hidd">取消</Button>
+        <Button type="primary" size="large" @click="setSenior">确定</Button>
+      </div>
+
+    </Modal>
+
   </div>
 </template>
 
@@ -380,9 +449,15 @@ export default {
         Message: [{ required: true, message: '短信内容不能为空', trigger: 'blur' }]
       },
       modal2: false, //群发站内信
+      letters: '',
+      Sele2: {
+        ON: false,
+        ALL: false
+      },
       formValidate2: {
-        title: '',
-        content: ''
+        // 群发 站内信
+        msg: '',
+        title: ''
       },
       ruleValidate2: {
         tag: [{ required: true, trigger: 'blur' }],
@@ -397,6 +472,8 @@ export default {
       modal3_3_1: false, //选择活动
       modal3_4: false, //APP推送(商品)
       modal3_4_1: false, //选择商品
+      modal4: false, //二维码
+      modalSenior: false, // 高级检索
       formValidate3: {
         PushType1: ['options1'], //APP推送(链接)推送类型
         PushType2: ['options2', 'options4'], //APP推送(专题)推送类型
@@ -538,29 +615,22 @@ export default {
           }
         }
       ],
-      modal4: false, //设置标签
-      label1: [
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称'
-      ],
+      modal5: false, //设置标签
+      labelcheckout: [],
+      labelList_c: [],
       columns: [
         {
           type: 'selection',
           width: 60,
-          align: 'center'
+          align: 'userId'
         },
         {
           title: '姓名',
-          key: 'name'
+          key: 'userName'
         },
         {
           title: '手机号',
-          key: 'phone'
+          key: 'tel'
         },
         {
           title: '用户昵称',
@@ -568,26 +638,37 @@ export default {
         },
         {
           title: '分类',
-          key: 'classify'
+          key: 'roles'
         },
         {
           title: '标签',
-          key: 'label'
+          key: 'labels'
         },
         {
           title: '参与活动数',
-          key: 'activity'
+          key: 'joinActivityNum'
         },
         {
           title: '积分',
-          key: 'integral'
+          key: 'score'
         },
         {
           title: '账户启用状态',
           key: 'state',
-          align: 'center',
+          align: 'userEnable',
           render: (h, params) => {
-            return h('div', [h('i-switch')])
+            return h('div', [
+              h('i-switch', {
+                props: {
+                  value: params.row.userEnable == 1 ? true : false
+                },
+                on: {
+                  input: e => {
+                    this.setUserEnable(params.row.userId, e)
+                  }
+                }
+              })
+            ])
           }
         },
         {
@@ -606,7 +687,12 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'user_details_hy' })
+                      this.$router.push({
+                        name: 'user_details_hy',
+                        query: {
+                          userId: params.row.userId
+                        }
+                      })
                     }
                   }
                 },
@@ -622,37 +708,18 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$Message.info('你点击了第' + params.index + '列')
+                      this.showQrcode(params)
                     }
                   }
                 },
                 '二维码'
-              ),
-              h(
-                'span',
-                {
-                  style: {
-                    color: 'green'
-                  },
-                  on: {
-                    click: () => {
-                      this.$Message.info('你点击了第' + params.index + '列')
-                    }
-                  }
-                },
-                '删除'
               )
             ])
           }
         }
       ],
-      batchList: [
-        { value: 'recommended', label: '设为推荐' },
-        { value: 'cancel', label: '取消推荐' },
-        { value: 'hidden', label: '设为隐藏' },
-        { value: 'According', label: '设为显示' },
-        { value: 'delete', label: '删除' }
-      ],
+      batchList: [{ value: '0', label: '禁用账号' }, { value: '1', label: '启用账号' }],
+      batchState: '',
       data: [],
       totalSize: 0,
       isShow: false,
@@ -662,17 +729,30 @@ export default {
       OtherInformation: ['options2', 'options4'],
       sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
       Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
-
+      vipGrade: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 会员等级
+      labelList: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 标签
       page: 1, // 页码
       size: 10, // 条数
       sort: 'asc', // 排序
-
+      startAt: '',
+      endAt: '',
+      registrationStartTimeStamp: '',
+      registrationEndTimeStamp: '',
       paramsObj: {
         info: '',
         orgName: '',
-        // 时间
         labelName: ''
-      }
+      },
+      paramsSeniorObj: {
+        account: '',
+        nickname: '',
+        levelId: '',
+        labelId: ''
+      },
+      QRCode: '',
+      ALLINFO: false, // 是否全选
+      ALLLIST: [], // 选中的人员
+      isSenior: false // 是否选择了高级检索
     }
   },
 
@@ -681,36 +761,279 @@ export default {
   computed: {},
 
   created() {
-    this.getUsetList()
+    this.init()
   },
 
   watch: {
     size(newVlaue, oldValue) {
-      return newVlaue === oldValue
+      if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
+    },
+    page(newVlaue, oldValue) {
+      if (newVlaue === oldValue) return
+      this.getUsetList(this.paramsObj)
+    },
+    ALLINFO(newVlaue, oldValue) {
+      //  全选 and 全不选
+      if (newVlaue === true) {
+        this.$refs.volunteerSel.selectAll(true)
+        let arr = this.data.map(item => {
+          return item.userId
+        })
+        this.ALLLIST = arr
+      } else {
+        this.$refs.volunteerSel.selectAll(false)
+        this.ALLLIST = []
+      }
     }
   },
 
   methods: {
-    getUsetList(paramsObj) {
-      Public.getUserList({
+    // 初始化
+    init() {
+      this.getUsetList()
+      this.getLabels()
+      this.getLevel()
+    },
+    //  获取用户列表
+    getUsetList(paramsObj, flag) {
+      let time = {}
+      if (flag) {
+        time = {
+          registrationStartTimeStamp: this.registrationStartTimeStamp
+            ? this.registrationStartTimeStamp.getTime()
+            : '',
+          registrationEndTimeStamp: this.registrationEndTimeStamp
+            ? this.registrationEndTimeStamp.getTime()
+            : ''
+        }
+      } else {
+        time = {
+          durationStart: this.startAt ? this.startAt.getTime() : '',
+          durationEnd: this.endAt ? this.endAt.getTime() : ''
+        }
+      }
+
+      let obj = this.util.remove({
         sysType: '2',
         page: this.page,
         size: this.size,
+        ...time,
         ...paramsObj
-      }).then(res => {
+      })
+      Public.getUserList(obj).then(res => {
         console.log(res)
 
         if (res.code === 200) {
           this.data = res.data.list
           this.totalSize = res.data.totalSize
+          this.isSenior = flag
         } else {
         }
       })
     },
+    // 用户状态 变更
+    setUserEnable(params, type) {
+      Public.setBatch({
+        sysType: '2',
+        userIds: params.toString(),
+        oprType: type ? '1' : '0'
+      }).then(res => {
+        if (res.code === 200) {
+          type ? this.$Message.info('启用成功') : this.$Message.info('禁用成功')
+        } else {
+          // TODO 操作失败之后， 状态不变更
+          this.$Message.error({
+            background: true,
+            content: '状态变更失败，请联系管理员查看'
+          })
+          this.getUsetList(this.paramsObj)
+        }
+      })
+    },
+    // 导出用户数据
+    exportFn(params) {
+      let exportUrl = {}
+      if (this.isSenior) {
+        exportUrl = this.util.remove({ size: this.totalSize, ...this.paramsSeniorObj })
+      } else {
+        exportUrl = this.util.remove({ size: this.totalSize, ...this.paramsObj })
+      }
+      this.util.userExprot('/user-list/user-export', { sysType: 2, page: 0, ...exportUrl })
+    },
+    // 获取标签
+    getLabels(params) {
+      Public.getLabel({
+        sysType: '2',
+        ...params
+      }).then(res => {
+        //  获取具体的用户详情
+        if (params) {
+          this.labelList_c = res.data.labelList
+          this.labelcheckout = res.data.userLabel.map(item => {
+            return item.labelId
+          })
+        } else {
+          let arr = res.data.labelList
+          this.labelList = arr.map(item => {
+            return { value: item.labelId, label: item.labelName }
+          })
+        }
+      })
+    },
+    // 获取会员等级
+    getLevel() {
+      Public.GetLevel({
+        sysType: 2
+      }).then(res => {
+        this.vipGrade = res.data.map(item => {
+          return {
+            value: item.levelId,
+            label: item.levelName
+          }
+        })
+      })
+    },
+    // 站内信
+    setsend(params) {
+      Public.Setsend({
+        sysId: '2',
+        ...params
+      }).then(res => {
+        if (res.code === 200) {
+          this.$Message.info('站内信发送成功~')
+        } else {
+          this.$Message.error({
+            background: true,
+            content: '发送失败，请联系负责人'
+          })
+
+          console.log(res.msg)
+        }
+      })
+    },
+    //  查询按钮
+    getInfo() {
+      this.getUsetList(this.paramsObj)
+    },
+    //  高级检索 模态框
+    getSenior() {
+      this.modalSenior = true
+    },
+    // 关闭 高级检索
+    hidd() {
+      this.modalSenior = false
+    },
+    // 高级检索按钮
+    setSenior() {
+      this.getUsetList(this.paramsSeniorObj, true)
+      this.modalSenior = false
+    },
+    // 显示二维码
+    showQrcode(imgSrc) {
+      this.QRCode = imgSrc.row.qrCodePath
+      this.modal4 = true
+    },
+    // 关闭 二维码
+    modalCancel() {
+      this.QRCode = ''
+      this.modal4 = false
+    },
+    // 显示站内信模态框
+    ismodal2() {
+      if (this.letters) {
+        this.modal2 = true
+      } else {
+        this.$Message.error({
+          background: true,
+          content: '请选择全部用户or选中用户'
+        })
+      }
+    },
+    // 点击页码
     onPage(page) {
       this.page = page
     },
+    // 选中 内容
+    handleSelectionChange(val) {
+      if (val.length === this.data.length) {
+        this.ALLINFO = true
+      } else {
+        this.ALLINFO = false
+      }
+      let arr = val.map(item => {
+        return item.userId
+      })
+      this.ALLLIST = arr
+    },
+    // 批量修改状态
+    batchOperation() {
+      if (this.batchState) {
+        this.setUserEnable(this.ALLLIST, this.batchState == 1 ? true : false, () => {
+          this.getUsetList(this.paramsObj)
+        })
+      } else {
+        this.$Message.error({
+          background: true,
+          content: '请选择批量操作的类型'
+        })
+      }
+    },
+    // 发送站内信
+    onStation() {
+      let ids = this.ALLLIST.toString()
+      this.setsend({ ids, ...this.formValidate2 })
+    },
+    // 选中站内信菜单
+    isALL(name) {
+      this.Sele2 = {
+        ON: false,
+        ALL: false
+      }
+      this.Sele2[name] = true
+      this.letters = name
+    },
+    // 设置标签按钮
+    onLabel() {
+      if (this.ALLLIST.length === 1) {
+        this.getLabels({ userId: this.ALLLIST.toString() })
+        this.modal5 = true
+      } else if (this.ALLLIST.length > 1) {
+        this.$Message.error({
+          background: true,
+          content: '只能选择列表中的一项'
+        })
+      } else {
+        this.$Message.error({
+          background: true,
+          content: '请选择列表中的一项'
+        })
+      }
+    },
+    // 设置标签 确定按钮
+    onSetLabel() {
+      Public.SetUserLabel({
+        userId: this.ALLLIST.toString(),
+        labelIds: this.labelcheckout.toString(),
+        sysType: '2'
+      }).then(res => {
+        if (res.code === 200) {
+          this.$Message.info('设置标签成功')
+          this.getUsetList(this.paramsObj)
+        } else {
+          this.$Message.error({
+            background: true,
+            content: '设置标签失败，请稍后再试'
+          })
+          console.log(res.msg)
+        }
+      })
+    },
+    // 导出按钮
+    onExport() {
+      this.exportFn()
+    },
+
     ok() {
       this.$Message.info('Clicked ok')
     },
@@ -723,7 +1046,8 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped >
 .integral-header {
   border: 1px solid #eee;
 }
@@ -776,5 +1100,22 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 10px auto;
+}
+.bg {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.bg img {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.ivu-form-item {
+  margin-bottom: 0;
+}
+.formitem {
+  display: inline-block;
 }
 </style>

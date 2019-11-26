@@ -1,7 +1,8 @@
 <!-- 短信消息(志愿者) -->
 <template>
   <div class="integral">
-    <div class="integral-header">
+    <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
+    <!-- <div class="integral-header">
        <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-between integral-top">
         <div>
@@ -19,163 +20,185 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>关键词</span>
-          <Input size="large" placeholder="关键词" class="inpt" />
+          <Input size="large" v-model="content" placeholder="关键词" class="inpt" />
         </div>
         <div class="flex-center-start">
           <span>发布时间</span>
           <Row>
             <Col span="12">
-              <DatePicker type="date" placeholder="请选择日期" style="width: 200px" class="sdate"></DatePicker>
+              <DatePicker type="date" v-model="createAt" placeholder="请选择日期" style="width: 200px" class="sdate"></DatePicker>
             </Col>
           </Row>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="flex-center-start">
-           <Icon type="md-list" />
+          <Icon type="md-list" />
           <span>数据列表</span>
         </div>
         <div class="flex-center-end">
-                  <Button size="small" class="table-btn" @click="modal1=true">发送短信</Button>
-                  <Button size="small" class="table-btn" @click="screen">群发消息</Button>
-                  <Select size='small' class="inpt" placeholder="显示条数"></Select>
-                  <Select size='small' class="inpt" placeholder="排序方式"></Select>
-            </div>
-              <Modal v-model="modal1" title="群发短信" >
-          <Form :model="formItem" :label-width="80">
-                 <FormItem label="发送对象">
-                   <Input v-model="formItem.input" placeholder="请输入用户手机号码"></Input>
-                  </FormItem>
-                   <FormItem label="短信内容">
-                     <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 4,maxRows: 4}" placeholder="请输入内容..."></Input>
-                  </FormItem>
-        </Form>
-          </Modal>
+          <Select v-model="size" style="width:120px" placeholder="显示条数">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </div>
       </div>
 
-
-      <div style="padding: 0.5rem 0;">
+      <div style="padding: 0.5rem 0;" v-for="(item,index) in list" :key="index">
         <div style="border: #E4E4E4 1px solid;  ">
-          <div class="flex-center-between" style="padding: 0.2rem 0.5rem;border-bottom: #e4e4e4 1px solid">
+          <div
+            class="flex-center-between"
+            style="padding: 0.2rem 0.5rem;border-bottom: #e4e4e4 1px solid"
+          >
             <div class="text1">
-              <Checkbox></Checkbox>
-              <p><span>发布人员：</span><span>admin</span></p>
-              <p><span>发送时间：</span><span>2019-08-02 15:47:44</span></p>
-              <p><span>接收对象：</span><span>200人</span></p>
+              <p>
+                <span>发送时间：</span>
+                <span>{{item.createAt}}</span>
+              </p>
             </div>
-            <a style="color: #008E40;">删除</a>
           </div>
           <div class="text2">
-            <p>尊敬的@，您的VIP会籍即将于@到期，请您及时续费！</p>
+            <p>{{item.content}}</p>
           </div>
         </div>
       </div>
 
       <div class="pages flex-center-between">
-        <div class="batch">
-          <Checkbox>全选</Checkbox>
-          <Select placeholder="批量操作" style="width: 150px">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Button style="margin-left: 10px">确定</Button>
-        </div>
-        <Page :total="100" show-elevator show-total size='small'/>
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { messageShort } from "@/request/api";
 export default {
   data() {
     return {
-        formItem: {
-        input: '',
-        select: '',
-        radio: 'male',
-        checkbox: [],
-        switch: true,
-        date: '',
-        time: '',
-        slider: [20, 50],
-        textarea: ''
-                },
-      modal1:false,
-       navigation1: {
+      navigation1: {
         head: "短信消息(志愿者)"
-       },
-       columns:[{
-         title: "发布人员",
-          key: "publisher",
+      },
+      // columns: [
+      //   {
+      //     title: "发布人员",
+      //     key: "publisher",
 
-           render: (h, params) => {
-            return h("div", "admin");
-          }
-       },
-       {
-         title: "发布时间",
-          key: "publishtime",
+      //     render: (h, params) => {
+      //       return h("div", "admin");
+      //     }
+      //   },
+      //   {
+      //     title: "发布时间",
+      //     key: "publishtime",
 
-           render: (h, params) => {
-            return h("div", "2019-08-02");
-          }
-       },{
-         title: "接收对象",
-          key: "object",
+      //     render: (h, params) => {
+      //       return h("div", "2019-08-02");
+      //     }
+      //   },
+      //   {
+      //     title: "接收对象",
+      //     key: "object",
 
-           render: (h, params) => {
-            return h("div", "200人");
-          }
-       },{
-         title: "操作",
-          key: "delete",
+      //     render: (h, params) => {
+      //       return h("div", "200人");
+      //     }
+      //   },
+      //   {
+      //     title: "操作",
+      //     key: "delete",
 
-           render: (h, params) => {
-            return h("a", "删除");
-          }
-       },{
-         title: "消息提示",
-          key: "tip",
+      //     render: (h, params) => {
+      //       return h("a", "删除");
+      //     }
+      //   },
+      //   {
+      //     title: "消息提示",
+      //     key: "tip",
 
-          render: (h, params) => {
-            return h("div", "你的会员已到期，请充值");
-          }
-       }],
-      data: [
-     {
-     },
-     {
-     },
-     {
-     },
-     {
-     },
-     {
-     },
-     {
-     },
-     {
-     },
-     {
-     }
+      //     render: (h, params) => {
+      //       return h("div", "你的会员已到期，请充值");
+      //     }
+      //   }
+      // ],
+      data: [],
+
+      sysId: 1,
+      channelFlag: 2,
+      page: 1,
+      size: 10,
+      content: "",
+      createAt: "",
+      dataCount: 0,
+      list: [],
+      Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
       ],
-      batchList:[
-        {
-          value: 'Delete',
-          label: '删除'
-        }
+      sorting: [
+        { value: "asc", label: "正序" },
+        { value: "desc", label: "倒序" }
+      ],
+      sort: "asc",
+      top: [
+        { name: "关键词", type: "input", value: "" },
+        { name: "发布时间", type: "date", value: "" }
       ]
     };
+  },
+  //事件监听
+  watch: {
+    size: "getmessageShort",
+    sort: "getmessageShort"
   },
 
   components: {},
   computed: {},
   created() {},
+  mounted() {
+    this.getmessageShort();
+  },
   methods: {
-    screen(){
-      this.$router.push({name:'vun_screen'})
+    //消息短信
+     getmessageShort() {
+      let params ={
+        sysId: this.sysId,
+        content:this.content,
+        channelFlag: this.channelFlag,
+        createAt:this.createAt,
+        page: { page: this.page, size: this.size }
+      }
+      params=this.util.remove(params)
+      console.log(params)
+      messageShort(params).then(res => {
+        if (res.code == 200) {
+          this.dataCount = res.data.totalSize;
+          this.list = res.data.list;
+        }
+        console.log(res);
+      });
+    },
+    //分页功能
+    changepages(index) {
+      this.page = index;
+      this.getmessageShort();
+    },
+
+    query(e) {
+      this.content = e[0].value;
+      this.createAt = e[1].value;
     }
   }
 };
@@ -229,19 +252,19 @@ export default {
   margin-left: 15px;
 }
 .text1,
-.text2{
+.text2 {
   font-size: 12px;
 }
-.text1{
+.text1 {
   display: flex;
 }
-.text1 p{
+.text1 p {
   margin: 0 0.2rem;
 }
-.text1 p span:nth-child(2){
-  color: #9EA7B4;
+.text1 p span:nth-child(2) {
+  color: #9ea7b4;
 }
-.text2{
+.text2 {
   padding: 0.5rem 1rem;
   height: 5rem;
 }

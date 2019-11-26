@@ -157,9 +157,18 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList()
+  },
 
   methods: {
+    getList ({startAt,endAt,orgName}) {
+      getBooks(filterNull({page:{page:this.page,size:10},startAt,endAt,orgName,sysType:'1,3'})).then(res => {
+        this.sumSize = res.data.totalSize
+        this.data = res.data.list
+        this.page = res.data.pageNum
+      })
+    },
     ok() {
       this.$Message.info("新增成功");
     },

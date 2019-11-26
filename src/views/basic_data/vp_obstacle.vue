@@ -9,7 +9,7 @@
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
           <span>已选择{{arr.length}}</span>
-          <Button class="table-btn" @click="getRetardeddel(1)">批量删除</Button>
+          <Button class="table-btn" @click="del">批量删除</Button>
           <Button class="table-btn" @click="addbtn(1)">新增智障类型</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -91,7 +91,7 @@ export default {
                 },
                 on: {
                   input: e => {
-                      this.arr = Array.of(params.row.dicId);
+                    this.arr = Array.of(params.row.dicId);
                     if (e == true) {
                       this.getRetardeddel(2);
                     } else {
@@ -135,7 +135,7 @@ export default {
                   on: {
                     click: () => {
                       this.arr = Array.of(params.row.dicId);
-                      console.log(this.arr)
+
                       this.getRetardeddel(1);
                     }
                   }
@@ -173,7 +173,8 @@ export default {
       add: null,
       userId: 1,
       dicId: null,
-      types: null
+      types: null,
+      arrs: ""
     };
   },
 
@@ -233,7 +234,7 @@ export default {
         type: this.types
       }).then(res => {
         if (res.code == 200) {
-          this.arr=[]
+          this.arr = [];
           this.getRetardedtype();
           this.$Message.info("操作成功");
         } else {
@@ -273,6 +274,18 @@ export default {
       });
     },
 
+    //删除
+    del() {
+      if (this.arr.length == 0) {
+        this.$Message.error("请至少选择一项!");
+      } else {
+        this.arr = this.arrs.map(item => {
+          return item.dicId;
+        });
+        this.getRetardeddel(1);
+      }
+    },
+
     //查询
     query(e) {
       this.name = e[0].value;
@@ -295,6 +308,7 @@ export default {
     //每条数据单选框的状态
     handleSelectionChange(val) {
       this.arr = val;
+      this.arrs = val;
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
@@ -303,13 +317,6 @@ export default {
       } else {
         this.status = false;
       }
-      //选择的数据id
-      let arr = [];
-      for (let i = 0; i < this.arr.length; i++) {
-        arr.push(this.arr[i].dicId);
-      }
-      this.arr = arr;
-      console.log(this.arr);
     },
 
     //分页功能

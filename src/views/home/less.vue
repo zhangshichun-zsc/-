@@ -5,25 +5,32 @@
     <div class="zh">
       <p class="zh-sz">账户设置</p>
       <div class="zh-nr">
-        <div class="img"><img :src=uploadpath /></div>
-        <Upload action="//jsonplaceholder.typicode.com/posts/" :on-success="handleSuccess">
-        <Button icon="ios-cloud-upload-outline">上传头像</Button>
-    </Upload>
+        <div class="img">
+          <img :src="imgUrl" class="img" />
+        </div>
+        <Upload
+          :action="orgimg"
+          :format="['jpg','jpeg','png']"
+          :show-upload-list="false"
+          :before-upload="handleBeforeUpload"
+        >
+          <Button icon="ios-cloud-upload-outline">上传头像</Button>
+        </Upload>
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-          <FormItem label="用户名" prop="name">
-            <Input v-model="formValidate.name"></Input>
+          <FormItem label="用户名">
+            <Input v-model="formValidate.name" disabled />
           </FormItem>
-          <FormItem label="手机号" prop="mail">
-            <Input v-model="formValidate.mail"></Input>
+          <FormItem label="手机号" prop="number">
+            <Input v-model="formValidate.number" disabled />
           </FormItem>
-          <FormItem label="旧密码" prop="city">
-            <Input v-model="formValidate.mail"></Input>
+          <FormItem label="旧密码" prop="oldPassword">
+            <Input v-model="formValidate.oldPassword" />
           </FormItem>
-          <FormItem label="新密码" prop="city">
-            <Input v-model="formValidate.mail"></Input>
+          <FormItem label="新密码" prop="newPassword">
+            <Input v-model="formValidate.newPassword" />
           </FormItem>
-          <FormItem label="确认密码" prop="city">
-            <Input v-model="formValidate.mail"></Input>
+          <FormItem label="确认密码" prop="confirm">
+            <Input v-model="formValidate.confirm" />
           </FormItem>
           <FormItem>
             <Button type="success" @click="handleSubmit('formValidate')">提交</Button>
@@ -35,46 +42,56 @@
 </template>
 
 <script>
+import { Setup } from "../../request/api";
+import { orgimg } from "../../request/http";
 export default {
   data() {
+    const newPassword = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请重新输入密码!"));
+      } else {
+        if (this.formValidate.confirm !== "") {
+          // 对第二个密码框单独验证
+          this.$refs.formValidate.validateField("confirm");
+        }
+        callback();
+      }
+    };
+    const confirm = (rule, value, callback) => {
+      if (value === "") {
+        // callback(new Error('请重新输入密码!'));
+      } else if (value !== this.formValidate.newPassword) {
+        callback(new Error("两个输入密码不匹配!"));
+      } else {
+        callback();
+      }
+    };
     return {
       navigation1: {
         head: "账户设置"
       },
       formValidate: {
         name: "",
-        mail: "",
-        city: ""
+        number: "",
+        oldPassword: "",
+        newPassword: "",
+        confirm: ""
       },
-      uploadpath:'',
+      uploadpath: "",
       ruleValidate: {
-        name: [
+        oldPassword: [
           {
             required: true,
-            message: "The name cannot be empty",
+            message: "旧密码不能为空",
             trigger: "blur"
           }
         ],
-        mail: [
-          {
-            required: true,
-            message: "会费期限不能为空并且只能是数字",
-            trigger: "change",
-            type: "number",
-            pattern: /^[a-z0-9]+$/,
-            transform(value) {
-              return Number(value);
-            }
-          }
-        ],
-        city: [
-          {
-            required: true,
-            message: "Please select the city",
-            trigger: "change"
-          }
-        ]
-      }
+        newPassword: [{ validator: newPassword, trigger: "blur" }],
+        confirm: [{ validator: confirm, trigger: "blur" }]
+      },
+
+      orgimg: "",
+      imgUrl: ""
     };
   },
 
@@ -83,25 +100,72 @@ export default {
   computed: {},
 
   created() {},
+  mounted() {
+    this.orgimg = orgimg;
+  },
 
   methods: {
+    //提交
+    getSetup() {
+      Setup({
+        userId: this.$store.state.userId,
+        oldPassword: this.formValidate.oldPassword,
+        newPassword: this.formValidate.newPassword,
+        picUrl: this.picUrl
+      }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("修改成功!");
+        } else {
+          this.$Message.error(res.msg);
+        }
+        console.log(res);
+      });
+    },
+
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$Message.success("Success!");
+          if (this.file == null) {
+            this.$Message.error("请上传图片！");
+          } else {
+            // if(this.formValidate.oldPassword!=this.formValidate.confirm){
+            //   this.$Message.error('两次密码不一致!')
+            // }else{
+            //  this.getSetup();
+            // }
+            this.getSetup();
+          }
         } else {
-          this.$Message.error("Fail!");
+          // this.$Message.error("必填项未填!");
         }
       });
     },
     handleReset(name) {
       this.$refs[name].resetFields();
     },
+    // handleSuccess(res, file) {
+    //   this.picUrl = res.data;
+    //   console.log(res, file);
+    // },
 
     //图片上传
-    handleSuccess(res,file){
-      this.uploadpath= file.name
-      console.log(res,file)
+    handleBeforeUpload(file) {
+      console.log(file);
+      if (file.type == "image/jpeg") {
+        this.file = file;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const _base64 = reader.result;
+          this.imgUrl = _base64;
+          this.picUrl = file.name;
+          // console.log(_base64,file.name);
+        };
+        return false;
+      } else {
+        // this.file = "";
+        this.$Message.error("格式不正确！");
+      }
     }
   }
 };

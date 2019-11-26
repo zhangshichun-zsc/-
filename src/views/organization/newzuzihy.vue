@@ -65,8 +65,8 @@
                 <img :src="filePath" style="width: 9rem;height: 5rem;" />
                 <div style="padding-top: 2.5rem;margin-left: 0.5rem;">
                   <Upload
-                    action="//192.168.0.11:8084/rhzg-web/pic/upload/"
-                    :on-success="handleSuccess"
+                    :action=orgimg
+                    :on-success="handleSuccessimg"
                   >
                     <Button icon="ios-cloud-upload-outline">上传图片</Button>
                   </Upload>
@@ -97,7 +97,7 @@
             <Button shape="circle" icon="md-close" style="margin-top: 0.5rem;"></Button>
           </div>
           <div class="middle">
-            <Upload action="//192.168.0.11:8084/rhzg-web/pic/upload/">
+            <Upload :action=orgimg :on-success="handleSuccess">
               <Button icon="ios-cloud-upload-outline">添加附件</Button>
             </Upload>
           </div>
@@ -116,10 +116,10 @@
   </div>
 </template>
 <script>
+import {orgimg} from '@/request/http'
 import {
   orgtype,
   orgadd,
-  orgimg,
   orgcity,
   orgdistrict,
   orgprovince
@@ -174,7 +174,8 @@ export default {
       cityList: [],
       districtList: [],
       filePath: null,
-      name: null
+      name: null,
+      orgimg:''
     };
   },
   methods: {
@@ -185,6 +186,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.list = res.data;
+          this.orgimg=orgimg
         }
         console.log(res);
       });
@@ -253,21 +255,27 @@ export default {
         }
       });
     },
-
-    //上传图片
-    handleSuccess(res, file) {
+     //上传图片
+    handleSuccessimg(res,file){
       this.name = file.name;
       this.filePath = file.filePath;
       console.log(res, file.name);
-    }
+
+    },
+
+    //附件上传
+    handleSuccess(res, file) {
+
+    },
+
   },
   mounted() {
     if (this.$route.query.sysId == "1") {
-      console.log(11);
+
       this.navigation1.head = "新建组织(会员)";
       this.getorgtype();
     } else if (this.$route.query.sysId == "2") {
-      console.log(22);
+
       this.navigation1.head = "新建组织(志愿者)";
       this.list = [{ dataKey: 8, dataValue: "志愿者团队" }];
       this.orgTypes = 8;
