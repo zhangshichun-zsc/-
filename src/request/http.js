@@ -12,13 +12,13 @@ const SERVICE_URL = {
   API_URL: [
     'https://rhzgtest.co-inclusion.org/rhzg-web', // 测试服务器 0
     'http://192.168.0.6:8084/rhzg-web', // 余海 1  192.168.0.6
-    'http://192.168.0.14:8084/rhzg-web', // 张飞飞 2
+    'http://192.168.0.14:8089/rhzg-web', // 张飞飞 2
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     'http://192.168.0.11:8084/rhzg-web', // 竺文聪 4
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
     'http://192.168.0.5:8084/rhzg-web', // 王盛
   ],
-  API_INDEX: 4
+  API_INDEX: 2
 
 }
 
@@ -30,7 +30,6 @@ export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] // 导�
 
 
 axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
-
 
 
 // 请求超时时间
@@ -82,6 +81,7 @@ axios.interceptors.request.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(url, params) {
+
   return new Promise((resolve, reject) => {
     axios.get(url, {
       params: params
@@ -96,7 +96,7 @@ export function get(url, params) {
 }
 export function gets(url, params) {
   return new Promise((resolve, reject) => {
-    let token = localStorage.getItem("token");
+    // let token = localStorage.getItem("token");
     axios.get(url, params, {
       headers: {
         Authorization: `Bearer ${token}`

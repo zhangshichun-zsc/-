@@ -9,6 +9,7 @@
             placeholder="立项审批、家长小组成立审批、志愿者团队成立审批、积分修改审批、VIP修改审批"
             style="width: 20rem"
             v-model="formValidate.typeFlag"
+            :transfer=true
           >
             <Option
               v-for="item in typelist"
@@ -201,6 +202,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info(res.msg);
+         this.$router.push({ name: "examinationMGT" });
         }
         console.log(res);
       });

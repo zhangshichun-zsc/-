@@ -175,16 +175,19 @@ export default {
   methods: {
     //消息短信
     getmessageShort() {
-      messageShort({
+      let params ={
         sysId: this.sysId,
-        // content:this.content,
+        content:this.content,
         channelFlag: this.channelFlag,
-        // createAt:this.createAt,
+        createAt:this.createAt,
         page: { page: this.page, size: this.size }
-      }).then(res => {
+      }
+      params=this.util.remove(params)
+      console.log(params)
+      messageShort(params).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
-          this.data = res.data.list;
+          this.list = res.data.list;
         }
         console.log(res);
       });

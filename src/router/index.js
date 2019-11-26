@@ -1010,7 +1010,10 @@ export default new Router({
         {
           path: 'project_approval',
           name: 'project_approval',
-          meta: {},
+          meta: {
+            title: '活动立项审批',
+            icon: 'ios-navigate'
+          },
           component: () =>
             import('@/views/activity/project_approval.vue')
         },

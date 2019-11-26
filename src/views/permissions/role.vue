@@ -264,7 +264,6 @@ export default {
   methods: {
     getMockData() {
       let mockData = [];
-
       for (let i = 0; i < this.List.length; i++) {
         mockData.push({
           key: this.List[i].sysRoleId,
@@ -272,7 +271,7 @@ export default {
           description: i
         });
       }
-      console.log(mockData);
+      this.data1 = mockData;
       return mockData;
     },
 
@@ -340,7 +339,6 @@ export default {
 
     //角色删除
     getroledel() {
-
       this.add = this.List.filter(item => item.sysRoleName == this.role);
       console.log(this.add);
       roledel({
@@ -349,7 +347,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info("删除成功");
-          this.getrolenumquery()
+          this.getrolenumquery();
         } else {
           this.$Message.error(res.msg);
         }
@@ -377,6 +375,7 @@ export default {
       this.getMockData();
       this.getTargetKeys();
       this.modal2 = true;
+      this.getroleAddto()
     },
 
     //新建
@@ -388,7 +387,6 @@ export default {
 
     //查询
     querys() {
-      console.log(`1-${this.role}`);
       this.getrolenumquery();
     },
 

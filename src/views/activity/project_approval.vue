@@ -57,14 +57,12 @@
         </div>
         <div>
           <Button class="table-btn">导出</Button>
-          <Button class="table-btn">
-            显示条数
-            <Icon type="md-arrow-dropdown" />
-          </Button>
-          <Button class="table-btn">
-            排序方式
-            <Icon type="md-arrow-dropdown" />
-          </Button>
+           <Select v-model="size" style="width:120px" placeholder="显示条数">
+              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
         </div>
       </div>
       <Table
@@ -81,7 +79,7 @@
           show-total
           size="small"
           style="margin: auto"
-          :page-size="pageSize"
+          :page-size="size"
           @on-change="changepages"
         />
       </div>
@@ -90,8 +88,8 @@
 </template>
 
 <script>
-import {date1} from '../../request/datatime.js'
-import { pendingApp, approvalpage } from "../../request/api";
+import {date1} from '@/request/datatime.js'
+import { pendingApp, approvalpage } from "@/request/api";
 export default {
   data() {
     return {
@@ -213,8 +211,23 @@ export default {
       creataTimeTimeStampTo: "",
       datastat: "",
       dataend: "",
-      arr: []
+      arr: [],
+      Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
+      ],
+      sorting: [
+        { value: "asc", label: "正序" },
+        { value: "desc", label: "倒序" }
+      ],
+      sort: "asc",
     };
+  },
+   //事件监听
+  watch: {
+    size: "getapprovalpage",
+    sort: "getapprovalpage"
   },
 
   components: {},
@@ -248,7 +261,7 @@ export default {
         this.dataend=''
       }
       approvalpage({
-        page: { page: this.page, size: this.size },
+        page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort },
         batchName: this.batchName,
         status: this.statu,
         creataTimeTimeStampFrom: this.datastat,
@@ -294,12 +307,9 @@ export default {
         this.status = false;
       }
       //选择的数据id
-      let arr = [];
-      for (let i = 0; i < this.arr.length; i++) {
-        arr.push(this.arr[i].batchId);
-      }
-      this.arr = arr.toString();
-      console.log(this.arr);
+        this.arr = val.map(item => {
+          return item.batchId;
+        }).toString();
     },
 
     //操作
