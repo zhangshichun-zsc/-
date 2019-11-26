@@ -13,41 +13,51 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button>查询结果</Button>
+          <Button @click="query()">查询结果</Button>
           <Button>高级检索</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>所属系统</span>
-          <Select size='large' class="inpt" placeholder="全部">
-          </Select>
-        </div>
-        <div class="flex-center-start">
           <span>组织</span>
-           <Select size='large' class="inpt" placeholder="全部">
-          </Select>
+          <Input size="large" placeholder="请输入" class="inpt" v-model="args.orgName" />
         </div>
         <div class="flex-center-start">
           <span>创建时间</span>
           <Row>
             <Col span="12">
-              <DatePicker type="date" placeholder="请选择日期" style="width: 200px" class="sdate"></DatePicker>
+               <DatePicker
+                  type="datetimerange"
+                  @on-change="handleChange"
+                  placement="bottom-end"
+                  placeholder="Select date"
+                  style="width:300px"
+                  format="yyyy-MM-dd HH:mm"
+                ></DatePicker>
             </Col>
           </Row>
         </div>
         <div class="flex-center-end">
           <Button @click="modal1 = true">新增模板</Button>
-           <Modal v-model="modal1" title="新增证书模板">
-             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+           <Modal v-model="modal1" title="新增证书模板" @on-ok='success'>
+             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
                  <FormItem label="组织" prop="organ">
-                     <Select v-model="formValidate.organ"></Select>
+                     <Select v-model="params.orgId">
+                         <Option :value="item.orgId" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
+                     </Select>
                  </FormItem>
                  <FormItem label="模板名称" prop="mname">
-                     <Input v-model="formValidate.mname"></Input>
+                     <Input v-model="params.title"></Input>
                  </FormItem>
                  <FormItem label="有效日期" prop="effect">
-                     <Input v-model="formValidate.effect"></Input>
+                    <Date-picker
+                    placement="bottom-end"
+                    placeholder="选择日期"
+                    style="width: 200px"
+                    type="datetime" 
+                    v-model="params.effectiveAt"
+                    @on-change='changeDate'
+                  ></Date-picker>
                  </FormItem>
               </Form>
           </Modal>
@@ -69,25 +79,26 @@
       </div>
       <Table border :columns="columns" :data="data"></Table>
       <div class="pages">
-        <Page :total="100" show-elevator show-total size="small" />
+          <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='10'/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getBooks } from '@/request/api'
+import { getBooks, getVolunteer,updateBooks } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
-        navigation1: {
+      navigation1: {
         head: "证书管理(志愿者)"
       },
-         formValidate:{
-        organ:'',
-        mname:'',
-        effect:''
+      params:{
+        orgId:'',
+        title:'',
+        effectiveAt:'',
+        orgType:3
        },
       ruleValidate:{
         organ: [
@@ -101,7 +112,6 @@ export default {
             ],
       },
       modal1: false,
-      modal1: false,
       columns: [
         {
           type: "selection",
@@ -110,19 +120,19 @@ export default {
         },
         {
           title: "组织",
-          key: "organ"
+          key: "orgName"
         },
         {
           title: "证书名称",
-          key: "cenficname"
+          key: "title"
         },
         {
-          title: "有效期限",
-          key: "validtime"
+          title: "有效时间",
+          key: "effectiveAt"
         },
         {
           title:"创建时间",
-          key:"createtime"
+          key:"createAt"
         },
         {
           title: "操作",
@@ -140,7 +150,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'vun_prend.vue' })
+                       let ob = params.row
+                      this.$router.push({ name: 'vun_prend.vue' ,params:{certMouldId:ob.certMouldId}})
                     }
                   }
                 },
@@ -155,7 +166,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'vun_prend.vue' })
+                      let ob = params.row
+                      this.$router.push({ name: 'vun_prend.vue',params:{certMouldId:ob.certMouldId}})
                     }
                   }
                 },
@@ -182,7 +194,13 @@ export default {
       data: [
       ],
       page:1,
-      sumSize:10
+      sumSize:10,
+      args:{
+        startAt:null,
+        endAt:null,
+        orgName:null
+      },
+      volun:[]
     };
   },
 
@@ -192,18 +210,43 @@ export default {
 
   created() {
     this.getList({page:1})
+    this.getVoteer()
   },
 
   methods: {
     getList ({startAt,endAt,orgName}) {
-      getBooks(filterNull({page:{page:this.page,size:10},startAt,endAt,orgName})).then(res => {
+      getBooks(filterNull({page:{page:this.page,size:10},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
         this.sumSize = res.data.totalSize
         this.data = res.data.list
         this.page = res.data.pageNum
       })
     },
-    ok() {
-      this.$Message.info("新增成功");
+    getVoteer(){
+      getVolunteer().then(res => {
+        this.volun = res.data
+      })
+    },
+
+    query(){
+      this.getList(this.args)
+    },
+
+    handleChange(e){
+      this.args.startAt = e[0]
+      this.args.endAt = e[1]
+    },
+
+    changePage (e) {
+      this.page = e
+      this.getList(this.args)
+    },
+    success () {
+      updateBooks(this.params).then(res => {
+        this.getList()
+      })
+    },
+    changeDate(e){
+      this.params.effectiveAt = e
     },
     cancel() {
       this.$Message.info("新增失败");

@@ -50,7 +50,7 @@
         <div>
           全选
           <span>已选择0</span>
-          <Button class="table-btn">批量删除</Button>
+          <Button class="table-btn" @click="deletes()">批量删除</Button>
           <Button class="table-btn" @click="showModal(null)">新增</Button>
           <Modal v-model="modal1" title="新增基金" @on-ok="ok" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
@@ -67,7 +67,7 @@
           </Modal>
         </div>
       </div>
-      <Table border :columns="columns" :data="data" @on-select='select' @on-select-cancel='cancael'></Table>
+      <Table border :columns="columns" :data="data" @on-select='select' @on-select-cancel='select' @on-select-all='select' @on-select-all-cancel='select'></Table>
       <div class="pages">
         <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
       </div>
@@ -87,10 +87,6 @@ export default {
       modal1: false,
         formItem: {
         input: '',
-                },
-       formValidate:{
-          name:"",
-          linker:""
        },
        ruleValidate:{
           name: [
@@ -179,6 +175,7 @@ export default {
                       this.pams.orgId = params.row.orgId
                       this.pams.delFlag = 1
                       this.pams.validFlag = params.row.validFlag
+                      this.list = []
                       this.ok()
                     }
                   }
@@ -255,15 +252,22 @@ export default {
         this.pams.contactUserName = e.contactUserName
         this.pams.contactUserPhone = e.contactUserPhone
       }
+      this.list = []
       this.modal1 = true
-      
     },
     ok() {
       let list = this.list
       list.push(this.pams)
-      list = filterNull(list)
+      this.update()
+    },
+    update(list){
+       list = filterNull(list)
       updateFun(list).then(res => {
-
+        if(res.code == 200){
+          this.$message.success('更新成功')
+          this.list = []
+          this.getList()
+        }
       })
     },
     cancel() {
@@ -274,26 +278,14 @@ export default {
       this.pams.contactUserPhone = null
     },
     select(e){
-      console.log(e)
-      // let args = this.pams
-      // args.orgId = e.orgId
-      // args.validFlag = e.validFlag
-      // args.delFlag = 1
-      // let list = this.list
-      // list.push(args)
-      // this.list = list
+      this.list = e
     },
-    cancael(e){
-      console.log(e)
-      // let list = this.list
-      // let m = 0
-      // for(let i=0,len=list.length;i<len;i++){
-      //   if(list[i].orgId == e.orgId){
-      //     m = i
-      //     break
-      //   }
-      // }
-      // this.$delete(list,m)
+    deletes(){
+      let list = this.list
+      for(let item of list){
+        item.delFlag = 1
+      }
+      this.list = list
     }
   }
 };

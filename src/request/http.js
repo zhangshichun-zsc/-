@@ -12,7 +12,7 @@ const SERVICE_URL = {
   API_URL: [
     'https://rhzgtest.co-inclusion.org/rhzg-web', // 测试服务器 0
     'http://192.168.0.6:8084/rhzg-web', // 余海 1  192.168.0.6
-    'http://192.168.0.14:8084/rhzg-web', // 张飞飞 2
+    'http://192.168.0.14:8089/rhzg-web', // 马飞飞 2
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     'http://192.168.0.11:8084/rhzg-web', // 竺文聪 4
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
@@ -39,40 +39,17 @@ axios.defaults.timeout = 100000
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
-
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
 
     // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    // const userId = localStorage.setItem('userId')
-    // console.log(userId)
-
-    // config.params=qs.stringify({
-    //   userId:userId,
-    //   // appId:appId,
-    //   ...config.params
-    // })
-    // config.params.set('userId',userId);
-  //  config.data.set('appId',appId);
-  // if(config.method==='post'){
-  //   config.params=qs.stringify({
-  //     userId:userId,
-  //     appId:appId,
-  //     ...config.params
-  //   })
-  // }else if(config.method==='get'){
-  //   config.params={
-  //     userId:userId,
-  //     appId:appId,
-  //     ...config.params
-  //   }
-  // }
+    const userId = store.state.userId
+    userId && (config.headers.Authorization = userId)
     return config
   },
   error => {
-    console.log(11)
     return Promise.error(error)
   })
 

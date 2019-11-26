@@ -454,7 +454,10 @@ export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优�
 export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
 export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p) 
 export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p) 
-export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) //
+export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) 
 export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
 export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
 export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList",p)
+export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail',p)//证书详情
+export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould",p) //
+export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould",p)//团队

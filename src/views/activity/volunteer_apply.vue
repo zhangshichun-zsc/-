@@ -191,7 +191,8 @@ export default {
         name:null,
         validFlag:null,
         createAt:null,
-        page:null
+        page:null,
+        sysId:'2,3'
       },
       page:1,
       size:10,
@@ -199,7 +200,7 @@ export default {
       sumSize:1,
       adds:{
         itemId:null,
-        sysId:2,
+        sysId: '2,3',
         userId: this.$store.state.userId,
         name:null,
         typeFlag: "4",
@@ -208,6 +209,9 @@ export default {
     };
   },
   created() {
+    let sysId = this.$route.params.sysId
+    this.args.sysId = sysId
+    this.adds.sysId = sysId
     this.getList()
   },
   methods: {
