@@ -201,7 +201,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "editing" });
+                      this.$router.push({ path: "editing",query:{ acitvityId:params.row.acitvityId} });
                     }
                   }
                 },

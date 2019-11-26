@@ -12,7 +12,7 @@ const SERVICE_URL = {
   API_URL: [
     'https://rhzgtest.co-inclusion.org/rhzg-web', // 测试服务器 0
     'http://192.168.0.6:8084/rhzg-web', // 余海 1  192.168.0.6
-    'http://192.168.0.14:8084/rhzg-web', // 马飞飞 2
+    'http://192.168.0.14:8089/rhzg-web', // 马飞飞 2
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     'http://192.168.0.11:8084/rhzg-web', // 竺文聪 4
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
