@@ -158,7 +158,7 @@
               <li>
                 <p><span class="active-span">培训内容</span> <i-switch v-model="isTrain" :true-value='1' :false-value='0' /></p>
                 <div v-if='isTrain === 1'>
-                  <wangeditor :labels="train[0].detailText" id="ed1" @change='changeEditorTrain'></wangeditor>
+                  <wangeditor :labels="train" id="ed1" @change='changeEditorTrain'></wangeditor>
                 </div>
               </li>
               <li>
@@ -259,12 +259,7 @@ import { filterNull } from '@/libs/utils'
               detailText: null,
               sort: 1
             }],
-            train:[{
-              sysId: 2,
-              typeFlag: 1,
-              targetType: 2,
-              detailText: null,
-            }],
+            train: null,
             isFeedback:0,
             isTrain: 0,
             actveType:'',
@@ -385,7 +380,7 @@ import { filterNull } from '@/libs/utils'
         this.args.detail = html
       },
       changeEditorTrain(html){
-        this.train[0].detailText = html
+        this.train = html
       },
       initData(){
         this.userId = localStorage.getItem("userId")
@@ -521,7 +516,7 @@ import { filterNull } from '@/libs/utils'
       },
       dealData(list, startAt){
         let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : []
-        let train = this.isTrain == 1 ? this.train : []
+        let train = this.isTrain == 1 ? this.train : null
         let zhaStart = this.zhaStart
         let zhaEnd = this.zhaEnd 
         for(let i=0,len=list.length;i<len;i++){

@@ -251,19 +251,18 @@ export const SetUserLabel = p => posts('/user-list/batch-opr-label', p) // 设�
 
 export const getLevel = p => get('/user-list/get-level-info', p) // 获取用户等级
 
-// export const userExprot = p => get('/user-list/user-export', p=>{
-//     console.log
-// }) // 导出用户数据
+export const getVipPage = p => get('/user-list/get-vip-page', p) //获取 vip审核 列表
+
+export const vipApproval = p => posts('/user-list/batch-opt-vip', p) //vip  审批 or 拒绝
+
+export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员编辑
+
+
 
 
 
 //  用户列表
 export const UserList = p => get('/user-list/get-user-page', p) //-用户列表--获取用户详情
-
-// 志愿者团队（共用）
-export const setBatch = p => post('/user-list/batch-opr-user', p) // 变更用户状态
-
-export const setsend = p => posts('/user-list/send-inner-msg', p) // 站内信
 
 
 
@@ -308,15 +307,27 @@ export const orgpage = p => posts('/org/getHomeList', p) //组织管理--组织�
 
 export const orgSetStatus = p => posts('/org/updateAdminAudit', p) // 审批
 
+export const orgSetGroup = p => posts('/org/updateHomeGroup', p) // 设置有效，and 无效
+
 export const orgGetInfo = p => get('/org/getHomeDetail', p) // 具体家长小组详情
 
-
-
-
+export const getIsConfig = p => get('/org/getIsConfig', p) // 判断当前用户下有没有审批权限
 
 // 志愿者团队
 
+export const queryVouluteerOrgList = p => posts('/volunteer-manager/queryVouluteerOrgList', p) //获取志愿者团队列表
 
+
+export const auditCreateCoOrg = p => posts('/volunteer-manager/auditCreateCoOrg', p) //审批志愿者团队 同伙 and 拒绝
+
+export const modifyOrgMsg = p => posts('/volunteer-manager/modifyOrgMsg', p) // 设置 无效/有效
+
+export const queryVolunteerOrgDetail = p => get('/volunteer-manager/queryVolunteerOrgDetail', p) // 获取详情
+
+
+
+//  审批
+export const queryAuditList = p => posts('/volunteer-manager/queryAuditList', p) // 审批页面详情
 
 
 
@@ -475,7 +486,7 @@ export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p
 export const getActiveLimit = p => posts('/volunteer-manager/apply/sign/limits', p)// 活动限制项
 export const getActiveSign = p => get('/volunteer-manager/queryActivityItem', p) //活动报名项
 export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询归属团队
-export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity',p)//保存
+export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity', p)//保存
 export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
 export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
 export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
@@ -483,3 +494,5 @@ export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p)
 export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p)
 export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) //
 export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
+export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
+export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList", p)

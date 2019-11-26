@@ -23,26 +23,26 @@
     </div>
     <div class='box box_'>
       <div class='item-left'>城市</div>
-      <div class='item-right'>{{list.provinceId}} {{list.districtId}} {{list.districtId}}</div>
+      <div class='item-right'>{{city}}</div>
     </div>
     <div class='box box_' v-if="this.$route.query.head !== 'parent'">
       <div class='item-left'>成立时间</div>
-      <div class='item-right'>xxxx/xx/xx <xx:xx></xx:xx>
+      <div class='item-right'>{{list.createAt}}
       </div>
     </div>
     <div class='box box_' v-if="this.$route.query.head !== 'parent'">
       <div class='item-left'>邀请码</div>
-      <div class='item-right'>1111<xx:xx></xx:xx>
+      <div class='item-right'>{{list.invitedCode||"暂无"}}
       </div>
     </div>
 
     <div class='box'>
-      <div class='item-left' style='line-height: 40px;'>图片</div>
+      <div class='item-left' style='line-height: 40px;'>{{ this.$route.query.head === 'parent'?'介绍': '志愿者团队介绍'}}</div>
       <div class='item-right textarea'>{{list.description}}</div>
     </div>
 
     <div class='box'>
-      <div class='item-left' style='line-height: 40px;'>介绍</div>
+      <div class='item-left' style='line-height: 40px;'>图片</div>
       <img class='item-img' :src="list.orgPicPath" alt="组织图片">
     </div>
     <div class='btn' v-if="btnFlag">
@@ -64,11 +64,12 @@
 
 
 <script>
-import { orgSetStatus, orgGetInfo } from '../../request/api'
+import { orgSetStatus, orgGetInfo, queryVolunteerOrgDetail } from '../../request/api'
 export default {
   data() {
     return {
       list: [],
+      city: '',
       navigation: {},
       value: '',
       modal8: false,
@@ -86,6 +87,7 @@ export default {
           : '创建志愿者团队详情（共用）'
     }
     this.getInfo()
+    this.city = localStorage.getItem('city')
   },
   methods: {
     // 获取详情
@@ -101,6 +103,16 @@ export default {
           console.log(res)
         })
       } else {
+        queryVolunteerOrgDetail({
+          orgId: this.$route.query.orgId
+        }).then(res => {
+          if (res.code == 200) {
+            this.list = res.data.data
+            console.log(res.data.data)
+            this.btnFlag = res.data.flag
+          }
+        })
+
         // alert('获取志愿者团队详情')
       }
     },

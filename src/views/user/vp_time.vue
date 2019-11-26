@@ -9,13 +9,14 @@
           <span>数据列表</span>
         </div>
         <div class="flex-center-end">
-          <Button  class="btn">批量审核</Button>
+          <Button class="btn" @click='examine(1)'>批量审核</Button>
+          <Button class="btn" @click='refuse'>批量拒绝</Button>
           <!--导出数据-->
 
-            <Button  class="btn" @click="exportData">
-              导出数据
-              <Icon type="md-arrow-dropdown"></Icon>
-            </Button>
+          <Button class="btn" @click="exportData">
+            导出数据
+            <Icon type="md-arrow-dropdown"></Icon>
+          </Button>
 
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -25,7 +26,7 @@
           </Select>
         </div>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+      <Table border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
           <Checkbox>全选</Checkbox>
@@ -34,182 +35,288 @@
           </Select>
           <Button style="margin-left: 10px">确定</Button>
         </div>
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changepages"
-        />
+        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
+
+    <Modal title="拒绝理由" v-model="refusemodel" :mask-closable="false">
+      <Input v-model="refuseValue" placeholder="请输入原因" clearable />
+      <p v-show="isModel" class='tips'>请输入拒绝理由</p>
+      <div slot="footer">
+        <Button type="text" size="large" @click="modalCancel">取消</Button>
+        <Button type="primary" size="large" @click="modalOk">确定</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
 <script>
-import { tablepage } from "@/request/mixin";
-import {} from "@/request/api";
+import { tablepage } from '@/request/mixin'
+import Public from './config/index'
 export default {
   data() {
     return {
       navigation1: {
-        head: "VIP时间审核(会员)"
+        head: 'VIP时间审核(会员)'
       },
+      refusemodel: false,
       columns: [
         {
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center"
+          align: 'center'
         },
         {
-          title: "用户账户",
-          key: "userid",
+          title: '用户账户',
+          key: 'loginName',
           render: (h, params) => {
-            return h("div", "18000000000");
+            return h('div', '18000000000')
           }
         },
         {
-          title: "用户昵称",
-          key: "username"
+          title: '用户昵称',
+          key: 'disPlayName'
         },
         {
-          title: "用户类型",
-          key: "userclass",
+          title: '用户类型',
+          key: 'userType',
           render: (h, params) => {
-            return h("div", "受益方");
+            return h('div', '受益方')
           }
         },
         {
-          title: "修改人",
-          key: "modify"
+          title: '修改人',
+          key: 'optName'
         },
         {
-          title: "修改时间",
-          key: "modifytime"
+          title: '修改时间',
+          key: 'optTime'
         },
         {
-          title: "原VIP到期时间",
-          key: "once",
-          algin: "center",
+          title: '原VIP到期时间',
+          key: 'vipLastTime',
+          algin: 'center',
           render: (h, params) => {
-            return h("div", "2019-1-1");
+            return h('div', '2019-1-1')
           }
         },
         {
-          title: "现VIP到期时间",
-          key: "now",
-          algin: "center",
+          title: '现VIP到期时间',
+          key: 'vipOptTime',
+          algin: 'center',
           render: (h, params) => {
-            return h("div", "2020-1-1");
+            return h('div', '2020-1-1')
           }
         },
         {
-          title: "调整值",
-          key: "adjust",
-          algin: "center",
+          title: '调整值',
+          key: 'adjustValue',
+          algin: 'center',
           render: (h, params) => {
-            return h("div", "+12");
+            return h('div', '+12')
           }
         },
         {
-          title: "状态",
-          key: "status",
-          algin: "center",
+          title: '状态',
+          key: 'status',
+          algin: 'center',
           render: (h, params) => {
-            return h("div", "待审核");
+            // '当前审核状态,0待一级审核,1审核通过,2审核不通过,3待二级审核',
+
+            let flag = params.row.status
+            let colors = {
+              待审核: 'green',
+              待一级审核: 'green',
+              审核通过: '#ccc',
+              审核不通过: 'red',
+              待二级审核: 'green'
+            }
+            return h(
+              'div',
+              {
+                style: {
+                  color: colors[flag]
+                }
+              },
+              params.row.status
+            )
           }
         },
         {
-          title: "操作",
-          key: "action",
-          align: "center",
+          title: '操作',
+          key: 'action',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#097276"
+                    color: '#097276'
                   },
                   on: {
                     click: () => {
                       // this.$router.push({ name: 'integral_detail' })
+                      this.examine('1', params.row.auditId)
                     }
                   }
                 },
-                "审核"
+                '审核'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
+                    marginRight: '5px',
+                    marginLeft: '5px',
+                    color: 'red'
                   },
                   on: {
-                    click: () => {}
+                    click: () => {
+                      this.refuse(params.row.auditId)
+                    }
                   }
                 },
-                "拒绝"
+                '拒绝'
               )
-            ]);
+            ])
           }
         }
       ],
       batchList: [
-        { value: "recommended", label: "设为推荐" },
-        { value: "cancel", label: "取消推荐" },
-        { value: "hidden", label: "设为隐藏" },
-        { value: "According", label: "设为显示" },
-        { value: "delete", label: "删除" }
+        { value: 'recommended', label: '设为推荐' },
+        { value: 'cancel', label: '取消推荐' },
+        { value: 'hidden', label: '设为隐藏' },
+        { value: 'According', label: '设为显示' },
+        { value: 'delete', label: '删除' }
       ],
       data: [],
       arrs: [],
-      Article: [
-        { value: 10, label: 10 },
-        { value: 15, label: 15 },
-        { value: 20, label: 20 }
-      ],
-      sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
-      ],
-      sort: "asc",
+      Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
+      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
+      sort: 'asc',
       size: 10,
       dataCount: 0,
       page: 1,
       top: [
-        { name: "用户账号", type: "input", value: "" },
-        { name: "修改人", type: "input", value: "" }
-      ]
-    };
+        { name: '用户账号', type: 'input', value: '' },
+        { name: '修改人', type: 'input', value: '' }
+      ],
+      isModel: false,
+      refuseValue: '',
+      paramsObj: {
+        userId: '1',
+        sysType: '1',
+        accountName: '',
+        optUserName: ''
+      },
+      isALLLIST: []
+    }
   },
 
   mixins: [tablepage],
 
-  components: {  },
-
-
+  components: {},
 
   computed: {},
 
   created() {},
-
+  mounted() {
+    this.paramsObj.userId = localStorage.getItem('userId') || ''
+    this.getVipList(this.paramsObj)
+  },
   methods: {
+    // 选中的 具体项
+    handleSelectionChange(val) {
+      this.isALLLIST = val.map(item => {
+        return item.auditId
+      })
+    },
     //分页功能
     changepages(index) {
-      this.page = index;
-      console.log(index);
+      this.page = index
+      console.log(index)
     },
     query(e) {
-      console.log(e);
+      let arr = this.paramsObj
+      this.paramsObj = {
+        ...arr,
+        accountName: e[0].value,
+        optUserName: e[1].value
+      }
+      this.getVipList(this.paramsObj)
+    },
+
+    // 查询列表 接口
+    getVipList(params) {
+      let obj = this.util.remove({ page: this.page, size: this.size, ...params })
+      Public.getVipPage(obj).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.data = res.data.list
+          this.dataCount = res.data.totalSize
+        }
+      })
+    },
+    // 拒绝按钮
+    refuse(props) {
+      props && (this.isALLLIST = props)
+      if (this.isALLLIST.length < 1) {
+        this.$Message.error('请至少选择一项')
+        return
+      }
+      this.refusemodel = true
+    },
+    // 确定
+    modalOk() {
+      if (this.refuseValue) {
+        this.examine(2)
+      } else {
+        this.isModel = true
+      }
+    },
+    // 取消按钮
+    modalCancel() {
+      this.refusemodel = false
+    },
+    // 审批
+    examine(optType, props) {
+      props && (this.isALLLIST = props)
+      if (this.isALLLIST.length < 1) {
+        this.$Message.error('请至少选择一项')
+      } else {
+        Public.vipApproval(
+          this.util.remove({
+            optType: optType,
+            auditIds: this.isALLLIST.toString(),
+            userId: this.paramsObj.userId,
+            remark: this.refuseValue
+          })
+        ).then(res => {
+          this.refusemodel = false
+          if (res.code === 200) {
+            this.$Message.info('操作成功')
+            this.getVipList(this.paramsObj)
+          } else if (res.code === 400) {
+            this.$Message.error('当前账号权限不允许进行二级审批')
+          } else {
+            this.$Message.error('操作失败')
+          }
+        })
+      }
+    },
+    exportData() {
+      this.util.userExprot('/user-list/vip-export', {
+        sysType: 1,
+        page: 0,
+        ...{ size: this.dataCount },
+        ...this.paramsObj
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .integral-header {
@@ -266,5 +373,8 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 10px auto;
+}
+.tips {
+  color: red;
 }
 </style>

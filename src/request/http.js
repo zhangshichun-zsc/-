@@ -18,7 +18,7 @@ const SERVICE_URL = {
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
     'http://192.168.0.5:8084/rhzg-web', // 王盛
   ],
-  API_INDEX: 2
+  API_INDEX: 0
 
 }
 
@@ -54,20 +54,20 @@ axios.interceptors.request.use(
     //   ...config.params
     // })
     // config.params.set('userId',userId);
-  //  config.data.set('appId',appId);
-  // if(config.method==='post'){
-  //   config.params=qs.stringify({
-  //     userId:userId,
-  //     appId:appId,
-  //     ...config.params
-  //   })
-  // }else if(config.method==='get'){
-  //   config.params={
-  //     userId:userId,
-  //     appId:appId,
-  //     ...config.params
-  //   }
-  // }
+    //  config.data.set('appId',appId);
+    // if(config.method==='post'){
+    //   config.params=qs.stringify({
+    //     userId:userId,
+    //     appId:appId,
+    //     ...config.params
+    //   })
+    // }else if(config.method==='get'){
+    //   config.params={
+    //     userId:userId,
+    //     appId:appId,
+    //     ...config.params
+    //   }
+    // }
     return config
   },
   error => {
