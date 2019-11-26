@@ -28,19 +28,22 @@
             </FormItem>
             <FormItem label="所属部门:" prop="deplNames">
               <!-- <Input v-model="AddDate.deplNames" disabled  /> -->
-              <p>{{AddDate.deplNames}}</p>
+              <!-- <p>{{AddDate.deplNames}}</p> -->
 
-              <!-- <Select style="width: 10rem" v-model="AddDate.deplNames" placeholder="全部">
-                <Option value="logistics">后勤部</Option>
-                <Option value="logistics">财务部</Option>
+              <Select style="width: 10rem" v-model="AddDate.deplNames" placeholder="全部">
+                <Option :value=AddDate.deplNames>{{AddDate.deplNames}}</Option>
+                <!-- <Option value="logistics">财务部</Option>
                 <Option value="logistics">行政部</Option>
-                <Option value="logistics">项目部</Option>
-              </Select>-->
+                <Option value="logistics">项目部</Option> -->
+              </Select>
               <a>查看部门详情</a>
               <p>选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限</p>
             </FormItem>
             <FormItem label="所属角色:" prop="sysRoleNames">
-              <p>{{AddDate.sysRoleNames}}</p>
+               <Select style="width: 10rem" v-model="AddDate.sysRoleNames" placeholder="全部">
+                <Option :value=AddDate.sysRoleNames>{{AddDate.sysRoleNames}}</Option>
+                 </Select>
+              <!-- <p>{{AddDate.sysRoleNames}}</p> -->
               <!-- <Input v-model="AddDate.sysRoleNames" disabled /> -->
               <!-- <Select style="width: 10rem" v-model="AddDate.sysRoleNames" placeholder="全部">
                 <Option value="logistics">角色1</Option>
@@ -160,7 +163,11 @@ export default {
     }
   },
   mounted() {
-    this.getrolenumquery();
+    if(this.$route.query.userId){
+this.getrolenumquery();
+this.navigation1.head='编辑成员信息'
+    }
+
   }
 };
 </script>

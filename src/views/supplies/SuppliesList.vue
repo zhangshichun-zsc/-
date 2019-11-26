@@ -419,17 +419,21 @@ export default {
     //批量删除
     batch(e) {
       console.log(this.arr);
-      if (this.arr == "") {
-        this.$Message.error("请先选择");
-      } else {
-        if (e == "sanchu") {
-          console.log(this.arr);
-          this.getmaterialdels();
+      if (e == "sanchu") {
+        //选择的数据id
+        this.arr = this.arr.map(item => {
+          return item.resourcesId;
+        });
+        if (this.arr == null) {
+          this.$Message.error("请至少选择一个");
         } else {
-          this.arr = Array.of(e);
           console.log(this.arr);
           this.getmaterialdels();
         }
+      } else {
+        this.arr = Array.of(e);
+        console.log(this.arr);
+        this.getmaterialdels();
       }
     },
     //全选按钮
@@ -456,19 +460,12 @@ export default {
       } else {
         this.status = false;
       }
-      //选择的数据id
-      let arr = [];
-      for (let i = 0; i < this.arr.length; i++) {
-        arr.push(this.arr[i].resourcesId);
-      }
-      this.arr = arr;
       console.log(this.arr);
     }
   },
   //  created() {
   //  this.getmaterialtype()
   //   this.getmaterialpage();
-
   // },
   mounted() {
     this.getmaterialpage();

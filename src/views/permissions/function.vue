@@ -92,6 +92,7 @@ export default {
   },
   mounted() {
     this.obj=this.$route.query.sysRoleId
+    console.log(this.obj)
     this.getPermissionset();
   }
 };

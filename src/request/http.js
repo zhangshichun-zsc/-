@@ -12,13 +12,13 @@ const SERVICE_URL = {
   API_URL: [
     'https://rhzgtest.co-inclusion.org/rhzg-web', // 测试服务器 0
     'http://192.168.0.6:8084/rhzg-web', // 余海 1  192.168.0.6
-    'http://192.168.0.14:8089/rhzg-web', // 马飞飞 2
+    'http://192.168.0.14:8089/rhzg-web', // 张飞飞 2
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     'http://192.168.0.11:8084/rhzg-web', // 竺文聪 4
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
     'http://192.168.0.5:8084/rhzg-web', // 王盛
   ],
-  API_INDEX: 3
+  API_INDEX: 0
 
 }
 
@@ -30,7 +30,6 @@ export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] // 导�
 
 
 axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
-
 
 
 // 请求超时时间
@@ -45,8 +44,29 @@ axios.interceptors.request.use(
 
     // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    const userId = store.state.userId
-    userId && (config.headers.Authorization = userId)
+    // const userId = localStorage.setItem('userId')
+    // console.log(userId)
+
+    // config.params=qs.stringify({
+    //   userId:userId,
+    //   // appId:appId,
+    //   ...config.params
+    // })
+    // config.params.set('userId',userId);
+    //  config.data.set('appId',appId);
+    // if(config.method==='post'){
+    //   config.params=qs.stringify({
+    //     userId:userId,
+    //     appId:appId,
+    //     ...config.params
+    //   })
+    // }else if(config.method==='get'){
+    //   config.params={
+    //     userId:userId,
+    //     appId:appId,
+    //     ...config.params
+    //   }
+    // }
     return config
   },
   error => {
@@ -59,6 +79,7 @@ axios.interceptors.request.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(url, params) {
+
   return new Promise((resolve, reject) => {
     axios.get(url, {
       params: params
@@ -73,7 +94,7 @@ export function get(url, params) {
 }
 export function gets(url, params) {
   return new Promise((resolve, reject) => {
-    let token = localStorage.getItem("token");
+    // let token = localStorage.getItem("token");
     axios.get(url, params, {
       headers: {
         Authorization: `Bearer ${token}`

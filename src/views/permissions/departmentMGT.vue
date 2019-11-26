@@ -26,9 +26,13 @@
                   />
                 </FormItem>
                 <FormItem label="上级部门" prop="SuperiorDepartments">
-                   <Select v-model="AddDate.SuperiorDepartments" style="width:200px">
-        <Option v-for="item in deplist" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
-    </Select>
+                  <Select v-model="AddDate.SuperiorDepartments" style="width:200px">
+                    <Option
+                      v-for="item in deplist"
+                      :value="item.deptId"
+                      :key="item.deptId"
+                    >{{ item.deptName }}</Option>
+                  </Select>
                 </FormItem>
                 <FormItem label="设置负责人:" prop="PersonCharge">
                   <Input
@@ -43,7 +47,7 @@
                 </FormItem>
               </Form>
             </Modal>
-           <Select v-model="size" style="width:120px" placeholder="显示条数">
+            <Select v-model="size" style="width:120px" placeholder="显示条数">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
@@ -65,16 +69,22 @@
         <Table border :columns="columns2" :data="data2"></Table>
       </div>
       <div class="pages">
-      <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
-
-
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import expandRow from '../../components/table-expand.vue';
+import expandRow from "@/components/table-expand.vue";
 import {
   departmentlist,
   departmentsub,
@@ -85,7 +95,7 @@ import {
   departmentStatus,
   departmentSup,
   departmentall
-} from "../../request/api";
+} from "@/request/api";
 export default {
   data() {
     return {
@@ -138,7 +148,7 @@ export default {
           align: "center",
           render: (h, params) => {
             return h(
-              'span',
+              "span",
               {
                 // style: {
                 //   color: 'blue',
@@ -146,13 +156,13 @@ export default {
                 // },
                 on: {
                   click: () => {
-                    this.deptId=params.row.deptId
-                    this.getdepartmentmember()
+                    this.deptId = params.row.deptId;
+                    this.getdepartmentmember();
                   }
                 }
               },
               params.row.deptName
-            )
+            );
           }
         },
         {
@@ -242,27 +252,27 @@ export default {
       columns2: [
         {
           title: "姓名",
-          key: "Name",
+          key: "userName",
           align: "center"
         },
         {
           title: "邮箱地址",
-          key: "EmailAddress",
+          key: "email",
           align: "center"
         },
         {
           title: "联系方式",
-          key: "contact",
+          key: "tel",
           align: "center"
         },
         {
           title: "角色",
-          key: "role",
+          key: "sysRoleNames",
           align: "center"
         },
         {
           title: "所属部门",
-          key: "SubDepartmentName",
+          key: "deptName",
           align: "center"
         },
         {
@@ -270,7 +280,19 @@ export default {
           key: "status",
           align: "center",
           render: (h, params) => {
-            return h("div", [h("i-switch")]);
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  value: params.row.validFag == 1
+                },
+                on: {
+                  input: e => {
+                    console.log(e);
+                    this.getdepartmentStatus(params.row.deptId, e);
+                  }
+                }
+              })
+            ]);
           }
         },
         {
@@ -339,8 +361,8 @@ export default {
       validFlag: "",
       page: 1,
       size: 10,
-      deplist:[],
-       Article: [
+      deplist: [],
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -350,10 +372,11 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-       dataCount: 0,
+      dataCount: 0,
+      status: ""
     };
   },
-   //事件监听
+  //事件监听
   watch: {
     size: "getdepartmentmember",
     sort: "getdepartmentmember"
@@ -370,19 +393,13 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.data1 = res.data;
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
     },
-    // 查询下级部门
-    getdepartmentsub() {
-      departmentsub({
-        depId: this.depId,
-        id: this.id
-      }).then(res => {
-        console.log(res);
-      });
-    },
+
     // 修改启用状态
     getdepartmentStatu(id, e) {
       if (e == true) {
@@ -397,6 +414,7 @@ export default {
         if (res.code == 200) {
           this.$Message.info("操作成功");
         } else {
+          this.getdepartmentlist();
           this.$Message.error(res.msg);
         }
       });
@@ -405,15 +423,15 @@ export default {
     getdepartmentmember() {
       departmentmember({
         page: { page: this.page, size: this.size },
-        depId: this.depId,
+        depId: this.deptId,
         sort: ""
       }).then(res => {
-        if(res.code==200){
-          this.data2=res.data.list
-          this.dataCount=res.data.totalSize
-          this.$Message.info("查询成功")
-        }else{
-          this.$Message.error(res.msg)
+        if (res.code == 200) {
+          this.data2 = res.data.list;
+          this.dataCount = res.data.totalSize;
+          this.$Message.info("查询成功");
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -421,8 +439,7 @@ export default {
     // 部门列表编辑
     getdepartmentedit() {
       departmentedit({}).then(res => {
-        if(res.code==200){
-
+        if (res.code == 200) {
         }
         console.log(res);
       });
@@ -439,36 +456,51 @@ export default {
       });
     },
     // 部门成员-修改启用状态
-    getdepartmentStatus() {
-      departmentStatus({}).then(res => {
+    getdepartmentStatus(id, e) {
+      if (e == true) {
+        this.status = 1;
+      } else {
+        this.status = 0;
+      }
+      departmentStatus({
+        deptUserId: id,
+        validFlag: this.status
+      }).then(res => {
         console.log(res);
       });
     },
     // 查询所有上级部门名称
     getdepartmentSup() {
       departmentSup({}).then(res => {
-        console.log(res);
-      });
-    },
-    // 查询所有部门名称
-    getdepartmentall() {
-      departmentall({}).then(res => {
         if(res.code==200){
           this.deplist=res.data
         }
         console.log(res);
       });
     },
+    // 查询所有部门名称
+    getdepartmentall() {
+      departmentall({}).then(res => {
+        if (res.code == 200) {
+          this.deplist = res.data;
+        }
+        console.log(res);
+      });
+    },
 
+    //清除input
+    clear(){
+
+    },
     //分页功能
     changepages(index) {
-      this.page = index
-      this.getdepartmentmember()
+      this.page = index;
+      this.getdepartmentmember();
     },
     //添加部门
-    add(){
-      this.modal1=true
-      this.getdepartmentall()
+    add() {
+      this.modal1 = true;
+      this.getdepartmentall();
     },
 
     AddMembers() {
@@ -481,7 +513,7 @@ export default {
       this.$Message.info("已取消");
     }
   },
-  components: { expandRow },
+  components: { expandRow }
 };
 </script>
 
@@ -514,5 +546,8 @@ body {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+}
+tr td.ivu-table-expanded-cell {
+  padding: 0 !important;
 }
 </style>

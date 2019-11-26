@@ -10,11 +10,11 @@
         </div>
         <div class="flex-center-end">
           <Button class="integral-rig" :to="{ name: 'integral_set' }">积分规则设置</Button>
-          <div class="integral-rig"  @click="Retractbtn">
+          <div class="integral-rig" @click="Retractbtn">
             <Icon type="ios-arrow-down" v-if="Retract==true" />
-              <Icon type="ios-arrow-up" v-if="Retract==false" />
-              <span v-if="Retract==true">收起筛选</span>
-              <span v-if="Retract==false">启用筛选</span>
+            <Icon type="ios-arrow-up" v-if="Retract==false" />
+            <span v-if="Retract==true">收起筛选</span>
+            <span v-if="Retract==false">启用筛选</span>
           </div>
           <Button class="integral-rig" @click="query">查询结果</Button>
         </div>
@@ -42,12 +42,12 @@
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
-         <Select v-model="size" style="width:120px" placeholder="显示条数">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+          <Select v-model="size" style="width:120px" placeholder="显示条数">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
         <Modal v-model="modal1" title="修改积分">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
@@ -55,18 +55,21 @@
               <RadioGroup v-model="formItem.addType" vertical>
                 <Radio label="1">
                   增加
-                  <Input placeholder="请输入大于0的整数" v-model="formItem.addScore1"/>
+                  <InputNumber :min="1" v-model="formItem.addScore1" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
+                  <!-- <Input placeholder="请输入大于0的整数" v-model="formItem.addScore1"/> -->
                   <Button style="background:#ccc">分</Button>
                 </Radio>
                 <Radio label="2">
                   减少
-                  <Input placeholder="请输入大于0的整数" v-model="formItem.addScore2"/>
+                  <InputNumber :min="1" v-model="formItem.addScore2" style="width: 160px;"  placeholder="请输入大于0的整数"></InputNumber>
+
+                  <!-- <Input placeholder="请输入大于0的整数" v-model="formItem.addScore2"/> -->
                   <Button style="background:#ccc">分</Button>
                 </Radio>
               </RadioGroup>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
-              <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}"/>
+              <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
             </FormItem>
           </Form>
           <div slot="footer">
@@ -106,8 +109,8 @@ export default {
       formItem: {
         remark: "",
         addType: "1",
-        addScore1: "",
-        addScore2: ""
+        addScore1:1,
+        addScore2:1,
       },
       formValidate: {
         serve: ""
@@ -199,9 +202,8 @@ export default {
                   on: {
                     click: () => {
                       this.clearinput();
-                      console.log(this.userIds)
                       this.userIds = params.row.userId;
-
+                       console.log(this.userIds);
                     }
                   }
                 },
@@ -249,8 +251,9 @@ export default {
       userIds: "",
       arrs: [],
       operationUserId: 8,
-      userIds:'',
-      Retract:true
+      userIds: "",
+      Retract: true,
+      num: ""
     };
   },
 
@@ -261,15 +264,14 @@ export default {
     this.getintegralpage();
   },
 
-
   mixins: [tablepage],
 
   created() {},
 
   //  事件监听
   watch: {
-    size:"getintegralpage",
-    sort:"getintegralpage"
+    size: "getintegralpage",
+    sort: "getintegralpage"
   },
   methods: {
     //积分管理--积分分页
@@ -296,16 +298,10 @@ export default {
 
     //修改积分
     getintegralmodify() {
-      let num = "";
-      if (this.formItem.addType == 1) {
-        num = this.formItem.addScore1;
-      } else if (this.formItem.addType == 2) {
-        num = this.formItem.addScore2;
-      }
       integralmodify({
         userIds: this.userIds,
         sysType: this.sysType,
-        addScore: num,
+        addScore: this.num,
         addType: this.formItem.addType,
         remark: this.formItem.remark,
         operationUserId: this.operationUserId
@@ -338,7 +334,7 @@ export default {
       console.log(this.arr);
     },
 
-     //收起筛选
+    //收起筛选
     Retractbtn() {
       this.Retract = !this.Retract;
       console.log(11);
@@ -347,18 +343,18 @@ export default {
     //批量修改
     modify() {
       console.log(this.arr);
-      if(this.arr.length==0){
-        this.$Message.error("请先选择")
-      }else{
+      if (this.arr.length == 0) {
+        this.$Message.error("至少选择一个！");
+      } else {
         this.clearinput();
-        this.userIds=this.arr
+        this.userIds = this.arr;
       }
     },
 
     clearinput() {
       this.formItem.remark = "";
-      this.formItem.addScore1 = "";
-      this.formItem.addScore2 = "";
+      this.formItem.addScore1 = 0;
+      this.formItem.addScore2 = 0;
       this.modal1 = true;
     },
 
@@ -371,7 +367,18 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.getintegralmodify();
+          if (this.formItem.addType == 1 && this.formItem.addScore1 !=null) {
+            this.num = this.formItem.addScore1;
+            this.getintegralmodify();
+          } else if (
+            this.formItem.addType == 2 &&
+            this.formItem.addScore2 != null
+          ) {
+            this.num = this.formItem.addScore2;
+            this.getintegralmodify();
+          } else {
+            this.$Message.error("数值不能为空");
+          }
         } else {
           this.$Message.error("必填项未填");
         }

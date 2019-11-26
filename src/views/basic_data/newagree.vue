@@ -42,29 +42,32 @@
           ></DatePicker>
         </FormItem>
       </FormItem>
-      <FormItem label="广告图片" prop="agFile">
-        <Upload action="//jsonplaceholder.typicode.com/posts/" :before-upload="handleUpload">
+      <FormItem label="广告附件" prop="agFile">
+        <p>{{Enclosure}}</p>
+        <Upload
+          :action="orgimg"
+          :before-upload="handleUpload"
+          :show-upload-list="false"
+        >
           <Button icon="ios-cloud-upload-outline">上传附件</Button>
         </Upload>
       </FormItem>
     </Form>
-    <!-- <Table border :columns="columns1" :data="data1"></Table> -->
     <br />
-
     <Button align="center" type="success" @click="handleSubmit('formInline')">保存</Button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import { orgimg } from "@/request/http";
 import {
   Agreementadd,
   AgreementNewList,
   AgreementList,
   Agreementdet,
   Agreementmodify
-} from "../../request/api";
-import { date1 } from "../../request/datatime";
+} from "@/request/api";
+import { date1 } from "@/request/datatime";
 export default {
   data() {
     return {
@@ -83,17 +86,28 @@ export default {
       },
       ruleInline: {
         partA: [
-          { required: true, message: "广告名称不能为空", trigger: "blur" }
+          { required: true, message: "甲方名称不能为空", trigger: "blur" }
         ],
         partB: [
-          { required: true, message: "广告名称不能为空", trigger: "blur" }
+          { required: true, message: "乙方名称不能为空", trigger: "blur" }
         ],
         typeDicId: [
-          { required: true, message: "广告名称不能为空"}
+          {
+            required: true,
+            message: "请选择所属协议分类",
+            trigger: "change",
+            type: "number"
+          }
         ],
         categoryId: [
-          { required: true, message: "广告名称不能为空"}
+          {
+            required: true,
+            message: "请选择所属项目类型",
+            trigger: "change",
+            type: "number"
+          }
         ],
+
         agTime: [
           {
             required: true,
@@ -104,45 +118,49 @@ export default {
         ]
       },
       sysId: 1,
-      data1: ""
+      data1: "",
+
+      orgimg: "",
+      Enclosure:''
     };
   },
 
   components: {},
 
   computed: {},
-
-  created() {
+  mounted() {
     this.getAgreementNewList();
     this.getAgreementList();
     if (this.$route.query.agreementId) {
+      this.navigation1.head='编辑协议'
       this.getAgreementdet();
-    } else {
     }
+    this.orgimg = orgimg;
+  },
+
+  created() {
+
   },
 
   methods: {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          // this.getAgreementadd()
-          if (this.$route.query.agreementId) {
-            console.log(11);
-            this.getAgreementmodify();
+          if ((this.file =='')) {
+            this.$Message.error("请上传附件");
           } else {
-            this.getAgreementadd()
-            // this.getadd();
+            if (this.$route.query.agreementId) {
+              this.getAgreementmodify();
+            } else {
+              this.getAgreementadd();
+            }
           }
-          this.$Message.success("提交成功!");
         } else {
           this.$Message.error("提交失败！");
         }
       });
     },
 
-    history() {
-      this.$router.go(-1);
-    },
     //协议分页列表
     getAgreementList() {
       AgreementList({}).then(res => {
@@ -186,7 +204,12 @@ export default {
         sort: this.sort
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.success("提交成功!");
+          this.$Message.success("添加成功!");
+          this.$router.push({
+            name: "agreelist"
+          });
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -218,7 +241,12 @@ export default {
         agFile: this.formInline.agFile
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.success("提交成功!");
+          this.$Message.success("编辑成功!");
+          this.$router.push({
+            name: "agreelist"
+          });
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -226,9 +254,8 @@ export default {
 
     //图片上传
     handleUpload(file) {
-      // this.picUrl=file.name
-      this.formInline.agFile = "11";
-      console.log(file, this.agFile);
+      this.Enclosure=file.name
+      console.log(file);
     }
   }
 };
