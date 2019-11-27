@@ -112,7 +112,7 @@ export default {
             let type = {
               1: '机构',
               2: '家长小组',
-              3: '自愿者小组'
+              3: '志愿者小组'
             }
 
             return h('span', type[orgType])

@@ -247,6 +247,8 @@ export const Userdetail = p => get('/user-list/user-detail-info', p) //-用户�
 
 export const getLabel = p => get('/user-list/get-label', p) // 获取所有标签
 
+export const Setsend = p => posts('/user-list/send-inner-msg', p) // 站内信接口
+
 export const SetUserLabel = p => posts('/user-list/batch-opr-label', p) // 设置用户标签
 
 export const getLevel = p => get('/user-list/get-level-info', p) // 获取用户等级
@@ -255,7 +257,11 @@ export const getVipPage = p => get('/user-list/get-vip-page', p) //获取 vip审
 
 export const vipApproval = p => posts('/user-list/batch-opt-vip', p) //vip  审批 or 拒绝
 
-export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员编辑
+export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员获取编辑资料
+
+export const setUpdate = p => posts('/user-list/update-user-info', p) //会员设置编辑资料
+
+export const optTime = p => posts('/user-list/opt-vip-time', p) //修改vip道到期时间
 
 
 

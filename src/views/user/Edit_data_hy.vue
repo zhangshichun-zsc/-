@@ -3,6 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="main">
+
       <ButtonGroup>
         <Button @click="userDetaile()">用户详情</Button>
         <Button type="success">编辑资料</Button>
@@ -55,7 +56,7 @@
                   <p>{{parameOBJ.basicInfo.info.tel}}</p>
                 </FormItem>
                 <FormItem label="昵称">
-                  <Input type="text" placeholder="点击输入" :value="parameOBJ.basicInfo.info.displayName" style="width:180px"></Input>
+                  <Input type="text" placeholder="点击输入" v-model="parameOBJ.basicInfo.info.displayName" style="width:180px"></Input>
                 </FormItem>
                 <FormItem label="身份证件类型">
                   <Select v-model="parameOBJ.basicInfo.info.idcardType" style="width:180px">
@@ -66,7 +67,7 @@
                   <Input type="text" placeholder="点击输入" style="width:180px" v-model="parameOBJ.basicInfo.info.idCard"></Input>
                 </FormItem>
                 <FormItem label="出生日期">
-                  <DatePicker type="date" :value='parameOBJ.basicInfo.info.birthDay' placeholder="点击输入" style="width:180px"></DatePicker>
+                  <DatePicker type="date" v-model="parameOBJ.basicInfo.info.birthDay" placeholder="点击输入" style="width:180px"></DatePicker>
                 </FormItem>
                 <FormItem label="性别">
                   <RadioGroup v-model="parameOBJ.basicInfo.info.sex">
@@ -78,6 +79,26 @@
                     </Radio>
                   </RadioGroup>
                 </FormItem>
+                <FormItem prop="province" label="省份">
+                  <Select v-model="province" placeholder="请选择省份">
+                    <Option v-for="(item,index) in provinceArr" :key="item.provinceId" :value="item.provinceId">{{ item.provinceName }}</Option>
+                  </Select>
+                </FormItem>
+                <FormItem prop="city" label="城市">
+                  <Select v-model="city" placeholder="请选择城市">
+                    <Option v-for="(item,index) in citiesArr" :key="item.cityId" :value="item.cityId">{{ item.cityName }}</Option>
+                  </Select>
+                </FormItem>
+                <FormItem prop="county" label="区县">
+                  <Select v-model="county" placeholder="请选择区县">
+                    <Option v-for="(item,index) in countyArr" :key="item.districtId" :value="item.districtId">{{ item.districtName }}</Option>
+                  </Select>
+
+                </FormItem>
+                <FormItem prop="address" label="详细地址">
+                  <Input type="text" style="width:180px" v-model="parameOBJ.basicInfo.info.address"></Input>
+                </FormItem>
+
                 <FormItem label="创建时间">
                   <p>{{parameOBJ.basicInfo.info.createAt}}</p>
                 </FormItem>
@@ -100,22 +121,22 @@
               <Form :label-width="120" style="padding: 0.5rem " label-position='left'>
                 <FormItem label="特长">
                   <Select v-model="parameOBJ.volInfo.info.speciality" style="width:180px" placeholder="请选择">
-                    <Option v-for="item in parameOBJ.volInfo.speciality" :value="item.dicId" :key='item.dicId'>{{item.dicName}}</Option>
+                    <Option v-for="item in parameOBJ.volInfo.speciality" :value="item.dicId+''" :key='item.dicId'>{{item.dicName}}</Option>
                   </Select>
                 </FormItem>
                 <FormItem label="志愿者特长">
                   <Select v-model="parameOBJ.volInfo.info.voluSpeciality" style="width:180px" placeholder="请选择">
-                    <Option v-for="item in parameOBJ.volInfo.volSpeciality" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
+                    <Option v-for="item in parameOBJ.volInfo.volSpeciality" :value="item.dicId+''" :key='item.dicId'>{{ item.dicName }}</Option>
                   </Select>
                 </FormItem>
                 <FormItem label="期待参加的活动种类">
                   <Select v-model="parameOBJ.volInfo.info.actTypeLike" style="width:180px" placeholder="请选择">
-                    <Option v-for="item in parameOBJ.volInfo.volServerType" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
+                    <Option v-for="item in parameOBJ.volInfo.volServerType" :value="item.dicId+''" :key='item.dicId'>{{ item.dicName }}</Option>
                   </Select>
                 </FormItem>
                 <FormItem label="教育程度">
                   <Select v-model="parameOBJ.volInfo.info.eduStatus" style="width:180px" placeholder="请选择">
-                    <Option v-for="item in parameOBJ.volInfo.education" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
+                    <Option v-for="item in parameOBJ.volInfo.education" :value="item.dicId+''" :key='item.dicId'>{{ item.dicName }}</Option>
                   </Select>
                 </FormItem>
                 <FormItem label="邮箱">
@@ -161,9 +182,10 @@
                 </div>
               </Form>
             </div>
-
+            <div class="btn-box"> <Button @click="setUpdata" class='btn' type="success">保存</Button></div>
           </div>
           </Col>
+
         </Row>
       </div>
 
@@ -261,7 +283,7 @@
           <Col span="12">
           <Form :label-width="140" style="padding: 0.5rem" label-position='left'>
             <FormItem label="VIP到期时间">
-              <p>{{  parameOBJ.memInfo.userInfo.vipLastTime || ''}}</p>
+              <p>{{  parameOBJ.memInfo.userInfo.vipLastTime || '暂无数据'}}</p>
             </FormItem>
             <FormItem label="姓名">
               <p>{{  parameOBJ.memInfo.userInfo.userName || ''}}</p>
@@ -274,6 +296,11 @@
             <FormItem label="会员职业">
               <Select v-model="parameOBJ.memInfo.userInfo.jobDicId" style="width:180px" placeholder="请选择">
                 <Option v-for="item in parameOBJ.memInfo.occupation" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="会员服装尺码">
+              <Select v-model="clothingSize" style="width:180px" placeholder="请选择">
+                <Option v-for="item in parameOBJ.memInfo.clothingSize" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
               </Select>
             </FormItem>
             <FormItem label="孩子姓名">
@@ -297,11 +324,10 @@
             <FormItem label="孩子障碍类型">
               <p>{{parameOBJ.memInfo.childsInfo[0].disorderType}}</p>
             </FormItem>
-            <div style="padding-left:0.5rem; padding-right:5rem">
-              <p>是否患有其他疾病</p>
-              <span v-if="parameOBJ.memInfo.childsInfo[0].disorderType.length>0" class='disorderTypelist-item ' v-for="item in parameOBJ.memInfo.childsInfo[0].disorderType.split(',')">{{item}}</span>
-              <span v-else class='disorderTypelist-item'>无</span>
-            </div>
+            <FormItem label="是否患有其他疾病">
+              <p style='padding:0; width:70%;' v-if="parameOBJ.memInfo.childsInfo[0].disorderType.length>0" class='disorderTypelist-item ' v-for="item in parameOBJ.memInfo.childsInfo[0].disorderType.split(',')">{{item}}</p>
+              <p v-else class='disorderTypelist-item'>无</p>
+            </FormItem>
             <FormItem label="孩子爱好、注意事项">
               <p>{{parameOBJ.memInfo.childsInfo[0].point}}</p>
             </FormItem>
@@ -385,11 +411,12 @@
             </FormItem>
             <FormItem label="手足的现有状态">
               <Select v-model="parameOBJ.memInfo.vipotherInfo.brothersStatus" style="width:180px" placeholder="请选择">
-                <Option v-for="item in parameOBJ.memInfo.listStatusType" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
+                <Option v-for="item in parameOBJ.memInfo.listStatusType" :value="item.dicId+''" :key='item.dicId'>{{ item.name }}</Option>
               </Select>
             </FormItem>
             <FormItem label="成年心智障碍者婚姻状况">
-              <RadioGroup v-model="parameOBJ.memInfo.vipotherInfo.brothersDisorder">
+
+              <RadioGroup v-model="parameOBJ.memInfo.vipotherInfo.isMarried">
                 <Radio label="1">
                   <span>已婚</span>
                 </Radio>
@@ -399,50 +426,153 @@
               </RadioGroup>
             </FormItem>
             <FormItem label="年收入范围">
-
-              <Select v-model="parameOBJ.memInfo.userInfo.orgName" style="width:180px" placeholder="请选择">
-                <Option v-for="item in parameOBJ.memInfo.listOrg" :value="item.dicId" :key='item.dicId'>{{ item.dicName }}</Option>
+              <Select v-model="parameOBJ.memInfo.vipotherInfo.annualIncome" style="width:180px" placeholder="请选择">
+                <Option v-for="item in parameOBJ.memInfo.listInCome" :value="item.dicId" :key='item.dicId'>{{ item.name }}</Option>
               </Select>
             </FormItem>
             <FormItem label="所在家长小组">
               <p>{{parameOBJ.memInfo.userInfo.orgName}}</p>
             </FormItem>
             <FormItem label="目前孩子有哪些社会保障">
-              <CheckboxGroup>
-                <Checkbox v-for='item in parameOBJ.memInfo.listInsurance' :label="item.dicId">{{item.name}}</Checkbox>
-
+              <CheckboxGroup v-model="securityType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSecurity' :label="item.dicId+''">
+                  {{item.name}}
+                </Checkbox>
+                <Checkbox style='display:flex; align-items: center; ' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.securityOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
               </CheckboxGroup>
 
+            </FormItem>
+
+            <FormItem label="是否自行购买相关商业保险*">
+              <CheckboxGroup v-model="insuranceType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listInsurance' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center; ' v-else :label="item.dicId +''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.insuranceOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="家庭希望孩子能获得哪方面的服务支持*">
+              <CheckboxGroup v-model="supportType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSupport' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.supportOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
             </FormItem>
           </Form>
 
           </Col>
           <Col span="12">
           <Form :label-width="120" style="padding: 0.5rem" label-position='left'>
-            <FormItem label="VIP到期时间">
-              <p>{{  parameOBJ.memInfo.userInfo.vipLastTime || ''}}</p>
+            <FormItem label="融合教育*">
+              <CheckboxGroup v-model="confluentType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listConfluent' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.confluentOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
             </FormItem>
-            <FormItem label="障碍类型">
-              <p>{{parameOBJ.memInfo.childsInfo[0].disorderType || ""}}</p>
+            <FormItem label="康复支持*">
+              <CheckboxGroup v-model="rehabilitationType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listRehabilitation' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.rehabilitationOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
             </FormItem>
-            <FormItem label="残疾证号">
-              <p>{{parameOBJ.memInfo.childsInfo[0].disorderCard || ""}}</p>
-
+            <FormItem label="职业培训及就业*">
+              <CheckboxGroup v-model="trainType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listTrain' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.trainOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
             </FormItem>
-            <FormItem label="家庭账号成员">
-              <p>{{parameOBJ.memInfo.homeMemberList[0].userName || ""}}{{parameOBJ.memInfo.homeMemberList[0].typeDicId}} {{parameOBJ.memInfo.homeMemberList[0].userPhone}}</p>
+            <FormItem label="自主生活*">
+              <CheckboxGroup v-model="livingType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listLiving' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.livingOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
             </FormItem>
-            <FormItem label="衣服尺码">
-              <p>{{parameOBJ.memInfo.childsInfo[0].clothingSize || "XL"}}</p>
+            <FormItem label="社会融合*">
+              <CheckboxGroup v-model="socialType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSocial' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.socialOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
             </FormItem>
-            <div style="text-align: center;">
-              <Icon type="ios-arrow-down" @click="showBenefitModel" />
-            </div>
+            <FormItem label="家长希望获得的支持*">
+              <CheckboxGroup v-model="hopeType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listHope' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.hopeOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="如参加专题培训，倾向主题为*">
+              <CheckboxGroup v-model="specialType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSpecial' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.specialOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="作为会员，我(家长)的优势和感兴趣的事情*">
+              <CheckboxGroup v-model="interestType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listInterest' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.interestOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="融爱融乐现有活动中，您所感兴趣的包括*">
+              <CheckboxGroup v-model="activityType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listActivity' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.activityOther" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="融爱融乐现有小组中，您希望加入*">
+              <CheckboxGroup v-model="hopeOrgId">
+                <Checkbox v-for='item in parameOBJ.memInfo.listOrg' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="会员信息推动方式*">
+              <CheckboxGroup v-model="msgSendType">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listMsgSend' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
+                <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
+                  <p style='width: 35px;'> {{item.name}}</p>
+                  <Input v-model="parameOBJ.memInfo.vipotherInfo.msgOtherSendType" placeholder="请输入" style="width: 150px" />
+                </Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+            <FormItem label="家庭账号成员*">
+              <p v-for="item in parameOBJ.memInfo.homeMemberList">
+                {{item.userName}} {{item.typeDicId}} {{item.userPhone}}
+              </p>
+            </FormItem>
 
           </Form>
           </Col>
         </Row>
-
       </div>
 
       <div slot="footer">
@@ -462,57 +592,36 @@ export default {
       navigation1: {
         head: '编辑资料(会员)'
       },
-      // formInline1: {
-      //   photo: '13111111111',
-      //   DateBirth: '',
-      //   gender: '',
-      //   IdCard: '',
-      //   email: '',
-      //   CreationTime: '2019-05-20   15:00'
-      // },
-      // formInline2: {
-      //   ProfessionalCompetence: '',
-      //   ServiceableTime: '',
-      //   hobby: '',
-      //   DegreeEducation: '',
-      //   ServiceIntention: ''
-      // },
-      // cityList2: [{ value: 'option1', label: '1' }],
-      // cityList3: [{ value: 'option1', label: '工作日' }],
-      // cityList4: [{ value: 'option1', label: '1' }],
-      // cityList5: [{ value: 'option1', label: '1' }],
-      // cityList6: [{ value: 'option1', label: '1' }],
-      // formInline3: {
-      //   VIPExpiryDate: '',
-      //   BarrierType: '',
-      //   DisabilityNumber: '',
-      //   FamilyAccountMember: '',
-      //   DressSize: ''
-      // },
-      // cityList7: [{ value: 'option1', label: '1' }],
-      // cityList8: [{ value: 'option1', label: '1' }],
-      // cityList9: [{ value: 'option1', label: '1' }],
-      // cityList10: [{ value: 'option1', label: '1' }],
-      // cityList11: [{ value: 'option1', label: '1' }],
-      // formInline4: {
-      //   OrganizationName: '',
-      //   TissueTypes: '',
-      //   department: '',
-      //   UnitPosition: ''
-      // },
-      // cityList12: [
-      //   { value: 'option1', label: '拜耳中国' },
-      //   { value: 'option2', label: '白鸽志愿团队' },
-      //   { value: 'option3', label: '丰台家长小组' }
-      // ],
-      // cityList13: [{ value: 'option1', label: '1' }],
-      // cityList14: [{ value: 'option1', label: '1' }],
-      // cityList15: [{ value: 'option1', label: '1' }],
+      //  多选框的数据 选中的数据
+      securityType: [],
+      insuranceType: [],
+      supportType: [],
+      rehabilitationType: [],
+      confluentType: [],
+      trainType: [],
+      livingType: [],
+      socialType: [],
+      hopeType: [],
+      specialOther: [],
+      activityType: [],
+      hopeOrgId: [],
+      msgSendType: [],
+      specialType: [],
+      interestType: [],
+      // 多选框数据end
       formInline5: {
         DonorType: '',
         cycle: '',
         lines: ''
       },
+      clothingSize: '',
+      province: '',
+      city: '',
+      county: '',
+      provinceArr: [], //省
+      citiesArr: [], // 市
+      countyArr: [], //区
+
       cityList16: [{ value: 'option1', label: '月捐' }, { value: 'option2', label: '次捐' }],
       cityList17: [{ value: 'option1', label: '1' }],
       cityList18: [{ value: 'option1', label: '1' }],
@@ -534,8 +643,6 @@ export default {
         userId: this.$route.query.userId,
         sysType: '1'
       },
-      specialityInfo: '',
-      speciality: [],
       parameOBJ: {
         titleInfo: {}, //头部信息
         basicInfo: {
@@ -601,7 +708,7 @@ export default {
             brothersStatus: '',
             cityId: 1,
             confluentOther: '',
-            confluentType: '',
+            confluentType: [],
             countryId: '',
             createAt: '',
             createUserId: '',
@@ -651,23 +758,162 @@ export default {
     }
   },
   created() {
+    this.init()
     this.getVipUserInfo(this.getOBJ)
   },
+  watch: {
+    province(newValue) {
+      this.getcitiesArr(newValue)
+    },
+    city(newValue) {
+      this.getcountyArr(newValue)
+    }
+  },
   methods: {
+    // 获取省市区信息
+    init() {
+      Public.orgcity().then(res => {
+        this.provinceArr = res.data
+      })
+    },
+    getcitiesArr(id) {
+      Public.orgprovince({ provinceId: id }).then(res => {
+        this.citiesArr = res.data
+      })
+    },
+    getcountyArr(id) {
+      Public.orgdistrict({ cityId: id }).then(res => {
+        this.countyArr = res.data
+        // this.county = ''
+      })
+    },
+
     // 获取所有数据
     getVipUserInfo(parame) {
       Public.getVipUserInfo(parame).then(res => {
         if (res.code === 200) {
-          // this.titleInfo = res.data.titleInfo
-          // this.basicInfo = res.data.basicInfo
-          this.speciality = res.data.volInfo.speciality
+          let data = res.data.memInfo.vipotherInfo
+          // 将 多选框的数据保存起来
+          this.securityType = this.splitArr(data.securityType)
+          this.supportType = this.splitArr(data.supportType)
+          this.confluentType = this.splitArr(data.confluentType)
+          this.trainType = this.splitArr(data.trainType)
+          this.livingType = this.splitArr(data.livingType)
+          this.socialType = this.splitArr(data.socialType)
+          this.hopeType = this.splitArr(data.hopeType)
+          this.specialOther = this.splitArr(data.specialOther)
+          this.activityType = this.splitArr(data.activityType)
+          this.msgSendType = this.splitArr(data.msgSendType)
+          this.hopeOrgId = this.splitArr(data.hopeOrgId)
+          this.insuranceType = this.splitArr(data.insuranceType)
+          this.interestType = this.splitArr(data.interestType)
+          this.specialType = this.splitArr(data.specialType)
+          // end
+
+          this.clothingSize = res.data.memInfo.userInfo.clothingSize - 0
+
+          this.province = res.data.basicInfo.info.proviceId
+          this.city = res.data.basicInfo.info.cityId
+          this.county = res.data.basicInfo.info.districtId
+
+          // this.getcitiesArr(res.data.basicInfo.info.proviceId)
+          // this.getcountyArr(res.data.basicInfo.info.cityId)
+
           this.parameOBJ = res.data
         }
 
         // console.log(JSON.stringify(res.data))
       })
     },
+    setUpdata() {
+      // 将多选题剔除保设置
 
+      let _basicInfo = this.parameOBJ.basicInfo.info
+      let _volInfo = this.parameOBJ.volInfo.info
+      let _memInfo = this.parameOBJ.memInfo.vipotherInfo
+      let _userInfo = this.parameOBJ.memInfo.userInfo
+
+      console.log(this.specialType.toString())
+
+      let obj = {
+        userId: this.$route.query.userId,
+        basicInfo: {
+          // 主信息
+          address: _basicInfo.address,
+          districtId: this.county,
+          cityId: this.city,
+          provinceId: this.province,
+          sex: _basicInfo.sex,
+          birthDay: _basicInfo.birthDay,
+          idCard: _basicInfo.idCard,
+          idcardType: _basicInfo.idcardType,
+          displayName: _basicInfo.displayName
+        },
+        volInfo: {
+          // 志愿者信息
+          eduStatus: _volInfo.eduStatus,
+          actTypeLike: _volInfo.actTypeLike,
+          voluSpeciality: _volInfo.voluSpeciality,
+          speciality: _volInfo.speciality,
+          email: _volInfo.email
+        },
+        memInfo: {
+          // 会员信息
+          annualIncome: _memInfo.annualIncome,
+          msgOtherSendType: _memInfo.msgOtherSendType,
+          msgSendType: this.msgSendType.toString(),
+          hopeOtherOrg: _memInfo.hopeOtherOrg,
+          hopeOrgId: this.hopeOrgId.toString(),
+          activityOther: _memInfo.activityOther,
+          activityType: this.activityType.toString(),
+          interestOther: _memInfo.interestOther,
+          interestType: this.interestType.toString(),
+          specialOther: _memInfo.specialOther,
+          specialType: this.specialType.toString(),
+          hopeOther: _memInfo.hopeOther,
+          hopeType: this.hopeType.toString(),
+          socialOther: _memInfo.socialOther,
+          socialType: this.socialType.toString(),
+          livingOther: _memInfo.livingOther,
+          livingType: this.livingType.toString(),
+          trainOther: _memInfo.trainOther,
+          trainType: this.trainType.toString(),
+          rehabilitationOther: _memInfo.rehabilitationOther,
+          rehabilitationType: this.rehabilitationType.toString(),
+          confluentOther: _memInfo.confluentOther,
+          confluentType: this.confluentType.toString(),
+          supportOther: _memInfo.supportOther,
+          supportType: this.supportType.toString(),
+          insuranceOther: _memInfo.insuranceOther,
+          insuranceType: this.insuranceType.toString(),
+          securityOther: _memInfo.securityOther,
+          securityType: this.securityType.toString(),
+          isMarried: _memInfo.isMarried,
+          brothersStatus: _memInfo.brothersStatus,
+          brothersAge: _memInfo.brothersAge,
+          brothersDisorder: _memInfo.brothersDisorder,
+          haveBrothers: _memInfo.haveBrothers,
+          clothingSize: this.clothingSize,
+          jobDicId: _userInfo.jobDicId,
+          typeDicId: _userInfo.typeDicId,
+          userName: _userInfo.userName
+        }
+      }
+      // console.log(JSON.stringify(obj))
+      Public.setUpdate(obj).then(res => {
+        if (res.code === 200) {
+          this.$Message.info('修改成功')
+          this.getVipUserInfo(this.getOBJ)
+        } else {
+          this.$Message.error('操作失败')
+        }
+      })
+    },
+    splitArr(str) {
+      return str.split(',').filter(function(el) {
+        return el != ''
+      })
+    },
     //修改标签弹窗
     modifyLabel() {
       alert('修改弹窗')
@@ -785,5 +1031,13 @@ export default {
   display: inline-block;
   padding: 5px 20px;
   width: 33.3%;
+}
+.btn {
+  width: 200px;
+  height: 60px;
+  border-radius: 20px;
+}
+.btn-box {
+  margin: 0 auto;
 }
 </style>
