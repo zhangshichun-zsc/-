@@ -1,6 +1,6 @@
 <!--维护活动模板(会员)-->
 <template>
-  <Maintain :navigation1='navigation1' :list='list' :from='1'></Maintain>
+  <Maintain :navigation1='navigation1' :list='list' :from='actrain'></Maintain>
 </template>
 
 <script>

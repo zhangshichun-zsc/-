@@ -53,7 +53,7 @@
                       <th>票价</th>
                       <th>VIP价</th>
                       <th>数量</th>
-                      <!-- <th>可预约数量</th> -->
+                      <th>可预约数量</th>
                       <th>可获得积分</th>
                     </tr>
                     <tr>
@@ -66,9 +66,9 @@
                       <td>
                         <Input v-model="oneRole.recruitNum" placeholder="请输入..." style="width: 90px"></Input>
                       </td>
-                      <!-- <td>
-                        <Input v-model="oneRole.amount" placeholder="请输入..." style="width: 90px"></Input>
-                      </td> -->
+                      <td>
+                        <Input v-model="oneRole.apptNum" placeholder="请输入..." style="width: 90px"></Input>
+                      </td>
                       <td>
                         <Input v-model="oneRole.score" placeholder="请输入..." style="width: 90px"></Input>
                       </td>
@@ -311,6 +311,50 @@
                 </iframe>
               </li>
               <li>
+                <span>优先限制</span>
+                <div class="impose">
+                  <table>
+                    <thead>
+                      <th>优先级别</th>
+                      <th>优先项</th>
+                      <th>操作</th>
+                    </thead>
+                    <tbody v-for="(item,index) in oneRole.choiceRuleList">
+                      <tr>
+                        <td>{{index+1}}.{{item.firstName}}</td>
+                        <td>
+                          <Button @click.native="sortFirst(index)">上移</Button>
+                        </td>
+                        <td>
+                          <Button @click.native="deleteFirst(index)">删除</Button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- <div class="impose-text">
+                    <a>+新增优先条件</a>
+                  </div> -->
+                  <div class="impose-div">
+                    <span>优先规则项</span>
+                    <Button v-for="item in firstItemList" @click.native="getFirst(item)">{{item.name}}</Button>
+                  </div>
+                </div>
+              </li>
+              <li class="other">
+                <span>是否自动筛选替补人员</span>
+                <RadioGroup v-model="oneRole.isAutoChoose">
+                  <Radio label="0" :true-value='0'>是</Radio>
+                  <Radio label="1" :true-value='1'>否</Radio>
+                </RadioGroup>
+              </li>
+              <li class="other">
+                <span>是否发放志愿证书</span>
+                <RadioGroup v-model="oneRole.isAutoChoose">
+                  <Radio label="0" :true-value='0'>是</Radio>
+                  <Radio label="1" :true-value='1'>否</Radio>
+                </RadioGroup>
+              </li>
+              <li>
                 <span>报名项设置</span>
                 <div class="impose">
                   <div v-for="(item,index) in oneRole.itemList" :key="index">
@@ -521,25 +565,27 @@
                 <span>优先限制</span>
                 <div class="impose">
                   <table>
-                    <tr>
+                    <thead>
                       <th>优先级别</th>
                       <th>优先项</th>
                       <th>操作</th>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>VIP优先</td>
-                      <td>
-                        <Icon type="ios-close-circle" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>未参加优先</td>
-                      <td>
-                        <Icon type="ios-close-circle" />
-                      </td>
-                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>VIP优先</td>
+                        <td>
+                          <Icon type="ios-close-circle" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>未参加优先</td>
+                        <td>
+                          <Icon type="ios-close-circle" />
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                   <div class="impose-text">
                     <a>+新增优先条件</a>
@@ -829,7 +875,7 @@
 </template>
 
 <script>
-import { batchItem,signType, signPost,signLimits,signItems } from "../../request/api";
+import { batchItem,signType, signPost,signLimits,signItems,firstList } from "../../request/api";
 
 export default {
   data() {
@@ -838,7 +884,8 @@ export default {
         fdList:[{ name: '反馈简介', type: 0}],
         refund:{},
         signRuleList:[],
-        itemList:[]
+        itemList:[],
+        choiceRuleList:[]
       },
       signTypeList: [],
       signPostList: [],
@@ -884,7 +931,8 @@ export default {
         { itemName: '单选问题', type: 3, answer: [{ answer: '' }, { answer: '' }, { answer: '' }], isNew: 1},
         { itemName: '多选问题', type: 4, answer: [{ answer: '' }, { answer: '' }, { answer: '' }], isNew: 1}
       ],
-      signItemList:[]
+      signItemList:[],
+      firstItemList:[]
     };
   },
   mounted() {
@@ -949,8 +997,12 @@ export default {
       signItems({
         roleId:val.roleId
       }).then(res=>{
-        console.log(res)
         this.signItemList = res.data
+      })
+      firstList({
+        roleId:val.roleId
+      }).then(res=>{
+        this.firstItemList = res.data
       })
     },
     //招募岗位
@@ -1043,6 +1095,42 @@ export default {
         this.$Message.warning("最多只可添加6个选项")
       }
     },
+    getFirst(e){
+      let m = {}
+      let n = this.oneRole.choiceRuleList
+      let isAdd = true
+      if (n.length == 0) {
+        m.ruleId = e.ruleId
+        m.firstName = e.name
+        n.push(m)
+      } else {
+        for (let i = 0; i < n.length; i++) {
+          if (n[i].ruleId == e.ruleId) {
+            isAdd = false
+          }
+        }
+        if (isAdd) {
+          m.ruleId = e.ruleId
+          m.firstName = e.name
+          n.push(m)
+        } else {
+          this.$Message.warning("已有该设置项，请勿重复添加")
+        }
+      }
+      this.oneRole.choiceRuleList = n
+    },
+    deleteFirst(e){
+      this.oneRole.choiceRuleList.splice(e,1)
+    },
+    sortFirst(e){
+      let m = this.oneRole.choiceRuleList
+      if(e==0){
+        this.$Message.warning("已经置顶，请勿继续操作")
+      }else{
+        m[e-1] = m.splice(e,1,m[e-1])[0]
+        this.oneRole.choiceRuleList = m
+      }
+    }
   }
 };
 </script>
