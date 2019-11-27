@@ -83,10 +83,7 @@ export default {
 
   methods: {
     train(e) {
-      let f = this.from
-      if(f==1){
-        this.$router.push({ name: "actrain",query:{activityId:e} });
-      }
+      this.$router.push({ name: this.from,query:{activityId:e} });
     },
     more() {
       if (this.show === false) {

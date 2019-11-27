@@ -180,7 +180,7 @@
         </div>
         
         <div v-if="isAddRole">
-          <role></role>
+          <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
         </div>
   </div>
 </template>
@@ -218,7 +218,16 @@ export default {
       releaseTimeSelf:false,
       isAddRole:false,
       image:'',
-      userId:1
+      userId:1,
+      oneRole:{},
+      roleMsg:{
+        fdList:[{ name: '反馈简介', type: 0}],
+        refund:{},
+        signRuleList:[],
+        itemList:[],
+        choiceRuleList:[]
+      },
+      roleI:0,  //招募角色下标
     };
   },
 
@@ -334,6 +343,12 @@ export default {
     //新增招募角色
     addRoles(){
       this.isAddRole = true
+      this.roleI = e
+      let r = this.roleMsg
+      let m = {}
+      let n = this.batch.userConfList
+      m = n[e]?n[e]:r
+      this.oneRole = m
     },
     //删除工作人员
     deleteWorker(i){
@@ -413,6 +428,16 @@ export default {
       orgimgdel({path:this.data.args.pic}).then(res => {
         this.$Message.success('删除成功')
       })
+    },
+    cancelRole(e){
+      console.log(e)
+      this.isAddRole = false
+    },
+    getRole(e){
+      console.log(e)
+      console.log(this.roleI)
+      this.isAddRole = false
+      this.batch.userConfList[this.roleI] = e
     },
   }
 }
