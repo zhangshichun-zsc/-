@@ -28,26 +28,43 @@
           :show-message="false"
           :label-width="120"
         >
-          <FormItem label="类型名称:" prop="AlbumName">
+          <FormItem label="类型名称:" prop="name">
             <Input style="width: 10rem" v-model="AddData.name" />
           </FormItem>
-          <FormItem label="分类图标:" prop="AlbumCover">
-            <Upload style="color: #9EA7B4;" multiple :action="orgimg" :show-upload-list=false :format="['jpg','jpeg','png']" :on-success="handleSuccess">
-              <Button icon="ios-cloud-upload-outline">选择上传文件</Button>
-              <p style="font-size: 14px;">
-                <span>只能上传jpg/png格式文件，文件不能超过50kb</span>
-              </p>
-            </Upload>
-            <img :src="AddData.picPath" style="height:50px;width:50px;" v-if="AddData.picPath" />
+          <FormItem label="类型图标:" prop="image">
+            <div class="start-wap">
+              <div class="upload" v-if="AddData.image == null">
+                <div class="file" @click="()=>{ this.$refs.files.click()}">
+                  <input
+                    style=" display:none;"
+                    type="file"
+                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                    ref="files"
+                    @change="uploadFile()"
+                    multiple
+                  />
+                  <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+                </div>
+              </div>
+              <img class="imgs" style="height:50px;width:50px;" v-else :src="AddData.image" />
+              <Icon
+                type="ios-trash"
+                v-if="AddData.image != null"
+                class="cancel"
+                :size="26"
+                @click="cancelImg()"
+              />
+            </div>
           </FormItem>
           <FormItem label="是否显示:" prop="WhetherShown">
             <i-switch v-model="WhetherShown" />
           </FormItem>
           <FormItem></FormItem>
         </Form>
+
         <div slot="footer">
           <Button type="text" size="large" @click="modalCancel">取消</Button>
-          <Button type="primary" size="large" @click="modalOk()">确定</Button>
+          <Button type="primary" size="large" @click="modalOk('AddData')">确定</Button>
         </div>
       </Modal>
       <div class="pages">
@@ -75,14 +92,14 @@
 </template>
 
 <script>
-import { orgimg } from "@/request/http";
+import { upload, orgimg } from "@/request/http";
 import {
   inquirytype,
   inquirybatch,
   inquirydel,
   inquiryedit,
   inquiryadd,
-
+  orgimgdel
 } from "@/request/api";
 export default {
   data() {
@@ -210,13 +227,11 @@ export default {
       WhetherShown: true,
       AddData: {
         name: "",
-        picPath: ""
+        image: null
       },
       ruleValidate: {
-        AlbumName: [{ required: true, message: "", trigger: "blur" }],
-        AlbumCover: [
-          { required: true, message: "请选择分类图标", trigger: "blur" }
-        ]
+        name: [{ required: true, message: "", trigger: "blur" }],
+        image: [{ required: true, message: "请选择分类图标", trigger: "blur" }]
       },
       batchList: [
         {
@@ -243,7 +258,8 @@ export default {
       ids: "",
       validFlag: "",
       types: "",
-      batchss: ""
+      batchss: "",
+      file: ""
     };
   },
   mounted() {
@@ -269,7 +285,7 @@ export default {
     //批量操作启用
     getinquirybatch() {
       inquirybatch({
-        userId: 1,
+        userId: this.$store.state.userId,
         ids: this.ids,
         validFlag: this.validFlag
       }).then(res => {
@@ -284,7 +300,7 @@ export default {
     getinquirydel() {
       inquirydel({
         ids: this.ids,
-        userId: 1
+        userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info("删除成功");
@@ -305,13 +321,14 @@ export default {
         pic: this.AddData.pic,
         validFlag: this.AddData.validFlag,
         name: this.AddData.name,
-        userId: 1
+        userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info(res.msg);
           this.modalEditor = false;
-        } else if(res.code==500){
-          this.$Message.error("类型已存在")
+          this.getinquirytype();
+        } else if (res.code == 500) {
+          this.$Message.error("类型已存在");
         }
         console.log(res);
       });
@@ -320,26 +337,52 @@ export default {
     //添加
     getinquiryadd() {
       inquiryadd({
-        userId: 1,
+        userId: this.$store.state.userId,
         sysId: this.sysId,
         dicName: this.AddData.name,
         dicPicture: this.AddData.pic,
         validFlag: this.AddData.validFlag
       }).then(res => {
-        if(res.code==200){
-           this.modalEditor = false;
-          this.$Message.info(res.msg)
-        }else if(res.code==500){
-          this.$Message.error("类型已存在")
+        if (res.code == 200) {
+          this.modalEditor = false;
+          this.$Message.info(res.msg);
+          this.getinquirytype();
+        } else if (res.code == 500) {
+          this.$Message.error("类型已存在");
         }
         console.log(res);
       });
     },
 
+
+
     //图片上传
-    handleSuccess(res, file) {
-      this.AddData.pic = res.data;
-      console.log(res, file);
+    uploadFile() {
+      let file = this.$refs.files.files[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.AddData.image = e.target.result;
+          this.AddData.pic = res.data;
+          console.log(this.AddData.image,this.AddData.pic)
+        };
+      });
+    },
+    //删除图片
+    cancelImg() {
+      orgimgdel({ path: this.AddData.pic }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.AddData.pic = null;
+          this.AddData.image = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
     },
 
     //批量操作
@@ -366,9 +409,9 @@ export default {
 
     modalOk() {
       if (this.batchss == 1) {
-        this.gets(this.getinquiryedit)
-      }else{
-        this.gets(this.getinquiryadd)
+        this.gets(this.getinquiryedit);
+      } else {
+        this.gets(this.getinquiryadd);
       }
     },
     modalCancel() {
@@ -396,7 +439,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      this.getinquirytype()
+      this.getinquirytype();
     },
 
     //每条数据单选框的状态
@@ -424,20 +467,20 @@ export default {
       (this.AddData.name = ""),
         (this.AddData.pic = ""),
         (this.WhetherShown = false);
-      this.AddData.picPath = "";
+      this.AddData.image = null;
     },
     //添加
-    gets(e){
-      if (this.AddData.name == "") {
-          this.$Message.error("有必填项未填");
+    gets(e) {
+      if (this.AddData.name == ""||this.AddData.image==null) {
+        this.$Message.error("有必填项未填");
+      } else {
+        if (this.WhetherShown == true) {
+          this.AddData.validFlag = 1;
         } else {
-          if (this.WhetherShown == true) {
-            this.AddData.validFlag = 1;
-          } else {
-            this.AddData.validFlag = 0;
-          }
-          e();
+          this.AddData.validFlag = 0;
         }
+        e();
+      }
     }
   }
 };

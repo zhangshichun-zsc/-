@@ -51,7 +51,7 @@
           ref="selection"
           border
           :columns="columns"
-          :data="data"
+          :data=data
         ></Table>
       <Modal v-model="modal2" title="查看消息">
         <h1 style="text-align: center;">{{obj.title}}</h1>
@@ -187,7 +187,7 @@ export default {
       messageShort(params).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
-          this.list = res.data.list;
+          this.data = res.data.list;
         }
         console.log(res);
       });
@@ -202,6 +202,7 @@ export default {
     query(e) {
       this.content = e[0].value;
       this.createAt = e[1].value;
+      this.getmessageShort()
     },
 
     screen() {

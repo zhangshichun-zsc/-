@@ -4,8 +4,35 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="zh">
       <p class="zh-sz">账户设置</p>
+
       <div class="zh-nr">
-        <div class="img">
+         <div class="start-wap">
+              <div class="upload" v-if="imgUrl == null" @click="()=>{ this.$refs.files.click()}">
+                <div class="file" >
+                  <input
+                    style=" display:none;"
+                    type="file"
+                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                    ref="files"
+                    @change="uploadFile()"
+                    multiple
+                  />
+                  <Button icon="ios-cloud-upload-outline" >上传头像</Button>
+                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                </div>
+              </div>
+
+              <img  :src=imgUrl style="height:150px;width:150px;"/>
+              <Icon
+                type="ios-trash"
+                v-if="imgUrl != null"
+                class="cancel"
+                :size="26"
+                @click="cancelImg()"
+              />
+            </div>
+
+        <!-- <div class="img">
           <img :src="imgUrl" class="img" />
         </div>
         <Upload
@@ -15,7 +42,7 @@
           :before-upload="handleBeforeUpload"
         >
           <Button icon="ios-cloud-upload-outline">上传头像</Button>
-        </Upload>
+        </Upload> -->
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
           <FormItem label="用户名">
             <Input v-model="formValidate.name" disabled />
@@ -42,8 +69,8 @@
 </template>
 
 <script>
-import { Setup } from "../../request/api";
-import { orgimg } from "../../request/http";
+import { Setup,orgimgdel} from "../../request/api";
+import { upload } from "../../request/http";
 export default {
   data() {
     const newPassword = (rule, value, callback) => {
@@ -71,8 +98,8 @@ export default {
         head: "账户设置"
       },
       formValidate: {
-        name: "",
-        number: "",
+        name: this.$store.state.userName,
+        number: this.$store.state.tel,
         oldPassword: "",
         newPassword: "",
         confirm: ""
@@ -90,8 +117,8 @@ export default {
         confirm: [{ validator: confirm, trigger: "blur" }]
       },
 
-      orgimg: "",
-      imgUrl: ""
+      picUrl: null,
+      imgUrl:null
     };
   },
 
@@ -101,7 +128,7 @@ export default {
 
   created() {},
   mounted() {
-    this.orgimg = orgimg;
+
   },
 
   methods: {
@@ -143,30 +170,58 @@ export default {
     handleReset(name) {
       this.$refs[name].resetFields();
     },
-    // handleSuccess(res, file) {
-    //   this.picUrl = res.data;
-    //   console.log(res, file);
-    // },
 
     //图片上传
-    handleBeforeUpload(file) {
+    uploadFile() {
+      let file = this.$refs.files.files[0];
       console.log(file);
-      if (file.type == "image/jpeg") {
-        this.file = file;
-        const reader = new FileReader();
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => {
-          const _base64 = reader.result;
-          this.imgUrl = _base64;
-          this.picUrl = file.name;
-          // console.log(_base64,file.name);
+        reader.onload = e => {
+          this.imgUrl = e.target.result;
+          this.picUrl = res.data;
         };
-        return false;
-      } else {
-        // this.file = "";
-        this.$Message.error("格式不正确！");
-      }
-    }
+      });
+    },
+      //删除图片
+    cancelImg() {
+      orgimgdel({ path: this.picUrl }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.picUrl = null;
+          this.imgUrl = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
+    // // handleSuccess(res, file) {
+    // //   this.picUrl = res.data;
+    // //   console.log(res, file);
+    // // },
+
+    // //图片上传
+    // handleBeforeUpload(file) {
+    //   console.log(file);
+    //   if (file.type == "image/jpeg") {
+    //     this.file = file;
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.onload = () => {
+    //       const _base64 = reader.result;
+    //       this.imgUrl = _base64;
+    //       this.picUrl = file.name;
+    //       // console.log(_base64,file.name);
+    //     };
+    //     return false;
+    //   } else {
+    //     // this.file = "";
+    //     this.$Message.error("格式不正确！");
+    //   }
+    // }
   }
 };
 </script>

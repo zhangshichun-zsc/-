@@ -1,6 +1,7 @@
 <!--志愿者编辑招募报名项（志愿者）-->
 <template>
   <div>
+    <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="post">
       <ul>
@@ -197,9 +198,7 @@
         <li class="flex-between">
           <span class="post-left">集合地址</span>
           <div>
-             <iframe id="mapPage" width="100%" height="500px" frameborder=0
-              src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-            </iframe>
+             <span @click="()=>{this.adr = true}">{{ args.setAddr == null?"点击选中地址":args.setAddr}}</span>
           </div>
         </li>
         <li><Button type="primary" @click="success()">完成</Button></li>
@@ -212,6 +211,7 @@
 import {getActiveType,getActiveSign,getActiveLimit,getGood } from '@/request/api'
 import { CITYSDATA } from '@/libs/sele'
 import { getAdressId,getAreaAdress } from '@/libs/utils'
+import adress from'_c/map'
 export default {
   data () {
     return {
@@ -244,14 +244,13 @@ export default {
     }
   },
 
-  components: {},
+  components: { adress },
 
   computed: {},
 
   created () {
     this.initData()
     this.dealData()
-    this.getMap()
   },
 
   methods: {
@@ -370,6 +369,7 @@ export default {
       })
       getActiveLimit({roleId: 2, userId}).then(res => {
         this.limitList = res.data
+        // this.splitLimit() 
       })
       getGood({roleId:2}).then(res => {
         this.goodList = res.data
@@ -381,7 +381,7 @@ export default {
        this.isDisb = data.isDisb
        if(this.i !== -1){
           this.args = Object.assign(this.args,data.args.coActivityUserConfParamList[this.i])
-          this.forList() 
+          this.forList()
        }
     },
     forList(){
@@ -396,28 +396,34 @@ export default {
       }
       this.limit = limit
       this.good = good
+      // this.splitLimit() 
     },
-    getMap(){
-      window.addEventListener('message', (event)=> {
-        var loc = event.data;
-        if (loc && loc.module == 'locationPicker') {
-        let geocoder = new qq.maps.Geocoder({
-            complete:(result)=>{
-              let obj = result.detail.addressComponents
-              let arr = getAdressId(obj.province,obj.city,obj.district)
-              console.log(arr,obj)
-              this.args.provinceId = arr[0]
-              this.args.cityId = arr[1]
-              this.args.districtId = arr[2]
+    splitLimit() {
+      let limit = this.limit
+      for(let i=0,len=limit.length;i<len;i++){
+        if(limit[i].ruleId == 3){
+          this.$set(limit[i],"data",limit[i].ruleValue.split(','))
+        }else if(item.ruleId == 4){
+          let arr = item.ruleValue.split(',')
+          let data = getAreaAdress(arr[0], arr[1], arr[2])
+          this.$set(limit[i],"data",data)
+        }else{
+          for(let as of this.limitList){
+            if (as.ruleId == limit[i].ruleId && as.data){
+               this.$set(limit[i],"data",as.data)
+              break
             }
-        })
-        let coord=new qq.maps.LatLng(loc.latlng.lat,loc.latlng.lng)
-        geocoder.getAddress(coord)
-        this.args.setAddr = loc.poiaddress
-        this.args.xx = loc.latlng.lat 
-        this.args.yy = loc.latlng.lng 
+          }
         }
-      }, false)
+      }
+    },
+    getMap(e){
+      this.args.provinceId = e.provinceId
+      this.args.cityId = e.cityId
+      this.args.districtId = e.districtId
+      this.args.setAddr = e.address
+      this.args.xx = e.xx 
+      this.args.yy = e.yy 
     },
     success(){
       if (!this.args.userPosition){

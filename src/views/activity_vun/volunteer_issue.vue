@@ -238,7 +238,7 @@ import {getActiveType,getActiveLimit,getActiveSign,getOrgTeam,getOrgId,orgimgdel
 import { getAdressId } from '@/libs/utils'
 import wangeditor from'_c/wangeditor'
 import adress from'_c/map'
-import { upload }from '@/request/http' 
+import { upload }from '@/request/http'
 import { filterNull } from '@/libs/utils'
   export default {
     data() {
@@ -389,7 +389,7 @@ import { filterNull } from '@/libs/utils'
           this.args = data.args
           this.isDisb = data.isDisb
           this.zhaStart = data.zhaStart
-          this.zhaEnd = data.zhaEnd 
+          this.zhaEnd = data.zhaEnd
           this.judge = data.judge
           this.dateOne = [data.args.startAt,data.args.endAt]
           this.dateTwo = [data.zhaStart,data.zhaEnd]
@@ -414,10 +414,10 @@ import { filterNull } from '@/libs/utils'
             this.args.pic = res.data
           }
         })
-       
+
       },
       cancelImg(){
-        orgimgdel({path:this.data.args.pic}).then(res => {
+        orgimgdel({path:this.args.pic}).then(res => {
          this.$Message.success('删除成功')
         })
       },
@@ -473,7 +473,7 @@ import { filterNull } from '@/libs/utils'
              this.$Message.warning('现在负责人没有对应的归属团队')
             return
           }
-        
+
         }else{
           if (item.name == null){
             this.$Message.warning('至少填写活动名称')
@@ -518,13 +518,13 @@ import { filterNull } from '@/libs/utils'
         let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : []
         let train = this.isTrain == 1 ? this.train : null
         let zhaStart = this.zhaStart
-        let zhaEnd = this.zhaEnd 
+        let zhaEnd = this.zhaEnd
         for(let i=0,len=list.length;i<len;i++){
           list[i].isFeedback = this.isFeedback
           list[i].isTrain = this.isTrain
           list[i].coDetailList = ls
           list[i].trainComments = train
-          list[i].enrollEndtime = zhaEnd 
+          list[i].enrollEndtime = zhaEnd
           list[i].enrollStarttime = zhaStart
           list[i].outrollStarttime = zhaStart
           list[i].outrollEndtime = startAt
@@ -545,7 +545,7 @@ import { filterNull } from '@/libs/utils'
         }else{
           return []
         }
-    
+
       },
       getTime(){
         const date = new Date()

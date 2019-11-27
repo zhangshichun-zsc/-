@@ -12,7 +12,7 @@ const SERVICE_URL = {
   API_URL: [
     'https://rhzgtest.co-inclusion.org/rhzg-web', // 测试服务器 0
     'http://192.168.0.6:8084/rhzg-web', // 余海 1  192.168.0.6
-    'http://192.168.0.14:8089/rhzg-web', // 张飞飞 2
+    'http://192.168.0.14:8084/rhzg-web', // 张飞飞 2
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     'http://192.168.0.11:8084/rhzg-web', // 竺文聪 4
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
@@ -36,7 +36,6 @@ axios.defaults.timeout = 100000
 
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-
 
 // 请求拦截器
 axios.interceptors.request.use(
@@ -70,7 +69,6 @@ axios.interceptors.request.use(
     return config
   },
   error => {
-    console.log(11)
     return Promise.error(error)
   })
 
@@ -132,7 +130,6 @@ export function post(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function posts(url, params) {
-
   return new Promise((resolve, reject) => {
     axios.post(url, QS.parse(QS.stringify(params)), {
       headers: {

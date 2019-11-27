@@ -1,4 +1,4 @@
-<!--发布资讯(志愿者)-->
+<!--发布资讯(会员)-->
 <template>
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
@@ -24,20 +24,20 @@
               <Input style="width: 15rem" v-model="ContentData.resume" />
             </FormItem>
             <FormItem label="展示窗口:" prop="showLocation">
-              <Select v-model="ContentData.showLocation" style="width:200px">
+              <Select v-model="ContentData.showLocation" style="width:200px" :transfer=true>
                 <Option
                   v-for="item in showlist"
                   :value="item.dicId"
-                  :key="item.value"
+                  :key="item.dicId"
                 >{{ item.dicName }}</Option>
               </Select>
             </FormItem>
             <FormItem label="资讯分类:" prop="informationType">
-              <Select v-model="ContentData.informationType" style="width:200px">
+              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true>
                 <Option
                   v-for="item in typelist"
                   :value="item.dicId"
-                  :key="item.value"
+                  :key="item.dicId"
                 >{{ item.dicName }}</Option>
               </Select>
             </FormItem>
@@ -75,18 +75,29 @@
         <div class="con-right">
           <div class="figure">
             <div class="tu">
-              <Icon type="md-image" />
+              <img :src="imgs" style="height:100px;width:100px;"/>
               <p>
-                <a @click="del">删除图片</a>
+                <a @click="cancelImg">删除图片</a>
               </p>
             </div>
             <div class="Photo-But">
-              <Upload :action="orgimg" :format="['jpg','jpeg','png']" :on-success="handleSuccess">
-                <Button icon="ios-cloud-upload-outline" type="success">上传图片</Button>
-              </Upload>
-
+               <div class="start-wap">
+              <div class="upload">
+                <div class="file" @click="()=>{ this.$refs.files.click()}">
+                  <input
+                    style=" display:none;"
+                    type="file"
+                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                    ref="files"
+                    @change="uploadFile()"
+                    multiple
+                  />
+                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  <Button>上传图片</Button>
+                </div>
+              </div>
+            </div>
               <Button type="success" @click="modal1=true">从图库中选择</Button>
-
             </div>
           </div>
           <Modal v-model="modal1" title="从图库选择">
@@ -103,7 +114,7 @@
 
 <script>
 import E from "wangeditor";
-import { orgimg } from "@/request/http";
+import { upload } from "@/request/http";
 import {
   inquiryReltype,
   inquiryRelext,
@@ -115,7 +126,7 @@ export default {
     return {
       name: "editor",
       navigation1: {
-        head: "发布资讯(志愿者)"
+        head: "发布资讯(会员)"
       },
       ContentData: {
         title: "",
@@ -149,9 +160,10 @@ export default {
       sysId: 2,
       typelist: [],
       showlist: [],
-      orgimg: "",
+
       url: "",
-      modal1: false
+      modal1: false,
+      imgs:null,
     };
   },
   methods: {
@@ -174,13 +186,14 @@ export default {
         if (res.code == 200) {
           this.showlist = res.data;
         }
+         console.log(res);
       });
     },
     //资讯发布
     getinquiryRel() {
       inquiryRel({
         sysId: this.sysId,
-        userId: 1,
+        userId: this.$store.state.userId,
         title: this.ContentData.title,
         showLocation: this.ContentData.showLocation,
         resume: this.ContentData.resume,
@@ -198,34 +211,49 @@ export default {
       });
     },
 
-    //删除图片
-    getorgimgdel() {
-      orgimgdel({
-        path: this.url
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.info("删除成功");
-        }
-        console.log(res);
-      });
-    },
-
-    picbtn() {},
 
     //图片上传
-    handleSuccess(res, file) {
-      this.url = res.data;
-      console.log(res, file);
+    uploadFile() {
+      let file = this.$refs.files.files[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.imgs = e.target.result;
+          this.url = res.data;
+
+        };
+      });
     },
-    //删除
-    del() {
-      this.getorgimgdel();
+     //删除图片
+    cancelImg() {
+      if(this.url==null){
+        this.$Message.info("请先上传图片")
+      }else{
+        orgimgdel({ path: this.url }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.imgs = null;
+          this.url = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+
+      }
+
     },
+
+
+
     //提交
     Submission(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (this.url == "") {
+          if (this.url == null) {
             this.$Message.error("请先上传图片");
           } else if (this.editorContent == "") {
             this.$Message.error("专题正文未填");
@@ -246,10 +274,11 @@ export default {
     };
     editor.create();
 
-    this.orgimg = orgimg;
+
     this.getinquiryReltype();
     this.getinquiryRelext();
-  }
+  },
+
 };
 </script>
 <style scoped>
