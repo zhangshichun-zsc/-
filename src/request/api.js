@@ -505,3 +505,5 @@ export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList",p)
 export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail',p)//证书详情
 export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould",p) //
 export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould",p)//团队
+export const getActiveTeb = p => get("/activity-feedback/mould/list",p),//活动反馈模板
+export const setActiveTeb = p => posts("/activity-feedback/mould/set",p),//设置反馈
