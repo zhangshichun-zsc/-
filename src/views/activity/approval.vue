@@ -165,7 +165,7 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择日期"
-                      style="width: 200px"
+                      style="width: 600px"
                       @on-change="getBatchDate"
                     ></Date-picker>
                   </i-col>
@@ -251,11 +251,11 @@
               <p v-for="(item,i) in batch.userConfList">
                 <span>{{item.roleName}}</span>
                 <span>{{item.recruitNum}}</span>
-                <span>详情</span>
+                <span @click="addRoles(i)">详情</span>
                 <span @click="deleteRole(i)">删除</span>
               </p>
               <h2 class="added">
-                <a @click="addRoles">+新增招募角色</a>
+                <a @click="addRoles(batch.userConfList.length)">+新增招募角色</a>
               </h2>
             </div>
           </div>
@@ -378,7 +378,7 @@
       </p>
     </div>
     <div class="add" v-if="isAddRole">
-      <role></role>
+      <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
     </div>
     <!-- 第三步 -->
     <div class="content-three" v-if="three">
@@ -561,7 +561,16 @@ export default {
       editor1:'',
       orgimg:'',
       userId:1,
-      image:''
+      image:'',
+      oneRole:{},
+      roleMsg:{
+        fdList:[{ name: '反馈简介', type: 0}],
+        refund:{},
+        signRuleList:[],
+        itemList:[],
+        choiceRuleList:[]
+      },
+      roleI:0,  //招募角色下标
     };
   },
 
@@ -773,9 +782,15 @@ export default {
       }
     },
     //新增招募角色
-    addRoles(){
+    addRoles(e){
       this.isAddRole = true
       this.two = false
+      this.roleI = e
+      let r = this.roleMsg
+      let m = {}
+      let n = this.batch.userConfList
+      m = n[e]?n[e]:r
+      this.oneRole = m
     },
     //删除工作人员
     deleteWorker(i){
@@ -785,6 +800,19 @@ export default {
     //删除招募角色
     deleteRole(i){
       this.batch.userConfList.splice(i,1)
+      console.log(this.batch.userConfList)
+    },
+    cancelRole(e){
+      console.log(e)
+      this.isAddRole = false
+      this.two = true
+    },
+    getRole(e){
+      console.log(e)
+      console.log(this.roleI)
+      this.isAddRole = false
+      this.two = true
+      this.batch.userConfList[this.roleI] = e
     },
     //新增物资
     addResources(){
@@ -878,7 +906,7 @@ export default {
       orgimgdel({path:this.data.args.pic}).then(res => {
         this.$Message.success('删除成功')
       })
-    },
+    }
   }
 };
 </script>

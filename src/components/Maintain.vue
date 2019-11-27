@@ -64,7 +64,7 @@ export default {
 
   methods: {
     train(id,name,ble) {
-      this.$router.push({ name: this.from,query:{id,name,ble} });
+      this.$router.push({ name: this.from,query:{id,name,ble} })
     },
     more() {
       if (this.show === false) {
