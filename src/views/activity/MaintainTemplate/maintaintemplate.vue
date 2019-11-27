@@ -6,7 +6,7 @@
       <p class="content-activity">融融介绍</p>
       <Form :model="formValidate" :label-width="80">
         <FormItem label="标题">
-          <i-input :value="formValidate.title" placeholder="请输入..." style="width:10rem;"></i-input>
+          <Input v-model="title" placeholder="请输入..." style="width:10rem;"></Input>
         </FormItem>
         <FormItem label="详情">
           <wangeditor :labels="editor1" id="ed1"></wangeditor>
@@ -29,6 +29,7 @@ export default {
           formValidate: {
               title:'',
           },
+          title:'',
           // 富文本富文本editor
           editor1: {
               contents:''

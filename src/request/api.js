@@ -480,6 +480,12 @@ export const signType = p => get('/activity-manage/apply/sign/before', p) //招�
 
 export const signPost = p => posts('/activity-manage/apply/sign/jobs', p) //招募岗位
 
+export const projectDetail = p => posts('/activity-manage/apply/act/id', p) //编辑活动详情
+
+export const projectEdit = p => posts('/activity-manage/act/update/id', p) //编辑活动保存
+
+export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动模板列表
+
 
 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag

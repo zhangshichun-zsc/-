@@ -40,14 +40,12 @@
     </div>
     <div class="content">
       <ul>
-        <li>
-          <p class="content-head">快乐活动营</p>
-          <div class="option">
-            <p @click="train">徒步活动模板</p>
-            <p>马拉松活动模板</p>
-            <p>篮球活动模板</p>
+        <li v-for="item in list">
+          <p class="content-head">{{item.dicName}}</p>
+          <div class="option" v-for="i in item.mouldList">
+            <p @click="train(i.activityId)">{{i.activityName}}</p>
           </div>
-          <div v-show="show">
+          <!-- <div v-show="show">
             <div class="option">
               <p>夏令营活动模板</p>
               <p>登山活动模板</p>
@@ -61,29 +59,7 @@
           </div>
           <p class="btn">
             <Button type="success" @click="more">更多</Button>
-          </p>
-        </li>
-        <li>
-          <p class="content-head">家长赋能计划</p>
-          <div class="option">
-            <p>家长赋能计划1模板</p>
-            <p>家长赋能计划1模板</p>
-            <p>家长赋能计划1模板</p>
-          </div>
-          <p class="btn">
-            <Button type="success">更多</Button>
-          </p>
-        </li>
-        <li>
-          <p class="content-head">趾印计划</p>
-          <div class="option">
-            <p>趾印计划活动1模板</p>
-            <p>趾印计划活动1模板</p>
-            <p>趾印计划活动1模板</p>
-          </div>
-          <p class="btn">
-            <Button type="success">更多</Button>
-          </p>
+          </p> -->
         </li>
       </ul>
     </div>
@@ -98,7 +74,7 @@ export default {
       modal1: false,
     };
   },
-  props: [ 'navigation1' ],
+  props: [ 'navigation1','list' ],
   components: {},
 
   computed: {},
@@ -106,8 +82,8 @@ export default {
   created() {},
 
   methods: {
-    train() {
-      this.$router.push({ name: "actrain" });
+    train(e) {
+      this.$router.push({ name: "actrain",query:{activityId:e} });
     },
     more() {
       if (this.show === false) {
