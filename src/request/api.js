@@ -485,6 +485,8 @@ export const projectDetail = p => posts('/activity-manage/apply/act/id', p) //�
 export const projectEdit = p => posts('/activity-manage/act/update/id', p) //编辑活动保存
 
 export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动模板列表
+export const signLimits = p => posts('/activity-manage/apply/sign/limits', p) //限制设置
+export const signItems = p => posts('/activity-manage/apply/item/list', p) //报名项设置
 
 
 
