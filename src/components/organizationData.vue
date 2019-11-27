@@ -189,7 +189,11 @@ export default {
         {
           title: "组织地址",
           key: "address",
-          align: "center"
+          align: "center",
+          render: (h, params) => {
+
+            return h('span', params.row.provinceName+params.row.cityName+params.row.districtName)
+          }
         },
         {
           title: "负责人",

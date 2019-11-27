@@ -6,7 +6,7 @@
       <div class="con">
         <div class="title bk">
           <p>
-            <span>当前人员:{{obj?obj.sysRoleName:''}}</span>
+            <span>当前人员:{{sysRoleName?sysRoleName:''}}</span>
           </p>
         </div>
         <div class="choose">
@@ -27,8 +27,8 @@
                           >全选</Checkbox> -->
                         </template>
                         <MenuItem name="1-1" v-for="(value,keys) in item.list" :key="keys">
-                          {{value.name}}
-                          <Checkbox :label="value.sysMenuId"></Checkbox>
+
+                          <Checkbox :label="value.sysMenuId"> {{value.name}}</Checkbox>
                         </MenuItem>
                       </Submenu>
                     </CheckboxGroup>
@@ -58,7 +58,10 @@ export default {
       sysRoleId: [],
       list: [],
       fruit: [],
-      obj:{}
+      obj:{},
+      list:'',
+      sysRoleId:'',
+      sysRoleName:''
     };
   },
   methods: {
@@ -76,10 +79,13 @@ export default {
 
     // 角色权限设置
     getroleSetup() {
+      this.list=this.fruit.toString()
       roleSetup({
-        sysRoleId: Number(this.obj.sysRoleId),
-        sysMenuIds: this.fruit
+        sysRoleId: this.sysRoleId,
+        sysMenuIds: this.list
       }).then(res => {
+        this.getPermissionset()
+          this.$Message.info(res.msg)
         console.log(res);
       });
     },
@@ -91,8 +97,9 @@ export default {
     }
   },
   mounted() {
-    this.obj=this.$route.query.sysRoleId
-    console.log(this.obj)
+    this.sysRoleId=this.$route.query.sysRoleId
+    this.sysRoleName=this.$route.query.sysRoleName
+    console.log(this.$route.query.sysRoleId)
     this.getPermissionset();
   }
 };

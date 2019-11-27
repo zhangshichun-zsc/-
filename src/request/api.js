@@ -391,7 +391,9 @@ export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色�
 
 export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
-export const roleAddto = p => posts('/sysRole/findOtherRoleUser', p) //角色管理--添加成员
+export const roleAddto = p => post('/sysRole/findOtherRoleUser', p) //角色管理--添加成员查询
+
+export const roleAddtos = p => post('/sysRole/addRoleToUser', p) //角色管理--添加成员
 
 export const roleedit = p => posts('/sysRole/edicRoleUser', p) //角色管理--编辑成员
 
