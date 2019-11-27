@@ -377,54 +377,108 @@
 
           <li>
             <span>培训内容</span>
-            <i-switch v-model="switch1" @on-change="change" />
-            <Radio v-model="single">是否必填</Radio>
+            <i-switch v-model="oneRole.isTrain" :true-value='1' :false-value='2' @on-change="change" />
+            <Checkbox v-model="oneRole.isTrainMust" :true-value='1'>是否必填</Checkbox>
           </li>
-          <li>
+          <!-- <li v-if="oneRole.isTrain==1">
             <span>
               <Button>选择模块</Button>
             </span>
             <Input v-model="value" placeholder="4" style="width: 200px" />
-          </li>
-          <li>
+          </li> -->
+          <!-- <li v-if="oneRole.isTrain==1">
             <span>培训标题</span>
             <Input v-model="value" placeholder="4" style="width: 200px" />
           </li>
-          <li>
+          <li v-if="oneRole.isTrain==1">
             <span>培训图片</span>
             <div class="photo">
               <img />
             </div>
           </li>
-          <li>
+          <li v-if="oneRole.isTrain==1">
             <span>培训视频</span>
             <div class="video">
               <img />
             </div>
-          </li>
-          <li class="rich-text">
+          </li> -->
+          <li class="rich-text" v-if="oneRole.isTrain==1">
             <span>培训详情</span>
-            <wangeditor :labels="editor1" id="ed1"></wangeditor>
+            <div v-if="oneRole.isTrain === 1">
+              <wangeditor :labels="oneRole.trainComments" id="ed1" @change="changeEditorTrain"></wangeditor>
+            </div>
           </li>
           <li>
-            <span>反馈内容</span>
-            <i-switch v-model="switch1" @on-change="change" />
-            <Radio v-model="single">是否必填</Radio>
+            <p>
+              <span class="active-span">反馈内容</span>
+              <i-switch v-model="oneRole.isFeedback" :true-value="1" :false-value="2" />
+            </p>
+            <div v-if="oneRole.isFeedback === 1">
+              <div v-for="(item,index) in oneRole.fdList" :key="index">
+                <div class="ls-item" v-if=" index ==0 ">
+                  <div>反馈简介</div>
+                  <Input
+                    placeholder="请输入反馈内容"
+                    class="txt"
+                    v-model="item.detailText"
+                    type="textarea"
+                    :disabled="isDisb"
+                  />
+                </div>
+                <div class="ls-item flex-between" v-else-if=" item.type === 1 ">
+                  <i-input placeholder="请输入单文本标题" v-model="item.detailText" :disabled="isDisb" />
+                  <img @click="deleItem(index,null)" v-if="!isDisb" />
+                </div>
+                <div class="ls-item flex-between" v-else-if=" item.type === 6 ">
+                  <i-input placeholder="请输入多行文本标题" v-model="item.detailText" :disabled="isDisb" />
+                  <img @click="deleItem(index,null)" v-if="!isDisb" />
+                </div>
+                <div class="ls-item" v-else-if="item.type === 3 ">
+                  <div class="flex-between">
+                    <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb" />
+                    <img @click="deleItem(index,null)" v-if="!isDisb" />
+                  </div>
+                  <div class="item flex-between" v-for="(val,i) in item.arr" :key="i">
+                    <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb" />
+                    <img @click="deleItem(index,i)" v-if="!isDisb" />
+                  </div>
+                  <div class="item-add" @click="addSignIput(index)" v-if="!isDisb">+</div>
+                </div>
+                <div class="ls-item" v-else>
+                  <div class="flex-between">
+                    <i-input placeholder="请输入多选标题" v-model="item.detailText" :disabled="isDisb" />
+                    <img @click="deleItem(index,null)" v-if="!isDisb" />
+                  </div>
+                  <div class="item flex-between" v-for="(val,i) in item.arr" :key="i">
+                    <input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb" />
+                    <img @click="deleItem(index,i)" v-if="!isDisb" />
+                  </div>
+                  <div class="item-add" @click="addSignIput(index)" v-if="!isDisb">+</div>
+                </div>
+              </div>
+              <div class="add">
+                <p>新增反馈项</p>
+                <div class="flex-between">
+                  <div
+                    v-for="(item,index) in feedList"
+                    :key="index"
+                    class="add-item"
+                    @click="addItem(item)"
+                  >{{ item.name }}</div>
+                </div>
+              </div>
+            </div>
           </li>
-          <li>
+          <!-- <li v-if="oneRole.isFeedback === 1">
             <span>
               <Button>选择模块</Button>
             </span>
             <Input v-model="value" placeholder="4" style="width: 200px" />
           </li>
-          <li>
+          <li v-if="oneRole.isFeedback === 1">
             <span>反馈标题</span>
             <Input v-model="value" placeholder="4" style="width: 200px" />
-          </li>
-          <li class="rich-text">
-            <span>反馈详情</span>
-            <div class="editorElem2" style="text-align:left;"></div>
-          </li>
+          </li> -->
         </ul>
       </div>
       <div class="btns-foot">
@@ -441,7 +495,9 @@ import { signType, signPost } from "../../request/api";
 export default {
   data() {
     return {
-      oneRole: {},
+      oneRole: {
+        fdList:[{ name: '反馈简介', type: 0}]
+      },
       signTypeList: [],
       signPostList: [],
       navigation1: {
@@ -469,7 +525,13 @@ export default {
       // 富文本editor
       editor1: {
         contents: ""
-      }
+      },
+      feedList:[
+        { name: '单行文本', type: 1},
+        { name: '多行文本', type: 6},
+        { name: '单选问题', type: 3, answer: [{ answer: '' }, { answer: '' }, { answer: '' }]},
+        { name: '多选问题', type: 4, answer: [{ answer: '' }, { answer: '' }, { answer: '' }]}
+      ],
     };
   },
   mounted() {
@@ -504,22 +566,25 @@ export default {
       });
     },
     //招募类型
-    getType(val){
-      this.oneRole.roleName = val.name
-      this.oneRole.roleId = val.roleId
+    getType(val) {
+      this.oneRole.roleName = val.name;
+      this.oneRole.roleId = val.roleId;
       signPost({
-        roleId:val.roleId, 
-        name:val.name
+        roleId: val.roleId,
+        name: val.name
       }).then(res => {
         console.log(res);
         this.signPostList = res.data.voluJobs;
       });
     },
     //招募岗位
-    getPost(val){
-      this.oneRole.positionName = val.name
-      this.oneRole.userPosition = val.roleId
+    getPost(val) {
+      this.oneRole.positionName = val.name;
+      this.oneRole.userPosition = val.roleId;
     },
+    addItem(e){
+      console.log(e)
+    }
   }
 };
 </script>

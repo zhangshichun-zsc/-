@@ -38,7 +38,6 @@ axios.defaults.timeout = 100000
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
-
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
@@ -71,7 +70,6 @@ axios.interceptors.request.use(
     return config
   },
   error => {
-    console.log(11)
     return Promise.error(error)
   })
 

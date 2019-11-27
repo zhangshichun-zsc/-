@@ -68,7 +68,16 @@
               </li>
               <li>
                 <span>主题图片</span>
-                <img :src="projectMsg.batchPicShow"/>
+                <div class="start-wap">
+                  <div class="upload" v-if='projectMsg.batchPicShow == null'>
+                      <div class="file" @click="()=>{ this.$refs.files.click()}">
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
+                        <p>+</p>
+                      </div>
+                  </div>
+                  <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
+                  <img src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()">
+                </div>
               </li>
               <li>
                 <span>小组归属</span>
@@ -137,8 +146,15 @@
                 </li>
                 <li class="imges">
                   <span class="same_style">主题图片</span>
-                  <div class="imgs">
-                    <img :src='batch.actShowPic' />
+                  <div class="start-wap">
+                    <div class="upload" v-if='image == null'>
+                        <div class="file" @click="()=>{ this.$refs.files.click()}">
+                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
+                          <p>+</p>
+                        </div>
+                    </div>
+                    <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
+                    <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
                   </div>
                 </li>
                 <li>
@@ -156,7 +172,8 @@
                 </li>
                 <li>
                   <span class="same_style">活动地址</span>
-                  <span>请选择</span>
+                  <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
+                  </iframe>
                 </li>
                 <li>
                   <span class="same_style">出行方式</span>
@@ -304,7 +321,16 @@
           </li>
           <li class="borders-img">
             <span>图片</span>
-            <img src />
+            <div class="start-wap">
+              <div class="upload" v-if='image == null'>
+                  <div class="file" @click="()=>{ this.$refs.files.click()}">
+                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
+                    <p>+</p>
+                  </div>
+              </div>
+              <img class="imgs" v-else :src="image"/>
+              <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
+            </div>
           </li>
           <li>
             <span>协议</span>
@@ -453,10 +479,10 @@
       </div>
       <div class="pdu-three">
         <p>
-          <Radio v-model="single">
+          <Checkbox v-model="single">
             我同意
             <a>《活动发布规则》</a>
-          </Radio>
+          </Checkbox>
         </p>
         <p class="btn-three">
           <Button>上一步</Button>
@@ -472,6 +498,7 @@
 import { projectItem, partner,batchItem,leader,projectApproval } from "@/request/api";
 
 import role from "./compile_beneficiary.vue"
+import { orgimg } from "@/request/http";
 
 export default {
   data() {
@@ -531,7 +558,10 @@ export default {
       addWorker:false,
       releaseTimeSelf:false,
       isAddRole:false,
-      editor1:''
+      editor1:'',
+      orgimg:'',
+      userId:1,
+      image:''
     };
   },
 
@@ -540,16 +570,20 @@ export default {
   computed: {},
 
   created() {
+    // this.userId = localStorage.getItem('userId')
     this.getProjectItem();
     this.getPartner();
     this.getBatchItem();
+  },
+  mounted(){
+    this.orgimg = orgimg;
   },
 
   methods: {
     //立项前置项查询
     getProjectItem() {
       projectItem({
-        userId: 1
+        userId: this.userId
       }).then(res => {
         console.log(res);
         this.itemsList = res.data;
@@ -565,7 +599,7 @@ export default {
     //批次活动前置信息查询
     getBatchItem(){
       batchItem({
-        userId:1
+        userId:this.userId
       }).then(res => {
         console.log(res);
         this.batchItemList = res.data
@@ -807,7 +841,7 @@ export default {
     //提交
     submit() {
       console.log(this.projectMsg);
-      this.projectMsg.userId = 1
+      this.projectMsg.userId = this.userId
       this.projectMsg.is_draft = 2
       projectApproval(
         this.projectMsg
@@ -818,14 +852,32 @@ export default {
     //提交
     draft() {
       console.log(this.projectMsg);
-      this.projectMsg.userId = 1
+      this.projectMsg.userId = this.userId
       this.projectMsg.is_draft = 1
       projectApproval(
         this.projectMsg
       ).then(res => {
         console.log(res);
       });
-    }
+    },
+    uploadFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      orgimg(dataForm).then(res => {
+
+      })
+      var reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        this.image = e.target.result
+      }
+    },
+    cancelImg(){
+      orgimgdel({path:this.data.args.pic}).then(res => {
+        this.$Message.success('删除成功')
+      })
+    },
   }
 };
 </script>
@@ -1290,6 +1342,33 @@ export default {
     a {
       color: #008e40;
       // font-size: 16px;
+    }
+  }
+
+  .start-wap{
+    position: relative;
+    height: 150px;
+    width: 300px;
+    .cancel{
+      width: 30px;
+      height: 30px;
+      background: #000;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .upload .file{
+      height: 150px;
+      width: 300px;
+      border: 1px dashed #dcdee2;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .upload .file:hover{
+      border: 1px dashed #2d8cf0;
+    }
+    .upload .file input{
+      display: none;
     }
   }
 }
