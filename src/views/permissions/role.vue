@@ -95,6 +95,10 @@
                   :render-format="render1"
                   @on-change="handleChange1"
                 ></Transfer>
+                <div slot="footer">
+     <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
+     <Button type="primary" size="large" @click="addmodalOk">确定</Button>
+</div>
               </Modal>
             </Layout>
           </Layout>
@@ -120,10 +124,9 @@ import {
   rolenumquery,
   rolequery,
   rolenew,
-  roleSetup,
+  roleAddtos,
   roledel,
   roleAddto,
-  roleedit
 } from "@/request/api";
 export default {
   data() {
@@ -250,7 +253,12 @@ export default {
       // data1: this.getMockData(),
       // targetKeys1: this.getTargetKeys()
       data1: [],
-      targetKeys1: []
+      targetKeys1: [],
+      addlist:[],
+      arr:[],
+      addUserIds:[],
+      delUserIds:[],
+
     };
   },
 
@@ -264,32 +272,52 @@ export default {
   methods: {
     getMockData() {
       let mockData = [];
-      for (let i = 0; i < this.List.length; i++) {
+      let data=this.data.concat(this.addlist)
+      for (let i = 0; i < data.length; i++) {
         mockData.push({
-          key: this.List[i].sysRoleId,
-          label: this.List[i].sysRoleName,
-          description: i
+          key: data[i].userId,
+          label: data[i].userName,
+          // description: i
         });
       }
-      this.data1 = mockData;
+      this.data1=mockData
+      console.log(mockData)
+
       return mockData;
     },
 
     //key值
     getTargetKeys() {
-      return this.getMockData()
-        .filter(() => Math.random() * 2 > 1)
-        .map(item => item.key);
+      this.targetKeys1=this.arr
     },
     render1(item) {
+      // console.log(item.label)
       return item.label;
     },
     handleChange1(newTargetKeys, direction, moveKeys) {
-      console.log(newTargetKeys);
-      console.log(direction);
-      console.log(moveKeys);
+      if(direction=='right'){
+        this.addUserIds=Array.from(new Set(moveKeys.concat(this.delUserIds)))
+      }else if(direction=='left'){
+         this.delUserIds=Array.from(new Set(moveKeys.concat(this.addUserIds)))
+        //     this.addUserIds=this.addUserIds.filter(item=>{
+        //     return moveKeys.every(item2=>{
+        //         // return item.code != item2.code;
+        //     });
+        // }
+      }
+      console.log(this.addUserIds,this.delUserIds)
+      // console.log(newTargetKeys);
+      // console.log(direction);
+      // console.log(moveKeys);
       this.targetKeys1 = newTargetKeys;
     },
+    //确定
+    addmodalOk(){
+      console.log(this.delUserIds,this.addUserIds)
+      this.getroleAddtos()
+      console.log(1)
+    },
+
 
     // 多条件查询角色成员
     getrolenumquery() {
@@ -315,7 +343,6 @@ export default {
           this.List = res.data;
           if (this.List.length != 0) {
             this.role = this.List[0].sysRoleName;
-            console.log(this.List[0].sysRoleName, `1-${this.role}`);
           }
         }
         console.log(res);
@@ -355,7 +382,7 @@ export default {
       });
     },
 
-    //添加角色列表
+    //查询添加角色列表
     getroleAddto() {
       this.add = this.List.filter(item => item.sysRoleName == this.role);
       if (this.add.length != 0) {
@@ -363,17 +390,39 @@ export default {
           sysRoleName: this.add[0].sysRoleName
         }).then(res => {
           if (res.code == 200) {
-            this.data1 = res.data;
+            this.addlist = res.data;
+            this.arr=this.data.map(item=>item.userId)
+          this.getMockData();
+          this.getTargetKeys();
           }
           console.log(res);
         });
       }
     },
 
+    //添加添加
+    getroleAddtos(){
+      this.add = this.List.filter(item => item.sysRoleName == this.role);
+      roleAddtos({
+        delUserIds:this.delUserIds.toString(),
+        addUserIds:this.addUserIds.toString(),
+        sysRoleId:this.add[0].sysRoleId
+      }).then(res=>{
+        if(res.code==200){
+          this.modal2=false
+          this.$Message.info(res.msg)
+          this.getrolenumquery()
+        }else{
+          this.$Message.info(res.msg)
+        }
+        console.log(res)
+      })
+    },
+
     //新建成员
     newadd() {
-      this.getMockData();
-      this.getTargetKeys();
+      this.addUserIds=[]
+      this.delUserIds=[]
       this.modal2 = true;
       this.getroleAddto()
     },
@@ -419,15 +468,13 @@ export default {
       this.modal1 = false;
     },
 
-    // addmember() {
-    //   this.$router.push({ name: "Add-members" });
-    // },
+//跳转
     function1() {
       this.add = this.List.filter(item => item.sysRoleName == this.role);
-      console.log(this.add);
+
       this.$router.push({
         name: "function",
-        query: { sysRoleId: this.add[0] }
+        query: { sysRoleName: this.add[0].sysRoleName,sysRoleId: this.add[0].sysRoleId},
       });
     }
   }
