@@ -74,7 +74,7 @@ export default {
       modal1: false,
     };
   },
-  props: [ 'navigation1','list' ],
+  props: [ 'navigation1','list','from' ],
   components: {},
 
   computed: {},
@@ -83,7 +83,10 @@ export default {
 
   methods: {
     train(e) {
-      this.$router.push({ name: "actrain",query:{activityId:e} });
+      let f = this.from
+      if(f==1){
+        this.$router.push({ name: "actrain",query:{activityId:e} });
+      }
     },
     more() {
       if (this.show === false) {

@@ -62,7 +62,7 @@ export default {
       },
       data: [],
 
-      sysId: 2,
+      sysId: 1,
       channelFlag: 2,
       page: 1,
       size: 10,
@@ -109,7 +109,7 @@ export default {
         page: { page: this.page, size: this.size }
       }
       params=this.util.remove(params)
-      console.log(params)
+      // console.log(params)
       messageShort(params).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
@@ -124,10 +124,13 @@ export default {
       this.getmessageShort();
     },
 
-    query(e) {
+     query(e) {
       this.content = e[0].value;
-      this.createAt = e[1].value;
-      console.log(11)
+      if(e[1].value!=''){
+        this.createAt = e[1].value.getTime();
+        this.createAt=this.util.formatDate(this.createAt)
+      }
+      this.getmessageShort()
     }
   }
 };

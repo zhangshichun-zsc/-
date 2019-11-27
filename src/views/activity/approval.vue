@@ -775,6 +775,7 @@ export default {
     //新增招募角色
     addRoles(){
       this.isAddRole = true
+      this.two = false
     },
     //删除工作人员
     deleteWorker(i){

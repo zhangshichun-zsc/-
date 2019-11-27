@@ -134,7 +134,7 @@ export default {
       // ],
       data: [],
 
-      sysId: 1,
+      sysId: 2,
       channelFlag: 2,
       page: 1,
       size: 10,
@@ -198,7 +198,11 @@ export default {
 
     query(e) {
       this.content = e[0].value;
-      this.createAt = e[1].value;
+      if(e[1].value!=''){
+        this.createAt = e[1].value.getTime();
+        this.createAt=this.util.formatDate(this.createAt)
+      }
+      this.getmessageShort()
     }
   }
 };
