@@ -236,7 +236,7 @@ export default {
   computed: {},
 
   created() {
-    this.userId = localStorage.getItem('userId')
+    this.userId = this.$store.state.userId
     this.getBatchItem();
     this.getProjectDetail()
   },

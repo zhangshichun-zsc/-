@@ -7,13 +7,13 @@
         <div>
           <Icon type="ios-search-outline" /><span>筛选查询</span></div>
         <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" /><span>收起筛选</span></div>
+          <div class="integral-center" @click='searchMode = !searchMode'>
+            <Icon :type="searchMode?'ios-arrow-down':'ios-arrow-up'" /><span>{{ searchMode?'收起':'展开'}}筛选</span></div>
           <Button @click='getInfo'>查询结果</Button>
           <Button @click='getSenior'>高级检索</Button>
         </div>
       </div>
-      <div class="flex-center-start integral-body">
+      <div class="flex-center-start integral-body" v-show="searchMode">
         <div class="flex-center-start">
           <span>姓名/手机号/昵称:</span>
           <Input size="large" v-model="paramsObj.info" placeholder="姓名/手机号/昵称" class="inpt" />
@@ -23,12 +23,13 @@
           <Input size="large" v-model="paramsObj.orgName" placeholder="团队名称" class="inpt" />
         </div>
         <div class="flex-center-start">
-          <!-- <span>服务时长:</span>
-          <TimePicker type="time" placeholder="请选择时间时间" class="inpt" size='large'></TimePicker> -->
-
-          <span>提交日期</span>
-          <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 200px"></DatePicker>
-          <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 200px"></DatePicker>
+          <span>服务时长:</span>
+          <!-- <InputNumber placeholder="请选择" v-model="startAt" style="width: 180px"></InputNumber> -->
+          <Input placeholder="请选择" v-model.number="startAt" style="width: 180px" />
+          <!-- <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 180px"></DatePicker> -->
+          <span>-</span>
+          <Input placeholder="请选择" v-model.number="endAt" style="width: 180px" />
+          <!-- <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 180px"></DatePicker> -->
 
         </div>
         <div class="flex-center-start">
@@ -274,7 +275,6 @@
             <Button @click="onExport">
               导出数据
             </Button>
-
           </Dropdown>
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -367,8 +367,8 @@
         <Button type="text" size="large" @click="modalCancel">取消</Button>
         <Button type="primary" size="large" @click="modalCancel">确定</Button>
       </div>
-
     </Modal>
+
     <Modal title="高级检索" v-model="modalSenior" :closable='false'>
       <Form ref="formCustom" :model="paramsSeniorObj">
         <Row>
@@ -388,7 +388,7 @@
         <Row>
           <Col span="12">
           <FormItem label="" class='formitem'>
-            <p>会员等级</p>
+            <p>志愿者等级</p>
             <Select style="width:200px" v-model="paramsSeniorObj.levelId">
               <Option v-for="item in vipGrade" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -422,7 +422,7 @@
 
       </Form>
       <div slot="footer">
-        <Button type="text" size="large" @click="hidd">取消</Button>
+        <Button type="text" size="large" @click="hidd">重置</Button>
         <Button type="primary" size="large" @click="setSenior">确定</Button>
       </div>
 
@@ -688,7 +688,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: 'user_details_hy',
+                        name: 'user_details_zyz',
                         query: {
                           userId: params.row.userId
                         }
@@ -718,6 +718,7 @@ export default {
           }
         }
       ],
+      searchMode: true,
       batchList: [{ value: '0', label: '禁用账号' }, { value: '1', label: '启用账号' }],
       batchState: '',
       data: [],
@@ -727,13 +728,16 @@ export default {
       OrganizeInformation: ['options1'],
       SummaryInformation: ['options1'],
       OtherInformation: ['options2', 'options4'],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
+      sorting: [
+        { value: 'create_at asc', label: '正序' },
+        { value: 'create_at desc', label: '倒序' }
+      ],
       Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
       vipGrade: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 会员等级
       labelList: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 标签
       page: 1, // 页码
       size: 10, // 条数
-      sort: 'asc', // 排序
+      sort: 'create_at desc', // 排序
       startAt: '',
       endAt: '',
       registrationStartTimeStamp: '',
@@ -773,6 +777,9 @@ export default {
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
     },
+    sort(newVlaue) {
+      this.getUsetList(this.paramsObj)
+    },
     ALLINFO(newVlaue, oldValue) {
       //  全选 and 全不选
       if (newVlaue === true) {
@@ -799,18 +806,18 @@ export default {
     getUsetList(paramsObj, flag) {
       let time = {}
       if (flag) {
+        let registration = this.sameday({
+          star: this.formatTime(this.registrationStartTimeStamp),
+          end: this.formatTime(this.registrationEndTimeStamp)
+        })
         time = {
-          registrationStartTimeStamp: this.registrationStartTimeStamp
-            ? this.registrationStartTimeStamp.getTime()
-            : '',
-          registrationEndTimeStamp: this.registrationEndTimeStamp
-            ? this.registrationEndTimeStamp.getTime()
-            : ''
+          registrationStartTimeStamp: registration.star,
+          registrationEndTimeStamp: registration.end
         }
       } else {
         time = {
-          durationStart: this.startAt ? this.startAt.getTime() : '',
-          durationEnd: this.endAt ? this.endAt.getTime() : ''
+          durationStart: this.startAt,
+          durationEnd: this.endAt
         }
       }
 
@@ -818,12 +825,12 @@ export default {
         sysType: '2',
         page: this.page,
         size: this.size,
+        sort: this.sort,
         ...time,
         ...paramsObj
       })
       Public.getUserList(obj).then(res => {
         console.log(res)
-
         if (res.code === 200) {
           this.data = res.data.list
           this.totalSize = res.data.totalSize
@@ -841,6 +848,10 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           type ? this.$Message.info('启用成功') : this.$Message.info('禁用成功')
+          if (this.batchState) {
+            this.getUsetList(this.paramsObj)
+            this.batchState = ''
+          }
         } else {
           // TODO 操作失败之后， 状态不变更
           this.$Message.error({
@@ -875,16 +886,17 @@ export default {
           })
         } else {
           let arr = res.data.labelList
+          arr.unshift({ labelId: '', labelName: '全部' })
           this.labelList = arr.map(item => {
             return { value: item.labelId, label: item.labelName }
           })
         }
       })
     },
-    // 获取会员等级
+    // 获取志愿者等级
     getLevel() {
       Public.GetLevel({
-        sysType: 2
+        sysType: '2'
       }).then(res => {
         this.vipGrade = res.data.map(item => {
           return {
@@ -922,7 +934,14 @@ export default {
     },
     // 关闭 高级检索
     hidd() {
-      this.modalSenior = false
+      // this.modalSenior = false
+      this.paramsSeniorObj = {
+        account: '',
+        nickname: '',
+        labelId: ''
+      }
+      this.registrationStartTimeStamp = ''
+      this.registrationEndTimeStamp = ''
     },
     // 高级检索按钮
     setSenior() {
@@ -942,7 +961,19 @@ export default {
     // 显示站内信模态框
     ismodal2() {
       if (this.letters) {
-        this.modal2 = true
+        if (this.letters === 'ON') {
+          if (this.ALLLIST.length > 0) {
+            this.modal2 = true
+          } else {
+            this.$Message.error({
+              background: true,
+              content: '请选择要修改的人员'
+            })
+          }
+        } else {
+          this.ALLINFO = true
+          this.modal2 = true
+        }
       } else {
         this.$Message.error({
           background: true,
@@ -1033,7 +1064,22 @@ export default {
     onExport() {
       this.exportFn()
     },
-
+    formatTime(time) {
+      if (!time) return ''
+      return time.getTime()
+    },
+    sameday(timeObj) {
+      let { star, end } = timeObj
+      if (!star || !end) return { star: star, end: end }
+      if (star === end) {
+        let time1 = this.util.formatDate(star)
+        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        }
+      }
+    },
     ok() {
       this.$Message.info('Clicked ok')
     },

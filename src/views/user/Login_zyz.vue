@@ -10,90 +10,133 @@
       </ButtonGroup>
       <div class="constant">
         <div class="constant-title flex-center-start">
-          <Icon type="md-reorder" size='20'/>
+          <Icon type="md-reorder" size='20' />
           <p>数据列表</p>
         </div>
         <Table border :columns="columns" :data="data"></Table>
         <div class="pages">
-          <Page :total="100" show-elevator show-total size='small'/>
+          <Page :total="dataCount" show-elevator show-total size='small' @on-change="changepages" />
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        navigation1: {
-          head: "登录日志(志愿者)"
+import { Userhistory } from '../../request/api'
+import { date1 } from '../../request/datatime'
+export default {
+  data() {
+    return {
+      navigation1: {
+        head: '登录日志(志愿者)'
+      },
+      columns: [
+        {
+          title: '时间',
+          key: 'createAt',
+          render: (h, params) => {
+            return h('div', [h('p', date1('Y-m-dH:i:s', params.row.startAt))])
+          }
         },
-        columns: [
-          {
-            title: '时间',
-            key: 'time'
-          },
-          {
-            title: 'IP',
-            key: 'ip'
-          },
-          {
-            title: '地区',
-            key: 'area'
-          },
-          {
-            title: '登录方式',
-            key: 'log'
+        {
+          title: 'IP',
+          key: 'ipAddr'
+        },
+        {
+          title: '地区',
+          key: 'address'
+        },
+        {
+          title: '登录方式',
+          key: 'typeFlag',
+          render: (h, params) => {
+            let str = params.row.typeFlag
+            let name = ''
+            if (str == 1) {
+              name = '会员小程序登录'
+            } else if (str === 2) {
+              name = '志愿者小程序登录'
+            } else {
+              name = '后台登录'
+            }
+            return h('div', [h('p', name)])
           }
-        ],
-        data: [
-          {
-            time: '2019-10-01 10:05:01',
-            ip: '193.168.1.1',
-            area: '中国',
-            log: '微信登录'
-          },
-          {
-            time: '2019-10-01 10:05:01',
-            ip: '193.168.1.1',
-            area: '中国',
-            log: '微信登录'
-          }
-        ]
-      }
+        }
+      ],
+      data: [],
+      page: 1,
+      size: 10,
+      dataCount: 0,
+      userId: 2,
+      sysType: '2'
+    }
+  },
+  mounted() {
+    this.gethistory()
+  },
+  methods: {
+    //列表数据
+    gethistory() {
+      console.log({ page: this.page, size: this.size })
+      Userhistory({
+        page: { page: this.page, size: this.size },
+        sysType: this.sysType,
+        userId: this.$route.query.userId
+      }).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.data = res.data.list
+          this.page = res.data.totalNum
+          this.dataCount = res.data.totalSize
+        }
+      })
     },
-    methods: {
-      userDetaile(){
-        this.$router.push({ name: 'user_details_hy' })
-      },
-      Editor(){
-        this.$router.push({ name: 'Edit_data_hy' })
-      },
+    //分页功能
+    changepages(index) {
+      this.page = index
+      console.log(index)
+      this.gethistory()
+    },
+    userDetaile() {
+      this.$router.push({
+        name: 'user_details_zyz',
+        query: {
+          userId: this.$route.query.userId
+        }
+      })
+    },
+    Editor() {
+      this.$router.push({
+        name: 'Edit_data_zyz',
+        query: {
+          userId: this.$route.query.userId
+        }
+      })
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .main{
-    width: 50rem;
-    margin: 0 auto;
-  }
-  .constant-title{
-    border-top: 1px solid #e4e4e4;
-    border-left: 1px solid #e4e4e4;
-    border-right: 1px solid #e4e4e4;
-    padding: 0.5rem;
-    background-color: #F3F3F3;
-  }
-  .pages{
-    border-left: 1px solid #e4e4e4;
-    border-right: 1px solid #e4e4e4;
-    border-bottom: 1px solid #e4e4e4;
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
-    padding: 0.2rem 0;
-  }
+.main {
+  width: 50rem;
+  margin: 0 auto;
+}
+.constant-title {
+  border-top: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  padding: 0.5rem;
+  background-color: #f3f3f3;
+}
+.pages {
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0.2rem 0;
+}
 </style>

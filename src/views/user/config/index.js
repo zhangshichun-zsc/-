@@ -1,4 +1,7 @@
-import { UserList, getLabel, SetUserLabel, getLevel, userExprot, Userdetail, getVipPage, vipApproval, getVipUserInfo } from "@/request/api";
+import {
+    UserList, getLabel, Userbatch, Setsend, SetUserLabel, getLevel, userExprot, optTime, Userdetail, getVipPage, vipApproval, getVipUserInfo, setUpdate, orgcity, orgprovince,
+    orgdistrict
+} from "@/request/api";
 
 const Public = {}
 
@@ -13,11 +16,11 @@ Public.getUserList = function (parame) {
 }
 //  变更用户状态
 Public.setBatch = function (parame) {
-    return setBatch(parame)
+    return Userbatch(parame)
 }
 
 Public.Setsend = function (parame) {
-    return setsend(parame)
+    return Setsend(parame)
 }
 
 Public.getLabel = function (parame) {
@@ -50,7 +53,22 @@ Public.vipApproval = function (parame) {
 Public.getVipUserInfo = function (parame) {
     return getVipUserInfo(parame)
 }
+Public.setUpdate = function (parame) {
+    return setUpdate(parame)
+}
 
+Public.orgcity = function (parame) {
+    return orgcity(parame)
+}
+Public.orgprovince = function (parame) {
+    return orgprovince(parame)
+}
+Public.orgdistrict = function (parame) {
+    return orgdistrict(parame)
+}
+Public.optTime = function (parame) {
+    return optTime(parame)
+}
 
 
 
