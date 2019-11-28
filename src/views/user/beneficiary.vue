@@ -803,7 +803,10 @@ export default {
           }
         }
       ],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
+      sorting: [
+        { value: 'create_at asc', label: '正序' },
+        { value: 'create_at desc', label: '倒序' }
+      ],
       Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
       batchList: [{ value: '0', label: '禁用账号' }, { value: '1', label: '启用账号' }],
       Sele2: {
@@ -826,7 +829,7 @@ export default {
       ALLINFO: false,
       isSenior: false,
       data: [],
-      sort: '',
+      sort: 'create_at desc',
       page: 1,
       size: 10,
       totalSize: 0,
@@ -854,6 +857,9 @@ export default {
     }
   },
   watch: {
+    sort(newVlaue) {
+      this.getUsetList(this.paramsObj)
+    },
     size(newVlaue, oldValue) {
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)

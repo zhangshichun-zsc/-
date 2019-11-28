@@ -728,13 +728,16 @@ export default {
       OrganizeInformation: ['options1'],
       SummaryInformation: ['options1'],
       OtherInformation: ['options2', 'options4'],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
+      sorting: [
+        { value: 'create_at asc', label: '正序' },
+        { value: 'create_at desc', label: '倒序' }
+      ],
       Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
       vipGrade: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 会员等级
       labelList: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 标签
       page: 1, // 页码
       size: 10, // 条数
-      sort: 'asc', // 排序
+      sort: 'create_at desc', // 排序
       startAt: '',
       endAt: '',
       registrationStartTimeStamp: '',
@@ -772,6 +775,9 @@ export default {
     },
     page(newVlaue, oldValue) {
       if (newVlaue === oldValue) return
+      this.getUsetList(this.paramsObj)
+    },
+    sort(newVlaue) {
       this.getUsetList(this.paramsObj)
     },
     ALLINFO(newVlaue, oldValue) {
@@ -819,6 +825,7 @@ export default {
         sysType: '2',
         page: this.page,
         size: this.size,
+        sort: this.sort,
         ...time,
         ...paramsObj
       })
