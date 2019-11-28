@@ -54,11 +54,7 @@
         <Button type="primary" icon="ios-cloud-saved-outline" @click="location" v-if='show'>保存图片</Button>
       </Col>
     </Row>
-    <!-- <div class="integral-table">
-      <div class="pages">
-        <Page :total="100" show-elevator show-total size="small" />
-      </div>
-    </div> -->
+
   </div>
 </template>
 
@@ -79,7 +75,11 @@ export default {
     };
   },
   created() {
-    this.getList()
+     if(~~this.$route.params.show === 0){
+      this.getList()
+    }else{
+      this.show = true
+    }
   },
   methods: {
     getList(){
@@ -121,8 +121,8 @@ export default {
         })
     },
     location(){
-      if(this.logoPic || this.officeSealPic){
-        this.$Message.wran('logo或者尾部照片没有选择')
+      if( !this.logoPic || !this.officeSealPic){
+        this.$Message.warning('logo或者尾部照片没有选择')
         return
       }
       let args = {

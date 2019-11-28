@@ -512,3 +512,9 @@ export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould",p) 
 export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould",p)//团队
 export const getActiveTeb = p => get("/activity-feedback/mould/list",p)//活动反馈模板
 export const setActiveTeb = p => posts("/activity-feedback/mould/set",p)//设置反馈
+export const getActiveTypeItem = p => get("/activity-manage/act/type/list",p)
+export const addActiveTypeItem = p => posts("/activity-feedback/mould/set",p)
+export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail",p)
+export const delActiveFeedBack = p => posts("/activity-feedback/mould/del",p)
+export const getTranList = p => get("/activity-feedback/train/mould/list",p)
+export const addTranList = p => posts("/activity-feedback/train/mould/set",p)

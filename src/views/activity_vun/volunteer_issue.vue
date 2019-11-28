@@ -418,6 +418,8 @@ import { filterNull } from '@/libs/utils'
       },
       cancelImg(){
         orgimgdel({path:this.args.pic}).then(res => {
+          this.image = null
+          this.args.pic = null
          this.$Message.success('删除成功')
         })
       },

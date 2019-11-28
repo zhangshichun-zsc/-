@@ -9,32 +9,9 @@
         <Button class="table-btn">作废模板</Button>
       </p>
       <Modal v-model="modal1" title="新增培训模板">
-        <p>请选择项目</p>
-        <div class="tabs">
-          <Button>快乐活动营</Button>
-          <Button>智库</Button>
-          <Button>支持性就业</Button>
-        </div>
-        <div class="tabs">
-          <Button>家长赋能计划</Button>
-          <Button>招募实习生</Button>
-          <Button>趾印计划</Button>
-        </div>
-        <div class="tabs">
-          <Button>老友陪伴</Button>
-          <Button>青少年</Button>
-          <Button>自倡导小组</Button>
-        </div>
         <p>请选择活动分类</p>
         <div class="tabs">
-          <Button>篮球</Button>
-          <Button>排球</Button>
-          <Button>校园</Button>
-        </div>
-        <div class="tabs">
-          <Button>羽毛球</Button>
-          <Button>徒步</Button>
-          <Button>戈壁</Button>
+          <Button v-for='(item,index) in arr' :key="index" @click="train(item.dicId,item.dicName,0)">{{ item.dicName }}</Button>
         </div>
       </Modal>
     </div>
@@ -43,23 +20,8 @@
         <li v-for="item in list">
           <p class="content-head">{{item.dicName}}</p>
           <div class="option" v-for="i in item.mouldList">
-            <p @click="train(i.activityId)">{{i.activityName}}</p>
+            <p @click="train(i[id],i[name],1)">{{ i[name] }}</p>
           </div>
-          <!-- <div v-show="show">
-            <div class="option">
-              <p>夏令营活动模板</p>
-              <p>登山活动模板</p>
-              <p>戈壁活动模板</p>
-            </div>
-            <div class="option">
-              <p>气排球活动模板</p>
-              <p>生日会活动模板</p>
-              <p>羽毛球活动模板</p>
-            </div>
-          </div>
-          <p class="btn">
-            <Button type="success" @click="more">更多</Button>
-          </p> -->
         </li>
       </ul>
     </div>
@@ -67,23 +29,42 @@
 </template>
 
 <script>
+import { getActiveTypeItem }from'@/request/api'
 export default {
   data() {
     return {
       show: false,
       modal1: false,
+      arr:[]
     };
   },
-  props: [ 'navigation1','list','from' ],
+  props: {
+    navigation1: String,
+    list: Array,
+    from: {
+      type: String,
+      default: 'actrain'
+    },
+    name: {
+      type: String,
+      default: 'activityName'
+    },
+    id: {
+      type: String,
+      default: 'activityId'
+    },
+  }, 
   components: {},
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList()
+  },
 
   methods: {
-    train(e) {
-      this.$router.push({ name: this.from,query:{activityId:e} });
+    train(id,name,ble) {
+      this.$router.push({ name: this.from,query:{id,name,ble} })
     },
     more() {
       if (this.show === false) {
@@ -91,6 +72,13 @@ export default {
       } else {
         this.show = false;
       }
+    },
+    getList(){
+      console.log(11)
+      getActiveTypeItem().then(res => {
+        this.arr = res.data
+        console.log(res)
+      })
     }
   }
 };
@@ -147,8 +135,6 @@ export default {
   }
 }
 .tabs {
-  display: flex;
-  justify-content: space-around;
   margin: 10px 0;
 }
 .tabs button {

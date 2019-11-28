@@ -54,12 +54,19 @@ export default {
       }
     }
   },
+  watch:{
+    arr(val){
+      if(val.length !==0){
+        this.showArea(val)
+      }
+    }
+  },
   components: {},
 
   computed: {},
 
   created () {
-    this.showArea()
+    
   },
 
   methods: {
@@ -75,8 +82,7 @@ export default {
       this.$set(this.ids,i,id)
       this.$emit('change',this.ids)
     },
-    showArea(){
-      let arr = this.arr
+    showArea(arr){
       this.ids = arr
       if(arr.length==0)return
       let name = getAreaAdress(arr[0],arr[1],arr[2])

@@ -35,6 +35,11 @@ export default {
       info: ''
     }
   },
+  watch: {
+    labels(val){
+       this.editor.txt.html(val)
+    }
+  },
   props: ['labels', 'id'],
   mounted() {
     this.editor = new E('#' + this.id)

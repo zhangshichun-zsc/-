@@ -49,7 +49,7 @@
                  <FormItem label="模板名称" prop="mname">
                      <Input v-model="params.title"></Input>
                  </FormItem>
-                 <FormItem label="有效日期" prop="effect">
+                 <FormItem label="生效日期" prop="effect">
                     <Date-picker
                     placement="bottom-end"
                     placeholder="选择日期"
@@ -57,6 +57,7 @@
                     type="datetime" 
                     v-model="params.effectiveAt"
                     @on-change='changeDate'
+                    :options="options"
                   ></Date-picker>
                  </FormItem>
               </Form>
@@ -67,19 +68,21 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="data-ios">
-         <div class="flex-center-start"
+         <div class="flex-center-start">
            <Icon type="ios-apps" />
           <span>数据列表</span>
          </div>
             <div class="flex-center-end">
-                  <Select size='small' class="inpt" placeholder="显示条数"></Select>
-                  <Select size='small' class="inpt" placeholder="排序方式"></Select>
+              <Select size='small' class="inpt" placeholder="显示条数" @on-change='changeNum'>
+                <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
+              </Select>
+              <Select size='small' class="inpt" placeholder="排序方式"></Select>
             </div>
         </div>
       </div>
       <Table border :columns="columns" :data="data"></Table>
       <div class="pages">
-          <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='10'/>
+          <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
       </div>
     </div>
   </div>
@@ -98,7 +101,8 @@ export default {
         orgId:'',
         title:'',
         effectiveAt:'',
-        orgType:3
+        orgType:3,
+        sysId:2
        },
       ruleValidate:{
         organ: [
@@ -131,8 +135,8 @@ export default {
           key: "effectiveAt"
         },
         {
-          title:"创建时间",
-          key:"createAt"
+          title:"失效时间",
+          key:"inEffectiveAt"
         },
         {
           title: "操作",
@@ -151,7 +155,7 @@ export default {
                   on: {
                     click: () => {
                        let ob = params.row
-                      this.$router.push({ name: 'vun_prend.vue' ,params:{certMouldId:ob.certMouldId}})
+                      this.$router.push({ name: 'vun_prend.vue' ,query:{certMouldId:ob.certMouldId,show:false}})
                     }
                   }
                 },
@@ -167,25 +171,11 @@ export default {
                   on: {
                     click: () => {
                       let ob = params.row
-                      this.$router.push({ name: 'vun_prend.vue',params:{certMouldId:ob.certMouldId}})
+                      this.$router.push({ name: 'vun_prend.vue',query:{certMouldId:ob.certMouldId,show:true}})
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
               )
             ]);
           }
@@ -194,13 +184,20 @@ export default {
       data: [
       ],
       page:1,
+      size:10,
       sumSize:10,
       args:{
         startAt:null,
         endAt:null,
-        orgName:null
+        orgName:null,
       },
-      volun:[]
+      volun:[],
+      numList:[10,15,20,],
+       options:{
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      }
     };
   },
 
@@ -209,16 +206,19 @@ export default {
   computed: {},
 
   created() {
-    this.getList({page:1})
-    this.getVoteer()
+    this.getList({})
   },
 
   methods: {
     getList ({startAt,endAt,orgName}) {
-      getBooks(filterNull({page:{page:this.page,size:10},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
-        this.sumSize = res.data.totalSize
-        this.data = res.data.list
-        this.page = res.data.pageNum
+      getBooks(filterNull({page:{page:this.page,size:this.size},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
+         if(res.code == 200){
+           this.sumSize = res.data.totalSize
+           this.data = res.data.list
+           this.page = res.data.pageNum
+        }else{
+          this.$Message.error(res.msg)
+        }
       })
     },
     getVoteer(){
@@ -228,6 +228,7 @@ export default {
     },
 
     query(){
+      this.page = 1
       this.getList(this.args)
     },
 
@@ -242,7 +243,12 @@ export default {
     },
     success () {
       updateBooks(this.params).then(res => {
-        this.getList()
+        if(res.code == 200){
+          this.$Message.success('添加成功')
+          this.getList(this.args)
+        }else{
+           this.$Message.error(res.msg)
+        }
       })
     },
     changeDate(e){
@@ -250,6 +256,11 @@ export default {
     },
     cancel() {
       this.$Message.info("新增失败");
+    },
+    changeNum(e){
+      this.size = e
+      this.page = 1
+      this.getList()
     }
   }
 };
