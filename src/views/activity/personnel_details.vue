@@ -18,16 +18,28 @@
               <th>报名时间</th>
               <th>报名状态</th>
               <th>几人陪同</th>
-              <th>几人乘车</th>
             </tr>
             <tr>
-              <td>5</td>
-              <td>100</td>
-              <td>7</td>
-              <td>50</td>
-              <td>100</td>
-              <td>7</td>
-              <td>50</td>
+              <td>{{msg.userName}}</td>
+              <td>{{msg.phone}}</td>
+              <td>{{msg.roleName}}</td>
+              <td>{{msg.createAt}}</td>
+              <td>{{msg.userActType}}</td>
+              <td v-if='msg.userActType==1'>审核中</td>
+              <td v-else-if='msg.userActType==2'>报名成功</td>
+              <td v-else-if='msg.userActType==3'>报名被拒绝</td>
+              <td v-else-if='msg.userActType==4'>转移中</td>
+              <td v-else-if='msg.userActType==5'>被转移中</td>
+              <td v-else-if='msg.userActType==6'>转移成功</td>
+              <td v-else-if='msg.userActType==7'>自主取消</td>
+              <td v-else-if='msg.userActType==8'>主办方取消</td>
+              <td v-else-if='msg.userActType==9'>已违约</td>
+              <td v-else-if='msg.userActType==10'>排队中</td>
+              <td v-else-if='msg.userActType==11'>请假中</td>
+              <td v-else-if='msg.userActType==12'>待付款</td>
+              <td v-else-if='msg.userActType==13'>拒绝转移</td>
+              <td v-else-if='msg.userActType==14'>工作人员</td>
+              <td>{{msg.parentCount}}</td>
             </tr>
           </table>
         </li>
@@ -37,12 +49,13 @@
             <tr>
               <th>培训状态</th>
               <th>确认时间</th>
-              <th>操作</th>
+              <!-- <th>操作</th> -->
             </tr>
             <tr>
-              <td>100</td>
-              <td>7</td>
-              <td>50</td>
+              <td v-if='msg.trainStatus==1'>未阅读</td>
+              <td v-else-if='msg.trainStatus==2'>已阅读</td>
+              <td v-else-if='msg.trainStatus==3'>已确认</td>
+              <td>{{msg.trainTime}}</td>
             </tr>
           </table>
         </li>
@@ -55,9 +68,11 @@
               <th>签到地点</th>
             </tr>
             <tr>
-              <td>100</td>
-              <td>7</td>
-              <td>50</td>
+              <td v-if='msg.trainStatus==0'>未签到</td>
+              <td v-else-if='msg.trainStatus==1'>已签到</td>
+              <td v-else-if='msg.trainStatus==2'>迟到</td>
+              <td>{{msg.signAt}}</td>
+              <td>{{msg.signAddress}}</td>
             </tr>
           </table>
         </li>
@@ -67,13 +82,13 @@
             <tr>
               <th>反馈状态</th>
               <th>提交时间</th>
-              <th>操作</th>
+              <!-- <th>操作</th> -->
             </tr>
             <tr>
-
-              <td>100</td>
-              <td>7</td>
-              <td>50</td>
+              <td v-if='msg.feedStatus==1'>已反馈</td>
+              <td v-else-if='msg.feedStatus==2'>未反馈</td>
+              <td>{{msg.feedAt}}</td>
+              <!-- <td>详情</td> -->
             </tr>
           </table>
         </li>
@@ -98,13 +113,16 @@
 </template>
 
 <script>
+import {userDetail} from '@/request/api'
 
 export default {
   data() {
     return {
       navigation1: {
         head: "活动人员明细(会员)"
-      }
+      },
+      actUserId:1,
+      msg:{}
     };
   },
 
@@ -112,9 +130,21 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    // this.actUserId = this.$route.query("actUserId")
+    this.getUserDetail()
+  },
 
-  methods: {}
+  methods: {
+    getUserDetail(){
+      userDetail({
+        actUserId:this.actUserId
+      }).then(res=>{
+        console.log(res)
+        this.msg = res.data
+      })
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

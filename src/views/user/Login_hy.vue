@@ -70,7 +70,7 @@ export default {
       size: 10,
       dataCount: 0,
       userId: 2,
-      sysType: 2
+      sysType: '1'
     }
   },
   methods: {
@@ -100,7 +100,6 @@ export default {
 
     //列表数据
     gethistory() {
-      console.log({ page: this.page, size: this.size })
       Userhistory({
         page: { page: this.page, size: this.size },
         sysType: this.sysType,

@@ -195,8 +195,11 @@ export default {
       data: [],
       arrs: [],
       Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
-      sort: 'asc',
+      sorting: [
+        { value: 'create_at asc', label: '正序' },
+        { value: 'create_at desc', label: '倒序' }
+      ],
+      sort: 'create_at desc',
       size: 10,
       dataCount: 0,
       page: 1,
@@ -244,7 +247,8 @@ export default {
       this.paramsObj = {
         ...arr,
         accountName: e[0].value,
-        optUserName: e[1].value
+        optUserName: e[1].value,
+        sort: this.sort
       }
       this.getVipList(this.paramsObj)
     },

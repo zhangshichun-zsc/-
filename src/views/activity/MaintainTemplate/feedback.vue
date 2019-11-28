@@ -1,16 +1,18 @@
 <!--维护反馈模板(会员)-->
 <template>
-  <Maintain :navigation1='navigation1'></Maintain>
+  <Maintain :navigation1='navigation1' :list='list' from='back' name='fkMouldName' id='actFkMouldId'></Maintain>
 </template>
 
 <script>
 import Maintain from '../../../components/Maintain'
+import { getActiveTeb }from'@/request/api'
 export default {
   data() {
     return {
       navigation1: {
         head: "维护反馈模板(会员)"
-      }
+      },
+      list:[]
     };
   },
 
@@ -18,10 +20,16 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getList()
+  },
 
   methods: {
-
+    getList(){
+      getActiveTeb().then(res => {
+        this.list = res.data
+      })
+    }
   }
 };
 </script>

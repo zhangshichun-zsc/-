@@ -39,17 +39,17 @@
         </div>
         <div class="flex-center-end">
           <Button @click="modal1 = true">新增模板</Button>
-           <Modal v-model="modal1" title="新增证书模板" @on-ok='success'>
+           <Modal v-model="modal1" title="新增证书模板" @on-cancel='cancel'>
              <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="组织" prop="organ">
+                 <FormItem label="组织" prop="orgId">
                      <Select v-model="params.orgId">
                          <Option :value="item.orgId" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
                      </Select>
                  </FormItem>
-                 <FormItem label="模板名称" prop="mname">
+                 <FormItem label="模板名称" prop="title">
                      <Input v-model="params.title"></Input>
                  </FormItem>
-                 <FormItem label="有效日期" prop="effect">
+                 <FormItem label="生效日期" prop="effectiveAt">
                     <Date-picker
                     placement="bottom-end"
                     placeholder="选择日期"
@@ -57,9 +57,13 @@
                     type="datetime" 
                     v-model="params.effectiveAt"
                     @on-change='changeDate'
+                    :options="options"
                   ></Date-picker>
                  </FormItem>
               </Form>
+               <div slot="footer">
+                 <Button type="error" size="large" @click="success">确定</Button>
+               </div>
           </Modal>
         </div>
       </div>
@@ -67,19 +71,21 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="data-ios">
-         <div class="flex-center-start"
+         <div class="flex-center-start">
            <Icon type="ios-apps" />
           <span>数据列表</span>
          </div>
             <div class="flex-center-end">
-                  <Select size='small' class="inpt" placeholder="显示条数"></Select>
-                  <Select size='small' class="inpt" placeholder="排序方式"></Select>
+              <Select size='small' class="inpt" placeholder="显示条数" @on-change='changeNum'>
+                <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
+              </Select>
+              <Select size='small' class="inpt" placeholder="排序方式"></Select>
             </div>
         </div>
       </div>
       <Table border :columns="columns" :data="data"></Table>
       <div class="pages">
-          <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='10'/>
+          <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
       </div>
     </div>
   </div>
@@ -98,16 +104,17 @@ export default {
         orgId:'',
         title:'',
         effectiveAt:'',
-        orgType:3
+        orgType:3,
+        sysId:2
        },
       ruleValidate:{
-        organ: [
+        orgId: [
             { required: true, message: '组织不能为空', trigger: 'blur' }
             ],
-        mname: [
+        title: [
             { required: true, message: '模板名称不能为空', trigger: 'blur' }
             ],
-        effect: [
+        effectiveAt: [
             { required: true, message: '有效日期不能为空', trigger: 'blur' }
             ],
       },
@@ -131,8 +138,8 @@ export default {
           key: "effectiveAt"
         },
         {
-          title:"创建时间",
-          key:"createAt"
+          title:"失效时间",
+          key:"inEffectiveAt"
         },
         {
           title: "操作",
@@ -151,12 +158,13 @@ export default {
                   on: {
                     click: () => {
                        let ob = params.row
-                      this.$router.push({ name: 'vun_prend.vue' ,params:{certMouldId:ob.certMouldId}})
+                      this.$router.push({ name: 'vun_prend.vue' ,query:{certMouldId:ob.certMouldId,show:false}})
                     }
                   }
                 },
                 "预览"
               ),
+               params.row.isEdit == 1?
               h(
                 "a",
                 {
@@ -167,26 +175,12 @@ export default {
                   on: {
                     click: () => {
                       let ob = params.row
-                      this.$router.push({ name: 'vun_prend.vue',params:{certMouldId:ob.certMouldId}})
+                      this.$router.push({ name: 'vun_prend.vue',query:{certMouldId:ob.certMouldId,show:true}})
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
-              )
+              ):""
             ]);
           }
         }
@@ -194,13 +188,20 @@ export default {
       data: [
       ],
       page:1,
+      size:10,
       sumSize:10,
       args:{
         startAt:null,
         endAt:null,
-        orgName:null
+        orgName:null,
       },
-      volun:[]
+      volun:[],
+      numList:[10,15,20,],
+       options:{
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      }
     };
   },
 
@@ -209,16 +210,19 @@ export default {
   computed: {},
 
   created() {
-    this.getList({page:1})
-    this.getVoteer()
+    this.getList({})
   },
 
   methods: {
     getList ({startAt,endAt,orgName}) {
-      getBooks(filterNull({page:{page:this.page,size:10},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
-        this.sumSize = res.data.totalSize
-        this.data = res.data.list
-        this.page = res.data.pageNum
+      getBooks(filterNull({page:{page:this.page,size:this.size},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
+         if(res.code == 200){
+           this.sumSize = res.data.totalSize
+           this.data = res.data.list
+           this.page = res.data.pageNum
+        }else{
+          this.$Message.error(res.msg)
+        }
       })
     },
     getVoteer(){
@@ -228,6 +232,7 @@ export default {
     },
 
     query(){
+      this.page = 1
       this.getList(this.args)
     },
 
@@ -241,15 +246,35 @@ export default {
       this.getList(this.args)
     },
     success () {
-      updateBooks(this.params).then(res => {
-        this.getList()
-      })
+       this.$refs.formValidate.validate((valid) => {
+         console.log(valid)
+            if (valid) {
+                updateBooks(this.params).then(res => {
+                  if(res.code == 200){
+                    this.$Message.success('添加成功')
+                    this.getList(this.args)
+                  }else{
+                    this.$Message.error(res.msg)
+                  }
+                })
+            } else {
+                this.$Message.error('没有填写完整');
+            }
+        })
+     
     },
     changeDate(e){
       this.params.effectiveAt = e
     },
     cancel() {
-      this.$Message.info("新增失败");
+      this.params.orgId = ''
+      this.params.title = ''
+      this.params.effectiveAt = ''
+    },
+    changeNum(e){
+      this.size = e
+      this.page = 1
+      this.getList()
     }
   }
 };

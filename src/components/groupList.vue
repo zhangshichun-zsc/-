@@ -112,7 +112,7 @@ export default {
             let type = {
               1: '机构',
               2: '家长小组',
-              3: '自愿者小组'
+              3: '志愿者小组'
             }
 
             return h('span', type[orgType])
@@ -235,8 +235,11 @@ export default {
         { value: 15, label: '显示15条' },
         { value: 20, label: '显示20条' }
       ],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
-      sort: 'asc',
+      sorting: [
+        { value: 'create_at asc', label: '正序' },
+        { value: 'create_at desc', label: '倒序' }
+      ],
+      sort: 'create_at desc',
       page: 1,
       size: 10,
       dataCount: 0,
@@ -255,14 +258,21 @@ export default {
   created() {
     this.getorgpage()
   },
+  watch: {
+    sort(newVlue) {
+      this.getorgpage()
+    }
+  },
   methods: {
     //标签分页
     getorgpage() {
       let fromobj = this.util.remove({
         page: {
           page: this.page,
-          size: this.size
+          size: this.size,
+          sort: this.sort
         },
+
         orgName: this.orgName,
         status: this.orgStatus == 0 ? '' : this.orgStatus,
         startAt: this.startAt ? this.startAt.getTime() : '',
@@ -274,7 +284,6 @@ export default {
             this.dataCount = res.data.totalSize
             this.data = res.data.list
           }
-          console.log(res)
         })
       } else {
         queryVouluteerOrgList(fromobj).then(res => {

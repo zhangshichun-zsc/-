@@ -247,6 +247,8 @@ export const Userdetail = p => get('/user-list/user-detail-info', p) //-用户�
 
 export const getLabel = p => get('/user-list/get-label', p) // 获取所有标签
 
+export const Setsend = p => posts('/user-list/send-inner-msg', p) // 站内信接口
+
 export const SetUserLabel = p => posts('/user-list/batch-opr-label', p) // 设置用户标签
 
 export const getLevel = p => get('/user-list/get-level-info', p) // 获取用户等级
@@ -255,7 +257,11 @@ export const getVipPage = p => get('/user-list/get-vip-page', p) //获取 vip审
 
 export const vipApproval = p => posts('/user-list/batch-opt-vip', p) //vip  审批 or 拒绝
 
-export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员编辑
+export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员获取编辑资料
+
+export const setUpdate = p => posts('/user-list/update-user-info', p) //会员设置编辑资料
+
+export const optTime = p => posts('/user-list/opt-vip-time', p) //修改vip道到期时间
 
 
 
@@ -491,6 +497,15 @@ export const projectDetail = p => posts('/activity-manage/apply/act/id', p) //�
 export const projectEdit = p => posts('/activity-manage/act/update/id', p) //编辑活动保存
 
 export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动模板列表
+export const signLimits = p => posts('/activity-manage/apply/sign/limits', p) //限制设置
+export const signItems = p => posts('/activity-manage/apply/item/list', p) //报名项设置
+export const firstList = p => posts('/activity-manage/apply/sign/first', p) //优先设置
+export const userDetail = p => posts('/activity-manage/act/user/detail', p) //人员明细
+export const actManager = p => posts('/activity-manage/volu/act/list', p) //活动管理
+
+export const getDetail = p => posts('/org/detail', p) //  获取 维护活动融融固定项 数据
+
+export const setpropaganda = p => posts('/org/propaganda/update', p) //  设置 维护活动融融固定项 数据
 
 
 
@@ -507,7 +522,15 @@ export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p)
 export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p)
 export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
 export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
-export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList",p)
-export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail',p)//证书详情
-export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould",p) //
-export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould",p)//团队
+export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList", p)
+export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail', p)//证书详情
+export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould", p) //
+export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould", p)//团队
+export const getActiveTeb = p => get("/activity-feedback/mould/list", p)//活动反馈模板
+export const setActiveTeb = p => posts("/activity-feedback/mould/set", p)//设置反馈
+export const getActiveTypeItem = p => get("/activity-manage/act/type/list", p)
+export const addActiveTypeItem = p => posts("/activity-feedback/mould/set", p)
+export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p)
+export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
+export const getTranList = p => get("/activity-feedback/train/mould/list", p)
+export const addTranList = p => posts("/activity-feedback/train/mould/set", p)

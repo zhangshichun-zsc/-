@@ -5,83 +5,82 @@
     <div class="content">
       <p class="content-activity">反馈模板</p>
       <div class="select">
-        <span class="select-template">所选项目</span>
-        <Input  style="width:300px;margin-top:20px" value="快乐活动营">
-        </Input>
+        <span class="select-template">模板名称</span>
+        <Input  style="width:300px;margin-top:20px" v-model="args.fkMouldName"></Input>
       </div>
       <div class="select">
         <span class="select-template">活动分类</span>
-        <Input  style="width:300px;margin-top:20px" value="篮球">
+        <Input  style="width:300px;margin-top:20px" value="篮球" v-model="args.typeDicName">
         </Input>
       </div>
       <div class="select">
         <span class="select-template">反馈简介</span>
-        <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}"  value=" 恭喜您已成功参与***活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。"></Input>
+        <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}" v-model="details[0].context"></Input>
       </div>
       <div class="select">
         <span class="select-template">反馈内容</span>
-        <div style="margin-top:20px">
-            <p>1. 本次活动是否达到您的期望</p>
-            <div style="margin-top:20px">
-              <RadioGroup>
-                 <Radio label="ok">
-                     <span>A.完全达到</span>
-                 </Radio>
-                 <Radio label="good">
-                     <span>B.基本达到</span>
-                 </Radio>
-                 <Radio label="general">
-                     <span>C.一般</span>
-                 </Radio>
-                 <Radio label="no">
-                     <span>D.相差很远</span>
-                 </Radio>
-              </RadioGroup>
-            </div>  
-            <p style="margin-top:20px">2. 您对本次活动的哪方面感到满意</p>
-            <div style="margin-top:20px">
-              <RadioGroup>
-                 <Radio label="ok">
-                     <span>A.活动内容</span>
-                 </Radio>
-                 <Radio label="good">
-                     <span>B.参与互动</span>
-                 </Radio>
-                 <Radio label="general">
-                     <span>C.流程安排</span>
-                 </Radio>
-                 <Radio label="no">
-                     <span>D.活动气氛</span>
-                 </Radio>
-              </RadioGroup>
-            </div>  
-            <p style="margin-top:20px">您对我们以后活动的举办还有什么建议？</p>
-              <h2 class="added" v-if="addbtns" >
-                 <a @click="addbtn()">+新增物资</a>
-              </h2>
-              <div v-show="show">
-                <div class="addes">
-                    <Button>+单选题</Button>
-                    <Button>+多选题</Button>
-                    <Button>+单行文本</Button>
-                    <Button>+多行文本</Button>
-                </div>
+        <div>
+          <div v-for="(item,index) in feed" :key='index'>
+            <div class="ls-item flex-between" v-if=' item.type === 1 '>
+              <span>请输入单文本标题</span>
+              <i-input placeholder="请输入单文本标题" v-model="item.context"/>
+              <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+            </div>
+            <div class="ls-item flex-between" v-else-if=' item.type === 6 '>
+              <span>请输入多行文本标题</span>
+              <i-input placeholder="请输入多行文本标题" v-model="item.context"/>
+              <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+            </div>
+            <div class="ls-item"  v-else-if='item.type === 3 '>
+              <div class="flex-between">
+                <span>请输入单选标题</span>
+                <i-input placeholder="请输入单选标题" v-model="item.context"/>
+                <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
-        </div>
+              <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
+                <span>单选{{i+1}}</span>
+                <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
+                <Icon type="ios-trash"  @click="deleItem(index,i)"/>
+              </div>
+              <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
+            </div>
+            <div class="ls-item" v-else>
+              <div class="flex-between">
+                <span>请输入多选标题</span>
+                <i-input placeholder="请输入多选标题" v-model="item.context"/>
+                <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+              </div>
+              <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
+                <span>多选{{i+1}}</span>
+                <input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
+                <Icon type="ios-trash"  @click="deleItem(index,i)"/>
+              </div>
+              <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
+            </div>
+          </div>
+          <div class="add">
+            <p>新增反馈项</p>
+            <div class="flex-between">
+              <i-button v-for="(item,index) in feedList" :key='index' class="add-item" @click="addItem(item.type)">{{ item.name }}</i-button>
+            </div>
+          </div>
+          </div>
       </div>
        <div class="select">
         <span class="select-template">上传图片</span>
-         <i-switch style="margin-top:20px"></i-switch>
+         <i-switch style="margin-top:20px" v-model="args.isPicFlag"  :true-value='1' :false-value='0'></i-switch>
       </div>
       <div class="button-food">
-        <i-button @click="feedback">保存</i-button>
-        <i-button @click="feedback">作废</i-button>
+        <i-button @click="feedback()">保存</i-button>
+        <i-button @click="delFeed()">作废</i-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { addActiveTypeItem,getActiveFeedBack,delActiveFeedBack }from'@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -92,19 +91,76 @@ export default {
       value: "",
       single: "",
       show: false,
-      addbtns: true
-    };
+      addbtns: true,
+      feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
+      feed: [],
+      details:[   {
+            type:6,
+            context: null,
+            isMust:0
+            
+          }],
+      args:{
+        actFkMouldId: null,
+        fkMouldName:null,
+        typeDicId: null,
+        typeDicName: null,
+        isPicFlag: 0,
+        details:[]
+      },
+      ble:false
+    }
   },
 
   components: {  },
 
   computed: {},
 
-  created() {},
+  created() {
+    this.ble =  ~~this.$route.query.ble
+    if(this.ble === 1){
+      this.args.actFkMouldId = this.$route.query.id
+      this.getDetail()
+    }else{
+      this.args.typeDicId = this.$route.query.id
+      this.args.typeDicName = this.$route.query.name
+    }
+  },
 
   mounted() {
   },
   methods: {
+    deleItem(i,m){
+      let feed = this.feed
+      if (m !== null) {
+        let arr = feed[i].answer
+        arr.splice(m, 1)
+      } else {
+        feed.splice(i, 1)
+      }
+      this.feed = feed
+    },
+    addSignIput(i){
+      let feed = this.feed
+      let arr = feed[i].answer
+      arr.push({ answer: null })
+      this.feed = feed
+    },
+    getDetail(){
+      console.log(1)
+      getActiveFeedBack({actFkMouldId: this.args.actFkMouldId}).then(res => {
+        console.log(res)
+        let list = res.data
+        if(list.details.length == 0){
+          delete list.details
+        }else{
+          this.details = [list.details[0]]
+          this.feed = list.details.splice(1)
+        }
+        list.isPicFlag = ~~list.isPicFlag
+        this.args = Object.assign(this.args,list)
+      })
+    },
     addbtn() {
        if(this.show===false){
        this.show=true
@@ -118,8 +174,37 @@ export default {
       this.addbtns = true;
     },
     feedback(){
-        this.$router.push({name:'feedback'})
-    }
+      let args = this.args
+      if(!args.fkMouldName || !this.details[0].context || !args.typeDicName){
+        this.$Message.console.warn('不完整')
+        return
+      }
+      args.details = [...this.details,...this.feed]
+      args = filterNull(args)
+      addActiveTypeItem(args).then(res => {
+        this.$Message.success('添加成功')
+        this.$router.back()
+      })
+    },
+    delFeed(){
+      delActiveFeedBack({actFkMouldId:this.args.actFkMouldId,valid:3}).then(res => {
+           this.$Message.success('删除成功')
+            this.$router.back()
+      })
+    },
+    addItem(type){
+      let feed = this.feed
+      let args = {
+        type,
+        context: null,
+        isMust:0
+      }
+      if (type === 4 || type === 3) {
+        args.answer = [{ answer: null }, { answer: null }, { answer: null }]
+      }
+      feed.push(args)
+      this.feed = feed
+    },
   }
 }
 </script>
@@ -198,7 +283,7 @@ export default {
      text-align: center
  }
 .button-food {
-  margin-top: 50px;
+  padding: 50px 20px;
   display: flex;
   justify-content: center;
   .ivu-btn-default {
