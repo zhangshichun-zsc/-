@@ -211,7 +211,9 @@
                       </tr>
                       <tr v-if="item.ruleId==22 || item.ruleId==4">
                         <td>居住地区限制</td>
-                        <td></td>
+                        <td>
+                          <selects @change='getAddr'></selects>
+                        </td>
                         <td>
                           <Button @click.native="deleteLimits(index)">删除</Button>
                         </td>
@@ -926,6 +928,7 @@
 
 <script>
 import { batchItem,signType, signPost,signLimits,signItems,firstList } from "../../request/api";
+import selects from'_c/selsect'
 
 export default {
   props:['oneRole'],
@@ -998,7 +1001,7 @@ export default {
     // editor1.create()
     // editor2.create()
   },
-  components: {},
+  components: {selects},
 
   computed: {},
 
@@ -1188,6 +1191,17 @@ export default {
     save(){
       console.log(this.oneRole)
       this.$emit("oneRole",this.oneRole)
+    },
+    changeEditorTrain(e){
+      this.oneRole.trainComments = e
+    },
+    getAddr(e){
+      console.log(e)
+      for(let i in this.oneRole.signRuleList){
+        if(i.ruleId==22 || i.ruleId==4){
+          this.oneRole.signRuleList[i].ruleValue = e[0] + ',' + e[1] + ',' + e[2]
+        }
+      }
     },
   }
 };

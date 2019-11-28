@@ -1,6 +1,7 @@
 <!--活动立项(会员)-->
 <template>
   <div class="active-lx">
+    <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="contents">
       <p class="head">
@@ -72,11 +73,11 @@
                   <div class="upload" v-if='projectMsg.batchPicShow == null'>
                       <div class="file" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                        <p>+</p>
+                        <!-- <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/> -->
                       </div>
                   </div>
                   <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
-                  <img src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()">
+                  <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
                 </div>
               </li>
               <li>
@@ -172,8 +173,9 @@
                 </li>
                 <li>
                   <span class="same_style">活动地址</span>
-                  <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-                  </iframe>
+                  <!-- <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
+                  </iframe> -->
+                  <span @click="()=>{this.adr = true}">{{ batch.actAddress == null?"点击选中地址":batch.actAddress}}</span>
                 </li>
                 <li>
                   <span class="same_style">出行方式</span>
@@ -240,7 +242,7 @@
             <p class="details-head">
               <span>活动详情</span>
             </p>
-            <wangeditor :labels="editor1" id="ed1"></wangeditor>
+            <wangeditor :labels="batch.detail" id="ed1" @change="changeEditorTrain"></wangeditor>
           </div>
 
           <div class="recruit">
@@ -498,6 +500,7 @@
 import { projectItem, partner,batchItem,leader,projectApproval } from "@/request/api";
 
 import role from "./compile_beneficiary.vue"
+import adress from'_c/map'
 import { orgimg } from "@/request/http";
 
 export default {
@@ -571,10 +574,11 @@ export default {
         choiceRuleList:[]
       },
       roleI:0,  //招募角色下标
+      adr:false
     };
   },
 
-  components: {role},
+  components: {role,adress},
 
   computed: {},
 
@@ -899,14 +903,23 @@ export default {
       var reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = (e) => {
-        this.image = e.target.result
+        this.projectMsg.batchPicShow = e.target.result
       }
     },
     cancelImg(){
       orgimgdel({path:this.data.args.pic}).then(res => {
         this.$Message.success('删除成功')
       })
-    }
+    },
+    changeEditorTrain(e){
+      this.batch.detail = e
+    },
+    getMap(e){
+      this.batch.actXx = e.xx
+      this.batch.actYy = e.yy
+      this.batch.actAddress = e.address
+      console.log(e)
+    },
   }
 };
 </script>
