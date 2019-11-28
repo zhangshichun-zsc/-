@@ -39,17 +39,17 @@
         </div>
         <div class="flex-center-end">
           <Button @click="modal1 = true">新增模板</Button>
-           <Modal v-model="modal1" title="新增证书模板" @on-ok='success'>
+           <Modal v-model="modal1" title="新增证书模板" @on-cancel='cancel'>
              <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="组织" prop="organ">
+                 <FormItem label="组织" prop="orgId">
                      <Select v-model="params.orgId">
                          <Option :value="item.orgId" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
                      </Select>
                  </FormItem>
-                 <FormItem label="模板名称" prop="mname">
+                 <FormItem label="模板名称" prop="title">
                      <Input v-model="params.title"></Input>
                  </FormItem>
-                 <FormItem label="生效日期" prop="effect">
+                 <FormItem label="生效日期" prop="effectiveAt">
                     <Date-picker
                     placement="bottom-end"
                     placeholder="选择日期"
@@ -61,6 +61,9 @@
                   ></Date-picker>
                  </FormItem>
               </Form>
+               <div slot="footer">
+                 <Button type="error" size="large" @click="success">确定</Button>
+               </div>
           </Modal>
         </div>
       </div>
@@ -105,13 +108,13 @@ export default {
         sysId:2
        },
       ruleValidate:{
-        organ: [
+        orgId: [
             { required: true, message: '组织不能为空', trigger: 'blur' }
             ],
-        mname: [
+        title: [
             { required: true, message: '模板名称不能为空', trigger: 'blur' }
             ],
-        effect: [
+        effectiveAt: [
             { required: true, message: '有效日期不能为空', trigger: 'blur' }
             ],
       },
@@ -161,6 +164,7 @@ export default {
                 },
                 "预览"
               ),
+               params.row.isEdit == 1?
               h(
                 "a",
                 {
@@ -176,7 +180,7 @@ export default {
                   }
                 },
                 "编辑"
-              )
+              ):""
             ]);
           }
         }
@@ -242,20 +246,30 @@ export default {
       this.getList(this.args)
     },
     success () {
-      updateBooks(this.params).then(res => {
-        if(res.code == 200){
-          this.$Message.success('添加成功')
-          this.getList(this.args)
-        }else{
-           this.$Message.error(res.msg)
-        }
-      })
+       this.$refs.formValidate.validate((valid) => {
+         console.log(valid)
+            if (valid) {
+                updateBooks(this.params).then(res => {
+                  if(res.code == 200){
+                    this.$Message.success('添加成功')
+                    this.getList(this.args)
+                  }else{
+                    this.$Message.error(res.msg)
+                  }
+                })
+            } else {
+                this.$Message.error('没有填写完整');
+            }
+        })
+     
     },
     changeDate(e){
       this.params.effectiveAt = e
     },
     cancel() {
-      this.$Message.info("新增失败");
+      this.params.orgId = ''
+      this.params.title = ''
+      this.params.effectiveAt = ''
     },
     changeNum(e){
       this.size = e
