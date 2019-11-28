@@ -49,15 +49,15 @@
           <Icon type="md-reorder" size="20" />
           <span @click="handleSelectAll(true)">全选</span>
           <Button class="table-btn" @click="showModal(null)">新增常用报名项</Button>
-          <Modal v-model="modal1" title="新增常用报名项" @on-ok='addOk'>
+          <Modal v-model="modal1" title="新增常用报名项"   @on-cancel='cancel'>
             <Tabs type="line" value="name1" v-model="adds.typeFlag" size="small" >
                 <TabPane label="单选题" name="3">
                   <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入标题" style="width:200px" v-model="adds.name"/></div>
-                  <div class="flex-start" v-for='(item,index) in items' :key='index'> <Radio/><Input :placeholder="'单选标题'"/></div>  
+                  <!-- <div class="flex-start" v-for='(item,index) in items' :key='index'> <Radio/><Input :placeholder="'单选标题'"/></div>   -->
                 </TabPane>
                 <TabPane label="多选题" name="4">
                  <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入标题" style="width:200px" v-model="adds.name"/></div>
-                  <div class="flex-start" v-for='(item,index) in items' :key='index'> <Radio/><Input :placeholder="'单选标题'"/></div>  
+                  <!-- <div class="flex-start" v-for='(item,index) in items' :key='index'> <Radio/><Input :placeholder="'单选标题'"/></div>   -->
                 </TabPane>
                 <TabPane label="单行文本" name="1">
                    <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入单行文本标题" style="width:200px" v-model="adds.name"/></div>
@@ -65,7 +65,10 @@
                 <TabPane label="多行文本" name="6">
                   <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入多行文本标题" style="width:200px" v-model="adds.name"/></div>
                 </TabPane>
-            </Tabs>                
+            </Tabs>
+              <div slot="footer">
+                 <Button type="error" size="large" @click="addOk">确定</Button>
+               </div>                
         </Modal>
         </div>
       </div>
@@ -223,10 +226,15 @@ export default {
       }
       args = filterNull(args)
       getSingList(args).then(res => {
-        this.sumSize = res.data.totalSize
-        this.datax = res.data.list
-        this.page = res.data.pageNum
-        this.sumPage = res.data.totalNum
+        if(res.code == 200){
+          this.sumSize = res.data.totalSize
+          this.datax = res.data.list
+          this.page = res.data.pageNum
+          this.sumPage = res.data.totalNum
+        }else{
+           this.$Message.error(res.msg)
+        }
+      
       })
     },
     changePage(e){
@@ -250,10 +258,21 @@ export default {
       this.modal1 = true
     },
     addOk(){
+      if(!this.adds.name){
+         this.$Message.warning('不能为空')
+        return
+      }
       let adds = filterNull(this.adds)
       addSignItem(adds).then(res => {
-
+          if(res.code == 200){
+           this.$Message.success('添加成功')
+          }else{
+            this.$Message.error(res.msg)
+          }
       })
+    },
+    cancel(){
+      this.adds.name = null
     },
     changeDate(e){
       this.args.createAt = e
