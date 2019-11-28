@@ -931,6 +931,11 @@ export default {
         this.projectMsg
       ).then(res => {
         console.log(res);
+        if(res.code==200){
+          this.$Message.success(res.msg)
+        }else{
+          this.$Message.error(res.msg)
+        }
       });
     },
     //提交
