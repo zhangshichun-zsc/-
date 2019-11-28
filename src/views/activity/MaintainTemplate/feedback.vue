@@ -1,6 +1,6 @@
 <!--维护反馈模板(会员)-->
 <template>
-  <Maintain :navigation1='navigation1' :list='list'></Maintain>
+  <Maintain :navigation1='navigation1' :list='list' from='back' name='fkMouldName' id='actFkMouldId'></Maintain>
 </template>
 
 <script>

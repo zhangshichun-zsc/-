@@ -1,6 +1,6 @@
 <!--维护活动模板(会员)-->
 <template>
-  <Maintain :navigation1='navigation1' :list='list' :from='actrain'></Maintain>
+  <Maintain :navigation1='navigation1' :list='list' :from='from'></Maintain>
 </template>
 
 <script>
@@ -12,7 +12,8 @@ export default {
       navigation1: {
         head: "维护活动模板(会员)"
       },
-      list:[]
+      list:[],
+      from:'actrain'
     };
   },
 

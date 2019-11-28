@@ -1,6 +1,7 @@
 <!--活动立项(会员)-->
 <template>
   <div class="active-lx">
+    <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="contents">
       <p class="head">
@@ -71,12 +72,12 @@
                 <div class="start-wap">
                   <div class="upload" v-if='projectMsg.batchPicShow == null'>
                       <div class="file" @click="()=>{ this.$refs.files.click()}">
-                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                        <p>+</p>
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                       </div>
                   </div>
                   <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
-                  <img src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()">
+                  <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
                 </div>
               </li>
               <li>
@@ -165,15 +166,16 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择日期"
-                      style="width: 200px"
+                      style="width: 600px"
                       @on-change="getBatchDate"
                     ></Date-picker>
                   </i-col>
                 </li>
                 <li>
                   <span class="same_style">活动地址</span>
-                  <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-                  </iframe>
+                  <!-- <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
+                  </iframe> -->
+                  <span @click="()=>{this.adr = true}">{{ batch.actAddress == null?"点击选中地址":batch.actAddress}}</span>
                 </li>
                 <li>
                   <span class="same_style">出行方式</span>
@@ -240,7 +242,7 @@
             <p class="details-head">
               <span>活动详情</span>
             </p>
-            <wangeditor :labels="editor1" id="ed1"></wangeditor>
+            <wangeditor :labels="batch.detail" id="ed1" @change="changeEditorTrain"></wangeditor>
           </div>
 
           <div class="recruit">
@@ -251,11 +253,11 @@
               <p v-for="(item,i) in batch.userConfList">
                 <span>{{item.roleName}}</span>
                 <span>{{item.recruitNum}}</span>
-                <span>详情</span>
+                <span @click="addRoles(i)">详情</span>
                 <span @click="deleteRole(i)">删除</span>
               </p>
               <h2 class="added">
-                <a @click="addRoles">+新增招募角色</a>
+                <a @click="addRoles(batch.userConfList.length)">+新增招募角色</a>
               </h2>
             </div>
           </div>
@@ -378,7 +380,7 @@
       </p>
     </div>
     <div class="add" v-if="isAddRole">
-      <role></role>
+      <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
     </div>
     <!-- 第三步 -->
     <div class="content-three" v-if="three">
@@ -498,7 +500,9 @@
 import { projectItem, partner,batchItem,leader,projectApproval } from "@/request/api";
 
 import role from "./compile_beneficiary.vue"
+import adress from'_c/map'
 import { orgimg } from "@/request/http";
+import { upload }from '@/request/http'
 
 export default {
   data() {
@@ -561,16 +565,26 @@ export default {
       editor1:'',
       orgimg:'',
       userId:1,
-      image:''
+      image:'',
+      oneRole:{},
+      roleMsg:{
+        fdList:[{ name: '反馈简介', type: 0}],
+        refund:{},
+        signRuleList:[],
+        itemList:[],
+        choiceRuleList:[]
+      },
+      roleI:0,  //招募角色下标
+      adr:false
     };
   },
 
-  components: {role},
+  components: {role,adress},
 
   computed: {},
 
   created() {
-    // this.userId = localStorage.getItem('userId')
+    this.userId = this.$store.state.userId
     this.getProjectItem();
     this.getPartner();
     this.getBatchItem();
@@ -773,9 +787,15 @@ export default {
       }
     },
     //新增招募角色
-    addRoles(){
+    addRoles(e){
       this.isAddRole = true
       this.two = false
+      this.roleI = e
+      let r = this.roleMsg
+      let m = {}
+      let n = this.batch.userConfList
+      m = n[e]?n[e]:r
+      this.oneRole = m
     },
     //删除工作人员
     deleteWorker(i){
@@ -785,6 +805,19 @@ export default {
     //删除招募角色
     deleteRole(i){
       this.batch.userConfList.splice(i,1)
+      console.log(this.batch.userConfList)
+    },
+    cancelRole(e){
+      console.log(e)
+      this.isAddRole = false
+      this.two = true
+    },
+    getRole(e){
+      console.log(e)
+      console.log(this.roleI)
+      this.isAddRole = false
+      this.two = true
+      this.batch.userConfList[this.roleI] = e
     },
     //新增物资
     addResources(){
@@ -865,19 +898,28 @@ export default {
       let file = this.$refs.files.files[0]
       const dataForm = new FormData()
       dataForm.append('file', file)
-      orgimg(dataForm).then(res => {
-
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          this.projectMsg.batchPicShow = e.target.result
+          this.projectMsg.batchPic = res.data
+        }
       })
-      var reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = (e) => {
-        this.image = e.target.result
-      }
     },
     cancelImg(){
       orgimgdel({path:this.data.args.pic}).then(res => {
         this.$Message.success('删除成功')
       })
+    },
+    changeEditorTrain(e){
+      this.batch.detail = e
+    },
+    getMap(e){
+      this.batch.actXx = e.xx
+      this.batch.actYy = e.yy
+      this.batch.actAddress = e.address
+      console.log(e)
     },
   }
 };

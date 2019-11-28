@@ -496,6 +496,8 @@ export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动
 export const signLimits = p => posts('/activity-manage/apply/sign/limits', p) //限制设置
 export const signItems = p => posts('/activity-manage/apply/item/list', p) //报名项设置
 export const firstList = p => posts('/activity-manage/apply/sign/first', p) //优先设置
+export const userDetail = p => posts('/activity-manage/act/user/detail', p) //人员明细
+export const actManager = p => posts('/activity-manage/volu/act/list', p) //活动管理
 
 export const getDetail = p => posts('/org/detail', p) //  获取 维护活动融融固定项 数据
 
@@ -522,3 +524,9 @@ export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould", p)
 export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould", p)//团队
 export const getActiveTeb = p => get("/activity-feedback/mould/list", p)//活动反馈模板
 export const setActiveTeb = p => posts("/activity-feedback/mould/set", p)//设置反馈
+export const getActiveTypeItem = p => get("/activity-manage/act/type/list", p)
+export const addActiveTypeItem = p => posts("/activity-feedback/mould/set", p)
+export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p)
+export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
+export const getTranList = p => get("/activity-feedback/train/mould/list", p)
+export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
