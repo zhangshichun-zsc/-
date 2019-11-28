@@ -96,9 +96,9 @@
                   @on-change="handleChange1"
                 ></Transfer>
                 <div slot="footer">
-     <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
-     <Button type="primary" size="large" @click="addmodalOk">确定</Button>
-</div>
+                  <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
+                  <Button type="primary" size="large" @click="addmodalOk">确定</Button>
+                </div>
               </Modal>
             </Layout>
           </Layout>
@@ -126,7 +126,7 @@ import {
   rolenew,
   roleAddtos,
   roledel,
-  roleAddto,
+  roleAddto
 } from "@/request/api";
 export default {
   data() {
@@ -208,7 +208,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "Add-members",
-                        query: { userId: params.row.userId, name: this.role }
+                        query: { userId: params.row.userId, name: this.role,state:3}
                       });
                     }
                   }
@@ -254,70 +254,77 @@ export default {
       // targetKeys1: this.getTargetKeys()
       data1: [],
       targetKeys1: [],
-      addlist:[],
-      arr:[],
-      addUserIds:[],
-      delUserIds:[],
-
+      addlist: [],
+      arr: [],
+      arrs:[],
+      addUserIds: [],
+      delUserIds: []
     };
   },
 
   watch: {
     role: "getrolenumquery"
   },
+
   mounted() {
     this.getrolenumquery();
-    this.getrolequery();
+    // this.getrolequery();
+    // console.log(this.role)
+  },
+   created(){
+      this.getrolequery();
+    console.log(this.role)
+
   },
   methods: {
     getMockData() {
       let mockData = [];
-      let data=this.data.concat(this.addlist)
+      let data = this.data.concat(this.addlist);
       for (let i = 0; i < data.length; i++) {
         mockData.push({
           key: data[i].userId,
-          label: data[i].userName,
+          label: data[i].userName
           // description: i
         });
       }
-      this.data1=mockData
-      console.log(mockData)
+      this.data1 = mockData;
+      console.log(mockData);
 
       return mockData;
     },
 
     //key值
     getTargetKeys() {
-      this.targetKeys1=this.arr
+      this.targetKeys1 = this.arr;
     },
     render1(item) {
       // console.log(item.label)
       return item.label;
     },
+
+    //穿梭框
     handleChange1(newTargetKeys, direction, moveKeys) {
-      if(direction=='right'){
-        this.addUserIds=Array.from(new Set(moveKeys.concat(this.delUserIds)))
-      }else if(direction=='left'){
-         this.delUserIds=Array.from(new Set(moveKeys.concat(this.addUserIds)))
-        //     this.addUserIds=this.addUserIds.filter(item=>{
-        //     return moveKeys.every(item2=>{
-        //         // return item.code != item2.code;
-        //     });
-        // }
+      console.log(this.arrs,this.arr)
+      if (direction == "right") {
+        this.delUserIds=this.util.arrChange(this.delUserIds,moveKeys)
+        this.addUserIds = this.addUserIds.concat(moveKeys);
+      } else if (direction == "left") {
+        this.addUserIds=this.util.arrChange(this.addUserIds,moveKeys)
+        this.delUserIds = this.delUserIds.concat(moveKeys);
       }
-      console.log(this.addUserIds,this.delUserIds)
+      console.log(this.addUserIds, this.delUserIds);
       // console.log(newTargetKeys);
       // console.log(direction);
       // console.log(moveKeys);
       this.targetKeys1 = newTargetKeys;
     },
     //确定
-    addmodalOk(){
-      console.log(this.delUserIds,this.addUserIds)
-      this.getroleAddtos()
-      console.log(1)
+    addmodalOk() {
+      this.delUserIds=this.util.arrChange(this.delUserIds,this.arrs)
+      this.addUserIds=this.util.arrChange(this.addUserIds,this.arr)
+      this.getroleAddtos();
+      console.log(1);
     },
-
 
     // 多条件查询角色成员
     getrolenumquery() {
@@ -343,6 +350,7 @@ export default {
           this.List = res.data;
           if (this.List.length != 0) {
             this.role = this.List[0].sysRoleName;
+            console.log(this.role,`1-${this.role}`)
           }
         }
         console.log(res);
@@ -391,9 +399,12 @@ export default {
         }).then(res => {
           if (res.code == 200) {
             this.addlist = res.data;
-            this.arr=this.data.map(item=>item.userId)
-          this.getMockData();
-          this.getTargetKeys();
+            this.arr = this.data.map(item => item.userId);
+            this.arrs=this.addlist.map(item=> item.userId)
+             this.addUserIds=this.arr
+      this.delUserIds=this.arrs
+            this.getMockData();
+            this.getTargetKeys();
           }
           console.log(res);
         });
@@ -401,30 +412,30 @@ export default {
     },
 
     //添加添加
-    getroleAddtos(){
+    getroleAddtos() {
       this.add = this.List.filter(item => item.sysRoleName == this.role);
       roleAddtos({
-        delUserIds:this.delUserIds.toString(),
-        addUserIds:this.addUserIds.toString(),
-        sysRoleId:this.add[0].sysRoleId
-      }).then(res=>{
-        if(res.code==200){
-          this.modal2=false
-          this.$Message.info(res.msg)
-          this.getrolenumquery()
-        }else{
-          this.$Message.info(res.msg)
+        delUserIds: this.delUserIds.toString(),
+        addUserIds: this.addUserIds.toString(),
+        sysRoleId: this.add[0].sysRoleId
+      }).then(res => {
+        if (res.code == 200) {
+          this.modal2 = false;
+          this.$Message.info(res.msg);
+          this.getrolenumquery();
+        } else {
+          this.$Message.info(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
     //新建成员
     newadd() {
-      this.addUserIds=[]
-      this.delUserIds=[]
+      this.addUserIds = [];
+      this.delUserIds = [];
       this.modal2 = true;
-      this.getroleAddto()
+      this.getroleAddto();
     },
 
     //新建
@@ -468,13 +479,16 @@ export default {
       this.modal1 = false;
     },
 
-//跳转
+    //跳转
     function1() {
       this.add = this.List.filter(item => item.sysRoleName == this.role);
 
       this.$router.push({
         name: "function",
-        query: { sysRoleName: this.add[0].sysRoleName,sysRoleId: this.add[0].sysRoleId},
+        query: {
+          sysRoleName: this.add[0].sysRoleName,
+          sysRoleId: this.add[0].sysRoleId
+        }
       });
     }
   }

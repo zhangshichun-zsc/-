@@ -110,7 +110,7 @@ export default {
           render: (h,params) => {
             return h("img", {
               attrs: {
-                src: params.row.coverImg
+                src: params.row.picPath
               },
               style: {
                 width: "4rem",
@@ -258,7 +258,7 @@ export default {
       ],
       sort: "asc",
       BelongList: [
-        { value: '', label: "全部" },
+        { value: 0, label: "全部" },
         { value: 1, label: "会员" },
         { value: 2, label: "志愿者" }
       ],
@@ -282,7 +282,8 @@ export default {
       list: [],
       batch: null,
       informationIds: "",
-      arr:[]
+      arr:[],
+      types:''
     };
   },
   //事件监听
@@ -312,8 +313,14 @@ export default {
 
     // 质询列表
     getAddressList() {
+
+      if(this.sysType==0){
+        this.types=''
+      }else{
+        this.types=this.sysType
+      }
       AddressList({
-        sysType: this.sysType,
+        sysType: this.types,
         title: this.title,
         infomationType: this.infomationType,
         page: { page: this.page, size: this.size, sort: "createAt" + " " + this.sort}
@@ -338,7 +345,9 @@ export default {
       AddressType().then(res => {
         console.log(res);
         if(res.code==200){
+
           this.type = res.data;
+          // this.type=unshift({dataKey:-1,dataValue:'全部'})
         }
       });
     },
