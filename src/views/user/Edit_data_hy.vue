@@ -47,15 +47,16 @@
                 <span>
                   基本信息
                 </span>
-                <span @click='showInfo(0)'>
+                <a href="javascript:;" @click='showBasic'>
                   显示/隐藏空值
-                </span>
+                </a>
               </div>
-              <Form :label-width="120" style="padding: 0.5rem" label-position='left'>
+
+              <Form ref="basic" :label-width="120" style="padding: 0.5rem" label-position='left'>
                 <FormItem label="手机号" style="text-algin:left">
                   <p>{{parameOBJ.basicInfo.info.tel}}</p>
                 </FormItem>
-                <FormItem label="昵称">
+                <FormItem label="昵称" v-show="basic.displayName">
                   <Input type="text" placeholder="点击输入" v-model="parameOBJ.basicInfo.info.displayName" style="width:180px"></Input>
                 </FormItem>
                 <FormItem label="身份证件类型">
@@ -63,11 +64,11 @@
                     <Option v-for="item in parameOBJ.basicInfo.idCardType" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
                   </Select>
                 </FormItem>
-                <FormItem label="证件号码">
+                <FormItem label="证件号码" v-show="basic.idCard">
                   <Input type="text" placeholder="点击输入" style="width:180px" v-model="parameOBJ.basicInfo.info.idCard"></Input>
                 </FormItem>
-                <FormItem label="出生日期">
-                  <DatePicker type="date" v-model="parameOBJ.basicInfo.info.birthDay" placeholder="点击输入" style="width:180px"></DatePicker>
+                <FormItem label="出生日期" v-show="basic.birthDay">
+                  <DatePicker type="date" :clearable="false" v-model="parameOBJ.basicInfo.info.birthDay" placeholder="点击输入" style="width:180px"></DatePicker>
                 </FormItem>
                 <FormItem label="性别">
                   <RadioGroup v-model="parameOBJ.basicInfo.info.sex">
@@ -79,27 +80,15 @@
                     </Radio>
                   </RadioGroup>
                 </FormItem>
-                <FormItem prop="province" label="省份">
-                  <Select v-model="province" placeholder="请选择省份">
-                    <Option v-for="(item,index) in provinceArr" :key="item.provinceId" :value="item.provinceId">{{ item.provinceName }}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem prop="city" label="城市">
-                  <Select v-model="city" placeholder="请选择城市">
-                    <Option v-for="(item,index) in citiesArr" :key="item.cityId" :value="item.cityId">{{ item.cityName }}</Option>
-                  </Select>
-                </FormItem>
-                <FormItem prop="county" label="区县">
-                  <Select v-model="county" placeholder="请选择区县">
-                    <Option v-for="(item,index) in countyArr" :key="item.districtId" :value="item.districtId">{{ item.districtName }}</Option>
-                  </Select>
 
+                <FormItem prop="province" label="省市区">
+                  <Selsect :arr='[province,city,county,]' @change='idsactive'></Selsect>
                 </FormItem>
-                <FormItem prop="address" label="详细地址">
+                <FormItem prop="address" label="详细地址" v-show="basic.address">
                   <Input type="text" style="width:180px" v-model="parameOBJ.basicInfo.info.address"></Input>
                 </FormItem>
 
-                <FormItem label="创建时间">
+                <FormItem label="创建时间" v-show="basic.createAt">
                   <p>{{parameOBJ.basicInfo.info.createAt}}</p>
                 </FormItem>
               </Form>
@@ -114,9 +103,9 @@
                 <span>
                   志愿者信息
                 </span>
-                <span>
+                <a href="javascript:;" @click='showVolInfo'>
                   显示/隐藏空值
-                </span>
+                </a>
               </div>
               <Form :label-width="120" style="padding: 0.5rem " label-position='left'>
                 <FormItem label="特长">
@@ -139,7 +128,7 @@
                     <Option v-for="item in parameOBJ.volInfo.education" :value="item.dicId+''" :key='item.dicId'>{{ item.dicName }}</Option>
                   </Select>
                 </FormItem>
-                <FormItem label="邮箱">
+                <FormItem label="邮箱" v-show="volInfo.email">
                   <Input type="text" style="width:180px" v-model="parameOBJ.volInfo.info.email"></Input>
                 </FormItem>
 
@@ -155,9 +144,6 @@
               <div class="constant-title flex-center-between">
                 <span>
                   受益方信息
-                </span>
-                <span>
-                  显示/隐藏空值
                 </span>
               </div>
               <Form :label-width="120" style="padding: 0.5rem" label-position='left'>
@@ -276,16 +262,21 @@
     <Modal title="收益方详情" v-model="showBenefitModelFlag" :mask-closable="false" width='1000'>
       <p slot="header" class='header'>
         <span>收益方详情</span>
-        <span style="text-align:right; margin-right: 30px">显示/隐藏空值</span>
+        <span style="text-align:right; margin-right: 30px">
+          <a href="javascript:;" @click='showUserInfo'>
+            显示/隐藏空值
+          </a>
+        </span>
+
       </p>
       <div>
         <Row>
           <Col span="12">
           <Form :label-width="140" style="padding: 0.5rem" label-position='left'>
-            <FormItem label="VIP到期时间">
+            <FormItem label="VIP到期时间" v-show="userInfo.vipLastTime">
               <p>{{  parameOBJ.memInfo.userInfo.vipLastTime || '暂无数据'}}</p>
             </FormItem>
-            <FormItem label="姓名">
+            <FormItem label="姓名" v-show="userInfo.userName">
               <p>{{  parameOBJ.memInfo.userInfo.userName || ''}}</p>
             </FormItem>
             <FormItem label="家庭身份">
@@ -406,8 +397,8 @@
                 </Radio>
               </RadioGroup>
             </FormItem>
-            <FormItem label="如有，年龄为">
-              <Input type="text" placeholder="请输入年龄" :value="parameOBJ.memInfo.vipotherInfo.brothersAge" style="width:180px"></Input>
+            <FormItem label="如有，年龄为" v-show="vipInfo.brothersAge">
+              <Input type="text" placeholder="请输入年龄" v-model="parameOBJ.memInfo.vipotherInfo.brothersAge" style="width:180px"></Input>
             </FormItem>
             <FormItem label="手足的现有状态">
               <Select v-model="parameOBJ.memInfo.vipotherInfo.brothersStatus" style="width:180px" placeholder="请选择">
@@ -415,7 +406,6 @@
               </Select>
             </FormItem>
             <FormItem label="成年心智障碍者婚姻状况">
-
               <RadioGroup v-model="parameOBJ.memInfo.vipotherInfo.isMarried">
                 <Radio label="1">
                   <span>已婚</span>
@@ -430,12 +420,12 @@
                 <Option v-for="item in parameOBJ.memInfo.listInCome" :value="item.dicId" :key='item.dicId'>{{ item.name }}</Option>
               </Select>
             </FormItem>
-            <FormItem label="所在家长小组">
+            <FormItem label="所在家长小组" v-show="userInfo.orgName">
               <p>{{parameOBJ.memInfo.userInfo.orgName}}</p>
             </FormItem>
-            <FormItem label="目前孩子有哪些社会保障">
+            <FormItem label="目前孩子有哪些社会保障" v-show="checkout.securityType">
               <CheckboxGroup v-model="securityType">
-                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSecurity' :label="item.dicId+''">
+                <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSecurity' :key='item.dicId' :label="item.dicId+''">
                   {{item.name}}
                 </Checkbox>
                 <Checkbox style='display:flex; align-items: center; ' v-else :label="item.dicId+''">
@@ -446,7 +436,7 @@
 
             </FormItem>
 
-            <FormItem label="是否自行购买相关商业保险*">
+            <FormItem label="是否自行购买相关商业保险*" v-show="checkout.insuranceType">
               <CheckboxGroup v-model="insuranceType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listInsurance' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center; ' v-else :label="item.dicId +''">
@@ -455,7 +445,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="家庭希望孩子能获得哪方面的服务支持*">
+            <FormItem label="家庭希望孩子能获得哪方面的服务支持*" v-show='checkout.supportType'>
               <CheckboxGroup v-model="supportType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSupport' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -469,7 +459,7 @@
           </Col>
           <Col span="12">
           <Form :label-width="120" style="padding: 0.5rem" label-position='left'>
-            <FormItem label="融合教育*">
+            <FormItem label="融合教育*" v-show="checkout.confluentType">
               <CheckboxGroup v-model="confluentType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listConfluent' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -478,7 +468,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="康复支持*">
+            <FormItem label="康复支持*" v-show="checkout.rehabilitationType">
               <CheckboxGroup v-model="rehabilitationType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listRehabilitation' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -487,7 +477,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="职业培训及就业*">
+            <FormItem label="职业培训及就业*" v-show='checkout.trainType'>
               <CheckboxGroup v-model="trainType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listTrain' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -496,7 +486,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="自主生活*">
+            <FormItem label="自主生活*" v-show="checkout.livingType">
               <CheckboxGroup v-model="livingType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listLiving' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -505,7 +495,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="社会融合*">
+            <FormItem label="社会融合*" v-show="checkout.socialType">
               <CheckboxGroup v-model="socialType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSocial' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -514,7 +504,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="家长希望获得的支持*">
+            <FormItem label="家长希望获得的支持*" v-show="checkout.hopeType">
               <CheckboxGroup v-model="hopeType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listHope' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -523,7 +513,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="如参加专题培训，倾向主题为*">
+            <FormItem label="如参加专题培训，倾向主题为*" v-show="checkout.specialType">
               <CheckboxGroup v-model="specialType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listSpecial' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -532,7 +522,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="作为会员，我(家长)的优势和感兴趣的事情*">
+            <FormItem label="作为会员，我(家长)的优势和感兴趣的事情*" v-show="checkout.interestType">
               <CheckboxGroup v-model="interestType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listInterest' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -541,7 +531,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="融爱融乐现有活动中，您所感兴趣的包括*">
+            <FormItem label="融爱融乐现有活动中，您所感兴趣的包括*" v-show='checkout.activityType'>
               <CheckboxGroup v-model="activityType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listActivity' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -550,12 +540,12 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="融爱融乐现有小组中，您希望加入*">
+            <FormItem label="融爱融乐现有小组中，您希望加入*" v-show="checkout.hopeOrgId">
               <CheckboxGroup v-model="hopeOrgId">
                 <Checkbox v-for='item in parameOBJ.memInfo.listOrg' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
               </CheckboxGroup>
             </FormItem>
-            <FormItem label="会员信息推动方式*">
+            <FormItem label="会员信息推动方式*" v-show="checkout.msgSendType">
               <CheckboxGroup v-model="msgSendType">
                 <Checkbox v-if="item.name!=='其他'" v-for='item in parameOBJ.memInfo.listMsgSend' :key='item.dicId' :label="item.dicId+''">{{item.name}} </Checkbox>
                 <Checkbox style='display:flex; align-items: center;' v-else :label="item.dicId+''">
@@ -572,21 +562,28 @@
 
           </Form>
           </Col>
+
         </Row>
       </div>
 
       <div slot="footer">
         <Button type="text" size="large"></Button>
-        <Button type="text" size="large"></Button>
+        <Button type="text" size="large" @click="setUpdata(2)">保存</Button>
       </div>
     </Modal>
-
+    <Modal v-model="modallable" title="设置标签" @on-ok="onSetLabel">
+      <CheckboxGroup v-model="userLabel">
+        <Checkbox v-for="item in parameOBJ.titleInfo.label" :key='item.labelId' :label="item.labelId">{{item.labelName}}</Checkbox>
+      </CheckboxGroup>
+    </Modal>
   </div>
 </template>
 
 <script>
 import Public from './config/index'
+import Selsect from '@/components/selsect'
 export default {
+  components: { Selsect },
   data() {
     return {
       navigation1: {
@@ -609,6 +606,7 @@ export default {
       specialType: [],
       interestType: [],
       // 多选框数据end
+
       formInline5: {
         DonorType: '',
         cycle: '',
@@ -643,6 +641,10 @@ export default {
         userId: this.$route.query.userId,
         sysType: '1'
       },
+      modallable: false, //设置标签
+      userLabel: [],
+      labelcheckout: [],
+      labelList_c: [],
       parameOBJ: {
         titleInfo: {}, //头部信息
         basicInfo: {
@@ -754,7 +756,44 @@ export default {
             volunteerScore: ''
           }
         }
-      } // 所有 的数据
+      }, // 所有 的数据
+      basic: {
+        displayName: true,
+        idCard: true,
+        birthDay: true,
+        address: true,
+        createAt: true
+      },
+      volInfo: {
+        email: true
+      },
+      userInfo: {
+        userName: true,
+        vipLastTime: true,
+        orgName: true
+      },
+      vipInfo: {
+        brothersAge: true
+      },
+      checkout: {
+        securityType: true,
+        insuranceType: true,
+        supportType: true,
+        rehabilitationType: true,
+        confluentType: true,
+        trainType: true,
+        livingType: true,
+        socialType: true,
+        hopeType: true,
+        activityType: true,
+        hopeOrgId: true,
+        msgSendType: true,
+        specialType: true,
+        interestType: true
+      },
+      basicFlag: true,
+      volInfoFlag: true,
+      userInfoFlag: true
     }
   },
   created() {
@@ -810,7 +849,9 @@ export default {
           this.specialType = this.splitArr(data.specialType)
           // end
 
-          this.clothingSize = res.data.memInfo.userInfo.clothingSize - 0
+          this.userLabel = res.data.titleInfo.userLabel.map(item => {
+            return item.labelId
+          })
 
           this.province = res.data.basicInfo.info.proviceId
           this.city = res.data.basicInfo.info.cityId
@@ -832,8 +873,6 @@ export default {
       let _volInfo = this.parameOBJ.volInfo.info
       let _memInfo = this.parameOBJ.memInfo.vipotherInfo
       let _userInfo = this.parameOBJ.memInfo.userInfo
-
-      console.log(this.specialType.toString())
 
       let obj = {
         userId: this.$route.query.userId,
@@ -907,6 +946,7 @@ export default {
         } else {
           this.$Message.error('操作失败')
         }
+        this.showBenefitModelFlag = false
       })
     },
     splitArr(str) {
@@ -914,13 +954,111 @@ export default {
         return el != ''
       })
     },
+    idsactive(res) {
+      if (res[0]) {
+        this.province = res[0]
+      }
+      if (res[1]) {
+        this.city = res[1]
+      }
+      if (res[2]) {
+        this.county = res[2]
+      }
+    },
     //修改标签弹窗
     modifyLabel() {
-      alert('修改弹窗')
+      this.modallable = true
     },
-    showInfo(index) {
-      alert('显示或者隐藏数据')
+    // 隐藏 空值
+    showBasic() {
+      let head = this.parameOBJ.basicInfo.info
+      let keys = Object.keys(this.basic)
+      let newObj = {}
+      keys.forEach(item => {
+        if (this.basicFlag) {
+          if (head[item]) {
+            newObj[item] = true
+          } else {
+            newObj[item] = false
+          }
+          this.basicFlag = false
+        } else {
+          this.basicFlag = true
+          newObj[item] = true
+        }
+      })
+      this.basic = newObj
     },
+    showVolInfo() {
+      if (this.volInfoFlag) {
+        console.log(this.parameOBJ.volInfo.info.email)
+        if (this.parameOBJ.volInfo.info.email) {
+          this.volInfo.email = true
+        } else {
+          this.volInfo.email = false
+        }
+        this.volInfoFlag = false
+      } else {
+        this.volInfo.email = true
+        this.volInfoFlag = true
+      }
+    },
+    showBasic() {
+      let head = this.parameOBJ.basicInfo.info
+      let keys = Object.keys(this.basic)
+      let newObj = {}
+      keys.forEach(item => {
+        if (this.basicFlag) {
+          if (head[item]) {
+            newObj[item] = true
+          } else {
+            newObj[item] = false
+          }
+          this.basicFlag = false
+        } else {
+          this.basicFlag = true
+          newObj[item] = true
+        }
+      })
+      this.basic = newObj
+    },
+    showUserInfo() {
+      let head = this.parameOBJ.memInfo.userInfo
+      let keys = Object.keys(this.userInfo)
+      let keys2 = Object.keys(this.checkout)
+      let newObj = {}
+      let newObj2 = {}
+      let flag = this.userInfoFlag
+      if (flag) {
+        keys.forEach(item => {
+          if (head[item]) {
+            newObj[item] = true
+          } else {
+            newObj[item] = false
+          }
+        })
+        keys2.forEach(item => {
+          if (this[item].lenght > 0) {
+            newObj2[item] = true
+          } else {
+            newObj2[item] = false
+          }
+        })
+        this.userInfoFlag = !flag
+      } else {
+        keys.forEach(item => {
+          newObj[item] = true
+        })
+        keys2.forEach(item => {
+          newObj2[item] = true
+        })
+        this.userInfoFlag = !flag
+      }
+
+      this.userInfo = newObj
+      this.checkout = newObj2
+    },
+
     // 显示 具体的营员信息
     showBenefitModel() {
       this.showBenefitModelFlag = true
@@ -928,6 +1066,25 @@ export default {
     // 显示更多孩子信息
     showMoreChildren() {
       this.moreChildren = true
+    },
+    // 设置标签 确定按钮
+    onSetLabel() {
+      Public.SetUserLabel({
+        userId: this.$route.query.userId,
+        labelIds: this.userLabel.toString(),
+        sysType: '1'
+      }).then(res => {
+        if (res.code === 200) {
+          this.$Message.info('设置标签成功')
+          this.getVipUserInfo(this.getOBJ)
+        } else {
+          this.$Message.error({
+            background: true,
+            content: '设置标签失败，请稍后再试'
+          })
+          console.log(res.msg)
+        }
+      })
     },
     // 跳转
     userDetaile() {
@@ -993,7 +1150,7 @@ export default {
 }
 .item {
   margin-bottom: 2em;
-  -moz-page-break-inside: avoid;
+  // -moz-page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
 }
 .avatarPath {

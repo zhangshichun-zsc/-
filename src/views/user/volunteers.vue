@@ -23,13 +23,13 @@
           <Input size="large" v-model="paramsObj.orgName" placeholder="团队名称" class="inpt" />
         </div>
         <div class="flex-center-start">
-          <!-- <span>服务时长:</span>
-          <TimePicker type="time" placeholder="请选择时间时间" class="inpt" size='large'></TimePicker> -->
-
-          <span>服务时长/时间段:</span>
-          <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 200px"></DatePicker>
+          <span>服务时长:</span>
+          <!-- <InputNumber placeholder="请选择" v-model="startAt" style="width: 180px"></InputNumber> -->
+          <Input placeholder="请选择" v-model.number="startAt" style="width: 180px" />
+          <!-- <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 180px"></DatePicker> -->
           <span>-</span>
-          <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 200px"></DatePicker>
+          <Input placeholder="请选择" v-model.number="endAt" style="width: 180px" />
+          <!-- <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 180px"></DatePicker> -->
 
         </div>
         <div class="flex-center-start">
@@ -422,7 +422,7 @@
 
       </Form>
       <div slot="footer">
-        <Button type="text" size="large" @click="hidd">取消</Button>
+        <Button type="text" size="large" @click="hidd">重置</Button>
         <Button type="primary" size="large" @click="setSenior">确定</Button>
       </div>
 
@@ -809,13 +809,9 @@ export default {
           registrationEndTimeStamp: registration.end
         }
       } else {
-        let dueation = this.sameday({
-          star: this.formatTime(this.startAt),
-          end: this.formatTime(this.endAt)
-        })
         time = {
-          durationStart: dueation.star,
-          durationEnd: dueation.end
+          durationStart: this.startAt,
+          durationEnd: this.endAt
         }
       }
 
@@ -931,7 +927,14 @@ export default {
     },
     // 关闭 高级检索
     hidd() {
-      this.modalSenior = false
+      // this.modalSenior = false
+      this.paramsSeniorObj = {
+        account: '',
+        nickname: '',
+        labelId: ''
+      }
+      this.registrationStartTimeStamp = ''
+      this.registrationEndTimeStamp = ''
     },
     // 高级检索按钮
     setSenior() {

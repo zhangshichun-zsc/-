@@ -235,8 +235,8 @@ export default {
         { value: 15, label: '显示15条' },
         { value: 20, label: '显示20条' }
       ],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
-      sort: 'asc',
+      sorting: [{ value: '1', label: '正序' }, { value: '2', label: '倒序' }],
+      sort: '2',
       page: 1,
       size: 10,
       dataCount: 0,
@@ -263,6 +263,7 @@ export default {
           page: this.page,
           size: this.size
         },
+        sort: this.sort,
         orgName: this.orgName,
         status: this.orgStatus == 0 ? '' : this.orgStatus,
         startAt: this.startAt ? this.startAt.getTime() : '',
@@ -274,7 +275,6 @@ export default {
             this.dataCount = res.data.totalSize
             this.data = res.data.list
           }
-          console.log(res)
         })
       } else {
         queryVouluteerOrgList(fromobj).then(res => {

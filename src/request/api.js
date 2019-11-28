@@ -497,6 +497,10 @@ export const signLimits = p => posts('/activity-manage/apply/sign/limits', p) //
 export const signItems = p => posts('/activity-manage/apply/item/list', p) //报名项设置
 export const firstList = p => posts('/activity-manage/apply/sign/first', p) //优先设置
 
+export const getDetail = p => posts('/org/detail', p) //  获取 维护活动融融固定项 数据
+
+export const setpropaganda = p => posts('/org/propaganda/update', p) //  设置 维护活动融融固定项 数据
+
 
 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag
@@ -507,14 +511,14 @@ export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity',
 export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
 export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
 export const getSingList = p => posts("/volunteer-manager/queryCoItem", p)
-export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p) 
-export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p) 
-export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p) 
+export const addSignItem = p => posts("/volunteer-manager/modifyCoItem", p)
+export const getfund = p => posts("/volunteer-manager/queryCoOrgList", p)
+export const updateFun = p => posts("/volunteer-manager/updateCoOrgList", p)
 export const updateCard = p => posts("/volunteer-manager/modifyCertificateInfo", p)
 export const getCard = p => posts("/volunteer-manager/queryCertificateList", p)
-export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList",p)
-export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail',p)//证书详情
-export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould",p) //
-export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould",p)//团队
-export const getActiveTeb = p => get("/activity-feedback/mould/list",p)//活动反馈模板
-export const setActiveTeb = p => posts("/activity-feedback/mould/set",p)//设置反馈
+export const getBooks = p => posts("/volunteer-manager/querySmCertMouldList", p)
+export const getBooksDetails = p => get('/volunteer-manager/querySmCertMouldDetail', p)//证书详情
+export const updateBooks = p => posts("/volunteer-manager/updateSmCertMould", p) //
+export const getVolunteer = p => get("/volunteer-manager/queryOrgListForSmCertMould", p)//团队
+export const getActiveTeb = p => get("/activity-feedback/mould/list", p)//活动反馈模板
+export const setActiveTeb = p => posts("/activity-feedback/mould/set", p)//设置反馈

@@ -143,7 +143,7 @@
               <li>
                 <span>限制设置</span>
                 <div class="impose">
-                  <table v-for="(item,index) in oneRole.signRuleList">
+                  <table v-for="(item,index) in oneRole.signRuleList" :key='index'>
                       <tr v-if="item.ruleId==21 || item.ruleId==3">
                         <td>年龄限制</td>
                         <td>
