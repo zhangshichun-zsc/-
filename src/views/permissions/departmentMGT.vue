@@ -11,22 +11,22 @@
           </p>
           <div class="but">
             <Button @click="add">添加部门</Button>
-            <Modal v-model="modal1" title="添加部门" @on-ok="ok" @on-cancel="cancel">
+            <Modal v-model="modal1" title="添加部门">
               <Form ref="AddDate" :model="AddDate" :rules="ruleValidate" :label-width="150">
-                <FormItem label="部门名称:" prop="DepartmentName">
-                  <Input style="width: 10rem" v-model="AddDate.DepartmentName" />
+                <FormItem label="部门名称:" prop="deptName">
+                  <Input style="width: 10rem" v-model="AddDate.deptName" />
                 </FormItem>
-                <FormItem label="职能描述:" prop="FunctionDescription">
+                <FormItem label="职能描述:" prop="description">
                   <Input
                     style="width: 10rem"
-                    v-model="AddDate.FunctionDescription"
+                    v-model="AddDate.description"
                     type="textarea"
                     :autosize="{minRows: 4,maxRows: 5}"
                     placeholder="请输入内容"
                   />
                 </FormItem>
-                <FormItem label="上级部门" prop="SuperiorDepartments">
-                  <Select v-model="AddDate.SuperiorDepartments" style="width:200px">
+                <FormItem label="上级部门" prop="parentId">
+                  <Select v-model="AddDate.parentId" style="width:200px">
                     <Option
                       v-for="item in deplist"
                       :value="item.deptId"
@@ -34,18 +34,18 @@
                     >{{ item.deptName }}</Option>
                   </Select>
                 </FormItem>
-                <FormItem label="设置负责人:" prop="PersonCharge">
-                  <Input
-                    @click="modal2 = true"
-                    style="width: 10rem"
-                    v-model="AddDate.PersonCharge"
-                  />
+                <FormItem label="设置负责人:" prop="leader">
+                  <Input @click="modal2 = true" style="width: 10rem" v-model="AddDate.leader" />
                   <Modal v-model="modal2" title="添加部门"></Modal>
                 </FormItem>
                 <FormItem label="所属项目" prop="ssproject">
                   <Select style="width: 10rem" v-model="AddDate.ssproject"></Select>
                 </FormItem>
               </Form>
+              <div slot="footer">
+                <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
+                <Button type="primary" size="large" @click="modalOk('AddDate')">确定</Button>
+              </div>
             </Modal>
             <Select v-model="size" style="width:120px" placeholder="显示条数">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -105,41 +105,42 @@ export default {
         head: "部门管理(共用)"
       },
       AddDate: {
-        DepartmentName: "",
-        FunctionDescription: "",
-        SuperiorDepartments: "",
-        PersonCharge: "",
+        deptName: "",
+        description: "",
+        parentId: "",
+        leader: "",
         ssproject: ""
       },
       ruleValidate: {
-        DepartmentName: [
+        deptName: [
           { required: true, message: "部门名称不能为空", trigger: "blur" }
         ],
-        FunctionDescription: [
+        description: [
           { required: true, message: "请输入内容", trigger: "blur" },
           { type: "string", min: 10, message: "不能少于10字", trigger: "blur" }
         ],
-        SuperiorDepartments: [
-          { required: true, message: "请选择相关部门", trigger: "change" }
+        parentId: [
+          {
+            required: true,
+            message: "请选择相关部门",
+            trigger: "change",
+            type: "number"
+          }
         ],
-        PersonCharge: [
+        leader: [
           { required: true, message: "请输入负责人姓名", trigger: "blur" }
-        ],
-        ssproject: [
-          { required: true, message: "请输入所属项目", trigger: "blur" }
         ]
+        // ssproject: [
+        //   { required: true, message: "请输入所属项目", trigger: "blur" }
+        // ]
       },
-      data1: [],
+      data1: [{}],
       columns1: [
         {
           type: "expand",
           width: 50,
           render: (h, params) => {
-            return h(expandRow, {
-              props: {
-                row: params.row
-              }
-            });
+            return (<expandRow row={params.row} dom={<expandRow row={params.row}/>}></expandRow>);
           }
         },
         {
@@ -224,25 +225,28 @@ export default {
                     on: {
                       click: () => {
                         this.modal1 = true;
+                        this.getdepartmentSup();
+                        this.AddDate = params.row;
+                        this.AddDate.parentId = params.row.parentId;
                       }
                     }
                   },
                   "编辑"
-                ),
-                h(
-                  "a",
-                  {
-                    style: {
-                      color: "#1ABD9D"
-                    },
-                    on: {
-                      click: () => {
-
-                      }
-                    }
-                  },
-                  "删除"
                 )
+                // h(
+                //   "a",
+                //   {
+                //     style: {
+                //       color: "#1ABD9D"
+                //     },
+                //     on: {
+                //       click: () => {
+
+                //       }
+                //     }
+                //   },
+                //   "删除"
+                // )
               ]
             );
           }
@@ -272,7 +276,7 @@ export default {
         },
         {
           title: "所属部门",
-          key: "deptName",
+          key: "deptNames",
           align: "center"
         },
         {
@@ -288,7 +292,7 @@ export default {
                 on: {
                   input: e => {
                     console.log(e);
-                    this.getdepartmentStatus(params.row.deptId, e);
+                    this.getdepartmentStatus(params.row.userId, e);
                   }
                 }
               })
@@ -319,7 +323,14 @@ export default {
                     },
                     on: {
                       click: () => {
-                        this.$router.push({ name: "Permissions-SetUp" });
+                        this.$router.push({
+                          name: "function",
+                          query: {
+                            sysRoleName: params.row.userName,
+                            sysRoleId: params.row.deptUserId,
+                            status: 1
+                          }
+                        });
                       }
                     }
                   },
@@ -334,24 +345,24 @@ export default {
                     },
                     on: {
                       click: () => {
-                        this.$router.push({ name: "Add-members" });
+                        this.$router.push({ name: "Add-members",query:{userId:params.row.userId,name:params.row.userName,deptId:this.deptId} });
                       }
                     }
                   },
                   "编辑"
-                ),
-                h(
-                  "a",
-                  {
-                    style: {
-                      color: "#1ABD9D"
-                    },
-                    on: {
-                      click: () => {}
-                    }
-                  },
-                  "删除"
                 )
+                // h(
+                //   "a",
+                //   {
+                //     style: {
+                //       color: "#1ABD9D"
+                //     },
+                //     on: {
+                //       click: () => {}
+                //     }
+                //   },
+                //   "删除"
+                // )
               ]
             );
           }
@@ -374,6 +385,7 @@ export default {
       sort: "asc",
       dataCount: 0,
       status: ""
+      // obj:''
     };
   },
   //事件监听
@@ -383,7 +395,6 @@ export default {
   },
   mounted() {
     this.getdepartmentlist();
-    // this.getdepartmentall()
   },
   methods: {
     // 部门列表
@@ -414,7 +425,7 @@ export default {
         if (res.code == 200) {
           this.$Message.info("操作成功");
         } else {
-          this.getdepartmentlist();
+          this.getdepartmentmember();
           this.$Message.error(res.msg);
         }
       });
@@ -447,11 +458,18 @@ export default {
     // 部门列表添加
     getdepartmentadd() {
       departmentadd({
-        deptName: this.deptName,
-        description: this.description,
-        parentId: this.parentId,
-        leader: this.leader
+        deptName: this.AddDate.deptName,
+        description: this.AddDate.description,
+        parentId: this.AddDate.parentId,
+        leader: this.AddDate.leader
       }).then(res => {
+        if (res.code == 200) {
+          this.getdepartmentlist();
+           this.modal1 = false;
+          this.$Message.info("添加成功");
+        } else {
+          this.$Message.error(res.msg);
+        }
         console.log(res);
       });
     },
@@ -466,14 +484,22 @@ export default {
         deptUserId: id,
         validFlag: this.status
       }).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("操作成功");
+        } else {
+          this.$Message.info(res.msg);
+          this.getdepartmentmember();
+        }
         console.log(res);
       });
     },
     // 查询所有上级部门名称
     getdepartmentSup() {
-      departmentSup({}).then(res => {
-        if(res.code==200){
-          this.deplist=res.data
+      departmentSup({
+        parentId: this.AddDate.parentId
+      }).then(res => {
+        if (res.code == 200) {
+          this.deplist = res.data;
         }
         console.log(res);
       });
@@ -489,8 +515,11 @@ export default {
     },
 
     //清除input
-    clear(){
-
+    clear() {
+      (this.AddDate.deptName = ""),
+        (this.AddDate.description = ""),
+        (this.AddDate.parentId = ""),
+        (this.AddDate.leader = "");
     },
     //分页功能
     changepages(index) {
@@ -500,17 +529,24 @@ export default {
     //添加部门
     add() {
       this.modal1 = true;
+      this.clear();
       this.getdepartmentall();
     },
+    //modalOk
+    modalOk(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.getdepartmentadd();
 
+        } else {
+          this.$Message.error("必填项未填!");
+        }
+      });
+    },
+
+    //添加成员
     AddMembers() {
-      this.$router.push({ name: "Add-members" });
-    },
-    ok() {
-      this.$Message.info("添加成功");
-    },
-    cancel() {
-      this.$Message.info("已取消");
+      this.$router.push({ name: "Add-members", query: { state: 1 } });
     }
   },
   components: { expandRow }
@@ -550,4 +586,5 @@ body {
 tr td.ivu-table-expanded-cell {
   padding: 0 !important;
 }
+td.ivu-table-expanded-cell{padding:0;}
 </style>

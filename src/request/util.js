@@ -86,9 +86,20 @@ export default {
   },
 
   urlEncode,
-  userExprot
+  userExprot,
 
-  //数组去重
+  //数组去重在a数组中去除与b数组相同的元素
+   arrChange( a, b ){
+    for (let i = 0; i < b.length; i++) {
+      for (let j = 0; j < a.length; j++) {
+        if (a[ j ] == b[ i ]) { //如果是id相同的，那么a[ j ].id == b[ i ].id
+          a.splice(j, 1);
+          j = j - 1;
+        }
+      }
+    }
+    return a;
+  }
 
 
 
