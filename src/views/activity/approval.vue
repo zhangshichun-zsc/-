@@ -148,14 +148,14 @@
                 <li class="imges">
                   <span>主题图片</span>
                   <div class="start-wap">
-                    <div class="upload" v-if='projectMsg.batchPicShow == null'>
+                    <div class="upload" v-if='batch.actShowPic == null'>
                         <div class="file" @click="()=>{ this.$refs.files.click()}">
-                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFile()" style="display:none" >
                           <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                         </div>
                     </div>
-                    <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
-                    <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
+                    <img class="imgs" v-else :src="batch.actShowPic"/>
+                    <Icon src="" alt="" v-if='batch.actShowPic == null' class="cancel" @click="cancelActImg()"/>
                   </div>
                 </li>
                 <li>
@@ -324,14 +324,14 @@
           <li class="borders-img">
             <span>图片</span>
             <div class="start-wap">
-              <div class="upload" v-if='image == null'>
+              <div class="upload" v-if='partner.partPicShow == null'>
                   <div class="file" @click="()=>{ this.$refs.files.click()}">
-                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                    <p>+</p>
+                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadPartnerFile()" style="display:none" >
+                    <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                   </div>
               </div>
-              <img class="imgs" v-else :src="image"/>
-              <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
+              <img class="imgs" v-else :src="partner.partPicShow"/>
+              <Icon src="" alt="" v-if='partner.partPicShow == null' class="cancel" @click="cancelPartnerImg()"/>
             </div>
           </li>
           <li>
@@ -451,8 +451,15 @@
             </RadioGroup>
           </li>
         </ul>
-        <div class="images">
-          <img :src="projectMsg.batchPicShow"/>
+        <div class="start-wap">
+          <div class="upload" v-if='projectMsg.batchPicShow == null'>
+              <div class="file" @click="()=>{ this.$refs.files.click()}">
+                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+              </div>
+          </div>
+          <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
+          <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
         </div>
       </div>
       <div class="activite-three">
@@ -952,12 +959,54 @@ export default {
       })
     },
     cancelImg(){
-        orgimgdel({path:this.projectMsg.batchPic}).then(res => {
-          this.projectMsg.batchPicShow = null
-          this.projectMsg.batchPic = null
-         this.$Message.success('删除成功')
-        })
-      },
+      orgimgdel({path:this.projectMsg.batchPic}).then(res => {
+        this.projectMsg.batchPicShow = null
+        this.projectMsg.batchPic = null
+        this.$Message.success('删除成功')
+      })
+    },
+    uploadPartnerFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          console.log(e)
+          this.partner.partPicShow = e.target.result
+          this.partner.partPic = res.data
+        }
+      })
+    },
+    cancelPartnerImg(){
+      orgimgdel({path:this.partner.partPic}).then(res => {
+        this.partner.partPicShow = null
+        this.partner.partPic = null
+        this.$Message.success('删除成功')
+      })
+    },
+    uploadActFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          console.log(e)
+          this.batch.actShowPic = e.target.result
+          this.batch.actPic = res.data
+        }
+      })
+    },
+    cancelActImg(){
+      orgimgdel({path:this.batch.actPic}).then(res => {
+        this.batch.actShowPic = null
+        this.batch.actPic = null
+        this.$Message.success('删除成功')
+      })
+    },
     changeEditorTrain(e){
       this.batch.detail = e
     },
