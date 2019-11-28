@@ -131,8 +131,8 @@
           </div>
           <div class="select">
             <span class="select-template">选择模板</span>
-            <Select v-model="model1" style="width:340px">
-              <Option v-for="item in part" :value="item.name" :key="item.name">{{ item.name }}</Option>
+            <Select v-model="batch.actTypeName" style="width:340px">
+              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="activitives">
@@ -146,16 +146,16 @@
                   <Input placeholder="请输入活动名称" v-model="batch.actName"></Input>
                 </li>
                 <li class="imges">
-                  <span class="same_style">主题图片</span>
+                  <span>主题图片</span>
                   <div class="start-wap">
-                    <div class="upload" v-if='image == null'>
+                    <div class="upload" v-if='projectMsg.batchPicShow == null'>
                         <div class="file" @click="()=>{ this.$refs.files.click()}">
-                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                          <p>+</p>
+                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                          <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                         </div>
                     </div>
                     <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
-                    <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
+                    <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
                   </div>
                 </li>
                 <li>
@@ -297,7 +297,7 @@
           <div class="button-food">
             <Button>预览</Button>
             <Button>上一步</Button>
-            <Button @click="nexttwo()">下一步</Button>
+            <Button @click.native="nextTwo()">下一步</Button>
             <Button @click="draft">存为草稿</Button>
           </div>
         </div>
@@ -459,9 +459,9 @@
         <p class="active-head">
           <span>活动立项批次</span>
         </p>
-        <div class="activite-content">
-          <img src />
-          <ul v-for="item in projectMsg.actInfoList">
+        <div class="activite-content" v-for="(item,i) in projectMsg.actInfoList">
+          <img :src='item.actShowPic' />
+          <ul>
             <li class="activite-li">
               <span>{{item.actName}}</span>
             </li>
@@ -471,11 +471,15 @@
             <li>
               <span>活动日期：{{item.startT}}至{{item.endT}}</span>
             </li>
+            <li>
+              <Button @click.native="changePc(i)">修改</Button>
+              <Button @click.native="deletePc(i)">删除</Button>
+            </li>
           </ul>
         </div>
         <div class="add-three">
           <p>
-            <a>+新增批次</a>
+            <Button @click.native="addPc()">+新增批次</Button>
           </p>
         </div>
       </div>
@@ -508,7 +512,8 @@ export default {
   data() {
     return {
       projectMsg: {
-        partnerList: []
+        partnerList: [],
+        actInfoList:[]
       },
       partner: {
         partName: "",
@@ -575,7 +580,8 @@ export default {
         choiceRuleList:[]
       },
       roleI:0,  //招募角色下标
-      adr:false
+      adr:false,
+      pcNum:0
     };
   },
 
@@ -655,7 +661,9 @@ export default {
       this.$router.push({ name: "registration" });
     },
     nextone() {
-      (this.selects = false), (this.two = true), (this.current = 1);
+      this.selects = false,
+      this.two = true,
+      this.current = 1
     },
 
     //保存合作方
@@ -679,8 +687,14 @@ export default {
       this.addbtns = !this.addbtns;
     },
 
-    nexttwo() {
-      (this.two = false), (this.three = true), this.current++;
+    nextTwo() {
+      console.log(this.batch)
+      console.log(this.pcNum)
+      this.projectMsg.actInfoList[this.pcNum] = this.batch
+      console.log(this.projectMsg)
+      this.two = false 
+      this.three = true
+      this.current=2;
     },
     //第三步
 
@@ -815,9 +829,15 @@ export default {
     getRole(e){
       console.log(e)
       console.log(this.roleI)
+      this.batch.userConfList[this.roleI] = e
+      if (this.roleI >= 0) {
+        this.batch.userConfList[this.roleI] = e;
+        delete this.roleI;
+      } else {
+        this.batch.userConfList.push(e);
+      }
       this.isAddRole = false
       this.two = true
-      this.batch.userConfList[this.roleI] = e
     },
     //新增物资
     addResources(){
@@ -871,6 +891,29 @@ export default {
       console.log(e)
       this.batch.releaseTime = e
     },
+    addPc(){
+      this.pcNum = this.projectMsg.actInfoList.length
+      let b = {
+        userConfList:[],
+        actResList:[],
+        actShowPic: '',
+        workerIdList:[{}]
+      }
+      this.batch = b
+      this.two = true
+      this.three = false
+      this.current = 1
+    },
+    deletePc(e){
+      this.projectMsg.actInfoList.splice(e,1)
+    },
+    changePc(e){
+      this.pcNum = e
+      this.batch = this.projectMsg.actInfoList[e]
+      this.two = true
+      this.three = false
+      this.current = 1
+    },
 
     //提交
     submit() {
@@ -902,16 +945,19 @@ export default {
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = (e) => {
+          console.log(e)
           this.projectMsg.batchPicShow = e.target.result
           this.projectMsg.batchPic = res.data
         }
       })
     },
     cancelImg(){
-      orgimgdel({path:this.data.args.pic}).then(res => {
-        this.$Message.success('删除成功')
-      })
-    },
+        orgimgdel({path:this.projectMsg.batchPic}).then(res => {
+          this.projectMsg.batchPicShow = null
+          this.projectMsg.batchPic = null
+         this.$Message.success('删除成功')
+        })
+      },
     changeEditorTrain(e){
       this.batch.detail = e
     },
