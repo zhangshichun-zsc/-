@@ -1,4 +1,4 @@
-<!--志愿者活动管理(志愿者)-->
+<!--志愿者活动管理(会员)-->
 <template>
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
@@ -9,33 +9,36 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-          <Button>查询结果</Button>
+          <Button @click="result">查询结果</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
-          <Input size="small" placeholder="活动名称" class="inpt" />
+          <Input size="small" placeholder="活动名称" class="inpt" v-model="name" />
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Select v-model="model1" style="width:200px">
-            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+          <Input size="small" placeholder="活动状态" class="inpt" v-model="activityStatus" />
         </div>
         <div class="flex-center-start">
           <span>活动日期:</span>
           <row class="flex-data inpt">
             <i-col>
-              <Date-picker type="date" placeholder="选择日期" style="width: 150px"></Date-picker>
+              <Date-picker
+                type="date"
+                placeholder="选择日期"
+                style="width: 150px"
+                v-model="activityTimestampFrom"
+              ></Date-picker>
             </i-col>
             <span>——</span>
             <i-col>
               <Date-picker
-                type="daterange"
-                placement="bottom-end"
+                type="date"
                 placeholder="选择日期"
                 style="width: 150px"
+                v-model="activityTimestampTo"
               ></Date-picker>
             </i-col>
           </row>
@@ -45,28 +48,13 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Checkbox :checked.sync="single1">全选</Checkbox>
-          <Button class="table-btn">导出</Button>
-          <Button class="table-btn" @click="modal3=true">导出志愿者签到表</Button>
-          <Button class="table-btn" @click="draft">草稿箱</Button>
-        </div>
-        <div>
-          <Button class="table-btn" @click="add">添加活动</Button>
-          <Button class="table-btn">
-            显示条数
-            <Icon type="md-arrow-dropdown" />
+          <Button @click="chackall()" style="border:0px;">
+            <Checkbox v-model="status">全选</Checkbox>
           </Button>
-          <Button class="table-btn">
-            排序方式
-            <Icon type="md-arrow-dropdown" />
-          </Button>
-        </div>
-      </div>
-      <div class="table">
-           <Table border :columns="columns" :data="datax"></Table>
-      <div class="set">
-          <Icon type="ios-settings-outline" @click="modal3 = true" />
-            <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
+
+          <Button class="table-btn" @click="exportData">导出</Button>
+          <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button>
+          <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
             <div class="popup">
               <p class="popup-head">
                 <span>目前导出字段顺序</span>
@@ -102,23 +90,93 @@
               </div>
             </div>
           </Modal>
+          <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button>
+          <Button class="table-btn" @click="draft">草稿箱</Button>
+        </div>
+        <div class="flex-center-end">
+          <Button class="table-btn" @click="addaction">添加活动</Button>
+         <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+        </div>
       </div>
+      <div class="table">
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="datax"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
+        <div class="set">
+          <Icon type="ios-settings-outline" @click="modal3 = true" />
+          <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
+            <div class="popup">
+              <p class="popup-head">
+                <span>目前导出字段顺序</span>
+                <span class="popup-head-tit">拖拽调整列显示顺序</span>
+              </p>
+              <div class="popup-content">
+                <p>
+                  <span>序号</span>
+                  <span>姓名</span>
+                  <span>性别</span>
+                  <span>手机号码</span>
+                  <span>身份证号</span>
+                  <span>年龄</span>
+                  <span>孩子姓名</span>
+                </p>
+                <p>
+                  <span>孩子性别</span>
+                  <span>孩子年龄</span>
+                  <span>签名（孩子）</span>
+                  <span>签名(家长)</span>
+                  <span>障碍类型</span>
+                </p>
+              </div>
+              <div class="bft">
+                <p>备选字段</p>
+                <div class="bft-tab">
+                  <CheckboxGroup v-model="fruit">
+                    <Checkbox label="香蕉">序号</Checkbox>
+                    <Checkbox label="苹果">姓名</Checkbox>
+                    <Checkbox label="西瓜">障碍类型</Checkbox>
+                  </CheckboxGroup>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        </div>
       </div>
-       <div class="pages">
-        <Page :total="100" show-elevator show-total size="small" />
-      </div>
+      <Page
+        :total="dataCount"
+        show-elevator
+        show-total
+        size="small"
+        style="margin: auto"
+        :page-size="size"
+        @on-change="changepages"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { date1 } from "../../request/datatime";
+import { actManager } from "../../request/api";
 export default {
   data() {
     return {
-      modal3:false,
-      single1: false,
+      status: false,
+      modal1: false,
+      modal2: false,
+      modal3: false,
+      fruit: ["苹果"],
       navigation1: {
-        head: "志愿者活动管理(志愿者)"
+        head: "志愿者活动管理(会员)"
       },
       columns: [
         {
@@ -127,59 +185,14 @@ export default {
           align: "center"
         },
         {
-          title: "活动名称",
-          key: "activity",
-          align: "center"
-        },
-        {
-          title: "活动时间",
-          key: "approval",
-          align: "center"
-        },
-        {
-          title: "活动类型",
-          key: "project",
-          align: "center"
-        },
-        {
-          title: "状态",
-          key: "time",
-          align: "center"
-        },
-        {
-          title: "活动分类",
-          key: "type",
-          align: "center"
-        },
-        {
-          title: "是否显示主办方小站",
-          key: "xiao",
-          align: "center"
-        },
-        {
-          title: "志愿者报名人数",
-          key: "state",
-          align: "center"
-        },
-        {
-          title: "上架/下架",
-          key: "classify",
-          align: "center",
-          render: (h,params) =>{
-             return h('div', [
-              h('i-switch')
-            ])
-          }
-        },
-        {
-          width: 220,
+          width: 180,
           title: "操作",
           key: "action",
           align: "center",
           render: (h, params) => {
             return h("div", [
               h(
-                "span",
+                "a",
                 {
                   clssName: "action",
                   style: {
@@ -188,14 +201,14 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.$router.push({ path: "/organization/editDetail" });
+                      this.$router.push({ path: "editing",query:{ acitvityId:params.row.acitvityId} });
                     }
                   }
                 },
                 "编辑"
               ),
               h(
-                "span",
+                "a",
                 {
                   style: {
                     marginRight: "2px",
@@ -205,14 +218,14 @@ export default {
                   },
                   on: {
                     click: () => {
-                     this.$router.push({path:'volunteer_general'})
+                      this.$router.push({ path: "profile",query:{ acitvityId:params.row.acitvityId} });
                     }
                   }
                 },
                 "概况"
               ),
               h(
-                "span",
+                "a",
                 {
                   style: {
                     marginRight: "2px",
@@ -222,83 +235,129 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({path:'activity_share'})
+                      this.$router.push({ path: "activity_share" });
                     }
                   }
                 },
                 "分享"
               ),
-              h(
-                "span",
-                {
-                  style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
-                    color: "green",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      // this.$Message.info("你点击了第" + params.index + "列");
-                    }
-                  }
+              // h(
+              //   "Dropdown",
+              //   {
+              //     props: {
+              //       transfer: true
+              //     }
+              //   },
+              //   [
+              //     h(
+              //       "a",
+              //       {
+              //         style: {
+              //           color: "green"
+              //         }
+              //       },
+              //       "更多操作"
+              //     ),
+              //     h(
+              //       "DropdownMenu",
+              //       {
+              //         slot: "list"
+              //       },
+              //       [
+              //         h(
+              //           "DropdownItem",
+              //           {
+              //             nativeOn: {
+              //               click: name => {
+              //                 this.show(params.index);
+              //               }
+              //             }
+              //           },
+              //           "取消"
+              //         ),
+              //         h("DropdownItem", "关闭报名"),
+              //         h("DropdownItem", "活动总结"),
+              //         h("DropdownItem", "设为新活动模板")
+              //       ]
+              //     )
+              //   ]
+              // )
+            ]);
+          }
+        },
+        {
+          title: "活动名称",
+          key: "name",
+          align: "center"
+        },
+        {
+          title: "活动时间",
+          key: "startTimestamp",
+          render: (h, params) => {
+            return h("div", date1("Y-m-d", params.row.startAt));
+          }
+        },
+        {
+          title: "活动类型",
+          key: "typeName",
+          align: "center"
+        },
+        {
+          title: "状态",
+          key: "status",
+          align: "center"
+        },
+        {
+          title: "是否显示主办方小站",
+          key: "isShowHolder",
+          align: "center"
+        },
+        {
+          title: "志愿者报名人数",
+          key: "num",
+          align: "center"
+        },
+        {
+          title: "上架/下架",
+          key: "statue",
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  value: params.row.activityQrCode == 1
                 },
-                "复制"
-              ),
-              h(
-                "Dropdown",{
-                  props:{
-                    transfer:true
+                on: {
+                  input: e => {
+
                   }
-                },[
-                  h('a',{
-                    style:{
-                      color:'green'
-                    }
-                  },'更多操作'),
-                  h('DropdownMenu',{
-                    slot:'list'
-                  },[
-                    h('DropdownItem',{
-                      nativeOn:{
-                        click:(name)=>{
-                          this.show(params.index)
-                        }
-                      }
-                    },'活动下架'),
-                    h('DropdownItem','关闭报名')
-                  ])
-                ]
-              )
+                }
+              })
             ]);
           }
         }
       ],
-      datax: [],
-      cityList: [
-        {
-          value: "待发布",
-          label: "待发布"
-        },
-        {
-          value: "招募中",
-          label: "招募中"
-        },
-        {
-          value: "即将开始",
-          label: "即将开始"
-        },
-        {
-          value: "进行中",
-          label: "进行中"
-        },
-        {
-          value: "已结束",
-          label: "已结束"
-        },
+      Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
       ],
-      model1: "",
-      fruit:''
+      sorting: [
+        { value: "asc", label: "正序" },
+        { value: "desc", label: "倒序" }
+      ],
+      sort: "asc",
+      datax: [],
+      sysType: 1,
+      page: 1,
+      size: 10,
+      dataCount: 0,
+      name: "",
+      activityStatus: "",
+      activityTimestampFrom: "",
+      activityTimestampTo: "",
+      arr: [],
+      status:"1,2,3,4,5,6,7,9,10,11,13"
     };
   },
   components: {},
@@ -306,22 +365,112 @@ export default {
   computed: {},
 
   created() {},
+  mounted() {
+    this.getactiveManager();
+  },
+  //事件监听
+  watch: {
+    size: "getactiveManager",
+    sort: "getactiveManager"
+  },
 
   methods: {
-    add(){
-      this.$router.push({name:'volunteer_issue'})
-    },
-    draft(){
-      this.$router.push({name:'volunteer_draft'})
-    }
+    //列表和分页
+    getactiveManager() {
+      let From=''
+      let To
+      if (this.activityTimestampFrom != "") {
+         From= this.activityTimestampFrom.getTime();
+      }
+      if (this.activityTimestampTo != "") {
+        To = this.activityTimestampTo.getTime();
+      }
+      actManager({
+        // page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort},
+        // name: this.name,
+        // sysType: this.sysType,
+        // activityStatus: this.activityStatus,
+        // activityTimestampFrom: From,
+        // activityTimestampTo: To
+        name:this.name,
+        status:this.status,
+        startT:this.From,
+        endT:this.To,
+        page:{
+          page:this.page,
+          size:this.size
+        }
 
+      }).then(res => {
+        this.$refs.selection.selectAll(false);
+        console.log(res);
+        if (res.code == 200) {
+
+          this.dataCount = res.data.totalSize;
+          this.datax = res.data.list;
+        }
+      });
+    },
+
+    //选择内容
+    handleSelectionChange(val) {
+      console.log(val);
+      this.arr = val;
+      if (
+        (this.arr.length == this.dataCount && this.dataCount != 0) ||
+        this.arr.length == this.size
+      ) {
+        this.status = true;
+      } else {
+        this.status = false;
+      }
+    },
+
+    //分页功能
+    changepages(index) {
+      this.page = index;
+      console.log(index);
+      this.getactiveManager();
+    },
+
+    //查询
+    result(e) {
+      this.name=e[0].value,
+      // this
+
+      this.getactiveManager();
+    },
+
+    addaction() {
+      this.$router.push({ name: "approval" });
+    },
+    draft() {
+      this.$router.push({ name: "draft" });
+    },
+
+    //导出数据
+    exportData() {
+      if(this.arr.length==0){
+        this.arr=this.data
+      }
+      this.$refs.selection.exportCsv({
+        filename:this.navigation1.head,
+        columns: this.columns.filter((col, index) => index > 0),
+        data: this.arr
+      });
+    },
+
+    //全选按钮
+    chackall() {
+      this.status = !this.status;
+      this.$refs.selection.selectAll(this.status);
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
 .integral-header {
   border: 1px solid #eee;
-  // font-size: 14px;
   margin-top: 20px;
 }
 .integral-header .integral-top {
@@ -359,9 +508,8 @@ export default {
 .flex-data {
   display: flex;
 }
-.pages {
-  text-align: center;
-  margin-top: 10px;
+.integral-table {
+  position: relative;
 }
 .popup {
   background: #ffffff;
@@ -398,12 +546,21 @@ export default {
     }
   }
 }
-.table{
-   position: relative;
+ul {
+  margin: 10px 30%;
 }
-.set{
+li {
+  width: 160px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border: 1px solid gray;
+  margin-top: -1px;
+}
+.set {
   position: absolute;
-  right: 3rem;
-  top: 0.7rem
+  left: 180px;
+  top: 70px;
+  cursor: pointer;
 }
 </style>

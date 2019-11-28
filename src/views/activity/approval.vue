@@ -72,8 +72,8 @@
                 <div class="start-wap">
                   <div class="upload" v-if='projectMsg.batchPicShow == null'>
                       <div class="file" @click="()=>{ this.$refs.files.click()}">
-                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                        <!-- <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/> -->
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                       </div>
                   </div>
                   <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
@@ -502,6 +502,7 @@ import { projectItem, partner,batchItem,leader,projectApproval } from "@/request
 import role from "./compile_beneficiary.vue"
 import adress from'_c/map'
 import { orgimg } from "@/request/http";
+import { upload }from '@/request/http'
 
 export default {
   data() {
@@ -583,7 +584,7 @@ export default {
   computed: {},
 
   created() {
-    // this.userId = localStorage.getItem('userId')
+    this.userId = this.$store.state.userId
     this.getProjectItem();
     this.getPartner();
     this.getBatchItem();
@@ -897,14 +898,14 @@ export default {
       let file = this.$refs.files.files[0]
       const dataForm = new FormData()
       dataForm.append('file', file)
-      orgimg(dataForm).then(res => {
-
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          this.projectMsg.batchPicShow = e.target.result
+          this.projectMsg.batchPic = res.data
+        }
       })
-      var reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = (e) => {
-        this.projectMsg.batchPicShow = e.target.result
-      }
     },
     cancelImg(){
       orgimgdel({path:this.data.args.pic}).then(res => {

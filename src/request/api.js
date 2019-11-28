@@ -490,6 +490,8 @@ export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动
 export const signLimits = p => posts('/activity-manage/apply/sign/limits', p) //限制设置
 export const signItems = p => posts('/activity-manage/apply/item/list', p) //报名项设置
 export const firstList = p => posts('/activity-manage/apply/sign/first', p) //优先设置
+export const userDetail = p => posts('/activity-manage/act/user/detail', p) //人员明细
+export const actManager = p => posts('/activity-manage/volu/act/list', p) //活动管理
 
 
 
