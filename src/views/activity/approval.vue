@@ -84,9 +84,9 @@
                 <span>小组归属</span>
                 <Select v-model="projectMsg.orgName" style="width:200px" placeholder="请选择小组归属">
                   <Option
-                    v-for="item in itemsList.org1s"
+                    v-for="(item,index) in itemsList.org1s"
                     :value="item.name"
-                    :key="item.name"
+                    :key="index"
                     @click.native="getOrg(item)"
                   >{{ item.name }}</Option>
                 </Select>
@@ -253,11 +253,11 @@
               <p v-for="(item,i) in batch.userConfList">
                 <span>{{item.roleName}}</span>
                 <span>{{item.recruitNum}}</span>
-                <span @click="addRoles(i)">详情</span>
+                <span @click="changeRoles(i)">详情</span>
                 <span @click="deleteRole(i)">删除</span>
               </p>
               <h2 class="added">
-                <a @click="addRoles(batch.userConfList.length)">+新增招募角色</a>
+                <a @click="addRoles()">+新增招募角色</a>
               </h2>
             </div>
           </div>
@@ -436,9 +436,9 @@
             <span>小组归属</span>
             <Select v-model="projectMsg.orgName" style="width:200px" placeholder="请选择小组归属">
               <Option
-                v-for="item in itemsList.org1s"
+                v-for="(item,index) in itemsList.org1s"
                 :value="item.name"
-                :key="item.name"
+                :key="index"
                 @click.native="getOrg(item)"
               >{{ item.name }}</Option>
             </Select>
@@ -808,15 +808,25 @@ export default {
       }
     },
     //新增招募角色
-    addRoles(e){
+    addRoles(){
+      let r = {
+        fdList:[{ name: '反馈简介', type: 0}],
+        refund:{},
+        signRuleList:[],
+        itemList:[],
+        choiceRuleList:[]
+      }
+      let n = this.batch.userConfList
+      this.roleI = n.length
+      this.oneRole = n[this.roleI]?n[this.roleI]:r
       this.isAddRole = true
       this.two = false
+    },
+    changeRoles(e){
       this.roleI = e
-      let r = this.roleMsg
-      let m = {}
-      let n = this.batch.userConfList
-      m = n[e]?n[e]:r
-      this.oneRole = m
+      this.oneRole = this.batch.userConfList[e]
+      this.isAddRole = true
+      this.two = false
     },
     //删除工作人员
     deleteWorker(i){

@@ -419,7 +419,24 @@ export default {
     },
     //新增招募角色
     addRoles(){
+      let r = {
+        fdList:[{ name: '反馈简介', type: 0}],
+        refund:{},
+        signRuleList:[],
+        itemList:[],
+        choiceRuleList:[]
+      }
+      let n = this.batch.userConfList
+      this.roleI = n.length
+      this.oneRole = n[this.roleI]?n[this.roleI]:r
       this.isAddRole = true
+      this.two = false
+    },
+    changeRoles(e){
+      this.roleI = e
+      this.oneRole = this.batch.userConfList[e]
+      this.isAddRole = true
+      this.two = false
     },
     //删除工作人员
     deleteWorker(i){
