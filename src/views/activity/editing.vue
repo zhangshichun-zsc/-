@@ -1,6 +1,7 @@
 <!--编辑活动(会员)-->
 <template>
   <div class="content">
+    <adress :value='adr' @change='getMap'/>
           <div class="select">
             <span class="select-template">活动分类</span>
             <Select v-model="batch.actTypeName" style="width:340px">
@@ -44,8 +45,7 @@
                 </li>
                 <li>
                   <span class="same_style">活动地址</span>
-                  <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-                  </iframe>
+                  <span @click="()=>{this.adr = true}">{{ batch.actAddress == null?"点击选中地址":batch.actAddress}}</span>
                 </li>
                 <li>
                   <span class="same_style">出行方式</span>
@@ -174,10 +174,15 @@
   import E from 'wangeditor';
 import { batchItem,leader,projectDetail,projectEdit } from "@/request/api";
 import { projectApproval } from '../../request/api';
+import role from "./compile_beneficiary.vue"
+import adress from'_c/map'
+import { orgimg } from "@/request/http";
+import { upload }from '@/request/http'
 export default {
   name: 'editor',
   data() {
     return {
+      adr:false,
       batch:{
         userConfList:[],
         actResList:[],
@@ -261,7 +266,7 @@ export default {
     };
   },
 
-  components: {  },
+  components: {role,adress},
 
   computed: {},
 
@@ -279,6 +284,15 @@ export default {
     // editor1.create()
   },
   methods: {
+    changeEditorTrain(e){
+      this.batch.detail = e
+    },
+    getMap(e){
+      this.batch.actXx = e.xx
+      this.batch.actYy = e.yy
+      this.batch.actAddress = e.address
+      console.log(e)
+    },
     getProjectDetail(){
        projectDetail({
         activityId:this.$route.query.acitvityId
