@@ -116,7 +116,7 @@ export default {
           render: h => {
             return h("img", {
               attrs: {
-                src: "params.row.picUrl"
+                src: "params.row.picPath"
               },
               style: {
                 width: "4rem",
@@ -332,7 +332,7 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.data = res.data.list;
-          this.page = res.data.pageNum;
+
           this.dataCount = res.data.totalSize;
         }
       });

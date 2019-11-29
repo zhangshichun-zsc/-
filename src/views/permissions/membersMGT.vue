@@ -6,7 +6,15 @@
       <div class="Members-search">
         <p>
           <span>输入搜索:</span>&nbsp;
-          <Input search size="large" placeholder="用户名/姓名" style="width: 200px" />
+          <Input
+            search
+            size="large"
+            placeholder="姓名"
+            v-model="name"
+            style="width: 200px"
+            @on-search="querys"
+          />
+          <!-- <Input search size="large" placeholder="用户名/姓名" style="width: 200px" /> -->
         </p>&nbsp;&nbsp;&nbsp;
         <p>
           <span>所属部门:</span>&nbsp;
@@ -25,7 +33,7 @@
                 <span>北京融爱融乐</span>
               </div>
               <div class="btn">
-                <Button @click="modal1=true">部门设置</Button>
+                <Button @click="set">部门设置</Button>
                 <Modal v-model="modal1" title="添加部门">
                   <Form
                     ref="formValidate"
@@ -33,29 +41,34 @@
                     :rules="ruleValidate"
                     :label-width="120"
                   >
-                    <FormItem label="部门名称" prop="name">
-                      <Input v-model="formValidate.name"></Input>
+                    <FormItem label="部门名称" prop="deptName">
+                      <Input v-model="formValidate.deptName"></Input>
                     </FormItem>
-                    <FormItem label="职能描述" prop="career">
+                    <FormItem label="职能描述" prop="description">
                       <Input
-                        v-model="formValidate.career"
+                        v-model="formValidate.description"
                         type="textarea"
                         :autosize="{minRows: 5,maxRows: 5}"
                         placeholder="请输入描述"
-                      ></Input>
+                      />
                     </FormItem>
-                    <FormItem label="上级部门" prop="apartment">
-                      <Select v-model="formValidate.apartment" label="后勤部">
-                        <Option value="后勤部">后勤部</Option>
-                        <Option value="财务部">财务部</Option>
-                        <Option value="行政部">行政部</Option>
-                        <Option value="项目部">项目部</Option>
+                    <FormItem label="上级部门" prop="parentId">
+                      <Select v-model="formValidate.parentId">
+                        <Option
+                          v-for="item in deplist"
+                          :value="item.deptId"
+                          :key="item.deptId"
+                        >{{ item.deptName }}</Option>
                       </Select>
                     </FormItem>
-                    <FormItem label="设置负责人" prop="person">
-                      <Input v-model="formValidate.person"></Input>
+                    <FormItem label="设置负责人" prop="leader">
+                      <Input v-model="formValidate.leader" />
                     </FormItem>
                   </Form>
+                  <div slot="footer">
+                    <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
+                    <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+                  </div>
                 </Modal>
               </div>
             </Menu>
@@ -67,23 +80,26 @@
                 width="auto"
                 :open-names="['1']"
                 style="background-color: #008e40;color: white;"
+                @click.native="bumen"
               >
                 <Submenu name="1">
                   <template slot="title">
-                    <Icon type="ios-navigate" />融爱融乐
+                    <Icon type="ios-navigate" @click="member"/>融爱融乐
                   </template>
-                  <MenuItem name="1-1">品牌发展部</MenuItem>
-                  <MenuItem name="1-2">志愿者发展部</MenuItem>
-                  <MenuItem name="1-3">IT管理系统部</MenuItem>
-                  <Submenu name="2">
-                    <template slot="title">后勤部</template>
-                    <MenuItem name="2-1">财务部</MenuItem>
-                    <MenuItem name="2-2">行政部</MenuItem>
-                  </Submenu>
-                  <Submenu name="3">
-                    <template slot="title">项目部</template>
-                    <MenuItem name="2-1">项目部1</MenuItem>
-                    <MenuItem name="2-2">项目部2</MenuItem>
+
+                  <Submenu
+                    :name="index+1"
+                    v-for="(item,index) in data1"
+                    :key="index"
+                    @click.native="member"
+                  >
+                    <template slot="title" @click="member(item.deptId)">{{item.deptName}}</template>
+                    <MenuItem
+                      :name="`2-${item.deptId}`"
+                      @click.native="member(item.deptId)"
+                      v-for="(item,index) in sunlist"
+                      :key="index"
+                    >{{item.deptName}}</MenuItem>
                   </Submenu>
                 </Submenu>
               </Menu>
@@ -105,26 +121,37 @@
 </template>
 
 <script>
+import {
+  memberlist,
+  departmentlist,
+  departmentadd,
+  departmentall
+} from "../../request/api";
 export default {
   data() {
     return {
       formValidate: {
-        career: "",
-        name: "",
-        apartment: "",
-        person: ""
+        deptName: "",
+        description: "",
+        parentId: "",
+        leader: ""
       },
       ruleValidate: {
-        career: [
+        deptName: [
           { required: true, message: "职能描述不能为空", trigger: "blur" }
         ],
-        name: [
+        description: [
           { required: true, message: "部门名称不能为空", trigger: "blur" }
         ],
-        apartment: [
-          { required: true, message: "上级名称不能为空", trigger: "blur" }
+        parentId: [
+          {
+            required: true,
+            message: "上级名称不能为空",
+            trigger: "change",
+            type: "number"
+          }
         ],
-        person: [{ required: true, message: "负责人不能为空", trigger: "blur" }]
+        leader: [{ required: true, message: "负责人不能为空", trigger: "blur" }]
       },
       modal1: false,
       navigation1: {
@@ -217,12 +244,130 @@ export default {
           }
         }
       ],
-      data: []
+      data: [],
+      data1: [],
+      parentId: 0,
+      deplist: [],
+      sun: true,
+      sunlist: [],
+      deptId: "",
+      page: 1,
+      size: 10,
+      name: ""
     };
   },
+  mounted() {
+    this.getdepartmentlist();
+  },
+
   methods: {
+    // 部门列表
+    getdepartmentlist() {
+      departmentlist({
+        parentId: this.parentId
+      }).then(res => {
+        if (res.code == 200) {
+          if (this.sun == false) {
+            this.sunlist = res.data;
+          } else {
+            this.data1 = res.data;
+          }
+        } else {
+          this.$Message.error(res.msg);
+        }
+        console.log(res);
+      });
+    },
+
+    // 查询所有部门名称
+    getdepartmentall() {
+      departmentall({}).then(res => {
+        if (res.code == 200) {
+          this.deplist = res.data;
+        }
+        console.log(res);
+      });
+    },
+    member(e) {
+      console.log(e);
+      this.deptId = e;
+      // this.getmemberlist();
+    },
+    bumen(e) {
+      this.sun = false;
+      this.parentId = 1;
+      console.log(e, this.parentId);
+      this.getdepartmentlist();
+      // this.getmemberlist()
+    },
+    // bumens(e){
+    //   console.log(e)
+
+    // },
+
+    //成员管理列表
+    getmemberlist() {
+      memberlist({
+        page: { page: this.page, size: this.size },
+        deptId: this.deptId,
+        userId: "",
+        name: this.name
+      }).then(res => {
+        if (res.code == 200) {
+          this.data = res.data;
+        }
+        console.log(res);
+      });
+    },
+    // 部门列表添加
+    getdepartmentadd() {
+      departmentadd({
+        deptName: this.formValidate.deptName,
+        description: this.formValidate.description,
+        parentId: this.formValidate.parentId,
+        leader: this.formValidate.leader
+      }).then(res => {
+        if (res.code == 200) {
+          this.getdepartmentlist();
+          this.$Message.info("添加成功");
+        } else {
+          this.$Message.error(res.msg);
+        }
+        console.log(res);
+      });
+    },
+
+    //部门设置
+    set() {
+      this.modal1 = true;
+      this.clear();
+      this.getdepartmentall();
+    },
+    //清除input
+    clear() {
+      (this.formValidate.deptName = ""),
+        (this.formValidate.description = ""),
+        (this.formValidate.parentId = ""),
+        (this.formValidate.leader = "");
+    },
+    //添加
+    modalOk(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.getdepartmentadd();
+          this.modal1 = false;
+        } else {
+          this.$Message.error("必填项未填!");
+        }
+      });
+    },
+    //查询
+    querys() {
+      this.getmemberlist();
+    },
+
     addmember() {
-      this.$router.push({ name: "Add-members" });
+      this.$router.push({ name: "Add-members", query: { state: 2 } });
     }
   }
 };
