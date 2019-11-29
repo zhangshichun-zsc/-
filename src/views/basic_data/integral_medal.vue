@@ -14,7 +14,6 @@
             <span>收起筛选</span>
           </div>
           <Button>查询结果</Button>
-          <Button>高级检索</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">

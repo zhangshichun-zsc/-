@@ -19,6 +19,9 @@
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
         </div>
+        <p>    
+          兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。
+     期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p>
         <Row>
           <Col span="6" push="18">
             <p>[*志愿机构*]</p>
@@ -31,7 +34,7 @@
           <a href="javascript:;" @click="showUpload(1)">更换LOGO</a>
           <a href="javascript:;" @click="showUpload(2)">更换页尾</a>
         </p>
-        <div class="box" v-show='i == 0'>
+        <div class="box" v-show='i == 1'>
             <div class="upload" v-if='headimg == null'>
                 <div class="file" @click="()=>{ this.$refs.files.click()}">
                   <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('headimg','logoPic',$event)">
@@ -69,7 +72,7 @@ export default {
       logoPic:null,
       footimg:null,
       officeSealPic:null,
-      i:0,
+      i:1,
       certMouldId:this.$route.params.certMouldId,
       show:this.$route.params.show
     };

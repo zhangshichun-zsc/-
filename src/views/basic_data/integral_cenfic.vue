@@ -48,17 +48,16 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <!-- <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button> -->
-          <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
-          <Modal v-model="modal1" title="修改" @on-ok='update' @on-cancel='cancel'>
+          <Modal v-model="modal1" title="修改"  @on-cancel='cancel'>
             <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
                 <Input v-model="args.name"/>
               </FormItem>
             </Form>
+              <div slot="footer">
+                 <Button type="error" size="large" @click="update">确定</Button>
+               </div>
           </Modal>
         </div>
       </div>
@@ -95,7 +94,7 @@ export default {
         head: "证书管理（共用）"
       },
       ruleValidate: {
-        name: [{ required: true, message: "就业情况不能为空", trigger: "blur" }]
+        name: [{ required: true, message: "不能为空", trigger: "blur" }]
       },
       title: "证书管理",
       columns: [
@@ -209,15 +208,23 @@ export default {
           this.sumSize = res.data.totalSize
           this.params.page = res.data.pageNum
           this.sumPage = res.data.totalNum
+        }else{
+          this.$Message.error(res.msg)
         }
       })
     },
     update(){
+      if(!this.args.name){
+        this.$Message.warning('不能为空')
+        return
+      }
       updateCard(this.args).then(res => {
         if(res.code == 200){
           this.getList()
           this.$Message.success('修改成功')
           this.cancel()
+        }else{
+          this.$Message.error(res.msg)
         }
       })
     },
@@ -235,7 +242,8 @@ export default {
       this.getList()
     },
     queryMet(){
-      this.params = Object.assign(this.params,this.query)
+      this.params = Object.assign(params,this.query)
+      this.$set(this.params,'page',{page:1,size:10})
       this.getList()
     }
   }
