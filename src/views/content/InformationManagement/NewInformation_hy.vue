@@ -33,13 +33,15 @@
               </Select>
             </FormItem>
             <FormItem label="资讯分类:" prop="informationType">
-              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true>
+
+              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true >
                 <Option
                   v-for="item in typelist"
                   :value="item.dicId"
                   :key="item.dicId"
                 >{{ item.dicName }}</Option>
               </Select>
+
             </FormItem>
           </Form>
         </div>
@@ -202,7 +204,7 @@ export default {
         url: this.url
       }).then(res => {
         if (res.code == 200) {
-          this.$router.push({ name: "InformationList_zyz" });
+          this.$router.push({ name: "InformationList_hy" });
           this.$Message.info(res.msg);
         } else {
           this.$Message.info(res.msg);
@@ -268,6 +270,7 @@ export default {
   },
   mounted() {
     var editor = new E("#editorElem");
+    editor.customConfig.zIndex = 100
     editor.customConfig.onchange = html => {
       this.editorContent = html;
       console.log(html);

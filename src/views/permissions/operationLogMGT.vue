@@ -10,7 +10,7 @@
             <span>数据列表</span>
           </p>
           <div class="but flex-center-start">
-            <div class="options flex-center-start">
+            <!-- <div class="options flex-center-start">
               <p>
                 <span>清除日志:</span>
               </p>
@@ -22,7 +22,7 @@
                 >{{ item.label }}</Option>
               </Select>
               <Button @click="Determine">确定</Button>
-            </div>
+            </div> -->
             <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>

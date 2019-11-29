@@ -38,17 +38,13 @@ export default {
   data() {
     return {
       columns1: [
-        // {
-        //   type: "expand",
-        //   width: 50,
-        //   render: (h, params) => {
-        //     return h(expandRow, {
-        //       props: {
-        //         row: params.row
-        //       }
-        //     });
-        //   }
-        // },
+        {
+          type: "expand",
+          width: 50,
+          render: (h, params)=>{
+            return (this.dom)
+          }
+        },
         {
           title: "部门名称",
           key: "deptName",
@@ -159,10 +155,9 @@ export default {
       validFlag:''
     };
   },
-  props: {
-    row: Object
-  },
+  props: ["row","dom"],
   mounted() {
+    console.log
     this.getdepartmentsub();
     console.log(this.row.deptId);
   },
@@ -208,4 +203,5 @@ export default {
 .ivu-table-expanded-cell {
   padding: 0 !important;
 }
+td.ivu-table-expanded-cell{padding:0;}
 </style>

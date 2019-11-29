@@ -420,8 +420,15 @@
               </li>
               <li>
                 <span>群二维码</span>
-                <div class="imgess">
-                  <img />
+                <div class="start-wap">
+                  <div class="upload" v-if='oneRole.qrCodeShow == null'>
+                      <div class="file" @click="()=>{ this.$refs.files.click()}">
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                      </div>
+                  </div>
+                  <img class="imgs" v-else :src="oneRole.qrCodeShow"/>
+                  <Icon src="" alt="" v-if='oneRole.qrCodeShow == null' class="cancel" @click="cancelImg()"/>
                 </div>
               </li>
             </ul>
@@ -801,8 +808,15 @@
               </li>
               <li>
                 <span>群二维码</span>
-                <div class="imgess">
-                  <img />
+                <div class="start-wap">
+                  <div class="upload" v-if='oneRole.qrCodeShow == null'>
+                      <div class="file" @click="()=>{ this.$refs.files.click()}">
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                      </div>
+                  </div>
+                  <img class="imgs" v-else :src="oneRole.qrCodeShow"/>
+                  <Icon src="" alt="" v-if='oneRole.qrCodeShow == null' class="cancel" @click="cancelImg()"/>
                 </div>
               </li>
             </ul>
@@ -1203,6 +1217,27 @@ export default {
         }
       }
     },
+    uploadFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          console.log(e)
+          this.oneRole.qrCodeShow = e.target.result
+          this.oneRole.qrCode = res.data
+        }
+      })
+    },
+    cancelImg(){
+      orgimgdel({path:this.oneRole.qrCode}).then(res => {
+        this.oneRole.qrCodeShow = null
+        this.oneRole.qrCode = null
+        this.$Message.success('删除成功')
+      })
+    },
   }
 };
 </script>
@@ -1437,4 +1472,30 @@ export default {
     margin-right: 20px;
   }
 }
+.start-wap{
+    position: relative;
+    height: 150px;
+    width: 300px;
+    .cancel{
+      width: 30px;
+      height: 30px;
+      background: #000;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .upload .file{
+      height: 150px;
+      width: 300px;
+      border: 1px dashed #dcdee2;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .upload .file:hover{
+      border: 1px dashed #2d8cf0;
+    }
+    .upload .file input{
+      display: none;
+    }
+  }
 </style>

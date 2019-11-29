@@ -422,6 +422,10 @@ export const departmentSup = p => get('/web/dept/findUpDeptName', p) //部门管
 
 export const departmentall = p => get('/web/dept/findAllDeptName', p) //部门管理--查询所有部门名称
 
+// 成员管理
+
+export const memberlist = p => posts('/web/dept/findDeptUserName', p) //成员管理--查询所有部门名称
+
 
 //日志
 export const Journallist = p => posts('web/log/findAll', p) //日志信息-列表

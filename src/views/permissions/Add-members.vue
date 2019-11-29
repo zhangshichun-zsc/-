@@ -6,7 +6,7 @@
       <div class="con">
         <div class="title bk-szy">
           <p>
-            <span>添加成员</span>
+            <span>{{navigation1.head}}</span>
           </p>
         </div>
         <div class="add inter-table">
@@ -30,26 +30,19 @@
               <!-- <Input v-model="AddDate.deplNames" disabled  /> -->
               <!-- <p>{{AddDate.deplNames}}</p> -->
 
-              <Select style="width: 10rem" v-model="AddDate.deplNames" placeholder="全部">
-                <Option :value=AddDate.deplNames>{{AddDate.deplNames}}</Option>
-                <!-- <Option value="logistics">财务部</Option>
-                <Option value="logistics">行政部</Option>
+              <Select style="width: 10rem" multiple v-model="AddDate.deplNames" placeholder="全部">
+                <!-- <Option :value="AddDate.deplNames">{{AddDate.deplNames}}</Option> -->
+                <Option :value=item.deptId v-for="(item,index) in list" :key="index">{{item.deptName}}</Option>
+                <!-- <Option value="logistics">行政部</Option>
                 <Option value="logistics">项目部</Option> -->
               </Select>
               <a>查看部门详情</a>
               <p>选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限</p>
             </FormItem>
             <FormItem label="所属角色:" prop="sysRoleNames">
-               <Select style="width: 10rem" v-model="AddDate.sysRoleNames" placeholder="全部">
-                <Option :value=AddDate.sysRoleNames>{{AddDate.sysRoleNames}}</Option>
-                 </Select>
-              <!-- <p>{{AddDate.sysRoleNames}}</p> -->
-              <!-- <Input v-model="AddDate.sysRoleNames" disabled /> -->
-              <!-- <Select style="width: 10rem" v-model="AddDate.sysRoleNames" placeholder="全部">
-                <Option value="logistics">角色1</Option>
-                <Option value="logistics">角色2</Option>
-                <Option value="logistics">角色3</Option>
-              </Select>-->
+              <Select style="width: 10rem" multiple v-model="AddDate.sysRoleNames" placeholder="全部">
+                <Option :value="AddDate.sysRoleNames">{{AddDate.sysRoleNames}}</Option>
+              </Select>
               <a>查看角色详情</a>
               <p>选择所属部门后默认继承角色功能权限，可在成员列表中单独设置权限</p>
             </FormItem>
@@ -76,7 +69,7 @@
 </template>
 
 <script>
-import { rolenumquery, roleedit } from "@/request/api";
+import { rolenumquery, roleedit,departmentlist,memberlist} from "@/request/api";
 export default {
   data() {
     return {
@@ -101,13 +94,20 @@ export default {
           { required: true, message: "邮箱地址不能为空", trigger: "blur" },
           { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
         ],
+        deplNames:[
+         { required: true, message: "请选择部门类型", trigger: "change",type:'number' }
+          ],
+        sysRoleNames:[
+         { required: true, message: "请选择角色类型", trigger: "change",type:'number' }
+          ],
         loginPwd: [
           { required: true, message: "请输入初始密码", trigger: "blur" }
         ],
         comments: []
       },
       page: 1,
-      size: 10
+      size: 10,
+      list:[]
     };
   },
   methods: {
@@ -122,10 +122,36 @@ export default {
         loginPwd: this.AddDate.loginPwd
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("编辑成功");
-          this.$router.push({
-            name: "role"
-          });
+          if (this.$route.query.state == 3) {
+            this.$Message.info("编辑成功");
+            this.$router.push({
+              name: "role"
+            });
+          }else if(this.$route.query.state==2){
+            this.$Message.info("添加成功");
+            this.$router.push({
+              name: "membersMGT"
+            });
+          }else if(this.$route.query.state==1){
+            this.$Message.info("添加成功");
+            this.$router.push({
+              name: "departmentMGT"
+            });
+          }
+        } else {
+          this.$Message.error(res.msg);
+        }
+        console.log(res);
+      });
+    },
+
+    // 部门列表
+    getdepartmentlist() {
+      departmentlist({
+        parentId: 0
+      }).then(res => {
+        if (res.code == 200) {
+          this.list = res.data;
         } else {
           this.$Message.error(res.msg);
         }
@@ -151,6 +177,18 @@ export default {
       });
     },
 
+    //成员管理编辑
+    getmemberlist(){
+      memberlist({
+        page: { page: this.page, size: this.size },
+        userId:this.$route.query.userId,
+        name:this.$route.query.name,
+        deptId:this.$route.query.deptId
+      }).then(res=>{
+        console.log(res)
+      })
+    },
+
     //提交
     handleReset(name) {
       this.$refs[name].validate(valid => {
@@ -163,11 +201,12 @@ export default {
     }
   },
   mounted() {
-    if(this.$route.query.userId){
-this.getrolenumquery();
-this.navigation1.head='编辑成员信息'
+    // this.getdepartmentlist()
+    if (this.$route.query.userId) {
+      this.getrolenumquery();
+      this.navigation1.head = "编辑成员信息";
     }
-
+    this.getmemberlist()
   }
 };
 </script>

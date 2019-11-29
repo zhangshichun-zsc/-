@@ -1,4 +1,4 @@
-<!--发布资讯(会员)-->
+<!--发布资讯(志愿者)-->
 <template>
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
@@ -126,7 +126,7 @@ export default {
     return {
       name: "editor",
       navigation1: {
-        head: "发布资讯(会员)"
+        head: "发布资讯(志愿者)"
       },
       ContentData: {
         title: "",
@@ -268,6 +268,8 @@ export default {
   },
   mounted() {
     var editor = new E("#editorElem");
+    editor.customConfig.zIndex = 100
+
     editor.customConfig.onchange = html => {
       this.editorContent = html;
       console.log(html);
