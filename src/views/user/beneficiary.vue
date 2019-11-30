@@ -1227,6 +1227,13 @@ export default {
           star: new Date(time1).getTime(),
           end: new Date(time2).getTime()
         }
+      } else {
+        let time1 = this.util.formatDate(star)
+        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        }
       }
     },
 

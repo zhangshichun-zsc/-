@@ -37,8 +37,8 @@
     </div>
 
     <div class='box'>
-      <div class='item-left' style='line-height: 40px;'>{{ this.$route.query.head === 'parent'?'介绍': '志愿者团队介绍'}}</div>
-      <div class='item-right textarea'>{{list.description}}</div>
+      <div class='item-left'>{{ this.$route.query.head === 'parent'?'介绍': '志愿者团队介绍'}}</div>
+      <div class='item-right textarea info-text'>{{list.description}}</div>
     </div>
 
     <div class='box'>
@@ -81,10 +81,7 @@ export default {
   props: [],
   created() {
     this.navigation = {
-      head:
-        this.$route.query.head === 'parent'
-          ? '创建家长小组详情（会员）'
-          : '创建志愿者团队详情（共用）'
+      head: this.$route.query.head === 'parent' ? '家长小组详情（会员）' : '志愿者团队详情（共用）'
     }
     this.getInfo()
     this.city = localStorage.getItem('city')
@@ -251,5 +248,12 @@ export default {
 .tips {
   text-align: center;
   color: red;
+}
+.info-text {
+  line-height: 24px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 </style>

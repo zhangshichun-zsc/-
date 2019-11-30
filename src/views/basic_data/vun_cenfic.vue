@@ -14,7 +14,6 @@
             <span>收起筛选</span>
           </div>
           <Button @click="query()">查询结果</Button>
-          <Button>高级检索</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body">
@@ -79,7 +78,10 @@
               <Select size='small' class="inpt" placeholder="显示条数" @on-change='changeNum'>
                 <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
               </Select>
-              <Select size='small' class="inpt" placeholder="排序方式"></Select>
+              <Select size='small' class="inpt" placeholder="排序方式"  @on-change='changeSort'>
+                <Option value="create_at desc">升序</Option>
+                <Option value="create_at asc">降序</Option>
+              </Select>
             </div>
         </div>
       </div>
@@ -134,12 +136,16 @@ export default {
           key: "title"
         },
         {
-          title: "有效时间",
+          title: "生效时间",
           key: "effectiveAt"
         },
         {
           title:"失效时间",
           key:"inEffectiveAt"
+        },
+         {
+          title:"创建时间",
+          key:"createAt"
         },
         {
           title: "操作",
@@ -189,6 +195,7 @@ export default {
       ],
       page:1,
       size:10,
+      sort:'create_at desc',
       sumSize:10,
       args:{
         startAt:null,
@@ -215,7 +222,7 @@ export default {
 
   methods: {
     getList ({startAt,endAt,orgName}) {
-      getBooks(filterNull({page:{page:this.page,size:this.size},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
+      getBooks(filterNull({page:{page:this.page,size:this.size,sort:this.sort},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
          if(res.code == 200){
            this.sumSize = res.data.totalSize
            this.data = res.data.list
@@ -246,22 +253,21 @@ export default {
       this.getList(this.args)
     },
     success () {
-       this.$refs.formValidate.validate((valid) => {
-         console.log(valid)
-            if (valid) {
-                updateBooks(this.params).then(res => {
-                  if(res.code == 200){
-                    this.$Message.success('添加成功')
-                    this.getList(this.args)
-                  }else{
-                    this.$Message.error(res.msg)
-                  }
-                })
-            } else {
-                this.$Message.error('没有填写完整');
-            }
-        })
-     
+      this.$refs.formValidate.validate((valid) => {
+        if (valid) {
+            updateBooks(this.params).then(res => {
+              if(res.code == 200){
+                this.modal1 = false
+                this.$Message.success('添加成功')
+                this.getList(this.args)
+              }else{
+                this.$Message.error(res.msg)
+              }
+            })
+        } else {
+            this.$Message.error('没有填写完整');
+        }
+      })
     },
     changeDate(e){
       this.params.effectiveAt = e
@@ -274,7 +280,12 @@ export default {
     changeNum(e){
       this.size = e
       this.page = 1
-      this.getList()
+      this.getList({})
+    },
+    changeSort(e){
+      this.sort = e
+      this.page = 1
+      this.getList({})
     }
   }
 };

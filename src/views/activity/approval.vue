@@ -84,9 +84,9 @@
                 <span>小组归属</span>
                 <Select v-model="projectMsg.orgName" style="width:200px" placeholder="请选择小组归属">
                   <Option
-                    v-for="item in itemsList.org1s"
+                    v-for="(item,index) in itemsList.org1s"
                     :value="item.name"
-                    :key="item.name"
+                    :key="index"
                     @click.native="getOrg(item)"
                   >{{ item.name }}</Option>
                 </Select>
@@ -131,8 +131,8 @@
           </div>
           <div class="select">
             <span class="select-template">选择模板</span>
-            <Select v-model="model1" style="width:340px">
-              <Option v-for="item in part" :value="item.name" :key="item.name">{{ item.name }}</Option>
+            <Select v-model="batch.actTypeName" style="width:340px">
+              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="activitives">
@@ -146,16 +146,16 @@
                   <Input placeholder="请输入活动名称" v-model="batch.actName"></Input>
                 </li>
                 <li class="imges">
-                  <span class="same_style">主题图片</span>
+                  <span>主题图片</span>
                   <div class="start-wap">
-                    <div class="upload" v-if='image == null'>
+                    <div class="upload" v-if='batch.actShowPic == null'>
                         <div class="file" @click="()=>{ this.$refs.files.click()}">
-                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                          <p>+</p>
+                          <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFile()" style="display:none" >
+                          <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                         </div>
                     </div>
-                    <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
-                    <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
+                    <img class="imgs" v-else :src="batch.actShowPic"/>
+                    <Icon src="" alt="" v-if='batch.actShowPic == null' class="cancel" @click="cancelActImg()"/>
                   </div>
                 </li>
                 <li>
@@ -253,11 +253,11 @@
               <p v-for="(item,i) in batch.userConfList">
                 <span>{{item.roleName}}</span>
                 <span>{{item.recruitNum}}</span>
-                <span @click="addRoles(i)">详情</span>
+                <span @click="changeRoles(i)">详情</span>
                 <span @click="deleteRole(i)">删除</span>
               </p>
               <h2 class="added">
-                <a @click="addRoles(batch.userConfList.length)">+新增招募角色</a>
+                <a @click="addRoles()">+新增招募角色</a>
               </h2>
             </div>
           </div>
@@ -297,7 +297,7 @@
           <div class="button-food">
             <Button>预览</Button>
             <Button>上一步</Button>
-            <Button @click="nexttwo()">下一步</Button>
+            <Button @click.native="nextTwo()">下一步</Button>
             <Button @click="draft">存为草稿</Button>
           </div>
         </div>
@@ -324,14 +324,14 @@
           <li class="borders-img">
             <span>图片</span>
             <div class="start-wap">
-              <div class="upload" v-if='image == null'>
+              <div class="upload" v-if='partner.partPicShow == null'>
                   <div class="file" @click="()=>{ this.$refs.files.click()}">
-                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
-                    <p>+</p>
+                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadPartnerFile()" style="display:none" >
+                    <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                   </div>
               </div>
-              <img class="imgs" v-else :src="image"/>
-              <img src="" alt="" v-if='image == null' class="cancel" @click="cancelImg()">
+              <img class="imgs" v-else :src="partner.partPicShow"/>
+              <Icon src="" alt="" v-if='partner.partPicShow == null' class="cancel" @click="cancelPartnerImg()"/>
             </div>
           </li>
           <li>
@@ -436,9 +436,9 @@
             <span>小组归属</span>
             <Select v-model="projectMsg.orgName" style="width:200px" placeholder="请选择小组归属">
               <Option
-                v-for="item in itemsList.org1s"
+                v-for="(item,index) in itemsList.org1s"
                 :value="item.name"
-                :key="item.name"
+                :key="index"
                 @click.native="getOrg(item)"
               >{{ item.name }}</Option>
             </Select>
@@ -451,17 +451,24 @@
             </RadioGroup>
           </li>
         </ul>
-        <div class="images">
-          <img :src="projectMsg.batchPicShow"/>
+        <div class="start-wap">
+          <div class="upload" v-if='projectMsg.batchPicShow == null'>
+              <div class="file" @click="()=>{ this.$refs.files.click()}">
+                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+              </div>
+          </div>
+          <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
+          <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
         </div>
       </div>
       <div class="activite-three">
         <p class="active-head">
           <span>活动立项批次</span>
         </p>
-        <div class="activite-content">
-          <img src />
-          <ul v-for="item in projectMsg.actInfoList">
+        <div class="activite-content" v-for="(item,i) in projectMsg.actInfoList">
+          <img :src='item.actShowPic' />
+          <ul>
             <li class="activite-li">
               <span>{{item.actName}}</span>
             </li>
@@ -471,11 +478,15 @@
             <li>
               <span>活动日期：{{item.startT}}至{{item.endT}}</span>
             </li>
+            <li>
+              <Button @click.native="changePc(i)">修改</Button>
+              <Button @click.native="deletePc(i)">删除</Button>
+            </li>
           </ul>
         </div>
         <div class="add-three">
           <p>
-            <a>+新增批次</a>
+            <Button @click.native="addPc()">+新增批次</Button>
           </p>
         </div>
       </div>
@@ -508,7 +519,8 @@ export default {
   data() {
     return {
       projectMsg: {
-        partnerList: []
+        partnerList: [],
+        actInfoList:[]
       },
       partner: {
         partName: "",
@@ -575,7 +587,8 @@ export default {
         choiceRuleList:[]
       },
       roleI:0,  //招募角色下标
-      adr:false
+      adr:false,
+      pcNum:0
     };
   },
 
@@ -655,7 +668,9 @@ export default {
       this.$router.push({ name: "registration" });
     },
     nextone() {
-      (this.selects = false), (this.two = true), (this.current = 1);
+      this.selects = false,
+      this.two = true,
+      this.current = 1
     },
 
     //保存合作方
@@ -679,8 +694,14 @@ export default {
       this.addbtns = !this.addbtns;
     },
 
-    nexttwo() {
-      (this.two = false), (this.three = true), this.current++;
+    nextTwo() {
+      console.log(this.batch)
+      console.log(this.pcNum)
+      this.projectMsg.actInfoList[this.pcNum] = this.batch
+      console.log(this.projectMsg)
+      this.two = false 
+      this.three = true
+      this.current=2;
     },
     //第三步
 
@@ -787,15 +808,25 @@ export default {
       }
     },
     //新增招募角色
-    addRoles(e){
+    addRoles(){
+      let r = {
+        fdList:[{ name: '反馈简介', type: 0}],
+        refund:{},
+        signRuleList:[],
+        itemList:[],
+        choiceRuleList:[]
+      }
+      let n = this.batch.userConfList
+      this.roleI = n.length
+      this.oneRole = n[this.roleI]?n[this.roleI]:r
       this.isAddRole = true
       this.two = false
+    },
+    changeRoles(e){
       this.roleI = e
-      let r = this.roleMsg
-      let m = {}
-      let n = this.batch.userConfList
-      m = n[e]?n[e]:r
-      this.oneRole = m
+      this.oneRole = this.batch.userConfList[e]
+      this.isAddRole = true
+      this.two = false
     },
     //删除工作人员
     deleteWorker(i){
@@ -815,9 +846,15 @@ export default {
     getRole(e){
       console.log(e)
       console.log(this.roleI)
+      this.batch.userConfList[this.roleI] = e
+      if (this.roleI >= 0) {
+        this.batch.userConfList[this.roleI] = e;
+        delete this.roleI;
+      } else {
+        this.batch.userConfList.push(e);
+      }
       this.isAddRole = false
       this.two = true
-      this.batch.userConfList[this.roleI] = e
     },
     //新增物资
     addResources(){
@@ -871,6 +908,29 @@ export default {
       console.log(e)
       this.batch.releaseTime = e
     },
+    addPc(){
+      this.pcNum = this.projectMsg.actInfoList.length
+      let b = {
+        userConfList:[],
+        actResList:[],
+        actShowPic: '',
+        workerIdList:[{}]
+      }
+      this.batch = b
+      this.two = true
+      this.three = false
+      this.current = 1
+    },
+    deletePc(e){
+      this.projectMsg.actInfoList.splice(e,1)
+    },
+    changePc(e){
+      this.pcNum = e
+      this.batch = this.projectMsg.actInfoList[e]
+      this.two = true
+      this.three = false
+      this.current = 1
+    },
 
     //提交
     submit() {
@@ -881,6 +941,11 @@ export default {
         this.projectMsg
       ).then(res => {
         console.log(res);
+        if(res.code==200){
+          this.$Message.success(res.msg)
+        }else{
+          this.$Message.error(res.msg)
+        }
       });
     },
     //提交
@@ -902,13 +967,58 @@ export default {
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = (e) => {
+          console.log(e)
           this.projectMsg.batchPicShow = e.target.result
           this.projectMsg.batchPic = res.data
         }
       })
     },
     cancelImg(){
-      orgimgdel({path:this.data.args.pic}).then(res => {
+      orgimgdel({path:this.projectMsg.batchPic}).then(res => {
+        this.projectMsg.batchPicShow = null
+        this.projectMsg.batchPic = null
+        this.$Message.success('删除成功')
+      })
+    },
+    uploadPartnerFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          console.log(e)
+          this.partner.partPicShow = e.target.result
+          this.partner.partPic = res.data
+        }
+      })
+    },
+    cancelPartnerImg(){
+      orgimgdel({path:this.partner.partPic}).then(res => {
+        this.partner.partPicShow = null
+        this.partner.partPic = null
+        this.$Message.success('删除成功')
+      })
+    },
+    uploadActFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          console.log(e)
+          this.batch.actShowPic = e.target.result
+          this.batch.actPic = res.data
+        }
+      })
+    },
+    cancelActImg(){
+      orgimgdel({path:this.batch.actPic}).then(res => {
+        this.batch.actShowPic = null
+        this.batch.actPic = null
         this.$Message.success('删除成功')
       })
     },

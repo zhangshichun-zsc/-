@@ -9,11 +9,10 @@ import { mouldList } from "@/request/api";
 export default {
   data() {
     return {
-      navigation1: {
-        head: "维护活动模板(会员)"
-      },
+      navigation1: "维护活动模板(会员)"
+      ,
       list:[],
-      from:'actrain'
+      from:'editing'
     };
   },
 

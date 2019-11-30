@@ -806,6 +806,10 @@ export default {
     getUsetList(paramsObj, flag) {
       let time = {}
       if (flag) {
+        // let endAt = null
+        // if (this.endAt) {
+        //   endAt = this.util.formatDate(this.endAt.getTime()).split(' ')[0] + ' 23:59:59'
+        // }
         let registration = this.sameday({
           star: this.formatTime(this.registrationStartTimeStamp),
           end: this.formatTime(this.registrationEndTimeStamp)
@@ -820,7 +824,7 @@ export default {
           durationEnd: this.endAt
         }
       }
-
+      console.log(time)
       let obj = this.util.remove({
         sysType: '2',
         page: this.page,
@@ -1072,6 +1076,13 @@ export default {
       let { star, end } = timeObj
       if (!star || !end) return { star: star, end: end }
       if (star === end) {
+        let time1 = this.util.formatDate(star)
+        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        }
+      } else {
         let time1 = this.util.formatDate(star)
         let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
         return {
