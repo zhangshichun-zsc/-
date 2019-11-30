@@ -87,6 +87,21 @@ export default {
         this.getPermissionset()
           this.$Message.info(res.msg)
         console.log(res);
+        if(res.code==200){
+          if(this.$route.query.status==1){
+             this.$router.push({
+              name: "departmentMGT"
+            });
+          }else if(this.$route.query.status==2){
+            this.$router.push({
+              name: "membersMGT"
+            });
+          }else if(this.$route.query.status == 3){
+             this.$router.push({
+              name: "role"
+            });
+          }
+        }
       });
     },
 

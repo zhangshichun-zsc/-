@@ -12,7 +12,7 @@ const SERVICE_URL = {
   API_URL: [
     'https://rhzgtest.co-inclusion.org/rhzg-web', // 测试服务器 0
     'http://192.168.0.6:8084/rhzg-web', // 余海 1  192.168.0.6
-    'http://192.168.0.14:8089/rhzg-web', // 张飞飞 2
+    'http://192.168.0.14:8084/rhzg-web', // 张飞飞 2
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     'http://192.168.0.11:8084/rhzg-web', // 竺文聪 4
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
@@ -22,7 +22,7 @@ const SERVICE_URL = {
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
-
+const token= localStorage.getItem('token')
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] // 导出文件
 
 
@@ -41,11 +41,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 axios.interceptors.request.use(
   config => {
 
-    // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
+    // 每次发送请求之前判断是否存在token，如果存在，则统一都加上token，不用每次请求都手动添加了
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    // const userId = localStorage.setItem('userId')
-    // console.log(userId)
-
+    // if(store.state.token){
+    //   config.params.token=token
+    // }else{
+    //   console.log(111)
+    // }
     // config.params=qs.stringify({
     //   userId:userId,
     //   // appId:appId,
@@ -69,8 +71,37 @@ axios.interceptors.request.use(
     return config
   },
   error => {
-    return Promise.error(error)
+    return Promise.reject(err);
   })
+
+
+// http response 拦截器
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  error => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          // 401 清除token信息并跳转到登录页面
+          localStorage.clear();
+          // 只有在当前路由不是登录页面才跳转
+          router.currentRoute.path !== 'login' &&
+            router.replace({
+              path: 'login',
+              query: { redirect: router.currentRoute.path },
+            });
+        case 500:
+
+
+      }
+    }
+    // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
+    return Promise.reject(error.response.data)
+  },
+)
+
 
 /**
  * get方法，对应get请求
@@ -78,7 +109,7 @@ axios.interceptors.request.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(url, params) {
-
+  params.token=token
   return new Promise((resolve, reject) => {
     axios.get(url, {
       params: params
@@ -91,22 +122,23 @@ export function get(url, params) {
       })
   })
 }
-export function gets(url, params) {
-  return new Promise((resolve, reject) => {
-    // let token = localStorage.getItem("token");
-    axios.get(url, params, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-    })
-      .then(res => {
-        resolve(res.data)
-      })
-      .catch(err => {
-        reject(err.data)
-      })
-  })
-}
+// export function gets(url, params) {
+//   return new Promise((resolve, reject) => {
+//     let token = localStorage.getItem("token");
+//     axios.get(url, params, {
+//       headers: {
+//         Authorization: `Bearer ${token}`
+//       },
+//     })
+//       .then(res => {
+//         resolve(res.data)
+//       })
+//       .catch(err => {
+//         reject(err.data)
+//       })
+//   })
+// }
+
 
 /**
  * post方法，对应post请求
@@ -114,6 +146,7 @@ export function gets(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function post(url, params) {
+  params.token=token
   return new Promise((resolve, reject) => {
     axios.post(url, QS.stringify(params))
       .then(res => {
@@ -130,6 +163,7 @@ export function post(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function posts(url, params) {
+  url=`${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios.post(url, QS.parse(QS.stringify(params)), {
       headers: {
@@ -145,6 +179,7 @@ export function posts(url, params) {
 }
 
 export function postdel(url, params) {
+  url=`${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios.post(url, params, {
       headers: {
@@ -161,6 +196,7 @@ export function postdel(url, params) {
 }
 
 export const upload = (p) => {
+  p.token=token
   return new Promise((resolve, reject) => {
     axios.post('/pic/upload', p, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {

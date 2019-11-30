@@ -266,17 +266,21 @@ export default {
   methods: {
     //标签分页
     getorgpage() {
+      let endAt = null
+      if (this.endAt) {
+        endAt = this.util.formatDate(this.endAt.getTime()).split(' ')[0] + ' 23:59:59'
+      }
+
       let fromobj = this.util.remove({
         page: {
           page: this.page,
           size: this.size,
           sort: this.sort
         },
-
         orgName: this.orgName,
         status: this.orgStatus == 0 ? '' : this.orgStatus,
         startAt: this.startAt ? this.startAt.getTime() : '',
-        endAt: this.endAt ? this.endAt.getTime() : ''
+        endAt: new Date(endAt).getTime()
       })
       if (this.$props.navigation1.name === 'parent') {
         orgpage(fromobj).then(res => {
@@ -464,7 +468,6 @@ export default {
       }
       this.arr = arr.toString()
     },
-
     handleSelectAll(status) {
       this.$refs.selection.selectAll(status)
     },

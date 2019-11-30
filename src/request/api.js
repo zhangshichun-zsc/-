@@ -1,14 +1,14 @@
 /**
  * api接口统一管理
  */
-import { get, post, posts, postdel, gets } from './http'
+import { get, post, posts, postdel } from './http'
 
 
 
 //登陆
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
-export const homepage = p => gets('/sysMenu/findAllMenuByRoloe', p) // 主页
+export const homepage = p => get('/sysMenu/findAllMenuByRoloe', p) // 主页
 
 
 

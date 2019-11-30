@@ -61,16 +61,38 @@
             <Radio label="0">下线</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="广告图片" prop="AdvertisingImages">
-          <Upload action="//jsonplaceholder.typicode.com/posts/" :format="['jpg','png']" :max-size="50" :before-upload="handleUpload" :on-remove="remove">
-            <Button icon="ios-cloud-upload-outline">选择上传图片</Button>
-            <span
-              style="color: #9EA7B4;font-size: 12px;margin-left: 0.5rem;"
-            >只能上传jpg/png格式文件，文件不能超过50kb</span>
-          </Upload>
+        <FormItem label="广告图片" prop="imgUrl">
+          <div class="start-wap">
+            <img  :src=formValidate.imgUrl style="height:150px;width:150px;"/>
+              <div class="upload" v-if="formValidate.imgUrl == null" @click="()=>{ this.$refs.files.click()}">
+                <div class="file" >
+                  <input
+                    style=" display:none;"
+                    type="file"
+                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                    ref="files"
+                    @change="uploadFile()"
+                    multiple
+                  />
+                  <Button icon="ios-cloud-upload-outline" >上传图片</Button>
+                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                </div>
+              </div>
+
+
+              <Icon
+                type="ios-trash"
+                v-if="formValidate.imgUrl != null"
+                class="cancel"
+                :size="26"
+                @click="cancelImg()"
+              />
+            </div>
+
+
         </FormItem>
         <FormItem label="广告链接" prop="linkUrl">
-          <Input v-model="formValidate.linkUrl"></Input>
+          <Input v-model="formValidate.linkUrl"/>
         </FormItem>
         <FormItem label="广告备注">
           <Input
@@ -89,9 +111,9 @@
 </template>
 
 <script>
-import  axios from 'axios';
 import {date1} from '../../request/datatime'
-import { AddAdvertising,AdvertisingList,AdvertisingDetails } from "../../request/api";
+import { upload } from "../../request/http";
+import { AddAdvertising,AdvertisingList,AdvertisingDetails,orgimgdel} from "../../request/api";
 export default {
   data() {
     return {
@@ -101,7 +123,9 @@ export default {
       citys:[],
       data1:'',
       data2:'',
-      picUrl:'',
+      content:'',
+
+
       formValidate: {
         title: "",
         location: '1',
@@ -110,6 +134,8 @@ export default {
         endAt: '',
         remark: "",
         linkUrl: "",
+        picUrl:'',
+         imgUrl:null,
       },
       ruleValidate: {
 
@@ -119,6 +145,7 @@ export default {
         linkUrl: [
           { required: true, message: "广告链接不能为空", trigger: "blur" }
         ],
+        imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
         location: [
           { required: true, message: "广告位置不能为空", trigger: "change" }
         ],
@@ -172,7 +199,6 @@ export default {
       })
     },
     //添加广告
-
     getadd(){
       this.data1 = this.formValidate.startAt.getTime()
       this.data2 = this.formValidate.endAt.getTime()
@@ -183,7 +209,7 @@ export default {
         startAt:this.data1,
         endAt:this.data2,
         status:this.formValidate.status,
-        picUrl:this.picUrl,
+        picUrl:this.formValidate.picUrl,
         linkUrl:this.formValidate.linkUrl,
         remark:this.formValidate.remark,
         contentId:this.$route.query.contentId
@@ -213,37 +239,56 @@ export default {
         this.formValidate.picUrl = list.picUrl,
         this.formValidate.linkUrl = list.linkUrl,
         this.formValidate.remark = list.remark
+        this.formValidate.imgUrl=list.picUrlShow
       })
+    },
+     //图片上传
+    uploadFile() {
+      let file = this.$refs.files.files[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.formValidate.imgUrl = e.target.result;
+          this.formValidate.picUrl = res.data;
+        };
+      });
+    },
+     //删除图片
+    cancelImg() {
+      console.log(this.formValidate.picUrl)
+      orgimgdel({ path: this.formValidate.picUrl }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.formValidate.picUrl = '';
+          this.formValidate.imgUrl = null;
+        } else {
+          this.$Message.error(res.msg);
+        }
+      });
     },
 
 
 
     handleSubmit(name) {
       if(this.formValidate.startAt<this.formValidate.endAt){
-      console.log()
       this.$refs[name].validate(valid => {
         if (valid) {
-          // this.getAddAdvertising()
           this.getadd()
           console.log(this.formValidate)
         } else {
            console.log(this.formValidate)
-          this.$Message.error("提交失败！");
+          this.$Message.error("必填项未填！");
         }
       });
       }else{
         this.$Message.info('日期结束时间不正确')
       }
     },
-    //图片上传
-    handleUpload(file){
-      // this.picUrl=file.name
-      this.formValidate.picUrl = '11'
-      console.log(file,this.picUrl)
-    },
-    remove(file){
-      console.log(file)
-    },
+
 
     history() {
       this.$router.go(-1);

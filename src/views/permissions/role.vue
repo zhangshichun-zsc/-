@@ -55,7 +55,7 @@
                 </Modal>
               </div>
               <div class="layout-nav">
-                <span>项目经理</span>
+                <span>{{role}}</span>
               </div>
               <div class="btn">
                 <Button @click="function1">权限设置</Button>
@@ -208,7 +208,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "Add-members",
-                        query: { userId: params.row.userId, name: this.role,state:3}
+                        query: { userId: params.row.userId, name: this.role,states:3}
                       });
                     }
                   }

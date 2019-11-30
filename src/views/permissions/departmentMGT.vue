@@ -134,7 +134,7 @@ export default {
         //   { required: true, message: "请输入所属项目", trigger: "blur" }
         // ]
       },
-      data1: [{}],
+      data1: [],
       columns1: [
         {
           type: "expand",
@@ -225,7 +225,7 @@ export default {
                     on: {
                       click: () => {
                         this.modal1 = true;
-                        this.getdepartmentSup();
+                        // this.getdepartmentSup();
                         this.AddDate = params.row;
                         this.AddDate.parentId = params.row.parentId;
                       }
@@ -345,7 +345,7 @@ export default {
                     },
                     on: {
                       click: () => {
-                        this.$router.push({ name: "Add-members",query:{userId:params.row.userId,name:params.row.userName,deptId:this.deptId} });
+                        this.$router.push({ name: "Add-members",query:{userId:params.row.userId,name:params.row.userName,deptId:this.deptId,states:1}});
                       }
                     }
                   },
@@ -546,7 +546,7 @@ export default {
 
     //添加成员
     AddMembers() {
-      this.$router.push({ name: "Add-members", query: { state: 1 } });
+      this.$router.push({ name: "Add-members", query: { states: 1 } });
     }
   },
   components: { expandRow }

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import {date1} from '../../request/datatime'
+import {formatDate} from '../../request/datatime'
 import tophead from "../../components/tophead";
 import {
   Agreementpage,
@@ -83,7 +83,7 @@ export default {
 
           align: "center",
           render: (h, params) => {
-            return h("div",date1('Y-m-d',params.row.agreementTimestamp) );
+            return h("div",formatDate(params.row.agreementTimestamp) );
           }
         },
         {
