@@ -27,21 +27,18 @@
               <Input style="width: 10rem" v-model="AddDate.email" />
             </FormItem>
             <FormItem label="所属部门:" prop="deplNames">
-              <!-- <Input v-model="AddDate.deplNames" disabled  /> -->
-              <!-- <p>{{AddDate.deplNames}}</p> -->
 
               <Select style="width: 10rem" multiple v-model="AddDate.deplNames" placeholder="全部">
-                <!-- <Option :value="AddDate.deplNames">{{AddDate.deplNames}}</Option> -->
+
                 <Option :value=item.deptId v-for="(item,index) in list" :key="index">{{item.deptName}}</Option>
-                <!-- <Option value="logistics">行政部</Option>
-                <Option value="logistics">项目部</Option> -->
+
               </Select>
               <a>查看部门详情</a>
               <p>选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限</p>
             </FormItem>
             <FormItem label="所属角色:" prop="sysRoleNames">
               <Select style="width: 10rem" multiple v-model="AddDate.sysRoleNames" placeholder="全部">
-                <Option :value="AddDate.sysRoleNames">{{AddDate.sysRoleNames}}</Option>
+                <Option  v-for="(item,index) in checkList" :key="index" :value="item.sysRoleId">{{item.sysRoleName}}</Option>
               </Select>
               <a>查看角色详情</a>
               <p>选择所属部门后默认继承角色功能权限，可在成员列表中单独设置权限</p>
@@ -69,7 +66,7 @@
 </template>
 
 <script>
-import { rolenumquery, roleedit,departmentlist,memberlist} from "@/request/api";
+import { rolenumquery,departmentall, roleedit,memberlist,rolequery} from "@/request/api";
 export default {
   data() {
     return {
@@ -95,10 +92,10 @@ export default {
           { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
         ],
         deplNames:[
-         { required: true, message: "请选择部门类型", trigger: "change",type:'number' }
+         { required: true, message: "请选择部门类型", trigger: "blur",type:'array' }
           ],
         sysRoleNames:[
-         { required: true, message: "请选择角色类型", trigger: "change",type:'number' }
+         { required: true, message: "请选择角色类型", trigger: "blur",type:'array' }
           ],
         loginPwd: [
           { required: true, message: "请输入初始密码", trigger: "blur" }
@@ -107,10 +104,20 @@ export default {
       },
       page: 1,
       size: 10,
-      list:[]
+      list:[],
+      checkList:[]
     };
   },
   methods: {
+     // 查询所有角色
+    getrolequery() {
+      rolequery({}).then(res => {
+        if (res.code == 200) {
+          this.checkList = res.data;
+        }
+        console.log(res);
+      });
+    },
     //编辑角色
     getroleedit() {
       roleedit({
@@ -122,17 +129,17 @@ export default {
         loginPwd: this.AddDate.loginPwd
       }).then(res => {
         if (res.code == 200) {
-          if (this.$route.query.state == 3) {
+          if (this.$route.query.status == 3) {
             this.$Message.info("编辑成功");
             this.$router.push({
               name: "role"
             });
-          }else if(this.$route.query.state==2){
+          }else if(this.$route.query.status==2){
             this.$Message.info("添加成功");
             this.$router.push({
               name: "membersMGT"
             });
-          }else if(this.$route.query.state==1){
+          }else if(this.$route.query.status==1){
             this.$Message.info("添加成功");
             this.$router.push({
               name: "departmentMGT"
@@ -144,20 +151,16 @@ export default {
         console.log(res);
       });
     },
-
-    // 部门列表
-    getdepartmentlist() {
-      departmentlist({
-        parentId: 0
-      }).then(res => {
+    // 查询所有部门名称
+    getdepartmentall() {
+      departmentall({}).then(res => {
         if (res.code == 200) {
           this.list = res.data;
-        } else {
-          this.$Message.error(res.msg);
         }
         console.log(res);
       });
     },
+
     // 多条件查询角色成员
     getrolenumquery() {
       rolenumquery({
@@ -170,6 +173,13 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.AddDate = res.data.list[0];
+          this.AddDate.sysRoleNames=res.data.list[0].sysRoleIds.split(",").map(item=>{
+              return Number(item)
+            })
+             this.AddDate.deplNames=res.data.list[0].deptIds.split(",").map(item=>{
+              return Number(item)
+            })
+
         } else {
           this.$Message.error(res.msg);
         }
@@ -185,6 +195,19 @@ export default {
         name:this.$route.query.name,
         deptId:this.$route.query.deptId
       }).then(res=>{
+        if(res.code==200){
+          if(res.data.list.length>0){
+            this.AddDate=res.data.list[0]
+            this.AddDate.sysRoleNames=res.data.list[0].sysRoleIds.split(",").map(item=>{
+              return Number(item)
+            })
+
+            this.AddDate.deplNames=res.data.list[0].deptIds.split(",").map(item=>{
+              return Number(item)
+            })
+            console.log(this.AddDate.deplNames,this.AddDate.sysRoleNames)
+          }
+        }
         console.log(res)
       })
     },
@@ -193,20 +216,30 @@ export default {
     handleReset(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.getroleedit();
+          // this.getroleedit();
         } else {
+          console.log(this.AddDate.deplNames,this.AddDate.sysRoleNames)
           this.$Message.error("必填项未填!");
         }
       });
     }
   },
   mounted() {
-    // this.getdepartmentlist()
-    if (this.$route.query.userId) {
-      this.getrolenumquery();
+    this.getdepartmentall()
+     this.getrolequery()
+    if(this.$route.query.userId){
+       // this.getrolenumquery();
       this.navigation1.head = "编辑成员信息";
+      if(this.$route.query.states==1){
+        this.getmemberlist()
+      }else if(this.$route.query.states==3){
+         this.getrolenumquery();
+      }
+    }else{
+
     }
-    this.getmemberlist()
+
+
   }
 };
 </script>

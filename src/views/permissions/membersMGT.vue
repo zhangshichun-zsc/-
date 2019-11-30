@@ -18,6 +18,13 @@
         </p>&nbsp;&nbsp;&nbsp;
         <p>
           <span>所属部门:</span>&nbsp;
+          <!-- <Select v-model="role" style="width:200px" :transfer="true">
+            <Option
+              v-for="item in data1"
+              :value="item.sysRoleName"
+              :key="item.sysRoleId"
+            >{{ item.sysRoleName }}</Option>
+          </Select>-->
           <Button style="width: 200px">
             全部
             <Icon type="md-arrow-dropdown" />
@@ -80,19 +87,15 @@
                 width="auto"
                 :open-names="['1']"
                 style="background-color: #008e40;color: white;"
-                @click.native="bumen"
+                @on-open-change="member"
+                @on-select="member"
+                accordion
               >
                 <Submenu name="1">
                   <template slot="title">
-                    <Icon type="ios-navigate" @click="member"/>融爱融乐
+                    <Icon type="ios-navigate" />融爱融乐
                   </template>
-
-                  <Submenu
-                    :name="index+1"
-                    v-for="(item,index) in data1"
-                    :key="index"
-                    @click.native="member"
-                  >
+                  <Submenu :name="index+1" v-for="(item,index) in data1" :key="index">
                     <template slot="title" @click="member(item.deptId)">{{item.deptName}}</template>
                     <MenuItem
                       :name="`2-${item.deptId}`"
@@ -114,7 +117,7 @@
         </Layout>
       </div>
       <div class="pages">
-        <Page :total="100" show-elevator show-total size="small" style="margin: auto" />
+        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" />
       </div>
     </div>
   </div>
@@ -125,7 +128,9 @@ import {
   memberlist,
   departmentlist,
   departmentadd,
-  departmentall
+  departmentall,
+  departmentStatus,
+  departmentsub
 } from "../../request/api";
 export default {
   data() {
@@ -134,7 +139,8 @@ export default {
         deptName: "",
         description: "",
         parentId: "",
-        leader: ""
+        leader: "",
+        active: ""
       },
       ruleValidate: {
         deptName: [
@@ -160,7 +166,7 @@ export default {
       columns: [
         {
           title: "姓名",
-          key: "name",
+          key: "userName",
           width: "100",
           align: "center"
         },
@@ -171,12 +177,12 @@ export default {
         },
         {
           title: "联系方式",
-          key: "link",
+          key: "tel",
           align: "center"
         },
         {
           title: "角色",
-          key: "active",
+          key: "sysRoleNames",
           width: "100",
           align: "center"
         },
@@ -186,7 +192,19 @@ export default {
           width: "100",
           algin: "center",
           render: (h, params) => {
-            return h("div", [h("i-switch")]);
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  value: params.row.validFag == 1
+                },
+                on: {
+                  input: e => {
+                    console.log(e);
+                    this.getdepartmentStatus(params.row.userId, e);
+                  }
+                }
+              })
+            ]);
           }
         },
         {
@@ -205,7 +223,14 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "Permissions-SetUp" });
+                      this.$router.push({
+                        name: "function",
+                        query: {
+                          sysRoleName: params.row.userName,
+                          sysRoleId: params.row.deptUserId,
+                          status: 2
+                        }
+                      });
                     }
                   }
                 },
@@ -220,26 +245,34 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "Add-members" });
+                      this.$router.push({
+                        name: "Add-members",
+                        query: {
+                          userId: params.row.userId,
+                          name: params.row.userName,
+                          deptId: this.deptId,
+                          states: 2
+                        }
+                      });
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {}
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
@@ -253,7 +286,9 @@ export default {
       deptId: "",
       page: 1,
       size: 10,
-      name: ""
+      name: "",
+      status: "",
+      dataCount: 0
     };
   },
   mounted() {
@@ -267,13 +302,20 @@ export default {
         parentId: this.parentId
       }).then(res => {
         if (res.code == 200) {
-          if (this.sun == false) {
-            this.sunlist = res.data;
-          } else {
-            this.data1 = res.data;
-          }
+          this.data1 = res.data;
         } else {
           this.$Message.error(res.msg);
+        }
+        console.log(res);
+      });
+    },
+    // 查询下级部门
+    getdepartmentsub() {
+      departmentsub({
+        depId: this.deptId
+      }).then(res => {
+        if (res.code == 200) {
+          this.sunlist = res.data;
         }
         console.log(res);
       });
@@ -290,21 +332,16 @@ export default {
     },
     member(e) {
       console.log(e);
-      this.deptId = e;
-      // this.getmemberlist();
+      if (e.length > 1) {
+        this.deptId = e[e.length - 1];
+        console.log(this.deptId);
+        this.getdepartmentsub();
+        // this.getdepartmentlist();
+        this.getmemberlist();
+      } else {
+        console.log(11);
+      }
     },
-    bumen(e) {
-      this.sun = false;
-      this.parentId = 1;
-      console.log(e, this.parentId);
-      this.getdepartmentlist();
-      // this.getmemberlist()
-    },
-    // bumens(e){
-    //   console.log(e)
-
-    // },
-
     //成员管理列表
     getmemberlist() {
       memberlist({
@@ -314,7 +351,28 @@ export default {
         name: this.name
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data;
+          this.data = res.data.list;
+          this.dataCount = res.data.totalSize;
+        }
+        console.log(res);
+      });
+    },
+    // 部门成员-修改启用状态
+    getdepartmentStatus(id, e) {
+      if (e == true) {
+        this.status = 1;
+      } else {
+        this.status = 0;
+      }
+      departmentStatus({
+        deptUserId: id,
+        validFlag: this.status
+      }).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("操作成功");
+        } else {
+          this.$Message.info(res.msg);
+          this.getmemberlist();
         }
         console.log(res);
       });
@@ -330,6 +388,7 @@ export default {
         if (res.code == 200) {
           this.getdepartmentlist();
           this.$Message.info("添加成功");
+          this.modal1 = false;
         } else {
           this.$Message.error(res.msg);
         }
@@ -355,7 +414,6 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getdepartmentadd();
-          this.modal1 = false;
         } else {
           this.$Message.error("必填项未填!");
         }
@@ -367,7 +425,7 @@ export default {
     },
 
     addmember() {
-      this.$router.push({ name: "Add-members", query: { state: 2 } });
+      this.$router.push({ name: "Add-members", query: { states: 2 } });
     }
   }
 };

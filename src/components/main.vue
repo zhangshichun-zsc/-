@@ -268,14 +268,14 @@
           <Sider hide-trigger>
             <div class="toggle-button">|||</div>
             <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
-              <Submenu :name="index+1" v-for="(item, index) in this.$router.options.routes" :key="index" v-if="item.meta.title">
+              <Submenu :name="index+1" v-for="(item, index) in routelist" :key="index" >
                 <template slot="title">
-                  <Icon :type="item.meta.icon"></Icon>
-                  {{ item.meta.title}}
+                  <!-- <Icon :type="item.meta.icon"></Icon> -->
+                  {{ item.parentName}}
                 </template>
-                <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.children" :key="keys" :to="{name: value.name}" v-if="value.meta.title" @click.native="savestate(`${index+1}-${keys+1}`)">
-                  <Icon :type="value.meta.icon"></Icon>
-                  {{ value.meta.title }}
+                <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.list" :key="keys" :to="{name: value.url}" @click.native="savestate(`${index+1}-${keys+1}`)">
+                  <!-- <Icon :type="value.meta.icon"></Icon> -->
+                  {{ value.name }}
                 </Menu-item>
               </Submenu>
             </Menu>
@@ -318,7 +318,9 @@ export default {
   methods: {
     gethomepage() {
       // this.token = localStorage.getItem("token");
-      homepage({}).then(res => {
+      homepage({
+        userId:this.$store.state.userId
+      }).then(res => {
         if (res.code == 200) {
           this.routelist = res.data
         }
@@ -366,7 +368,9 @@ export default {
     modalOk(e) {
       this.modal1 = false
       if (e == 1) {
+        localStorage.clear();
         this.$router.push({ name: 'login' })
+        // console.log(this.$store.state.token)
       }
     },
 
@@ -375,8 +379,7 @@ export default {
     }
   },
   mounted() {
-    console.log(localStorage.getItem('token'))
-    // this.gethomepage();
+    this.gethomepage();
   }
 }
 </script>

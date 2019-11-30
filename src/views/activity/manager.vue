@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { date1 } from "../../request/datatime";
+import { formatDate } from "../../request/datatime";
 import { activeManager, activeAddManager } from "../../request/api";
 export default {
   data() {
@@ -304,7 +304,7 @@ export default {
           title: "活动时间",
           key: "startTimestamp",
           render: (h, params) => {
-            return h("div", date1("Y-m-d", params.row.startAt));
+            return h("div", formatDate(params.row.startTimestamp));
           }
         },
         {

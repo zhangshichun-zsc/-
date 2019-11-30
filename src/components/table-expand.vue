@@ -133,18 +133,7 @@ export default {
                   },
                   "编辑"
                 ),
-                h(
-                  "a",
-                  {
-                    style: {
-                      color: "#1ABD9D"
-                    },
-                    on: {
-                      click: () => {}
-                    }
-                  },
-                  "删除"
-                )
+
               ]
             );
           }
@@ -157,7 +146,7 @@ export default {
   },
   props: ["row","dom"],
   mounted() {
-    console.log
+    console.log(this.dom)
     this.getdepartmentsub();
     console.log(this.row.deptId);
   },

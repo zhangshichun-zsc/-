@@ -59,7 +59,9 @@ export default {
   computed: {},
 
   created() {},
+  mounted(){
 
+  },
   methods: {
     getlogin() {
       login({

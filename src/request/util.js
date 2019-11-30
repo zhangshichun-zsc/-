@@ -100,6 +100,13 @@ export default {
       }
     }
     return a;
+  },
+
+  //字符串转数组
+  strarr(a){
+    a.split(",").map(item=>{
+      return Number(item)
+    })
   }
 
 
