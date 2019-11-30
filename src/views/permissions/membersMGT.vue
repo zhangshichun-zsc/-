@@ -97,12 +97,15 @@
                   </template>
                   <Submenu :name="index+1" v-for="(item,index) in data1" :key="index">
                     <template slot="title" @click="member(item.deptId)">{{item.deptName}}</template>
-                    <MenuItem
+                  <Submenu :name="indexs+1" v-for="(val,indexs) in sunlist" :key="indexs">
+                     <template slot="title" @click="member(val.deptId)">{{val.deptName}}</template>
+                     <MenuItem
                       :name="`2-${item.deptId}`"
                       @click.native="member(item.deptId)"
-                      v-for="(item,index) in sunlist"
+                      v-for="(item,index) in lowestlist"
                       :key="index"
                     >{{item.deptName}}</MenuItem>
+                  </Submenu>
                   </Submenu>
                 </Submenu>
               </Menu>
@@ -131,7 +134,7 @@ import {
   departmentall,
   departmentStatus,
   departmentsub
-} from "../../request/api";
+} from "@/request/api";
 export default {
   data() {
     return {
@@ -288,7 +291,9 @@ export default {
       size: 10,
       name: "",
       status: "",
-      dataCount: 0
+      dataCount: 0,
+      lowestlist:[],
+      layer:''
     };
   },
   mounted() {
@@ -315,7 +320,12 @@ export default {
         depId: this.deptId
       }).then(res => {
         if (res.code == 200) {
-          this.sunlist = res.data;
+          if(this.layer==1){
+            this.sunlist = res.data;
+          }else if(this.layer==2){
+
+          }
+
         }
         console.log(res);
       });
@@ -332,12 +342,16 @@ export default {
     },
     member(e) {
       console.log(e);
+      this.layer=e[0]
       if (e.length > 1) {
-        this.deptId = e[e.length - 1];
+        if(e[0]==1){
+           this.deptId = e[e.length - 1];
         console.log(this.deptId);
         this.getdepartmentsub();
         // this.getdepartmentlist();
         this.getmemberlist();
+        }
+
       } else {
         console.log(11);
       }

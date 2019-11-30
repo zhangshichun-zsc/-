@@ -176,6 +176,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
+      arr:''
     };
   },
 

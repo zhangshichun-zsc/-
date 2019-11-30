@@ -42,6 +42,8 @@ export default {
           type: "expand",
           width: 50,
           render: (h, params)=>{
+          //  this.ids=params.row.deptId
+          //  this.getdepartmentsub()
             return (this.dom)
           }
         },
@@ -144,9 +146,9 @@ export default {
       validFlag:''
     };
   },
-  props: ["row","dom"],
+  props: ["row","dom","deptId"],
   mounted() {
-    console.log(this.dom)
+    console.log(this.dom,this.deptId)
     this.getdepartmentsub();
     console.log(this.row.deptId);
   },
@@ -155,7 +157,7 @@ export default {
     getdepartmentsub() {
       this.ids=this.row.deptId
       departmentsub({
-        depId: this.row.deptId
+        depId: this.ids
       }).then(res => {
         if (res.code == 200) {
           this.data=res.data

@@ -3,7 +3,7 @@
   <div class="main">
     <div class="layout">
       <Layout>
-        <Header>
+        <Header >
           <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-nav">
               <div class="layout-logo">
@@ -317,7 +317,6 @@ export default {
 
   methods: {
     gethomepage() {
-      // this.token = localStorage.getItem("token");
       homepage({
         userId:this.$store.state.userId
       }).then(res => {
@@ -370,7 +369,7 @@ export default {
       if (e == 1) {
         localStorage.clear();
         this.$router.push({ name: 'login' })
-        // console.log(this.$store.state.token)
+
       }
     },
 

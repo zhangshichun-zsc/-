@@ -77,7 +77,6 @@ export default {
         }else{
           this.$Message.info("密码或账号不正确!")
         }
-        console.log(res.data)
       })
     },
     handleSubmit(name) {

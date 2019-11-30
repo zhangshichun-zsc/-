@@ -55,7 +55,7 @@
                 </Modal>
               </div>
               <div class="layout-nav">
-                <span>项目经理</span>
+                <span>{{role}}</span>
               </div>
               <div class="btn">
                 <Button @click="function1">权限设置</Button>

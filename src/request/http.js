@@ -18,7 +18,7 @@ const SERVICE_URL = {
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
     'http://192.168.0.5:8084/rhzg-web', // 王盛
   ],
-  API_INDEX: 2
+  API_INDEX: 0
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
@@ -41,12 +41,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 axios.interceptors.request.use(
   config => {
 
-    // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
+    // 每次发送请求之前判断是否存在token，如果存在，则统一都加上token，不用每次请求都手动添加了
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    // const userId = localStorage.setItem('userId')
-    if(store.state.token){
-
-    }
+    // if(store.state.token){
+    //   config.params.token=token
+    // }else{
+    //   console.log(111)
+    // }
     // config.params=qs.stringify({
     //   userId:userId,
     //   // appId:appId,
@@ -84,14 +85,16 @@ axios.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // 401 清除token信息并跳转到登录页面
-          store.commit(types.LOGOUT)
-
+          localStorage.clear();
           // 只有在当前路由不是登录页面才跳转
           router.currentRoute.path !== 'login' &&
             router.replace({
               path: 'login',
               query: { redirect: router.currentRoute.path },
-            })
+            });
+        case 500:
+
+
       }
     }
     // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
@@ -160,7 +163,7 @@ export function post(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function posts(url, params) {
-  params.token=token
+  url=`${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios.post(url, QS.parse(QS.stringify(params)), {
       headers: {
@@ -176,7 +179,7 @@ export function posts(url, params) {
 }
 
 export function postdel(url, params) {
-  params.token=token
+  url=`${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios.post(url, params, {
       headers: {

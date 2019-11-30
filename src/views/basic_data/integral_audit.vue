@@ -53,7 +53,7 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { date1 } from "../../request/datatime";
+import { formatDate } from "../../request/datatime";
 import { integralExa, Integralaudit } from "../../request/api";
 export default {
   data() {
@@ -88,7 +88,7 @@ export default {
           title: "修改时间",
           key: "modifyTime",
           render: (h, params) => {
-            return h("div", date1("Y-m-dH:i:s", params.row.modifyTime));
+            return h("div", formatDate(params.row.modifyTime));
           }
         },
         {
@@ -177,6 +177,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
+      arr:''
     };
   },
 
@@ -224,7 +225,7 @@ export default {
            this.$Message.info("操作成功");
            this.getintegralExa()
         }else{
-          this.$Message.info("网络错误");
+          this.$Message.info(res.msg);
         }
         console.log(res);
       });

@@ -239,6 +239,7 @@ export default {
         this.formValidate.picUrl = list.picUrl,
         this.formValidate.linkUrl = list.linkUrl,
         this.formValidate.remark = list.remark
+        this.formValidate.imgUrl=list.picUrlShow
       })
     },
      //图片上传

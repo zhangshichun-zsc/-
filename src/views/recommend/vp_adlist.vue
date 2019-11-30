@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { date1 } from "../../request/datatime";
+import { formatDate } from "../../request/datatime";
 import {
   AdvertisingList,
   AdvertisingDetails,
@@ -160,8 +160,8 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h("p", "开始时间:" + date1("Y-m-dH:i:s", params.row.startAt)),
-              h("p", "到期时间:" + date1("Y-m-dH:i:s", params.row.endAt))
+              h("p", "开始时间:" + formatDate(params.row.startAt)),
+              h("p", "到期时间:" + formatDate(params.row.endAt))
             ]);
           }
         },
@@ -225,7 +225,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "blue"
+                    color:'green',
                   },
                   on: {
                     click: () => {
