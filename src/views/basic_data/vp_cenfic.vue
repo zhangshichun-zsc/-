@@ -104,7 +104,7 @@ export default {
       },
       ruleValidate:{
         orgId: [
-            { required: true, message: '组织不能为空', trigger: 'blur' }
+            { required: true, message: '组织不能为空', trigger: 'change',type:'number',min:0 }
             ],
         title: [
             { required: true, message: '模板名称不能为空', trigger: 'blur' }
@@ -247,6 +247,7 @@ export default {
                 this.modal1 = false
                 this.$Message.success('添加成功')
                 this.getList(this.args)
+                 this.cancel()
               }else{
                 this.$Message.error(res.msg)
               }
