@@ -5,8 +5,8 @@
     <div class="content">
       <div class="con-top con-p bk-szy flex-center-start">
         <p>
-          <span>5.12 “行走在夏日”游园活动</span>
-          <span>（10条反馈）</span>
+          <span>{{this.$route.query.name}}</span>
+          <!-- <span>（10条反馈）</span> -->
         </p>
         <div class="flex-center-end">
           <Button size="small">导出反馈结果</Button>
@@ -65,7 +65,7 @@
           <div class="con-top">
             <p>反馈详情</p>
           </div>
-          <div style="padding: 0.1rem 0.5rem" v-for="(item,i) in lists">
+          <div style="padding: 0.1rem 0.5rem"  v-for="(item,i) in lists">
             <p>{{lists[i].sort}}.{{lists[i].question}}</p>
             <div>{{lists[i].answer}}</div>
           </div>
@@ -77,7 +77,7 @@
 
 <script>
 import Divider from "iview/src/components/divider/divider";
-import { date1 } from "../../../request/datatime";
+import { formatDate } from "../../../request/datatime";
 import { Activityuserpage, Activitydetail } from "../../../request/api";
 export default {
   components: { Divider },
@@ -118,7 +118,7 @@ export default {
           align: "center",
           width: "180px",
           render: (h, params) => {
-            return h("div", [h("p", date1("Y-m-dH:i:s", params.row.startAt))]);
+            return h("div", [h("p", formatDate(params.row.feedbackTimestamp))]);
           }
         },
         {

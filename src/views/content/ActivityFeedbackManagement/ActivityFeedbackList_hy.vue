@@ -83,8 +83,8 @@
 </template>
 
 <script>
-import { date1 } from "../../../request/datatime";
-import { Activitypage,Activitybatch } from "../../../request/api";
+import { formatDate } from "@/request/datatime";
+import { Activitypage,Activitybatch } from "@/request/api";
 export default {
   data() {
     return {
@@ -133,7 +133,7 @@ export default {
           key: "activityTimestamp",
           align: "center",
           render: (h, params) => {
-            return h("div", [h("p", date1("Y-m-dH:i:s", params.row.startAt))]);
+            return h("div", [h("p", formatDate(params.row.activityTimestamp))]);
           }
         },
         {
@@ -155,7 +155,8 @@ export default {
                       this.$router.push({
                         name: "ActivityFeedbackDetails_hy",
                         query: {
-                          activityId: params.row.activityId
+                          activityId: params.row.activityId,
+                          name:params.row.activityName
                         }
                       });
                     }
@@ -227,7 +228,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
-          this.page = res.data.pageNum;
+
           this.dataCount = res.data.totalSize;
         }
         console.log(res);

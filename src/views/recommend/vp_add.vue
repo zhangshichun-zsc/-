@@ -191,7 +191,7 @@ export default {
   methods: {
     //列表
     getAdvertisingList(){
-      AdvertisingList().then(res=>{
+      AdvertisingList({}).then(res=>{
         if(res.code==200){
           this.citys=res.data
         }

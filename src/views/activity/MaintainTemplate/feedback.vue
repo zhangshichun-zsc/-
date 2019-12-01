@@ -26,7 +26,7 @@ export default {
 
   methods: {
     getList(){
-      getActiveTeb().then(res => {
+      getActiveTeb({}).then(res => {
         this.list = res.data
       })
     }

@@ -26,7 +26,8 @@ export default {
 
   methods: {
     getList(){
-      getTranList().then(res => {
+      let token=this.$store.state.token
+      getTranList({token:token}).then(res => {
         this.list = res.data
       })
     }
