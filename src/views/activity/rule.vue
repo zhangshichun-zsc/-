@@ -69,11 +69,7 @@ export default {
           key: "name",
           align: "center"
         },
-        {
-          title: "限制条件",
-          key: "content",
-          align: "center"
-        },
+
         {
           title: "新增时间",
           key: "createAt",
@@ -124,7 +120,7 @@ export default {
         },
         {
           title: "优先条件",
-          key: "content",
+          key: "name",
           align: "center"
         },
         {
@@ -175,8 +171,8 @@ export default {
         { value: 20, label: 20 }
       ],
       sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
+        { value: "create_at asc", label: "正序" },
+        { value: "create_at desc", label: "倒序" }
       ],
       data: [],
       data1: [],
@@ -185,7 +181,7 @@ export default {
       dataCount: 0,
       ruleType: "1",
       ruleOprType: "1",
-      sort: "asc"
+      sort: "create_at asc"
     };
   },
 
@@ -212,17 +208,11 @@ export default {
     },
     //活动规则池--获取活动规则分页
     getActiverulepage() {
-      let ruleTypes = null;
 
-      if (this.sysType == "2") {
-        ruleTypes = Number(this.ruleType) + 1;
-      } else {
-        ruleTypes = this.ruleType;
-      }
       Activerulepage({
         sysType: this.sysType,
-        page: { page: this.page, size: this.size },
-        ruleType: ruleTypes
+        page: { page: this.page, size: this.size,sort:this.sort },
+        ruleType: this.ruleType
       }).then(res => {
         if (res.code == 200) {
           if (this.ruleType == 1) {
@@ -230,7 +220,6 @@ export default {
           } else {
             this.data1 = res.data.list;
           }
-          // this.size = res.data.pageSize;
           this.dataCount = res.data.totalSize;
         }
         console.log(res);

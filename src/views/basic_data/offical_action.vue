@@ -224,7 +224,7 @@ export default {
       // dicNamemod: "",
       validFlag: "",
       typeFlag: "",
-      oprUserId: 1,
+
       statsdata: "",
       dicId: "",
       arr: [],
@@ -237,7 +237,7 @@ export default {
   computed: {},
 
   created() {
-    //  this.getOffactivities();
+
   },
   mounted() {
     this.getOffactivities();
@@ -321,7 +321,7 @@ export default {
       Offactiviteadd({
         typeFlag: 8,
         dicName: this.formValidate.dicNamemod,
-        oprUserId: this.oprUserId
+        oprUserId: this.$store.state.userId,
       }).then(res => {
         if (res.code == 200) {
           this.modal2=false

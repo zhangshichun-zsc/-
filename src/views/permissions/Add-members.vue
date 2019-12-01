@@ -216,9 +216,9 @@ export default {
     handleReset(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          // this.getroleedit();
+          this.getroleedit();
         } else {
-          console.log(this.AddDate.deplNames,this.AddDate.sysRoleNames)
+
           this.$Message.error("必填项未填!");
         }
       });

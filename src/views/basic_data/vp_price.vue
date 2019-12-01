@@ -62,7 +62,7 @@
 
 <script>
 import tophead from "@/components/tophead";
-import { date1 } from "@/request/datatime";
+import { formatDate } from "@/request/datatime";
 import {
   Cost,
   Costdel,
@@ -147,7 +147,7 @@ export default {
           key: "createAt",
           align: "center",
           render: (h, params) => {
-            return h("div", [h("p", date1("Y-m-dH:i:s", params.row.createAt))]);
+            return h("div", [h("p", formatDate(params.row.createAt))]);
           }
         },
         {
