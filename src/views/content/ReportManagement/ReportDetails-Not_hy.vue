@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="con bk">
-        <table width="100%;"  v-for="details in ReportData">
+        <table width="100%;" v-for="details in ReportData">
           <tr>
             <td>举报理由</td>
             <td>{{details.ReportReason}}</td>
@@ -51,74 +51,74 @@
   </div>
 </template>
 <script>
-  export default {
-    data () {
-      return {
-        navigation1: {
-          head: "举报详情-未处理(会员)"
-        },
-        ReportData:[
-          {
-            ReportReason:'存在不良信息',
-            Whistleblowers:'王',
-            ReportTime:'2019-03-22 11:05',
-            ReportObject:'5-12 行走在夏日',
-            ReportStatus:'未处理',
-            ReportContent:'暴露隐私'
-          }
-        ]
-      }
+export default {
+  data() {
+    return {
+      navigation1: {
+        head: '举报详情-未处理(会员)'
+      },
+      ReportData: [
+        {
+          ReportReason: '存在不良信息',
+          Whistleblowers: '王',
+          ReportTime: '2019-03-22 11:05',
+          ReportObject: '5-12 行走在夏日',
+          ReportStatus: '未处理',
+          ReportContent: '暴露隐私'
+        }
+      ]
     }
   }
-
+}
 </script>
 <style scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-  }
-  .main,
-  .bk,
-  .con td{
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 1rem;
-  }
-  .con-top{
-    background-color: #F3F3F3;
-    justify-content: space-between;
-    padding:0.5rem 1rem;
-  }
-  .con-top p,
-  .con{
-    font-size: 12px;
-  }
-  .bk-szy{
-    border-left: 1px solid #E4E4E4;
-    border-right: 1px solid #E4E4E4;
-    border-top: 1px solid #E4E4E4;
-  }
-  .con{
-    padding: 1rem 8rem;
-  }
-  .con td:nth-child(1){
-    text-align: right;
-    width: 6rem;
-  }
-  .con td{
-    padding: 0.5rem 1rem;
-  }
-  .con table{
-    margin-bottom: 1rem;
-  }
-  .but{
-    display: flex;
-    justify-content: center;
-  }
-  .but Button{
-    margin-right: 1rem;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+
+.bk,
+.con td {
+  border: 1px solid #e4e4e4;
+}
+.content {
+  margin: 1rem;
+}
+.con-top {
+  background-color: #f3f3f3;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+.con-top p,
+.con {
+  font-size: 12px;
+}
+.bk-szy {
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  border-top: 1px solid #e4e4e4;
+}
+.con {
+  padding: 1rem 8rem;
+}
+.con td:nth-child(1) {
+  text-align: right;
+  width: 6rem;
+}
+.con td {
+  padding: 0.5rem 1rem;
+}
+.con table {
+  margin-bottom: 1rem;
+}
+.but {
+  display: flex;
+  justify-content: center;
+}
+.but button {
+  margin-right: 1rem;
+}
 </style>

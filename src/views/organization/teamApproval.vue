@@ -380,11 +380,11 @@ export default {
         endAt: this.endAt ? this.endAt.getTime() : ''
       })
       if (this.navigation1.name === 'parent') {
-        getIsConfig({
-          userId: this.userId
-        }).then(res => {
-          if (!res.data === true) return
-        })
+        // getIsConfig({
+        //   userId: this.userId
+        // }).then(res => {
+        //   if (!res.data === true) return
+        // })
         orgpage(fromobj).then(res => {
           if (res.code == 200) {
             this.dataCount = res.data.totalSize

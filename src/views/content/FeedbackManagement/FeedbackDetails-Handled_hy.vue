@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="con bk">
-        <table width="100%;"  v-for="details in FeedbackData">
+        <table width="100%;" v-for="details in FeedbackData">
           <tr>
             <td>反馈类型</td>
             <td>{{details.FeedbackType}}</td>
@@ -31,7 +31,7 @@
             <td>{{details.state}}</td>
           </tr>
         </table>
-        <table width="100%;"  v-for="DealWith in DealWithData">
+        <table width="100%;" v-for="DealWith in DealWithData">
           <tr>
             <td>处理人员</td>
             <td>{{DealWith.DealWithPersonnel}}</td>
@@ -55,74 +55,74 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        navigation1: {
-          head: "举报详情-已处理(会员)"
-        },
-        FeedbackData:[
-          {
-            FeedbackType:'活动反馈',
-            FeedbackPeople:'王',
-            FeedbackTime:'2019-03-22 11:05',
-            FeedbackContent:'增加多种活动形式',
-            state:'已回复'
-          }
-        ],
-        DealWithData:[
-          {
-            DealWithPersonnel:'admin',
-            ProcessingTime:'2019-07-19 14:48:38',
-            ProcessingResults:'无效举报',
-            ProcessingNote:'无',
-          }
-        ]
-      }
+export default {
+  data() {
+    return {
+      navigation1: {
+        head: '举报详情-已处理(会员)'
+      },
+      FeedbackData: [
+        {
+          FeedbackType: '活动反馈',
+          FeedbackPeople: '王',
+          FeedbackTime: '2019-03-22 11:05',
+          FeedbackContent: '增加多种活动形式',
+          state: '已回复'
+        }
+      ],
+      DealWithData: [
+        {
+          DealWithPersonnel: 'admin',
+          ProcessingTime: '2019-07-19 14:48:38',
+          ProcessingResults: '无效举报',
+          ProcessingNote: '无'
+        }
+      ]
     }
   }
-
+}
 </script>
 <style scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-  }
-  .main,
-  .bk,
-  .con td{
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 1rem;
-  }
-  .con-top{
-    background-color: #F3F3F3;
-    justify-content: space-between;
-    padding:0.5rem 1rem;
-  }
-  .con-top p,
-  .con{
-    font-size: 12px;
-  }
-  .bk-szy{
-    border-left: 1px solid #E4E4E4;
-    border-right: 1px solid #E4E4E4;
-    border-top: 1px solid #E4E4E4;
-  }
-  .con{
-    padding: 1rem 8rem;
-  }
-  .con td:nth-child(1){
-    text-align: right;
-    width: 6rem;
-  }
-  .con td{
-    padding: 0.5rem 1rem;
-  }
-  .con table{
-    margin-bottom: 1rem;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+
+.bk,
+.con td {
+  border: 1px solid #e4e4e4;
+}
+.content {
+  margin: 1rem;
+}
+.con-top {
+  background-color: #f3f3f3;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+.con-top p,
+.con {
+  font-size: 12px;
+}
+.bk-szy {
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  border-top: 1px solid #e4e4e4;
+}
+.con {
+  padding: 1rem 8rem;
+}
+.con td:nth-child(1) {
+  text-align: right;
+  width: 6rem;
+}
+.con td {
+  padding: 0.5rem 1rem;
+}
+.con table {
+  margin-bottom: 1rem;
+}
 </style>

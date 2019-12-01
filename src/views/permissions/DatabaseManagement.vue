@@ -16,57 +16,63 @@
         <Table border :columns="DackupColumns" :data="DackupData"></Table>
       </div>
       <div class="pages">
-        <Page :total="100" show-elevator show-total size='small' style="margin: auto"/>
+        <Page :total="100" show-elevator show-total size='small' style="margin: auto" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    data(){
-      return{
-        modal1: false,
-        navigation1: {
-          head: "数据库管理(共用)"
+export default {
+  data() {
+    return {
+      modal1: false,
+      navigation1: {
+        head: '数据库管理(共用)'
+      },
+      DackupData: [],
+      DackupColumns: [
+        {
+          title: '备份文件名',
+          key: 'BackupName',
+          align: 'center'
         },
-        DackupData:[],
-        DackupColumns:[
-          {
-            title:'备份文件名',
-            key:'BackupName',
-            align: 'center'
-          },{
-            title:'版本号',
-            key:'VersionNumber',
-            align: 'center'
-          },{
-            title:'大小(字节)',
-            key:'SizeByte',
-            align: 'center'
-          },{
-            title:'备份时间',
-            key:'BackupTime',
-            align: 'center'
-          },
-          {
-            title:'操作',
-            key: "action",
-            align: "center",
-            render: (h, params) => {
-              return h("div",{
-                style:{
-                  display: "flex",
-                  justifyContent:'space-around',
-                  fontSize: "16px"
+        {
+          title: '版本号',
+          key: 'VersionNumber',
+          align: 'center'
+        },
+        {
+          title: '大小(字节)',
+          key: 'SizeByte',
+          align: 'center'
+        },
+        {
+          title: '备份时间',
+          key: 'BackupTime',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          render: (h, params) => {
+            return h(
+              'div',
+              {
+                style: {
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  fontSize: '16px'
                 }
-              }, [
+              },
+              [
                 h(
-                  "a",
+                  'a',
                   {
-                    clssName: "action",
+                    clssName: 'action',
                     style: {
-                      color: "#1ABD9D"
+                      color: '#1ABD9D'
                     },
                     on: {
                       click: () => {
@@ -74,56 +80,57 @@
                       }
                     }
                   },
-                  "恢复"
+                  '恢复'
                 ),
                 h(
-                  "a",
+                  'a',
                   {
                     style: {
-                      color: "#1ABD9D"
+                      color: '#1ABD9D'
                     },
                     on: {
                       click: () => {}
                     }
                   },
-                  "删除"
+                  '删除'
                 )
-              ]);
-            }
+              ]
+            )
           }
-        ],
-      }
-    },
+        }
+      ]
+    }
   }
+}
 </script>
 
 <style scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 10px;
-  }
-  .bk-szy{
-    border-left: 1px solid #E4E4E4;
-    border-right: 1px solid #E4E4E4;
-    border-top: 1px solid #E4E4E4;
-  }
-  .title{
-    background-color: #F3F3F3;
-    justify-content: space-between;
-    padding: 5px 20px;
-  }
-  .but Input{
-    width: 100px;
-  }
-  .pages{
-    display: flex;
-    justify-content: center;
-    margin: 10px auto;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+.content {
+  margin: 10px;
+}
+.bk-szy {
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  border-top: 1px solid #e4e4e4;
+}
+.title {
+  background-color: #f3f3f3;
+  justify-content: space-between;
+  padding: 5px 20px;
+}
+.but input {
+  width: 100px;
+}
+.pages {
+  display: flex;
+  justify-content: center;
+  margin: 10px auto;
+}
 </style>

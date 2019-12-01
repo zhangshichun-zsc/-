@@ -32,7 +32,7 @@
                   </Radio>
                 </RadioGroup>
               </div>
-              <Divider style="margin: 0.2rem 0"/>
+              <Divider style="margin: 0.2rem 0" />
               <div>
                 <p>2. 您对本次活动的哪方面感到满意</p>
                 <RadioGroup v-model="choose2" vertical>
@@ -50,7 +50,7 @@
                   </Radio>
                 </RadioGroup>
               </div>
-              <Divider style="margin: 0.2rem 0"/>
+              <Divider style="margin: 0.2rem 0" />
               <div>
                 <p>您对我们以后活动的举办还有什么建议？</p>
                 <Input style="width: 20rem" v-model="FeedbackDate.FeedbackSuggestions" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请输入内容"></Input>
@@ -67,40 +67,38 @@
 </template>
 
 <script>
-  import Button from "iview/src/components/button/button";
-  export default {
-    components: {Button},
-    data(){
-      return{
-        navigation1: {
-          head: "活动反馈"
-        },
-        FeedbackDate:{
-          FeedbackIntroduction:' 恭喜您已成功参与活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。',
-          FeedbackSuggestions:'希望此类活动更多些',
-
-        },
-        choose1: 'choose-A',
-        choose2: 'choose-C',
-      }
+import Button from 'iview/src/components/button/button'
+export default {
+  components: { Button },
+  data() {
+    return {
+      navigation1: {
+        head: '活动反馈'
+      },
+      FeedbackDate: {
+        FeedbackIntroduction:
+          ' 恭喜您已成功参与活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。',
+        FeedbackSuggestions: '希望此类活动更多些'
+      },
+      choose1: 'choose-A',
+      choose2: 'choose-C'
     }
   }
-
+}
 </script>
 <style scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-  }
-  .main{
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 1rem 5rem;
-  }
-  .title{
-    padding: 1rem 2rem;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+
+.content {
+  margin: 1rem 5rem;
+}
+.title {
+  padding: 1rem 2rem;
+}
 </style>

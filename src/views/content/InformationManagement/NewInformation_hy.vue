@@ -25,21 +25,13 @@
             </FormItem>
             <FormItem label="展示窗口:" prop="showLocation">
               <Select v-model="ContentData.showLocation" style="width:200px" :transfer=true>
-                <Option
-                  v-for="item in showlist"
-                  :value="item.dicId"
-                  :key="item.dicId"
-                >{{ item.dicName }}</Option>
+                <Option v-for="item in showlist" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
               </Select>
             </FormItem>
             <FormItem label="资讯分类:" prop="informationType">
 
-              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true >
-                <Option
-                  v-for="item in typelist"
-                  :value="item.dicId"
-                  :key="item.dicId"
-                >{{ item.dicName }}</Option>
+              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true>
+                <Option v-for="item in typelist" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
               </Select>
 
             </FormItem>
@@ -77,34 +69,27 @@
         <div class="con-right">
           <div class="figure">
             <div class="tu">
-              <img :src="imgs" style="height:100px;width:100px;"/>
+              <img :src="imgs" style="height:100px;width:100px;" />
               <p>
                 <a @click="cancelImg">删除图片</a>
               </p>
             </div>
             <div class="Photo-But">
-               <div class="start-wap">
-              <div class="upload">
-                <div class="file" @click="()=>{ this.$refs.files.click()}">
-                  <input
-                    style=" display:none;"
-                    type="file"
-                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                    ref="files"
-                    @change="uploadFile()"
-                    multiple
-                  />
-                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-                  <Button>上传图片</Button>
+              <div class="start-wap">
+                <div class="upload">
+                  <div class="file" @click="()=>{ this.$refs.files.click()}">
+                    <input style=" display:none;" type="file" accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP" ref="files" @change="uploadFile()" multiple />
+                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                    <Button>上传图片</Button>
+                  </div>
                 </div>
               </div>
-            </div>
               <Button type="success" @click="modal1=true">从图库中选择</Button>
             </div>
           </div>
           <Modal v-model="modal1" title="从图库选择">
-                <p>商品图库>全部图库</p>
-              </Modal>
+            <p>商品图库>全部图库</p>
+          </Modal>
           <div class="tj">
             <Button type="success" @click="Submission('ContentData')">提交</Button>
           </div>
@@ -115,58 +100,53 @@
 </template>
 
 <script>
-import E from "wangeditor";
-import { upload } from "@/request/http";
-import {
-  inquiryReltype,
-  inquiryRelext,
-  inquiryRel,
-  orgimgdel
-} from "@/request/api";
+import E from 'wangeditor'
+import { upload } from '@/request/http'
+import { inquiryReltype, inquiryRelext, inquiryRel, orgimgdel } from '@/request/api'
 export default {
   data() {
     return {
-      name: "editor",
+      name: 'editor',
       navigation1: {
-        head: "发布资讯(会员)"
+        head: '发布资讯(会员)'
       },
       ContentData: {
-        title: "",
-        resume: "",
-        showLocation: "",
-        informationType: ""
+        title: '',
+        resume: '',
+        showLocation: '',
+        informationType: ''
       },
       RuleDate: {
-        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
-        resume: [{ required: true, message: "描述不能为空", trigger: "blur" }],
+        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+        resume: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
         showLocation: [
           {
-            type: "number",
+            type: 'number',
             required: true,
-            message: "请选择展示类型",
-            trigger: "change"
+            message: '请选择展示类型',
+            trigger: 'change'
           }
         ],
         informationType: [
           {
-            type: "number",
+            type: 'number',
             required: true,
-            message: "请选择资讯类型",
-            trigger: "change"
+            message: '请选择资讯类型',
+            trigger: 'change'
           }
         ]
       },
 
-      editorContent: "",
+      editorContent: '',
 
       sysId: 1,
       typelist: [],
       showlist: [],
 
-      url: "",
+      url: '',
       modal1: false,
-      imgs:null,
-    };
+      imgs: null
+    }
   },
   methods: {
     //资讯类型下拉
@@ -175,10 +155,10 @@ export default {
         sysId: this.sysId
       }).then(res => {
         if (res.code == 200) {
-          this.typelist = res.data;
+          this.typelist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //展示窗口下拉
     getinquiryRelext() {
@@ -186,10 +166,10 @@ export default {
         sysId: this.sysId
       }).then(res => {
         if (res.code == 200) {
-          this.showlist = res.data;
+          this.showlist = res.data
         }
-         console.log(res);
-      });
+        console.log(res)
+      })
     },
     //资讯发布
     getinquiryRel() {
@@ -204,85 +184,77 @@ export default {
         url: this.url
       }).then(res => {
         if (res.code == 200) {
-          this.$router.push({ name: "InformationList_hy" });
-          this.$Message.info(res.msg);
+          this.$router.push({ name: 'InformationList_hy' })
+          this.$Message.info(res.msg)
         } else {
-          this.$Message.info(res.msg);
+          this.$Message.info(res.msg)
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
-
 
     //图片上传
     uploadFile() {
-      let file = this.$refs.files.files[0];
-      console.log(file);
-      const dataForm = new FormData();
-      dataForm.append("file", file);
+      let file = this.$refs.files.files[0]
+      console.log(file)
+      const dataForm = new FormData()
+      dataForm.append('file', file)
       upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
         reader.onload = e => {
-          this.imgs = e.target.result;
-          this.url = res.data;
-
-        };
-      });
-    },
-     //删除图片
-    cancelImg() {
-      if(this.url==null){
-        this.$Message.info("请先上传图片")
-      }else{
-        orgimgdel({ path: this.url }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功");
-          this.imgs = null;
-          this.url = null;
-        } else {
-          this.$Message.success(res.msg);
+          this.imgs = e.target.result
+          this.url = res.data
         }
-      });
-
-      }
-
+      })
     },
-
-
+    //删除图片
+    cancelImg() {
+      if (this.url == null) {
+        this.$Message.info('请先上传图片')
+      } else {
+        orgimgdel({ path: this.url }).then(res => {
+          if (res.code == 200) {
+            this.$Message.success('删除成功')
+            this.imgs = null
+            this.url = null
+          } else {
+            this.$Message.success(res.msg)
+          }
+        })
+      }
+    },
 
     //提交
     Submission(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
           if (this.url == null) {
-            this.$Message.error("请先上传图片");
-          } else if (this.editorContent == "") {
-            this.$Message.error("专题正文未填");
+            this.$Message.error('请先上传图片')
+          } else if (this.editorContent == '') {
+            this.$Message.error('专题正文未填')
           } else {
-            this.getinquiryRel();
+            this.getinquiryRel()
           }
         } else {
-          this.$Message.error("必填项未填!");
+          this.$Message.error('必填项未填!')
         }
-      });
+      })
     }
   },
   mounted() {
-    var editor = new E("#editorElem");
+    var editor = new E('#editorElem')
     editor.customConfig.zIndex = 100
     editor.customConfig.onchange = html => {
-      this.editorContent = html;
-      console.log(html);
-    };
-    editor.create();
+      this.editorContent = html
+      console.log(html)
+    }
+    editor.create()
 
-
-    this.getinquiryReltype();
-    this.getinquiryRelext();
-  },
-
-};
+    this.getinquiryReltype()
+    this.getinquiryRelext()
+  }
+}
 </script>
 <style scoped>
 html,
@@ -292,7 +264,7 @@ body {
 .main {
   background-color: #ffffff;
 }
-.main,
+
 .content,
 .tu {
   border: 1px solid #e4e4e4;
