@@ -22,7 +22,9 @@ const SERVICE_URL = {
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
-const token= localStorage.getItem('token')
+
+export const token= localStorage.getItem('token')
+
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] // 导出文件
 
 

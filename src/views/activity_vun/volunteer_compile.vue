@@ -184,7 +184,7 @@
                 <div class="items flex">
                   <p class="items-tit">优先规则库</p>
                   <div class="flex-start ">
-                    
+
                    <Button type="primary" :disabled='item.disabled'  v-for="(item,index) in goodList" :key='index' @click="addGoodItem(item,index)">{{ item.name }}</Button>
                     </div>
                 </div>
@@ -364,12 +364,12 @@ export default {
       getActiveType({typeFlag:15}).then(res => {
         this.array = res.data
       })
-      getActiveSign().then(res => {
+      getActiveSign({}).then(res => {
         this.items = res.data
       })
       getActiveLimit({roleId: 2, userId}).then(res => {
         this.limitList = res.data
-        // this.splitLimit() 
+        // this.splitLimit()
       })
       getGood({roleId:2}).then(res => {
         this.goodList = res.data
@@ -396,7 +396,7 @@ export default {
       }
       this.limit = limit
       this.good = good
-      // this.splitLimit() 
+      // this.splitLimit()
     },
     splitLimit() {
       let limit = this.limit
@@ -422,8 +422,8 @@ export default {
       this.args.cityId = e.cityId
       this.args.districtId = e.districtId
       this.args.setAddr = e.address
-      this.args.xx = e.xx 
-      this.args.yy = e.yy 
+      this.args.xx = e.xx
+      this.args.yy = e.yy
     },
     success(){
       if (!this.args.userPosition){
@@ -435,7 +435,7 @@ export default {
       } else if (!this.args.recruitNum || this.args.recruitNum == 0){
         this.$Message.warning('招募数量没填写')
         return
-      } 
+      }
       let data = JSON.parse(sessionStorage.getItem("data"))
       let args = this.args
       let list = data.args.coActivityUserConfParamList
@@ -448,7 +448,7 @@ export default {
       let limit = this.limit
       for(let val of limit){
         if(val.ruleId == 3){
-          val.ruleValue = (val.data).join(',') 
+          val.ruleValue = (val.data).join(',')
         }else if(val.ruleId == 4){
           val.ruleValue = getAdressId(this.name[0],this.name[1],this.name[2]).join(',')
         }
@@ -459,7 +459,7 @@ export default {
       }else{
         let arr = data.args.coActivityUserConfParamList
         arr.push(args)
-        data.args.coActivityUserConfParamList = arr 
+        data.args.coActivityUserConfParamList = arr
       }
       console.log(data)
      sessionStorage.setItem('data',JSON.stringify(data))

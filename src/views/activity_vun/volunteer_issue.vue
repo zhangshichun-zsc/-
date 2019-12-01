@@ -395,7 +395,7 @@ import { filterNull } from '@/libs/utils'
           this.dateTwo = [data.zhaStart,data.zhaEnd]
           this.image = data.image
         }
-        getOrgTeam().then(res => {
+        getOrgTeam({}).then(res => {
           this.orgList = res.data
         })
         getActiveType({typeFlag:40}).then(res => {
