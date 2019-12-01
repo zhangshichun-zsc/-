@@ -737,6 +737,7 @@ export default {
       labelList: [{ value: 1, label: 1 }, { value: 2, label: 2 }, { value: 3, label: 3 }], // 标签
       page: 1, // 页码
       size: 10, // 条数
+      pageFlag: false, //是否需要请求新数据
       sort: 'create_at desc', // 排序
       startAt: '',
       endAt: '',
@@ -775,6 +776,7 @@ export default {
     },
     page(newVlaue, oldValue) {
       if (newVlaue === oldValue) return
+
       this.getUsetList(this.paramsObj)
     },
     sort(newVlaue) {
@@ -930,6 +932,8 @@ export default {
     },
     //  查询按钮
     getInfo() {
+      this.pageFlag = true
+      this.page = 1
       this.getUsetList(this.paramsObj)
     },
     //  高级检索 模态框
@@ -949,6 +953,7 @@ export default {
     },
     // 高级检索按钮
     setSenior() {
+      this.page = 1
       this.getUsetList(this.paramsSeniorObj, true)
       this.modalSenior = false
     },

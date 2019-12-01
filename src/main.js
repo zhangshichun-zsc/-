@@ -7,7 +7,7 @@ import store from './store/index'
 import VDistpicker from 'v-distpicker'
 import 'babel-polyfill'
 
-import  util  from "../src/request/util";
+import util from "../src/request/util";
 import page from './components/page'
 import head from './components/head'
 import topheads from './components/topheads'
@@ -21,7 +21,7 @@ import './libs/rem.js'
 
 
 Vue.prototype.$Message = Message
-Vue.prototype.util=util
+Vue.prototype.util = util
 
 Vue.config.productionTip = false
 Vue.use(Components)
@@ -33,17 +33,7 @@ Vue.use(number)
 Vue.component('v-distpicker', VDistpicker)
 Vue.component(VeLine.name, VeLine)
 
-router.beforeEach((to, from, next) => {
-  if (store.state.token) {  // 通过vuex state获取当前的token是否存在
-      next();
-  }
-  else {
-      next({
-          path: '/login',
-          query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
-      })
-  }
-})
+
 
 new Vue({
     router,

@@ -956,6 +956,7 @@ export default {
     },
     // 查询按钮
     getInfo() {
+      this.page = 1
       this.getUsetList(this.paramsObj)
     },
     // 修改Vip时间
@@ -1197,6 +1198,7 @@ export default {
     },
     // 高级检索按钮
     setSenior() {
+      this.page = 1
       this.getUsetList(this.paramsSeniorObj, true)
       this.modalSenior = false
     },
