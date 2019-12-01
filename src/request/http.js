@@ -23,7 +23,7 @@ const SERVICE_URL = {
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
 
-export const token= localStorage.getItem('token')
+export const token = localStorage.getItem('token')
 
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] // 导出文件
 
@@ -111,7 +111,7 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(url, params) {
-  params.token=token
+  params.token = token
   return new Promise((resolve, reject) => {
     axios.get(url, {
       params: params
@@ -148,7 +148,7 @@ export function get(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function post(url, params) {
-  params.token=token
+  params.token = token
   return new Promise((resolve, reject) => {
     axios.post(url, QS.stringify(params))
       .then(res => {
@@ -165,7 +165,7 @@ export function post(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function posts(url, params) {
-  url=`${url}?token=${token}`
+  url = `${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios.post(url, QS.parse(QS.stringify(params)), {
       headers: {
@@ -181,7 +181,7 @@ export function posts(url, params) {
 }
 
 export function postdel(url, params) {
-  url=`${url}?token=${token}`
+  url = `${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios.post(url, params, {
       headers: {
@@ -198,7 +198,7 @@ export function postdel(url, params) {
 }
 
 export const upload = (p) => {
-  p.token=token
+  p.token = token
   return new Promise((resolve, reject) => {
     axios.post('/pic/upload', p, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {

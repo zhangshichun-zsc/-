@@ -206,7 +206,6 @@ export default {
         if(res.code == 200){
           this.data1 = res.data.list
           this.sumSize = res.data.totalSize
-          this.params.page = res.data.pageNum
           this.sumPage = res.data.totalNum
         }else{
           this.$Message.error(res.msg)
@@ -220,6 +219,8 @@ export default {
       }
       updateCard(this.args).then(res => {
         if(res.code == 200){
+          this.$set(this.params.page,'page',1)
+          this.modal1 = false
           this.getList()
           this.$Message.success('修改成功')
           this.cancel()
@@ -242,8 +243,8 @@ export default {
       this.getList()
     },
     queryMet(){
-      this.params = Object.assign(params,this.query)
-      this.$set(this.params,'page',{page:1,size:10})
+      this.params = Object.assign(this.params,this.query)
+      this.$set(this.params.page,'page',1)
       this.getList()
     }
   }

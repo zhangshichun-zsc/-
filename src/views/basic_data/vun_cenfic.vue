@@ -42,7 +42,7 @@
              <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
                  <FormItem label="组织" prop="orgId">
                      <Select v-model="params.orgId">
-                         <Option :value="item.orgId" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
+                         <Option :value="`${item.orgId}`" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
                      </Select>
                  </FormItem>
                  <FormItem label="模板名称" prop="title">
@@ -103,7 +103,7 @@ export default {
         head: "证书管理(志愿者)"
       },
       params:{
-        orgId:'',
+        orgId: '',
         title:'',
         effectiveAt:'',
         orgType:3,
@@ -111,13 +111,13 @@ export default {
        },
       ruleValidate:{
         orgId: [
-            { required: true, message: '组织不能为空', trigger: 'blur' }
+             { required: true, message: '组织不能为空', trigger: 'change',type:'number',min:0 }
             ],
         title: [
             { required: true, message: '模板名称不能为空', trigger: 'blur' }
             ],
         effectiveAt: [
-            { required: true, message: '有效日期不能为空', trigger: 'blur' }
+            { required: true, message: '有效日期不能为空', trigger: 'change' }
             ],
       },
       modal1: false,
