@@ -665,7 +665,7 @@ export default {
       console.log(11);
     },
     set() {
-      this.$router.push({ name: "registration" });
+     this.$router.push({name:'volunteer_apply',params:{sysId:'1,3'}})
     },
     nextone() {
       this.selects = false,
