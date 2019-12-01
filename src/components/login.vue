@@ -7,14 +7,14 @@
         <p class="engin">Management System</p>
         <FormItem  prop="user">
 
-           <Input prefix="md-person" type="text" size="large" style="width:300px;height:45px;" v-model="formValidate.user" placeholder="请输入用户名称"/>
+           <Input prefix="md-person" type="text" size="large" style="width:300px;height:45px;" v-model="formValidate.user" placeholder="请输入用户名称"  @on-enter="handleSubmit('formValidate')"/>
                 <!-- <Icon type="ios-person-outline" slot="prepend"></Icon> -->
 
 
         </FormItem>
 
         <FormItem  prop="password">
-          <Input  prefix="ios-unlock" type="password" size="large" style="width:300px" v-model="formValidate.password" placeholder="请输入登陆密码"/>
+          <Input  prefix="ios-unlock" type="password" size="large" style="width:300px" v-model="formValidate.password" placeholder="请输入登陆密码" @on-enter="handleSubmit('formValidate')"/>
 
 
 

@@ -26,7 +26,6 @@ export default {
 
   methods: {
     getList(){
-
       mouldList({}).then(res=>{
         console.log(res)
         this.list = res.data

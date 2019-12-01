@@ -342,7 +342,7 @@ export default {
     },
     // 质询类型
     getAddressType() {
-      AddressType().then(res => {
+      AddressType({}).then(res => {
         console.log(res);
         if(res.code==200){
 

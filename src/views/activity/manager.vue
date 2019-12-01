@@ -18,8 +18,11 @@
           <Input size="small" placeholder="活动名称" class="inpt" v-model="name" />
         </div>
         <div class="flex-center-start">
-          <span>活动日期:</span>
-          <Input size="small" placeholder="活动状态" class="inpt" v-model="activityStatus" />
+          <span>活动状态:</span>
+          <Select v-model="activityStatus" style="width:200px">
+        <Option v-for="item in activeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    </Select>
+
         </div>
         <div class="flex-center-start">
           <span>活动日期:</span>
@@ -357,7 +360,7 @@ export default {
           }
         },
         {
-          title: "上架/下架",
+          title: "是否上架",
           key: "statue",
           align: "center",
           render: (h, params) => {
@@ -396,6 +399,7 @@ export default {
       activityTimestampFrom: "",
       activityTimestampTo: "",
       arr: [],
+      activeList:[]
     };
   },
   components: {},
@@ -415,21 +419,22 @@ export default {
   methods: {
     //列表和分页
     getactiveManager() {
-      let From=''
-      let To
+      let Fromtime=''
+      let Totime=''
       if (this.activityTimestampFrom != "") {
-         From= this.activityTimestampFrom.getTime();
+         Fromtime= this.activityTimestampFrom.getTime();
       }
-      if (this.activityTimestampTo != "") {
-        To = this.activityTimestampTo.getTime();
+      if (this.activityTimestampTo != ""){
+        Totime = this.activityTimestampTo.getTime();
       }
+
       activeManager({
         page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort},
         name: this.name,
         sysType: this.sysType,
         activityStatus: this.activityStatus,
-        activityTimestampFrom: From,
-        activityTimestampTo: To
+        activityTimestampFrom: Fromtime,
+        activityTimestampTo: Totime
       }).then(res => {
         this.$refs.selection.selectAll(false);
         console.log(res);
@@ -463,10 +468,8 @@ export default {
     },
 
     //查询
-    result(e) {
-      this.name=e[0].value,
-      // this
-
+    result() {
+      // this.name=e[0].value,
       this.getactiveManager();
     },
 
@@ -476,18 +479,21 @@ export default {
     draft() {
       this.$router.push({ name: "draft" });
     },
+    exportData(){
 
-    //导出数据
-    exportData() {
-      if(this.arr.length==0){
-        this.arr=this.data
-      }
-      this.$refs.selection.exportCsv({
-        filename:this.navigation1.head,
-        columns: this.columns.filter((col, index) => index > 0),
-        data: this.arr
-      });
     },
+
+    // //导出数据
+    // exportData() {
+    //   if(this.arr.length==0){
+    //     this.arr=this.data
+    //   }
+    //   this.$refs.selection.exportCsv({
+    //     filename:this.navigation1.head,
+    //     columns: this.columns.filter((col, index) => index > 0),
+    //     data: this.arr
+    //   });
+    // },
 
     //全选按钮
     chackall() {
