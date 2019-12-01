@@ -390,7 +390,7 @@ export default {
   overflow: hidden;
 }
 .layout-logo {
-  width: 200px;
+  padding-left: 35px;
   height: 60px;
   background: #c11333;
   border-radius: 3px;
@@ -404,8 +404,11 @@ export default {
     color: #ffffff;
   }
 }
+.icon {
+  padding-right: 35px;
+}
 .layout-logo img {
-  width: 20px;
+  width: 48px;
 }
 .layout-nav {
   display: flex;
@@ -416,8 +419,8 @@ export default {
 }
 .main-content {
   padding: 0 20px 20px;
-
   padding-left: 280px;
+  padding-top: 80px;
 }
 
 .ivu-layout .ivu-layout-header,
