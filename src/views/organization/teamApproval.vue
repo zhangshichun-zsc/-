@@ -338,13 +338,15 @@ export default {
       endAt: '',
       auditId: '',
       paramsid: '',
-      userId: '11',
+      userId: '',
       isModel: false,
       navigation1: {
         head: '志愿者团队审批（共用）',
         name: 'volunteer'
       },
-      promeObj: {},
+      promeObj: {
+        userId: ''
+      },
       isALL: false
     }
   },
@@ -356,7 +358,10 @@ export default {
         name: 'parent'
       }
     }
-    this.paramsObj.userId = localStorage.getItem('userId') || ''
+    let userId = localStorage.getItem('userId') || ''
+    this.promeObj.userId = userId
+    this.userId = userId
+
     this.getorgpage()
   },
   watch: {},
