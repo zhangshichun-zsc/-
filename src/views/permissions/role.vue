@@ -46,7 +46,6 @@
                     <FormItem label="职能描述" prop="sysRoleNames">
                       <Input v-model="formValidate.sysRoleNames" placeholder="Enter your name" />
                     </FormItem>
-                    <Button @click="function1">权限设置</Button>
                   </Form>
                   <div slot="footer">
                     <Button type="text" size="large" @click="modalcancel()">取消</Button>

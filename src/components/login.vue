@@ -2,18 +2,26 @@
 <template>
   <div class="login">
     <div class="form">
-      <Form ref="formValidate" :model="formValidate" :rules="ruleInline" inline :show-message="false" :label-width="140">
-        <p>后台管理系统</p>
+      <Form ref="formValidate" :model="formValidate" :rules="ruleInline" inline :show-message="false" :label-width="80">
+        <p class="text">后台管理系统</p>
+        <p class="engin">Management System</p>
+        <FormItem  prop="user">
 
-        <FormItem label="用户名" prop="user">
-          <Input v-model="formValidate.user" placeholder="Enter your name"></Input>
+           <Input prefix="md-person" type="text" size="large" style="width:300px;height:45px;" v-model="formValidate.user" placeholder="请输入用户名称"/>
+                <!-- <Icon type="ios-person-outline" slot="prepend"></Icon> -->
+
+
         </FormItem>
-        <FormItem label="密码" prop="password">
-          <Input v-model="formValidate.password" placeholder="Enter your e-mail"></Input>
+
+        <FormItem  prop="password">
+          <Input  prefix="ios-unlock" type="password" size="large" style="width:300px" v-model="formValidate.password" placeholder="请输入登陆密码"/>
+
+
+
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('formValidate')">登陆</Button>
-          <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+
+          <Button type="success"  size=default @click="handleSubmit('formValidate')">登陆</Button>
         </FormItem>
       </Form>
     </div>
@@ -33,14 +41,14 @@ export default {
         user: [
           {
             required: true,
-            message: 'Please fill in the user name',
+            message: '请输入用户名',
             trigger: 'blur'
           }
         ],
         password: [
           {
             required: true,
-            message: 'Please fill in the password.',
+            message: '密码不能为空',
             trigger: 'blur'
           },
           {
@@ -88,16 +96,14 @@ export default {
         }
       })
     },
-    handleReset(name) {
-      this.$refs[name].resetFields()
-    }
+
   }
 }
 </script>
 <style lang="scss" scoped>
 .login {
   background: #008e40;
-  height: 700px;
+  height:700px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -110,12 +116,33 @@ export default {
   background: #ffffff;
   height: 420px;
   width: 420px;
-  p {
-    text-align: center;
-    margin: 30px 0;
+  .text{
+     text-align: center;
+    margin-top: 30px;
+     margin-bottom: 10px;
     color: #008e40;
-    font-size: 18px;
+    font-size: 32px;
     font-weight: 900;
   }
+  .engin{
+    text-align: center;
+    margin-bottom: 40px;
+    color: #008e40;
+    font-size: 28px;
+
+  }
+}
+.ivu-input-default{
+  height: 50px;
+}
+.ivu-btn-success{
+  height: 40px;
+  width: 300px;
+}
+.ivu-form-item{
+  width: 100%;
+}
+.ivu-input-large{
+  height: 45px;
 }
 </style>

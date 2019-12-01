@@ -87,10 +87,10 @@ export default {
           { required: true, message: "成员名称不能为空", trigger: "blur" }
         ],
         tel: [{ required: true, message: "请输入手机号", trigger: "blur" }],
-        email: [
-          { required: true, message: "邮箱地址不能为空", trigger: "blur" },
-          { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
-        ],
+        // email: [
+        //   { required: true, message: "邮箱地址不能为空", trigger: "blur" },
+        //   { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
+        // ],
         deplNames:[
          { required: true, message: "请选择部门类型", trigger: "blur",type:'array' }
           ],

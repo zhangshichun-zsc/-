@@ -33,17 +33,7 @@ Vue.use(number)
 Vue.component('v-distpicker', VDistpicker)
 Vue.component(VeLine.name, VeLine)
 
-router.beforeEach((to, from, next) => {
-  if (store.state.token) {  // 通过vuex state获取当前的token是否存在
-      next();
-  }
-  else {
-      next({
-          path: '/login',
-          query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
-      })
-  }
-})
+
 
 new Vue({
     router,

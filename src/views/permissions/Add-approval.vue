@@ -9,7 +9,7 @@
             placeholder="立项审批、家长小组成立审批、志愿者团队成立审批、积分修改审批、VIP修改审批"
             style="width: 20rem"
             v-model="formValidate.typeFlag"
-            :transfer=true
+            :transfer="true"
           >
             <Option
               v-for="item in typelist"
@@ -19,13 +19,14 @@
           </Select>
         </FormItem>
         <FormItem label="谁可以发起申请:" prop="applyRoles">
-          <CheckboxGroup v-model="formValidate.applyRoles">
-            <Checkbox
+          <Select v-model="formValidate.applyRoles" style="width:200px">
+            <Option
               v-for="item in rolelist"
-              :label="item.roleId"
+              :value="item.roleId"
               :key="item.roleId"
-            >{{ item.roleName }}</Checkbox>
-          </CheckboxGroup>
+              :transfer="true"
+            >{{ item.roleName }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="项目所属:" prop="categoryId">
           <Select placeholder="快乐活动营" style="width: 10rem" v-model="formValidate.categoryId">
@@ -33,6 +34,7 @@
               v-for="item in projectlist"
               :value="item.categoryId"
               :key="item.categoryId"
+              :transfer="true"
             >{{ item.name }}</Option>
           </Select>
         </FormItem>
@@ -95,7 +97,7 @@ export default {
       },
       formValidate: {
         typeFlag: null,
-        applyRoles: [],
+        applyRoles: "",
         categoryId: null
       },
       ruleValidate: {
@@ -110,8 +112,7 @@ export default {
         applyRoles: [
           {
             required: true,
-            type: "array",
-            min: 1,
+            type: "number",
             message: "必选项",
             trigger: "change"
           }
@@ -202,7 +203,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info(res.msg);
-         this.$router.push({ name: "examinationMGT" });
+          this.$router.push({ name: "examinationMGT" });
         }
         console.log(res);
       });
@@ -218,8 +219,8 @@ export default {
       this.userNameb = e.userName;
       if (this.auditUser1Id == null) {
         this.$Message.info("请先选择一级审批");
-        this.userNameb=''
-        this.auditUser2Id=''
+        this.userNameb = "";
+        this.auditUser2Id = "";
       } else if (this.auditUser1Id == this.auditUser2Id) {
         this.auditUser2Id = null;
         this.userNameb = null;
@@ -234,7 +235,7 @@ export default {
         if (valid) {
           if (this.auditUser1Id == null) {
             this.$Message.info("请先选择审批人");
-          }else if(this.auditUser1Id==this.auditUser2Id) {
+          } else if (this.auditUser1Id == this.auditUser2Id) {
             this.$Message.info("审批人不能相同");
           } else {
             this.getpoweradd();

@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { date1 } from "@/request/datatime.js";
+import { formatDate } from "@/request/datatime.js";
 import {
   Offactivities,
   modifystate,
@@ -126,9 +126,9 @@ export default {
         },
         {
           title: "创建时间",
-          key: "createtime",
+          key: "createTimestamp",
           render: (h, params) => {
-            return h("div", date1("Y-m-dH:i:s", params.row.releaseTimestamp));
+            return h("div", formatDate(params.row.createTimestamp));
           }
         },
         {

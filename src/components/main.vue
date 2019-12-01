@@ -295,7 +295,6 @@
 import { homepage } from '../request/api'
 export default {
   props: ['labels'],
-
   data() {
     return {
       modal1: false,
