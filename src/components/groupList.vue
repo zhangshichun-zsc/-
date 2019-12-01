@@ -270,6 +270,7 @@ export default {
       if (this.endAt) {
         endAt = this.util.formatDate(this.endAt.getTime()).split(' ')[0] + ' 23:59:59'
       }
+      console.log(endAt)
 
       let fromobj = this.util.remove({
         page: {
@@ -280,8 +281,9 @@ export default {
         orgName: this.orgName,
         status: this.orgStatus == 0 ? '' : this.orgStatus,
         startAt: this.startAt ? this.startAt.getTime() : '',
-        endAt: new Date(endAt).getTime()
+        endAt: endAt ? new Date(endAt).getTime() : ''
       })
+      console.log(fromobj)
       if (this.$props.navigation1.name === 'parent') {
         orgpage(fromobj).then(res => {
           if (res.code == 200) {

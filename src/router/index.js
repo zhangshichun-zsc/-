@@ -4,36 +4,13 @@ import Main from '_c/main.vue'
 import store from '../store/index'
 // import Min from '_c/mintit'
 
-// Router.beforeEach((to,from,next)=>{
-//   if(to.path.startsWith('/login'){
-//     next()
-//   })
-// })
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-//       if (store.state.token) {  // 通过vuex state获取当前的token是否存在
-//           next();
-//       }
-//       else {
-//           next({
-//               path: '/login',
-//               query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//           })
-//       }
-//   }
-//   else {
-//       next();
-//   }
-// })
-
 Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
       name: 'login',
-       alias: '/',
+      alias: '/',
       meta: {
       },
       component: () =>
@@ -2263,14 +2240,20 @@ export default new Router({
   ]
 })
 
-// Router.beforeEach((to, from, next) => {
-//       if (store.state.token) {  // 通过vuex state获取当前的token是否存在
-//           next();
-//       }
-//       else {
-//           next({
-//               path: '/login',
-//               query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//           })
-//       }
+// router.beforeEach((to, from, next) => {
+//   const token = localStorage.getItem("token")
+//   console.log(token)
+//   if (!token) {
+//     console.log(0)
+//     next({ path: '/login' })
+//   } else {
+//     console.log(11)
+//     next()
+//   }
 // })
+
+
+export default router
+
+
+
