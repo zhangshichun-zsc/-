@@ -3,34 +3,18 @@
   <div class="main">
     <div class="layout">
       <Layout>
-        <Header >
+        <Header>
           <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-nav">
               <div class="layout-logo">
-                <img src="../assets/logo.png" />
+                <img src="../assets/logo.svg" />
                 <span>后台管理系统</span>
               </div>
               <div class="icon">
-                <Dropdown prop="transfer:true">
-                  <span title="账户信息">
-                    <Icon type="ios-contact-outline" size="26" />admin
-                  </span>
-                  <DropdownMenu slot="list">
-                    <DropdownItem style="display:flex;justify-content: space-between">
-                      <p>账户信息</p>
-                      <p style="color:green" @click="less">账户设置</p>
-                    </DropdownItem>
-                    <DropdownItem divided>• 所在部门：IT系统管理部</DropdownItem>
-                    <DropdownItem>• 本次登录：2019-07-01 14:36:21</DropdownItem>
-                    <DropdownItem>• 登录地区：北京市 (IP：1.1.1.1)</DropdownItem>
-                    <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-                <span>|</span>
                 <span>
                   <Icon title="系统首页" @click="home" type="ios-home-outline" size="26" style="cursor: pointer;" />
                 </span>
-                <span>|</span>
+
                 <Dropdown prop="transfer:true">
                   <span>
                     <Icon title="常用菜单" type="ios-menu-outline" size="26" />
@@ -57,6 +41,23 @@
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
+
+                <Dropdown prop="transfer:true">
+                  <span title="账户信息">
+                    <Icon type="ios-contact-outline" size="26" />admin
+                  </span>
+                  <DropdownMenu slot="list">
+                    <DropdownItem style="display:flex;justify-content: space-between">
+                      <p>账户信息</p>
+                      <p style="color:green" @click="less">账户设置</p>
+                    </DropdownItem>
+                    <DropdownItem divided>• 所在部门：IT系统管理部</DropdownItem>
+                    <DropdownItem>• 本次登录：2019-07-01 14:36:21</DropdownItem>
+                    <DropdownItem>• 登录地区：北京市 (IP：1.1.1.1)</DropdownItem>
+                    <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+
                 <Modal v-model="modal2" width="800px">
                   <p slot="header">
                     <span>常用菜单设置</span>
@@ -265,10 +266,10 @@
         </Header>
         <Layout>
           <!-- :style="{position: 'fixed','padding-top': '73px', height: '100vh', left: 0, overflow: 'auto'}" -->
-          <Sider hide-trigger>
-            <div class="toggle-button">|||</div>
+          <Sider hide-trigger :style="{position: 'fixed','padding-top': '60px', height: '100vh', left: 0, overflow: 'auto'}">
+            <!-- <div class="toggle-button">|||</div> -->
             <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
-              <Submenu :name="index+1" v-for="(item, index) in routelist" :key="index" >
+              <Submenu :name="index+1" v-for="(item, index) in routelist" :key="index">
                 <template slot="title">
                   <!-- <Icon :type="item.meta.icon"></Icon> -->
                   {{ item.parentName}}
@@ -317,7 +318,7 @@ export default {
   methods: {
     gethomepage() {
       homepage({
-        userId:this.$store.state.userId
+        userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
           this.routelist = res.data
@@ -366,9 +367,8 @@ export default {
     modalOk(e) {
       this.modal1 = false
       if (e == 1) {
-        localStorage.clear();
+        localStorage.clear()
         this.$router.push({ name: 'login' })
-
       }
     },
 
@@ -377,7 +377,7 @@ export default {
     }
   },
   mounted() {
-    this.gethomepage();
+    this.gethomepage()
   }
 }
 </script>
@@ -391,18 +391,17 @@ export default {
 }
 .layout-logo {
   width: 200px;
-  height: 64px;
-  background: #008e40;
+  height: 60px;
+  background: #c11333;
   border-radius: 3px;
   float: left;
   display: flex;
   justify-content: center;
   align-items: center;
   span {
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 20px;
     padding-left: 10px;
+    font-size: 20px;
+    color: #ffffff;
   }
 }
 .layout-logo img {
@@ -417,13 +416,23 @@ export default {
 }
 .main-content {
   padding: 0 20px 20px;
+
+  padding-left: 280px;
 }
 
 .ivu-layout .ivu-layout-header,
 .ivu-layout-header .ivu-menu {
   // position:relative;
-  background: #008e40;
-  // z-index: 2;
+  background: #c11333;
+  padding: 0;
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+.ivu-layout-header {
+  padding: 0;
 }
 
 .flex-center-between {
@@ -443,6 +452,7 @@ export default {
   letter-spacing: 0.2em;
   cursor: pointer;
 }
+
 .icon span {
   margin-right: 15px;
   color: white;

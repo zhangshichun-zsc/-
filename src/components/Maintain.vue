@@ -29,14 +29,14 @@
 </template>
 
 <script>
-import { getActiveTypeItem }from'@/request/api'
+import { getActiveTypeItem } from '@/request/api'
 export default {
   data() {
     return {
       show: false,
       modal1: false,
-      arr:[]
-    };
+      arr: []
+    }
   },
   props: {
     navigation1: String,
@@ -52,7 +52,7 @@ export default {
     id: {
       type: String,
       default: 'activityId'
-    },
+    }
   },
   components: {},
 
@@ -63,17 +63,17 @@ export default {
   },
 
   methods: {
-    train(id,name,ble) {
-      this.$router.push({ name: this.from,query:{id,name,ble} })
+    train(id, name, ble) {
+      this.$router.push({ name: this.from, query: { id, name, ble } })
     },
     more() {
       if (this.show === false) {
-        this.show = true;
+        this.show = true
       } else {
-        this.show = false;
+        this.show = false
       }
     },
-    getList(){
+    getList() {
       console.log(11)
       getActiveTypeItem({}).then(res => {
         this.arr = res.data
@@ -81,7 +81,7 @@ export default {
       })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .head {
