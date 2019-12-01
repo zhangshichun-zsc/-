@@ -797,17 +797,9 @@ export default {
     }
   },
   created() {
-    this.init()
     this.getVipUserInfo(this.getOBJ)
   },
-  watch: {
-    province(newValue) {
-      this.getcitiesArr(newValue)
-    },
-    city(newValue) {
-      this.getcountyArr(newValue)
-    }
-  },
+  watch: {},
   methods: {
     // 获取省市区信息
     init() {
