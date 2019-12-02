@@ -1,31 +1,34 @@
 <!-- 基础资料(共用) -->
 <template>
-  <div class="login">
-    <div class="form">
-      <Form ref="formValidate" :model="formValidate" :rules="ruleInline" inline :show-message="false" :label-width="80">
-        <p class="text">后台管理系统</p>
-        <p class="engin">Management System</p>
-        <FormItem  prop="user">
+  <div class='box'>
 
-           <Input prefix="md-person" type="text" size="large" style="width:300px;height:45px;" v-model="formValidate.user" placeholder="请输入用户名称"  @on-enter="handleSubmit('formValidate')"/>
-                <!-- <Icon type="ios-person-outline" slot="prepend"></Icon> -->
+    <img class='banner' src='@/assets/images/banner.png' />
+    <div class="login">
 
+      <div class="form">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleInline" inline :show-message="false" :label-width="80">
+          <p class="text">后台管理系统</p>
 
-        </FormItem>
+          <FormItem prop="user">
 
-        <FormItem  prop="password">
-          <Input  prefix="ios-unlock" type="password" size="large" style="width:300px" v-model="formValidate.password" placeholder="请输入登陆密码" @on-enter="handleSubmit('formValidate')"/>
+            <Input prefix="md-person" type="text" size="large" style="width:240px;" v-model="formValidate.user" placeholder="请输入用户名称" @on-enter="handleSubmit('formValidate')" />
 
+          </FormItem>
 
+          <FormItem prop="password">
+            <Input prefix="ios-unlock" type="password" size="large" style="width:240px; " v-model="formValidate.password" placeholder="请输入登陆密码" @on-enter="handleSubmit('formValidate')" />
 
-        </FormItem>
-        <FormItem>
+          </FormItem>
+          <FormItem>
+            <Button type="warning" size=default @click="handleSubmit('formValidate')" style="width:240px; height:40px">登录</Button>
 
-          <Button type="success"  size=default @click="handleSubmit('formValidate')">登陆</Button>
-        </FormItem>
-      </Form>
+          </FormItem>
+        </Form>
+      </div>
+
     </div>
   </div>
+
 </template>
 
 <script>
@@ -67,9 +70,7 @@ export default {
   computed: {},
 
   created() {},
-  mounted(){
-
-  },
+  mounted() {},
   methods: {
     getlogin() {
       login({
@@ -82,7 +83,7 @@ export default {
           localStorage.setItem("userName",res.data.userName)
           localStorage.setItem("tel",res.data.tel)
           this.$router.push({ name: "index"});
-          this.gethomepage()
+          // this.gethomepage()
         }else{
           this.$Message.info("密码或账号不正确!")
         }
@@ -108,16 +109,36 @@ export default {
           this.$Message.error('密码或账号不正确!')
         }
       })
-    },
-
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-.login {
-  background: #008e40;
-  height:700px;
+.ivu-input-large {
+  height: 90px !important;
+}
+.box {
+  position: relative;
   width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #c11333;
+}
+.banner {
+  width: 100%;
+  height: 100%;
+
+  vertical-align: top;
+}
+
+.login {
+  position: absolute;
+
+  top: 0;
+  right: 250px;
+  // background: #fff;
+  height: 700px;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,36 +147,42 @@ export default {
   display: flex;
   // justify-content: center;
   align-items: center;
-  background: #ffffff;
+
   height: 420px;
-  width: 420px;
-  .text{
-     text-align: center;
+  width: 520px;
+  // background: ;
+  box-shadow: -1px 1px 13px 9px #fff;
+  .text {
+    text-align: center;
     margin-top: 30px;
-     margin-bottom: 10px;
-    color: #008e40;
+
+    color: #000;
     font-size: 32px;
     font-weight: 900;
+    margin-bottom: 40px;
   }
-  .engin{
+  .engin {
     text-align: center;
     margin-bottom: 40px;
-    color: #008e40;
+    color: #000;
     font-size: 28px;
-
   }
 }
-.ivu-input-default{
+.ivu-input-default {
   height: 50px;
 }
-.ivu-btn-success{
+.ivu-btn-success {
   height: 40px;
   width: 300px;
 }
-.ivu-form-item{
+.ivu-form-item {
   width: 100%;
 }
-.ivu-input-large{
+.ivu-input-large {
   height: 45px;
+}
+
+.ivu-form-inline .ivu-form-item {
+  margin-right: 0;
 }
 </style>

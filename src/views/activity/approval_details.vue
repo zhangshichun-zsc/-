@@ -13,11 +13,7 @@
           <li>
             <span>选择项目</span>
             <i-select :model.sync="model1" style="width:200px">
-              <i-option
-                v-for="(item,index) in cityList"
-                :value="item.value"
-                :key="index"
-              >{{ item.label }}</i-option>
+              <i-option v-for="(item,index) in cityList" :value="item.value" :key="index">{{ item.label }}</i-option>
             </i-select>
           </li>
           <li>
@@ -26,9 +22,9 @@
           </li>
           <li>
             <span>有效期限</span>
-           <Col span="12">
+            <Col span="12">
             <DatePicker v-model="datas" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
-        </Col>
+            </Col>
           </li>
         </ul>
       </div>
@@ -45,11 +41,7 @@
           <li>
             <span>小组归属</span>
             <i-select :model.sync="model1" style="width:200px">
-              <i-option
-                v-for="(item,index) in cityList"
-                :value="item.value"
-                :key="index"
-              >{{ item.label }}</i-option>
+              <i-option v-for="(item,index) in cityList" :value="item.value" :key="index">{{ item.label }}</i-option>
             </i-select>
           </li>
           <li>
@@ -59,8 +51,8 @@
         </ul>
         <div>
           <Upload action="//jsonplaceholder.typicode.com/posts/">
-        <Button icon="ios-cloud-upload-outline">上传图片</Button>
-    </Upload>
+            <Button icon="ios-cloud-upload-outline">上传图片</Button>
+          </Upload>
         </div>
       </div>
       <div class="project-content">
@@ -81,7 +73,7 @@
       <div class="cooperation">
         <ul>
           <li class="border-no">合作方</li>
-          <li v-for="item in list.actBatchPartners" :key="item.batchPartId" >
+          <li v-for="item in list.actBatchPartners" :key="item.batchPartId">
             <span>{{item.partName}}</span>
             <span>详情</span>
           </li>
@@ -99,69 +91,69 @@
 </template>
 
 <script>
-import {formatDate,date1} from '../../request/datatime'
-import {approvaldet} from '../../request/api'
+import { formatDate, date1 } from '../../request/datatime'
+import { approvaldet } from '../../request/api'
 export default {
   data() {
     return {
       navigation1: {
-        head: "活动立项明细"
+        head: '活动立项明细'
       },
       cityList: [
         {
-          value: "beijing",
-          label: "北京市"
+          value: 'beijing',
+          label: '北京市'
         },
         {
-          value: "shanghai",
-          label: "上海市"
+          value: 'shanghai',
+          label: '上海市'
         }
       ],
-      model1: "beijing",
+      model1: 'beijing',
       single: false,
-      list:[],
-      datas:['2019-08-21','2019-10-1'],
-      actlist:[]
-    };
+      list: [],
+      datas: ['2019-08-21', '2019-10-1'],
+      actlist: []
+    }
   },
 
-  components: {  },
+  components: {},
 
   computed: {},
 
   created() {},
-  mounted(){
+  mounted() {
     this.getapprovaldet()
   },
   methods: {
     //活动详情
-    getapprovaldet(){
+    getapprovaldet() {
       approvaldet({
-        batchId:this.$route.query.batchId
-      }).then(res=>{
-        if(res.code==200){
+        batchId: this.$route.query.batchId
+      }).then(res => {
+        if (res.code == 200) {
           this.list = res.data
           this.actlist = res.data.acitivitys
-          this.actlist=res.data.acitivitys.map(item => {
-            if(item.startAt){
-              item.startAt=date1('Y-m-d',item.startAt)
-              item.endAt=date1('Y-m-d',item.endAt)
+          this.actlist = res.data.acitivitys.map(item => {
+            if (item.startAt) {
+              item.startAt = date1('Y-m-d', item.startAt)
+              item.endAt = date1('Y-m-d', item.endAt)
             }
             return item
-          });
-          this.datas[0] =date1('Y-m-d',res.data.startTime)
-          this.datas[1]=date1('Y-m-d',res.data.endTime)
+          })
+          this.datas[0] = date1('Y-m-d', res.data.startTime)
+          this.datas[1] = date1('Y-m-d', res.data.endTime)
           console.log(this.datas)
         }
         console.log(res)
       })
     },
     //通过
-    adopt(){
+    adopt() {
       console.log(this.datas)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .content {
@@ -224,7 +216,6 @@ export default {
     }
   }
   .main {
-    border: #e4e4e4 1px solid;
     height: 200px;
     width: 600px;
     margin-left: 40px;
@@ -282,20 +273,19 @@ export default {
     background: #ffffff;
     margin-top: 10px;
   }
-  .btn{
+  .btn {
     width: 900px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top:50px;
-    .table-btn{
+    margin-top: 50px;
+    .table-btn {
       width: 120px;
       height: 40px;
       border: black 1px solid;
       margin: 0 20px;
-
     }
-    .active{
+    .active {
       background: #339933;
       color: #ffffff;
     }

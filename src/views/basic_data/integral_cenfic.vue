@@ -24,6 +24,7 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="query.validFlag">
+            <Option value="">全部</Option>
             <Option value="1">有效状态</Option>
             <Option value="0">无效状态</Option>
           </Select>
@@ -48,7 +49,7 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
+          <!-- <Button class="table-btn" @click="modal1 = true">{{title}}</Button> -->
           <Modal v-model="modal1" title="修改"  @on-cancel='cancel'>
             <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "证书管理（共用）"
+        head: "证件管理"
       },
       ruleValidate: {
         name: [{ required: true, message: "不能为空", trigger: "blur" }]
@@ -99,7 +100,7 @@ export default {
       title: "证书管理",
       columns: [
         {
-          title: "就业情况",
+          title: "名称",
           key: "name"
         },
         {
@@ -217,7 +218,7 @@ export default {
         this.$Message.warning('不能为空')
         return
       }
-      updateCard(this.args).then(res => {
+      updateCard(filterNull(this.args)).then(res => {
         if(res.code == 200){
           this.$set(this.params.page,'page',1)
           this.modal1 = false

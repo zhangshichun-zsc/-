@@ -17,21 +17,11 @@
                   <Input style="width: 10rem" v-model="AddDate.deptName" />
                 </FormItem>
                 <FormItem label="职能描述:" prop="description">
-                  <Input
-                    style="width: 10rem"
-                    v-model="AddDate.description"
-                    type="textarea"
-                    :autosize="{minRows: 4,maxRows: 5}"
-                    placeholder="请输入内容"
-                  />
+                  <Input style="width: 10rem" v-model="AddDate.description" type="textarea" :autosize="{minRows: 4,maxRows: 5}" placeholder="请输入内容" />
                 </FormItem>
                 <FormItem label="上级部门" prop="parentId">
                   <Select v-model="AddDate.parentId" style="width:200px">
-                    <Option
-                      v-for="item in deplist"
-                      :value="item.deptId"
-                      :key="item.deptId"
-                    >{{ item.deptName }}</Option>
+                    <Option v-for="item in deplist" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                   </Select>
                 </FormItem>
                 <FormItem label="设置负责人:" prop="leader">
@@ -69,22 +59,14 @@
         <Table border :columns="columns2" :data="data2"></Table>
       </div>
       <div class="pages">
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changepages"
-        />
+        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import expandRow from "@/components/table-expand.vue";
+import expandRow from '@/components/table-expand.vue'
 import {
   departmentlist,
   departmentsub,
@@ -95,29 +77,27 @@ import {
   departmentStatus,
   departmentSup,
   departmentall
-} from "@/request/api";
+} from '@/request/api'
 export default {
   data() {
     return {
       modal1: false,
       modal2: false,
       navigation1: {
-        head: "部门管理(共用)"
+        head: '部门管理(共用)'
       },
       AddDate: {
-        deptName: "",
-        description: "",
-        parentId: "",
-        leader: "",
-        ssproject: ""
+        deptName: '',
+        description: '',
+        parentId: '',
+        leader: '',
+        ssproject: ''
       },
       ruleValidate: {
-        deptName: [
-          { required: true, message: "部门名称不能为空", trigger: "blur" }
-        ],
+        deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
         description: [
-          { required: true, message: "请输入内容", trigger: "blur" },
-          { type: "string", min: 10, message: "不能少于10字", trigger: "blur" }
+          { required: true, message: '请输入内容', trigger: 'blur' },
+          { type: 'string', min: 10, message: '不能少于10字', trigger: 'blur' }
         ],
         // parentId: [
         //   {
@@ -137,19 +117,19 @@ export default {
       data1: [],
       columns1: [
         {
-          type: "expand",
+          type: 'expand',
           width: 50,
           render: (h, params) => {
-            return (<expandRow row={params.row} dom={<expandRow row={params.row}/>}></expandRow>);
+            return <expandRow row={params.row} dom={<expandRow row={params.row} />}></expandRow>
           }
         },
         {
-          title: "部门名称",
-          key: "deptName",
-          align: "center",
+          title: '部门名称',
+          key: 'deptName',
+          align: 'center',
           render: (h, params) => {
             return h(
-              "span",
+              'span',
               {
                 // style: {
                 //   color: 'blue',
@@ -157,81 +137,81 @@ export default {
                 // },
                 on: {
                   click: () => {
-                    this.deptId = params.row.deptId;
-                    this.getdepartmentmember();
+                    this.deptId = params.row.deptId
+                    this.getdepartmentmember()
                   }
                 }
               },
               params.row.deptName
-            );
+            )
           }
         },
         {
-          title: "职能描述",
-          key: "description",
-          align: "center"
+          title: '职能描述',
+          key: 'description',
+          align: 'center'
         },
         {
-          title: "成员数量",
-          key: "sum",
-          align: "center"
+          title: '成员数量',
+          key: 'sum',
+          align: 'center'
         },
         {
-          title: "负责人",
-          key: "leader",
-          align: "center"
+          title: '负责人',
+          key: 'leader',
+          align: 'center'
         },
         {
-          title: "是否启用",
-          key: "status",
-          align: "center",
+          title: '是否启用',
+          key: 'status',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
+            return h('div', [
+              h('i-switch', {
                 props: {
                   value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {
-                    this.getdepartmentStatu(params.row.deptId, e);
+                    this.getdepartmentStatu(params.row.deptId, e)
                   }
                 }
               })
-            ]);
+            ])
           }
         },
         {
-          title: "操作",
-          key: "action",
-          align: "center",
+          title: '操作',
+          key: 'action',
+          align: 'center',
           render: (h, params) => {
             return h(
-              "div",
+              'div',
               {
                 style: {
-                  display: "flex",
-                  justifyContent: "space-around",
-                  MaxfontSize: "16px"
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  MaxfontSize: '16px'
                 }
               },
               [
                 h(
-                  "a",
+                  'a',
                   {
-                    clssName: "action",
+                    clssName: 'action',
                     style: {
-                      color: "#1ABD9D"
+                      color: '#1ABD9D'
                     },
                     on: {
                       click: () => {
-                        this.modal1 = true;
+                        this.modal1 = true
                         // this.getdepartmentSup();
-                        this.AddDate = params.row;
-                        this.AddDate.parentId = params.row.parentId;
+                        this.AddDate = params.row
+                        this.AddDate.parentId = params.row.parentId
                       }
                     }
                   },
-                  "编辑"
+                  '编辑'
                 )
                 // h(
                 //   "a",
@@ -248,108 +228,116 @@ export default {
                 //   "删除"
                 // )
               ]
-            );
+            )
           }
         }
       ],
       data2: [],
       columns2: [
         {
-          title: "姓名",
-          key: "userName",
-          align: "center"
+          title: '姓名',
+          key: 'userName',
+          align: 'center'
         },
         {
-          title: "邮箱地址",
-          key: "email",
-          align: "center"
+          title: '邮箱地址',
+          key: 'email',
+          align: 'center'
         },
         {
-          title: "联系方式",
-          key: "tel",
-          align: "center"
+          title: '联系方式',
+          key: 'tel',
+          align: 'center'
         },
         {
-          title: "角色",
-          key: "sysRoleNames",
-          align: "center"
+          title: '角色',
+          key: 'sysRoleNames',
+          align: 'center'
         },
         {
-          title: "所属部门",
-          key: "deptNames",
-          align: "center"
+          title: '所属部门',
+          key: 'deptNames',
+          align: 'center'
         },
         {
-          title: "是否启用",
-          key: "status",
-          align: "center",
+          title: '是否启用',
+          key: 'status',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
+            return h('div', [
+              h('i-switch', {
                 props: {
                   value: params.row.validFag == 1
                 },
                 on: {
                   input: e => {
-                    console.log(e);
-                    this.getdepartmentStatus(params.row.userId, e);
+                    console.log(e)
+                    this.getdepartmentStatus(params.row.userId, e)
                   }
                 }
               })
-            ]);
+            ])
           }
         },
         {
-          title: "操作",
-          key: "action",
-          align: "center",
+          title: '操作',
+          key: 'action',
+          align: 'center',
           render: (h, params) => {
             return h(
-              "div",
+              'div',
               {
                 style: {
-                  display: "flex",
-                  justifyContent: "space-around",
-                  MaxfontSize: "16px"
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  MaxfontSize: '16px'
                 }
               },
               [
                 h(
-                  "a",
+                  'a',
                   {
-                    clssName: "action",
+                    clssName: 'action',
                     style: {
-                      color: "#1ABD9D"
+                      color: '#1ABD9D'
                     },
                     on: {
                       click: () => {
                         this.$router.push({
-                          name: "function",
+                          name: 'function',
                           query: {
                             sysRoleName: params.row.userName,
                             sysRoleId: params.row.deptUserId,
                             status: 1
                           }
-                        });
+                        })
                       }
                     }
                   },
-                  "权限设置"
+                  '权限设置'
                 ),
                 h(
-                  "a",
+                  'a',
                   {
-                    clssName: "action",
+                    clssName: 'action',
                     style: {
-                      color: "#1ABD9D"
+                      color: '#1ABD9D'
                     },
                     on: {
                       click: () => {
-                        this.$router.push({ name: "Add-members",query:{userId:params.row.userId,name:params.row.userName,deptId:this.deptId,states:1}});
+                        this.$router.push({
+                          name: 'Add-members',
+                          query: {
+                            userId: params.row.userId,
+                            name: params.row.userName,
+                            deptId: this.deptId,
+                            states: 1
+                          }
+                        })
                       }
                     }
                   },
-                  "编辑"
+                  '编辑'
                 )
                 // h(
                 //   "a",
@@ -364,37 +352,30 @@ export default {
                 //   "删除"
                 // )
               ]
-            );
+            )
           }
         }
       ],
-      depId: "",
-      validFlag: "",
+      depId: '',
+      validFlag: '',
       page: 1,
       size: 10,
       deplist: [],
-      Article: [
-        { value: 10, label: 10 },
-        { value: 15, label: 15 },
-        { value: 20, label: 20 }
-      ],
-      sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
-      ],
-      sort: "asc",
+      Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
+      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
+      sort: 'asc',
       dataCount: 0,
-      status: ""
+      status: ''
       // obj:''
-    };
+    }
   },
   //事件监听
   watch: {
-    size: "getdepartmentmember",
-    sort: "getdepartmentmember"
+    size: 'getdepartmentmember',
+    sort: 'getdepartmentmember'
   },
   mounted() {
-    this.getdepartmentlist();
+    this.getdepartmentlist()
   },
   methods: {
     // 部门列表
@@ -403,57 +384,57 @@ export default {
         parentId: 0
       }).then(res => {
         if (res.code == 200) {
-          this.data1 = res.data;
+          this.data1 = res.data
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     // 修改启用状态
     getdepartmentStatu(id, e) {
       if (e == true) {
-        this.validFlag = 1;
+        this.validFlag = 1
       } else {
-        this.validFlag = 0;
+        this.validFlag = 0
       }
       departmentStatu({
         depId: id,
         validFlag: this.validFlag
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("操作成功");
+          this.$Message.info('操作成功')
         } else {
-          this.getdepartmentmember();
-          this.$Message.error(res.msg);
+          this.getdepartmentmember()
+          this.$Message.error(res.msg)
         }
-      });
+      })
     },
     // 查询部门成员
     getdepartmentmember() {
       departmentmember({
         page: { page: this.page, size: this.size },
         depId: this.deptId,
-        sort: ""
+        sort: ''
       }).then(res => {
         if (res.code == 200) {
-          this.data2 = res.data.list;
-          this.dataCount = res.data.totalSize;
-          this.$Message.info("查询成功");
+          this.data2 = res.data.list
+          this.dataCount = res.data.totalSize
+          this.$Message.info('查询成功')
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 部门列表编辑
     getdepartmentedit() {
       departmentedit({}).then(res => {
         if (res.code == 200) {
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 部门列表添加
     getdepartmentadd() {
@@ -464,34 +445,34 @@ export default {
         leader: this.AddDate.leader
       }).then(res => {
         if (res.code == 200) {
-          this.getdepartmentlist();
-           this.modal1 = false;
-          this.$Message.info("添加成功");
+          this.getdepartmentlist()
+          this.modal1 = false
+          this.$Message.info('添加成功')
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 部门成员-修改启用状态
     getdepartmentStatus(id, e) {
       if (e == true) {
-        this.status = 1;
+        this.status = 1
       } else {
-        this.status = 0;
+        this.status = 0
       }
       departmentStatus({
         deptUserId: id,
         validFlag: this.status
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("操作成功");
+          this.$Message.info('操作成功')
         } else {
-          this.$Message.info(res.msg);
-          this.getdepartmentmember();
+          this.$Message.info(res.msg)
+          this.getdepartmentmember()
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 查询所有上级部门名称
     getdepartmentSup() {
@@ -499,58 +480,57 @@ export default {
         parentId: this.AddDate.parentId
       }).then(res => {
         if (res.code == 200) {
-          this.deplist = res.data;
+          this.deplist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 查询所有部门名称
     getdepartmentall() {
       departmentall({}).then(res => {
         if (res.code == 200) {
-          this.deplist = res.data;
+          this.deplist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     //清除input
     clear() {
-      (this.AddDate.deptName = ""),
-        (this.AddDate.description = ""),
-        (this.AddDate.parentId = ""),
-        (this.AddDate.leader = "");
+      ;(this.AddDate.deptName = ''),
+        (this.AddDate.description = ''),
+        (this.AddDate.parentId = ''),
+        (this.AddDate.leader = '')
     },
     //分页功能
     changepages(index) {
-      this.page = index;
-      this.getdepartmentmember();
+      this.page = index
+      this.getdepartmentmember()
     },
     //添加部门
     add() {
-      this.modal1 = true;
-      this.clear();
-      this.getdepartmentall();
+      this.modal1 = true
+      this.clear()
+      this.getdepartmentall()
     },
     //modalOk
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.getdepartmentadd();
-
+          this.getdepartmentadd()
         } else {
-          this.$Message.error("必填项未填!");
+          this.$Message.error('必填项未填!')
         }
-      });
+      })
     },
 
     //添加成员
     AddMembers() {
-      this.$router.push({ name: "Add-members", query: { states: 1 } });
+      this.$router.push({ name: 'Add-members', query: { states: 1 } })
     }
   },
   components: { expandRow }
-};
+}
 </script>
 
 <style scoped>
@@ -560,7 +540,6 @@ body {
 }
 .main {
   background-color: #ffffff;
-  border: 1px solid #e4e4e4;
 }
 .content {
   margin: 10px;
@@ -586,5 +565,7 @@ body {
 tr td.ivu-table-expanded-cell {
   padding: 0 !important;
 }
-td.ivu-table-expanded-cell{padding:0;}
+td.ivu-table-expanded-cell {
+  padding: 0;
+}
 </style>

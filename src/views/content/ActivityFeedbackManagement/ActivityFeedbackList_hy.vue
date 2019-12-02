@@ -24,11 +24,7 @@
         <p>
           <span>所属项目:</span>&nbsp;
           <Select style="width:6rem;" placeholder="全部" size="small">
-            <Option
-              v-for="item in OptionsList"
-              :value="item.value"
-              :key="item.value"
-            >{{ item.label }}</Option>
+            <Option v-for="item in OptionsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </p>
       </div>
@@ -51,50 +47,37 @@
         </div>
       </div>
       <div class="con">
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="data"
-          @on-selection-change="tablechange"
-        ></Table>
+        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="tablechange"></Table>
       </div>
       <div class="pages">
         <div class="batch">
           <Button @click="chackall()">
-             <Checkbox v-model="status" style="border:0px;">全选</Checkbox>
+            <Checkbox v-model="status" style="border:0px;">全选</Checkbox>
           </Button>
           <!-- <Select placeholder="批量操作" style="width: 150px" v-model="batch">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button> -->
         </div>
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          :page-size="pageSize"
-          @on-change="changepages"
-        />
+        <Page :total="dataCount" show-elevator show-total size="small" :page-size="pageSize" @on-change="changepages" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatDate } from "@/request/datatime";
-import { Activitypage,Activitybatch } from "@/request/api";
+import { formatDate } from '@/request/datatime'
+import { Activitypage, Activitybatch } from '@/request/api'
 export default {
   data() {
     return {
       navigation1: {
-        head: "活动反馈列表(会员)"
+        head: '活动反馈列表(会员)'
       },
       OptionsList: [
-        { value: "ProductEvaluation", label: "商品评价" },
-        { value: "topics", label: "话题内容" },
-        { value: "UserComments", label: "用户评论" }
+        { value: 'ProductEvaluation', label: '商品评价' },
+        { value: 'topics', label: '话题内容' },
+        { value: 'UserComments', label: '用户评论' }
       ],
       data: [],
       page: 1, //每页显示多少数据
@@ -102,88 +85,88 @@ export default {
       dataCount: 0,
       pageSize: 10,
       sysType: 1,
-      activityName: "",
+      activityName: '',
       categoryId: 1,
       arr: [],
-      batch:null,
-      status:false,
+      batch: null,
+      status: false,
       columns: [
         {
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center"
+          align: 'center'
         },
         {
-          title: "活动名称",
-          key: "activityName",
-          align: "center"
+          title: '活动名称',
+          key: 'activityName',
+          align: 'center'
         },
         {
-          title: "项目名称",
-          key: "categoryName",
-          align: "center"
+          title: '项目名称',
+          key: 'categoryName',
+          align: 'center'
         },
         {
-          title: "反馈人数",
-          key: "feedbackNum",
-          align: "center"
+          title: '反馈人数',
+          key: 'feedbackNum',
+          align: 'center'
         },
         {
-          title: "活动时间",
-          key: "activityTimestamp",
-          align: "center",
+          title: '活动时间',
+          key: 'activityTimestamp',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [h("p", formatDate(params.row.activityTimestamp))]);
+            return h('div', [h('p', formatDate(params.row.activityTimestamp))])
           }
         },
         {
-          title: "操作",
-          key: "action",
-          align: "center",
+          title: '操作',
+          key: 'action',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    marginRight: "5px",
-                    color: "green"
+                    marginRight: '5px',
+                    color: 'green'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "ActivityFeedbackDetails_hy",
+                        name: 'ActivityFeedbackDetails_hy',
                         query: {
                           activityId: params.row.activityId,
-                          name:params.row.activityName
+                          name: params.row.activityName
                         }
-                      });
+                      })
                     }
                   }
                 },
-                "反馈统计"
+                '反馈统计'
               ),
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    marginRight: "5px",
-                    color: "green"
+                    marginRight: '5px',
+                    color: 'green'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "ActivityFeedback",
+                        name: 'ActivityFeedback',
                         query: {
                           activityId: params.row.activityId
                         }
-                      });
+                      })
                     }
                   }
                 },
-                "查看"
+                '查看'
               )
               // h(
               //   "a",
@@ -199,7 +182,7 @@ export default {
               //   },
               //   "删除"
               // )
-            ]);
+            ])
           }
         }
       ],
@@ -207,35 +190,35 @@ export default {
       modalView: false,
       FeedbackDate: {
         FeedbackIntroduction:
-          " 恭喜您已成功参与活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。",
-        FeedbackSuggestions: "希望此类活动更多些"
+          ' 恭喜您已成功参与活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。',
+        FeedbackSuggestions: '希望此类活动更多些'
       },
-      choose1: "choose-A",
-      choose2: "choose-C"
-    };
+      choose1: 'choose-A',
+      choose2: 'choose-C'
+    }
   },
   methods: {
     ok() {
-      this.$Message.info("添加成功");
+      this.$Message.info('添加成功')
     },
     cancel() {
-      this.$Message.info("已取消");
+      this.$Message.info('已取消')
     },
     getActivitypage() {
       Activitypage({
         page: { page: this.page, size: this.size },
-        sysType: this.sysType,
+        sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = res.data.list
 
-          this.dataCount = res.data.totalSize;
+          this.dataCount = res.data.totalSize
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
-       //批量操作接口
+    //批量操作接口
     // getActivityBatch(){
     //     Activitybatch({
     //      feedbackIds:this.arr,
@@ -250,31 +233,31 @@ export default {
 
     //分页功能
     changepages(index) {
-      this.page = index;
-      console.log(index);
-      this.getActivitypage();
+      this.page = index
+      console.log(index)
+      this.getActivitypage()
     },
 
-        //全选按钮
+    //全选按钮
     chackall() {
-      this.status = !this.status;
-      console.log(this.status, this.$refs.selection);
-      this.$refs.selection.selectAll(this.status);
+      this.status = !this.status
+      console.log(this.status, this.$refs.selection)
+      this.$refs.selection.selectAll(this.status)
     },
     //每条数据单选框的状态
     tablechange(selection) {
-      this.arr = selection;
+      this.arr = selection
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
       ) {
-        this.status = true;
+        this.status = true
       } else {
-        this.status = false;
+        this.status = false
       }
-    },
+    }
 
-     //批量操作
+    //批量操作
     // batches() {
     //   if (this.arr.length>0) {
     //     let arr = [];
@@ -304,9 +287,9 @@ export default {
   },
 
   mounted() {
-    this.getActivitypage();
+    this.getActivitypage()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 html,
@@ -316,7 +299,7 @@ body {
 .main {
   background-color: #ffffff;
 }
-.main,
+
 .bk {
   border: 1px solid #e4e4e4;
 }

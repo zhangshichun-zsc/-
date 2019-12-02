@@ -51,21 +51,14 @@
         <div class="con-left">
           <Table border :columns="columns" :data="data"></Table>
           <div class="pages">
-            <Page
-              :total="dataCount"
-              show-elevator
-              show-total
-              size="small"
-              :page-size="size"
-              @on-change="changepages"
-            />
+            <Page :total="dataCount" show-elevator show-total size="small" :page-size="size" @on-change="changepages" />
           </div>
         </div>
         <div class="con-right bk">
           <div class="con-top">
             <p>反馈详情</p>
           </div>
-          <div style="padding: 0.1rem 0.5rem"  v-for="(item,i) in lists">
+          <div style="padding: 0.1rem 0.5rem" v-for="(item,i) in lists">
             <p>{{lists[i].sort}}.{{lists[i].question}}</p>
             <div>{{lists[i].answer}}</div>
           </div>
@@ -76,59 +69,59 @@
 </template>
 
 <script>
-import Divider from "iview/src/components/divider/divider";
-import { formatDate } from "../../../request/datatime";
-import { Activityuserpage, Activitydetail } from "../../../request/api";
+import Divider from 'iview/src/components/divider/divider'
+import { formatDate } from '../../../request/datatime'
+import { Activityuserpage, Activitydetail } from '../../../request/api'
 export default {
   components: { Divider },
   data() {
     return {
       navigation1: {
-        head: "活动反馈详情(会员)"
+        head: '活动反馈详情(会员)'
       },
       data: [],
       page: 1, //每页显示多少数据
       size: 10, //数据条数
       dataCount: 0,
-      userName: "",
+      userName: '',
       feedbackId: 18,
-      sort: "",
-      question: "",
-      answer: "",
-      submitTimestampFrom: "",
-      submitTimestampTo: "",
+      sort: '',
+      question: '',
+      answer: '',
+      submitTimestampFrom: '',
+      submitTimestampTo: '',
       arr: [],
       lists: [],
       columns: [
         {
-          title: "反馈人",
-          key: "userName",
-          width: "100px",
-          align: "center"
+          title: '反馈人',
+          key: 'userName',
+          width: '100px',
+          align: 'center'
         },
         {
-          title: "手机号码",
-          key: "tel",
-          align: "center",
-          width: "140px"
+          title: '手机号码',
+          key: 'tel',
+          align: 'center',
+          width: '140px'
         },
         {
-          title: "反馈时间",
-          key: "feedbackTimestamp",
-          align: "center",
-          width: "180px",
+          title: '反馈时间',
+          key: 'feedbackTimestamp',
+          align: 'center',
+          width: '180px',
           render: (h, params) => {
-            return h("div", [h("p", formatDate(params.row.feedbackTimestamp))]);
+            return h('div', [h('p', formatDate(params.row.feedbackTimestamp))])
           }
         },
         {
-          title: "参与活动岗位",
-          key: "userTypeText",
-          align: "center",
-          width: "160px"
+          title: '参与活动岗位',
+          key: 'userTypeText',
+          align: 'center',
+          width: '160px'
         }
       ]
-    };
+    }
   },
   methods: {
     getActivityuserpage() {
@@ -137,17 +130,17 @@ export default {
         activityId: this.$route.query.activityId
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
-          this.dataCount = res.data.totalSize;
+          this.data = res.data.list
+          this.dataCount = res.data.totalSize
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //分页功能
     changepages(index) {
-      this.page = index;
-      console.log(index);
-      this.getActivityuserpage();
+      this.page = index
+      console.log(index)
+      this.getActivityuserpage()
     },
 
     //详情
@@ -156,17 +149,17 @@ export default {
         feedbackId: this.feedbackId
       }).then(res => {
         if (res.code == 200) {
-          this.lists = res.data;
-          console.log(res);
+          this.lists = res.data
+          console.log(res)
         }
-      });
+      })
     }
   },
   mounted() {
-    this.getActivityuserpage();
-    this.getActivitydetail();
+    this.getActivityuserpage()
+    this.getActivitydetail()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 html,
@@ -176,7 +169,7 @@ body {
 .main {
   background-color: #ffffff;
 }
-.main,
+
 .bk {
   border: 1px solid #e4e4e4;
 }

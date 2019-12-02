@@ -5,37 +5,18 @@
     <div class="content">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="150">
         <FormItem label="审批类型:" prop="typeFlag">
-          <Select
-            placeholder="立项审批、家长小组成立审批、志愿者团队成立审批、积分修改审批、VIP修改审批"
-            style="width: 20rem"
-            v-model="formValidate.typeFlag"
-            :transfer="true"
-          >
-            <Option
-              v-for="item in typelist"
-              :value="item.dataKey"
-              :key="item.dataKey"
-            >{{ item.dataValue }}</Option>
+          <Select placeholder="立项审批、家长小组成立审批、志愿者团队成立审批、积分修改审批、VIP修改审批" style="width: 20rem" v-model="formValidate.typeFlag" :transfer="true">
+            <Option v-for="item in typelist" :value="item.dataKey" :key="item.dataKey">{{ item.dataValue }}</Option>
           </Select>
         </FormItem>
         <FormItem label="谁可以发起申请:" prop="applyRoles">
           <Select v-model="formValidate.applyRoles" style="width:200px">
-            <Option
-              v-for="item in rolelist"
-              :value="item.roleId"
-              :key="item.roleId"
-              :transfer="true"
-            >{{ item.roleName }}</Option>
+            <Option v-for="item in rolelist" :value="item.roleId" :key="item.roleId" :transfer="true">{{ item.roleName }}</Option>
           </Select>
         </FormItem>
         <FormItem label="项目所属:" prop="categoryId">
           <Select placeholder="快乐活动营" style="width: 10rem" v-model="formValidate.categoryId">
-            <Option
-              v-for="item in projectlist"
-              :value="item.categoryId"
-              :key="item.categoryId"
-              :transfer="true"
-            >{{ item.name }}</Option>
+            <Option v-for="item in projectlist" :value="item.categoryId" :key="item.categoryId" :transfer="true">{{ item.name }}</Option>
           </Select>
         </FormItem>
       </Form>
@@ -43,13 +24,7 @@
         <div class="Level-1">
           <h2>选择一级审批</h2>
           <ul>
-            <li
-              class="flex-center-between"
-              v-for="item in prolist"
-              :key="item.userId"
-              :value="item.userId"
-              @click="class1(item)"
-            >
+            <li class="flex-center-between" v-for="item in prolist" :key="item.userId" :value="item.userId" @click="class1(item)">
               <span>{{item.userName}}</span>
               <Icon type="ios-arrow-forward" />
             </li>
@@ -59,13 +34,7 @@
         <div class="Level-2">
           <h2>选择二级审批</h2>
           <ul>
-            <li
-              class="flex-center-between"
-              v-for="item in prolist"
-              :key="item.userId"
-              :value="item.userId"
-              @click="class2(item)"
-            >
+            <li class="flex-center-between" v-for="item in prolist" :key="item.userId" :value="item.userId" @click="class2(item)">
               <span>{{item.userName}}</span>
               <Icon type="ios-arrow-forward" />
             </li>
@@ -82,47 +51,41 @@
 </template>
 
 <script>
-import {
-  poweradd,
-  powertype,
-  powerPer,
-  powerApply,
-  AgreementNewList
-} from "../../request/api";
+import { poweradd, powertype, powerPer, powerApply, AgreementNewList } from '../../request/api'
 export default {
   data() {
     return {
       navigation1: {
-        head: "设置审批流程（共用）"
+        head: '设置审批流程（共用）'
       },
       formValidate: {
         typeFlag: null,
-        applyRoles: "",
+        applyRoles: '',
         categoryId: null
       },
       ruleValidate: {
         typeFlag: [
           {
             required: true,
-            message: "必选项",
-            trigger: "change",
-            type: "number"
+            message: '必选项',
+            trigger: 'change',
+            type: 'number'
           }
         ],
         applyRoles: [
           {
             required: true,
-            type: "number",
-            message: "必选项",
-            trigger: "change"
+            type: 'number',
+            message: '必选项',
+            trigger: 'change'
           }
         ],
         categoryId: [
           {
             required: true,
-            message: "必选项",
-            trigger: "change",
-            type: "number"
+            message: '必选项',
+            trigger: 'change',
+            type: 'number'
           }
         ]
       },
@@ -136,13 +99,13 @@ export default {
       auditUser2Id: null,
       userNameb: null,
       enableFLag: 1
-    };
+    }
   },
   mounted() {
-    this.getAgreementNewList();
-    this.getpowertype();
-    this.getpowerPer();
-    this.getpowerApply();
+    this.getAgreementNewList()
+    this.getpowertype()
+    this.getpowerPer()
+    this.getpowerApply()
   },
   methods: {
     // poweradd, powertype, powerPer, powerApply,AgreementNewList
@@ -152,10 +115,10 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.projectlist = res.data;
+          this.projectlist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 获取审批类型列表
     getpowertype() {
@@ -163,28 +126,28 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.typelist = res.data;
+          this.typelist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 获取审核人员列表
     getpowerPer() {
       powerPer({}).then(res => {
         if (res.code == 200) {
-          this.prolist = res.data;
+          this.prolist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 获取可申请角色列表
     getpowerApply() {
       powerApply({}).then(res => {
         if (res.code == 200) {
-          this.rolelist = res.data;
+          this.rolelist = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // -添加审批流程
     getpoweradd() {
@@ -208,31 +171,31 @@ export default {
         applyRoles: Applicant
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info(res.msg);
-          this.$router.push({ name: "examinationMGT" });
+          this.$Message.info(res.msg)
+          this.$router.push({ name: 'examinationMGT' })
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //一级审批
     class1(e) {
-      this.auditUser1Id = e.userId;
-      this.userNamea = e.userName;
+      this.auditUser1Id = e.userId
+      this.userNamea = e.userName
     },
     //二级审批
     class2(e) {
-      this.auditUser2Id = e.userId;
-      this.userNameb = e.userName;
+      this.auditUser2Id = e.userId
+      this.userNameb = e.userName
       if (this.auditUser1Id == null) {
-        this.$Message.info("请先选择一级审批");
-        this.userNameb = "";
-        this.auditUser2Id = "";
+        this.$Message.info('请先选择一级审批')
+        this.userNameb = ''
+        this.auditUser2Id = ''
       } else if (this.auditUser1Id == this.auditUser2Id) {
-        this.auditUser2Id = null;
-        this.userNameb = null;
-        this.$Message.info("审批人不能相同");
+        this.auditUser2Id = null
+        this.userNameb = null
+        this.$Message.info('审批人不能相同')
       }
-      console.log(this.auditUser2Id, this.userNameb);
+      console.log(this.auditUser2Id, this.userNameb)
     },
 
     //保存
@@ -240,19 +203,19 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           if (this.auditUser1Id == null) {
-            this.$Message.info("请先选择审批人");
+            this.$Message.info('请先选择审批人')
           } else if (this.auditUser1Id == this.auditUser2Id) {
-            this.$Message.info("审批人不能相同");
+            this.$Message.info('审批人不能相同')
           } else {
-            this.getpoweradd();
+            this.getpoweradd()
           }
         } else {
-          this.$Message.error("有必选项未填");
+          this.$Message.error('有必选项未填')
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -262,7 +225,7 @@ body {
 }
 .main {
   background-color: #ffffff;
-  border: 1px solid #e4e4e4;
+
   padding-bottom: 2rem;
 }
 .content {

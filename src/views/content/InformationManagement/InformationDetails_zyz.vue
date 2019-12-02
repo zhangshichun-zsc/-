@@ -46,24 +46,12 @@
             </div>
             <Divider />
             <div class="paper-con">
-              <Form
-                style="margin: 0 auto;"
-                ref="InpDate"
-                :model="InpDate"
-                :rules="ruleValidate"
-                :label-width="120"
-              >
+              <Form style="margin: 0 auto;" ref="InpDate" :model="InpDate" :rules="ruleValidate" :label-width="120">
                 <FormItem label="用户名:" prop="Name">
                   <Input style="width: 10rem" v-model="InpDate.Name"></Input>
                 </FormItem>
                 <FormItem label="回复内容:" prop="ReplyContent">
-                  <Input
-                    style="width: 15rem"
-                    v-model="InpDate.ReplyContent"
-                    type="textarea"
-                    :autosize="{minRows: 8,maxRows: 5}"
-                    placeholder="请输入内容"
-                  ></Input>
+                  <Input style="width: 15rem" v-model="InpDate.ReplyContent" type="textarea" :autosize="{minRows: 8,maxRows: 5}" placeholder="请输入内容"></Input>
                 </FormItem>
                 <FormItem>
                   <Button type="success" @click="succes()">提交</Button>
@@ -100,67 +88,64 @@
                   </p>
                 </div>
               </div> -->
-              <Divider />
-            </div>
+            <Divider />
           </div>
-          <div class="pages">
-            <Page :total="100" show-elevator show-total size="small" style="margin: auto" />
-          </div>
+        </div>
+        <div class="pages">
+          <Page :total="100" show-elevator show-total size="small" style="margin: auto" />
         </div>
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
-import { AddressDetails } from "../../../request/api";
-import Button from "iview/src/components/button/button";
+import { AddressDetails } from '../../../request/api'
+import Button from 'iview/src/components/button/button'
 export default {
   components: { Button },
   data() {
     return {
       navigation1: {
-        head: "资讯详情(志愿者)"
+        head: '资讯详情(志愿者)'
       },
       InpDate: {
-        Name: "",
-        ReplyContent: ""
+        Name: '',
+        ReplyContent: ''
       },
       ruleValidate: {
-        ReplyContent: [
-          { required: true, message: "内容不能为空", trigger: "blur" }
-        ]
+        ReplyContent: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
       },
       informationId: null,
-      list:[]
-    };
+      list: []
+    }
   },
   methods: {
     succes() {
-      console.log(this.$route.query.informationId);
-      this.getAddressDetails();
+      console.log(this.$route.query.informationId)
+      this.getAddressDetails()
     },
 
     //详情数据
     getAddressDetails() {
       this.informationId = this.$route.query.informationId
-      console.log(this.$route.query.informationId);
+      console.log(this.$route.query.informationId)
       AddressDetails({
         informationId: this.informationId
       }).then(res => {
-        console.log(res);
-        if(res.code==200){
+        console.log(res)
+        if (res.code == 200) {
           this.list = res.data
-          this.list.releaseTimestamp=this.util.formatDate(res.data.releaseTimestamp)
+          this.list.releaseTimestamp = this.util.formatDate(res.data.releaseTimestamp)
         }
-      });
+      })
     }
   },
   created() {
-    this.getAddressDetails();
-  },
-
-};
+    this.getAddressDetails()
+  }
+}
 </script>
 <style scoped>
 html,
@@ -170,7 +155,6 @@ body {
 .main {
   background-color: #ffffff;
 }
-.main,
 .content {
   border: 1px solid #e4e4e4;
 }

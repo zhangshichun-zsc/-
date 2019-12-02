@@ -15,9 +15,7 @@
               <Input style="width: 10rem" v-model="AddDate.AlbumName"></Input>
             </FormItem>
             <FormItem label="相册封面:">
-              <Upload
-                multiple
-                action="//jsonplaceholder.typicode.com/posts/">
+              <Upload multiple action="//jsonplaceholder.typicode.com/posts/">
                 <Button icon="ios-cloud-upload-outline">选择上传文件</Button>
               </Upload>
               <span style="color: #999999;font-size: 14px;">只能上传jpg/png格式文件，文件不能超过50kb</span>
@@ -39,67 +37,65 @@
 </template>
 
 <script>
-  export default {
-    data(){
-      return{
-        navigation1: {
-          head: "新建相册(志愿者)"
-        },
-        AddDate:{
-          AlbumName:'',
-          AlbumCover:'',
-          AlbumDescription:'',
-          Sorting:''
-        },
-        ruleValidate:{
-          AlbumName:[
-            { required: true, message: '相册名称不能为空', trigger: 'blur' }
-          ]
-        },
+export default {
+  data() {
+    return {
+      navigation1: {
+        head: '新建相册(志愿者)'
+      },
+      AddDate: {
+        AlbumName: '',
+        AlbumCover: '',
+        AlbumDescription: '',
+        Sorting: ''
+      },
+      ruleValidate: {
+        AlbumName: [{ required: true, message: '相册名称不能为空', trigger: 'blur' }]
       }
     }
   }
-
+}
 </script>
 <style lang="scss" scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-  }
-  .main,
-  .add{
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 10px;
-  }
-  .bk-szy{
-    border-left: 1px solid #E4E4E4;
-    border-right: 1px solid #E4E4E4;
-    border-top: 1px solid #E4E4E4;
-  }
-  .title{
-    background-color: #F3F3F3;
-    justify-content: space-between;
-    padding: 10px 20px;
-  }
-  .add{
-    padding: 50px 0;
-  }
-  .add td{
-    padding: 5px 10px;
-  }
-  .add a{
-    margin-left: 20px;
-    color: #666666;
-  }
-  .bd{
-    margin: 0 auto;
-  }
-  .inter-table{
-    display: flex;
-    align-items: center;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+
+.add {
+  border: 1px solid #e4e4e4;
+}
+.content {
+  margin: 10px;
+}
+.bk-szy {
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  border-top: 1px solid #e4e4e4;
+}
+.title {
+  background-color: #f3f3f3;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.add {
+  padding: 50px 0;
+}
+.add td {
+  padding: 5px 10px;
+}
+.add a {
+  margin-left: 20px;
+  color: #666666;
+}
+.bd {
+  margin: 0 auto;
+}
+.inter-table {
+  display: flex;
+  align-items: center;
+}
 </style>
