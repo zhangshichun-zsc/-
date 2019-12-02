@@ -9,7 +9,7 @@
     <div class="content">
       <div class="summarize">
         <p>本次活动总结</p>
-        <wangeditor :labels="editor1" id="ed1"></wangeditor>
+        <wangeditor :labels="editor1" id="edaaaaa" @change="btns"></wangeditor>
       </div>
       <div class="activity-content">
         <p class="content-img">
@@ -35,30 +35,38 @@
 </template>
 
 <script>
+import {activesum} from '@/request/api'
+import {wangeditor} from "@/components/wangeditor";
 export default {
   data() {
     return {
       navigation1: {
         head: "活动总结(会员)"
       },
-        // 富文本editor
-        editor1: {
-            contents:''
-        }
+      editor1:''
     };
   },
 
-  components: {},
+  components: {wangeditor},
 
   computed: {},
 
   created() {},
 
   methods: {
-    onEditorBlur(){
-      console.log(this.editorOption)
-      // 失去焦点事件
+    getactivesum(){
+      activesum({
+
+      }).then(res=>{
+        console.log(res)
+      })
     },
+    //
+    btns(e){
+      console.log(e)
+
+    },
+
     btn(){
       console.log(apiAddress)
       apiAddress().then(res=> {

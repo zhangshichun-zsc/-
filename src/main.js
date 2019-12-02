@@ -17,10 +17,30 @@ import 'iview/dist/styles/iview.css'
 import './libs/style.scss'
 import './libs/rest.css'
 import './libs/rem.js'
-
-
-
 Vue.prototype.$Message = Message
+
+
+//路由
+router.beforeEach((to,from,next)=>{
+  // console.log(to);
+  if(localStorage.getItem('token')){
+    // Message.info('登录成功')
+    next();
+  }else {
+    //没有登录，去跳转登录页
+    if(to.path === '/login'){
+      console.log(111)
+      // Message.error('身份过期请重新登陆')
+      next();
+    }else {
+      // Message.error('已退出登陆')
+      next({
+        path:'/login'
+      });
+    }
+  }
+});
+
 Vue.prototype.util = util
 
 Vue.config.productionTip = false

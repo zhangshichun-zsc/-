@@ -32,16 +32,7 @@
               >{{ item.dataValue }}</Option>
             </Select>
           </p>
-          <p>
-            <span>资讯所属:</span>&nbsp;
-            <Select style="width:200px" placeholder="会员" v-model="sysType">
-              <Option
-                v-for="item in BelongList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-          </p>
+
         </div>
       </div>
       <div class="con">
@@ -88,8 +79,8 @@
 </template>
 
 <script>
-import {formatDate} from '../../../request/datatime'
-import { AddressList, AddressType, AddressDel } from "../../../request/api";
+import {formatDate} from '@/request/datatime'
+import { AddressList, AddressType, AddressDel } from "@/request/api";
 export default {
   data() {
     return {
@@ -257,11 +248,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-      BelongList: [
-        { value: 0, label: "全部" },
-        { value: 1, label: "会员" },
-        { value: 2, label: "志愿者" }
-      ],
+
       batchList: [
         { value: "2", label: "设为推荐" },
         { value: "3", label: "取消推荐" },
@@ -283,7 +270,7 @@ export default {
       batch: null,
       informationIds: "",
       arr:[],
-      types:''
+
     };
   },
   //事件监听
@@ -314,13 +301,9 @@ export default {
     // 质询列表
     getAddressList() {
 
-      if(this.sysType==0){
-        this.types=''
-      }else{
-        this.types=this.sysType
-      }
+
       AddressList({
-        sysType: this.types,
+        sysType: this.sysType,
         title: this.title,
         infomationType: this.infomationType,
         page: { page: this.page, size: this.size, sort: "createAt" + " " + this.sort}

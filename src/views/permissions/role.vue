@@ -83,7 +83,7 @@
               </Menu>
             </Sider>
             <Layout :style="{padding: '0 24px 24px'}">
-              <Button :style="{margin: '24px 0',maxWidth:'100px'}" @click="newadd">添加成员</Button>
+              <Button :style="{margin: '24px 0',maxWidth:'100px'}" @click="newadd">添加人员</Button>
               <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
                 <Table border :columns="columns" :data="data"></Table>
               </Content>
@@ -97,6 +97,18 @@
                 <div slot="footer">
                   <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
                   <Button type="primary" size="large" @click="addmodalOk">确定</Button>
+                </div>
+              </Modal>
+              <Modal v-model="addstate" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                  <span>删除确定</span>
+                </p>
+                <div style="text-align:center">
+                  <p>请确认是否要删除此数据</p>
+                </div>
+                <div slot="footer">
+                  <Button type="error" @click="modalCancel">取消</Button>
+                  <Button type="success" @click="modalOkdel">确定</Button>
                 </div>
               </Modal>
             </Layout>
@@ -207,7 +219,11 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "Add-members",
-                        query: { userId: params.row.userId, name: this.role,states:3}
+                        query: {
+                          userId: params.row.userId,
+                          name: this.role,
+                          states: 3
+                        }
                       });
                     }
                   }
@@ -228,7 +244,7 @@ export default {
                         this.$Message.error("请先选择角色");
                       } else {
                         this.ids = params.row.userId;
-                        this.getroledel();
+                        this.addstate = true;
                       }
                     }
                   }
@@ -255,9 +271,10 @@ export default {
       targetKeys1: [],
       addlist: [],
       arr: [],
-      arrs:[],
+      arrs: [],
       addUserIds: [],
-      delUserIds: []
+      delUserIds: [],
+      addstate: false
     };
   },
 
@@ -270,10 +287,9 @@ export default {
     // this.getrolequery();
     // console.log(this.role)
   },
-   created(){
-      this.getrolequery();
-    console.log(this.role)
-
+  created() {
+    this.getrolequery();
+    console.log(this.role);
   },
   methods: {
     getMockData() {
@@ -303,12 +319,12 @@ export default {
 
     //穿梭框
     handleChange1(newTargetKeys, direction, moveKeys) {
-      console.log(this.arrs,this.arr)
+      console.log(this.arrs, this.arr);
       if (direction == "right") {
-        this.delUserIds=this.util.arrChange(this.delUserIds,moveKeys)
+        this.delUserIds = this.util.arrChange(this.delUserIds, moveKeys);
         this.addUserIds = this.addUserIds.concat(moveKeys);
       } else if (direction == "left") {
-        this.addUserIds=this.util.arrChange(this.addUserIds,moveKeys)
+        this.addUserIds = this.util.arrChange(this.addUserIds, moveKeys);
         this.delUserIds = this.delUserIds.concat(moveKeys);
       }
       console.log(this.addUserIds, this.delUserIds);
@@ -319,8 +335,8 @@ export default {
     },
     //确定
     addmodalOk() {
-      this.delUserIds=this.util.arrChange(this.delUserIds,this.arrs)
-      this.addUserIds=this.util.arrChange(this.addUserIds,this.arr)
+      this.delUserIds = this.util.arrChange(this.delUserIds, this.arrs);
+      this.addUserIds = this.util.arrChange(this.addUserIds, this.arr);
       this.getroleAddtos();
       console.log(1);
     },
@@ -349,7 +365,7 @@ export default {
           this.List = res.data;
           if (this.List.length != 0) {
             this.role = this.List[0].sysRoleName;
-            console.log(this.role,`1-${this.role}`)
+            console.log(this.role, `1-${this.role}`);
           }
         }
         console.log(res);
@@ -382,6 +398,7 @@ export default {
         if (res.code == 200) {
           this.$Message.info("删除成功");
           this.getrolenumquery();
+          this.addstate = false;
         } else {
           this.$Message.error(res.msg);
         }
@@ -399,9 +416,9 @@ export default {
           if (res.code == 200) {
             this.addlist = res.data;
             this.arr = this.data.map(item => item.userId);
-            this.arrs=this.addlist.map(item=> item.userId)
-             this.addUserIds=this.arr
-      this.delUserIds=this.arrs
+            this.arrs = this.addlist.map(item => item.userId);
+            this.addUserIds = this.arr;
+            this.delUserIds = this.arrs;
             this.getMockData();
             this.getTargetKeys();
           }
@@ -489,6 +506,15 @@ export default {
           sysRoleId: this.add[0].sysRoleId
         }
       });
+    },
+    //取消
+    modalCancel() {
+      this.addstate = false;
+      this.$Message.info("取消成功");
+    },
+    //确定
+    modalOkdel() {
+      this.getroledel();
     }
   }
 };

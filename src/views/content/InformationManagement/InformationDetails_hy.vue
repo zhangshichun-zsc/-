@@ -37,7 +37,7 @@
               <p>{{list.content}}</p>
             </div>
           </div>
-          <div class="paper">
+          <!-- <div class="paper">
             <div class="paper-top flex-start">
               <p>
                 <Icon type="ios-undo" size="30" />
@@ -71,8 +71,8 @@
                 </FormItem>
               </Form>
             </div>
-          </div>
-          <div class="paper">
+          </div> -->
+          <!-- <div class="paper">
             <div class="paper-top flex-start">
               <p>
                 <Icon type="ios-chatbubbles" size="30" />
@@ -80,32 +80,11 @@
               </p>
             </div>
             <Divider />
-            <!-- <div class="paper-con">
-              <div class="reply">
-                <div class="portrait">
-                  <Icon type="ios-person" size="80" />
-                </div>
-                <div class="comments">
-                  <p>
-                    <span>嗷嗷</span>
-                  </p>
-                  <p>
-                    <span>回复：</span>
-                    <span>收获良多！</span>
-                  </p>
-                  <p>
-                    <span>2019-06-15 14:35:51</span>
-                    <span>回复</span>
-                    <span>删除</span>
-                  </p>
-                </div>
-              </div> -->
+
               <Divider />
             </div>
-          </div>
-          <div class="pages">
-            <Page :total="100" show-elevator show-total size="small" style="margin: auto" />
-          </div>
+          </div> -->
+
         </div>
       </div>
     </div>

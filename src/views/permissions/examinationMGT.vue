@@ -29,7 +29,7 @@
           show-total
           size="small"
           style="margin: auto"
-          :page-size="pageSize"
+          :page-size="size"
           @on-change="changepages"
         />
       </div>
@@ -104,7 +104,7 @@ export default {
       page: 1,
       size: 10,
       dataCount: 0,
-      pageSize: 10,
+
       enableFlag: null
     };
   },

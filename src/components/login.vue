@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { login } from '../request/api'
+import { login,homepage } from '../request/api'
 export default {
   data() {
     return {
@@ -82,9 +82,22 @@ export default {
           localStorage.setItem("userName",res.data.userName)
           localStorage.setItem("tel",res.data.tel)
           this.$router.push({ name: "index"});
+          this.gethomepage()
         }else{
           this.$Message.info("密码或账号不正确!")
         }
+      })
+    },
+
+    gethomepage() {
+      homepage({
+        userId: localStorage.getItem('userId')
+      }).then(res => {
+        if (res.code == 200) {
+          // this.routelist = res.data
+           window.sessionStorage.setItem('routelist', res.data)
+        }
+        console.log(res)
       })
     },
     handleSubmit(name) {

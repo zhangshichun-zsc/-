@@ -302,7 +302,11 @@ export default {
       modal2: false,
       active: '',
       token: '',
-      routelist: []
+      routelist:[],
+      list:function(){
+        this.routelist=sessionStorage.getItem('routelist')
+        console.log(this.routelist,sessionStorage.getItem('routelist'))
+      }
     }
   },
 
@@ -313,6 +317,8 @@ export default {
   //保存储存的信息
   created() {
     this.active = window.sessionStorage.getItem('active')
+    // this.routelist = window.sessionStorage.getItem('routelist')
+    // console.log(this.routelist)
   },
 
   methods: {

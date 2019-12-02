@@ -189,7 +189,13 @@ export default {
     // -添加审批流程
     getpoweradd() {
       let Applicant = null;
-      Applicant = this.formValidate.applyRoles.toString();
+      if(this.formValidate.applyRoles==0){
+        Applicant=this.rolelist.map(item=>{
+          return item.roleId
+        }).toString
+      }else{
+        Applicant=this.formValidate.applyRoles.toString()
+      }
       poweradd({
         sysId: this.sysType,
         typeFlag: this.formValidate.typeFlag,

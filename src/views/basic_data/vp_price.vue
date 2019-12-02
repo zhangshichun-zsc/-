@@ -13,13 +13,15 @@
           <Modal v-model="modal1" title="新增会费" draggable width="800">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称" prop="name">
-                <Input v-model="formValidate.name"/>
+                <Input v-model="formValidate.name" />
               </FormItem>
               <FormItem label="金额" prop="amount">
-                <Input v-model="formValidate.amount"/>
+                 <InputNumber  :min="0" v-model="formValidate.amount"></InputNumber>
+
               </FormItem>
               <FormItem label="会费期限" prop="imonth">
-                <Input v-model="formValidate.imonth" width="120"/><span>个月</span>
+                <InputNumber :max="99" :min="1" v-model="formValidate.imonth"></InputNumber>
+                <span>个月</span>
               </FormItem>
               <FormItem label="会员包" prop="packageFlag">
                 <RadioGroup v-model="formValidate.packageFlag">
@@ -28,7 +30,8 @@
                 </RadioGroup>
               </FormItem>
               <FormItem label="会费详情">
-                <div id="editorElem" style="text-align:left"></div>
+                <wangeditor id="exccccc" :labels=editorContent  @change="btn"></wangeditor>
+                <!-- <div id="editorContent" style="text-align:left"></div> -->
               </FormItem>
             </Form>
             <div slot="footer">
@@ -61,16 +64,10 @@
 </template>
 
 <script>
+import wangeditor from '@/components/wangeditor';
 import tophead from "@/components/tophead";
 import { formatDate } from "@/request/datatime";
-import {
-  Cost,
-  Costdel,
-  Costmodify,
-  CostAdd,
-  Costbatch
-} from "@/request/api";
-import E from "wangeditor";
+import { Cost, Costdel, Costmodify, CostAdd, Costbatch } from "@/request/api";
 export default {
   name: "editor",
   data() {
@@ -92,11 +89,11 @@ export default {
             required: true,
             message: "输入格式不正确",
             trigger: "blur",
-            pattern:/^[a-z0-9]+$/,
+            pattern: /^[a-z0-9]+$/,
             type: "number",
-            transform(value) {
-              return Number(value);
-            }
+            // transform(value) {
+            //   return Number(value);
+            // }
           }
         ],
         imonth: [
@@ -220,29 +217,27 @@ export default {
           name: "有效状态",
           type: "select",
           list: [
-            { dataValue: "全部", dataKey: "0" },
+            { dataValue: "全部", dataKey: "" },
             { dataValue: "有效", dataKey: "1" },
-            { dataValue: "无效", dataKey: "2" }
+            { dataValue: "无效", dataKey: "0" }
           ],
           value: ""
         },
         { name: "时间", type: "date", value: "" }
-      ]
+      ],
+      startAt:'',
+      endAt: "",
+      editorContent:''
     };
   },
-  components: { tophead },
+  components: { tophead ,wangeditor},
 
   computed: {},
 
   created() {},
 
   mounted() {
-    var editor = new E("#editorElem");
-    editor.customConfig.onchange = html => {
-      this.editorContent = html;
-      console.log(html);
-    };
-    editor.create();
+
     this.getCost();
   },
   methods: {
@@ -260,7 +255,6 @@ export default {
           } else {
             this.getCostAdd();
           }
-
         } else {
           this.$Message.error("必填项为空！");
         }
@@ -270,21 +264,29 @@ export default {
     getCost() {
       if (this.createTimeStamp != "") {
         this.datas = this.createTimeStamp.getTime();
+        this.endAt = new Date().getTime();
+        if (this.datas > this.endAt) {
+          this.startAt=this.endAt
+          this.endAt=this.datas
+        }else{
+          this.startAt=this.datas
+        }
       }
+
       Cost({
         page: { page: this.page, size: this.size },
         name: this.name,
         status: this.statues,
-        createTimeStamp: this.datas
+        startAt: this.startAt,
+        endAt: this.endAt
       }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
           this.data = res.data.list;
           this.$refs.selection.selectAll(false);
-        }else{
+        } else {
           this.$Message.error(res.msg);
-
         }
       });
     },
@@ -296,19 +298,18 @@ export default {
         if (res.code == 200) {
           let lists = res.data;
           (this.formValidate.name = lists.name),
-            this.editorContent = lists.detail,
-            // editorElem.txt.html(this.editorContent);
-            // this.editorElem.text.html(`${lists.detail}`)
+            (this.editorContent = lists.detail),
             (this.formValidate.packageFlag = lists.packageFlag),
-            (this.formValidate.imonth = String(lists.imonth)),
-            (this.formValidate.amount = String(lists.amount));
+            (this.formValidate.imonth = Number(lists.imonth)),
+            (this.formValidate.amount = Number(lists.amount));
           console.log(typeof lists.amount, typeof this.formValidate.amount);
-        }else{
-          this.$Message.error(res.msg)
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
     },
+
     // 修改会费
     getCostmodify() {
       Costmodify({
@@ -323,8 +324,8 @@ export default {
           this.$Message.success("提交成功!");
           this.modal1 = false;
           this.$Message.success("操作成功!");
-        }else{
-          this.$Message.error(res.msg)
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -343,8 +344,8 @@ export default {
           this.getCost();
           this.$Message.success(res.data.msg);
           this.modal1 = false;
-        }else{
-          this.$Message.error(res.msg)
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res, 11);
       });
@@ -362,18 +363,20 @@ export default {
         console.log(res);
       });
     },
+    //富文本
+    btn(e){
+      this.editorContent=e
+      console.log(e)
+    },
 
     //查询
     query(e) {
       this.name = e[0].value;
       this.createTimeStamp = e[2].value;
-      if (e[1].value == 0) {
-        this.statues = "";
-      } else {
+
         this.statues = e[1].value;
-      }
+
       this.getCost();
-      console.log(e);
     },
 
     //分页功能
@@ -419,6 +422,7 @@ export default {
       }
     },
     add(name) {
+      this.editorContent=''
       this.$refs[name].resetFields();
       this.modal1 = true;
     }

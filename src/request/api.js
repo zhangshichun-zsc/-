@@ -76,6 +76,18 @@ export const activeManager = p => get('/activity-manage/get-activity-page', p) /
 
 export const activeAddManager = p => get('/activity-manage/get-activity-join-page', p) //活动管理--活动参与列表-用户活动参与列表分页
 
+export const activecancel = p => posts('/activity-manage/work/act/cancel', p) //活动管理-活动取消
+
+export const activeclose = p => posts('/activity-manage/work/act/close', p) //活动管理-活动关闭
+
+export const activeset = p => posts('/activity-manage/has/act/mould/set', p) //活动管理-设置模板
+
+export const activedown = p => posts('/activity-manage/work/act/down', p) //活动管理-活动下架
+
+export const activesum = p => posts('/activity-manage/work/act/sum', p) //活动总结-活动总结
+
+
+
 export const pendingBatchList = p => get('/activity-undeal/get-activity-batch-list', p) //获取活动批次列表
 
 export const pendingSignList = p => get('/activity-undeal/get-signup-status-list', p) //获取报名状态列表

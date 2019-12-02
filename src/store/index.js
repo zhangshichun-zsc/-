@@ -11,11 +11,16 @@ export default new Vuex.Store({
     userId:localStorage.getItem('userId') ? localStorage.getItem('userId') : '17',
     tel:localStorage.getItem('tel') ? localStorage.getItem('tel') : ''
   },
+  getters:{
+
+
+  },
   mutations: {
 
 
   },
   actions: {
 
-  }
+  },
+
 })

@@ -64,9 +64,9 @@
             <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
               <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <a @click="modal1 = true">
+            <!-- <a @click="modal1 = true">
               <Icon type="ios-settings-outline" />
-            </a>
+            </a> -->
           </div>
         </div>
         <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
