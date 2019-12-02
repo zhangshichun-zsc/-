@@ -15,17 +15,30 @@
               <span>活动名称</span>
               <Input v-model="args.name" placeholder="Enter something..." style="width: 300px" />
             </li>
+             <li class="start">
+              <span>封面图片</span>
+              <div class="start-wap">
+                <div class="upload shae" v-if='cover == null'>
+                    <div class="file" @click="()=>{ this.$refs.filess.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('cover',$event)" multiple>
+                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                    </div>
+                </div>
+                <img class="imgss" v-else :src="cover"/>
+                <Icon type="ios-trash" v-if='cover !== null' class="cancel" @click="cancelImg('cover')"/>
+              </div>
+            </li>
             <li class="start">
               <span>活动图片</span>
               <div class="start-wap">
                 <div class="upload" v-if='image == null'>
                     <div class="file" @click="()=>{ this.$refs.files.click()}">
-                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('image',$event)" multiple>
                       <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                     </div>
                 </div>
                 <img class="imgs" v-else :src="image"/>
-                <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg()"/>
+                <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg('image')"/>
               </div>
             </li>
             <li>
@@ -169,29 +182,53 @@
                       <div>反馈简介</div>
                       <i-input placeholder="请输入反馈内容" class="txt" v-model="item.detailText" type="textarea" :disabled="isDisb"/>
                     </div>
+                    <view class="ls-item flex-between" v-else-if='index == 1'>
+                      <text>是否上传图片</text>
+                      <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.detailText"></switch>
+                    </view>
                     <div class="ls-item flex-between" v-else-if=' item.typeFlag === 1 '>
                       <i-input placeholder="请输入单文本标题" v-model="item.detailText" :disabled="isDisb"/>
+                      <div>
+                         <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
+                         <span>必填</span>
+                      </div>
                        <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                     </div>
                     <div class="ls-item flex-between" v-else-if=' item.typeFlag === 6 '>
                       <i-input placeholder="请输入多行文本标题" v-model="item.detailText" :disabled="isDisb"/>
+                      <div>
+                         <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
+                         <span>必填</span>
+                      </div>
                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                     </div>
                     <div class="ls-item"  v-else-if='item.typeFlag === 3 '>
                       <div class="flex-between">
                         <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb"/>
-                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
+                        <div>
+                          <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
+                          <span>必填</span>
+                        </div>
+                        <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                       </div>
                       <div class="item flex-between" v-for="(val,i) in item.arr" :key='i'>
                         <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
-                       <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
+                        <div>
+                          <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
+                          <span>必填</span>
+                        </div>
+                        <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
                       </div>
                       <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
                     </div>
                     <div class="ls-item" v-else>
                       <div class="flex-between">
                         <i-input placeholder="请输入多选标题" v-model="item.detailText" :disabled="isDisb"/>
-                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
+                        <div>
+                          <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
+                          <span>必填</span>
+                        </div>
+                        <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                       </div>
                       <div class="item flex-between" v-for="(val,i) in item.arr" :key='i'>
                         <input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
@@ -258,6 +295,12 @@ import { filterNull } from '@/libs/utils'
               targetType: 3,
               detailText: null,
               sort: 1
+            }, {
+              sysId: 2,
+              typeFlag: 9,
+              targetType: 3,
+              detailText: null,
+              sort: 2
             }],
             train: null,
             isFeedback:0,
@@ -276,6 +319,7 @@ import { filterNull } from '@/libs/utils'
               isNeedCertMould:null,
               name:null,
               pic:null,
+              coverPic:null,
               orgId:null,
               startAt:null,
               endAt:null,
@@ -317,6 +361,7 @@ import { filterNull } from '@/libs/utils'
               channel:2,
             },
             image:null,
+            cover:null,
             once:false
         };
     },
@@ -346,7 +391,12 @@ import { filterNull } from '@/libs/utils'
         let feed = this.feed
         if (m !== null) {
           let arr = feed[i].arr
-          arr.splice(m, 1)
+          if(arr.length >2){
+            arr.splice(m, 1)
+          }else{
+            this.$Message.warning("必须留两个")
+            return
+          }
         } else {
           feed.splice(i, 1)
         }
@@ -368,7 +418,8 @@ import { filterNull } from '@/libs/utils'
           typeFlag: type,
           targetType: 3,
           detailText: null,
-          sort: feed.length + 1
+          sort: feed.length + 1,
+          isMust:0
         }
         if (type === 4 || type === 3) {
           args.arr = [{ value: null }, { value: null }, { value: null }]
@@ -402,25 +453,46 @@ import { filterNull } from '@/libs/utils'
           this.array = res.data
         })
       },
-      uploadFile () {
-        let file = this.$refs.files.files[0]
+      uploadFile (img,e) {
+        console.log(img,img=='cover')
+          let file = e.target.files[0]
          const dataForm = new FormData()
         dataForm.append('file', file)
         upload(dataForm).then(res => {
-          var reader = new FileReader()
-          reader.readAsDataURL(file)
-          reader.onload = (e) => {
-            this.image = e.target.result
-            this.args.pic = res.data
+          if(res.code == 200){
+            var reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = (e) => {
+              if(img === 'cover'){
+                this.cover = e.target.result
+                this.args.coverPic = res.data
+              }else{
+                this.image = e.target.result
+                this.args.pic = res.data
+              }
+            }
+          }else{
+            this.$Message.warning(res.msg)
           }
         })
 
       },
-      cancelImg(){
+      cancelImg(img){
         orgimgdel({path:this.args.pic}).then(res => {
-          this.image = null
-          this.args.pic = null
-         this.$Message.success('删除成功')
+          if(res.code == 200){
+              if(img === 'cover'){
+                this.cover =  null
+                this.args.coverPic =  null
+              }else{
+                this.image = null
+                this.args.pic = null
+              }
+            this.image = null
+            this.args.pic = null
+            this.$Message.success('删除成功')
+          }else{
+             this.$Message.warning(res.msg)
+          }
         })
       },
       handleChange(e){
@@ -468,7 +540,7 @@ import { filterNull } from '@/libs/utils'
           if (this.single == false) {
             this.$Message.warning('你没有同意发布规则')
             return
-          } else if (item.name == null || item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.pay == null || item.detail == null || this.args.ownerUserName == null) {
+          } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.pay == null || item.detail == null || this.args.ownerUserName == null) {
             this.$Message.warning('报名项填写不完整')
             return
           } else if (this.args.ownerUserId == null) {
@@ -512,7 +584,10 @@ import { filterNull } from '@/libs/utils'
         saveActive(obj).then(res => {
           this.once = false
           if(res.code == 200){
+            sessionStorage.removeItem("data")
             this.$Message.success('发布成功')
+          }else{
+            this.$Message.warning(res.msg)
           }
         })
       },
@@ -525,7 +600,7 @@ import { filterNull } from '@/libs/utils'
           list[i].isFeedback = this.isFeedback
           list[i].isTrain = this.isTrain
           list[i].coDetailList = ls
-          list[i].trainComments = train
+          list[i].trainComments = traintrain
           list[i].enrollEndtime = zhaEnd
           list[i].enrollStarttime = zhaStart
           list[i].outrollStarttime = zhaStart
@@ -563,7 +638,7 @@ import { filterNull } from '@/libs/utils'
           this.$router.push({name:'volunteer_apply',params:{sysId:'2,3'}})
       }
     },
-    mounted(){}
+    
   }
 </script>
 <style lang="scss" scoped>
@@ -628,6 +703,9 @@ import { filterNull } from '@/libs/utils'
               height: 150px;
               width: 300px;
               background: #e4e4e4;
+            }
+            .imgss {
+              height: 150px;
             }
             .phone {
               width: 60px;
@@ -779,14 +857,18 @@ import { filterNull } from '@/libs/utils'
     position: relative;
     height: 150px;
     width: 300px;
+    .upload{
+      width: 100%;
+      height: 100%;
+    }
     .cancel{
       position: absolute;
       top: 10px;
       right: 10px;
     }
     .upload .file{
-      height: 150px;
-      width: 300px;
+      width: 100%;
+      height: 100%;
       border: 1px dashed #dcdee2;
       text-align: center;
       padding: 20px 0;
@@ -796,6 +878,10 @@ import { filterNull } from '@/libs/utils'
     }
     .upload .file input{
       display: none;
+    }
+    .shae{
+      height: 150px;
+      width: 150px;
     }
   }
 
