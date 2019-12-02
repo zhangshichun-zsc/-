@@ -600,7 +600,7 @@ import { filterNull } from '@/libs/utils'
           list[i].isFeedback = this.isFeedback
           list[i].isTrain = this.isTrain
           list[i].coDetailList = ls
-          list[i].trainComments = traintrain
+          list[i].trainComments = train
           list[i].enrollEndtime = zhaEnd
           list[i].enrollStarttime = zhaStart
           list[i].outrollStarttime = zhaStart
