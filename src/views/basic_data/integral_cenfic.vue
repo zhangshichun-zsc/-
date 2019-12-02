@@ -39,7 +39,6 @@
                   placement="bottom-end"
                   placeholder="Select date"
                   style="width:300px"
-                  format="yyyy-MM-dd HH:mm"
                 ></DatePicker>
             </Col>
           </Row>
