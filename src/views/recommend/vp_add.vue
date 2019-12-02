@@ -28,8 +28,8 @@
         </FormItem>
         <FormItem label="广告位置" prop="location">
           <Select v-model="formValidate.location" placeholder="Select your city" style="width:300px">
-                <Option value="1">会员首页轮播</Option>
-                <Option value="2">志愿者首页轮播</Option>
+                <Option :value="item.dataKey" v-for="(item,index) in citys" :key="index">{{item.dataValue}}</Option>
+
             </Select>
         </FormItem>
 
@@ -126,8 +126,8 @@ export default {
 
       formValidate: {
         title: "",
-        location: '1',
-        status: '1',
+        location: '',
+        status: '0',
         startAt: '',
         endAt: '',
         remark: "",
@@ -145,7 +145,7 @@ export default {
         // ],
         imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
         location: [
-          { required: true, message: "广告位置不能为空", trigger: "change" }
+          { required: true, message: "广告位置不能为空", trigger: "change",type:'number' }
         ],
         status: [
           { required: true, message: "请选择其中一个", trigger: "change" }
@@ -189,7 +189,9 @@ export default {
   methods: {
     //列表
     getAdvertisingList(){
-      AdvertisingList({}).then(res=>{
+      AdvertisingList({
+        sysType:1
+      }).then(res=>{
         if(res.code==200){
           this.citys=res.data
         }
@@ -200,10 +202,11 @@ export default {
     getadd(){
       this.data1 = this.formValidate.startAt.getTime()
       this.data2 = this.formValidate.endAt.getTime()
+      this.sysid=this.formValidate.location
       AddAdvertising({
         sysId:this.sysid,
          title:this.formValidate.title,
-        location:this.formValidate.location,
+
         startAt:this.data1,
         endAt:this.data2,
         status:this.formValidate.status,

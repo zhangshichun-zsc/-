@@ -182,9 +182,9 @@ export const modifystate = p => post('/common/update-dic-status', p) //-公共�
 
 export const Offactivitedel = p => post('/common/del-dic', p) //-：公共模块--删除字典信息
 
-export const Offactivitemod = p => post('/common/modify-dic-info', p) //-公共模块--修改字典信息
+export const Offactivitemod = p => posts('/common/modify-act-type', p) //-公共模块--修改字典信息
 
-export const Offactiviteadd = p => post('/common/add-dic-info', p) //-公共模块--添加字典信息
+export const Offactiviteadd = p => posts('/common/add-act-type', p) //-公共模块--添加字典信息
 //
 
 // 财务
@@ -349,10 +349,7 @@ export const queryVolunteerOrgDetail = p => get('/volunteer-manager/queryVolunte
 //  审批
 export const queryAuditList = p => posts('/volunteer-manager/queryAuditList', p) // 审批页面详情
 
-
-
 export const orgbatch = p => posts('/org/delete', p) //组织管理--组织批量操作
-
 
 export const orgimg = p => post('/pic/upload', p, "multipart/form-data") //组织管理-上传图片
 
@@ -435,6 +432,9 @@ export const departmentStatus = p => get('/web/dept/changgeDeptUserStatus', p) /
 export const departmentSup = p => get('/web/dept/findUpDeptName', p) //部门管理--查询所有上级部门名称
 
 export const departmentall = p => get('/web/dept/findAllDeptName', p) //部门管理--查询所有部门名称
+
+export const departtype = p => get('/web/dept/findDicName', p) //部门管理--查询活动分类
+
 
 // 成员管理
 

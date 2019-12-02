@@ -11,7 +11,7 @@
           </p>
           <div class="but">
             <Button @click="add">添加部门</Button>
-            <Modal v-model="modal1" title="添加部门">
+            <Modal v-model="modal1" :title=text>
               <Form ref="AddDate" :model="AddDate" :rules="ruleValidate" :label-width="150">
                 <FormItem label="部门名称:" prop="deptName">
                   <Input style="width: 10rem" v-model="AddDate.deptName" />
@@ -25,10 +25,10 @@
                   </Select>
                 </FormItem>
                 <FormItem label="设置负责人:" prop="leader">
-                  <Input @click="modal2 = true" style="width: 10rem" v-model="AddDate.leader" />
-                  <Modal v-model="modal2" title="添加部门"></Modal>
+                  <Input  style="width: 10rem" v-model="AddDate.leader" />
+
                 </FormItem>
-                <FormItem label="所属项目" prop="ssproject">
+                <FormItem label="活动类型" prop="ssproject">
                   <Select style="width: 10rem" v-model="AddDate.ssproject"></Select>
                 </FormItem>
               </Form>
@@ -76,13 +76,14 @@ import {
   departmentadd,
   departmentStatus,
   departmentSup,
-  departmentall
+  departmentall,
+  departtype
 } from '@/request/api'
 export default {
   data() {
     return {
       modal1: false,
-      modal2: false,
+
       navigation1: {
         head: '部门管理(共用)'
       },
@@ -109,10 +110,10 @@ export default {
         // ],
         leader: [
           { required: true, message: "请输入负责人姓名", trigger: "blur" }
+        ],
+        ssproject: [
+          { required: true, message: "请输入活动类型", trigger: "blur" }
         ]
-        // ssproject: [
-        //   { required: true, message: "请输入所属项目", trigger: "blur" }
-        // ]
       },
       data1: [],
       columns1: [
@@ -205,7 +206,8 @@ export default {
                     on: {
                       click: () => {
                         this.modal1 = true
-                        // this.getdepartmentSup();
+                        this.text='编辑成员'
+                        this.getdepartmentSup();
                         this.AddDate = params.row
                         this.AddDate.parentId = params.row.parentId
                       }
@@ -213,20 +215,7 @@ export default {
                   },
                   '编辑'
                 )
-                // h(
-                //   "a",
-                //   {
-                //     style: {
-                //       color: "#1ABD9D"
-                //     },
-                //     on: {
-                //       click: () => {
 
-                //       }
-                //     }
-                //   },
-                //   "删除"
-                // )
               ]
             )
           }
@@ -339,18 +328,6 @@ export default {
                   },
                   '编辑'
                 )
-                // h(
-                //   "a",
-                //   {
-                //     style: {
-                //       color: "#1ABD9D"
-                //     },
-                //     on: {
-                //       click: () => {}
-                //     }
-                //   },
-                //   "删除"
-                // )
               ]
             )
           }
@@ -365,7 +342,8 @@ export default {
       sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
       sort: 'asc',
       dataCount: 0,
-      status: ''
+      status: '',
+      text:''
       // obj:''
     }
   },
@@ -376,6 +354,7 @@ export default {
   },
   mounted() {
     this.getdepartmentlist()
+    this.getdeparttype()
   },
   methods: {
     // 部门列表
@@ -388,6 +367,15 @@ export default {
         } else {
           this.$Message.error(res.msg)
         }
+        console.log(res)
+      })
+    },
+
+    //查询分类
+    getdeparttype(){
+      departtype({
+
+      }).then(res=>{
         console.log(res)
       })
     },
@@ -429,9 +417,23 @@ export default {
       })
     },
     // 部门列表编辑
+    //  AddDate: {
+    //     deptName: '',
+    //     description: '',
+    //     parentId: '',
+    //     leader: '',
+    //     ssproject: ''
+    //   },
     getdepartmentedit() {
-      departmentedit({}).then(res => {
+      departmentedit({
+        deptId:this.AddDate.parentId,
+        deptName:this.AddDate.deptName,
+        description:this.AddDate.description,
+        leader:this.AddDate.leader,
+        dicIds:this.dicIds
+      }).then(res => {
         if (res.code == 200) {
+
         }
         console.log(res)
       })
@@ -509,6 +511,7 @@ export default {
     },
     //添加部门
     add() {
+      this.text='添加成员'
       this.modal1 = true
       this.clear()
       this.getdepartmentall()
@@ -526,6 +529,7 @@ export default {
 
     //添加成员
     AddMembers() {
+
       this.$router.push({ name: 'Add-members', query: { states: 1 } })
     }
   },

@@ -301,11 +301,11 @@ export default {
   props: ['labels'],
   data() {
     return {
+      routelist:this.gethomepage(),
       modal1: false,
       modal2: false,
       active: '',
       token: '',
-      routelist:[],
       list:function(){
         this.routelist=sessionStorage.getItem('routelist')
         console.log(this.routelist,sessionStorage.getItem('routelist'))
@@ -330,6 +330,7 @@ export default {
         userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
+          // return res.data
           this.routelist = res.data
         }
         console.log(res)
@@ -386,7 +387,7 @@ export default {
     }
   },
   mounted() {
-    this.gethomepage()
+    // this.gethomepage()
   }
 }
 </script>
