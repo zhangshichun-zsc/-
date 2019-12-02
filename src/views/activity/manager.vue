@@ -472,7 +472,7 @@ export default {
       ],
       sort: "asc",
       datax: [],
-      sysType: 1,
+      sysType: 2,
       page: 1,
       size: 10,
       dataCount: 0,

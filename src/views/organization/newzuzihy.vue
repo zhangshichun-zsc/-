@@ -28,7 +28,8 @@
               <Input v-model="formValidate.ownerUserName" placeholder="自动带出" style="width: 220px" />
             </FormItem>
             <FormItem label="地址:" prop="address">
-              <Select v-model="formValidate.provinceId" style="width:150px">
+              <!-- <select :></select> -->
+              <!-- <Select v-model="formValidate.provinceId" style="width:150px">
                 <Option
                   v-for="item in provinceList"
                   :value="item.provinceId"
@@ -48,7 +49,7 @@
                   :value="item.districtId"
                   :key="item.districtId"
                 >{{ item.districtName }}</Option>
-              </Select>
+              </Select> -->
             </FormItem>
             <FormItem label="联系方式:" prop="orgName">
               <Input v-model="formValidate.ownerUserPhone" style="width: 220px" />
@@ -60,18 +61,33 @@
                 style="width: 220px"
               />
             </FormItem>
-            <FormItem label="图片:" prop="orgName">
-              <div class="flex-start">
-                <img :src="filePath" style="width: 9rem;height: 5rem;" />
-                <div style="padding-top: 2.5rem;margin-left: 0.5rem;">
-                  <Upload
-                    :action=orgimg
-                    :on-success="handleSuccessimg"
-                  >
-                    <Button icon="ios-cloud-upload-outline">上传图片</Button>
-                  </Upload>
-                </div>
-              </div>
+            <FormItem label="图片:" prop="imgUrl">
+              <div class="start-wap">
+          <div class="upload" v-if="formValidate.imgUrl == null" @click="()=>{ this.$refs.files.click()}">
+            <div class="file">
+              <input
+                style=" display:none;"
+                type="file"
+                accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                ref="files"
+                @change="uploadFile()"
+                multiple
+              />
+              <Button icon="ios-cloud-upload-outline">上传图片</Button>
+              <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+            </div>
+          </div>
+
+          <img :src="formValidate.imgUrl" style="height:150px;width:150px;" />
+          <Icon
+            type="ios-trash"
+            v-if="formValidate.imgUrl!= null"
+            class="cancel"
+            :size="26"
+            @click="cancelImg()"
+          />
+        </div>
+
             </FormItem>
             <FormItem label="详情:" prop="orgName">
               <Input
@@ -116,13 +132,16 @@
   </div>
 </template>
 <script>
+// import { select } from "@/components/select";
+import { upload } from "../../request/http";
 import {orgimg} from '@/request/http'
 import {
   orgtype,
   orgadd,
   orgcity,
   orgdistrict,
-  orgprovince
+  orgprovince,
+  orgimgdel
 } from "@/request/api";
 export default {
   data() {
@@ -145,9 +164,10 @@ export default {
         wx: "",
         text: "",
         fileList: [],
-
+        picUrl:null,
         ownerUserName: "",
-        ownerUserPhone: ""
+        ownerUserPhone: "",
+        imgUrl:null,
       },
       ruleValidate: {
         orgName: [
@@ -164,7 +184,13 @@ export default {
             trigger: "blur"
             // type:
           }
-        ]
+        ],
+        imgUrl:[  {
+            required: true,
+            message: "图片不能为空",
+            trigger: "blur"
+
+          }]
       },
       list: [],
       createUserId: 1,
@@ -173,11 +199,12 @@ export default {
       provinceList:[],
       cityList: [],
       districtList: [],
-      filePath: null,
+
       name: null,
       orgimg:''
     };
   },
+  // components: { select },
   methods: {
     //获取组织类型列表
     getorgtype() {
@@ -245,6 +272,34 @@ export default {
       });
     },
 
+    //图片上传
+    uploadFile() {
+      let file = this.$refs.files.files[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.formValidate.imgUrl = e.target.result;
+          this.formValidate.picUrl = res.data;
+        };
+      });
+    },
+    //删除图片
+    cancelImg() {
+      orgimgdel({ path: this.formValidate.picUrl }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.formValidate.picUrl = null;
+          this.formValidate.imgUrl = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
+
     //表单提交
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
@@ -254,13 +309,6 @@ export default {
           this.$Message.error("必填项未填！");
         }
       });
-    },
-     //上传图片
-    handleSuccessimg(res,file){
-      this.name = file.name;
-      this.filePath = file.filePath;
-      console.log(res, file.name);
-
     },
 
     //附件上传

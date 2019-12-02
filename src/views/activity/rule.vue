@@ -269,6 +269,7 @@ export default {
 }
 
 .content {
+  height: 700px;
   .integral-table {
     height: 50px;
     border: #e4e4e4 1px solid;

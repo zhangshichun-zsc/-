@@ -1,4 +1,4 @@
-<!-- 证书管理(志愿者) -->
+<!-- 证书管理(会员) -->
 <template>
   <div class="integral">
      <div class="integral-header">
@@ -53,7 +53,7 @@
                     placement="bottom-end"
                     placeholder="选择日期"
                     style="width: 200px"
-                    type="datetime" 
+                    type="datetime"
                     v-model="params.effectiveAt"
                     @on-change='changeDate'
                     :options="options"
@@ -100,7 +100,7 @@ export default {
   data() {
     return {
         navigation1: {
-        head: "证书管理(志愿者)"
+        head: "证书管理(会员)"
       },
       ruleValidate:{
         orgId: [
