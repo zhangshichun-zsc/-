@@ -48,7 +48,7 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
+          <!-- <Button class="table-btn" @click="modal1 = true">{{title}}</Button> -->
           <Modal v-model="modal1" title="修改"  @on-cancel='cancel'>
             <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
@@ -217,7 +217,7 @@ export default {
         this.$Message.warning('不能为空')
         return
       }
-      updateCard(this.args).then(res => {
+      updateCard(filterNull(this.args)).then(res => {
         if(res.code == 200){
           this.$set(this.params.page,'page',1)
           this.modal1 = false

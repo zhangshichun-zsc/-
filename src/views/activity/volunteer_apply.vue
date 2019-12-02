@@ -214,7 +214,7 @@ export default {
   created() {
     let sysId = this.$route.params.sysId
     this.args.sysId = sysId
-    this.adds.sysId = sysId
+    this.adds.sysId = sysId.split(",")[0]
     this.getList()
   },
   methods: {
@@ -265,6 +265,7 @@ export default {
       let adds = filterNull(this.adds)
       addSignItem(adds).then(res => {
           if(res.code == 200){
+            this.modal1 = false
            this.$Message.success('添加成功')
           }else{
             this.$Message.error(res.msg)
