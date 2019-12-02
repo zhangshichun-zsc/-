@@ -26,7 +26,7 @@
           <Row>
             <Col span="12">
                <DatePicker
-                  type="datetime"
+                  type="daterange"
                   @on-change="handleChange"
                   placement="bottom-end"
                   placeholder="Select date"
