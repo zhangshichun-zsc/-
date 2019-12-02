@@ -59,85 +59,83 @@
 </template>
 
 <script>
-import {ReportDel} from '../../../request/api'
-  export default {
-    data () {
-      return {
-        navigation1: {
-          head: "举报详情-已处理(会员)"
-        },
-        details:{},
-        DealWithData:[
-          {
-            DealWithPersonnel:'admin',
-            ProcessingTime:'2019-07-19 14:48:38',
-            ProcessingResults:'无效举报',
-            ProcessingNote:'无',
-          }
-        ],
-        DealWith:[
-          {}
-        ]
-      }
-    },
-    mounted(){
-      this.getReportDel()
-    },
-    methods:{
-      getReportDel(){
-        ReportDel({
-          reportId:this.$route.query.reportId
-        }).then(res=>{
-          console.log(res)
-          if(res.code==200){
-            this.ReportData=res.data
-          }
-        })
-      }
+import { ReportDel } from '../../../request/api'
+export default {
+  data() {
+    return {
+      navigation1: {
+        head: '举报详情-已处理(会员)'
+      },
+      details: {},
+      DealWithData: [
+        {
+          DealWithPersonnel: 'admin',
+          ProcessingTime: '2019-07-19 14:48:38',
+          ProcessingResults: '无效举报',
+          ProcessingNote: '无'
+        }
+      ],
+      DealWith: [{}]
+    }
+  },
+  mounted() {
+    this.getReportDel()
+  },
+  methods: {
+    getReportDel() {
+      ReportDel({
+        reportId: this.$route.query.reportId
+      }).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.ReportData = res.data
+        }
+      })
     }
   }
-
+}
 </script>
 <style scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-  }
-  .main,
-  .bk,
-  .con td{
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 1rem;
-  }
-  .con-top{
-    background-color: #F3F3F3;
-    justify-content: space-between;
-    padding:0.5rem 1rem;
-  }
-  .con-top p,
-  .con{
-    font-size: 12px;
-  }
-  .bk-szy{
-    border-left: 1px solid #E4E4E4;
-    border-right: 1px solid #E4E4E4;
-    border-top: 1px solid #E4E4E4;
-  }
-  .con{
-    padding: 1rem 8rem;
-  }
-  .con td:nth-child(1){
-    text-align: right;
-    width: 6rem;
-  }
-  .con td{
-    padding: 0.5rem 1rem;
-  }
-  .con table{
-    margin-bottom: 1rem;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+
+.bk,
+.con td {
+  border: 1px solid #e4e4e4;
+}
+.content {
+  margin: 1rem;
+}
+.con-top {
+  background-color: #f3f3f3;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+}
+.con-top p,
+.con {
+  font-size: 12px;
+}
+.bk-szy {
+  border-left: 1px solid #e4e4e4;
+  border-right: 1px solid #e4e4e4;
+  border-top: 1px solid #e4e4e4;
+}
+.con {
+  padding: 1rem 8rem;
+}
+.con td:nth-child(1) {
+  text-align: right;
+  width: 6rem;
+}
+.con td {
+  padding: 0.5rem 1rem;
+}
+.con table {
+  margin-bottom: 1rem;
+}
 </style>

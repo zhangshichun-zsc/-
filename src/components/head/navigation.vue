@@ -22,11 +22,11 @@
 
 <script>
 export default {
-  inject: ["reload"],
+  inject: ['reload'],
   data() {
-    return {};
+    return {}
   },
-  props: ["labels"],
+  props: ['labels'],
   components: {},
 
   computed: {},
@@ -34,26 +34,26 @@ export default {
   created() {},
 
   methods: {
-
     //返回
     returns() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
 
     //局部刷新
     refresh() {
-      this.reload();
+      this.reload()
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .min .min-tit {
-  height: 50px;
-  background: #f3f3f3;
-  border: 1px solid #e4e4e4;
+  height: 68px;
   margin-bottom: 0px;
-  line-height: 50px;
+  line-height: 68px;
+  background-color: #f2f2f2;
+  border: 0;
+  border: none;
 }
 .min .rig {
   margin-right: 20px;
@@ -67,6 +67,8 @@ export default {
   }
 }
 .borders {
-  border-left: 5px solid #1abc9c;
+  font-size: 16px;
+  color: #1b2331;
+  font-weight: 800;
 }
 </style>

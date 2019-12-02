@@ -319,6 +319,8 @@ export const orgGetInfo = p => get('/org/getHomeDetail', p) // 具体家长小�
 
 export const getIsConfig = p => get('/org/getIsConfig', p) // 判断当前用户下有没有审批权限
 
+export const queryCoAuditConfig = p => get('/volunteer-manager/queryCoAuditConfig', p) // 判断当前用户下有没有审批权限
+
 // 志愿者团队
 
 export const queryVouluteerOrgList = p => posts('/volunteer-manager/queryVouluteerOrgList', p) //获取志愿者团队列表

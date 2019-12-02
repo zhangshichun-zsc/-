@@ -14,25 +14,25 @@
             <TabPane label="功能权限设置" name="name1">
               <Row>
                 <Col span="8">
-                  <Menu>
-                    <CheckboxGroup v-model="fruit">
-                      <Submenu :name="index" v-for="(item,index) in list" :key="index">
-                        <template slot="title">
-                          <Icon type="ios-paper" />
-                          {{item.parentName}}
-                          <!-- <Checkbox
+                <Menu>
+                  <CheckboxGroup v-model="fruit">
+                    <Submenu :name="index" v-for="(item,index) in list" :key="index">
+                      <template slot="title">
+                        <Icon type="ios-paper" />
+                        {{item.parentName}}
+                        <!-- <Checkbox
                             :indeterminate="indeterminate"
                             :value="checkAll"
                             @click.prevent.native="handleCheckAll"
                           >全选</Checkbox> -->
-                        </template>
-                        <MenuItem name="1-1" v-for="(value,keys) in item.list" :key="keys">
+                      </template>
+                      <MenuItem name="1-1" v-for="(value,keys) in item.list" :key="keys">
 
-                          <Checkbox :label="value.sysMenuId"> {{value.name}}</Checkbox>
-                        </MenuItem>
-                      </Submenu>
-                    </CheckboxGroup>
-                  </Menu>
+                      <Checkbox :label="value.sysMenuId"> {{value.name}}</Checkbox>
+                      </MenuItem>
+                    </Submenu>
+                  </CheckboxGroup>
+                </Menu>
                 </Col>
               </Row>
               <Button type="success" @click="save">保存</Button>
@@ -45,79 +45,79 @@
 </template>
 
 <script>
-import { Permissionset,roleSetup} from "@/request/api";
-import Table from "iview/src/components/table/table";
+import { Permissionset, roleSetup } from '@/request/api'
+import Table from 'iview/src/components/table/table'
 export default {
   components: { Table },
   data() {
     return {
       navigation1: {
-        head: "功能权限设置(共用)"
+        head: '功能权限设置(共用)'
       },
       single: false,
       sysRoleId: [],
       list: [],
       fruit: [],
-      obj:{},
-      list:'',
-      sysRoleId:'',
-      sysRoleName:''
-    };
+      obj: {},
+      list: '',
+      sysRoleId: '',
+      sysRoleName: ''
+    }
   },
   methods: {
     //查询
     getPermissionset() {
       Permissionset({}).then(res => {
         if (res.code == 200) {
-          this.list = res.data;
+          this.list = res.data
         } else {
-          this.$Message.info(res.msg);
+          this.$Message.info(res.msg)
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     // 角色权限设置
     getroleSetup() {
-      this.list=this.fruit.toString()
+      this.list = this.fruit.toString()
       roleSetup({
         sysRoleId: this.sysRoleId,
         sysMenuIds: this.list
       }).then(res => {
         this.getPermissionset()
-          this.$Message.info(res.msg)
-        console.log(res);
-        if(res.code==200){
-          if(this.$route.query.status==1){
-             this.$router.push({
-              name: "departmentMGT"
-            });
-          }else if(this.$route.query.status==2){
+        this.$Message.info(res.msg)
+        console.log(res)
+        if (res.code == 200) {
+          if (this.$route.query.status == 1) {
             this.$router.push({
-              name: "membersMGT"
-            });
-          }else if(this.$route.query.status == 3){
-             this.$router.push({
-              name: "role"
-            });
+              name: 'departmentMGT'
+            })
+          } else if (this.$route.query.status == 2) {
+            this.$router.push({
+              name: 'membersMGT'
+            })
+          } else if (this.$route.query.status == 3) {
+            this.$router.push({
+              name: 'role'
+            })
           }
         }
-      });
+      })
     },
 
     //保存
     save() {
-      console.log(this.fruit);
+      console.log(this.fruit)
       this.getroleSetup()
     }
   },
   mounted() {
-    this.sysRoleId=this.$route.query.sysRoleId
-    this.sysRoleName=this.$route.query.sysRoleName
+    this.sysRoleId = this.$route.query.sysRoleId
+    this.sysRoleName = this.$route.query.sysRoleName
     console.log(this.$route.query.sysRoleId)
-    this.getPermissionset();
+    this.getPermissionset()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 html,
@@ -127,7 +127,7 @@ body {
 .main {
   background-color: #ffffff;
 }
-.main,
+
 .choose {
   border: 1px solid #e4e4e4;
 }
@@ -186,8 +186,7 @@ table td,
   display: block;
   margin: auto;
 }
-.ivu-checkbox-wrapper .ivu-checkbox span{
+.ivu-checkbox-wrapper .ivu-checkbox span {
   display: none !important;
-
 }
 </style>

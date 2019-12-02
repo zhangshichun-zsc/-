@@ -158,11 +158,14 @@ export default {
           }
         },
         {
-          title: "组织地址",
-          key: "address",
-          align: "center",
+          title: '组织地址',
+          key: 'address',
+          align: 'center',
           render: (h, params) => {
-            return h('span', params.row.provinceName+params.row.cityName+params.row.districtName)
+            return h(
+              'span',
+              params.row.provinceName + params.row.cityName + params.row.districtName
+            )
           }
         },
         {
@@ -416,7 +419,6 @@ body {
 }
 .main {
   background-color: #ffffff;
-  border: 1px solid #e4e4e4;
 }
 .basis {
   margin: 0.5rem;

@@ -39,70 +39,70 @@
 </template>
 
 <script>
-  export default {
-    data(){
-      return{
-        navigation1: {
-          head: "优秀志愿者"
-        }
+export default {
+  data() {
+    return {
+      navigation1: {
+        head: '优秀志愿者'
       }
     }
   }
-
+}
 </script>
 <style scoped>
-  html,body{
-    margin: auto;
-  }
-  .main{
-    background-color: #ffffff;
-  }
-  .main,
-  .content{
-    border: 1px solid #E4E4E4;
-  }
-  .content{
-    margin: 1rem auto;
-    width: 50rem;
-    display: flex;
-  }
-  .content p{
-    font-size: 14px;
-    line-height: 28px;
-    color: #999999;
-  }
-  .con-left{
-    width: 15rem;
-  }
-  .left-con{
-    margin-top: 5rem;
-    padding: 2rem;
-  }
-  .con-right{
-    width: 35rem;
-    border-left: 1px solid #E4E4E4;
-  }
-  .right-con{
-    padding: 1rem 2rem;
-  }
-  .paper-top p{
-    margin-right: 1rem;
-  }
-  .paper-top span{
-    margin-left: 0.5rem;
-  }
-  .paper-con{
-    padding-bottom: 2rem;
-  }
-  .reply{
-    display: flex;
-  }
-  .comments span{
-    margin: 0.2rem;
-  }
-  .pages{
-    display: flex;
-    justify-content: center;
-    margin: 10px auto;
-  }
+html,
+body {
+  margin: auto;
+}
+.main {
+  background-color: #ffffff;
+}
+
+.content {
+  border: 1px solid #e4e4e4;
+}
+.content {
+  margin: 1rem auto;
+  width: 50rem;
+  display: flex;
+}
+.content p {
+  font-size: 14px;
+  line-height: 28px;
+  color: #999999;
+}
+.con-left {
+  width: 15rem;
+}
+.left-con {
+  margin-top: 5rem;
+  padding: 2rem;
+}
+.con-right {
+  width: 35rem;
+  border-left: 1px solid #e4e4e4;
+}
+.right-con {
+  padding: 1rem 2rem;
+}
+.paper-top p {
+  margin-right: 1rem;
+}
+.paper-top span {
+  margin-left: 0.5rem;
+}
+.paper-con {
+  padding-bottom: 2rem;
+}
+.reply {
+  display: flex;
+}
+.comments span {
+  margin: 0.2rem;
+}
+.pages {
+  display: flex;
+  justify-content: center;
+  margin: 10px auto;
+}
 </style>

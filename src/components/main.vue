@@ -381,7 +381,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .layout {
   border: 1px solid #d7dde4;
   background: #f5f7f9;
@@ -420,7 +420,8 @@ export default {
 .main-content {
   padding: 0 20px 20px;
   padding-left: 280px;
-  padding-top: 80px;
+  padding-top: 60px;
+  background-color: #f2f2f2;
 }
 
 .ivu-layout .ivu-layout-header,
@@ -433,9 +434,6 @@ export default {
   position: fixed;
   top: 0;
   z-index: 1;
-}
-.ivu-layout-header {
-  padding: 0;
 }
 
 .flex-center-between {

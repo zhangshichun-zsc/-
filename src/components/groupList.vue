@@ -57,11 +57,10 @@
             <Button class="table-btn" @click='batchAdopt'>通过</Button>
             <Button class="table-btn" @click="batchRefuse">拒绝</Button>
           </span>
-          <Button type="info" style='margin-left: 10px;' ghost @click='jump'>
+          <Button type="info" style='margin-left: 10px;' ghost v-if='jurisdiction' @click='jump'>
             {{navigation1.name==="parent"?'家长小组 ':'志愿者团队'}}审批</Button>
         </div>
         <div>
-
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -84,7 +83,8 @@ import {
   orgSetStatus,
   queryVouluteerOrgList,
   modifyOrgMsg,
-  orgSetGroup
+  orgSetGroup,
+  queryCoAuditConfig
 } from '../request/api'
 import { setTimeout } from 'timers'
 export default {
@@ -251,11 +251,16 @@ export default {
       startAt: '',
       endAt: '',
       auditId: '',
-      isModel: false
+      userId: '',
+      isModel: false,
+      jurisdiction: false
     }
   },
   props: ['index', 'navigation1'],
   created() {
+    let userId = localStorage.getItem('userId') || ''
+    this.userId = userId
+    this.isJurisdiction()
     this.getorgpage()
   },
   watch: {
@@ -264,6 +269,16 @@ export default {
     }
   },
   methods: {
+    // 是否有权限显示审批按钮
+    isJurisdiction() {
+      queryCoAuditConfig({
+        userId: this.userId,
+        typeFlag: '6',
+        sysId: this.navigation1.name === 'parent' ? '1,2' : '2,3'
+      }).then(res => {
+        this.jurisdiction = res.data.isAudit
+      })
+    },
     //标签分页
     getorgpage() {
       let endAt = null

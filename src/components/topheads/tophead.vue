@@ -22,21 +22,16 @@
         <div class="con">
           <Form inline class="flex-center-start" v-if="Retract==true">
             <div v-for="(item,index) in top" :key="index">
-              <FormItem :label=item.name  prop="name" v-if="item.type=='input'">
+              <FormItem :label=item.name prop="name" v-if="item.type=='input'">
                 <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"></Input>
               </FormItem>
-              <FormItem :label=item.name  prop="list" v-if="item.type=='select'">
+              <FormItem :label=item.name prop="list" v-if="item.type=='select'">
                 <Select style="width:150px" v-model="item.value">
-                  <Option
-                    v-for="items in item.list"
-                    :value="items.dataKey"
-                    :key="items.dataKey"
-                    :transfer=true
-                  >{{ items.dataValue }}</Option>
+                  <Option v-for="items in item.list" :value="items.dataKey" :key="items.dataKey" :transfer=true>{{ items.dataValue }}</Option>
                 </Select>
               </FormItem>
-              <FormItem :label=item.name  prop="CreationTime"  v-if="item.type=='date'">
-                <DatePicker type="date" placeholder="请选择日期"  v-model="item.value" style="width: 150px" :transfer=true></DatePicker>
+              <FormItem :label=item.name prop="CreationTime" v-if="item.type=='date'">
+                <DatePicker type="date" placeholder="请选择日期" v-model="item.value" style="width: 150px" :transfer=true></DatePicker>
               </FormItem>
             </div>
           </Form>
@@ -90,18 +85,18 @@ export default {
   data() {
     return {
       formValidate: {
-        name: ""
+        name: ''
       },
       ruleValidate: {
-        name: [{ required: true, message: "兴趣爱好不能为空", trigger: "blur" }]
+        name: [{ required: true, message: '兴趣爱好不能为空', trigger: 'blur' }]
       },
       modal1: false,
       Retract: true
-    };
+    }
   },
-  props: ["navigation1", "top"],
+  props: ['navigation1', 'top'],
 
-//  <!-- //数据例子 -->
+  //  <!-- //数据例子 -->
   // <!-- top:[{name:'关键词',type:'input',value:''},{name:'发布时间',type:'select',list:[],value:''}], -->
 
   components: {},
@@ -115,16 +110,16 @@ export default {
   methods: {
     //查询
     query() {
-      this.$emit("query", this.top);
+      this.$emit('query', this.top)
     },
 
     //收起筛选
     Retractbtn() {
-      this.Retract = !this.Retract;
-      console.log(11);
+      this.Retract = !this.Retract
+      console.log(11)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .integral-header {
@@ -152,7 +147,6 @@ export default {
 
 .main {
   background-color: #ffffff;
-  border: 1px solid #e4e4e4;
 }
 .content {
   margin-top: 10px;
@@ -191,7 +185,7 @@ export default {
 .batch button {
   margin-left: 1rem;
 }
-.ivu-form-inline .ivu-form-item{
+.ivu-form-inline .ivu-form-item {
   display: flex;
 }
 </style>

@@ -20,62 +20,30 @@
               <div class="flex-center-start">
                 <p style="width: 100px;text-align: center;">用户分类</p>
                 <Select v-model="sysId" style="width: 200px;">
-                  <Option
-                    v-for="item in typelist"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                  <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </div>
               <div class="flex-center-start">
                 <p style="width: 100px;text-align: center;">类型</p>
                 <Select v-model="adds[0].ruleType" style="width: 150px;margin-right:10px">
-                  <Option
-                    v-for="item in cityList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                  <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <Select v-model="adds[0].compareType" style="width: 100px;">
-                  <Option
-                    v-for="item in cityList"
-                    :value="item.value1"
-                    :key="item.value1"
-                  >{{ item.label1 }}</Option>
+                  <Option v-for="item in cityList" :value="item.value1" :key="item.value1">{{ item.label1 }}</Option>
                 </Select>
-                <Input
-                  type="text"
-                  style="width: 50px;margin-left:10px"
-                  v-model="adds[0].requireCondition"
-                ></Input>
+                <Input type="text" style="width: 50px;margin-left:10px" v-model="adds[0].requireCondition"></Input>
               </div>
               <div class="flex-center-start" v-if="a">
                 <p style="width: 100px;text-align: center;"></p>
                 <Select v-model="adds[1].ruleType" style="width: 150px;margin-right:10px">
-                  <Option
-                    v-for="item in cityList2"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
+                  <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 <Select v-model="adds[1].compareType" style="width: 100px;">
-                  <Option
-                    v-for="item in cityList2"
-                    :value="item.value1"
-                    :key="item.value1"
-                  >{{ item.label1 }}</Option>
+                  <Option v-for="item in cityList2" :value="item.value1" :key="item.value1">{{ item.label1 }}</Option>
                 </Select>
-                <Input
-                  type="text"
-                  style="width: 50px;margin-left:10px"
-                  v-model="adds[1].requireCondition"
-                ></Input>
+                <Input type="text" style="width: 50px;margin-left:10px" v-model="adds[1].requireCondition"></Input>
               </div>
-              <div
-                v-if="b"
-                style="width:280px;height:24px;margin:10px 0 0 100px;border:1px solid #ccc;text-align: center;line-height:24px; border-style: dashed;cursor:pointer"
-                @click="Show"
-              >添加条件</div>
+              <div v-if="b" style="width:280px;height:24px;margin:10px 0 0 100px;border:1px solid #ccc;text-align: center;line-height:24px; border-style: dashed;cursor:pointer" @click="Show">添加条件</div>
               <div class="flex-start">
                 <p style="width: 100px;text-align: center;">时间范围</p>
                 <RadioGroup v-model="timeType" style="display: inline-grid;">
@@ -84,12 +52,7 @@
                   </Radio>
                   <Radio label="1">
                     <span>应用于所选时间段</span>
-                    <DatePicker
-                      type="date"
-                      placeholder="开始时间"
-                      v-model="startAt"
-                      style="width: 150px"
-                    ></DatePicker>
+                    <DatePicker type="date" placeholder="开始时间" v-model="startAt" style="width: 150px"></DatePicker>
                     <DatePicker type="date" placeholder="结束时间" v-model="endAt" style="width: 150px"></DatePicker>
                   </Radio>
                 </RadioGroup>
@@ -97,36 +60,18 @@
             </FormItem>
           </Form>
         </Modal>
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="listMsg"
-          @on-selection-change="tablechange"
-        ></Table>
+        <Table ref="selection" border :columns="columns" :data="listMsg" @on-selection-change="tablechange"></Table>
         <div class="pages bk-zxy flex-center-between">
           <div>
             <Button @click.stop="chackall()" style="border:0px;">
               <Checkbox v-model="status">全选</Checkbox>
             </Button>
             <Select placeholder="批量操作" style="width: 150px">
-              <Option
-                v-for="item in batchList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+              <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Button class="space" @click="batches()">确定</Button>
           </div>
-          <Page
-            :total="dataCount"
-            show-elevator
-            show-total
-            size="small"
-            style="margin: auto"
-            :page-size="pageSize"
-            @on-change="changepages"
-          />
+          <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="pageSize" @on-change="changepages" />
         </div>
       </div>
     </div>
@@ -134,88 +79,82 @@
 </template>
 
 <script>
-import { date1 } from "../../request/datatime.js";
-import {
-  Labelpage,
-  Labeldel,
-  Labeladd,
-  Labelmodify,
-  Labeldetails
-} from "../../request/api";
+import { date1 } from '../../request/datatime.js'
+import { Labelpage, Labeldel, Labeladd, Labelmodify, Labeldetails } from '../../request/api'
 export default {
-  inject: ["reload"],
+  inject: ['reload'],
   data() {
     return {
       navigation1: {
-        head: "标签列表(会员)"
+        head: '标签列表(会员)'
       },
       columns: [
         {
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center"
+          align: 'center'
         },
         {
-          title: "标签名称",
-          key: "name",
-          align: "center"
+          title: '标签名称',
+          key: 'name',
+          align: 'center'
         },
         {
-          title: "人数",
-          key: "count",
-          align: "center"
+          title: '人数',
+          key: 'count',
+          align: 'center'
         },
         {
-          title: "自动打标签条件",
-          key: "getCondition",
-          align: "center"
+          title: '自动打标签条件',
+          key: 'getCondition',
+          align: 'center'
         },
         {
-          title: "操作",
-          key: "action",
-          align: "center",
+          title: '操作',
+          key: 'action',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
+            return h('div', [
               h(
-                "span",
+                'span',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "green",
-                    cursor: "pointer"
+                    color: 'green',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.modify(params.row.labelId);
+                      this.modify(params.row.labelId)
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "span",
+                'span',
                 {
                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "green",
-                    cursor: "pointer"
+                    marginRight: '5px',
+                    marginLeft: '5px',
+                    color: 'green',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.del(params.row.labelId);
+                      this.del(params.row.labelId)
                     }
                   }
                 },
-                "删除"
+                '删除'
               )
-            ]);
+            ])
           }
         }
       ],
       modal1: false,
       formValidate: {
-        TagName: ""
+        TagName: ''
       },
       ruleValidate: {
         TagName: [
@@ -223,15 +162,15 @@ export default {
         ]
       },
       cityList: [
-        { value: "1", label: "活动参与数", value1: "3", label1: "大于" },
-        { value: "0", label: "服务时长", value1: "0", label1: "小于" }
+        { value: '1', label: '活动参与数', value1: '3', label1: '大于' },
+        { value: '0', label: '服务时长', value1: '0', label1: '小于' }
       ],
       cityList2: [
-        { value: "1", label: "活动参与数", value1: "3", label1: "大于" },
-        { value: "0", label: "服务时长", value1: "0", label1: "小于" }
+        { value: '1', label: '活动参与数', value1: '3', label1: '大于' },
+        { value: '0', label: '服务时长', value1: '0', label1: '小于' }
       ],
-      typelist: [{ value: 1, label: "志愿者" }, { value: 2, label: "受益方" }],
-      batchList: [{ value: "1", label: "删除" }],
+      typelist: [{ value: 1, label: '志愿者' }, { value: 2, label: '受益方' }],
+      batchList: [{ value: '1', label: '删除' }],
       listMsg: [],
       a: false,
       b: true,
@@ -241,21 +180,21 @@ export default {
       pageSize: 10,
       dataCount: 0,
       status: false,
-      batch: "",
+      batch: '',
       sysType: 1,
       arr: [],
-      sysId: "",
-      name: "",
+      sysId: '',
+      name: '',
       adds: [
         {
-          ruleType: "",
-          compareType: "",
-          requireCondition: ""
+          ruleType: '',
+          compareType: '',
+          requireCondition: ''
         },
         {
-          ruleType: "",
-          compareType: "",
-          requireCondition: ""
+          ruleType: '',
+          compareType: '',
+          requireCondition: ''
         }
       ],
       adds1: [],
@@ -265,11 +204,11 @@ export default {
       data1: null,
       data2: null,
       labelId: null,
-      obj: [],
-    };
+      obj: []
+    }
   },
   mounted() {
-    this.getLabelpage();
+    this.getLabelpage()
   },
   methods: {
     // 标签管理--标签分页
@@ -279,12 +218,12 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.listMsg = res.data.list;
-          this.page = res.data.pageNum;
-          this.dataCount = res.data.totalSize;
+          this.listMsg = res.data.list
+          this.page = res.data.pageNum
+          this.dataCount = res.data.totalSize
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     //标签管理--删除标签
@@ -293,30 +232,30 @@ export default {
         labelIds: this.arr
       }).then(res => {
         if (res.code == 200) {
-          this.$refs.selection.selectAll(false);
-          this.$Message.info("删除成功");
-          this.reload();
+          this.$refs.selection.selectAll(false)
+          this.$Message.info('删除成功')
+          this.reload()
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //标签管理--添加新标签
     getLabeladd() {
       if (this.timeType == 1) {
-        this.data1 = this.startAt.getTime();
-        this.data2 = this.endAt.getTime();
+        this.data1 = this.startAt.getTime()
+        this.data2 = this.endAt.getTime()
       } else {
-        this.startAt = "";
-        this.endAt = "";
+        this.startAt = ''
+        this.endAt = ''
       }
-      if (this.adds[1].ruleType != "") {
-        this.obj = this.adds;
-        console.log(this.obj,this.adds,1)
+      if (this.adds[1].ruleType != '') {
+        this.obj = this.adds
+        console.log(this.obj, this.adds, 1)
       } else {
         let arr = []
         arr.push(this.adds[1])
-        this.obj=arr
-        console.log(arr,2)
+        this.obj = arr
+        console.log(arr, 2)
       }
       Labeladd({
         name: this.name,
@@ -329,14 +268,14 @@ export default {
         if (res.code == 200) {
           this.reload()
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //编辑
     modify(e) {
-      this.modal1 = true;
-      this.labelId = e;
-      this.getLabeldetails();
+      this.modal1 = true
+      this.labelId = e
+      this.getLabeldetails()
     },
     //详情
     getLabeldetails() {
@@ -344,36 +283,36 @@ export default {
         labelId: this.labelId
       }).then(res => {
         if (res.code == 200) {
-          let lists = res.data;
-          this.sysId = lists.sysId;
-          this.name = lists.name;
-          console.log(typeof(this.timeType),typeof(lists.timeType))
-          this.timeType = lists.timeType;
+          let lists = res.data
+          this.sysId = lists.sysId
+          this.name = lists.name
+          console.log(typeof this.timeType, typeof lists.timeType)
+          this.timeType = lists.timeType
           if (this.timeType == 1) {
-            this.startAt = date1("Y-m-d", lists.startAt);
-            this.endAt = date1("Y-m-d", lists.endAt);
+            this.startAt = date1('Y-m-d', lists.startAt)
+            this.endAt = date1('Y-m-d', lists.endAt)
           }
           if (lists.labelRules.length == 2) {
-            this.a = true;
-            this.b = false;
-            this.adds = lists.labelRules;
+            this.a = true
+            this.b = false
+            this.adds = lists.labelRules
           } else {
-            this.adds[0] = lists.labelRules[0];
+            this.adds[0] = lists.labelRules[0]
             console.log(this.adds[0])
-            console.log(typeof(this.adds[0].ruleType))
+            console.log(typeof this.adds[0].ruleType)
           }
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     //修改
     getLabelmodify() {
-      if (this.adds[1].ruleType != "") {
-        this.obj = this.adds;
-        console.log(this.adds);
+      if (this.adds[1].ruleType != '') {
+        this.obj = this.adds
+        console.log(this.adds)
       } else {
-        this.obj = this.adds[0];
+        this.obj = this.adds[0]
       }
       Labelmodify({
         labelId: this.labelId,
@@ -384,74 +323,73 @@ export default {
         endAt: this.data2,
         labelRules: this.obj
       }).then(res => {
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     //分页功能
     changepages(index) {
-      this.page = index;
-      console.log(index);
-      this.getLabelpage();
+      this.page = index
+      console.log(index)
+      this.getLabelpage()
     },
 
     //每条数据单选框的状态
     tablechange(selection) {
-      this.arr = selection;
-      console.log(this.arr);
+      this.arr = selection
+      console.log(this.arr)
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
       ) {
-        this.status = true;
+        this.status = true
       } else {
-        this.status = false;
+        this.status = false
       }
-      let arr = [];
+      let arr = []
       for (let i = 0; i < this.arr.length; i++) {
-        arr.push(this.arr[i].labelId);
+        arr.push(this.arr[i].labelId)
       }
-      this.arr = arr.toString();
-      console.log(this.arr);
+      this.arr = arr.toString()
+      console.log(this.arr)
     },
 
     //批量删除
     batches() {
-      this.getLabeldel();
+      this.getLabeldel()
     },
 
     //全选按钮
     chackall() {
       console.log(this.status)
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
+      this.status = !this.status
+      this.$refs.selection.selectAll(this.status)
     },
 
     //删除
     del(e) {
-      this.arr = e;
-      this.getLabeldel();
+      this.arr = e
+      this.getLabeldel()
     },
     // 确定
     ok() {
-      console.log(this.labelId);
-      if (this.labelId != "") {
-        this.getLabelmodify();
+      console.log(this.labelId)
+      if (this.labelId != '') {
+        this.getLabelmodify()
       } else {
-        this.getLabeladd();
+        this.getLabeladd()
       }
     },
     cancel() {
-
-      this.$Message.info("Clicked cancel");
+      this.$Message.info('Clicked cancel')
     },
     //显示
     Show() {
-      this.a = true;
-      this.b = false;
+      this.a = true
+      this.b = false
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -461,7 +399,6 @@ body {
 }
 .main {
   background-color: #ffffff;
-  border: 1px solid #e4e4e4;
 }
 .basis {
   margin: 0.5rem;

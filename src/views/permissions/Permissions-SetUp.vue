@@ -12,31 +12,18 @@
         <div class="choose">
           <Tabs value="name1">
             <TabPane label="功能权限设置" name="name1">
-              <Menu :active-name="active"  theme="light" width="300px"  accordion>
-                <Submenu
-                  :name="index+1"
-                  v-for="(item, index) in this.$router.options.routes"
-                  :key="index"
-                  v-if="item.meta.title"
-                 
-                >
+              <Menu :active-name="active" theme="light" width="300px" accordion>
+                <Submenu :name="index+1" v-for="(item, index) in this.$router.options.routes" :key="index" v-if="item.meta.title">
                   <template slot="title">
                     +
                     {{ item.meta.title}}
                     <Checkbox style="position:absolute;right:24px;z-index:999"></Checkbox>
                     <div class="sub"></div>
                   </template>
-                  <Menu-item
-                    :name="`${index+1}-${keys+1}`"
-                    v-for="(value,keys) in item.children"
-                    :key="keys"
-                    :to="{name: value.name}"
-                    v-if="value.meta.title"
-                    @click.native="savestate(`${index+1}-${keys+1}`)"
-                  >
+                  <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.children" :key="keys" :to="{name: value.name}" v-if="value.meta.title" @click.native="savestate(`${index+1}-${keys+1}`)">
                     <Icon :type="value.meta.icon"></Icon>
                     {{ value.meta.title }}
-                     <Checkbox style="position:absolute;right:24px"></Checkbox>
+                    <Checkbox style="position:absolute;right:24px"></Checkbox>
                   </Menu-item>
                 </Submenu>
               </Menu>
@@ -53,28 +40,28 @@
 </template>
 
 <script>
-import Table from "iview/src/components/table/table";
+import Table from 'iview/src/components/table/table'
 export default {
   components: { Table },
   data() {
     return {
-      active: "",
+      active: '',
       navigation1: {
-        head: "权限设置(共用)"
+        head: '权限设置(共用)'
       }
-    };
+    }
   },
   //保存储存的信息
   created() {
-    this.active = window.sessionStorage.getItem("active");
+    this.active = window.sessionStorage.getItem('active')
   },
   methods: {
     //保存点击的信息
     savestate(active) {
-      window.sessionStorage.setItem("active", active);
+      window.sessionStorage.setItem('active', active)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 html,
@@ -84,7 +71,7 @@ body {
 .main {
   background-color: #ffffff;
 }
-.main,
+
 .choose {
   border: 1px solid #e4e4e4;
 }
@@ -143,14 +130,13 @@ table td,
   display: block;
   margin: auto;
 }
-.sub{
+.sub {
   position: absolute;
   z-index: 50;
   right: 0;
-  top:0;
+  top: 0;
   width: 50px;
   height: 50px;
   background: white;
 }
-
 </style>
