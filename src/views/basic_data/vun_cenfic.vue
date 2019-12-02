@@ -229,7 +229,7 @@ export default {
       })
     },
     getVoteer(){
-      getVolunteer().then(res => {
+      getVolunteer({}).then(res => {
         this.volun = res.data
       })
     },
