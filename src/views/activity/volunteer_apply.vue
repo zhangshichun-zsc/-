@@ -21,6 +21,7 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="args.validFlag">
+            <Option value="">全部</Option>
             <Option value="1">有效状态</Option>
             <Option value="0">无效状态</Option>
           </Select>

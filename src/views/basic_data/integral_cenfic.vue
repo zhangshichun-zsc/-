@@ -24,6 +24,7 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="query.validFlag">
+            <Option value="">全部</Option>
             <Option value="1">有效状态</Option>
             <Option value="0">无效状态</Option>
           </Select>
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "证书管理（共用）"
+        head: "证件管理"
       },
       ruleValidate: {
         name: [{ required: true, message: "不能为空", trigger: "blur" }]
@@ -99,7 +100,7 @@ export default {
       title: "证书管理",
       columns: [
         {
-          title: "就业情况",
+          title: "名称",
           key: "name"
         },
         {

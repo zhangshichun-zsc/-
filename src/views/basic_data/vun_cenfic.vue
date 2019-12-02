@@ -123,11 +123,6 @@ export default {
       modal1: false,
       columns: [
         {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "组织",
           key: "orgName"
         },
@@ -218,6 +213,7 @@ export default {
 
   created() {
     this.getList({})
+    this.getVoteer()
   },
 
   methods: {
@@ -260,6 +256,7 @@ export default {
                 this.modal1 = false
                 this.$Message.success('添加成功')
                 this.getList(this.args)
+                this.cancel()
               }else{
                 this.$Message.error(res.msg)
               }
