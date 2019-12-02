@@ -196,9 +196,9 @@ export function postdel(url, params) {
 }
 
 export const upload = (p) => {
-  p.token = token
+  // p.token = token
   return new Promise((resolve, reject) => {
-    axios.post('/pic/upload', p, { headers: { 'Content-Type': 'multipart/form-data' } })
+    axios.post(`/pic/upload?token=${token}`, p, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         resolve(res.data)
       })

@@ -26,9 +26,13 @@
             </RadioGroup>
           </div>
         </li>
-        <li class="flex-between"><span class="post-left">招募数量：</span><div><i-input v-model="args.recruitNum"  type="number"  style="width:300px"/></div></li>
-        <li class="flex-between"><span class="post-left">可预约数量：</span><div><i-input v-model="args.apptNum"  type="number" style="width:300px"/></div></li>
         <li class="flex-between">
+          <span class="post-left">招募数量：</span>
+          <div><i-input v-model="args.recruitNum"  type="number"  style="width:300px"/></div></li>
+        <li class="flex-between">
+          <span class="post-left">可预约数量：</span>
+          <div><i-input v-model="args.apptNum"  type="number" style="width:300px"/></div></li>
+        <li class="flex-start">
           <span class="post-left">报名项设置</span>
           <div>
             <p class="flex-between"><span>报名项名称</span><span>是否必填</span><span>操作</span></p>
@@ -58,19 +62,29 @@
                 <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
               </div>
               <div class=""  v-else-if=' ~~item.itemType  === 3 '>
-                <div class="flex-between">
-                  <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb" style="width:300px"/>
+                <div v-if='item.isNewItem == 0' class="flex-between">
+                  <span>{{item.itemName}}</span> 
                   <div>
-                    <i-switch v-model="item.isMustWrite" :true-value='1' :false-value='0' />
+                    <i-switch  v-model="item.isMustWrite" :true-value='1' :false-value='0' />
                     <span>必填</span>
                   </div>
                   <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
                 </div>
-                <div class="item flex-between" v-for="(val,i) in item.arr" :key='i'>
-                  <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb" style="width:300px"/>
-                   <Icon type="ios-trash" @click="deleItem(index,i)" v-if='!isDisb'/>
+                <div v-else>
+                  <div class="flex-between">
+                    <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb" style="width:300px"/>
+                    <div>
+                      <i-switch v-model="item.isMustWrite" :true-value='1' :false-value='0' />
+                      <span>必填</span>
+                    </div>
+                    <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
+                  </div>
+                  <div class="item flex-between" v-for="(val,i) in item.arr" :key='i'>
+                    <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb" style="width:300px"/>
+                    <Icon type="ios-trash" @click="deleItem(index,i)" v-if='!isDisb'/>
+                  </div>
+                  <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
                 </div>
-                <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
               </div>
               <div class=""  v-else-if=' ~~item.itemType  === 4 '>
                 <div class="flex-between">
@@ -91,16 +105,16 @@
             <div class="items">
               <p>新增报名项</p>
               <div>
-                <div class="flex">
+                <div class="flex-start">
                   <span class="items-tit">常用报名项</span>
-                  <div class="flex-start ">
+                  <div class="flex-wrap-start ">
                     <Button type="primary" v-for="(item,index) in items" :key='index' @click="addItem(item,0,index)"  :disabled='item.disabled' class="item">{{ item.name }}</Button>
                   </div>
                 </div>
-                <div class="flex">
+                <div class="flex-start">
                   <span class="items-tit">自定义报名项</span>
                   <div class="flex-start ">
-                     <Button type="primary"  v-for="(item,index) in feedList" :key='index' @click="addItem(item,1)">{{ item.name }}</Button>
+                     <Button type="primary"  v-for="(item,index) in feedList" :key='index' @click="addItem(item,1)" class="item">{{ item.name }}</Button>
                   </div>
                 </div>
               </div>
@@ -111,7 +125,7 @@
           <span class="post-left">岗位职责</span>
           <div> <i-input placeholder="请输入岗位职责" v-model="args.positionComments" :disabled="isDisb"/></div>
         </li>
-        <li class="flex-between">
+        <li class="flex-start">
           <span class="post-left">限制设置</span>
           <div>
             <p class="flex-between"><span>常用限制项</span><span>是否必填</span><span>操作</span></p>
@@ -168,7 +182,7 @@
             </div>
           </div>
         </li>
-        <li class="flex-between">
+        <li class="flex-start">
           <span class="post-left">优先设置</span>
           <div>
              <p class="flex-between"><span>报名项名称</span><span>是否必填</span><span>操作</span></p>
@@ -176,6 +190,15 @@
                 <div v-for='(item,index) in good' :key='index' class="flex-between">
                  <span>{{index+1}}</span>
                  <span>{{ item.ruleName }}</span>
+                 <div v-if=' ~~item.ruleId == 23'>
+                    <Select v-model="item.ruleValue" style="width:300px">
+                      <Option
+                        v-for="(val,i) in item.data"
+                        :value="val.dicId"
+                        :key="i"
+                      >{{ item.name }}</Option>
+                    </Select>
+                 </div>
                  <div>
                    <Icon type="md-arrow-up" color='red' @click="ranktab(index)"/>
                    <Icon type="ios-trash"  @click="deleGoodItem(index)" v-if='!isDisb'/>
@@ -198,7 +221,7 @@
         <li class="flex-between">
           <span class="post-left">集合地址</span>
           <div>
-             <span @click="()=>{this.adr = true}">{{ args.setAddr == null?"点击选中地址":args.setAddr}}</span>
+             <span @click="()=>{this.adr = true}">{{ args.setAddr?args.setAddr:"点击选中地址"}}</span>
           </div>
         </li>
         <li><Button type="primary" @click="success()">完成</Button></li>
@@ -218,6 +241,7 @@ export default {
       navigation1: {
         head: "志愿者编辑招募报名项(志愿者)"
       },
+      adr:false,
       i:null,
       userId:null,
       goodList:[],
@@ -283,7 +307,12 @@ export default {
       let items = this.args.coActivityItemList
       if (m !== null) {
         let arr = items[i].arr
-        arr.splice(m, 1)
+        if(arr.length >2){
+          arr.splice(m, 1)
+        }else{
+          this.$Message.warning("必须留两个")
+          return
+        }
       } else {
         if(items[i].isNewItem == 0){
           this.$set(this.items[i],'disabled',false)
@@ -354,6 +383,7 @@ export default {
         ruleValue: null,
         ruleName: item.name,
         sort: good.length+1,
+        data:item.object?item.object:[],
         sysId: 2,
         typeFlag: 3,
       })
@@ -476,6 +506,7 @@ export default {
     flex: 1;
   }
   ul>li{
+    margin-bottom: 20px;
     .post-left{
       display: block;
       width: 200px;
@@ -488,6 +519,7 @@ export default {
       padding: 20px;
       background: #eee;
       .items-tit{
+        width:100px;
         margin-right: 30px;
       }
       .flex-start{
@@ -497,7 +529,8 @@ export default {
         display: flex;
       }
       .item{
-         white-space: pre-wrap;
+        margin-right: 20px;
+        margin-bottom: 20px;
       }
     }
   }

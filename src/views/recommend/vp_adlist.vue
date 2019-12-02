@@ -39,7 +39,6 @@
         </div>
       </div>
     </div>
-
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="flex-center-start">
@@ -307,7 +306,9 @@ export default {
 
     //列表
     getAdvertisingList() {
-      AdvertisingList({}).then(res => {
+      AdvertisingList({
+        sysType:1
+      }).then(res => {
         if (res.code == 200) {
           this.locations = res.data;
         } else {

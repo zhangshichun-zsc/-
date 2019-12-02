@@ -6,31 +6,31 @@
       <p class="zh-sz">账户设置</p>
 
       <div class="zh-nr">
-         <div class="start-wap">
-              <div class="upload" v-if="imgUrl == null" @click="()=>{ this.$refs.files.click()}">
-                <div class="file" >
-                  <input
-                    style=" display:none;"
-                    type="file"
-                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                    ref="files"
-                    @change="uploadFile()"
-                    multiple
-                  />
-                  <Button icon="ios-cloud-upload-outline" >上传头像</Button>
-                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-                </div>
-              </div>
-
-              <img  :src=imgUrl style="height:150px;width:150px;"/>
-              <Icon
-                type="ios-trash"
-                v-if="imgUrl != null"
-                class="cancel"
-                :size="26"
-                @click="cancelImg()"
+        <div class="start-wap">
+          <div class="upload" v-if="imgUrl == null" @click="()=>{ this.$refs.files.click()}">
+            <div class="file">
+              <input
+                style=" display:none;"
+                type="file"
+                accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                ref="files"
+                @change="uploadFile()"
+                multiple
               />
+              <Button icon="ios-cloud-upload-outline">上传头像</Button>
+              <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
             </div>
+          </div>
+
+          <img :src="imgUrl" style="height:150px;width:150px;" />
+          <Icon
+            type="ios-trash"
+            v-if="imgUrl != null"
+            class="cancel"
+            :size="26"
+            @click="cancelImg()"
+          />
+        </div>
 
         <!-- <div class="img">
           <img :src="imgUrl" class="img" />
@@ -42,7 +42,7 @@
           :before-upload="handleBeforeUpload"
         >
           <Button icon="ios-cloud-upload-outline">上传头像</Button>
-        </Upload> -->
+        </Upload>-->
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
           <FormItem label="用户名">
             <Input v-model="formValidate.name" disabled />
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { Setup,orgimgdel} from "../../request/api";
+import { Setup, orgimgdel } from "../../request/api";
 import { upload } from "../../request/http";
 export default {
   data() {
@@ -118,7 +118,7 @@ export default {
       },
 
       picUrl: null,
-      imgUrl:null
+      imgUrl: null
     };
   },
 
@@ -127,9 +127,7 @@ export default {
   computed: {},
 
   created() {},
-  mounted() {
-
-  },
+  mounted() {},
 
   methods: {
     //提交
@@ -152,7 +150,8 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (this.file == null) {
+          console.log(this.picUrl)
+          if (this.picUrl== null) {
             this.$Message.error("请上传图片！");
           } else {
             // if(this.formValidate.oldPassword!=this.formValidate.confirm){
@@ -163,7 +162,7 @@ export default {
             this.getSetup();
           }
         } else {
-          // this.$Message.error("必填项未填!");
+          this.$Message.error("必填项未填!");
         }
       });
     },
@@ -183,10 +182,11 @@ export default {
         reader.onload = e => {
           this.imgUrl = e.target.result;
           this.picUrl = res.data;
+
         };
       });
     },
-      //删除图片
+    //删除图片
     cancelImg() {
       orgimgdel({ path: this.picUrl }).then(res => {
         if (res.code == 200) {
@@ -197,7 +197,7 @@ export default {
           this.$Message.success(res.msg);
         }
       });
-    },
+    }
     // // handleSuccess(res, file) {
     // //   this.picUrl = res.data;
     // //   console.log(res, file);

@@ -26,12 +26,12 @@
           <Row>
             <Col span="12">
                <DatePicker
-                  type="datetimerange"
+                  type="daterange"
                   @on-change="handleChange"
                   placement="bottom-end"
                   placeholder="Select date"
                   style="width:300px"
-                  format="yyyy-MM-dd HH:mm"
+                  format="yyyy-MM-dd"
                 ></DatePicker>
             </Col>
           </Row>
@@ -42,7 +42,7 @@
              <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
                  <FormItem label="组织" prop="orgId">
                      <Select v-model="params.orgId">
-                         <Option :value="`${item.orgId}`" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
+                         <Option :value="item.orgId" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
                      </Select>
                  </FormItem>
                  <FormItem label="模板名称" prop="title">
@@ -111,7 +111,7 @@ export default {
        },
       ruleValidate:{
         orgId: [
-             { required: true, message: '组织不能为空', trigger: 'change',type:'number',min:0 }
+             { required: true, message: '组织不能为空', trigger: 'change', type:'number',min:0 }
             ],
         title: [
             { required: true, message: '模板名称不能为空', trigger: 'blur' }
@@ -240,8 +240,17 @@ export default {
     },
 
     handleChange(e){
-      this.args.startAt = e[0]
-      this.args.endAt = e[1]
+      let start = e[0]
+      let end = e[1]
+      if(start === end){
+        start = start + ' 00:00:00'
+        end = end + ' 59:59:59'
+      }else{
+        start = start + ' 00:00:00'
+        end = end + ' 00:00:00'
+      }
+      this.args.startAt = start
+      this.args.endAt = end
     },
 
     changePage (e) {

@@ -1,4 +1,4 @@
-<!--资讯列表(会员)-->
+<!--资讯列表(志愿者)-->
 <template>
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
@@ -25,15 +25,14 @@
           <p>
             <span>资讯分类:</span>&nbsp;
             <Select style="width:200px" placeholder="全部" v-model="infomationType">
-              <Option v-for="item in type" :value="item.dataKey" :key="item.dataValue">{{ item.dataValue }}</Option>
+              <Option
+                v-for="item in type"
+                :value="item.dataKey"
+                :key="item.dataValue"
+              >{{ item.dataValue }}</Option>
             </Select>
           </p>
-          <p>
-            <span>资讯所属:</span>&nbsp;
-            <Select style="width:200px" placeholder="会员" v-model="sysType">
-              <Option v-for="item in BelongList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-          </p>
+
         </div>
       </div>
       <div class="con">
@@ -45,7 +44,7 @@
           <div class="but">
             <Button @click="addBut()">新增</Button>
             <Button @click="MgtBut()">分类管理</Button>
-            <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
@@ -65,191 +64,202 @@
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
-        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatDate } from '../../../request/datatime'
-import { AddressList, AddressType, AddressDel } from '../../../request/api'
+import {formatDate} from '@/request/datatime'
+import { AddressList, AddressType, AddressDel } from "@/request/api";
 export default {
   data() {
     return {
       navigation1: {
-        head: '资讯管理(志愿者)'
+        head: "资讯管理(志愿者)"
       },
       data: [],
       columns: [
         {
-          type: 'selection',
+          type: "selection",
           width: 60,
-          align: 'center'
+          align: "center",
         },
         {
-          title: '封面图片',
-          key: 'coverImg',
-          align: 'center',
-          render: h => {
-            return h('img', {
+          title: "封面图片",
+          key: "coverImg",
+          align: "center",
+          render: (h,params) => {
+            return h("img", {
               attrs: {
-                src: 'params.row.picPath'
+                src: params.row.coverImgPath
               },
               style: {
-                width: '4rem',
-                height: '4rem'
+                width: "4rem",
+                height: "4rem"
               }
-            })
+            });
           }
         },
         {
-          title: '标题',
-          key: 'title',
-          align: 'center'
+          title: "标题",
+          key: "title",
+          align: "center"
         },
         {
-          title: '展示窗口',
-          key: 'showLocationText',
-          align: 'center'
+          title: "展示窗口",
+          key: "showLocationText",
+          align: "center"
         },
         {
-          title: '分类',
-          key: 'informationTypeText',
-          align: 'center'
+          title: "分类",
+          key: "informationTypeText",
+          align: "center"
         },
         {
-          title: '热门',
-          key: 'status',
-          align: 'center',
+          title: "热门",
+          key: "status",
+          align: "center",
           render: (h, params) => {
-            return h('div', [
-              h('i-switch', {
+            return h("div", [
+              h("i-switch", {
                 props: {
                   value: params.row.hotFlag == 1
                 },
                 on: {
                   input: e => {
                     console.log(e)
-                    this.getAddressDel(params.row.informationId, e)
+                    this.getAddressDel(params.row.informationId, e);
                   }
                 }
               })
-            ])
+            ]);
           }
         },
         {
-          title: '资讯所属',
-          key: 'informationOwner',
-          align: 'center'
+          title: "资讯所属",
+          key: "informationOwner",
+          align: "center"
         },
         {
-          title: '发布时间',
-          key: 'releaseTimestamp',
-          align: 'center',
-          render: (h, params) => {
-            return h('div', formatDate(params.row.releaseTimestamp))
+          title: "发布时间",
+          key: "releaseTimestamp",
+          align: "center",
+          render:(h,params)=>{
+              return h("div",formatDate(params.row.releaseTimestamp))
           }
         },
         {
-          title: '相关',
+          title: "相关",
           // key: "collectionNum",
-          align: 'center',
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'p',
+                "p",
 
-                '收藏:' + params.row.collectionNum
+                ("收藏:"+params.row.collectionNum)
               ),
               h(
-                'p',
+                "p",
                 {
                   style: {
-                    marginRight: '5px',
-                    marginLeft: '5px'
-                  }
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                  },
                 },
-                '阅读:' + params.row.readNum
+                ("阅读:"+params.row.readNum)
               ),
               h(
-                'p',
+                "p",
                 {
                   style: {
-                    marginRight: '5px',
-                    marginLeft: '5px'
-                  }
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                  },
                 },
-                '评论:' + params.row.commentNUm
+                ("评论:"+params.row.commentNUm)
               )
-            ])
+            ]);
           }
         },
         {
-          title: '操作',
-          key: 'action',
-          align: 'center',
+          title: "操作",
+          key: "action",
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'span',
+                "span",
                 {
-                  clssName: 'action',
+                  clssName: "action",
                   style: {
-                    color: 'green'
+                    color: "green"
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: 'InformationDetails_hy',
+                        name: "InformationDetails_zyz",
                         query: {
                           informationId: this.data[params.index].informationId
                         }
-                      })
+                      });
                     }
                   }
                 },
-                '查看'
+                "查看"
               ),
               h(
-                'span',
+                "span",
                 {
                   style: {
-                    marginRight: '5px',
-                    marginLeft: '5px',
-                    color: 'green'
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "green"
                   },
                   on: {
                     click: () => {
-                      this.remove(params.row.informationId)
+                      this.remove(params.row.informationId);
                     }
                   }
                 },
-                '删除'
+                "删除"
               )
-            ])
+            ]);
           }
         }
       ],
-      Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
-      sort: 'asc',
-      BelongList: [
-        { value: '', label: '全部' },
-        { value: 1, label: '会员' },
-        { value: 2, label: '志愿者' }
+       Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
       ],
+      sorting: [
+        { value: "asc", label: "正序" },
+        { value: "desc", label: "倒序" }
+      ],
+      sort: "asc",
+
       batchList: [
-        { value: '2', label: '设为推荐' },
-        { value: '3', label: '取消推荐' },
-        { value: '4', label: '设为隐藏' },
-        { value: '5', label: '设为显示' },
-        { value: '1', label: '删除' }
+        { value: "2", label: "设为推荐" },
+        { value: "3", label: "取消推荐" },
+        { value: "4", label: "设为隐藏" },
+        { value: "5", label: "设为显示" },
+        { value: "1", label: "删除" }
       ],
       page: 1,
       size: 10,
       dataCount: 0,
-      pageSize: 10,
+
       title: null,
       infomationType: '',
       type: [],
@@ -258,132 +268,127 @@ export default {
       status: false,
       list: [],
       batch: null,
-      informationIds: '',
-      arr: []
-    }
+      informationIds: "",
+      arr:[],
+
+    };
   },
   //事件监听
   watch: {
-    size: 'getAddressList',
-    sort: 'getAddressList'
+    size: "getAddressList",
+    sort: "getAddressList"
   },
   methods: {
     addBut() {
-      this.$router.push({ name: 'NewInformation_zyz' })
+      this.$router.push({ name: "NewInformation_zyz" });
     },
     MgtBut() {
-      this.$router.push({ name: 'InformationClassification_zyz' })
+      this.$router.push({ name: "InformationClassification_zyz" });
     },
 
     //全选按钮
     chackall() {
-      this.status = !this.status
-      console.log(this.status)
-      this.$refs.selection.selectAll(this.status)
+      this.status = !this.status;
+      console.log(this.status);
+      this.$refs.selection.selectAll(this.status);
     },
 
     // 查询结果按钮
     query() {
-      this.getAddressList()
+      this.getAddressList();
     },
 
     // 质询列表
     getAddressList() {
+
+
       AddressList({
         sysType: this.sysType,
         title: this.title,
         infomationType: this.infomationType,
-        page: {
-          page: this.page,
-          size: this.size,
-          sort: 'createAt' + ' ' + this.sort
-        }
+        page: { page: this.page, size: this.size, sort: "createAt" + " " + this.sort}
       }).then(res => {
-        // this.data = res.data.list
-        console.log(res)
         if (res.code == 200) {
-          this.data = res.data.list
-
-          this.dataCount = res.data.totalSize
+          this.data = res.data.list;
+          this.dataCount = res.data.totalSize;
+        }else{
+          this.$Message.error(res.msg)
         }
-      })
+      });
     },
 
     //分页功能
     changepages(index) {
-      this.page = index
-      console.log(index)
-      this.getAddressList()
+      this.page = index;
+      console.log(index);
+      this.getAddressList();
     },
     // 质询类型
     getAddressType() {
       AddressType({}).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.type = res.data
+        console.log(res);
+        if(res.code==200){
+
+          this.type = res.data;
+          // this.type=unshift({dataKey:-1,dataValue:'全部'})
         }
-      })
+      });
     },
+
 
     //每条数据单选框的状态
-    handleSelectionChange(val) {
-      this.arr = val
+    handleSelectionChange(val){
+      this.arr=val
       console.log(this.arr)
-      if (
-        (this.arr.length == this.dataCount && this.dataCount != 0) ||
-        this.arr.length == this.size
-      ) {
-        this.status = true
+      if (this.arr.length == this.dataCount&&this.dataCount!=0||this.arr.length==this.size) {
+        this.status = true;
       } else {
-        this.status = false
+        this.status = false;
       }
-      //选择的数据id
-      this.arr = val
-        .map(item => {
+        this.arr=val.map(item=>{
           return item.informationId
-        })
-        .toString()
-      console.log(this.arr)
+        }).toString()
+        console.log(this.arr)
     },
 
-    //批量操作接口
+    //是否热门
     getAddressDel(index, del) {
       if (del == false) {
-        this.batch = 6
+        this.batch = 6;
       } else {
-        this.batch = 7
+        this.batch = 7;
       }
-      console.log(index, del, this.batch)
+      console.log(index, del, this.batch);
       AddressDel({
         informationIds: index,
         informationOprType: this.batch
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info('操作成功')
+          this.$Message.info("操作成功");
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
     // 删除按钮
     remove(id) {
-      console.log(id)
+      console.log(id);
       AddressDel({
         informationIds: id,
         informationOprType: 5
       }).then(res => {
         if (res.code == 200) {
-          this.getAddressList()
-          this.$Message.info('删除成功')
+          this.getAddressList();
+          this.$Message.info("删除成功");
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
-    //批量操作
+     //批量操作
     batches() {
       if (this.arr.length == 0) {
-        this.$Message.error('请至少选择一个')
+        this.$Message.error("请至少选择一个");
       } else {
         //操作接口
         AddressDel({
@@ -391,22 +396,22 @@ export default {
           informationOprType: this.batch
         }).then(res => {
           if (res.code == 200) {
-            console.log(this.arr)
-            this.getAddressList()
-            this.$Message.info(res.msg)
-            this.status = false
-            this.$refs.selection.selectAll(this.status)
+            console.log(this.arr);
+            this.getAddressList();
+            this.$Message.info(res.msg);
+            this.status = false;
+            this.$refs.selection.selectAll(this.status);
           }
-          console.log(res)
-        })
+          console.log(res);
+        });
       }
     }
   },
   mounted() {
-    this.getAddressType()
-    this.getAddressList()
+    this.getAddressType();
+    this.getAddressList();
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 html,
@@ -415,6 +420,7 @@ body {
 }
 .main {
   background-color: #ffffff;
+  border: 1px solid #e4e4e4;
 }
 .content {
   margin: 10px;

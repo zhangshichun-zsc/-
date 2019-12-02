@@ -1,4 +1,4 @@
-<!-- 证书管理(志愿者) -->
+<!-- 证书管理(会员) -->
 <template>
   <div class="integral">
      <div class="integral-header">
@@ -26,12 +26,11 @@
           <Row>
             <Col span="12">
                <DatePicker
-                  type="datetimerange"
+                  type="datetime"
                   @on-change="handleChange"
                   placement="bottom-end"
                   placeholder="Select date"
                   style="width:300px"
-                  format="yyyy-MM-dd HH:mm"
                 ></DatePicker>
             </Col>
           </Row>
@@ -53,7 +52,7 @@
                     placement="bottom-end"
                     placeholder="选择日期"
                     style="width: 200px"
-                    type="datetime" 
+                    type="datetime"
                     v-model="params.effectiveAt"
                     @on-change='changeDate'
                     :options="options"
@@ -100,7 +99,7 @@ export default {
   data() {
     return {
         navigation1: {
-        head: "证书管理(志愿者)"
+        head: "证书管理(会员)"
       },
       ruleValidate:{
         orgId: [
@@ -231,8 +230,14 @@ export default {
     },
 
     handleChange(e){
-      this.args.startAt = e[0]
-      this.args.endAt = e[1]
+      let start = e[0]
+      let end = e[1]
+      if(start === end){
+        start = start + ' 00:00:00'
+        end = end + ' 59:59:59'
+      }
+      this.args.startAt = start
+      this.args.endAt = end
     },
 
     changePage (e) {

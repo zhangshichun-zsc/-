@@ -4,6 +4,9 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <div class="con-left">
+        <div>
+          <img :src='list.coverImgPath'/>
+        </div>
         <div class="left-con">
           <p>
             <span>标题：</span>

@@ -39,7 +39,7 @@ export default {
     }
   },
   props: {
-    navigation1: String,
+    navigation1: Object,
     list: Array,
     from: {
       type: String,

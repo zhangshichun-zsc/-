@@ -51,9 +51,14 @@
           <Button class="table-btn" type="primary" @click="add">新增活动分类</Button>
           <Modal v-model="modal2" :title=text >
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="活动名称" prop="dicNamemod">
+              <FormItem label="活动分类" prop="dicNamemod">
                 <Input v-model="formValidate.dicNamemod" placeholder="环保" />
               </FormItem>
+               <FormItem label="收益对象" prop="actTypeFlag">
+               <Select v-model="formValidate.actTypeFlag" style="width: 150px;margin-right:10px">
+            <Option v-for="item in actTypelist" :value="item.value" :key="item.value">{{ item.name }}</Option>
+          </Select>
+               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="canceltwo">取消</Button>
@@ -101,11 +106,15 @@ export default {
         head: "官方活动分类管理(会员)"
       },
       formValidate: {
-        dicNamemod: ""
+        dicNamemod: "",
+         actTypeFlag:1,
       },
       ruleValidate: {
         dicNamemod: [
           { required: true, message: "活动名称不能为空", trigger: "blur" }
+        ],
+        actTypeFlag:[
+          { required: true, message: "收益对象不能为空", trigger: "change",type:'number' }
         ]
       },
       // modal1: false,
@@ -228,7 +237,9 @@ export default {
       statsdata: "",
       dicId: "",
       arr: [],
-      text: ""
+      text: "",
+
+      actTypelist:[{name:'家长',value:1},{name:'孩子',value:2}]
     };
   },
 
@@ -274,7 +285,7 @@ export default {
       }
       modifystate({
         dicId: id,
-        validFlag: this.validFlags
+        validFlag: this.validFlags,
       }).then(res => {
         if (res.code == 200) {
           this.getOffactivities();
@@ -304,7 +315,8 @@ export default {
     getOffactivitemod(id) {
       Offactivitemod({
         dicId: this.dicId,
-        dicName: this.formValidate.dicNamemod
+        dicName: this.formValidate.dicNamemod,
+         actTypeFlag:this.formValidate.actTypeFlag
       }).then(res => {
         if (res.code == 200) {
           this.getOffactivities();
@@ -322,6 +334,7 @@ export default {
         typeFlag: 8,
         dicName: this.formValidate.dicNamemod,
         oprUserId: this.$store.state.userId,
+        actTypeFlag:this.formValidate.actTypeFlag
       }).then(res => {
         if (res.code == 200) {
           this.modal2=false

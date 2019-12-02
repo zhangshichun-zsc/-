@@ -30,9 +30,21 @@
         <span>培训图片</span>
         <div> <wangeditor :labels="args.trainComments" id="eddl" @change='changeEditorTrain'></wangeditor></div>
       </div>
+       <Modal v-model="addstate" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                  <span>作废确定</span>
+                </p>
+                <div style="text-align:center">
+                  <p>请确认是否要作废此模板</p>
+                </div>
+                <div slot="footer">
+                  <Button type="error" @click="cencel(2)">取消</Button>
+                  <Button type="success" @click="delFeed">确定</Button>
+                </div>
+              </Modal>
       <div class="button-food">
         <i-button @click="template">保存</i-button>
-        <i-button @click="delFeed">作废</i-button>
+        <i-button @click="cencel(1)">作废</i-button>
       </div>
     </div>
   </div>
@@ -50,17 +62,19 @@ export default {
         head: "维护活动模板(会员)"
       },
       image: null,
+       addstate:false,
       args:{
 	      fkMouldName:null,
 	      typeDicId:null,
 	      typeDicName:null,
 	      picUrl: null,
-	      trainComments: null
+        trainComments: null,
+
       }
     };
   },
 
-  components: { 
+  components: {
     wangeditor
    },
 
@@ -130,18 +144,27 @@ export default {
         }else{
            this.$Message.error(res.msg)
         }
-      
+
       })
+    },
+    cencel(e){
+      if(e==1){
+        this.addstate=true
+      }else{
+        this.addstate=false
+      }
+
     },
     delFeed(){
       delActiveFeedBack({actFkMouldId:this.args.actFkMouldId,valid:3}).then(res => {
         if(res.code == 200){
           this.$Message.success('删除成功')
+          this.addstate=false
           this.$router.back()
         }else{
            this.$Message.error(res.msg)
         }
-         
+
       })
     },
   }

@@ -33,7 +33,7 @@
               <div class="layout-logo">角色</div>
               <div class="btn1">
                 <Button @click="newbtn">新建角色</Button>
-                <Modal v-model="modal1" title="新增常用报名项">
+                <Modal v-model="modal1" title="新建角色">
                   <Form
                     ref="formValidate"
                     :model="formValidate"
@@ -41,10 +41,10 @@
                     :label-width="120"
                   >
                     <FormItem label="角色名称" prop="name">
-                      <Input v-model="formValidate.name" placeholder="Enter your name" />
+                      <Input v-model="formValidate.name"  />
                     </FormItem>
                     <FormItem label="职能描述" prop="sysRoleNames">
-                      <Input v-model="formValidate.sysRoleNames" placeholder="Enter your name" />
+                      <Input v-model="formValidate.sysRoleNames" />
                     </FormItem>
                   </Form>
                   <div slot="footer">
