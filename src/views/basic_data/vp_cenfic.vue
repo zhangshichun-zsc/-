@@ -26,12 +26,11 @@
           <Row>
             <Col span="12">
                <DatePicker
-                  type="datetimerange"
+                  type="datetime"
                   @on-change="handleChange"
                   placement="bottom-end"
                   placeholder="Select date"
                   style="width:300px"
-                  format="yyyy-MM-dd HH:mm"
                 ></DatePicker>
             </Col>
           </Row>
@@ -231,8 +230,14 @@ export default {
     },
 
     handleChange(e){
-      this.args.startAt = e[0]
-      this.args.endAt = e[1]
+      let start = e[0]
+      let end = e[1]
+      if(start === end){
+        start = start + ' 00:00:00'
+        end = end + ' 59:59:59'
+      }
+      this.args.startAt = start
+      this.args.endAt = end
     },
 
     changePage (e) {
