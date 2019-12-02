@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="con-right">
-          <div id="editorElem" style="text-align:left"></div>
+           <wangeditor id="exccccc2" :labels=editorContent  @change="btn"></wangeditor>
         </div>
       </div>
       <div class="con flex-start">
@@ -100,9 +100,15 @@
 </template>
 
 <script>
-import E from 'wangeditor'
-import { upload } from '@/request/http'
-import { inquiryReltype, inquiryRelext, inquiryRel, orgimgdel } from '@/request/api'
+import wangeditor from '@/components/wangeditor';
+
+import { upload } from "@/request/http";
+import {
+  inquiryReltype,
+  inquiryRelext,
+  inquiryRel,
+  orgimgdel
+} from "@/request/api";
 export default {
   data() {
     return {
@@ -148,6 +154,7 @@ export default {
       imgs: null
     }
   },
+   components: {  wangeditor},
   methods: {
     //资讯类型下拉
     getinquiryReltype() {
@@ -225,6 +232,13 @@ export default {
       }
     },
 
+    //富文本
+    btn(e){
+      this.editorContent=e
+    },
+
+
+
     //提交
     Submission(name) {
       this.$refs[name].validate(valid => {
@@ -243,17 +257,14 @@ export default {
     }
   },
   mounted() {
-    var editor = new E('#editorElem')
-    editor.customConfig.zIndex = 100
-    editor.customConfig.onchange = html => {
-      this.editorContent = html
-      console.log(html)
-    }
-    editor.create()
 
-    this.getinquiryReltype()
-    this.getinquiryRelext()
-  }
+
+
+    this.getinquiryReltype();
+    this.getinquiryRelext();
+  },
+
+
 }
 </script>
 <style scoped>

@@ -39,6 +39,18 @@
           <Button style="margin-left: 10px" @click="batch">批量删除</Button>
         </div>
       </div>
+       <Modal v-model="addstate" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                  <span>删除确定</span>
+                </p>
+                <div style="text-align:center">
+                  <p>请确认是否要删除此数据</p>
+                </div>
+                <div slot="footer">
+                  <Button type="error" @click="modalCancel">取消</Button>
+                  <Button type="success" @click="modalOkdel">确定</Button>
+                </div>
+              </Modal>
       <div class="pages">
         <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
@@ -123,8 +135,9 @@ export default {
       dataCount: 0,
       arr: [],
       status: false,
-      statusTime: ''
-    }
+      statusTime:'',
+      addstate:false
+    };
   },
   //事件监听
   watch: {
@@ -157,7 +170,8 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.getJournallist()
-          this.$Message.info('删除成功')
+          this.$Message.info("删除成功");
+          this.$refs.selection.selectAll(false);
         } else {
           this.$Message.error(res.msg)
         }
@@ -172,30 +186,43 @@ export default {
 
     //选择内容
     handleSelectionChange(val) {
-      if ((val.length == this.dataCount && this.dataCount != 0) || val.length == this.size) {
-        this.status = true
+      this.arr=val
+      if (
+        (val.length == this.dataCount && this.dataCount != 0) ||
+        val.length == this.size
+      ) {
+        this.status = true;
       } else {
         this.status = false
       }
-      this.arr = val
-        .map(item => {
-          return item.sysLogId
-        })
-        .toString()
       console.log(this.arr)
     },
     //批量操作
     batch() {
-      // if (this.arr == "") {
-      //   this.$Message.error("至少选择一个");
-      // } else if (this.type == "") {
-      //   this.$Message.error("请先选择操作类型");
-      // } else {
+       this.arr = this.arr.map(item => {
+          return item.sysLogId;
+        }).toString();
+         if (this.arr.length == 0) {
+        this.$Message.error("至少选择一个");
+      } else if (this.type == "") {
+        this.$Message.error("请先选择操作类型");
+      } else {
+         this.addstate=true
 
-      console.log(22, this.arr)
-      this.statusTime = ''
-      this.getJournaldel()
-      // }
+
+      }
+
+
+    },
+    modalCancel(){
+      this.addstate=false
+    },
+
+    //删除确定
+    modalOkdel(){
+      this.statusTime=''
+      this.getJournaldel();
+
     },
     //全选按钮
     chackall() {

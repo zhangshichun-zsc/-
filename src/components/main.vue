@@ -3,7 +3,7 @@
   <div class="main">
     <div class="layout">
       <Layout>
-        <Header>
+        <Header :style="{position: 'fixed', width: '100%'}">
           <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-nav">
               <div class="layout-logo">
@@ -265,18 +265,21 @@
           </Menu>
         </Header>
         <Layout>
-          <!-- :style="{position: 'fixed','padding-top': '73px', height: '100vh', left: 0, overflow: 'auto'}" -->
-          <Sider hide-trigger :style="{position: 'fixed','padding-top': '60px', height: '100vh', left: 0, overflow: 'auto'}">
+
+          <Sider hide-trigger breakpoint="md" collapsible :collapsed-width="78" id='sider' :style="{position: 'fixed', 'padding-top': '50px', height: '100vh', left: 0, overflow: 'auto', background:'#fff'}">
             <!-- <div class="toggle-button">|||</div> -->
             <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
-              <Submenu :name="index+1" v-for="(item, index) in routelist" :key="index">
+              <Submenu :name="index+1" id='top' v-for="(item, index) in routelist" :key="index">
                 <template slot="title">
-                  <!-- <Icon :type="item.meta.icon"></Icon> -->
-                  {{ item.parentName}}
+
+                  <img class='icon-img' v-if='item.icon' :src="`https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg` ">
+                  <Icon v-else type="ios-bookmark" />
+                  <span style='font-size: 14px;color: #1B2331;line-height: 14px;'>{{ item.parentName}}</span>
+
                 </template>
                 <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.list" :key="keys" :to="{name: value.url}" @click.native="savestate(`${index+1}-${keys+1}`)">
-                  <!-- <Icon :type="value.meta.icon"></Icon> -->
-                  {{ value.name }}
+                  <Icon type="md-arrow-dropright" />
+                  <span class='color: #1b2331'> {{ value.name }}</span>
                 </Menu-item>
               </Submenu>
             </Menu>
@@ -302,7 +305,11 @@ export default {
       modal2: false,
       active: '',
       token: '',
-      routelist: []
+      routelist:[],
+      list:function(){
+        this.routelist=sessionStorage.getItem('routelist')
+        console.log(this.routelist,sessionStorage.getItem('routelist'))
+      }
     }
   },
 
@@ -313,6 +320,8 @@ export default {
   //保存储存的信息
   created() {
     this.active = window.sessionStorage.getItem('active')
+    // this.routelist = window.sessionStorage.getItem('routelist')
+    // console.log(this.routelist)
   },
 
   methods: {
@@ -404,6 +413,12 @@ export default {
     color: #ffffff;
   }
 }
+.icon-img {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
+
 .icon {
   padding-right: 35px;
 }
@@ -422,6 +437,17 @@ export default {
   padding-left: 280px;
   padding-top: 60px;
   background-color: #f2f2f2;
+}
+
+//  当宽度小于  xs: '480px',  lg: '992px',xl: '1200px', xxl: '1600px'
+@media screen and (max-width: 992px) {
+  .main-content {
+    padding-left: 380px;
+  }
+  #sider {
+    background: red;
+    width: 200px !important;
+  }
 }
 
 .ivu-layout .ivu-layout-header,
@@ -494,7 +520,32 @@ export default {
   font-weight: bold;
   color: green;
 }
+.ivu-menu-dark {
+  background-color: #fff;
+}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item {
+  color: #1b2331;
+}
+#top .ivu-menu-submenu-title:hover {
+  background-color: red !important;
+  color: red !important;
+}
 
+.ivu-menu-opened {
+  background: #ffffff !important;
+}
+.ivu-menu-submenu-title:hover {
+  color: #fc494d !important;
+  background: #f6f7f9 !important;
+}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item:hover {
+  color: #fc494d !important;
+  background: #f6f7f9 !important;
+}
+
+.ivu-menu-item {
+  color: #1b2331;
+}
 //  隐藏滚动条的样式
 ::-webkit-scrollbar {
   width: 0px;

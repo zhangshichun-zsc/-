@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import {date1} from '../../request/datatime'
+import {formatDate} from '../../request/datatime'
 import { upload } from "../../request/http";
 import { AddAdvertising,AdvertisingList,AdvertisingDetails,orgimgdel} from "../../request/api";
 export default {
@@ -142,9 +142,9 @@ export default {
         title: [
           { required: true, message: "广告名称不能为空", trigger: "blur" }
         ],
-        linkUrl: [
-          { required: true, message: "广告链接不能为空", trigger: "blur" }
-        ],
+        // linkUrl: [
+        //   { required: true, message: "广告链接不能为空", trigger: "blur" }
+        // ],
         imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
         location: [
           { required: true, message: "广告位置不能为空", trigger: "change" }
@@ -233,8 +233,8 @@ export default {
         let list = res.data
         this.formValidate.title=list.title,
         this.formValidate.location=list.location,
-        this.formValidate.startAt = date1('Y-m-d',this.startAt)
-        this.formValidate.endAt = date1('Y-m-d',this.endAt)
+        this.formValidate.startAt = formatDate(this.startAt)
+        this.formValidate.endAt = formatDate(this.endAt)
         this.formValidate.status = list.status,
         this.formValidate.picUrl = list.picUrl,
         this.formValidate.linkUrl = list.linkUrl,

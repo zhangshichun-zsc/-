@@ -99,15 +99,17 @@ export default {
           { required: true, message: '请输入内容', trigger: 'blur' },
           { type: 'string', min: 10, message: '不能少于10字', trigger: 'blur' }
         ],
-        parentId: [
-          {
-            required: true,
-            message: '请选择相关部门',
-            trigger: 'change',
-            type: 'number'
-          }
-        ],
-        leader: [{ required: true, message: '请输入负责人姓名', trigger: 'blur' }]
+        // parentId: [
+        //   {
+        //     required: true,
+        //     message: "请选择相关部门",
+        //     trigger: "change",
+        //     type: "number"
+        //   }
+        // ],
+        leader: [
+          { required: true, message: "请输入负责人姓名", trigger: "blur" }
+        ]
         // ssproject: [
         //   { required: true, message: "请输入所属项目", trigger: "blur" }
         // ]

@@ -21,7 +21,7 @@
     <div class="integral-table">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <FormItem label="广告名称" prop="title">
-          <Input v-model="formValidate.title" placeholder="广告名称" style="width:300px"></Input>
+          <Input v-model="formValidate.title" placeholder="广告名称" style="width:300px"/>
           <span
             style="color: #9EA7B4;font-size: 12px;margin-left: 0.5rem;"
           >广告名称只是作为辨别多个广告条目之用，并不显示在广告中</span>
@@ -30,11 +30,9 @@
           <Select v-model="formValidate.location" placeholder="Select your city" style="width:300px">
                 <Option value="1">会员首页轮播</Option>
                 <Option value="2">志愿者首页轮播</Option>
-
             </Select>
         </FormItem>
 
-        </FormItem>
         <FormItem label="开始时间" prop="startAt">
           <FormItem prop="startAt">
             <DatePicker
@@ -111,7 +109,7 @@
 </template>
 
 <script>
-import {date1} from '../../request/datatime'
+import {formatDate} from '../../request/datatime'
 import { upload } from "../../request/http";
 import { AddAdvertising,AdvertisingList,AdvertisingDetails,orgimgdel} from "../../request/api";
 export default {
@@ -142,9 +140,9 @@ export default {
         title: [
           { required: true, message: "广告名称不能为空", trigger: "blur" }
         ],
-        linkUrl: [
-          { required: true, message: "广告链接不能为空", trigger: "blur" }
-        ],
+        // linkUrl: [
+        //   { required: true, message: "广告链接不能为空", trigger: "blur" }
+        // ],
         imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
         location: [
           { required: true, message: "广告位置不能为空", trigger: "change" }
@@ -233,8 +231,8 @@ export default {
         let list = res.data
         this.formValidate.title=list.title,
         this.formValidate.location=list.location,
-        this.formValidate.startAt = date1('Y-m-d',this.startAt)
-        this.formValidate.endAt = date1('Y-m-d',this.endAt)
+        this.formValidate.startAt = formatDate(this.startAt)
+        this.formValidate.endAt = formatDate(this.endAt)
         this.formValidate.status = list.status,
         this.formValidate.picUrl = list.picUrl,
         this.formValidate.linkUrl = list.linkUrl,

@@ -1,26 +1,26 @@
 <template>
   <div id="app">
-      <router-view v-if="isRouterAlive"/>
+    <router-view v-if="isRouterAlive" />
   </div>
 </template>
 <script>
 export default {
-  name:'App',
-  provide(){
+  name: 'App',
+  provide() {
     return {
-      reload:this.reload
+      reload: this.reload
     }
   },
-  data(){
-    return{
-      isRouterAlive:true
+  data() {
+    return {
+      isRouterAlive: true
     }
   },
-  methods:{
-    reload(){
-      this.isRouterAlive=false
-      this.$nextTick(function () {
-        this.isRouterAlive=true
+  methods: {
+    reload() {
+      this.isRouterAlive = false
+      this.$nextTick(function() {
+        this.isRouterAlive = true
       })
     }
   }
@@ -34,5 +34,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   font-size: 16px;
+}
+
+//  隐藏滚动条的样式
+::-webkit-scrollbar {
+  width: 0px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
 }
 </style>

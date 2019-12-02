@@ -44,6 +44,7 @@ export default {
   mounted() {
     this.editor = new E('#' + this.id)
     // 自定义菜单配置
+
     this.editor.customConfig.menus = btnmenu
     // 配置上传图片为base64
     this.editor.customConfig.uploadImgShowBase64 = false

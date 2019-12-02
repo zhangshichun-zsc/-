@@ -23,7 +23,15 @@
         <Table ref="selection" border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
-        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="pageSize" @on-change="changepages" />
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
@@ -87,7 +95,7 @@ export default {
       page: 1,
       size: 10,
       dataCount: 0,
-      pageSize: 10,
+
       enableFlag: null
     }
   },

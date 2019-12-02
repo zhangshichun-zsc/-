@@ -37,7 +37,7 @@
               <a>查看角色详情</a>
               <p>选择所属部门后默认继承角色功能权限，可在成员列表中单独设置权限</p>
             </FormItem>
-            <FormItem label="初始密码:" prop="loginPwd">
+            <FormItem label="密码设置:" prop="loginPwd">
               <Input style="width: 10rem" v-model="AddDate.loginPwd" />
             </FormItem>
             <FormItem label="备注信息:" prop="comments">
@@ -77,9 +77,14 @@ export default {
         //   { required: true, message: "邮箱地址不能为空", trigger: "blur" },
         //   { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
         // ],
-        deplNames: [{ required: true, message: '请选择部门类型', trigger: 'blur', type: 'array' }],
-        sysRoleNames: [
-          { required: true, message: '请选择角色类型', trigger: 'blur', type: 'array' }
+        deplNames:[
+         { required: true, message: "请选择部门类型", trigger: "blur",type:'array' }
+          ],
+        sysRoleNames:[
+         { required: true, message: "请选择角色类型", trigger: "blur",type:'array' }
+          ],
+        loginPwd: [
+          { required: true, message: "请输入密码", trigger: "blur" }
         ],
         loginPwd: [{ required: true, message: '请输入初始密码', trigger: 'blur' }],
         comments: []
