@@ -54,18 +54,34 @@ export default {
   computed: {},
 
   created () {
-    
+
   },
+  // watch:{
+  //   'getA'
+  // },
 
   methods: {
     changeProve(i, e) {
       let id = 1
+      console.log(i,e)
       if (i == 0) {
-        id = getAdressId(e.label, '', '')[0]
+        let i = this.val[0]
+        let city = this.area[this.val[0]].citys[0].name
+        let county=this.area[this.val[0]].citys[0].areas
+        this.$set(this.val,1,0)
+        this.$set(this.val,2,0)
+        this.ids = getAdressId(e.label, city, county)
+        console.log(this.ids)
       } else if (i == 1) {
-        id = getAdressId('', e.label, '')[0]
+        let county=this.area[this.val[0]].citys[0].areas
+        this.$set(this.val,2,0)
+        id = getAdressId('', e.label, county)
+        let p = this.ids[0]
+        this.ids=[p,...id]
       } else {
-        id = getAdressId('', '', e.label)[0]
+        // this.ids = getAdressId('', '', e.label)[0]
+        console.log(this.ids)
+        this.$set(this.ids[2])
       }
       this.$set(this.ids, i, id)
       this.$emit('change', this.ids)

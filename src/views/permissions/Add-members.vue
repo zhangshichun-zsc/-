@@ -21,11 +21,8 @@
               <Input style="width: 10rem" v-model="AddDate.email" />
             </FormItem>
             <FormItem label="所属部门:" prop="deplNames">
-
               <Select style="width: 10rem" multiple v-model="AddDate.deplNames" placeholder="全部">
-
                 <Option :value=item.deptId v-for="(item,index) in list" :key="index">{{item.deptName}}</Option>
-
               </Select>
               <a>查看部门详情</a>
               <p>选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限</p>
@@ -54,7 +51,7 @@
 </template>
 
 <script>
-import { rolenumquery, departmentall, roleedit, memberlist, rolequery } from '@/request/api'
+import { rolenumquery, departmentall, roleedit, memberlist, rolequery,departaddDeptUser } from '@/request/api'
 export default {
   data() {
     return {
@@ -169,6 +166,20 @@ export default {
         } else {
           this.$Message.error(res.msg)
         }
+        console.log(res)
+      })
+    },
+    //成员添加
+    getdepartaddDeptUser(){
+      departaddDeptUser({
+        sysRoleIds:this.sysRoleIds,
+        tel:this.tel,
+        userName:this.userName,
+        deptIds:this.deptIds,
+        email:this.email,
+        comments:this.comments,
+        loginPwd:this.loginPwd
+      }).then(res=>{
         console.log(res)
       })
     },

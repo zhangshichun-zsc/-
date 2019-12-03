@@ -20,10 +20,10 @@
           <span>所属部门:</span>
           <Select v-model="role" style="width:200px" :transfer="true">
             <Option
-              v-for="item in data1"
-              :value="item.sysRoleName"
-              :key="item.sysRoleId"
-            >{{ item.sysRoleName }}</Option>
+              v-for="item in deplist"
+              :value="item.deptId"
+              :key="item.deptId"
+            >{{ item.deptName }}</Option>
           </Select>
 
         </p>
@@ -31,7 +31,7 @@
 
       <div>
          <Button :style="{margin: '24px 0',maxWidth:'100px'}" @click="addmember">添加成员</Button>
-                <Table border :columns="columns" :data="data"></Table>
+                <Table border :columns="columns" :data="data2"></Table>
       </div>
       <div class="pages">
         <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" />
@@ -42,6 +42,7 @@
 
 <script>
 import {
+  departmentmember,
   memberlist,
   departmentlist,
   departmentadd,
@@ -201,10 +202,10 @@ export default {
         }
       ],
       role:'',
-      data: [],
-      data1: [],
-      parentId: 0,
+      data2: [],
       deplist: [],
+      parentId: 0,
+
       sun: true,
       sunlist: [],
       deptId: "",
@@ -218,11 +219,11 @@ export default {
     };
   },
   mounted() {
-
+    this.getdepartmentall()
+    this.getdepartmentmember()
   },
 
   methods: {
-
 
     // 查询所有部门名称
     getdepartmentall() {
@@ -232,6 +233,24 @@ export default {
         }
         console.log(res);
       });
+    },
+
+     // 查询部门成员
+    getdepartmentmember() {
+      departmentmember({
+        page: { page: this.page, size: this.size },
+        depId: 0,
+        sort: ''
+      }).then(res => {
+        if (res.code == 200) {
+          this.data2 = res.data.list
+          this.dataCount = res.data.totalSize
+          this.$Message.info('查询成功')
+        } else {
+          this.$Message.error(res.msg)
+        }
+        console.log(res)
+      })
     },
 
     //成员管理列表

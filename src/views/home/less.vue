@@ -31,18 +31,6 @@
             @click="cancelImg()"
           />
         </div>
-
-        <!-- <div class="img">
-          <img :src="imgUrl" class="img" />
-        </div>
-        <Upload
-          :action="orgimg"
-          :format="['jpg','jpeg','png']"
-          :show-upload-list="false"
-          :before-upload="handleBeforeUpload"
-        >
-          <Button icon="ios-cloud-upload-outline">上传头像</Button>
-        </Upload>-->
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
           <FormItem label="用户名">
             <Input v-model="formValidate.name" disabled />
@@ -54,10 +42,10 @@
             <Input v-model="formValidate.oldPassword" />
           </FormItem>
           <FormItem label="新密码" prop="newPassword">
-            <Input v-model="formValidate.newPassword" />
+            <Input type="password" v-model="formValidate.newPassword" />
           </FormItem>
           <FormItem label="确认密码" prop="confirm">
-            <Input v-model="formValidate.confirm" />
+            <Input  type="password" v-model="formValidate.confirm" />
           </FormItem>
           <FormItem>
             <Button type="success" @click="handleSubmit('formValidate')">提交</Button>
@@ -99,7 +87,7 @@ export default {
       },
       formValidate: {
         name: this.$store.state.userName,
-        number: this.$store.state.tel,
+        number: this.$store.state.tel?this.$store.state.tel:'',
         oldPassword: "",
         newPassword: "",
         confirm: ""
@@ -151,16 +139,14 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           console.log(this.picUrl)
-          if (this.picUrl== null) {
-            this.$Message.error("请上传图片！");
-          } else {
+
             // if(this.formValidate.oldPassword!=this.formValidate.confirm){
             //   this.$Message.error('两次密码不一致!')
             // }else{
             //  this.getSetup();
             // }
             this.getSetup();
-          }
+
         } else {
           this.$Message.error("必填项未填!");
         }

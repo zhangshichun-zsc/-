@@ -947,6 +947,7 @@ export default {
       })
     },
     idsactive(res) {
+      console.log(res)
       if (res[0]) {
         this.province = res[0]
       }

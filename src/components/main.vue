@@ -271,11 +271,9 @@
             <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
               <Submenu :name="index+1" id='top' v-for="(item, index) in routelist" :key="index">
                 <template slot="title">
-
                   <img class='icon-img' v-if='item.icon' :src="`https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg` ">
                   <Icon v-else type="ios-bookmark" />
                   <span style='font-size: 14px;color: #1B2331;line-height: 14px;'>{{ item.parentName}}</span>
-
                 </template>
                 <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.list" :key="keys" :to="{name: value.url}" @click.native="savestate(`${index+1}-${keys+1}`)">
                   <Icon type="md-arrow-dropright" />
@@ -332,6 +330,9 @@ export default {
         if (res.code == 200) {
           // return res.data
           this.routelist = res.data
+          if(this.routelist.length==0){
+             this.$Message.error('权限不足!')
+          }
         }
         console.log(res)
       })

@@ -5,7 +5,7 @@
     <div class="content">
       <div class="con-left">
         <div>
-          <img :src='list.coverImgPath'/>
+          <img :src='list.coverImgPath' style="height:100px;width:100px"/>
         </div>
         <div class="left-con">
           <p>

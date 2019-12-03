@@ -18,12 +18,12 @@ const SERVICE_URL = {
     'http://192.168.0.11:8083/rhzg-app-server', // 竺文聪 5 //图片上传
     'http://192.168.0.5:8084/rhzg-web', // 王盛
   ],
-  API_INDEX: 2
+  API_INDEX: 4
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
 
- const token = localStorage.getItem('token')
+const token = localStorage.getItem('token')
 
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] // 导出文件
 
@@ -94,10 +94,8 @@ axios.interceptors.response.use(
               path: 'login',
               query: { redirect: router.currentRoute.path },
             });
-        case 500:
       }
     }
-    // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
     return Promise.reject(error.response.data)
   },
 )

@@ -106,7 +106,7 @@ export default {
         if (valid) {
           this.getlogin()
         } else {
-          this.$Message.error('密码或账号不正确!')
+          this.$Message.error('请输入密码或账号!')
         }
       })
     }

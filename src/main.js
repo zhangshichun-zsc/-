@@ -23,13 +23,12 @@ Vue.prototype.$Message = Message
 //路由
 router.beforeEach((to,from,next)=>{
   // console.log(to);
-  if(localStorage.getItem('token')){
+  if(store.state.token){
     // Message.info('登录成功')
     next();
   }else {
     //没有登录，去跳转登录页
     if(to.path === '/login'){
-      console.log(111)
       // Message.error('身份过期请重新登陆')
       next();
     }else {

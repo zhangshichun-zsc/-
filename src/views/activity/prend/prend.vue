@@ -44,7 +44,7 @@
               </Modal>
       <div class="button-food">
         <i-button @click="template">保存</i-button>
-        <i-button @click="cencel(1)">作废</i-button>
+        <i-button @click="cencel(1)" v-if=zuo >作废</i-button>
       </div>
     </div>
   </div>
@@ -63,6 +63,7 @@ export default {
       },
       image: null,
        addstate:false,
+       zuo:false,
       args:{
 	      fkMouldName:null,
 	      typeDicId:null,
@@ -83,6 +84,7 @@ export default {
   created() {
     this.ble =  ~~this.$route.query.ble
     if(this.ble === 1){
+      this.zuo=true
       this.args.actFkMouldId = this.$route.query.id
       this.getDetail()
     }else{
@@ -91,7 +93,9 @@ export default {
     }
   },
 
-  mounted() {},
+  mounted() {
+
+  },
 
   methods: {
     uploadFile () {
