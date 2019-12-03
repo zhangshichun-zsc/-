@@ -24,7 +24,7 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="query.validFlag">
-            <Option value="">全部</Option>
+             <Option value="">全部</Option>
             <Option value="1">有效状态</Option>
             <Option value="0">无效状态</Option>
           </Select>
@@ -34,7 +34,7 @@
           <Row>
             <Col span="12">
                <DatePicker
-                  type="datetime"
+                  type="daterange"
                   @on-change="handleChange"
                   placement="bottom-end"
                   placeholder="Select date"
@@ -240,9 +240,12 @@ export default {
       if(start === end){
         start = start + ' 00:00:00'
         end = end + ' 59:59:59'
+      }else{
+        start = start + ' 00:00:00'
+        end = end + ' 00:00:00'
       }
-      this.args.startAt = start
-      this.args.endAt = end
+      this.query.startAt = start
+      this.query.endAt = end
     },
     changepages(e){
       this.params.page = e
