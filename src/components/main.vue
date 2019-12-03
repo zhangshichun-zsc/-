@@ -275,7 +275,6 @@
                   <img class='icon-img' :src="item.icon?`https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg`:'https://rhzgtest.co-inclusion.org/app/menu_icon/content.svg'">
                   <!-- <Icon v-else type="ios-bookmark" /> -->
                   <span style='font-size: 14px;color: #1B2331;line-height: 14px;'>{{ item.parentName}}</span>
-
                 </template>
                 <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.list" :key="keys" :to="{name: value.url}" @click.native="savestate(`${index+1}-${keys+1}`)">
                   <Icon type="md-arrow-dropright" />
@@ -332,6 +331,9 @@ export default {
         if (res.code == 200) {
           // return res.data
           this.routelist = res.data
+          if(this.routelist.length==0){
+             this.$Message.error('权限不足!')
+          }
         }
         console.log(res)
       })

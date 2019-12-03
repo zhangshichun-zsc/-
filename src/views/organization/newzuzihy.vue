@@ -28,7 +28,8 @@
               <Input v-model="formValidate.ownerUserName" placeholder="自动带出" style="width: 220px" />
             </FormItem>
             <FormItem label="地址:" prop="address">
-              <!-- <select :></select> -->
+               <Selsect :arr='[province,city,county,]' @change='selbtn'></Selsect>
+
               <!-- <Select v-model="formValidate.provinceId" style="width:150px">
                 <Option
                   v-for="item in provinceList"
@@ -132,7 +133,9 @@
   </div>
 </template>
 <script>
-// import { select } from "@/components/select";
+import Selsect from '@/components/selsect'
+
+
 import { upload } from "../../request/http";
 import {orgimg} from '@/request/http'
 import {
@@ -168,6 +171,11 @@ export default {
         ownerUserName: "",
         ownerUserPhone: "",
         imgUrl:null,
+
+        province:'',
+        city:'',
+        county:'',
+
       },
       ruleValidate: {
         orgName: [
@@ -201,10 +209,16 @@ export default {
       districtList: [],
 
       name: null,
-      orgimg:''
+      orgimg:'',
+      types:[],
+
+        province:'',
+        city:'',
+        county:'',
+
     };
   },
-  // components: { select },
+  components: { Selsect },
   methods: {
     //获取组织类型列表
     getorgtype() {
@@ -238,39 +252,46 @@ export default {
         console.log(res);
       });
     },
-    //获取省
-    getorgcity() {
-      orgcity({}).then(res => {
-        if (res.code == 200) {
-          this.provinceList = res.data;
-          this.getorgprovince();
-        }
-        console.log(res);
-      });
+    //省市区
+    selbtn(e){
+      this.formValidate.provinceId=e[0];
+      this.cityId=e[1];
+      this.districtId=e[2];
+      console.log(e)
     },
-    //获取市
-    getorgprovince() {
-      orgprovince({
-        provinceId: this.formValidate.provinceId
-      }).then(res => {
-        if (res.code == 200) {
-          this.cityList = res.data;
-          this.getorgdistrict();
-        }
-        console.log(res);
-      });
-    },
-    //获取区
-    getorgdistrict() {
-      orgdistrict({
-        cityId: this.formValidate.cityId
-      }).then(res => {
-        if (res.code == 200) {
-          this.districtList = res.data;
-        }
-        console.log(res);
-      });
-    },
+    // //获取省
+    // getorgcity() {
+    //   orgcity({}).then(res => {
+    //     if (res.code == 200) {
+    //       this.provinceList = res.data;
+    //       this.getorgprovince();
+    //     }
+    //     console.log(res);
+    //   });
+    // },
+    // //获取市
+    // getorgprovince() {
+    //   orgprovince({
+    //     provinceId: this.formValidate.provinceId
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       this.cityList = res.data;
+    //       this.getorgdistrict();
+    //     }
+    //     console.log(res);
+    //   });
+    // },
+    // //获取区
+    // getorgdistrict() {
+    //   orgdistrict({
+    //     cityId: this.formValidate.cityId
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       this.districtList = res.data;
+    //     }
+    //     console.log(res);
+    //   });
+    // },
 
     //图片上传
     uploadFile() {
@@ -306,6 +327,7 @@ export default {
         if (valid) {
           this.getorgadd();
         } else {
+          console.log(this.formValidate.provinceId)
           this.$Message.error("必填项未填！");
         }
       });

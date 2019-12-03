@@ -320,7 +320,7 @@ export default {
     },
     //查询结果
     query() {
-      console.log(this.size)
+      this.page=1
       this.getorgpage()
     },
     //全选按钮

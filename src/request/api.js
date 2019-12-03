@@ -427,6 +427,11 @@ export const departmentedit = p => posts('/web/dept/editDept', p) //部门管理
 
 export const departmentadd = p => posts('/web/dept/addDept', p) //部门管理--部门列表添加
 
+export const departaddDeptUser = p => posts('/web/dept/addDeptUser', p) //部门管理--部门添加
+
+
+
+
 export const departmentStatus = p => get('/web/dept/changgeDeptUserStatus', p) //部门管理-部门成员-修改启用状态
 
 export const departmentSup = p => get('/web/dept/findUpDeptName', p) //部门管理--查询所有上级部门名称

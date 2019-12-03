@@ -167,7 +167,7 @@ export default {
               h(
                 "p",
 
-                ("收藏:"+params.row.collectionNum)
+                ("收藏:"+params.row.collectNum)
               ),
               h(
                 "p",
@@ -177,7 +177,7 @@ export default {
                     marginLeft: "5px",
                   },
                 },
-                ("阅读:"+params.row.readNum)
+                ("阅读:"+0)
               ),
               h(
                 "p",
@@ -187,7 +187,7 @@ export default {
                     marginLeft: "5px",
                   },
                 },
-                ("评论:"+params.row.commentNUm)
+                ("评论:"+'0')
               )
             ]);
           }

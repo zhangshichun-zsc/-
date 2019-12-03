@@ -3,7 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="select">
-      <RadioGroup v-model="sysType" @on-change="Single">
+      <RadioGroup v-model="sysType" @on-change="Singles">
         <Radio label="1">会员</Radio>
         <Radio label="2">
           <span @click="vun">志愿者</span>
@@ -208,11 +208,15 @@ export default {
     },
     //活动规则池--获取活动规则分页
     getActiverulepage() {
+      let ruletypes=this.ruleType
+      if(this.sysType==2){
+        ruletypes=Number(this.ruleType)+2
+      }
 
       Activerulepage({
         sysType: this.sysType,
         page: { page: this.page, size: this.size,sort:this.sort },
-        ruleType: this.ruleType
+        ruleType: ruletypes
       }).then(res => {
         if (res.code == 200) {
           if (this.ruleType == 1) {
@@ -242,10 +246,17 @@ export default {
       console.log(index);
       this.getActiverulepage();
     },
+
+    Singles(){
+
+      this.getActiverulepage();
+    },
     //单选
     Single() {
       this.getActiverulepage();
     },
+
+
 
     //跳转志愿者页面
     vun() {

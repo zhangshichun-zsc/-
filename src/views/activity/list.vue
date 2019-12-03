@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { date1 } from "@/request/datatime";
+import { formatDate } from "@/request/datatime";
 import { activeAddManager } from "@/request/api";
 export default {
   data() {
@@ -122,7 +122,7 @@ export default {
           title: "活动时间",
           key: "startTimestamp",
           render: (h, params) => {
-            return h("div", date1("Y-m-d", params.row.startTimestamp));
+            return h("div", formatDate(params.row.startTimestamp));
           }
         },
         {
@@ -149,12 +149,12 @@ export default {
           title: "报名时间",
           key: "signUpTimestamp",
           render: (h, params) => {
-            return h("div", date1("Y-m-d", params.row.signUpTimestamp));
+            return h("div", formatDate(params.row.signUpTimestamp));
           }
         },
         {
           title: "匹配规则",
-          key: "rule",
+          key: "ruleName",
           align: "center"
         }
       ],
@@ -229,6 +229,7 @@ export default {
 
     //查询结果
     query(){
+      this.page=1
       this.getactiveAddManager()
     },
 

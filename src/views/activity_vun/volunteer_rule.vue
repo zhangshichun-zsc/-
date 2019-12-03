@@ -22,10 +22,10 @@
         <div class="table-header">
           <div>
             <Tabs type="card" v-model="ruleType" @on-click="Single">
-              <TabPane label="限制规则" name="1">
+              <TabPane label="限制规则" name="3">
                 <Table border :columns="columns" :data="data" width="600px"></Table>
               </TabPane>
-              <TabPane label="优先规则" name="2">
+              <TabPane label="优先规则" name="4">
                 <Table border :columns="columns1" :data="data1" width="600px"></Table>
               </TabPane>
             </Tabs>
@@ -178,7 +178,7 @@ export default {
       page: 1,
       size: 10,
       dataCount: 0,
-      ruleType: '1',
+      ruleType: '3',
       ruleOprType: "1",
       sort: "create_at asc"
     };
@@ -265,6 +265,7 @@ export default {
 }
 
 .content {
+  height: 700px;
   .integral-table {
     height: 50px;
     border: #e4e4e4 1px solid;

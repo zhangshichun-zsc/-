@@ -407,9 +407,6 @@ export default {
           title: "会员报名人数",
           key: "memberSignUpCount",
           align: "center",
-          render: (h, params) => {
-            return h("div", params.row.memberSignUpCount);
-          }
         },
         {
           title: "志愿者报名人数",
