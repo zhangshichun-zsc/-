@@ -266,14 +266,14 @@
         </Header>
         <Layout>
 
-          <Sider hide-trigger breakpoint="md" collapsible :collapsed-width="78" id='sider' :style="{position: 'fixed', 'padding-top': '50px', height: '100vh', left: 0, overflow: 'auto', background:'#fff'}">
+          <Sider hide-trigger breakpoint="md" collapsible :collapsed-width="78" id='sider' :style="{position: 'fixed',  'min-width': '200px',  height: '100vh', left: 0, overflow: 'auto', background:'#fff'}">
             <!-- <div class="toggle-button">|||</div> -->
             <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
               <Submenu :name="index+1" id='top' v-for="(item, index) in routelist" :key="index">
                 <template slot="title">
 
-                  <img class='icon-img' v-if='item.icon' :src="`https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg` ">
-                  <Icon v-else type="ios-bookmark" />
+                  <img class='icon-img' :src="item.icon?`https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg`:'https://rhzgtest.co-inclusion.org/app/menu_icon/content.svg'">
+                  <!-- <Icon v-else type="ios-bookmark" /> -->
                   <span style='font-size: 14px;color: #1B2331;line-height: 14px;'>{{ item.parentName}}</span>
 
                 </template>
@@ -301,14 +301,14 @@ export default {
   props: ['labels'],
   data() {
     return {
-      routelist:this.gethomepage(),
+      routelist: this.gethomepage(),
       modal1: false,
       modal2: false,
       active: '',
       token: '',
-      list:function(){
-        this.routelist=sessionStorage.getItem('routelist')
-        console.log(this.routelist,sessionStorage.getItem('routelist'))
+      list: function() {
+        this.routelist = sessionStorage.getItem('routelist')
+        console.log(this.routelist, sessionStorage.getItem('routelist'))
       }
     }
   },
@@ -440,16 +440,44 @@ export default {
   background-color: #f2f2f2;
 }
 
-//  当宽度小于  xs: '480px',  lg: '992px',xl: '1200px', xxl: '1600px'
+//  当宽度小于  xs: '480px',  lg: '992px',xl: '1200px', xxl: ' '
+@media screen and (max-width: 1600px) {
+  .main-content {
+    padding-left: 280px;
+  }
+  #sider {
+
+    width: 240px !important;
+    min-width: 240px !important;
+    padding-top: 72px;
+    
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .main-content {
+    padding-left: 280px;
+  }
+  #sider {
+    background: red;
+    width: 240px !important;
+    min-width: 240px !important;
+    padding-top: 70px;
+  }
+}
+
 @media screen and (max-width: 992px) {
   .main-content {
-    padding-left: 380px;
+    padding-left: 280px;
   }
   #sider {
     background: red;
     width: 200px !important;
+    min-width: 240px !important;
+    padding-top: 80px;
   }
 }
+
 
 .ivu-layout .ivu-layout-header,
 .ivu-layout-header .ivu-menu {

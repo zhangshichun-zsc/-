@@ -223,14 +223,7 @@
         <div class="lx-right">
           <ve-line :data="chartData" width="900px" height="323px" :settings="chartSettings"></ve-line>
           <i-col span="12">
-            <Date-picker
-              :value="value2"
-              format="yyyy/MM/dd"
-              type="daterange"
-              placement="bottom-end"
-              placeholder="选择日期"
-              style="width: 200px"
-            ></Date-picker>
+            <Date-picker :value="value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-picker>
           </i-col>
         </div>
       </div>
@@ -263,14 +256,7 @@
         <div class="lx-right">
           <ve-line :data="chartData" width="900px" height="323px" :settings="chartSettings"></ve-line>
           <i-col span="12">
-            <Date-picker
-              :value="value2"
-              format="yyyy/MM/dd"
-              type="daterange"
-              placement="bottom-end"
-              placeholder="选择日期"
-              style="width: 200px"
-            ></Date-picker>
+            <Date-picker :value="value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-picker>
           </i-col>
         </div>
       </div>
@@ -279,28 +265,28 @@
 </template>
 
 <script>
-import { Homeactivity, Homeactpend, Homeactwhole } from "../../request/api";
+import { Homeactivity, Homeactpend, Homeactwhole } from '../../request/api'
 export default {
   data() {
     this.chartSettings = {
-      stack: { 用户: ["访问用户", "下单用户"] },
+      stack: { 用户: ['访问用户', '下单用户'] },
       area: true
-    };
+    }
     return {
       navigation1: {
-        head: "系统首页（会员）"
+        head: '系统首页（会员）'
       },
-      value1: "2016-01-01",
-      value2: ["2016-01-01", "2016-02-15"],
+      value1: '2016-01-01',
+      value2: ['2016-01-01', '2016-02-15'],
       chartData: {
-        columns: ["日期", "本周"],
+        columns: ['日期', '本周'],
         rows: [
-          { 日期: "06-01周六", 今日: 1, 本周: 1, 本月: 1 },
-          { 日期: "06-02周六", 今日: 1, 本周: 3, 本月: 2 },
-          { 日期: "06-03周六", 今日: 1, 本周: 2, 本月: 3 },
-          { 日期: "06-04周六", 今日: 6, 本周: 1, 本月: 2 },
-          { 日期: "06-05周六", 今日: 4, 本周: 3, 本月: 4 },
-          { 日期: "06-06周六", 今日: 5, 本周: 4, 本月: 3 }
+          { 日期: '06-01周六', 今日: 1, 本周: 1, 本月: 1 },
+          { 日期: '06-02周六', 今日: 1, 本周: 3, 本月: 2 },
+          { 日期: '06-03周六', 今日: 1, 本周: 2, 本月: 3 },
+          { 日期: '06-04周六', 今日: 6, 本周: 1, 本月: 2 },
+          { 日期: '06-05周六', 今日: 4, 本周: 3, 本月: 4 },
+          { 日期: '06-06周六', 今日: 5, 本周: 4, 本月: 3 }
         ]
       },
       modal1: false,
@@ -310,14 +296,14 @@ export default {
       activityOverview: [],
       userOverview: [],
       Jumplist: [
-        { name: "活动立项", query: "/activity/approval" },
-        { name: "活动管理", query: "/activity/manager" },
-        { name: "用户列表", query: "/user/all_member_hy" },
-        { name: "报表统计", query: "/activity/approval" },
-        { name: "消息管理", query: "/operate/vp_message" },
-        { name: "广告管理", query: "/recommend/vp_adlist" }
+        { name: '活动立项', query: '/activity/approval' },
+        { name: '活动管理', query: '/activity/manager' },
+        { name: '用户列表', query: '/user/all_member_hy' },
+        { name: '报表统计', query: '/activity/approval' },
+        { name: '消息管理', query: '/operate/vp_message' },
+        { name: '广告管理', query: '/recommend/vp_adlist' }
       ]
-    };
+    }
   },
   components: {},
 
@@ -325,9 +311,9 @@ export default {
 
   created() {},
   mounted() {
-    this.getHomeactivity();
-    this.getHomeactpend();
-    this.getHomeactwhole();
+    this.getHomeactivity()
+    this.getHomeactpend()
+    this.getHomeactwhole()
   },
   methods: {
     //首页-活动计数
@@ -336,11 +322,11 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.activity = res.data;
+          this.activity = res.data
         } else {
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
 
     //首页--待处理事务
@@ -349,10 +335,10 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.Pending = res.data;
+          this.Pending = res.data
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //首页--活动总览
     getHomeactwhole() {
@@ -360,22 +346,22 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.userOverview = res.data.userOverview;
-          this.activityOverview = res.data.activityOverview;
-        }else{
-          this.$Message.error(res.msg);
+          this.userOverview = res.data.userOverview
+          this.activityOverview = res.data.activityOverview
+        } else {
+          this.$Message.error(res.msg)
         }
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     //跳转
     Jump(index) {
       this.$router.push({
         path: this.Jumplist[index].query
-      });
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .head {

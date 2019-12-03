@@ -13,7 +13,7 @@ import head from './components/head'
 import topheads from './components/topheads'
 import number from './components/number'
 import iView, { Message } from 'iview'
-import 'iview/dist/styles/iview.css'
+import './assets/css/dist/styles/iview.css'
 import './libs/style.scss'
 import './libs/rest.css'
 import './libs/rem.js'
@@ -21,21 +21,21 @@ Vue.prototype.$Message = Message
 
 
 //路由
-router.beforeEach((to,from,next)=>{
+router.beforeEach((to, from, next) => {
   // console.log(to);
-  if(localStorage.getItem('token')){
+  if (localStorage.getItem('token')) {
     // Message.info('登录成功')
     next();
-  }else {
+  } else {
     //没有登录，去跳转登录页
-    if(to.path === '/login'){
+    if (to.path === '/login') {
       console.log(111)
       // Message.error('身份过期请重新登陆')
       next();
-    }else {
+    } else {
       // Message.error('已退出登陆')
       next({
-        path:'/login'
+        path: '/login'
       });
     }
   }
@@ -56,7 +56,7 @@ Vue.component(VeLine.name, VeLine)
 
 
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')
