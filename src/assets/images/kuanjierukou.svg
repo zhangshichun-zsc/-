@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>kuanjierukou</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="18.3886719%" y1="14.5996094%" x2="78.2421875%" y2="84.7265625%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.5" offset="0%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-2" cx="25" cy="25" r="25"></circle>
+        <linearGradient x1="57.3924276%" y1="61.0863829%" x2="0%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#FF6877" offset="0%"></stop>
+            <stop stop-color="#FC494D" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页-" transform="translate(-1791.000000, -512.000000)">
+            <g id="kuanjierukou" transform="translate(1791.000000, 512.000000)">
+                <g id="Group-22">
+                    <g id="Oval">
+                        <use fill="#FEF4F5" xlink:href="#path-2"></use>
+                        <use fill="url(#linearGradient-1)" style="mix-blend-mode: soft-light;" xlink:href="#path-2"></use>
+                    </g>
+                    <path d="M25,36 C18.9248678,36 14,31.0751322 14,25 C14,18.9248678 18.9248678,14 25,14 C31.0751322,14 36,18.9248678 36,25 C36,31.0751322 31.0751322,36 25,36 Z M24.0909091,24.0909091 L20.9090909,24.0909091 C20.4070139,24.0909091 20,24.497923 20,25 C20,25.502077 20.4070139,25.9090909 20.9090909,25.9090909 L24.0909091,25.9090909 L24.0909091,29.0909091 C24.0909091,29.5929861 24.497923,30 25,30 C25.502077,30 25.9090909,29.5929861 25.9090909,29.0909091 L25.9090909,25.9090909 L29.0909091,25.9090909 C29.5929861,25.9090909 30,25.502077 30,25 C30,24.497923 29.5929861,24.0909091 29.0909091,24.0909091 L25.9090909,24.0909091 L25.9090909,20.9090909 C25.9090909,20.4070139 25.502077,20 25,20 C24.497923,20 24.0909091,20.4070139 24.0909091,20.9090909 L24.0909091,24.0909091 Z" id="Combined-Shape" fill="url(#linearGradient-3)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
