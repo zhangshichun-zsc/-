@@ -1,9 +1,10 @@
 /** axios封装
  * 请求拦截、相应拦截、错误统一处理
  */
-import axios from "axios";
-import QS from "qs";
-import store from "../store/index";
+import axios from 'axios'
+import QS from 'qs'
+import store from '../store/index'
+import router from '../router/index'
 
 /**
  * 服务器地址
@@ -18,8 +19,12 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛
   ],
-  API_INDEX: 4
-};
+  API_INDEX: 2
+}
+
+export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
+
+
 
 export const orgimg = (
   SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + "/pic/upload"
@@ -29,7 +34,8 @@ const token = localStorage.getItem("token");
 
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]; // 导出文件
 
-axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
+
+axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
 
 // 请求超时时间
 axios.defaults.timeout = 100000;
@@ -41,34 +47,23 @@ axios.defaults.headers.post["Content-Type"] =
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
-    // 每次发送请求之前判断是否存在token，如果存在，则统一都加上token，不用每次请求都手动添加了
+
+    if (router.currentRoute.fullPath.indexOf('/login') != -1) {
+      //登录接口,不做token信息添加
+    } else {
+      // console.log(store.state.token)
+      //非登录接口,为了一些权限接口,做token信息添加
+      if (config.method === 'post') {
+        config.url = `${config.url}?token=${store.state.token}`
+      } else if (config.method === 'get') {
+        config.params = {
+          'token': store.state.token,
+          ...config.params
+        }
+      }
+    }
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-    // if(store.state.token){
-    //   config.params.token=token
-    // }else{
-    //   console.log(111)
-    // }
-    // config.params=qs.stringify({
-    //   userId:userId,
-    //   // appId:appId,
-    //   ...config.params
-    // })
-    // config.params.set('userId',userId);
-    //  config.data.set('appId',appId);
-    // if(config.method==='post'){
-    //   config.params=qs.stringify({
-    //     userId:userId,
-    //     appId:appId,
-    //     ...config.params
-    //   })
-    // }else if(config.method==='get'){
-    //   config.params={
-    //     userId:userId,
-    //     appId:appId,
-    //     ...config.params
-    //   }
-    // }
-    return config;
+    return config
   },
   error => {
     return Promise.reject(err);
@@ -78,25 +73,53 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    return response;
-  },
-  error => {
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // 401 清除token信息并跳转到登录页面
-          localStorage.clear();
-          // 只有在当前路由不是登录页面才跳转
-          router.currentRoute.path !== "login" &&
-            router.replace({
-              path: "login",
-              query: { redirect: router.currentRoute.path }
-            });
-      }
+    if (response.data.code == 107) {
+      this.$Message.error('身份过期请重新登陆!')
+      router.currentRoute.path != '/login' &&
+        router.replace({
+          path: '/login',
+          query: {
+            redirect: router.currentRoute.path
+          },
+        });
+    } else if (response.data.code == 105) {
+      this.$Message.error('请登录!')
+      router.currentRoute.path != '/login' &&
+        router.replace({
+          path: '/login',
+          query: {
+            redirect: router.currentRoute.path
+          },
+        });
+
+    } else if (response.data.code == 1003) {
+
     }
-    return Promise.reject(error.response.data);
-  }
-);
+    return response
+  },
+  // error => {
+  //   console.log(error)
+  //   if (error.response) {
+  //     switch (error.response.status) {
+  //       case 106:
+  //         console.log(11)
+  //         this.$router.push({
+  //           name: 'login'
+  //         })
+  //         // 401 清除token信息并跳转到登录页面
+  //         localStorage.clear();
+  //         // 只有在当前路由不是登录页面才跳转
+  //         router.currentRoute.path != '/login' &&
+  //           router.replace({
+  //             path: '/login',
+  //             // query: { redirect: router.currentRoute.path },
+  //           });
+  //     }
+  //   }
+  //   return Promise.reject(error.response.data)
+  // },
+)
+
 
 /**
  * get方法，对应get请求
@@ -104,10 +127,9 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(url, params) {
-  params.token = token;
+  // params.token = token
   return new Promise((resolve, reject) => {
-    axios
-      .get(url, {
+    axios.get(url, {
         params: params
       })
       .then(res => {
@@ -141,7 +163,7 @@ export function get(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function post(url, params) {
-  params.token = token;
+  // url = `${url}?token=${token}`
   return new Promise((resolve, reject) => {
     axios
       .post(url, QS.stringify(params))
@@ -159,16 +181,17 @@ export function post(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function posts(url, params) {
-  url = `${url}?token=${token}`;
+  // url = `${url}?token=${token}`
   return new Promise((resolve, reject) => {
-    axios
-      .post(url, QS.parse(QS.stringify(params)), {
+    axios.post(url, QS.parse(QS.stringify(params)), {
         headers: {
-          "Content-Type": "application/json;charset=UTF-8"
-        }
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+      }).then(res => {
+        resolve(res.data)
       })
-      .then(res => {
-        resolve(res.data);
+      .catch(err => {
+        reject(err.data)
       })
       .catch(err => {
         reject(err.data);
@@ -177,12 +200,11 @@ export function posts(url, params) {
 }
 
 export function postdel(url, params) {
-  url = `${url}?token=${token}`;
+  // url = `${url}?token=${token}`
   return new Promise((resolve, reject) => {
-    axios
-      .post(url, params, {
+    axios.post(url, params, {
         headers: {
-          "Content-Type": "application/json;charset=UTF-8"
+          'Content-Type': 'application/json;charset=UTF-8'
         }
       })
       .then(res => {
@@ -197,9 +219,10 @@ export function postdel(url, params) {
 export const upload = p => {
   // p.token = token
   return new Promise((resolve, reject) => {
-    axios
-      .post(`/pic/upload?token=${token}`, p, {
-        headers: { "Content-Type": "multipart/form-data" }
+    axios.post('/pic/upload', p, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       })
       .then(res => {
         resolve(res.data);

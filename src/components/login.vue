@@ -122,6 +122,8 @@ export default {
         console.log(res);
       });
     },
+
+
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {

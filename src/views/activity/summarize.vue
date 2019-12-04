@@ -9,7 +9,8 @@
     <div class="content">
       <div class="summarize">
         <p>本次活动总结</p>
-        <wangeditor :labels="editor1" id="edaaaaa" @change="btns"></wangeditor>
+         <wangeditor id="excccc2" :labels=editor1  @change="btns"></wangeditor>
+
       </div>
       <div class="activity-content">
         <p class="content-img">
@@ -36,7 +37,8 @@
 
 <script>
 import {activesum} from '@/request/api'
-import {wangeditor} from "@/components/wangeditor";
+import wangeditor from '@/components/wangeditor';
+
 export default {
   data() {
     return {
@@ -47,7 +49,7 @@ export default {
     };
   },
 
-  components: {wangeditor},
+  components: { wangeditor },
 
   computed: {},
 

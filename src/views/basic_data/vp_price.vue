@@ -288,7 +288,9 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-      });
+      }).catch(res=>{
+        console.log(res)
+      })
     },
     // 会费详情
     getCostdel() {
@@ -322,8 +324,8 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("提交成功!");
-          this.modal1 = false;
-          this.$Message.success("操作成功!");
+
+
         } else {
           this.$Message.error(res.msg);
         }
@@ -366,23 +368,20 @@ export default {
     //富文本
     btn(e){
       this.editorContent=e
-      console.log(e)
     },
 
     //查询
     query(e) {
+      this.page=1
       this.name = e[0].value;
       this.createTimeStamp = e[2].value;
-
-        this.statues = e[1].value;
-
+      this.statues = e[1].value;
       this.getCost();
     },
 
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getCost();
     },
     //全选按钮
@@ -394,7 +393,6 @@ export default {
     //选择内容
     handleSelectionChange(val) {
       this.arr = val;
-      console.log(this.arr);
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size

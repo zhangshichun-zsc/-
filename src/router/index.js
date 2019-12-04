@@ -2240,17 +2240,7 @@ const router = new Router({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   const token = localStorage.getItem("token")
-//   console.log(token)
-//   if (!token) {
-//     console.log(0)
-//     next({ path: '/login' })
-//   } else {
-//     console.log(11)
-//     next()
-//   }
-// })
+
 
 
 export default router

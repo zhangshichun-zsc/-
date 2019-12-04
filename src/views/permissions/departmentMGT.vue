@@ -115,13 +115,15 @@ export default {
           { required: true, message: "请输入活动类型", trigger: "blur" }
         ]
       },
+      rpw:null,
       data1: [],
       columns1: [
         {
           type: 'expand',
           width: 50,
           render: (h, params) => {
-            return <expandRow row={params.row} dom={<expandRow row={params.row} />}></expandRow>
+              // let data = this.getdepartmentsub(params.row.deptId);
+            return <expandRow row={params.row} dom={<expandRow row={this.rpw}/>} onChanges={(e)=>{this.rpw = e; console.log(this.rpw)}}></expandRow>
           }
         },
         {
@@ -357,6 +359,9 @@ export default {
     this.getdeparttype()
   },
   methods: {
+    changeData(e){
+      console.log(e)
+    },
     // 部门列表
     getdepartmentlist() {
       departmentlist({
@@ -417,13 +422,6 @@ export default {
       })
     },
     // 部门列表编辑
-    //  AddDate: {
-    //     deptName: '',
-    //     description: '',
-    //     parentId: '',
-    //     leader: '',
-    //     ssproject: ''
-    //   },
     getdepartmentedit() {
       departmentedit({
         deptId:this.AddDate.parentId,

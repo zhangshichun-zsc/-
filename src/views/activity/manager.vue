@@ -335,7 +335,7 @@ export default {
                             click: name => {
                               this.$router.push({
                                 name: "summarize",
-                                query: { acitvityId: params.row.activityId }
+                                query: { acitvityId: params.row.acitvityId }
                               });
                             }
                           }

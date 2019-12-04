@@ -376,6 +376,7 @@ export default {
 
     // 查询结果按钮
     query() {
+      this.page=1
       this.getOffactivities();
     },
     //每条数据单选框的状态

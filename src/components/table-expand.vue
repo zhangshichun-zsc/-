@@ -42,8 +42,7 @@ export default {
           type: "expand",
           width: 50,
           render: (h, params)=>{
-          //  this.ids=params.row.deptId
-          //  this.getdepartmentsub()
+            this.$emit("changes",params.row)
             return (this.dom)
           }
         },
@@ -146,16 +145,22 @@ export default {
       validFlag:''
     };
   },
-  props: ["row","dom","deptId"],
+  props: ["row","dom"],
+  watch:{
+    row(val){
+      console.log(val)
+      this.getdepartmentsub(val);
+    }
+  },
   mounted() {
-    console.log(this.dom,this.deptId)
-    this.getdepartmentsub();
-    console.log(this.row.deptId);
+    if(!this.row)return
+    this.getdepartmentsub(this.row);
   },
   methods: {
     // 查询下级部门
-    getdepartmentsub() {
-      this.ids=this.row.deptId
+    getdepartmentsub(val) {
+      // console.log(val)
+      this.ids=val.deptId
       departmentsub({
         depId: this.ids
       }).then(res => {

@@ -42,7 +42,7 @@
         <ul class="sh">
           <li>
             <span>
-              <a>待审核报名</a>
+              <a @click="examine(3)">待审核报名</a>
             </span>
            <span>
               (
@@ -51,7 +51,7 @@
           </li>
           <li>
             <span>
-              <a>广告位即将到期</a>
+              <a @click="examine(3)">广告位即将到期</a>
             </span>
             <span>
               (
@@ -214,7 +214,11 @@ export default {
       activity: [],
       Pending: [],
       activityOverview: [],
-      userOverview: []
+      userOverview: [],
+       examinelist:[
+      {name:'广告位即将过期',query: "/recommend/vp_adlist"},
+      {name:'待审核报名',query: "/activity/list"},
+      ]
     };
   },
   components: {},
@@ -264,6 +268,11 @@ export default {
         }
         console.log(res);
       });
+    },
+    examine(index){
+      this.$router.push({
+        path:this.examinelist[index].query
+      })
     }
   }
 };

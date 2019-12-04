@@ -331,9 +331,6 @@ export default {
         if (res.code == 200) {
           // return res.data
           this.routelist = res.data
-          if(this.routelist.length==0){
-             this.$Message.error('权限不足!')
-          }
         }
         console.log(res)
       })
@@ -379,8 +376,9 @@ export default {
     modalOk(e) {
       this.modal1 = false
       if (e == 1) {
-        localStorage.clear()
+        this.$store.commit('clearToken')
         this.$router.push({ name: 'login' })
+        console.log(this.$store.state.token)
       }
     },
 
