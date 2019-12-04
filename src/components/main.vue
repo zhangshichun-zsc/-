@@ -442,7 +442,7 @@ export default {
   background-color: #f2f2f2;
 }
 
-//  当宽度小于  xs: '480px',  lg: '992px',xl: '1200px', xxl: ' '
+//  当宽度界限 lg: '992px',xl: '1200px', xxl: '1600'
 @media screen and (max-width: 1600px) {
   .main-content {
     padding-left: 280px;

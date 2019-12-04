@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="51px" height="50px" viewBox="0 0 51 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>guanggaoguanli </title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="18.3886719%" y1="14.5996094%" x2="78.2421875%" y2="84.7265625%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.5" offset="0%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-2" cx="25" cy="25" r="25"></circle>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#FF6877" offset="0%"></stop>
+            <stop stop-color="#FC494D" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页-" transform="translate(-1564.000000, -512.000000)">
+            <g id="guanggaoguanli-" transform="translate(1564.000000, 512.000000)">
+                <g id="Oval">
+                    <use fill="#FEF4F5" xlink:href="#path-2"></use>
+                    <use fill="url(#linearGradient-1)" style="mix-blend-mode: soft-light;" xlink:href="#path-2"></use>
+                </g>
+                <path d="M17,15 L33.8571429,15 C35.5139971,15 36.8571429,16.3431458 36.8571429,18 L36.8571429,32 C36.8571429,33.6568542 35.5139971,35 33.8571429,35 L17,35 C15.3431458,35 14,33.6568542 14,32 L14,18 C14,16.3431458 15.3431458,15 17,15 Z M15.7875018,33.07 L35.0810811,33.07 L30.2419562,26.8128571 L27.0959531,28.7285714 L22.7144287,23.4942857 L15.7875018,33.07 Z M29.5955956,22.7285714 C30.2755906,22.7288266 30.9040682,22.3666522 31.2442869,21.7784757 C31.5845056,21.1902993 31.5847782,20.4654788 31.2450019,19.8770472 C30.9052256,19.2886155 30.2770206,18.9259695 29.5970256,18.9257143 C28.5458444,18.9253198 27.6933736,19.7762986 27.6929787,20.8264286 C27.6925838,21.8765586 28.5444144,22.7281769 29.5955956,22.7285714 Z" id="Shape" fill="url(#linearGradient-3)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

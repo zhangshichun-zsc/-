@@ -2,51 +2,125 @@
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
+    <!-- 立项数量 -->
     <div class="jr">
       <ul>
         <li>
-          <div>
-            <Icon type="md-aperture" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>今日立项总数</p>
-            <span>{{activity.activityBatchCount}}</span>
+            <span>{{ activity.activityBatchCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity1.png" />
           </div>
         </li>
         <li>
-          <div>
-            <Icon type="ios-aperture" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>今日活动总数</p>
-            <span>{{activity.todayActivityCount}}</span>
+            <span>{{ activity.todayActivityCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity2.png" />
           </div>
         </li>
         <li>
-          <div>
-            <Icon type="ios-aperture-outline" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>昨日活动总数</p>
-            <span>{{activity.yesterdayActivityCount}}</span>
+            <span>{{ activity.yesterdayActivityCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity3.png" />
           </div>
         </li>
         <li>
-          <div>
-            <Icon type="md-trending-up" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>近7天总数</p>
-            <span>{{activity.latest7dayActivityCount}}</span>
+            <span>{{ activity.latest7dayActivityCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity4.png" />
           </div>
         </li>
       </ul>
     </div>
+
+    <div class="pending-box">
+      <div class="pending-left">
+        <p class="pending-left-title">
+          <span>待处理事务</span>
+          <span class="more">查看更多</span>
+        </p>
+        <div class="pending-left-content">
+          <li>
+            <p>
+              <Icon type="md-arrow-dropright" />
+              <a href="javascript:;">待审核立项</a>
+              <span class="dot"></span>
+            </p>
+            <span>
+              (
+              <b>{{ Pending.unauditActivityCount }}</b
+              >)
+            </span>
+          </li>
+          <li>
+            <p>
+              <Icon type="md-arrow-dropright" />
+              <a href="javascript:;">待审核转移人员</a>
+               <span class="dot"></span>
+            </p>
+
+            <span>
+              (
+              <b>{{ Pending.qualAuditCount }}</b
+              >)
+            </span>
+          </li>
+          <li>
+            <p>
+              <Icon type="md-arrow-dropright" />
+              <a href="javascript:;">待审核报名</a>
+               <span class="dot"></span>
+            </p>
+
+            <span>
+              (
+              <b>{{ Pending.waitAuditSignUpCount }}</b
+              >)
+            </span>
+          </li>
+          <li>
+            <p>
+              <Icon type="md-arrow-dropright" />
+              <a href="javascript:;">广告位即将到期</a>
+               <span class="dot"></span>
+            </p>
+
+            <span>
+              (
+              <b>{{ Pending.willExpiredAdvCount }}</b
+              >)
+            </span>
+          </li>
+          <li>
+            <p>
+              <Icon type="md-arrow-dropright" />
+              <a href="javascript:;">待领取物质</a>
+               <span class="dot"></span>
+            </p>
+            <span>
+              (
+              <b>{{ Pending.unReceiveCount }}</b
+              >)
+            </span>
+          </li>
+        </div>
+      </div>
+
+      <div class="pending-right"></div>
+    </div>
+
     <div class="sw">
-      <p class="dai">
-        <span class="cl">待处理事务</span>
-        <span class="gd">更多</span>
-      </p>
       <div class="sw-bo">
         <ul class="sh">
           <li>
@@ -55,7 +129,8 @@
             </span>
             <span>
               (
-              <b>{{Pending.unauditActivityCount}}</b>)
+              <b>{{ Pending.unauditActivityCount }}</b
+              >)
             </span>
           </li>
           <li>
@@ -64,7 +139,8 @@
             </span>
             <span>
               (
-              <b>{{Pending.qualAuditCount}}</b>)
+              <b>{{ Pending.qualAuditCount }}</b
+              >)
             </span>
           </li>
           <li>
@@ -73,7 +149,8 @@
             </span>
             <span>
               (
-              <b>{{Pending.waitAuditSignUpCount}}</b>)
+              <b>{{ Pending.waitAuditSignUpCount }}</b
+              >)
             </span>
           </li>
         </ul>
@@ -84,7 +161,8 @@
             </span>
             <span>
               (
-              <b>{{Pending.willExpiredAdvCount}}</b>)
+              <b>{{ Pending.willExpiredAdvCount }}</b
+              >)
             </span>
           </li>
           <li class="le">
@@ -93,30 +171,37 @@
             </span>
             <span>
               (
-              <b>{{Pending.unReceiveCount}}</b>)
+              <b>{{ Pending.unReceiveCount }}</b
+              >)
             </span>
           </li>
         </ul>
       </div>
     </div>
+
     <div class="rk-head">
       <p class="rk-top">快捷入口</p>
       <ul class="rk-hd">
-        <li @click="Jump(index)" v-for="(item,index) in Jumplist" :key="index">
-          <a>{{item.name}}</a>
+        <li @click="Jump(index)" v-for="(item, index) in Jumplist" :key="index">
+          <a>{{ item.name }}</a>
         </li>
         <li @click="modal1 = true">
           <a>快捷入口管理</a>
         </li>
       </ul>
     </div>
-    <Modal v-model="modal1" width="1000" :mask="false" :styles="{left: '18px'}">
+    <Modal
+      v-model="modal1"
+      width="1000"
+      :mask="false"
+      :styles="{ left: '18px' }"
+    >
       <div class="rk-head">
         <p class="rk-top">已选快捷入口</p>
         <ul class="rk-hd">
-          <li v-for="(item,index) in Jumplist" :key="index">
+          <li v-for="(item, index) in Jumplist" :key="index">
             <p>
-              <a>{{item.name}}</a>
+              <a>{{ item.name }}</a>
             </p>
             <p class="del">
               <a>删除</a>
@@ -130,9 +215,9 @@
       <div class="rk-head">
         <p class="rk-top">未选快捷入口</p>
         <ul class="rk-hd">
-          <li v-for="(item,index) in Jumplist" :key="index">
+          <li v-for="(item, index) in Jumplist" :key="index">
             <p>
-              <a>{{item.name}}</a>
+              <a>{{ item.name }}</a>
             </p>
             <p class="del">
               <a>添加</a>
@@ -148,27 +233,37 @@
         <p>活动总览</p>
         <ul>
           <li>
-            <span class="hd-shu">{{activityOverview.offShelfActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.offShelfActivityCount
+            }}</span>
             <span>已下架</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.publishActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.publishActivityCount
+            }}</span>
             <span>已发布</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.beginningActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.beginningActivityCount
+            }}</span>
             <span>进行中</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.endingActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.endingActivityCount
+            }}</span>
             <span>已结束</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.cancelActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.cancelActivityCount
+            }}</span>
             <span>已取消</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.allActivityCount}}</span>
+            <span class="hd-shu">{{ activityOverview.allActivityCount }}</span>
             <span>全部活动</span>
           </li>
         </ul>
@@ -177,19 +272,21 @@
         <p>用户总览</p>
         <ul>
           <li>
-            <span class="hd-shu">{{userOverview.todayNewUserCount}}</span>
+            <span class="hd-shu">{{ userOverview.todayNewUserCount }}</span>
             <span>今日新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{userOverview.yesterdayNewUserCount}}</span>
+            <span class="hd-shu">{{ userOverview.yesterdayNewUserCount }}</span>
             <span>昨日新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{userOverview.currentMonthNewUserCount}}</span>
+            <span class="hd-shu">{{
+              userOverview.currentMonthNewUserCount
+            }}</span>
             <span>本月新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{userOverview.memberTatolCount}}</span>
+            <span class="hd-shu">{{ userOverview.memberTatolCount }}</span>
             <span>会员总数</span>
           </li>
         </ul>
@@ -204,9 +301,8 @@
               <span class="lx-by">本月立项总数</span>
               <span class="lx-su">40</span>
               <h2>
-                <span class="lx-bai">
-                  <Icon type="md-arrow-dropup" />10%
-                </span>同比上月
+                <span class="lx-bai"> <Icon type="md-arrow-dropup" />10% </span
+                >同比上月
               </h2>
             </li>
             <li>
@@ -214,16 +310,28 @@
               <span class="lx-su">10</span>
               <h2>
                 <span class="lx-bai-two">
-                  <Icon type="md-arrow-dropdown" />10%
-                </span>同比上周
+                  <Icon type="md-arrow-dropdown" />10% </span
+                >同比上周
               </h2>
             </li>
           </ul>
         </div>
         <div class="lx-right">
-          <ve-line :data="chartData" width="900px" height="323px" :settings="chartSettings"></ve-line>
+          <ve-line
+            :data="chartData"
+            width="900px"
+            height="323px"
+            :settings="chartSettings"
+          ></ve-line>
           <i-col span="12">
-            <Date-picker :value="value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-picker>
+            <Date-picker
+              :value="value2"
+              format="yyyy/MM/dd"
+              type="daterange"
+              placement="bottom-end"
+              placeholder="选择日期"
+              style="width: 200px"
+            ></Date-picker>
           </i-col>
         </div>
       </div>
@@ -237,9 +345,8 @@
               <span class="lx-by">本月活动总数</span>
               <span class="lx-su">40</span>
               <h2>
-                <span class="lx-bai">
-                  <Icon type="md-arrow-dropup" />10%
-                </span>同比上月
+                <span class="lx-bai"> <Icon type="md-arrow-dropup" />10% </span
+                >同比上月
               </h2>
             </li>
             <li>
@@ -247,16 +354,28 @@
               <span class="lx-su">10</span>
               <h2>
                 <span class="lx-bai-two">
-                  <Icon type="md-arrow-dropdown" />10%
-                </span>同比上周
+                  <Icon type="md-arrow-dropdown" />10% </span
+                >同比上周
               </h2>
             </li>
           </ul>
         </div>
         <div class="lx-right">
-          <ve-line :data="chartData" width="900px" height="323px" :settings="chartSettings"></ve-line>
+          <ve-line
+            :data="chartData"
+            width="900px"
+            height="323px"
+            :settings="chartSettings"
+          ></ve-line>
           <i-col span="12">
-            <Date-picker :value="value2" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px"></Date-picker>
+            <Date-picker
+              :value="value2"
+              format="yyyy/MM/dd"
+              type="daterange"
+              placement="bottom-end"
+              placeholder="选择日期"
+              style="width: 200px"
+            ></Date-picker>
           </i-col>
         </div>
       </div>
@@ -265,28 +384,28 @@
 </template>
 
 <script>
-import { Homeactivity, Homeactpend, Homeactwhole } from '../../request/api'
+import { Homeactivity, Homeactpend, Homeactwhole } from "../../request/api";
 export default {
   data() {
     this.chartSettings = {
-      stack: { 用户: ['访问用户', '下单用户'] },
+      stack: { 用户: ["访问用户", "下单用户"] },
       area: true
-    }
+    };
     return {
       navigation1: {
-        head: '系统首页（会员）'
+        head: "系统首页（会员）"
       },
-      value1: '2016-01-01',
-      value2: ['2016-01-01', '2016-02-15'],
+      value1: "2016-01-01",
+      value2: ["2016-01-01", "2016-02-15"],
       chartData: {
-        columns: ['日期', '本周'],
+        columns: ["日期", "本周"],
         rows: [
-          { 日期: '06-01周六', 今日: 1, 本周: 1, 本月: 1 },
-          { 日期: '06-02周六', 今日: 1, 本周: 3, 本月: 2 },
-          { 日期: '06-03周六', 今日: 1, 本周: 2, 本月: 3 },
-          { 日期: '06-04周六', 今日: 6, 本周: 1, 本月: 2 },
-          { 日期: '06-05周六', 今日: 4, 本周: 3, 本月: 4 },
-          { 日期: '06-06周六', 今日: 5, 本周: 4, 本月: 3 }
+          { 日期: "06-01周六", 今日: 1, 本周: 1, 本月: 1 },
+          { 日期: "06-02周六", 今日: 1, 本周: 3, 本月: 2 },
+          { 日期: "06-03周六", 今日: 1, 本周: 2, 本月: 3 },
+          { 日期: "06-04周六", 今日: 6, 本周: 1, 本月: 2 },
+          { 日期: "06-05周六", 今日: 4, 本周: 3, 本月: 4 },
+          { 日期: "06-06周六", 今日: 5, 本周: 4, 本月: 3 }
         ]
       },
       modal1: false,
@@ -296,14 +415,14 @@ export default {
       activityOverview: [],
       userOverview: [],
       Jumplist: [
-        { name: '活动立项', query: '/activity/approval' },
-        { name: '活动管理', query: '/activity/manager' },
-        { name: '用户列表', query: '/user/all_member_hy' },
-        { name: '报表统计', query: '/activity/approval' },
-        { name: '消息管理', query: '/operate/vp_message' },
-        { name: '广告管理', query: '/recommend/vp_adlist' }
+        { name: "活动立项", query: "/activity/approval" },
+        { name: "活动管理", query: "/activity/manager" },
+        { name: "用户列表", query: "/user/all_member_hy" },
+        { name: "报表统计", query: "/activity/approval" },
+        { name: "消息管理", query: "/operate/vp_message" },
+        { name: "广告管理", query: "/recommend/vp_adlist" }
       ]
-    }
+    };
   },
   components: {},
 
@@ -311,9 +430,9 @@ export default {
 
   created() {},
   mounted() {
-    this.getHomeactivity()
-    this.getHomeactpend()
-    this.getHomeactwhole()
+    this.getHomeactivity();
+    this.getHomeactpend();
+    this.getHomeactwhole();
   },
   methods: {
     //首页-活动计数
@@ -322,11 +441,11 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.activity = res.data
+          this.activity = res.data;
         } else {
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
     //首页--待处理事务
@@ -335,10 +454,10 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.Pending = res.data
+          this.Pending = res.data;
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
     //首页--活动总览
     getHomeactwhole() {
@@ -346,24 +465,49 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.userOverview = res.data.userOverview
-          this.activityOverview = res.data.activityOverview
+          this.userOverview = res.data.userOverview;
+          this.activityOverview = res.data.activityOverview;
         } else {
-          this.$Message.error(res.msg)
+          this.$Message.error(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
     //跳转
     Jump(index) {
       this.$router.push({
         path: this.Jumplist[index].query
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
+//  当宽度界限 lg: '992px',xl: '1200px', xxl: '1600'
+@media screen and (max-width: 1600px) {
+}
+
+@media screen and (max-width: 1200px) {
+  .jr li {
+    width: 360px !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .jr li {
+    width: 360px !important;
+  }
+
+  .jr li div {
+    padding: 40px 30px;
+  }
+}
+
+.icon-img {
+  width: 50px;
+  height: 50px;
+}
+
 .head {
   height: 50px;
   line-height: 50px;
@@ -378,38 +522,103 @@ export default {
 
 .jr ul {
   display: flex;
+  justify-content: space-between;
   margin: 20px 0;
 }
 .jr li {
-  width: 250px;
-  height: 100px;
-  display: flex;
-  margin-right: 20px;
-  justify-content: flex-start;
-  background: #ffffff;
+  width: 376px;
+  height: 150px;
   border: #e4e4e4 1px solid;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  display: flex;
 }
 .jr li div {
-  margin: 25px;
+  // margin: 25px;
+  padding: 40px 30px;
 }
 .jj p {
   width: 6rem;
-  font-size: 0.75rem;
   margin: 10px 15px 0 0;
-  color: gray;
+  font-size: 16px;
+  color: #8e9192;
+  line-height: 20px;
 }
+.jj span {
+  font-size: 36px;
+  color: #1b2331;
+  line-height: 35px;
+  // font-weight: 800;
+}
+
 //待处理事务
-.sw {
-  border: 2px solid #eeeeee;
-  margin-bottom: 10px;
-}
-.dai {
-  background: #eeeeee;
+.pending-box {
   display: flex;
   justify-content: space-between;
-  padding-right: 100px;
-  border-bottom: #eeeeee solid 1px;
+  align-items: stretch;
 }
+.pending-left {
+  padding: 22px 32px;
+  width: 1070px;
+  height: 320px;
+  background: #fff;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
+.pending-right {
+  width: 410px;
+  height: 320px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
+
+.pending-left-title {
+  font-size: 18px;
+  color: #1b2331;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+}
+.pending-left .more {
+  font-size: 16px;
+  color: #8e9192;
+  text-align: right;
+}
+.pending-left-content {
+  margin-bottom: 20px;
+}
+.pending-left-content li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  font-size: 16px;
+  color: #1b2331;
+  letter-spacing: 0;
+  line-height: 42px;
+  position: relative;
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #fc4c51;
+    border-radius: 50%;
+    margin-top: 8px;
+    vertical-align: top;
+  }
+}
+.pending-left-content li a {
+  margin-left: 5px;
+  margin-right: 5px;
+  color: #1b2331;
+}
+
 .gd {
   line-height: 45px;
   height: 45px;

@@ -21,9 +21,7 @@ Vue.prototype.$Message = Message;
 
 //路由
 router.beforeEach((to, from, next) => {
-  // console.log(to);
   if (store.state.token) {
-    // Message.info('登录成功')
     next();
   } else {
     //没有登录，去跳转登录页
