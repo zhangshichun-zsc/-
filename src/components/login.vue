@@ -20,7 +20,7 @@
 
           </FormItem>
           <FormItem>
-            <Button type="warning" size=default @click="handleSubmit('formValidate')" style="width:240px; height:40px">登录</Button>
+            <Button type="warning" size=default @click.prevent="handleSubmit('formValidate')" style="width:240px; height:40px">登录</Button>
 
           </FormItem>
         </Form>
@@ -77,30 +77,23 @@ export default {
         loginName:this.formValidate.user,
         loginPwd:this.formValidate.password
       }).then(res=>{
+        console.log(res)
         if(res.code==200){
           localStorage.setItem("token",res.data.token)
           localStorage.setItem("userId",res.data.userId)
           localStorage.setItem("userName",res.data.userName)
           localStorage.setItem("tel",res.data.tel)
-          this.$router.push({ name: "index"});
-          // this.gethomepage()
+          console.log(11)
+          this.$router.push({ name: 'index' });
         }else{
           this.$Message.info("密码或账号不正确!")
         }
-      })
-    },
-
-    gethomepage() {
-      homepage({
-        userId: localStorage.getItem('userId')
-      }).then(res => {
-        if (res.code == 200) {
-          // this.routelist = res.data
-           window.sessionStorage.setItem('routelist', res.data)
-        }
+      }).catch(res=>{
         console.log(res)
       })
     },
+
+
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {

@@ -20,6 +20,12 @@ import './libs/rem.js'
 Vue.prototype.$Message = Message
 
 
+// const routerPush = router.prototype.push
+
+// router.prototype.push = function push(location) {
+//   return routerPush.call(this, location).catch(error=> error)
+// }
+
 //路由
 router.beforeEach((to,from,next)=>{
   // console.log(to);

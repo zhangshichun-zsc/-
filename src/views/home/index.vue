@@ -51,7 +51,7 @@
         <ul class="sh">
           <li>
             <span>
-              <a>待审核立项</a>
+              <a @click="examine(0)">待审核立项</a>
             </span>
             <span>
               (
@@ -60,7 +60,7 @@
           </li>
           <li>
             <span>
-              <a>待审核转移人员</a>
+              <a @click="examine(2)">待审核转移人员</a>
             </span>
             <span>
               (
@@ -69,7 +69,7 @@
           </li>
           <li>
             <span>
-              <a>待审核报名</a>
+              <a @click="examine(4)">待审核报名</a>
             </span>
             <span>
               (
@@ -80,7 +80,7 @@
         <ul class="lb-gg">
           <li class="le">
             <span>
-              <a>广告位即将到期</a>
+              <a @click="examine(1)">广告位即将到期</a>
             </span>
             <span>
               (
@@ -89,7 +89,7 @@
           </li>
           <li class="le">
             <span>
-              <a>待领取物质</a>
+              <a @click="examine(3)">待领取物质</a>
             </span>
             <span>
               (
@@ -316,6 +316,13 @@ export default {
         { name: "报表统计", query: "/activity/approval" },
         { name: "消息管理", query: "/operate/vp_message" },
         { name: "广告管理", query: "/recommend/vp_adlist" }
+      ],
+      examinelist:[{name:'活动立项',query: "/activity/approval"},
+      {name:'广告位即将过期',query: "/recommend/vp_adlist"},
+      {name:'待审核审批人员',query: "/activity/pending"},
+      {name:'待领取物质',query: "/activity/pending"},
+        {name:'待审核报名',query: "/activity/list"},
+
       ]
     };
   },
@@ -373,6 +380,11 @@ export default {
       this.$router.push({
         path: this.Jumplist[index].query
       });
+    },
+    examine(index){
+      this.$router.push({
+        path:this.examinelist[index].query
+      })
     }
   }
 };
