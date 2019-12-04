@@ -48,14 +48,17 @@
       <div class="pending-left">
         <p class="pending-left-title">
           <span>待处理事务</span>
-          <span class="more">查看更多</span>
+          <!-- <span class="more">查看更多</span> -->
         </p>
         <div class="pending-left-content">
           <li>
             <p>
               <Icon type="md-arrow-dropright" />
               <a href="javascript:;">待审核立项</a>
-              <span class="dot"></span>
+              <span
+                v-show="Pending.unauditActivityCount > 0"
+                class="dot"
+              ></span>
             </p>
             <span>
               (
@@ -67,7 +70,10 @@
             <p>
               <Icon type="md-arrow-dropright" />
               <a href="javascript:;">待审核转移人员</a>
-               <span class="dot"></span>
+              <span
+                v-show="Pending.unauditActivityCount > 0"
+                class="dot"
+              ></span>
             </p>
 
             <span>
@@ -80,7 +86,10 @@
             <p>
               <Icon type="md-arrow-dropright" />
               <a href="javascript:;">待审核报名</a>
-               <span class="dot"></span>
+              <span
+                v-show="Pending.unauditActivityCount > 0"
+                class="dot"
+              ></span>
             </p>
 
             <span>
@@ -93,7 +102,10 @@
             <p>
               <Icon type="md-arrow-dropright" />
               <a href="javascript:;">广告位即将到期</a>
-               <span class="dot"></span>
+              <span
+                v-show="Pending.unauditActivityCount > 0"
+                class="dot"
+              ></span>
             </p>
 
             <span>
@@ -106,7 +118,10 @@
             <p>
               <Icon type="md-arrow-dropright" />
               <a href="javascript:;">待领取物质</a>
-               <span class="dot"></span>
+              <span
+                v-show="Pending.unauditActivityCount > 0"
+                class="dot"
+              ></span>
             </p>
             <span>
               (
@@ -559,6 +574,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  margin-bottom: 20px;
 }
 .pending-left {
   padding: 22px 32px;
