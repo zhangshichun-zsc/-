@@ -48,164 +48,54 @@
       <div class="pending-left">
         <p class="pending-left-title">
           <span>待处理事务</span>
-          <!-- <span class="more">查看更多</span> -->
         </p>
         <div class="pending-left-content">
-          <li>
+          <li v-for="(item, index) in examinelist" :key="item.name">
             <p>
               <Icon type="md-arrow-dropright" />
-              <a href="javascript:;">待审核立项</a>
-              <span
-                v-show="Pending.unauditActivityCount > 0"
-                class="dot"
-              ></span>
+              <a @click="examine(index)" href="javascript:;">{{
+                item.name || 其他
+              }}</a>
+              <span v-show="Pending[item.data] > 0" class="dot"></span>
             </p>
             <span>
               (
-              <b>{{ Pending.unauditActivityCount }}</b
-              >)
-            </span>
-          </li>
-          <li>
-            <p>
-              <Icon type="md-arrow-dropright" />
-              <a href="javascript:;">待审核转移人员</a>
-              <span
-                v-show="Pending.unauditActivityCount > 0"
-                class="dot"
-              ></span>
-            </p>
-
-            <span>
-              (
-              <b>{{ Pending.qualAuditCount }}</b
-              >)
-            </span>
-          </li>
-          <li>
-            <p>
-              <Icon type="md-arrow-dropright" />
-              <a href="javascript:;">待审核报名</a>
-              <span
-                v-show="Pending.unauditActivityCount > 0"
-                class="dot"
-              ></span>
-            </p>
-
-            <span>
-              (
-              <b>{{ Pending.waitAuditSignUpCount }}</b
-              >)
-            </span>
-          </li>
-          <li>
-            <p>
-              <Icon type="md-arrow-dropright" />
-              <a href="javascript:;">广告位即将到期</a>
-              <span
-                v-show="Pending.unauditActivityCount > 0"
-                class="dot"
-              ></span>
-            </p>
-
-            <span>
-              (
-              <b>{{ Pending.willExpiredAdvCount }}</b
-              >)
-            </span>
-          </li>
-          <li>
-            <p>
-              <Icon type="md-arrow-dropright" />
-              <a href="javascript:;">待领取物质</a>
-              <span
-                v-show="Pending.unauditActivityCount > 0"
-                class="dot"
-              ></span>
-            </p>
-            <span>
-              (
-              <b>{{ Pending.unReceiveCount }}</b
+              <b>{{ Pending[item.data] }}</b
               >)
             </span>
           </li>
         </div>
       </div>
-
-      <div class="pending-right"></div>
-    </div>
-
-    <div class="sw">
-      <div class="sw-bo">
-        <ul class="sh">
-          <li>
-            <span>
-              <a @click="examine(0)">待审核立项</a>
-            </span>
-            <span>
-              (
-              <b>{{ Pending.unauditActivityCount }}</b
-              >)
-            </span>
-          </li>
-          <li>
-            <span>
-              <a @click="examine(2)">待审核转移人员</a>
-            </span>
-            <span>
-              (
-              <b>{{ Pending.qualAuditCount }}</b
-              >)
-            </span>
-          </li>
-          <li>
-            <span>
-              <a @click="examine(4)">待审核报名</a>
-            </span>
-            <span>
-              (
-              <b>{{ Pending.waitAuditSignUpCount }}</b
-              >)
-            </span>
-          </li>
-        </ul>
-        <ul class="lb-gg">
-          <li class="le">
-            <span>
-              <a @click="examine(1)">广告位即将到期</a>
-            </span>
-            <span>
-              (
-              <b>{{ Pending.willExpiredAdvCount }}</b
-              >)
-            </span>
-          </li>
-          <li class="le">
-            <span>
-              <a @click="examine(3)">待领取物质</a>
-            </span>
-            <span>
-              (
-              <b>{{ Pending.unReceiveCount }}</b
-              >)
-            </span>
-          </li>
-        </ul>
+      <div class="pending-right">
+        <p class="pending-right-title">快捷入口</p>
+        <div class="pending-right-content">
+          <ul>
+            <li
+              @click="Jump(index)"
+              v-for="(item, index) in Jumplist"
+              :key="index"
+            >
+              <div>
+                <img
+                  class="icon-img2"
+                  :src="
+                    `https://rhzgtest.co-inclusion.org/app/menu_images/${item.icon}.png`
+                  "
+                />
+              </div>
+              <div>
+                <a class="name-btn" href="javascript:;">{{ item.name }}</a>
+              </div>
+            </li>
+            <!-- <li @click="modal1 = true">
+              <a>快捷入口管理</a>
+            </li> -->
+          </ul>
+        </div>
       </div>
     </div>
 
-    <div class="rk-head">
-      <p class="rk-top">快捷入口</p>
-      <ul class="rk-hd">
-        <li @click="Jump(index)" v-for="(item, index) in Jumplist" :key="index">
-          <a>{{ item.name }}</a>
-        </li>
-        <li @click="modal1 = true">
-          <a>快捷入口管理</a>
-        </li>
-      </ul>
-    </div>
-    <Modal
+    <!-- <Modal
       v-model="modal1"
       width="1000"
       :mask="false"
@@ -240,9 +130,9 @@
           </li>
         </ul>
       </div>
-
       <div slot="footer"></div>
-    </Modal>
+    </Modal> -->
+
     <div class="hd-ma">
       <div class="hd-on">
         <p>活动总览</p>
@@ -307,7 +197,7 @@
         </ul>
       </div>
     </div>
-    <div class="lx-on">
+    <!-- <div class="lx-on">
       <p>立项统计</p>
       <div class="lx-nr">
         <div class="lx-left">
@@ -350,8 +240,8 @@
           </i-col>
         </div>
       </div>
-    </div>
-    <div class="lx-on" style="margin-top:20px;">
+    </div> -->
+    <!-- <div class="lx-on" style="margin-top:20px;">
       <p>活动统计</p>
       <div class="lx-nr">
         <div class="lx-left">
@@ -394,7 +284,7 @@
           </i-col>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -430,19 +320,68 @@ export default {
       activityOverview: [],
       userOverview: [],
       Jumplist: [
-        { name: "活动立项", query: "/activity/approval" },
-        { name: "活动管理", query: "/activity/manager" },
-        { name: "用户列表", query: "/user/all_member_hy" },
-        { name: "报表统计", query: "/activity/approval" },
-        { name: "消息管理", query: "/operate/vp_message" },
-        { name: "广告管理", query: "/recommend/vp_adlist" }
+        {
+          name: "活动立项",
+          query: "/activity/approval",
+          icon: "shortcutEntry_1"
+        },
+        {
+          name: "活动管理",
+          query: "/activity/manager",
+          icon: "shortcutEntry_2"
+        },
+        {
+          name: "用户列表",
+          query: "/user/all_member_hy",
+          icon: "shortcutEntry_3"
+        },
+        {
+          name: "报表统计",
+          query: "/activity/approval",
+          icon: "shortcutEntry_4"
+        },
+        {
+          name: "消息管理",
+          query: "/operate/vp_message",
+          icon: "shortcutEntry_5"
+        },
+        {
+          name: "广告管理",
+          query: "/recommend/vp_adlist",
+          icon: "shortcutEntry_6"
+        },
+        {
+          name: "快捷入口管理",
+          query: "",
+          icon: "shortcutEntry_7"
+        }
       ],
-      examinelist:[{name:'活动立项',query: "/activity/approval"},
-      {name:'广告位即将过期',query: "/recommend/vp_adlist"},
-      {name:'待审核审批人员',query: "/activity/pending"},
-      {name:'待领取物质',query: "/activity/pending"},
-        {name:'待审核报名',query: "/activity/list"},
-
+      examinelist: [
+        {
+          name: "活动立项审批",
+          query: "/activity/approval",
+          data: "unauditActivityCount"
+        },
+        {
+          name: "广告位即将过期",
+          query: "/recommend/vp_adlist",
+          data: "willExpiredAdvCount"
+        }
+        // {
+        //   name: "待审核审批人员",
+        //   query: "/activity/pending",
+        //   data: "qualAuditCount"
+        // },
+        // {
+        //   name: "待审核报名",
+        //   query: "/activity/list",
+        //   data: "waitAuditSignUpCount"
+        // },
+        // {
+        //   name: "待领取物质",
+        //   query: "/activity/pending",
+        //   data: "unReceiveCount"
+        // }
       ]
     };
   },
@@ -457,6 +396,15 @@ export default {
     this.getHomeactwhole();
   },
   methods: {
+    /**
+     * TODO:
+     *  ! 遗留的 接口 ：
+     *    立项统计
+     *    活动统计
+     *    用户总览
+     *
+     */
+
     //首页-活动计数
     getHomeactivity() {
       Homeactivity({
@@ -497,14 +445,19 @@ export default {
     },
     //跳转
     Jump(index) {
+      if (!this.Jumplist[index].query) {
+        this.$Message.info("此功能暂未开放，敬请期待~");
+        return;
+      }
       this.$router.push({
         path: this.Jumplist[index].query
       });
     },
-    examine(index){
+    // 跳转
+    examine(index) {
       this.$router.push({
-        path:this.examinelist[index].query
-      })
+        path: this.examinelist[index].query
+      });
     }
   }
 };
@@ -592,12 +545,12 @@ export default {
   padding: 22px 32px;
   width: 1070px;
   height: 320px;
-  background: #fff;
   background: #ffffff;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .pending-right {
+  padding: 22px 32px;
   width: 410px;
   height: 320px;
   background: #ffffff;
@@ -645,6 +598,40 @@ export default {
   margin-left: 5px;
   margin-right: 5px;
   color: #1b2331;
+}
+
+.pending-right-title {
+  font-size: 18px;
+  color: #1b2331;
+  font-weight: 800;
+}
+.pending-right-content {
+  // padding: 28px 40px;
+  ul {
+    li {
+      width: 25%;
+      margin-top: 30px;
+      display: inline-block;
+      div {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+      }
+      .icon-img2 {
+        vertical-align: middle;
+        border-radius: 50%;
+        background: #fef4f5;
+        margin: 0 auto;
+      }
+      .name-btn {
+        text-align: center;
+        font-size: 12px;
+        color: #333333;
+        text-align: center;
+        line-height: 16px;
+      }
+    }
+  }
 }
 
 .gd {
@@ -750,18 +737,23 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+.hd-on {
+  width: 1070px;
+}
+.hd-tw {
+  width: 410px;
+}
 .hd-on,
 .hd-tw {
-  height: 200px;
-  width: 520px;
-  border: #e4e4e4 solid 1px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  height: 179px;
   p {
-    background: #f3f3f3;
     padding-left: 20px;
     height: 45px;
     line-height: 45px;
     font-weight: 700;
-    border-bottom: #e4e4e4 solid 1px;
   }
 
   ul {
