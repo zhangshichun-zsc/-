@@ -304,7 +304,7 @@ export default {
             (this.formValidate.packageFlag = lists.packageFlag),
             (this.formValidate.imonth = Number(lists.imonth)),
             (this.formValidate.amount = Number(lists.amount));
-          console.log(typeof lists.amount, typeof this.formValidate.amount);
+
         } else {
           this.$Message.error(res.msg);
         }

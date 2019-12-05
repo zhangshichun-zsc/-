@@ -387,6 +387,7 @@ export default {
 
     //查询结果
     query() {
+      this.page=1
       this.getorgpage()
     },
     //全选按钮

@@ -175,7 +175,7 @@ export default {
                           userId: params.row.userId,
                           name: params.row.userName,
                           deptId: this.deptId,
-                          states: 2
+                          states: 3
                         }
                       });
                     }
@@ -245,7 +245,7 @@ export default {
         if (res.code == 200) {
           this.data2 = res.data.list
           this.dataCount = res.data.totalSize
-          this.$Message.info('查询成功')
+
         } else {
           this.$Message.error(res.msg)
         }

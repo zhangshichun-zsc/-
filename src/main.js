@@ -26,22 +26,22 @@ Vue.prototype.$Message = Message;
 // }
 
 //路由
-router.beforeEach((to, from, next) => {
-  if (store.state.token) {
-    next();
-  } else {
-    //没有登录，去跳转登录页
-    if (to.path === "/login") {
-      // Message.error('身份过期请重新登陆')
-      next();
-    } else {
-      // Message.error('已退出登陆')
-      next({
-        path: "/login"
-      });
-    }
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (store.state.token) {
+//     next();
+//   } else {
+//     //没有登录，去跳转登录页
+//     if (to.path === "/login") {
+//       // Message.error('身份过期请重新登陆')
+//       next();
+//     } else {
+//       // Message.error('已退出登陆')
+//       next({
+//         path: "/login"
+//       });
+//     }
+//   }
+// });
 
 Vue.prototype.util = util;
 

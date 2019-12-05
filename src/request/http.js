@@ -24,12 +24,6 @@ const SERVICE_URL = {
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
 
-
-
-export const orgimg = (
-  SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + "/pic/upload"
-).slice(5); //组织管理-上传图片
-
 const token = localStorage.getItem("token");
 
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]; // 导出文件
@@ -43,11 +37,9 @@ axios.defaults.timeout = 100000;
 // post请求头
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
-
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
-
     if (router.currentRoute.fullPath.indexOf('/login') != -1) {
       //登录接口,不做token信息添加
     } else {
