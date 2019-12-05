@@ -15,7 +15,7 @@
     <div v-if="num==0">
       <div class="details-td">
         <div class="details-wz">
-          <img :src="arr.orgPic" />
+          <img :src="arr.orgPicPath" style="height:100px;width:100px" />
           <span>{{arr.orgName}}</span>
           <span>分类：{{arr.orgTypeText}}</span>
         </div>
@@ -30,7 +30,7 @@
             <th>负责人</th>
             <td>{{arr.ownerUserName}}</td>
             <th>城市</th>
-            <td>{{arr.address}}</td>
+            <td>{{arr.cityName}}</td>
           </tr>
           <tr>
             <th>联系方式</th>
@@ -103,29 +103,7 @@
               <Input v-model="BasicDate.contactUserName" placeholder="自动带出" style="width: 220px" />
             </FormItem>
             <FormItem label="地址:" prop="city">
-              <Select v-model="BasicDate.provinceId" style="width:150px">
-                <Option
-                  v-for="item in provinceList"
-                  :value="item.provinceId"
-                  :key="item.provinceId"
-                >{{ item.provinceName }}</Option>
-              </Select>
-              <Select v-model="BasicDate.cityId" style="width:150px">
-                <Option
-                  v-for="item in cityList"
-                  :value="item.cityId"
-                  :key="item.cityId"
-                >{{ item.cityName }}</Option>
-              </Select>
-              <Select v-model="BasicDate.districtId" style="width:150px">
-                <Option
-                  v-for="item in districtList"
-                  :value="item.districtId"
-                  :key="item.districtId"
-                >{{ item.districtName }}</Option>
-              </Select>
-              <!-- <Cascader :data="citysData" v-model="citydata" on-change="city" on-visible-change="city" style="width: 220px"></Cascader> -->
-              <!-- <Input v-model="BasicDate.address" placeholder="点 击 输 入" style="width: 220px" /> -->
+              <Selsect :arr="[province,city,county,]" @change="selbtn"></Selsect>
             </FormItem>
             <FormItem label="联系方式:" prop="orgName">
               <Input v-model="BasicDate.contactUserPhone" style="width: 220px" />
@@ -134,31 +112,35 @@
               <Input v-model="BasicDate.wx" placeholder="点 击 输 入" style="width: 220px" />
             </FormItem>
 
-            <FormItem label="图片:">
-              <div class="flex-start">
-                <div style="width: 9rem;height: 5rem;">
-                  <img style="width: 9rem;height: 5rem;" :src="BasicDate.orgPicShow" />
-                </div>
-                <Button
-                  shape="circle"
-                  icon="md-close"
-                  style="margin-top: 0.5rem;"
-                  @click="remove()"
-                ></Button>
-
-                <div style="padding-top: 2.5rem;margin-left: 0.5rem;">
-                  <!-- <input type="file" accept='image/*' placeholder="上传图片" @change="upload"/> -->
-                  <Upload
-                    :action=orgimg
-                    :on-success="handleSuccess"
-                    :on-remove="remove"
-                    :format="['jpg','jpeg','png']"
-                    :max-size="2048"
-                    :show-upload-list="false"
-                  >
+            <FormItem label="图片:" prop="orgPicShow">
+              <div class="start-wap">
+                <div
+                  class="upload"
+                  v-if="BasicDate.orgPicShow == null"
+                  @click="()=>{ this.$refs.files.click()}"
+                >
+                  <div class="file">
+                    <input
+                      style=" display:none;"
+                      type="file"
+                      accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                      ref="files"
+                      @change="uploadFile()"
+                      multiple
+                    />
                     <Button icon="ios-cloud-upload-outline">上传图片</Button>
-                  </Upload>
+                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  </div>
                 </div>
+
+                <img :src="BasicDate.orgPicShow" style="height:150px;width:150px;" />
+                <Icon
+                  type="ios-trash"
+                  v-if="BasicDate.orgPicShow != null"
+                  class="cancel"
+                  :size="26"
+                  @click="cancelImg()"
+                />
               </div>
             </FormItem>
             <FormItem label="详情:" prop="orgName">
@@ -195,7 +177,7 @@
           <div class="middle">
             <Upload
               multiple
-              :action=orgimg
+              :action="orgimg"
               :on-success="handleSuccesstext"
               :default-file-list="BasicDate.fileList"
               :show-upload-list="false"
@@ -219,7 +201,9 @@
 </template>
 
 <script>
-import {orgimg} from '@/request/http'
+
+import { upload,orgimg } from "../../request/http";
+import Selsect from "@/components/selsect";
 import { formatDate } from "@/request/datatime";
 import {
   orgdetails,
@@ -229,9 +213,7 @@ import {
   orgedit,
   orgemod,
   orgimgdel,
-  orgcity,
-  orgprovince,
-  orgdistrict
+
 } from "@/request/api";
 export default {
   data() {
@@ -251,11 +233,19 @@ export default {
         },
         {
           title: "职位",
-          key: "userType"
+          key: "roleNames"
         },
         {
           title: "人员分类",
-          key: "roleNames"
+          key: "userType",
+          render: (h, params) => {
+            let typelist = [
+              { name: "负责人", type: "1" },
+              { name: "管理人员", type: "2" },
+              { name: "普通人员", type: "3" }
+            ];
+            return h("div", typelist[Number(params.row.userType) - 1].name);
+          }
         },
         {
           title: "操作",
@@ -273,7 +263,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "/user/user_details_hy" });
+                      this.$router.push({
+                        path: "/user/user_details_hy",
+                        query: { userId: params.row.userId }
+                      });
                     }
                   }
                 },
@@ -306,10 +299,9 @@ export default {
       sysType: 1,
       page: 1,
       size: 10,
-      pageSize: 10,
       dataCount: 0,
       arr: [],
-      dataend: null,
+
       ruleValidate: {
         orgName: [
           {
@@ -322,8 +314,15 @@ export default {
           {
             required: true,
             message: "请选择地址",
-            trigger: "blur",
+            trigger: "blur"
             // type:
+          }
+        ],
+        orgPicShow: [
+          {
+            required: true,
+            message: "必填项不能为空",
+            trigger: "blur"
           }
         ]
       },
@@ -347,31 +346,21 @@ export default {
           url: ""
         }
       ],
-      orgimg:'',
+      orgimg: "",
       percent: 0, // 文件上传进度条
       statistics: [],
-
-      provinceList: [],
-      cityList: [],
-      districtList: []
+      province: "",
+      county: "",
+      city: ""
     };
   },
   computed: {},
-
+  components: { Selsect },
   created() {},
   mounted() {
-
     this.getorgdetestat();
     this.getorgdetails();
     this.getorgmember();
-  },
-  watch: {
-    "BasicDate.provinceId": function(newval, oldval) {
-      this.getorgprovince(),
-        (this.BasicDate.districtId = ""),
-        (this.districtList = []);
-    },
-    "BasicDate.cityId": "getorgdistrict"
   },
 
   methods: {
@@ -383,9 +372,8 @@ export default {
       this.navigation1.head = this.list[e] + "(会员)";
       console.log(e);
       if (e == 1) {
-        this.getorgcity();
         this.getorgedit();
-        this.orgimg=orgimg
+        this.orgimg = orgimg;
       }
     },
     // 获取组织详情
@@ -478,22 +466,19 @@ export default {
       });
     },
 
-    //删除图片和附件
+    //省市区
+    selbtn(e) {
+      console.log(e);
+    },
+
+    //删除附件
     getorgimgdel(e) {
       let removeid = "";
-      if (e == 1) {
-        removeid = this.BasicDate.text;
-      } else {
-        removeid = this.BasicDate.orgPic;
-      }
+      removeid = this.BasicDate.text;
       orgimgdel({
         path: removeid
       }).then(res => {
         if (res.code == 200) {
-          if (e == 1) {
-          } else {
-            this.BasicDate.orgPicShow = "";
-          }
           this.$Message.success("删除成功");
         } else {
           this.$Message.error(res.msg);
@@ -502,60 +487,44 @@ export default {
       });
     },
 
-    //获取省
-    getorgcity() {
-      orgcity({}).then(res => {
-        if (res.code == 200) {
-          this.provinceList = res.data;
-          this.getorgprovince()
-        }
-        console.log(res);
-      });
-    },
-    //获取市
-    getorgprovince() {
-      orgprovince({
-        provinceId: this.BasicDate.provinceId
-      }).then(res => {
-        if (res.code == 200) {
-          this.cityList = res.data;
-          this.getorgdistrict()
-        }
-        console.log(res);
-      });
-    },
-    //获取区
-    getorgdistrict() {
-      orgdistrict({
-        cityId: this.BasicDate.cityId
-      }).then(res => {
-        if (res.code == 200) {
-          this.districtList = res.data;
-        }
-        console.log(res);
-      });
-    },
+
     city() {
       this.getorgcity();
     },
 
-    //上传图片
-    handleSuccess(res, file) {
-      if (res.code == 200) {
-        this.BasicDate.orgPic = res.data;
-        this.$Message.success("上传成功");
-      } else {
-        this.$Message.error(res.msg);
-      }
-      console.log(res, file.name);
+    //图片上传
+    uploadFile() {
+      let file = this.$refs.files.files[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.BasicDate.orgPicShow = e.target.result;
+          this.picUrl = res.data;
+        };
+      });
     },
+    //删除图片
+    cancelImg() {
+      orgimgdel({ path: this.picUrl }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.picUrl = null;
+          this.BasicDate.orgPicShow = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
+
+
 
     //上传附件
     handleSuccesstext(res, file) {
       if (res.code == 200) {
-        if (this.percent != 100) {
-          this.percent += 100;
-        }
         let obj = [{ fileUrl: res.data, fileName: file.name }];
         this.BasicDate.fileList = this.BasicDate.fileList.concat(obj);
         this.$Message.success("上传成功");
@@ -566,13 +535,7 @@ export default {
       console.log(res, file.name);
     },
 
-    //图片删除
-    remove() {
-      if (this.BasicDate.orgPicShow == "") {
-      } else {
-        this.getorgimgdel();
-      }
-    },
+
 
     //删除附件
     removetext(e) {
@@ -601,8 +564,7 @@ export default {
     changepages(index) {
       this.page = index;
       this.getorgmember();
-    },
-
+    }
   }
 };
 </script>

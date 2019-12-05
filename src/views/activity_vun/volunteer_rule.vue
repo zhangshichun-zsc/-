@@ -98,7 +98,7 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.typeFlag == 1
+                  value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {
@@ -151,7 +151,7 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.typeFlag == 1
+                  value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {

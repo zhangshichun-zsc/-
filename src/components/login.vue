@@ -103,7 +103,13 @@ export default {
           localStorage.setItem("userId", res.data.userId);
           localStorage.setItem("userName", res.data.userName);
           localStorage.setItem("tel", res.data.tel);
+          /**
+           * ! 将数据保存在vux中
+           */
+          this.$store.commit("setToken", { ...res.data });
+
           this.$router.push({ name: "index" });
+
           // this.gethomepage()
         } else {
           this.$Message.info("密码或账号不正确!");
@@ -122,7 +128,6 @@ export default {
         console.log(res);
       });
     },
-
 
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
