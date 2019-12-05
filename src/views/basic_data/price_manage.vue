@@ -24,6 +24,7 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="args.validFlag">
+            <Option value="">全部</Option>
             <Option value="1">有效状态</Option>
             <Option value="0">无效状态</Option>
           </Select>
@@ -31,16 +32,19 @@
         <div class="flex-center-start">
           <span>创建时间</span>
           <Row>
-            <Col span="12">
-               <DatePicker
-                  type="datetimerange"
-                  @on-change="handleChange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width:300px"
-                  format="yyyy-MM-dd HH:mm"
-                ></DatePicker>
-            </Col>
+              <DatePicker
+                :open="open"
+                confirm
+                type="daterange"
+                @on-change="handleChange"
+                @on-clear="args.startAt='';args.endAt='';time=''"
+                @on-ok="open = false">
+                <a href="javascript:void(0)" @click="open = true">
+                    <Icon type="ios-calendar-outline"></Icon>
+                    <template v-if="!time">请选择时间段</template>
+                    <template v-else>{{ time }}</template>
+                </a>
+            </DatePicker>
           </Row>
         </div>
       </div>
@@ -49,7 +53,7 @@
       <div class="table-header flex-center-between">
         <div>
           全选
-          <span>已选择0</span>
+          <span>已选择{{list.length}}</span>
           <Button class="table-btn" @click="deletes()">批量删除</Button>
           <Button class="table-btn" @click="showModal(null)">新增</Button>
           <Modal v-model="modal1" title="新增基金" @on-ok="ok" @on-cancel="cancel">
@@ -81,21 +85,23 @@ import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
-        navigation1: {
+      time:'',
+      open:false,
+      navigation1: {
         head: "基金管理(会员)"
       },
       modal1: false,
         formItem: {
         input: '',
-       },
-       ruleValidate:{
-          name: [
-          { required: true, message: '基金名称不能为空', trigger: 'blur' }
-                ],
-          contactUserName: [
-          { required: true, message: '联系人员不能为空', trigger: 'blur' }
-                ]
-       },
+      },
+      ruleValidate:{
+        name: [
+        { required: true, message: '基金名称不能为空', trigger: 'blur' }
+              ],
+        contactUserName: [
+        { required: true, message: '联系人员不能为空', trigger: 'blur' }
+              ]
+      },
       columns: [
         {
           type: "selection",
@@ -132,12 +138,12 @@ export default {
                 },
                 on: {
                   "on-change": (e) => {
-                    // let item = this.datax[e]
-                    // this.adds.itemId = item.itemId
-                    // this.adds.typeFlag = item.typeFlag
-                    // this.adds.name = item.name
-                    // this.adds.validFlag = e
-                    // this.addOk()
+                    let item = this.datax[e]
+                    this.adds.itemId = item.itemId
+                    this.adds.typeFlag = item.typeFlag
+                    this.adds.name = item.name
+                    this.adds.validFlag = e
+                    this.addOk()
                   }
                 }
               })
@@ -230,17 +236,27 @@ export default {
       getfund(args).then(res => {
         this.sumSize = res.data.totalSize
         this.data = res.data.list
-        this.args.page = res.data.pageNum
         this.sumPage = res.data.totalNum
       })
     },
     changePage(e){
-      this.args.page = e
+      this.$set(this.args.page,'page',e)
       this.getList()
     },
     handleChange(e){
-      this.args.startAt = e[0]
-      this.args.endAt = e[1]
+      let start = e[0]
+      let end = e[1]
+      let time = e[0] + '-' + e[1]
+      if(start === end){
+        start = start + ' 00:00:00'
+        end = end + ' 59:59:59'
+      }else{
+        start = start + ' 00:00:00'
+        end = end + ' 00:00:00'
+      }
+      this.args.startAt = start
+      this.args.endAt = end
+      this.time = time
     },
     showModal(e){
       if(e == null){
