@@ -29,17 +29,17 @@
         <div class="flex-center-start">
           <span>创建时间</span>
           <row>
-            <i-col span="12" class="inpt">
-              <Date-picker
-                placement="bottom-end"
-                placeholder="选择日期"
-                style="width: 200px"
-                type="datetime" 
-                format="yyyy-MM-dd HH:mm"
-                v-model="args.createAt"
-                @on-change='changeDate'
-              ></Date-picker>
-            </i-col>
+             <DatePicker
+              :open="open"
+              confirm
+              type="date"
+              @on-change="changeDate"
+              @on-ok="successOk">
+              <a href="javascript:void(0)" @click="open = true">
+                  <Icon type="ios-calendar-outline"></Icon>
+                  <template>{{ time }}</template>
+              </a>
+            </DatePicker>
           </row>
         </div>
       </div>
@@ -88,6 +88,8 @@ import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
+      open:false,
+      time:'请选择时间段',
       ruleValidate: {
           content: [
               { required: true, message: '', trigger: 'change' }
@@ -276,9 +278,19 @@ export default {
     cancel(){
       this.adds.name = null
     },
+    successOk(){
+      if(!this.args.createAt){
+        this.time='请选择时间段'
+      }
+      this.open = false
+    },
     changeDate(e){
+      if(e){
+        this.time = e
+        e = e + ' 00:00:00'
+      }
       this.args.createAt = e
-    }
+    },
   }
 };
 </script>
