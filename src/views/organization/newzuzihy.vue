@@ -7,7 +7,7 @@
         <p class="title">分类</p>
         <div class="content middle">
           <RadioGroup v-model="orgTypes">
-            <Radio :label="item.dataKey" v-for="item in list" :key="item.dataKey">{{item.dataValue}}</Radio>
+            <Radio :label="item.dataKey" v-for="item in list" :key="item.dicCode">{{item.dataValue}}</Radio>
           </RadioGroup>
         </div>
       </div>
@@ -29,28 +29,6 @@
             </FormItem>
             <FormItem label="地址:" prop="address">
                <Selsect :arr='[province,city,county,]' @change='selbtn'></Selsect>
-
-              <!-- <Select v-model="formValidate.provinceId" style="width:150px">
-                <Option
-                  v-for="item in provinceList"
-                  :value="item.provinceId"
-                  :key="item.provinceId"
-                >{{ item.provinceName }}</Option>
-              </Select>
-              <Select v-model="formValidate.cityId" style="width:150px">
-                <Option
-                  v-for="item in cityList"
-                  :value="item.cityId"
-                  :key="item.cityId"
-                >{{ item.cityName }}</Option>
-              </Select>
-              <Select v-model="formValidate.districtId" style="width:150px">
-                <Option
-                  v-for="item in districtList"
-                  :value="item.districtId"
-                  :key="item.districtId"
-                >{{ item.districtName }}</Option>
-              </Select> -->
             </FormItem>
             <FormItem label="联系方式:" prop="orgName">
               <Input v-model="formValidate.ownerUserPhone" style="width: 220px" />
@@ -215,6 +193,7 @@ export default {
         province:'',
         city:'',
         county:'',
+        file:''
 
     };
   },
@@ -242,7 +221,9 @@ export default {
         createUserId: this.createUserId,
         remark: this.formValidate.remark,
         ownerUserName: this.formValidate.ownerUserName,
-        ownerUserPhone: this.formValidate.ownerUserPhone
+        ownerUserPhone: this.formValidate.ownerUserPhone,
+        orgPic:this.formValidate.orgPic,
+        file:this.file
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success(res.msg);
@@ -259,39 +240,6 @@ export default {
       this.districtId=e[2];
       console.log(e)
     },
-    // //获取省
-    // getorgcity() {
-    //   orgcity({}).then(res => {
-    //     if (res.code == 200) {
-    //       this.provinceList = res.data;
-    //       this.getorgprovince();
-    //     }
-    //     console.log(res);
-    //   });
-    // },
-    // //获取市
-    // getorgprovince() {
-    //   orgprovince({
-    //     provinceId: this.formValidate.provinceId
-    //   }).then(res => {
-    //     if (res.code == 200) {
-    //       this.cityList = res.data;
-    //       this.getorgdistrict();
-    //     }
-    //     console.log(res);
-    //   });
-    // },
-    // //获取区
-    // getorgdistrict() {
-    //   orgdistrict({
-    //     cityId: this.formValidate.cityId
-    //   }).then(res => {
-    //     if (res.code == 200) {
-    //       this.districtList = res.data;
-    //     }
-    //     console.log(res);
-    //   });
-    // },
 
     //图片上传
     uploadFile() {
@@ -335,7 +283,7 @@ export default {
 
     //附件上传
     handleSuccess(res, file) {
-
+      this.file=res.data
     },
 
   },

@@ -17,7 +17,7 @@ const SERVICE_URL = {
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     "http://192.168.0.11:8084/rhzg-web", // 竺文聪 4
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
-    "http://192.168.0.5:8084/rhzg-web" // 王盛
+    "http://192.168.0.5:8084/rhzg-web" // 王盛 6
   ],
   API_INDEX: 0
 }
@@ -65,7 +65,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     if (response.data.code == 107) {
-      this.$Message.error("身份过期请重新登陆!");
       router.currentRoute.path != "/login" &&
         router.replace({
           path: "/login",
@@ -74,7 +73,7 @@ axios.interceptors.response.use(
           }
         });
     } else if (response.data.code == 105) {
-      this.$Message.error("请登录!");
+
       router.currentRoute.path != "/login" &&
         router.replace({
           path: "/login",
@@ -83,6 +82,7 @@ axios.interceptors.response.use(
           }
         });
     } else if (response.data.code == 1003) {
+
     }
     return response;
   }

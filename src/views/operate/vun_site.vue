@@ -2,36 +2,7 @@
 <template>
   <div class="integral">
     <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
-    <!-- <div class="integral-header">
-      <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-          <Button>查询结果</Button>
-        </div>
-      </div>
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span>消息标题</span>
-          <Input size="large" placeholder="消息标题" class="inpt" />
-        </div>
-        <div class="flex-center-start">
-          <span>发布时间</span>
-          <Row>
-            <Col span="12">
-              <DatePicker type="date" placeholder="请选择日期" style="width: 200px" class="sdate"></DatePicker>
-            </Col>
-          </Row>
-        </div>
-      </div>
-    </div>-->
+
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="flex-center-start">
@@ -199,7 +170,8 @@ export default {
     },
 
     query(e) {
-      console.log(e)
+            this.page=1
+
       this.content = e[0].value;
       this.createAt = e[1].value;
       this.getmessageShort()

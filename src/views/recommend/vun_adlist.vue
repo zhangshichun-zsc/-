@@ -26,15 +26,15 @@
           <Select style="width:200px" placeholder="全部" class="inpt" v-model="location">
             <Option
               v-for="item in locations"
-              :value="item.dataKey"
-              :key="item.dataValue"
+              :value="item.dicCode"
+              :key="item.dicCode"
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
         <div class="flex-center-start">
           <span>到期时间</span>
           <Select style="width:200px" placeholder="全部" class="inpt" v-model="time">
-            <Option v-for="item in timeLists" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option v-for="item in timeLists" :value="item.time" :key="item.time">{{ item.label }}</Option>
           </Select>
         </div>
       </div>
@@ -67,7 +67,7 @@
       <div class="pages flex-center-between">
         <div class="batch">
           <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status">全选</Checkbox>
+            <Checkbox v-model="status"></Checkbox>全选
           </Button>
           <Select placeholder="批量操作" style="width: 150px" v-model="batch">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -94,7 +94,8 @@ import {
   AdvertisingList,
   AdvertisingDetails,
   AdvertisingBatch,
-  AdvertisingPage
+  AdvertisingPage,
+  AdvertisingRoof
 } from "../../request/api";
 export default {
   data() {
@@ -102,20 +103,25 @@ export default {
       model1: "",
       locations: [],
       timeLists: [
+         {
+          value:'0',
+          label:'全部',
+          time:0
+        },
         {
           value: "1",
           label: "一天内",
-          time: "86400001"
+          time: 86400001
         },
         {
           value: "2",
           label: "三天内",
-          time: "259200001"
+          time: 259200001
         },
         {
           value: "3",
           label: "一周内",
-          time: "604700000"
+          time: 604700000
         }
       ],
 
@@ -178,9 +184,9 @@ export default {
                 on: {
                   input: e => {
                     if (e == false) {
-                      this.remove(params.row.contentId, 2);
+
                     } else if (e == true) {
-                      this.remove(params.row.contentId, 3);
+
                     }
                   }
                 }
@@ -198,6 +204,10 @@ export default {
           key: "action",
           align: "center",
           render: (h, params) => {
+            let Roof='置顶'
+            if(params.row.topFlag==1){
+              Roof='取消置顶'
+            }
             return h("div", [
               h(
                 "a",
@@ -209,7 +219,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "vp_add",
+                        name: "vun_add",
                         query: {
                           contentId: params.row.contentId
                         }
@@ -229,11 +239,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.remove(params.row.contentId, 4);
+                      this.getAdvertisingRoof(params.row.contentId, params.row.topFlag,1);
                     }
                   }
                 },
-                "置顶"
+                Roof
               ),
               h(
                 "a",
@@ -245,8 +255,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.contentId);
-                      this.remove(params.row.contentId, 1);
+                       this.getAdvertisingRoof(params.row.contentId, 0,2);
+
                     }
                   }
                 },
@@ -274,7 +284,7 @@ export default {
       sysType: 2,
       location: "",
       endTimeStamp: "",
-      time: "",
+      time: 0,
       status: false,
       arr: [],
       batch: null
@@ -296,8 +306,7 @@ export default {
     //列表
     getAdvertisingList() {
       AdvertisingList({
-        sysType:2
-
+        sysType:this.sysType
       }).then(res => {
         if (res.code == 200) {
           this.locations = res.data;
@@ -313,20 +322,11 @@ export default {
     },
     //列表数据
     getAdvertisingPage(e) {
-      if (this.time == 1) {
-        this.endTimeStamp = 86400001 + new Date().getTime();
-      } else if (this.time == 2) {
-        this.endTimeStamp = 259200001 + new Date().getTime();
-      } else if (this.time == 3) {
-        this.endTimeStamp = 604700000 + new Date().getTime();
+      if(this.time==0){
+        this.endTimeStamp=''
+      }else{
+        this.endTimeStamp = this.time + new Date().getTime();
       }
-      console.log(
-        this.page,
-        this.title,
-        this.sysType,
-        this.location,
-        this.endTimeStamp
-      );
       AdvertisingPage({
         page: { page: this.page, size: this.size },
         title: this.title,
@@ -345,7 +345,7 @@ export default {
             this.$Message.info("查询成功");
           } else {
           }
-          // this.$Message.info("操作成功");
+
         }
       });
     },
@@ -362,13 +362,19 @@ export default {
       });
     },
 
-
-    // 删除按钮
-    remove(id, startid) {
-      this.arr = id;
-      this.batch = startid;
-      this.getAdvertisingBatch(2);
+    //置顶
+    getAdvertisingRoof(ids,flag,type){
+      AdvertisingRoof({
+        contentId:ids,
+        topFlag:flag,
+        type:type
+      }).then(res=>{
+        console.log(res)
+      })
     },
+
+
+
     //每条数据单选框的状态
     tablechange(selection) {
       this.arr = selection;
@@ -407,6 +413,7 @@ export default {
 
     //查询
     result() {
+      this.page=1
       this.getAdvertisingPage(3);
     }
   },

@@ -111,7 +111,6 @@
             <FormItem label="微信公众号:">
               <Input v-model="BasicDate.wx" placeholder="点 击 输 入" style="width: 220px" />
             </FormItem>
-
             <FormItem label="图片:" prop="orgPicShow">
               <div class="start-wap">
                 <div
@@ -252,6 +251,10 @@ export default {
           key: "action",
           align: "center",
           render: (h, params) => {
+            let del
+            if(params.row.userType!=1){
+              del='删除'
+            }
             return h("div", [
               h(
                 "span",
@@ -259,7 +262,7 @@ export default {
                   clssName: "action",
                   style: {
                     color: "green",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   },
                   on: {
                     click: () => {
@@ -279,7 +282,7 @@ export default {
                     marginRight: "5px",
                     marginLeft: "5px",
                     color: "green",
-                    cursor: "pointer"
+                    cursor: "pointer",
                   },
                   on: {
                     click: () => {
@@ -287,7 +290,7 @@ export default {
                     }
                   }
                 },
-                "删除"
+                del
               )
             ]);
           }
@@ -349,9 +352,10 @@ export default {
       orgimg: "",
       percent: 0, // 文件上传进度条
       statistics: [],
+
       province: "",
       county: "",
-      city: ""
+      city:""
     };
   },
   computed: {},
@@ -448,8 +452,8 @@ export default {
         address: this.BasicDate.address,
         remark: this.BasicDate.remark,
         orgPic: this.BasicDate.orgPic,
-        ownerUserName: this.BasicDate.ownerUserName,
-        ownerUserPhone: this.BasicDate.ownerUserPhone,
+        ownerUserName: this.BasicDate.contactUserName,
+        ownerUserPhone: this.BasicDate.contactUserPhone,
         description: this.BasicDate.description,
         wx: this.BasicDate.wx,
         fileList: this.BasicDate.fileList,
@@ -528,6 +532,7 @@ export default {
         let obj = [{ fileUrl: res.data, fileName: file.name }];
         this.BasicDate.fileList = this.BasicDate.fileList.concat(obj);
         this.$Message.success("上传成功");
+        console.log(obj)
       } else {
         this.percent = 0;
         this.$Message.error(res.msg);
