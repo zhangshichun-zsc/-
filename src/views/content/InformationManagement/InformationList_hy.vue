@@ -25,6 +25,7 @@
           <p>
             <span>资讯分类:</span>&nbsp;
             <Select style="width:200px" placeholder="全部" v-model="infomationType">
+              <Option :value="''">全部</Option>
               <Option
                 v-for="item in type"
                 :value="item.dataKey"
@@ -81,6 +82,7 @@
 <script>
 import {formatDate} from '@/request/datatime'
 import { AddressList, AddressType, AddressDel } from "@/request/api";
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -238,7 +240,7 @@ export default {
           }
         }
       ],
-       Article: [
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -248,7 +250,6 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-
       batchList: [
         { value: "2", label: "设为推荐" },
         { value: "3", label: "取消推荐" },
@@ -259,7 +260,6 @@ export default {
       page: 1,
       size: 10,
       dataCount: 0,
-
       title: null,
       infomationType: '',
       type: [],
@@ -270,13 +270,18 @@ export default {
       batch: null,
       informationIds: "",
       arr:[],
-
     };
   },
   //事件监听
   watch: {
-    size: "getAddressList",
-    sort: "getAddressList"
+    'size':()=>{
+      this.page = 1
+      this.getAddressList()
+    },
+    'sort':()=>{
+      this.page = 1
+      this.getAddressList()
+    },
   },
   methods: {
     addBut() {
@@ -295,19 +300,18 @@ export default {
 
     // 查询结果按钮
     query() {
+      this.page = 1
       this.getAddressList();
     },
 
     // 质询列表
     getAddressList() {
-
-
-      AddressList({
+      AddressList(filterNull({
         sysType: this.sysType,
         title: this.title,
         infomationType: this.infomationType,
         page: { page: this.page, size: this.size, sort: "createAt" + " " + this.sort}
-      }).then(res => {
+      })).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
@@ -328,9 +332,7 @@ export default {
       AddressType({}).then(res => {
         console.log(res);
         if(res.code==200){
-
           this.type = res.data;
-          // this.type=unshift({dataKey:-1,dataValue:'全部'})
         }
       });
     },
