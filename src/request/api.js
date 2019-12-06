@@ -444,11 +444,17 @@ export const departmentStatu = p => get('/web/dept/changgeStatus', p) //部门�
 
 export const departmentmember = p => posts('/web/dept/findDeptUser', p) //部门管理--查询部门成员
 
+export const findDeptUserName = p => posts('/web/dept/findDeptUserName', p) // 查询过所有成员
+
 export const departmentedit = p => posts('/web/dept/editDept', p) //部门管理--部门列表编辑
 
 export const departmentadd = p => posts('/web/dept/addDept', p) //部门管理--部门列表添加
 
+export const editDeptUser = p => posts('/web/dept/editDeptUser', p) //编辑成员信息、
+
 export const departaddDeptUser = p => posts('/web/dept/addDeptUser', p) //部门管理--部门添加
+
+export const findRoleMenu = p => get('/sysRole/findRoleMenu', p) //部门管理--部门添加
 
 
 

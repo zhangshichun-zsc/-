@@ -6,7 +6,7 @@
       <div class="con">
         <div class="title bk">
           <p>
-            <span>当前人员:{{sysRoleName?sysRoleName:''}}</span>
+            <span>当前人员:{{ sysRoleName ? sysRoleName : "" }}</span>
           </p>
         </div>
         <div class="choose">
@@ -14,25 +14,45 @@
             <TabPane label="功能权限设置" name="name1">
               <Row>
                 <Col span="8">
-                <Menu>
-                  <CheckboxGroup v-model="fruit">
-                    <Submenu :name="index" v-for="(item,index) in list" :key="index">
+                  <Menu>
+                    <!-- <CheckboxGroup v-model="fruit"> -->
+                    <Submenu
+                      :name="index"
+                      v-for="(item, index) in ALLLIST"
+                      :key="index"
+                    >
                       <template slot="title">
-                        <Icon type="ios-paper" />
-                        {{item.parentName}}
-                        <!-- <Checkbox
-                            :indeterminate="indeterminate"
-                            :value="checkAll"
-                            @click.prevent.native="handleCheckAll"
-                          >全选</Checkbox> -->
-                      </template>
-                      <MenuItem name="1-1" v-for="(value,keys) in item.list" :key="keys">
+                        <!-- ！ 点击全选， 选中一部分， 展示不同的样式 -->
 
-                      <Checkbox :label="value.sysMenuId"> {{value.name}}</Checkbox>
-                      </MenuItem>
+                        {{ arr[item.sysMenuId].checkAll }}
+                        <!--    :value="arr[item.sysMenuId].checkAll" -->
+                        <CheckboxGroup v-model="menuONE">
+                          <Checkbox
+                            :value="true"
+                            :label="item.sysMenuId"
+                            :indeterminate="arr[item.sysMenuId].indeterminate"
+                            @click.prevent.native="handleCheckAll"
+                            >{{ item.parentName }}}</Checkbox
+                          >
+                        </CheckboxGroup>
+                      </template>
+                      <CheckboxGroup
+                        v-model="checkAllGroup"
+                        @on-change="checkAllGroupChange"
+                      >
+                        <MenuItem
+                          name="1-1"
+                          v-for="(value, keys) in item.list"
+                          :key="keys"
+                        >
+                          <Checkbox :label="value.sysMenuId">{{
+                            value.name
+                          }}</Checkbox>
+                        </MenuItem>
+                      </CheckboxGroup>
                     </Submenu>
-                  </CheckboxGroup>
-                </Menu>
+                    <!-- </CheckboxGroup> -->
+                  </Menu>
                 </Col>
               </Row>
               <Button type="success" @click="save">保存</Button>
@@ -45,79 +65,141 @@
 </template>
 
 <script>
-import { Permissionset, roleSetup } from '@/request/api'
-import Table from 'iview/src/components/table/table'
+/**
+ *  ! 实现 :1 展示选中的子项
+ *  ! 2: 展示选中的父项
+ *  ! 3: 实现全选,
+ *  ! 4: 实现全不选
+ *
+ */
+
+import { Permissionset, roleSetup, findRoleMenu } from "@/request/api";
+import Table from "iview/src/components/table/table";
+import { log } from "util";
 export default {
   components: { Table },
   data() {
     return {
       navigation1: {
-        head: '功能权限设置(共用)'
+        head: "功能权限设置(共用)"
       },
       single: false,
       sysRoleId: [],
       list: [],
       fruit: [],
       obj: {},
-      list: '',
-      sysRoleId: '',
-      sysRoleName: ''
-    }
+      sysRoleId: "",
+      sysRoleName: "",
+      firstClassMenu: [],
+      ALLLIST: [], // 全部菜单
+      USERLIST: [], // 用户选中的
+      menuONE: [], // 一级菜单
+      arr: [],
+      checkAllGroup: [], // 已选的才当
+      indeterminate: true,
+      checkAll: false
+    };
   },
+  watch: {},
   methods: {
     //查询
     getPermissionset() {
-      Permissionset({}).then(res => {
+      let roleId = this.sysRoleId;
+      findRoleMenu({ roleId }).then(res => {
         if (res.code == 200) {
-          this.list = res.data
+          this.ALLLIST = res.data.menuList;
+          this.checkAllGroup = res.data.subMenuRoles.map(item => {
+            return item.sysMenuId;
+          });
+
+          /**
+           * !用来控制 一级菜单的首选项
+           */
+          let obj = {};
+          res.data.parentMenuRoles
+            .map(item => {
+              return item.sysMenuId;
+            })
+            .forEach(key => {
+              obj[key] = {
+                indeterminate: false,
+                checkAll: true
+              };
+            });
+          this.arr = obj;
         } else {
-          this.$Message.info(res.msg)
+          this.$Message.info(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
     // 角色权限设置
     getroleSetup() {
-      this.list = this.fruit.toString()
+      this.list = this.fruit.toString();
       roleSetup({
         sysRoleId: this.sysRoleId,
         sysMenuIds: this.list
       }).then(res => {
-        this.getPermissionset()
-        this.$Message.info(res.msg)
-        console.log(res)
+        this.getPermissionset();
+        this.$Message.info(res.msg);
+        console.log(res);
         if (res.code == 200) {
-          if (this.$route.query.status == 1) {
-            this.$router.push({
-              name: 'departmentMGT'
-            })
-          } else if (this.$route.query.status == 2) {
-            this.$router.push({
-              name: 'membersMGT'
-            })
-          } else if (this.$route.query.status == 3) {
-            this.$router.push({
-              name: 'role'
-            })
-          }
+          this.$router.push({
+            name: this.$route.query.fromURL
+          });
         }
-      })
+      });
+    },
+    // 全选中一部分
+    handleCheckAll() {
+      if (this.indeterminate) {
+        this.checkAll = false;
+      } else {
+        this.checkAll = !this.checkAll;
+      }
+      this.indeterminate = false;
+
+      if (this.checkAll) {
+        let menuArr = this.ALLLIST;
+        // TODO  保存所有的 满足父节菜单 的菜单
+        // this.checkAllGroup = menuArr.map(item => {
+        //   return item.sysMenuId;
+        // });
+      } else {
+        this.checkAllGroup = [];
+      }
     },
 
+    // 全选中的情况
+    checkAllGroupChange(data) {
+      // console.log(data);
+      if (data.length === 104) {
+        this.indeterminate = false;
+        this.checkAll = true;
+      } else if (data.length > 0) {
+        this.indeterminate = true;
+        this.checkAll = false;
+      } else {
+        this.indeterminate = false;
+        this.checkAll = true;
+      }
+    },
+
+    // 全选 END
     //保存
     save() {
-      console.log(this.fruit)
-      this.getroleSetup()
+      console.log(this.checkAllGroup);
+      console.log(this.menuONE);
+      // this.getroleSetup();
     }
   },
   mounted() {
-    this.sysRoleId = this.$route.query.sysRoleId
-    this.sysRoleName = this.$route.query.sysRoleName
-    console.log(this.$route.query.sysRoleId)
-    this.getPermissionset()
+    this.sysRoleId = this.$route.query.sysRoleId;
+    this.sysRoleName = this.$route.query.sysRoleName;
+    this.getPermissionset();
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 html,

@@ -64,6 +64,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
+
     if (response.data.code == 107) {
       router.currentRoute.path != "/login" &&
         router.replace({

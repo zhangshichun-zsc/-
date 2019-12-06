@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-center-between" style="display:flex">
         <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
@@ -70,6 +70,7 @@
         border
         :columns="columns"
         :data="datax"
+        height='525px'
         @on-selection-change="handleSelectionChange"
       ></Table>
       <div class="pages">

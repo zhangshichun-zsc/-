@@ -1,8 +1,39 @@
 <!-- 基础资料(共用) -->
 <template>
   <div class="box">
-    <img class="banner" src="@/assets/images/banner.png" />
-    <div class="login">
+    <header>
+      <span>融合中国 </span><span> | </span
+      ><span class="title"> 后台管理系统</span>
+    </header>
+    <div class="login-box">
+      <img src="@/assets/images/login_bg.svg" />
+      <div class="login-from">
+        <form class="form" autocomplete="off">
+          <p>欢迎登录</p>
+
+          <input
+            type="text"
+            v-model="formValidate.user"
+            placeholder="请输入用户名称"
+            @on-enter="handleSubmit()"
+          />
+
+          <input
+            type="password"
+            v-model="formValidate.password"
+            placeholder="请输入登陆密码"
+            @on-enter="handleSubmit()"
+          />
+
+          <a class="login-btn" href="javascript:;" @click="handleSubmit()"
+            >登录</a
+          >
+        </form>
+      </div>
+    </div>
+    <!-- <img class="banner" src="@/assets/images/login_bg.png" /> -->
+    <!-- <img class="banner" src="@/assets/images/banner.png" /> -->
+    <!-- <div class="login">
       <div class="form">
         <Form
           ref="formValidate"
@@ -48,7 +79,7 @@
           </FormItem>
         </Form>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -94,6 +125,7 @@ export default {
   mounted() {},
   methods: {
     getlogin() {
+      console.log(123);
       login({
         loginName: this.formValidate.user,
         loginPwd: this.formValidate.password
@@ -129,14 +161,18 @@ export default {
       });
     },
 
-    handleSubmit(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          this.getlogin();
-        } else {
-          this.$Message.error("请输入密码或账号!");
-        }
-      });
+    handleSubmit() {
+      if (this.formValidate.user && this.formValidate.password) {
+        this.getlogin();
+      } else {
+        this.$Message.error("请输入密码或账号!");
+      }
+
+      // if (valid) {
+      //   this.getlogin();
+      // } else {
+      //   this.$Message.error("请输入密码或账号!");
+      // }
     }
   }
 };
@@ -150,67 +186,86 @@ export default {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background-color: #c11333;
+  background-color: #f2f2f2;
+  padding-top: 180px;
 }
-.banner {
-  width: 100%;
-  height: 100%;
+header {
+  margin: 0 auto;
+  text-align: center;
+  span {
+    font-size: 40px;
+    color: #c11333;
 
-  vertical-align: top;
+    font-weight: 800;
+  }
+  .title {
+    color: #001c00;
+  }
 }
-
-.login {
-  position: absolute;
-
-  top: 0;
-  right: 250px;
-  // background: #fff;
-  height: 700px;
-
+.login-box {
   display: flex;
+
   justify-content: center;
-  align-items: center;
-}
-.form {
-  display: flex;
-  // justify-content: center;
-  align-items: center;
-
-  height: 420px;
-  width: 520px;
-  // background: ;
-  box-shadow: -1px 1px 13px 9px #fff;
-  .text {
-    text-align: center;
-    margin-top: 30px;
-
-    color: #000;
-    font-size: 32px;
-    font-weight: 900;
-    margin-bottom: 40px;
+  margin-top: 80px;
+  img {
+    width: 443px;
+    height: 562px;
+    vertical-align: middle;
   }
-  .engin {
-    text-align: center;
-    margin-bottom: 40px;
-    color: #000;
-    font-size: 28px;
+  .login-from {
+    width: 443px;
+    height: 562px;
+    background: #ffffff;
+    box-shadow: 0 3px 4px 0 rgba(188, 200, 219, 0.23);
+    border-radius: 0px 23px 23px 0px;
+
+    .form {
+      padding-top: 72px;
+    }
+    p {
+      text-align: center;
+      font-size: 36px;
+      color: #333333;
+      font-weight: 800;
+      margin-bottom: 72px;
+    }
+
+    input {
+      padding: 0 5px;
+      display: block;
+      margin: 0 auto;
+      width: 354px;
+      height: 60px;
+      font-size: 16px;
+      color: #333333;
+      background: #fff;
+      line-height: 60px;
+      outline: none;
+      border: 0;
+      border-bottom: 1px solid #fe6472;
+      border-radius: 0.27px;
+    }
   }
 }
-.ivu-input-default {
-  height: 50px;
-}
-.ivu-btn-success {
-  height: 40px;
-  width: 300px;
-}
-.ivu-form-item {
-  width: 100%;
-}
-.ivu-input-large {
-  height: 45px;
-}
 
-.ivu-form-inline .ivu-form-item {
-  margin-right: 0;
+input:-webkit-autofill {
+  background-color: #fff;
+  outline: none;
+  color: #333333;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+}
+.login-btn {
+  display: block;
+  background-image: linear-gradient(90deg, #ff6877 0%, #fc494d 100%);
+  box-shadow: 0 4px 5px 0 rgba(255, 98, 111, 0.43);
+  border-radius: 24.5px;
+  width: 350px;
+  height: 48px;
+  margin: 0 auto;
+  margin-top: 50px;
+  text-align: center;
+  line-height: 48px;
+  font-size: 18px;
+  color: #ffffff;
 }
 </style>
