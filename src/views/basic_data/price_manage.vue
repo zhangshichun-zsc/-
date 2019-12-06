@@ -24,6 +24,7 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="args.validFlag">
+            <Option value="">全部</Option>
             <Option value="1">有效状态</Option>
             <Option value="0">无效状态</Option>
           </Select>
@@ -31,16 +32,17 @@
         <div class="flex-center-start">
           <span>创建时间</span>
           <Row>
-            <Col span="12">
-               <DatePicker
-                  type="datetimerange"
-                  @on-change="handleChange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width:300px"
-                  format="yyyy-MM-dd HH:mm"
-                ></DatePicker>
-            </Col>
+              <DatePicker
+                :open="open"
+                confirm
+                type="daterange"
+                @on-change="handleChange"
+                @on-ok="successOk">
+                <a href="javascript:void(0)" @click="open = true">
+                    <Icon type="ios-calendar-outline"></Icon>
+                    <template>{{ time }}</template>
+                </a>
+            </DatePicker>
           </Row>
         </div>
       </div>
@@ -49,10 +51,10 @@
       <div class="table-header flex-center-between">
         <div>
           全选
-          <span>已选择0</span>
-          <Button class="table-btn" @click="deletes()">批量删除</Button>
+          <span>已选择{{list.length}}</span>
+          <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
           <Button class="table-btn" @click="showModal(null)">新增</Button>
-          <Modal v-model="modal1" title="新增基金" @on-ok="ok" @on-cancel="cancel">
+          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
                    <Input v-model="pams.orgName" placeholder="请输入基金名称"/>
@@ -60,10 +62,13 @@
                    <FormItem label="联系人员" prop="contactUserName">
                      <Input v-model="pams.contactUserName"/>
                   </FormItem>
-                   <FormItem label="联系方式" >
-                     <Input v-model="args.contactUserPhone"/>
+                   <FormItem label="联系方式" prop='contactUserPhone' >
+                     <Input v-model="pams.contactUserPhone"/>
                   </FormItem>
               </Form>
+              <div slot="footer">
+                 <Button type="error" size="large" @click="ok">确定</Button>
+              </div>
           </Modal>
         </div>
       </div>
@@ -78,30 +83,45 @@
 <script>
 import { getfund,updateFun } from '@/request/api'
 import { filterNull } from '@/libs/utils'
+import { parse } from 'path';
 export default {
   data() {
+     const validatePhone = (rule, value, callback) => {
+        if (!value) {
+            return callback(new Error('手机号不能为空'));
+        }else if(!(/^1[3456789]\d{9}$/.test(value))){ 
+             return callback(new Error('手机号码有误，请重填'));
+        }else{
+            callback();
+        }
+      };       
     return {
-        navigation1: {
+      time:'请选择时间段',
+      open:false,
+      navigation1: {
         head: "基金管理(会员)"
       },
       modal1: false,
         formItem: {
         input: '',
-       },
-       ruleValidate:{
-          name: [
+      },
+      ruleValidate:{
+        name: [
           { required: true, message: '基金名称不能为空', trigger: 'blur' }
-                ],
-          contactUserName: [
+        ],
+        contactUserName: [
           { required: true, message: '联系人员不能为空', trigger: 'blur' }
-                ]
-       },
+        ],
+        contactUserPhone:[
+          { validator: validatePhone, trigger: 'blur' }
+        ]
+      },
       columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
+        // {
+        //   type: "selection",
+        //   width: 60,
+        //   align: "center"
+        // },
         {
           title: "基金名称",
           key: "orgName"
@@ -122,7 +142,7 @@ export default {
           title: "有效状态",
           key: "validFlag",
           algin: "center",
-           render: (h, params) => {
+          render: (h, params) => {
             return h('div', [
               h('i-switch',{
                 props:{
@@ -132,12 +152,10 @@ export default {
                 },
                 on: {
                   "on-change": (e) => {
-                    // let item = this.datax[e]
-                    // this.adds.itemId = item.itemId
-                    // this.adds.typeFlag = item.typeFlag
-                    // this.adds.name = item.name
-                    // this.adds.validFlag = e
-                    // this.addOk()
+                    let item = params.row
+                    this.$set(this.pams,'orgId',item.orgId)
+                    this.$set(this.pams,'validFlag',e)
+                    this.update([this.pams])
                   }
                 }
               })
@@ -158,30 +176,39 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.showModal(params.row)
+                      if(params.row.validFlag === 1){
+                         this.showModal(params.row)
+                      }else{
+                        this.$Message.error('无效状态不能编辑')
+                      }
+                    
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "Button",
-                {
-                 props:{
-                   type:'primary'
-                 },
-                  on: {
-                    click: () => {
-                      this.pams.orgId = params.row.orgId
-                      this.pams.delFlag = 1
-                      this.pams.validFlag = params.row.validFlag
-                      this.list = []
-                      this.ok()
-                    }
-                  }
-                },
-                "删除"
               )
+              // ,
+              // h(
+              //   "Button",
+              //   {
+              //    props:{
+              //      type:'primary'
+              //    },
+              //     on: {
+              //       click: () => {
+              //         if(params.row.validFlag === 1){
+              //           this.pams.orgId = params.row.orgId
+              //           this.pams.delFlag = 1
+              //           this.pams.validFlag = params.row.validFlag
+              //           this.update([this.pams])
+              //         }else{
+              //           this.$Message.error('无效状态不能编辑')
+              //         }
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
@@ -230,17 +257,34 @@ export default {
       getfund(args).then(res => {
         this.sumSize = res.data.totalSize
         this.data = res.data.list
-        this.args.page = res.data.pageNum
         this.sumPage = res.data.totalNum
       })
     },
     changePage(e){
-      this.args.page = e
+      this.$set(this.args.page,'page',e)
       this.getList()
     },
+    successOk(){
+      if(!this.args.startAt&&!this.args.endAt){
+        this.time='请选择时间段'
+      }
+      this.open = false
+    },
     handleChange(e){
-      this.args.startAt = e[0]
-      this.args.endAt = e[1]
+      let start = e[0]
+      let end = e[1]
+      this.time = e[0] + '-' + e[1]
+      if(start&&end){
+        if(start === end){
+          start = start + ' 00:00:00'
+          end = end + ' 59:59:59'
+        }else{
+          start = start + ' 00:00:00'
+          end = end + ' 00:00:00'
+        }
+      }
+      this.args.startAt = start
+      this.args.endAt = end
     },
     showModal(e){
       if(e == null){
@@ -256,17 +300,21 @@ export default {
       this.modal1 = true
     },
     ok() {
-      let list = this.list
-      list.push(this.pams)
-      this.update()
+      this.$refs.formValidate.validate((valid) => {
+        if (valid) {
+             this.update([this.pams])
+        } else {
+            this.$Message.error('没有填写完整');
+        }
+      })
     },
     update(list){
-       list = filterNull(list)
-      updateFun(list).then(res => {
+      updateFun(filterNull({list})).then(res => {
         if(res.code == 200){
-          this.$message.success('更新成功')
-          this.list = []
+          this.modal1 = false
           this.getList()
+        }else{
+          this.$Message.error(res.msg);
         }
       })
     },

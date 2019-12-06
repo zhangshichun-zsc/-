@@ -9,10 +9,6 @@
           <span>筛选查询</span>
         </p>
         <div class="flex-center-end">
-          <div class="Pack">
-            <Icon type="ios-arrow-down"/>
-            <span>收起筛选</span>
-          </div>
           <Button size="small">查询结果</Button>
         </div>
       </div>
@@ -24,6 +20,7 @@
         <p>
           <span>反馈类型:</span>&nbsp;
           <Select style="width:6rem;" placeholder="全部" size="small">
+            <Option :value="null">全部</Option>
             <Option v-for="item in OptionsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </p>
