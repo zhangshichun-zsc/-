@@ -19,7 +19,8 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛
   ],
-  API_INDEX: 2
+  API_INDEX: 0
+
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
@@ -64,6 +65,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
+
     if (response.data.code == 107) {
       this.$Message.error("身份过期请重新登陆!");
       router.currentRoute.path != "/login" &&

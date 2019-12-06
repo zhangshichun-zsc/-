@@ -440,6 +440,14 @@ export default {
   background-color: #f2f2f2;
 }
 
+
+    #sider {
+    width: 240px !important;
+    min-width: 240px !important;
+    padding-top: 82px;
+    
+  }
+
 //  当宽度界限 lg: '992px',xl: '1200px', xxl: '1600'
 @media screen and (max-width: 1600px) {
   .main-content {
@@ -449,32 +457,32 @@ export default {
 
     width: 240px !important;
     min-width: 240px !important;
-    padding-top: 72px;
+    padding-top: 72px !important;
     
   }
 }
 
 @media screen and (max-width: 1200px) {
   .main-content {
-    padding-left: 280px;
+    padding-left: 280px !important;
   }
   #sider {
     background: red;
     width: 240px !important;
     min-width: 240px !important;
-    padding-top: 70px;
+    padding-top: 70px !important;
   }
 }
 
 @media screen and (max-width: 992px) {
   .main-content {
-    padding-left: 280px;
+    padding-left: 280px !important;
   }
   #sider {
     background: red;
     width: 200px !important;
     min-width: 240px !important;
-    padding-top: 80px;
+    padding-top: 80px !important;
   }
 }
 

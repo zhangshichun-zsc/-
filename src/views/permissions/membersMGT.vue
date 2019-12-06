@@ -12,10 +12,10 @@
             placeholder="姓名"
             v-model="name"
             style="width: 200px"
-            @on-search="querys"
           />
           <!-- <Input search size="large" placeholder="用户名/姓名" style="width: 200px" /> -->
-        </p>&nbsp;&nbsp;&nbsp;
+        </p>
+        &nbsp;&nbsp;&nbsp;
         <p>
           <span>所属部门:</span>
           <Select v-model="role" style="width:200px" :transfer="true">
@@ -23,18 +23,36 @@
               v-for="item in deplist"
               :value="item.deptId"
               :key="item.deptId"
-            >{{ item.deptName }}</Option>
+              >{{ item.deptName }}</Option
+            >
           </Select>
-
+        </p>
+        <p>
+          <a href="javascript:;" class="getInfo" @click="getdepartmentmember">
+            <Icon type="ios-search-outline" />查询</a
+          >
         </p>
       </div>
 
       <div>
-         <Button :style="{margin: '24px 0',maxWidth:'100px'}" @click="addmember">添加成员</Button>
-                <Table border :columns="columns" :data="data2"></Table>
+        <a href="javascript:;" class="addmember-btn" @click="addmember"
+          >添加成员</a
+        >
+        <!-- <Button
+          :style="{ margin: '24px 0', maxWidth: '100px' }"
+         
+          ></Button -->
+        <!-- > -->
+        <Table border :columns="columns" :data="data2"></Table>
       </div>
       <div class="pages">
-        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" />
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+        />
       </div>
     </div>
   </div>
@@ -48,7 +66,8 @@ import {
   departmentadd,
   departmentall,
   departmentStatus,
-  departmentsub
+  departmentsub,
+  findDeptUserName
 } from "@/request/api";
 export default {
   data() {
@@ -104,9 +123,9 @@ export default {
 
           align: "center"
         },
-       {
+        {
           title: "部门",
-          key: "sysRoleNames",
+          key: "deptNames",
 
           align: "center"
         },
@@ -142,7 +161,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276",
+                    color: "#FF565A",
                     padding: "10px"
                   },
                   on: {
@@ -152,7 +171,7 @@ export default {
                         query: {
                           sysRoleName: params.row.userName,
                           sysRoleId: params.row.deptUserId,
-                          status: 2
+                          fromURL: this.$route.name
                         }
                       });
                     }
@@ -165,7 +184,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
@@ -174,8 +193,9 @@ export default {
                         query: {
                           userId: params.row.userId,
                           name: params.row.userName,
-                          deptId: this.deptId,
-                          states: 3
+                          deptId: params.row.deptIds,
+                          states: 3,
+                          fromURL: this.$route.name
                         }
                       });
                     }
@@ -201,11 +221,10 @@ export default {
           }
         }
       ],
-      role:'',
+      role: 0,
       data2: [],
       deplist: [],
       parentId: 0,
-
       sun: true,
       sunlist: [],
       deptId: "",
@@ -214,43 +233,48 @@ export default {
       name: "",
       status: "",
       dataCount: 0,
-      lowestlist:[],
-      layer:''
+      lowestlist: [],
+      layer: ""
     };
   },
   mounted() {
-    this.getdepartmentall()
-    this.getdepartmentmember()
+    this.getdepartmentall();
+    this.getdepartmentmember();
   },
 
   methods: {
-
     // 查询所有部门名称
     getdepartmentall() {
       departmentall({}).then(res => {
         if (res.code == 200) {
-          this.deplist = res.data;
+          this.deplist = [
+            {
+              deptId: 0,
+              deptName: "全部"
+            },
+            ...res.data
+          ];
         }
         console.log(res);
       });
     },
 
-     // 查询部门成员
+    // 查询部门成员
     getdepartmentmember() {
-      departmentmember({
+      findDeptUserName({
         page: { page: this.page, size: this.size },
-        depId: 0,
-        sort: ''
+        deptId: this.role,
+        sort: "",
+        name: this.name
       }).then(res => {
         if (res.code == 200) {
-          this.data2 = res.data.list
-          this.dataCount = res.data.totalSize
-
+          this.data2 = res.data.list;
+          this.dataCount = res.data.totalSize;
         } else {
-          this.$Message.error(res.msg)
+          this.$Message.error(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
     //成员管理列表
@@ -307,7 +331,6 @@ export default {
       });
     },
 
-
     //清除input
     clear() {
       (this.formValidate.deptName = ""),
@@ -315,14 +338,11 @@ export default {
         (this.formValidate.parentId = ""),
         (this.formValidate.leader = "");
     },
-
-    //查询
-    querys() {
-      this.getmemberlist();
-    },
-
     addmember() {
-      this.$router.push({ name: "Add-members", query: { states: 2 } });
+      this.$router.push({
+        name: "Add-members",
+        query: { states: 2, fromURL: this.$route.name }
+      });
     }
   }
 };
@@ -339,14 +359,12 @@ body {
 .content {
   margin: 10px;
 }
-.bk {
-  border: 1px solid #e4e4e4;
-}
+
 .Members-search {
-  background-color: #f3f3f3;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 10px 30px;
+  width: 1000px;
 }
 .ivu-menu li {
   color: white;
@@ -404,5 +422,30 @@ body {
 .ivu-menu-light.ivu-menu-vertical
   .ivu-menu-item-active:not(.ivu-menu-submenu):after {
   width: 0;
+}
+
+.getInfo {
+  display: block;
+  width: 110px;
+  height: 32px;
+  line-height: 32px;
+  background: #ff565a;
+  border-radius: 15px;
+  font-size: 16px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.addmember-btn {
+  display: block;
+  width: 110px;
+  height: 32px;
+  line-height: 32px;
+  background: #ff565a;
+  border-radius: 15px;
+  font-size: 16px;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>
