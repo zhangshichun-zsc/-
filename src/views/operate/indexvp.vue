@@ -41,15 +41,20 @@
           <Button size="small" @click="modal1 = true">发布消息</Button>
           <Select size="small" class="inpt" placeholder="显示条数"></Select>
           <Select size="small" class="inpt" placeholder="排序方式"></Select>
-            <Modal v-model="modal1" title="发布消息">
-          <Form :model="formItem" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="消息标题" prop="NewsHeadlines">
-                   <Input v-model="formItem.input" placeholder="请输入标题"></Input>
-                  </FormItem>
-                   <FormItem label="消息内容" prop="MessageContent">
-                     <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 4,maxRows: 4}" placeholder="请输入内容..."></Input>
-                  </FormItem>
-        </Form>
+          <Modal v-model="modal1" title="发布消息">
+            <Form :model="formItem" :rules="ruleValidate" :label-width="120">
+              <FormItem label="消息标题" prop="NewsHeadlines">
+                <Input v-model="formItem.input" placeholder="请输入标题"></Input>
+              </FormItem>
+              <FormItem label="消息内容" prop="MessageContent">
+                <Input
+                  v-model="formItem.textarea"
+                  type="textarea"
+                  :autosize="{minRows: 4,maxRows: 4}"
+                  placeholder="请输入内容..."
+                ></Input>
+              </FormItem>
+            </Form>
           </Modal>
         </div>
       </div>
@@ -65,22 +70,18 @@
 export default {
   data() {
     return {
-     formItem: {
-        input: '',
-        textarea: ''
-                },
-      modal1:false,
-      ruleValidate:{
-        NewsHeadlines:[
-          { required: true, trigger: 'blur' }
-        ],
-        MessageContent:[
-          { required: true, trigger: 'blur' }
-        ],
+      formItem: {
+        input: "",
+        textarea: ""
+      },
+      modal1: false,
+      ruleValidate: {
+        NewsHeadlines: [{ required: true, trigger: "blur" }],
+        MessageContent: [{ required: true, trigger: "blur" }]
       },
       navigation1: {
         head: "系统消息(会员)"
-       },
+      },
       columns: [
         {
           type: "selection",
@@ -128,7 +129,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.modal1=true
+                      this.modal1 = true;
                       // this.$router.push({ name: 'integral_detail' })
                     }
                   }
@@ -212,8 +213,7 @@ export default {
 
   created() {},
 
-  methods: {
-  }
+  methods: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -264,5 +264,4 @@ export default {
 .sdate {
   margin-left: 15px;
 }
-
 </style>

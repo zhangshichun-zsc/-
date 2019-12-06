@@ -9,7 +9,7 @@
     <div class="content">
       <div class="summarize">
         <p>本次活动总结</p>
-         <wangeditor id="excccc2" :labels=editor1  @change="btns"></wangeditor>
+         <wangeditor id="excccc2" :labels='text'  @change="btns"></wangeditor>
 
       </div>
       <div class="activity-content">
@@ -17,18 +17,24 @@
           <span>您可以上传有意思的活动照片</span>
           <span>上传图片(最多6张)</span>
         </p>
-        <div class="uploading-img">
-          <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
+        <div class="uploading-img" v-for='(item,i) in picList'>
+          <div v-if="item.pic">
+            <img class="imgs" :src="item.pic"/>
+            <Icon src="" alt="" class="cancel" @click="cancelImg()"/>
+          </div>
         </div>
+        
+        <div v-if='picList.length<6'>
+          <div class="upload" >
+            <div class="file" @click="()=>{ this.$refs.files.click()}">
+              <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+              <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+            </div>
+          </div>
+        </div>
+
         <div class="btn">
-          <Button class="table-btn" @click="btn">提交</Button>
+          <Button class="table-btn" @click="getactivesum">提交</Button>
         </div>
       </div>
     </div>
@@ -38,6 +44,7 @@
 <script>
 import {activesum} from '@/request/api'
 import wangeditor from '@/components/wangeditor';
+import { upload }from '@/request/http'
 
 export default {
   data() {
@@ -45,7 +52,12 @@ export default {
       navigation1: {
         head: "活动总结(会员)"
       },
-      editor1:''
+      editor1:'',
+      picList:[], //图片展示
+      pics:[], //上传后
+      userId:1,
+      activityId:1,
+      text:''
     };
   },
 
@@ -53,12 +65,40 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.userId = this.$store.state.userId
+  },
 
   methods: {
+    uploadFile() {
+      let file = this.$refs.files.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        var reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = (e) => {
+          console.log(e)
+          this.picList[this.picList.length] = e.target.result
+          this.pics[this.pics.length] = res.data
+        }
+      })
+      console.log(this.picList)
+      console.log(this.pics)
+    },
+    cancelImg(){
+      orgimgdel({path:this.projectMsg.batchPic}).then(res => {
+        this.projectMsg.batchPicShow = null
+        this.projectMsg.batchPic = null
+        this.$Message.success('删除成功')
+      })
+    },
     getactivesum(){
       activesum({
-
+        userId:this.userId,
+        activityId:this.$route.query.acitvityId,
+        text:this.text,
+        pics:this.pics
       }).then(res=>{
         console.log(res)
       })
@@ -66,7 +106,7 @@ export default {
     //
     btns(e){
       console.log(e)
-
+      this.text = e
     },
 
     btn(){

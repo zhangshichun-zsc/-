@@ -12,7 +12,7 @@ export default {
         head: "组织列表(志愿者)",
         id:''
       },
-      data: []
+
     }
   },
   components: { organizationData },

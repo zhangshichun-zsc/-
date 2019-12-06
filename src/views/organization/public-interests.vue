@@ -1,6 +1,6 @@
 <!-- 公益机构 -->
 <template>
-  <organizationData :navigation1='navigation1' :orgType='orgType'></organizationData>
+  <organizationData :navigation1='navigation1' ></organizationData>
 
 </template>
 
@@ -10,10 +10,10 @@ export default {
   data () {
     return {
       navigation1: {
-        head: "公益机构(会员)"
+        head: "公益机构(会员)",
+        id:5
       },
-      orgType:1,
-      data: []
+
     }
   },
 

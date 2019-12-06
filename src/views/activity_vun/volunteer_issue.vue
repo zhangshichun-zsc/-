@@ -506,6 +506,7 @@ import { filterNull } from '@/libs/utils'
         this.dateTwo = e
       },
       changeInput(e){
+        console.log(e)
         let param = e.data
         getOrgId({ orgId:this.args.orgId, param}).then(res => {
           this.judgeList = res.data

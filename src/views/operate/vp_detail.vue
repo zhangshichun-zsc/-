@@ -28,7 +28,7 @@
           show-total
           size="small"
           style="margin: auto"
-          :page-size="pageSize"
+          :page-size="size"
           @on-change="changepages"
         />
       </div>
@@ -38,7 +38,7 @@
 
 <script>
 import { InvitationDetailed, BiInvitationList } from "../../request/api";
-import {date1} from '../../request/datatime'
+import {formatDate} from '../../request/datatime'
 
 export default {
   data() {
@@ -66,7 +66,7 @@ export default {
           title: "注册时间",
           // key: "registerTimestamp",
           render: (h, params) => {
-            return h("div",date1('Y-m-dH:s:i',params.row.registerTimestamp) );
+            return h("div",formatDate(params.row.registerTimestamp) );
           }
         },
         {
@@ -129,11 +129,10 @@ export default {
       data1: [],
        page:1,
       size:10,
-      pageSize: 10,
+
       dataCount:0,
        arr:[],
       sysType:1,
-      volunteerId:''
     };
   },
   //事件监听
@@ -160,7 +159,7 @@ export default {
     getInvitationDetailed() {
       InvitationDetailed({
         sysType: this.sysType,
-        memberId: this.$route.query.volunteerId,
+        memberId: this.$route.query.memberId,
       }).then(res => {
         if(res.code==200){
           this.data1=res.data

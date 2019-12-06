@@ -147,7 +147,6 @@ export default {
       this.feed = feed
     },
     getDetail(){
-      console.log(1)
       getActiveFeedBack({actFkMouldId: this.args.actFkMouldId}).then(res => {
         console.log(res)
         let list = res.data
@@ -176,20 +175,29 @@ export default {
     feedback(){
       let args = this.args
       if(!args.fkMouldName || !this.details[0].context || !args.typeDicName){
-        this.$Message.console.warn('不完整')
+        this.$Message.console.warning('不完整')
         return
       }
       args.details = [...this.details,...this.feed]
       args = filterNull(args)
       addActiveTypeItem(args).then(res => {
-        this.$Message.success('添加成功')
-        this.$router.back()
+         if(res.code == 200){
+            this.$Message.success('添加成功')
+             this.$router.back()
+        }else{
+           this.$Message.error(res.msg)
+        }
+     
       })
     },
     delFeed(){
       delActiveFeedBack({actFkMouldId:this.args.actFkMouldId,valid:3}).then(res => {
-           this.$Message.success('删除成功')
-            this.$router.back()
+        if(res.code == 200){
+          this.$Message.success('删除成功')
+          this.$router.back()
+        }else{
+           this.$Message.error(res.msg)
+        }
       })
     },
     addItem(type){

@@ -8,6 +8,10 @@ import { get, post, posts, postdel } from './http'
 //登陆
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
+// /backstage/out
+export const loginout = p => get('/backstage/out', p) // 登陆
+
+
 export const homepage = p => get('/sysMenu/findAllMenuByRoloe', p) // 主页
 
 
@@ -50,6 +54,7 @@ export const inquiryRel = p => posts('/information-manage/createInformation', p)
 
 
 // 推荐模块
+
 export const AdvertisingList = p => get('/adv-content/get-adcontent-location-list', p) // 广告管理--获取广告位值列表
 
 export const AdvertisingDetails = p => get('/adv-content/get-adv-content', p) // 广告管理--获取广告详情
@@ -59,6 +64,9 @@ export const AdvertisingBatch = p => post('/adv-content/batch-opr-adv-content', 
 export const AdvertisingPage = p => get('/adv-content/adv-content-page', p) // 广告管理--获取广告分页
 
 export const AddAdvertising = p => posts('/adv-content/add-ad-content', p) //广告管理--添加广告
+
+export const AdvertisingRoof = p => posts('/adv-content/changFirst', p) // 广告管理--广告置顶
+
 
 export const Popularitylist = p => posts('/activity-manage/top/list', p)  //人气推荐
 
@@ -321,7 +329,10 @@ export const Gradeadd = p => post('/level/add-level', p) //-等级管理--添加
 
 //组织
 // 家长小组
-export const orgpage = p => posts('/org/getHomeList', p) //组织管理--组织分页
+export const orgpage = p => posts('/org/get-org-Page', p) //组织管理--组织分页
+
+export const orgpages = p => posts('/org/getHomeList', p) //组织管理-家长小组
+
 
 export const orgSetStatus = p => posts('/org/updateAdminAudit', p) // 审批
 

@@ -24,15 +24,17 @@
         <div class="flex-center-start">
           <span>创建时间</span>
           <Row>
-            <Col span="12">
-               <DatePicker
-                  type="daterange"
-                  @on-change="handleChange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width:300px"
-                ></DatePicker>
-            </Col>
+            <DatePicker
+              :open="open"
+              confirm
+              type="daterange"
+              @on-change="handleChange"
+              @on-ok="successOk">
+              <a href="javascript:void(0)" @click="open = true">
+                  <Icon type="ios-calendar-outline"></Icon>
+                  <template>{{ time }}</template>
+              </a>
+            </DatePicker>
           </Row>
         </div>
         <div class="flex-center-end">
@@ -98,6 +100,8 @@ import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
+      open: false,
+      time:'请选择时间段',
       navigation1: {
         head: "证书管理(志愿者)"
       },
@@ -238,15 +242,24 @@ export default {
       this.getList(this.args)
     },
 
+     successOk(){
+      if(!this.args.startAt&&!this.args.endAt){
+        this.time='请选择时间段'
+      }
+      this.open = false
+    },
     handleChange(e){
       let start = e[0]
       let end = e[1]
-      if(start === end){
-        start = start + ' 00:00:00'
-        end = end + ' 59:59:59'
-      }else{
-        start = start + ' 00:00:00'
-        end = end + ' 00:00:00'
+      this.time = e[0] + '-' + e[1]
+      if(start&&end){
+        if(start === end){
+          start = start + ' 00:00:00'
+          end = end + ' 59:59:59'
+        }else{
+          start = start + ' 00:00:00'
+          end = end + ' 00:00:00'
+        }
       }
       this.args.startAt = start
       this.args.endAt = end

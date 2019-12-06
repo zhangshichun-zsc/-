@@ -12,43 +12,7 @@ export default {
         head: "媒体(会员)",
         id:4
       },
-      data: [
-        {
-          name: '媒体1',
-          type: '媒体',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '媒体1',
-          type: '媒体',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '媒体1',
-          type: '媒体',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '媒体1',
-          type: '媒体',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '媒体1',
-          type: '媒体',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        }
-      ]
+
     }
   },
 

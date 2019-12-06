@@ -1,4 +1,4 @@
-<!-- 添加广告(志愿者) -->
+<!-- 添加广告(会员) -->
 <template>
   <div class="integral">
     <div class="integral-header">
@@ -8,14 +8,14 @@
           <Icon type="ios-search-outline" />
           <span>添加广告</span>
         </div>
-        <div>
+        <!-- <div>
           <Button size="small">
             <Icon type="md-refresh" size="10" />刷新
           </Button>
           <Button @click="history" size="small">
             <Icon type="ios-arrow-back" size="10" />返回
           </Button>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="integral-table">
@@ -28,8 +28,7 @@
         </FormItem>
         <FormItem label="广告位置" prop="location">
           <Select v-model="formValidate.location" placeholder="Select your city" style="width:300px">
-                <Option :value="item.dataKey" v-for="(item,index) in citys" :key="index">{{item.dataValue}}</Option>
-
+                <Option :value="item.dicCode" v-for="(item,index) in citys" :key="index">{{item.dataValue}}</Option>
             </Select>
         </FormItem>
 
@@ -116,7 +115,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "添加广告(志愿者)"
+        head: "添加广告(会员)"
       },
       citys:[],
       data1:'',
@@ -168,7 +167,7 @@ export default {
         ]
       },
       data: [],
-      sysid:1
+      sysid:2
     };
   },
   mounted(){
@@ -190,7 +189,7 @@ export default {
     //列表
     getAdvertisingList(){
       AdvertisingList({
-        sysType:2
+        sysType:this.sysid
       }).then(res=>{
         if(res.code==200){
           this.citys=res.data
@@ -202,22 +201,22 @@ export default {
     getadd(){
       this.data1 = this.formValidate.startAt.getTime()
       this.data2 = this.formValidate.endAt.getTime()
-      this.sysid=this.formValidate.location
+
       AddAdvertising({
         sysId:this.sysid,
          title:this.formValidate.title,
-
         startAt:this.data1,
         endAt:this.data2,
         status:this.formValidate.status,
         picUrl:this.formValidate.picUrl,
         linkUrl:this.formValidate.linkUrl,
         remark:this.formValidate.remark,
-        contentId:this.$route.query.contentId
+        contentId:this.$route.query.contentId,
+        location:this.formValidate.location
       }).then(res=>{
         if(res.code==200){
          this.$Message.success("提交成功!");
-         this.$router.push({ name: 'vun_adlist' })
+         this.$router.push({ name: 'vp_adlist' })
   }
         console.log(res)
       }).catch(res=>{
@@ -233,9 +232,9 @@ export default {
         console.log(res)
         let list = res.data
         this.formValidate.title=list.title,
-        this.formValidate.location=list.location,
-        this.formValidate.startAt = formatDate(this.startAt)
-        this.formValidate.endAt = formatDate(this.endAt)
+        this.formValidate.location=Number(list.location),
+        this.formValidate.startAt = list.startAt
+        this.formValidate.endAt = list.endAt
         this.formValidate.status = list.status,
         this.formValidate.picUrl = list.picUrl,
         this.formValidate.linkUrl = list.linkUrl,

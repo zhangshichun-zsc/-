@@ -24,19 +24,23 @@
         <div class="flex-center-start">
           <span>创建时间</span>
           <Row>
-            <Col span="12">
-               <DatePicker
-                  type="daterange"
-                  @on-change="handleChange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width:300px"
-                ></DatePicker>
-            </Col>
+            <DatePicker
+              :open="open"
+              confirm
+              type="daterange"
+              @on-change="handleChange"
+              @on-ok="successOk">
+              <a href="javascript:void(0)" @click="open = true">
+                  <Icon type="ios-calendar-outline"></Icon>
+                  <template>{{ time }}</template>
+              </a>
+            </DatePicker>
           </Row>
         </div>
+        <div class="flex-center-start">
+           <Button @click="modal1 = true">新增模板</Button>
+        </div>
         <div class="flex-center-end">
-          <Button @click="modal1 = true">新增模板</Button>
            <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
              <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
                  <FormItem label="组织" prop="orgId">
@@ -70,18 +74,17 @@
       <div class="table-header flex-center-between">
         <div class="data-ios">
          <div class="flex-center-start">
-           <!-- <i-icon type="ios-apps" /> -->
           <span>数据列表</span>
          </div>
-            <div class="flex-center-end">
-              <Select size='small' class="inpt" placeholder="显示条数" @on-change='changeNum'>
-                <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
-              </Select>
-               <Select size='small' class="inpt" placeholder="排序方式"  @on-change='changeSort'>
-                <Option value="create_at desc">升序</Option>
-                <Option value="create_at asc">降序</Option>
-              </Select>
-            </div>
+          <div class="flex-center-end">
+            <Select size='small' class="inpt" placeholder="显示条数" @on-change='changeNum'>
+              <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
+            </Select>
+              <Select size='small' class="inpt" placeholder="排序方式"  @on-change='changeSort'>
+              <Option value="create_at desc">升序</Option>
+              <Option value="create_at asc">降序</Option>
+            </Select>
+          </div>
         </div>
       </div>
       <Table border :columns="columns" :data="data"></Table>
@@ -98,7 +101,9 @@ import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
-        navigation1: {
+      open: false,
+      time:'请选择时间段',
+      navigation1: {
         head: "证书管理(会员)"
       },
       ruleValidate:{
@@ -228,13 +233,24 @@ export default {
       this.page = 1
       this.getList(this.args)
     },
-
+    successOk(){
+      if(!this.args.startAt&&!this.args.endAt){
+        this.time='请选择时间段'
+      }
+      this.open = false
+    },
     handleChange(e){
       let start = e[0]
       let end = e[1]
-      if(start === end){
-        start = start + ' 00:00:00'
-        end = end + ' 59:59:59'
+      this.time = e[0] + '-' + e[1]
+      if(start&&end){
+        if(start === end){
+          start = start + ' 00:00:00'
+          end = end + ' 59:59:59'
+        }else{
+          start = start + ' 00:00:00'
+          end = end + ' 00:00:00'
+        }
       }
       this.args.startAt = start
       this.args.endAt = end
@@ -299,7 +315,7 @@ export default {
   padding: 20px;
   background: #fff;
 }
-.integral-header .integral-body .flex-center-start .inpt {
+.inpt {
   width: 200px;
   margin-left: 15px;
 }
