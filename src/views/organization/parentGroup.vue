@@ -12,7 +12,7 @@ export default {
         head: '家长小组列表(会员)',
         name: 'parent'
       },
-      index: 0
+      index: 2
     }
   },
   components: { groupList }

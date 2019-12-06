@@ -1,7 +1,8 @@
-<!-- 邀请好友查询(志愿者) -->
+<!-- 邀请好友查询(会员) -->
 <template>
   <div class="integral">
-        <Tophead :navigation1=navigation1 :top=top @query="query"></Tophead>
+    <Tophead :navigation1=navigation1 :top=top @query="query"></Tophead>
+
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div class="flex-center-start">
@@ -19,7 +20,6 @@
             </div>
       </div>
        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
-
       <div class="pages">
         <Page
           :total="dataCount"
@@ -38,12 +38,12 @@
 
 <script>
 import {tablepage} from '@/request/mixin'
-import {InvitationList} from '../../request/api'
+import {InvitationList} from '@/request/api'
 export default {
   data() {
     return {
         navigation1: {
-        head: "邀请好友查询(志愿者)",
+        head: "邀请好友查询(会员)",
        },
       columns: [
         {
@@ -104,7 +104,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'vp_detail',query:{ memberId:params.row.memberId,inviteUserAccountId:params.row.userAccountId} })
+                      this.$router.push({ name: 'vp_detail',query:{ volunteerId:params.row.memberId,inviteUserAccountId:params.row.userAccountId} })
                     }
                   }
                 },
@@ -124,6 +124,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
+      top:[{name:'用户账号',type:'input',value:''},{name:'用户昵称',type:'input',value:''}],
       data: [],
        page:1,
       size:10,
@@ -133,19 +134,17 @@ export default {
       sysType:2,
       info:'',
       nickname:'',
-      inviteUserAccountId:1,
-      top:[{name:'用户账号',type:'input',value:''},{name:'用户昵称',type:'input',value:''}],
 
     };
   },
 
+  mixins:[tablepage],
   components: {},
   //事件监听
   watch: {
     size: "getInvitationList",
     sort: "getInvitationList"
   },
-  mixins:[tablepage],
   computed: {},
   mounted(){
     this.getInvitationList()
@@ -155,9 +154,9 @@ export default {
   },
 
   methods: {
-
     //查询
     query(e){
+      this.page=1
       this.info=e[0].value
       this.nickname=e[1].value
 this.getInvitationList()
@@ -182,7 +181,6 @@ this.getInvitationList()
       //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getInvitationList()
     },
 

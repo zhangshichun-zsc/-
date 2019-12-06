@@ -295,7 +295,7 @@
 </template>
 
 <script>
-import { homepage } from '../request/api'
+import { homepage,loginout} from '../request/api'
 export default {
   props: ['labels'],
   data() {
@@ -329,8 +329,24 @@ export default {
         userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
-          // return res.data
           this.routelist = res.data
+        }
+        console.log(res)
+      })
+    },
+
+    //退出登录
+    getloginout(){
+      loginout({
+        userId:this.$store.state.userId
+      }).then(res=>{
+        if(res.code==200){
+            this.$store.commit('clearToken')
+        this.$router.push({ name: 'login' })
+        console.log(this.$store.state.token)
+          this.$Message.info('退出成功')
+        }else{
+          this.$Message.error(res.msg)
         }
         console.log(res)
       })
@@ -376,9 +392,8 @@ export default {
     modalOk(e) {
       this.modal1 = false
       if (e == 1) {
-        this.$store.commit('clearToken')
-        this.$router.push({ name: 'login' })
-        console.log(this.$store.state.token)
+        this.getloginout()
+
       }
     },
 
@@ -450,7 +465,7 @@ export default {
     width: 240px !important;
     min-width: 240px !important;
     padding-top: 72px;
-    
+
   }
 }
 

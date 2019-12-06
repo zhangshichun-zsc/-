@@ -79,7 +79,7 @@
 
 <script>
 import {
-  orgpage,
+  orgpages,
   orgSetStatus,
   queryVouluteerOrgList,
   modifyOrgMsg,
@@ -300,7 +300,7 @@ export default {
       })
       console.log(fromobj)
       if (this.$props.navigation1.name === 'parent') {
-        orgpage(fromobj).then(res => {
+        orgpages(fromobj).then(res => {
           if (res.code == 200) {
             this.dataCount = res.data.totalSize
             this.data = res.data.list

@@ -10,38 +10,9 @@ export default {
     return {
       navigation1: {
         head: "同行(会员)",
-        id:2
+        id:7
       },
-      data: [
-        {
-          name: '同行1',
-          type: '同行',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '同行1',
-          type: '同行',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '同行1',
-          type: '同行',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        },
-        {
-          name: '同行1',
-          type: '同行',
-          addr: '北京市',
-          leader: '比心',
-          num: 20
-        }
-      ]
+
     }
   },
 
