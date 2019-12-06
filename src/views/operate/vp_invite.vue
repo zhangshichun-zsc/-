@@ -20,7 +20,6 @@
             </div>
       </div>
        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
-
       <div class="pages">
         <Page
           :total="dataCount"
@@ -105,7 +104,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'vp_detail',query:{ volunteerId:params.row.volunteerId,inviteUserAccountId:params.row.userAccountId} })
+                      this.$router.push({ name: 'vp_detail',query:{ memberId:params.row.memberId,inviteUserAccountId:params.row.userAccountId} })
                     }
                   }
                 },
@@ -157,6 +156,7 @@ export default {
   methods: {
     //查询
     query(e){
+      this.page=1
       this.info=e[0].value
       this.nickname=e[1].value
 this.getInvitationList()

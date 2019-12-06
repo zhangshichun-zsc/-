@@ -8,12 +8,13 @@
           <span>
             <Icon type="navicon-round" />数据列表
           </span>
+          <Button class="table-btn" @click="choice">选择活动</Button>
         </div>
         <div>
-          <Button class="table-btn" @click="choice">选择活动</Button>
+
           <Modal v-model="modal1" title="选择活动">
             <div class="action">
-              <Input placeholder="活动名称搜索" v-model="name" style="width:300px;border-radius:0"></Input>
+              <Input placeholder="活动名称搜索" v-model="name" style="width:300px;border-radius:0"/>
               <Button style="background:#ccc;border-radius:0 " @click="choice">
                 <Icon type="ios-search" size="20" />
               </Button>
@@ -329,6 +330,7 @@ export default {
 
     //弹出框
     choice() {
+       this.page=1
       this.modal1 = true;
       this.getPopularityChoice();
     }
