@@ -1,4 +1,4 @@
-<!-- 邀请好友查询(会员) -->
+<!-- 邀请好友查询(志愿者) -->
 <template>
   <div class="integral">
     <Tophead :navigation1=navigation1 :top=top @query="query"></Tophead>
@@ -43,7 +43,7 @@ export default {
   data() {
     return {
         navigation1: {
-        head: "邀请好友查询(会员)",
+        head: "邀请好友查询(志愿者)",
        },
       columns: [
         {
@@ -104,7 +104,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'vp_detail',query:{ volunteerId:params.row.memberId,inviteUserAccountId:params.row.userAccountId} })
+                      this.$router.push({ name: 'vun_detail',query:{ volunteerId:params.row.volunteerId,inviteUserAccountId:params.row.userAccountId} })
                     }
                   }
                 },

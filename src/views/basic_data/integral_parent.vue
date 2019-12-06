@@ -1,35 +1,27 @@
 <!-- 家长职业类型管理(会员) -->
 <template>
   <div>
+
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-           <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <span>已选择{{arr.length}}</span>
-          <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
-          <Modal v-model="modal1" :title="'新增'+title">
+          <!-- <span>已选择{{arr.length}}</span> -->
+          <Button class="table-btn" @click="btn">{{title}}</Button>
+          <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem :label="title" prop="name">
-                <Input v-model="formValidate.name"></Input>
+              <FormItem :label="title" prop="dicName">
+                <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="primary" size="large" @click="modalOk">确定</Button>
             </div>
           </Modal>
         </div>
       </div>
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data1"
-        @on-selection-change="handleSelectionChange"
-      ></Table>
+      <Table ref="selection" border :columns="columns" :data="data1"></Table>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -46,7 +38,8 @@
 </template>
 
 <script>
-import {formatDate} from '@/request/datatime'
+import { Basicsearch, Basicbatch } from "@/request/api";
+import { formatDate } from "@/request/datatime";
 import basicdata from "@/components/basicdata";
 export default {
   data() {
@@ -55,10 +48,12 @@ export default {
         head: "家长职业类型管理(会员)"
       },
       formValidate: {
-        name: ""
+        dicName: ""
       },
       ruleValidate: {
-        name: [{ required: true, message: "就业情况不能为空", trigger: "blur" }]
+        dicName: [
+          { required: true, message: "就业情况不能为空", trigger: "blur" }
+        ]
       },
       title: "家长职业类型管理",
       columns: [
@@ -69,14 +64,11 @@ export default {
         },
         {
           title: "职业名称",
-          key: "EmploymentSituation"
+          key: "dicName"
         },
         {
           title: "创建时间",
-          key: "createtime",
-           render:(h,params)=>{
-              return h("div",formatDate(params.row.createtime))
-          }
+          key: "creatAt"
         },
         {
           title: "创建人",
@@ -90,11 +82,18 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.hotFlag == 1
+                  value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {
-                    console.log(e)
+                    if(e){
+                      this.states=1
+                      this.getBasicbatch(2)
+                    }else{
+                      this.states=0
+                       this.getBasicbatch(2)
+                    }
+
                   }
                 }
               })
@@ -117,36 +116,54 @@ export default {
                   on: {
                     click: () => {
                       this.modal1 = true;
+                      this.dicId=params.row.dicId
+                      this.text = "编辑新增家长职业类型管理";
+                       this.id=0
+                      this.formValidate.dicName = params.row.dicName;
+
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {}
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
       ],
       data1: [],
       modal1: false,
-      arr: [],
-       page: 1,
+
+
+
+      page: 1,
       size: 10,
       dataCount: 0,
-      status:false
+      sysId: 1,
+      typeFlag: 1,  //每个页面写死
+      startAt: "",
+      endAt: "",
+      validFlag: "",
+      params: "",
+      dicCode: 0,
+
+      list: [],
+      text: "新增家长职业类型管理",
+      states:'',
+      id:0
     };
   },
 
@@ -154,61 +171,127 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getBasicsearch();
+  },
 
   methods: {
-    //查询
-    query(e) {
-      console.log(e);
+    //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
+    getBasicsearch() {
+      let params = {
+        page: {
+          page: this.page,
+          size: this.size
+        },
+        sysId: this.sysId,
+        typeFlag: this.typeFlag,
+        targetName: this.targetName,
+        validFlag: this.validFlag,
+        startAt: this.startAt,
+        endAt: this.endAt
+      };
+      this.params = this.util.remove(params);
+      Basicsearch(this.params).then(res => {
+        if (res.code == 200) {
+          this.data1 = res.data.list;
+          this.dataCount = res.data.totalSize;
+          this.dicCode = this.dataCount + 1;
+        }
+        console.log(res);
+      });
     },
 
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      console.log(this.status);
-      this.$refs.selection.selectAll(this.status);
+    // 批量操作"list": [{"orgId": "70", "validFlag": "0"}]
+    getBasicbatch(e) {
+      if (e==0) {
+         (this.list = [
+          {
+            sysId: this.sysId,
+            dicName: this.formValidate.dicName,
+            userId: this.$store.state.userId,
+            validFlag: 1,
+            delFlag: 0,
+            typeFlag: this.typeFlag,
+            dicCode: this.dicCode,
+            orgId: 1
+          }
+        ]);
+      } else if (e == 1) {
+         (this.list = [
+          {
+            dicId: this.dicId,
+            dicName: this.formValidate.dicName
+          }
+        ]);
+      } else if (e == 2) {
+         (this.list = [
+          {
+            dicId: this.dicId,
+            validFlag: this.states
+          }
+        ]);
+      }
+      Basicbatch({ list: this.list }).then(res => {
+        if (res.code == 200) {
+          this.getBasicsearch();
+          this.modal1 = false;
+        }
+        console.log(res);
+      });
+    },
+
+    //查询
+    query(e) {
+      this.page = 1;
+      this.validFlag = e.validFlag;
+      this.targetName = e.dicName;
+      this.startAt = e.createTimestamp[0];
+      this.endAt = e.createTimestamp[1];
+      // if (e.createTimestamp == "") {
+      // this.startAt = '';
+      // this.endAt = '';
+      // } else if (new Date() > e.createTimestamp) {
+      //   this.startAt = e.createTimestamp;
+      //   this.endAt = new Date();
+      // } else {
+      //   this.startAt = new Date();
+      //   this.endAt = e.createTimestamp;
+      // }
+      this.getBasicsearch();
     },
 
     //取消
-    modalCancel(){
-
+    modalCancel() {
+      this.modal1 = false;
+      this.formValidate.dicName = "";
     },
     //确定
-    modalOk(){
-
-    },
-
-    //每条数据单选框的状态
-    handleSelectionChange(val){
-      this.arr=val
-      console.log(this.arr)
-      if (this.arr.length == this.dataCount&&this.dataCount!=0||this.arr.length==this.size) {
-        this.status = true;
+    modalOk() {
+      if (this.dicName == "") {
+        this.$Message.error("名称不能为空");
       } else {
-        this.status = false;
-      }
-       //选择的数据id
-        let arr = [];
-        for (let i = 0; i < this.arr.length+1; i++) {
-            arr.push(this.arr[i].id);
+        if (this.id==0) {
+          this.getBasicbatch(1);
+        } else {
+          this.getBasicbatch(0);
         }
-        this.arr = arr.toString();
-        console.log(this.arr)
+      }
     },
 
-     //分页功能
+    //弹出框
+    btn(){
+      this.modal1=true
+      this.id=1
+      this.formValidate.dicName=''
+    },
+
+    //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
-
+      this.getBasicsearch();
     },
 
-    ok() {
-      this.$Message.info("新增成功");
-    },
-    cancel() {
-      this.$Message.info("新增失败");
-    }
+
   }
 };
 </script>

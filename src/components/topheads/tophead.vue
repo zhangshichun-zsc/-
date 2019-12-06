@@ -23,7 +23,7 @@
           <Form inline class="flex-center-start" v-if="Retract==true">
             <div v-for="(item,index) in top" :key="index">
               <FormItem :label=item.name prop="name" v-if="item.type=='input'">
-                <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"></Input>
+                <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"/>
               </FormItem>
               <FormItem :label=item.name prop="list" v-if="item.type=='select'">
                 <Select style="width:150px" v-model="item.value">
@@ -122,28 +122,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
+
 
 .main {
   background-color: #ffffff;

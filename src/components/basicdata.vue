@@ -48,18 +48,8 @@
         </div>
         <div class="flex-center-start">
           <span style="margin-right:20px">创建时间</span>
-          <Row>
-            <Col span="12">
-              <DatePicker
-                type="date"
-                placeholder="请选择日期"
-                style="width: 200px"
-                class="sdate"
-                :transfer="true"
-                v-model="search.createTimestamp"
-              ></DatePicker>
-            </Col>
-          </Row>
+           <DatePicker type="daterange" v-model="search.createTimestamp" confirm placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+
         </div>
       </div>
     </div>

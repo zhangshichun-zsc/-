@@ -9,7 +9,7 @@ import { get, post, posts, postdel } from './http'
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
 // /backstage/out
-export const loginout = p => get('/backstage/out', p) // 登陆
+export const loginout = p => get('/backstage/out', p) // 登出
 
 
 export const homepage = p => get('/sysMenu/findAllMenuByRoloe', p) // 主页
@@ -132,6 +132,16 @@ export const Activerulepage = p => get('/activity-manage/get-activity-rule-page'
 
 
 // 基础资料
+
+// 家长职业类型管理（会员）
+// 志愿者特长管理（共用）
+// 志愿者活动分类管理（志愿者）
+// 官方活动分类管理
+// 障碍类型
+export const Basicsearch = p => posts('/volunteer-manager/queryUserBasicData', p)  //查询
+export const Basicbatch = p => postdel('/volunteer-manager/updateUserBasicData', p)  //操作
+
+
 export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p) //协议管理--协议分页
 
 export const Agreementdel = p => post('/agreement-manage/del-agreement', p) //删除协议

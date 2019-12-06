@@ -1,36 +1,26 @@
-<!-- 障碍管理(会员) -->
+<!-- 障碍类型 -->
 <template>
   <div>
-    <tophead :navigation1="navigation1" :top="top" @query="query"></tophead>
-    <div class="integral-table">
+     <basicdata :navigation1="navigation1" @query="query"></basicdata>
+     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <span>已选择{{arr.length}}</span>
-          <Button class="table-btn" @click="del">批量删除</Button>
-          <Button class="table-btn" @click="addbtn(1)">新增智障类型</Button>
+          <!-- <span>已选择{{arr.length}}</span> -->
+          <Button class="table-btn" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem :label="text" prop="name">
-                <Input v-model="formValidate.name"></Input>
+              <FormItem label=障碍类型 prop="dicName">
+                <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="primary" size="large" @click="modalOk">确定</Button>
             </div>
           </Modal>
         </div>
       </div>
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data"
-        @on-selection-change="handleSelectionChange"
-      ></Table>
+      <Table ref="selection" border :columns="columns" :data="data1"></Table>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -43,13 +33,14 @@
         />
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import { Retardedtype, Retardedadd, Retardeddel } from "../../request/api";
-import { formatDate } from "../../request/datatime";
-import tophead from "../../components/tophead";
+import { Basicsearch, Basicbatch } from "@/request/api";
+import { formatDate } from "@/request/datatime";
+import basicdata from "@/components/basicdata";
 export default {
   data() {
     return {
@@ -57,11 +48,14 @@ export default {
         head: "障碍类型(会员)"
       },
       formValidate: {
-        name: ""
+        dicName: ""
       },
       ruleValidate: {
-        name: [{ required: true, message: "新增智障类型", trigger: "blur" }]
+        dicName: [
+          { required: true, message: "志愿者特长不能为空", trigger: "blur" }
+        ]
       },
+      title: "新增类型",
       columns: [
         {
           type: "selection",
@@ -69,16 +63,14 @@ export default {
           align: "center"
         },
         {
-          title: "障碍类型名称",
+          title: "特长名称",
           key: "dicName"
         },
         {
           title: "创建时间",
-          key: "createAt",
-          render: (h, params) => {
-            return h("div", formatDate(params.row.createAt));
-          }
+          key: "creatAt"
         },
+
         {
           title: "有效状态",
           key: "status",
@@ -91,12 +83,14 @@ export default {
                 },
                 on: {
                   input: e => {
-                    this.arr = Array.of(params.row.dicId);
-                    if (e == true) {
-                      this.getRetardeddel(2);
-                    } else {
-                      this.getRetardeddel(3);
+                    if(e){
+                      this.states=1
+                      this.getBasicbatch(2)
+                    }else{
+                      this.states=0
+                       this.getBasicbatch(2)
                     }
+
                   }
                 }
               })
@@ -118,218 +112,206 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.addbtn(2, params.row.dicName, params.row.dicId);
+                      this.modal1 = true;
+                      this.dicId=params.row.dicId
+                      this.text = "修改障碍类型";
+                      this.id=0
+                      this.formValidate.dicName = params.row.dicName;
+
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.arr = Array.of(params.row.dicId);
-
-                      this.getRetardeddel(1);
-                    }
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {}
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
       ],
-      data: [],
-      top: [
-        { name: "名称", type: "input", value: "" },
-        {
-          name: "有效状态",
-          type: "select",
-          list: [
-            { dataValue: "全部", dataKey: "2" },
-            { dataValue: "有效", dataKey: "1" },
-            { dataValue: "无效", dataKey: "0" }
-          ],
-          value: ""
-        }
-      ],
+      data1: [],
       modal1: false,
-      arr: [],
+      top:[{
+        name:'名称',
+        type:'input',
+        value:''
+      },{
+        name:'有效日期',
+        type:'select',
+        list:[{dataKey:'',dataValue:'全部',},{dataKey:'0',dataValue:'无效',},{dataKey:'1',dataValue:'有效',}],
+        value:''
+      },],
+
       page: 1,
       size: 10,
       dataCount: 0,
-      status: false,
-      validFlag: null,
-      name: null,
-      type: "9",
-      text: null,
-      add: null,
-      userId: 1,
-      dicId: null,
-      types: null,
-      arrs: ""
+      sysId: 1,
+      typeFlag: 9,  //每个页面写死
+      startAt: "",
+      endAt: "",
+      validFlag: "",
+      params: "",
+      dicCode: 0,
+
+      list: [],
+      text: "添加智障类型",
+      states:'',
+      id:0
     };
   },
 
-  components: { tophead },
+  components: { basicdata },
 
   computed: {},
 
-  created() {},
-  mounted() {
-    this.getRetardedtype();
+  created() {
+    this.getBasicsearch();
   },
+
   methods: {
-    //列表
-    getRetardedtype() {
-      Retardedtype({
-        page: { page: this.page, size: this.size },
+    //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
+    getBasicsearch() {
+      let params = {
+        page: {
+          page: this.page,
+          size: this.size
+        },
+        sysId: this.sysId,
+        typeFlag: this.typeFlag,
+        targetName: this.targetName,
         validFlag: this.validFlag,
-        name: this.name,
-        type: this.type
-      }).then(res => {
+        startAt: this.startAt,
+        endAt: this.endAt
+      };
+      this.params = this.util.remove(params);
+      Basicsearch(this.params).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data1 = res.data.list;
           this.dataCount = res.data.totalSize;
-        } else {
-          this.$Message.error(res.msg);
+          this.dicCode = this.dataCount + 1;
         }
         console.log(res);
       });
     },
 
-    //新增修该
-    getRetardedadd() {
-      Retardedadd({
-        type: this.type,
-        add: this.add,
-        name: this.formValidate.name,
-        dicId: this.dicId,
-        userId: this.userId
-      }).then(res => {
-        if (res.code == 200) {
-          this.modal1 = false;
-          this.getRetardedtype();
-          this.$Message.info("操作成功");
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res);
-      });
-    },
-
-    //删除
-    getRetardeddel(type) {
-      this.types = type;
-      Retardeddel({
-        userId: this.userId,
-        dicId: this.arr,
-        type: this.types
-      }).then(res => {
-        if (res.code == 200) {
-          this.arr = [];
-          this.getRetardedtype();
-          this.$Message.info("操作成功");
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res);
-      });
-    },
-
-    //弹出框显示
-    addbtn(e, name, id) {
-      this.modal1 = true;
-      this.add = e;
-      if (e == 1) {
-        this.text = "新增智障类型";
-        this.formValidate.name = "";
-        this.dicId = "";
-      } else {
-        this.text = "编辑智障类型";
-        this.formValidate.name = name;
-        this.dicId = id;
+    // 批量操作"list": [{"orgId": "70", "validFlag": "0"}]
+    getBasicbatch(e) {
+      if (e==0) {
+         (this.list = [
+          {
+            sysId: this.sysId,
+            dicName: this.formValidate.dicName,
+            userId: this.$store.state.userId,
+            validFlag: 1,
+            delFlag: 0,
+            typeFlag: this.typeFlag,
+            dicCode: this.dicCode,
+            orgId: 1
+          }
+        ]);
+      } else if (e == 1) {
+         (this.list = [
+          {
+            dicId: this.dicId,
+            dicName: this.formValidate.dicName
+          }
+        ]);
+      } else if (e == 2) {
+         (this.list = [
+          {
+            dicId: this.dicId,
+            validFlag: this.states
+          }
+        ]);
       }
+      Basicbatch({ list: this.list }).then(res => {
+        if (res.code == 200) {
+          this.getBasicsearch();
+          this.modal1 = false;
+          if(e==0){
+            this.$Message.info('添加成功')
+          }else if(e==1){
+            this.$Message.info('编辑成功')
+
+          }else if(e==2){
+            this.$Message.info('操作成功')
+
+          }
+        }
+        console.log(res);
+      });
     },
-    //取消弹出框
+
+     //查询
+    query(e) {
+      this.page = 1;
+      this.validFlag = e.validFlag;
+      this.targetName = e.dicName;
+      this.startAt = e.createTimestamp[0];
+      this.endAt = e.createTimestamp[1];
+      // if (e.createTimestamp == "") {
+      // this.startAt = '';
+      // this.endAt = '';
+      // } else if (new Date() > e.createTimestamp) {
+      //   this.startAt = e.createTimestamp;
+      //   this.endAt = new Date();
+      // } else {
+      //   this.startAt = new Date();
+      //   this.endAt = e.createTimestamp;
+      // }
+      this.getBasicsearch();
+    },
+
+    //取消
     modalCancel() {
       this.modal1 = false;
+      this.formValidate.dicName = "";
+    },
+    //确定
+    modalOk() {
+      if (this.dicName == "") {
+        this.$Message.error("名称不能为空");
+      } else {
+        if (this.id == 0) {
+          this.getBasicbatch(1);
+        } else {
+          this.getBasicbatch(0);
+        }
+      }
     },
 
     //弹出框
-    modalOk(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          this.getRetardedadd();
-        } else {
-          this.$Message.error("必填项不能为空！");
-        }
-      });
-    },
-
-    //删除
-    del() {
-      if (this.arr.length == 0) {
-        this.$Message.error("请至少选择一项!");
-      } else {
-        this.arr = this.arrs.map(item => {
-          return item.dicId;
-        });
-        this.getRetardeddel(1);
-      }
-    },
-
-    //查询
-    query(e) {
-      this.name = e[0].value;
-      if (e[1].value == 2) {
-        this.validFlag = "";
-      } else {
-        this.validFlag = e[1].value;
-      }
-      this.getRetardedtype();
-      console.log(e);
-    },
-
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      console.log(this.status);
-      this.$refs.selection.selectAll(this.status);
-    },
-
-    //每条数据单选框的状态
-    handleSelectionChange(val) {
-      this.arr = val;
-      this.arrs = val;
-      if (
-        (this.arr.length == this.dataCount && this.dataCount != 0) ||
-        this.arr.length == this.size
-      ) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
+    btn(){
+      this.modal1=true
+      this.id=1
+      this.formValidate.dicName=''
     },
 
     //分页功能
     changepages(index) {
       this.page = index;
-      this.getRetardedtype();
-    }
+      this.getBasicsearch();
+    },
+
+
   }
 };
 </script>
 <style lang="scss" scoped>
 .integral-table {
-  margin-top: 10px;
+  margin-top: 30px;
 }
 .table-header {
   padding: 5px 20px;
