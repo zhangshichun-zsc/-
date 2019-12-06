@@ -112,8 +112,6 @@
 </template>
 <script>
 import Selsect from '@/components/selsect'
-
-
 import { upload } from "../../request/http";
 import {orgimg} from '@/request/http'
 import {

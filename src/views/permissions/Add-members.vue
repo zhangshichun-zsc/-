@@ -4,11 +4,11 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <div class="con">
-        <div class="title bk-szy">
+        <!-- <div class="title bk-szy">
           <p>
-            <span>{{navigation1.head}}</span>
+            <span>{{ navigation1.head }}</span>
           </p>
-        </div>
+        </div> -->
         <div class="add inter-table">
           <Form
             style="margin: 0 auto;"
@@ -18,50 +18,87 @@
             :label-width="100"
           >
             <FormItem label="成员名称:" prop="userName">
-              <Input style="width: 10rem" v-model="AddDate.userName" />
+              <Input
+                placeholder="请输入成员名称"
+                style="width: 10rem"
+                v-model="AddDate.userName"
+              />
             </FormItem>
             <FormItem label="手机号:" prop="tel">
-              <Input style="width: 10rem" v-model="AddDate.tel" />
+              <Input
+                placeholder="请输入手机号"
+                style="width: 10rem"
+                v-model="AddDate.tel"
+                :maxlength="11"
+              />
             </FormItem>
             <FormItem label="邮箱地址:" prop="email">
-              <Input style="width: 10rem" v-model="AddDate.email" />
+              <Input
+                placeholder="请输入邮箱地址"
+                style="width: 10rem"
+                v-model="AddDate.email"
+              />
             </FormItem>
             <FormItem label="所属部门:" prop="deplNames">
-              <Select style="width: 10rem" multiple v-model="AddDate.deplNames" placeholder="全部">
+              <Select
+                style="width: 10rem"
+                v-model="AddDate.deplNames"
+                placeholder="请选择所属部门"
+              >
                 <Option
                   :value="item.deptId"
-                  v-for="(item,index) in list"
+                  v-for="(item, index) in list"
                   :key="index"
-                >{{item.deptName}}</Option>
+                  >{{ item.deptName }}</Option
+                >
               </Select>
-              <a>查看部门详情</a>
-              <p>选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限</p>
+              <a href="javascript:;">查看部门详情</a>
+              <p>
+                选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限
+              </p>
             </FormItem>
             <FormItem label="所属角色:" prop="sysRoleNames">
-              <Select style="width: 10rem" multiple v-model="AddDate.sysRoleNames" placeholder="全部">
+              <Select
+                multiple
+                style="width: 10rem"
+                v-model="AddDate.sysRoleNames"
+                placeholder="请选择所属角色"
+              >
                 <Option
-                  v-for="(item,index) in checkList"
+                  v-for="(item, index) in checkList"
                   :key="index"
                   :value="item.sysRoleId"
-                >{{item.sysRoleName}}</Option>
+                  >{{ item.sysRoleName }}</Option
+                >
               </Select>
               <a>查看角色详情</a>
-              <p>选择所属部门后默认继承角色功能权限，可在成员列表中单独设置权限</p>
+              <p>
+                选择所属部门后默认继承角色功能权限，可在成员列表中单独设置权限
+              </p>
             </FormItem>
             <FormItem label="密码设置:" prop="loginPwd">
-              <Input style="width: 10rem" v-model="AddDate.loginPwd" />
+              <Input
+                placeholder="请设置密码"
+                style="width: 10rem"
+                v-model="AddDate.loginPwd"
+              />
             </FormItem>
             <FormItem label="备注信息:" prop="comments">
               <Input
                 style="width: 20rem"
                 v-model="AddDate.comments"
                 type="textarea"
-                :autosize="{minRows: 8,maxRows: 5}"
+                :autosize="{ minRows: 8, maxRows: 5 }"
                 placeholder="请输入内容"
               />
             </FormItem>
             <FormItem>
-              <Button type="success" @click="handleReset('AddDate')">提交</Button>
+              <a
+                href="javascript:;"
+                class="addDate-btn"
+                @click="handleReset('AddDate')"
+                >提交</a
+              >
             </FormItem>
           </Form>
         </div>
@@ -77,10 +114,22 @@ import {
   roleedit,
   memberlist,
   rolequery,
-  departaddDeptUser
+  departaddDeptUser,
+  findDeptUserName,
+  editDeptUser
 } from "@/request/api";
 export default {
   data() {
+    const validatePhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else if (!/^1[34578]\d{9}$/.test(value)) {
+        callback("手机号格式不正确");
+      } else {
+        callback();
+      }
+    };
+
     return {
       navigation1: {
         head: "添加成员(共用)"
@@ -98,17 +147,18 @@ export default {
         userName: [
           { required: true, message: "成员名称不能为空", trigger: "blur" }
         ],
-        tel: [{ required: true, message: "请输入手机号", trigger: "blur" }],
-        // email: [
-        //   { required: true, message: "邮箱地址不能为空", trigger: "blur" },
-        //   { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
-        // ],
+        tel: [{ required: true, validator: validatePhone, trigger: "blur" }],
+
+        email: [
+          { required: true, message: "邮箱地址不能为空", trigger: "blur" },
+          { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
+        ],
         deplNames: [
           {
             required: true,
             message: "请选择部门类型",
             trigger: "blur",
-            type: "array"
+            type: "number"
           }
         ],
         sysRoleNames: [
@@ -131,6 +181,7 @@ export default {
       checkList: []
     };
   },
+  watch: {},
   methods: {
     // 查询所有角色
     getrolequery() {
@@ -143,31 +194,25 @@ export default {
     },
     //编辑角色
     getroleedit() {
-      roleedit({
+      editDeptUser({
         userId: this.$route.query.userId,
-        userName: this.AddDate.userName,
+        sysRoleIds: this.AddDate.sysRoleNames.toString(),
         tel: this.AddDate.tel,
+        userName: this.AddDate.userName,
+        deptIds: this.AddDate.deplNames.toString(),
         email: this.AddDate.email,
         comments: this.AddDate.comments,
         loginPwd: this.AddDate.loginPwd
       }).then(res => {
         if (res.code == 200) {
-          if (this.$route.query.status == 3) {
+          if (this.$route.query.states == 3) {
             this.$Message.info("编辑成功");
-            this.$router.push({
-              name: "role"
-            });
-          } else if (this.$route.query.status == 2) {
+          } else if (this.$route.query.states == 2) {
             this.$Message.info("添加成功");
-            this.$router.push({
-              name: "membersMGT"
-            });
-          } else if (this.$route.query.status == 1) {
-            this.$Message.info("添加成功");
-            this.$router.push({
-              name: "departmentMGT"
-            });
           }
+          this.$router.push({
+            name: this.$route.query.fromURL
+          });
         } else {
           this.$Message.error(res.msg);
         }
@@ -186,15 +231,18 @@ export default {
 
     // 多条件查询角色成员
     getrolenumquery() {
-      rolenumquery({
+      console.log("查询编辑的用户信息");
+      findDeptUserName({
         userId: this.$route.query.userId,
-        role: this.$route.query.name,
+        name: this.$route.query.name,
+        deptId: "0",
         page: {
           page: this.page,
           size: this.size
         }
       }).then(res => {
         if (res.code == 200) {
+          console.log(res.data.list[0].sysRoleIds);
           if (res.data.list.length > 0) {
             this.AddDate = res.data.list[0];
             this.AddDate.sysRoleNames = res.data.list[0].sysRoleIds
@@ -217,11 +265,15 @@ export default {
 
     //成员添加
     getdepartaddDeptUser() {
+      console.log("----------------------");
+      console.log(this.AddDate.deplNames);
+      console.log(this.AddDate.sysRoleNames);
+      console.log("----------------------");
       departaddDeptUser({
-        sysRoleIds: this.AddDate.sysRoleNames,
+        sysRoleIds: this.AddDate.sysRoleNames.toString(),
         tel: this.AddDate.tel,
         userName: this.AddDate.userName,
-        deptIds: this.AddDate.deplNames,
+        deptIds: this.AddDate.deplNames.toString(),
         email: this.AddDate.email,
         comments: this.AddDate.comments,
         loginPwd: this.AddDate.loginPwd
@@ -230,7 +282,10 @@ export default {
       });
     },
 
-    //成员管理编辑
+    /**
+     *  TODO:  新增时获取所有部门
+     *
+     */
     getmemberlist() {
       memberlist({
         page: { page: this.page, size: this.size },
@@ -277,9 +332,8 @@ export default {
     this.getdepartmentall();
     this.getrolequery();
     if (this.$route.query.userId) {
-      // this.getrolenumquery();
       this.navigation1.head = "编辑成员信息";
-      if (this.$route.query.states == 1) {
+      if (this.$route.query.states == 2) {
         this.getmemberlist();
       } else if (this.$route.query.states == 3) {
         this.getrolenumquery();
@@ -294,20 +348,21 @@ html,
 body {
   margin: auto;
 }
+.ivu-form .ivu-form-item-label {
+  font-size: 20px !important;
+  color: #1b2331 !important;
+  line-height: 24px !important;
+}
 .main {
   background-color: #ffffff;
 }
 
-.add {
-  border: 1px solid #e4e4e4;
-}
 .content {
   margin: 10px;
 }
 .bk-szy {
-  border-left: 1px solid #e4e4e4;
-  border-right: 1px solid #e4e4e4;
-  border-top: 1px solid #e4e4e4;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 24px;
 }
 .title {
   background-color: #f3f3f3;
@@ -327,5 +382,16 @@ body {
 .inter-table {
   display: flex;
   align-items: center;
+}
+.addDate-btn {
+  display: block;
+  width: 110px;
+  text-align: center;
+  background: #ff565a;
+  border-radius: 15px;
+  line-height: 32px;
+  font-size: 14px;
+  color: #ffffff !important;
+  height: 32px;
 }
 </style>

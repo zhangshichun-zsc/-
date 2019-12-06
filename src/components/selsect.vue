@@ -56,12 +56,11 @@ export default {
   created () {
 
   },
-  // watch:{
-  //   'getA'
-  // },
+
 
   methods: {
     changeProve(i, e) {
+      console.log(i,e)
       let id = 1
       if (i == 0) {
         let i = this.val[0]
@@ -71,16 +70,14 @@ export default {
         this.$set(this.val,1,0)
         this.$set(this.val,2,0)
         this.ids = getAdressId(e.label, city, county)
-        console.log(e.label,county)
-        console.log(this.ids)
+        console.log(this.ids,i)
       } else if (i == 1) {
         let county=this.area[this.val[0]].citys[0].areas[0]
-
         this.$set(this.val,2,0)
         id = getAdressId('', e.label, county)
         let p = this.ids[0]
         this.ids=[p,...id]
-         console.log(e.label,county,p)
+         console.log(e.label,county,p,id)
       } else {
         // this.ids = getAdressId('', '', e.label)[0]
         console.log(this.ids)

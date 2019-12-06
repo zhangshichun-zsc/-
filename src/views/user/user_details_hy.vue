@@ -108,6 +108,7 @@
 </template>
 
 <script>
+import {formatDate} from '../../request/datatime'
 import Public from './config/index'
 export default {
   data() {
@@ -202,7 +203,11 @@ export default {
         },
         {
           title: '活动时间',
-          key: 'startAt'
+          key: 'startAt',
+          render:(h,params)=>{
+              return h("div",formatDate(params.row.startAt))
+          }
+
         },
         {
           title: '用户账号',
@@ -282,24 +287,7 @@ export default {
         }
       ],
       data5: [
-        {
-          SponsoredTime: '2019-05-12 10:00:00',
-          UserAccount: '18000000000',
-          SponsorshipType: '月捐',
-          lines: '20.0',
-          cycle: '6个月',
-          TotalAmount: '6个月',
-          recorder: '**工作人员'
-        },
-        {
-          SponsoredTime: '2019-02-12 8:00:00',
-          UserAccount: '18000000000',
-          SponsorshipType: '次捐',
-          lines: '100.0',
-          cycle: '',
-          TotalAmount: '100.0',
-          recorder: '**工作人员'
-        }
+
       ],
       role: [], //  分类
       userLabel: [], // 标签
@@ -338,6 +326,11 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.basicInfo = res.data.basicInfo
+
+           this.basicInfo.vipLastTime=formatDate(this.basicInfo.vipLastTime)
+           this.basicInfo.birthday=formatDate(this.basicInfo.birthday)
+           this.basicInfo.createTime=formatDate(this.basicInfo.createTime)
+
           this.statisticsInfo = [res.data.statisticsInfo]
           this.activityRecord = res.data.activityRecord
           this.userAdderes = res.data.userAdderes

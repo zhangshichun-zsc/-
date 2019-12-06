@@ -1,74 +1,61 @@
-<!-- 志愿者活动分类管理(共用) -->
+<!-- 志愿者活动分类管理 -->
 <template>
   <div>
-    <basicdata :navigation1="navigation1"  @query=query></basicdata>
-    <div class="integral-table">
+     <basicdata :navigation1="navigation1" @query="query"></basicdata>
+     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <span>已选择{{arr.length}}</span>
-          <Button class="table-btn" @click="add(1)">新增活动分类</Button>
-          <Modal v-model="modal1" :title=text>
+          <!-- <span>已选择{{arr.length}}</span> -->
+          <Button class="table-btn" @click="btn">{{title}}</Button>
+          <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="活动名称" prop="dicName">
-                <Input v-model="formValidate.dicName"></Input>
+              <FormItem label=活动分类 prop="dicName">
+                <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
-              <Button type="primary" @click="handsubmit('formValidate')">确定</Button>
+              <Button type="text" size="large" @click="modalCancel">取消</Button>
+              <Button type="primary" size="large" @click="modalOk">确定</Button>
             </div>
           </Modal>
         </div>
       </div>
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data"
-        @on-selection-change="tablechange"
-      ></Table>
+      <Table ref="selection" border :columns="columns" :data="data1"></Table>
       <div class="pages">
         <Page
           :total="dataCount"
           show-elevator
           show-total
           size="small"
+          style="margin: auto"
           :page-size="size"
           @on-change="changepages"
         />
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import { date1 } from "../../request/datatime";
-import basicdata from "../../components/basicdata";
-import {
-  Commonpage,
-  Commondelete,
-  Commonmodifystatus,
-  Commonmodify,
-  Commonadd
-} from "../../request/api";
+import { Basicsearch, Basicbatch } from "@/request/api";
+import { formatDate } from "@/request/datatime";
+import basicdata from "@/components/basicdata";
 export default {
   data() {
     return {
       navigation1: {
-        head: "志愿者活动分类管理(共用)"
+        head: "志愿者活动分类管理(志愿者)"
       },
       formValidate: {
         dicName: ""
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "活动名称不能为空", trigger: "blur" }
+          { required: true, message: "志愿者特长不能为空", trigger: "blur" }
         ]
       },
-      modal1: false,
-      modal2: false,
+      title: "新增活动分类",
       columns: [
         {
           type: "selection",
@@ -81,18 +68,16 @@ export default {
         },
         {
           title: "创建时间",
-          key: "createAt",
-          render: (h, params) => {
-            return h("div", [h("p", date1("Y-m-dH:i:s", params.row.startAt))]);
-          }
+          key: "creatAt"
         },
         {
-          title: "创建人",
-          key: "userName"
+          title:'创建人',
+          key:'center'
         },
+
         {
           title: "有效状态",
-          key: "validFlag",
+          key: "status",
           algin: "center",
           render: (h, params) => {
             return h("div", [
@@ -102,7 +87,14 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
+                    if(e){
+                      this.states=1
+                      this.getBasicbatch(2)
+                    }else{
+                      this.states=0
+                       this.getBasicbatch(2)
+                    }
+
                   }
                 }
               })
@@ -124,47 +116,63 @@ export default {
                   },
                   on: {
                     click: () => {
-                      (this.dicId = params.row.dicId),
-                        (this.formValidate.dicName = params.row.dicName),
-                        console.log(this.dicName);
-                      this.add(2)
+                      this.modal1 = true;
+                      this.dicId=params.row.dicId
+                      this.text = "修改活动分类";
+                      this.id=0
+                      this.formValidate.dicName = params.row.dicName;
+
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "#07ec53"
-                  },
-                  on: {
-                    click: () => {
-                      this.delete(params.row.dicId);
-                    }
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {}
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
       ],
-      data: [],
+      data1: [],
+      modal1: false,
+      top:[{
+        name:'名称',
+        type:'input',
+        value:''
+      },{
+        name:'有效日期',
+        type:'select',
+        list:[{dataKey:'',dataValue:'全部',},{dataKey:'0',dataValue:'无效',},{dataKey:'1',dataValue:'有效',}],
+        value:''
+      },],
+
       page: 1,
       size: 10,
-      typeFlag: 7,
       dataCount: 0,
-      status:false,
-      validFlag: '',
-      dicName: "",
-      dicId: null,
-      sysType:'',
-      arr:[],
-      text:''
+      sysId: 1,
+      typeFlag: 7,  //每个页面写死
+      startAt: "",
+      endAt: "",
+      validFlag: "",
+      params: "",
+      dicCode: 0,
+
+      list: [],
+      text: "添加活动分类",
+      states:'',
+      id:0
     };
   },
 
@@ -172,174 +180,141 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getBasicsearch();
+  },
 
   methods: {
-    ok() {
-      this.$Message.info("新增成功");
+    //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
+    getBasicsearch() {
+      let params = {
+        page: {
+          page: this.page,
+          size: this.size
+        },
+        sysId: this.sysId,
+        typeFlag: this.typeFlag,
+        targetName: this.targetName,
+        validFlag: this.validFlag,
+        startAt: this.startAt,
+        endAt: this.endAt
+      };
+      this.params = this.util.remove(params);
+      Basicsearch(this.params).then(res => {
+        if (res.code == 200) {
+          this.data1 = res.data.list;
+          this.dataCount = res.data.totalSize;
+          this.dicCode = this.dataCount + 1;
+        }
+        console.log(res);
+      });
     },
-    cancel() {
-      this.$Message.info("新增失败");
+
+    // 批量操作"list": [{"orgId": "70", "validFlag": "0"}]
+    getBasicbatch(e) {
+      if (e==0) {
+         (this.list = [
+          {
+            sysId: this.sysId,
+            dicName: this.formValidate.dicName,
+            userId: this.$store.state.userId,
+            validFlag: 1,
+            delFlag: 0,
+            typeFlag: this.typeFlag,
+            dicCode: this.dicCode,
+            orgId: 1
+          }
+        ]);
+      } else if (e == 1) {
+         (this.list = [
+          {
+            dicId: this.dicId,
+            dicName: this.formValidate.dicName
+          }
+        ]);
+      } else if (e == 2) {
+         (this.list = [
+          {
+            dicId: this.dicId,
+            validFlag: this.states
+          }
+        ]);
+      }
+      Basicbatch({ list: this.list }).then(res => {
+        if (res.code == 200) {
+          this.getBasicsearch();
+          this.modal1 = false;
+          if(e==0){
+            this.$Message.info('添加成功')
+          }else if(e==1){
+            this.$Message.info('编辑成功')
+
+          }else if(e==2){
+            this.$Message.info('操作成功')
+
+          }
+        }
+        console.log(res);
+      });
     },
-    add(e){
-      this.modal1=true
-      if(e==1){
-        this.formValidate.dicName=''
-        this.text='新增活动名称'
-      }else if(e==2){
-        this.text='修改活动名称'
+
+     //查询
+    query(e) {
+      this.page = 1;
+      this.validFlag = e.validFlag;
+      this.targetName = e.dicName;
+      this.startAt = e.createTimestamp[0];
+      this.endAt = e.createTimestamp[1];
+      // if (e.createTimestamp == "") {
+      // this.startAt = '';
+      // this.endAt = '';
+      // } else if (new Date() > e.createTimestamp) {
+      //   this.startAt = e.createTimestamp;
+      //   this.endAt = new Date();
+      // } else {
+      //   this.startAt = new Date();
+      //   this.endAt = e.createTimestamp;
+      // }
+      this.getBasicsearch();
+    },
+
+    //取消
+    modalCancel() {
+      this.modal1 = false;
+      this.formValidate.dicName = "";
+    },
+    //确定
+    modalOk() {
+      if (this.dicName == "") {
+        this.$Message.error("名称不能为空");
+      } else {
+        if (this.id == 0) {
+          this.getBasicbatch(1);
+        } else {
+          this.getBasicbatch(0);
+        }
       }
     },
 
+    //弹出框
+    btn(){
+      this.text='添加活动分类'
+      this.modal1=true
+      this.id=1
+      this.formValidate.dicName=''
+    },
 
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
-      this.getCommonpage();
-    },
-    //每条数据单选框的状态
-    tablechange(selection) {
-      this.arr = selection;
-
-      if (
-        (this.arr.length == this.dataCount && this.dataCount != 0) ||
-        this.arr.length == this.size
-      ) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
-    },
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
-    },
-    //添加确定
-    handsubmit(dicName) {
-      this.$refs[dicName].validate(valid => {
-        if (valid) {
-          if(this.text=='新增活动名称'){
-            this.getCommonadd();
-          }else{
-            this.getCommonmodify();
-          }
-
-        }
-      });
-    },
-    //添加
-    getCommonadd() {
-      Commonadd({
-        typeFlag: this.typeFlag,
-        dicName: this.formValidate.dicName
-      }).then(res => {
-        if (res.code == 200) {
-          this.getCommonpage();
-          this.modal1 = false;
-          this.$Message.success("添加成功!");
-        } else {
-          this.$Message.error("添加失败!");
-        }
-        console.log(res);
-      });
+      this.getBasicsearch();
     },
 
 
-    //修改接口
-    getCommonmodify() {
-      Commonmodify({
-        dicId: this.dicId,
-        dicName: this.formValidate.dicName
-      }).then(res => {
-        if (res.code == 200) {
-          this.getCommonpage();
-          this.modal1 = false;
-          this.$Message.success("修改成功!");
-        } else {
-          this.$Message.success("修改失败!");
-        }
-        console.log(res);
-      });
-    },
-
-    //删除
-    delete(e) {
-      this.dicId = e;
-      this.getCommondel();
-    },
-
-    //列表数据
-    getCommonpage() {
-      Commonpage({
-        page: { page: this.page, size: this.size },
-        typeFlag: this.typeFlag,
-        sysType:this.sysType,
-        dicName:this.dicName,
-        validFlag:this.validFlag,
-        createTimestamp:this.createTimestamp,
-      }).then(res => {
-        if (res.code == 200) {
-          this.data = res.data.list;
-          this.dataCount = res.data.totalSize;
-        }else{
-          this.$Message.error(res.msg)
-        }
-        console.log(res);
-      });
-    },
-    //删除数据
-    getCommondel() {
-      Commondelete({
-        dicId: this.dicId
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功!");
-          this.getCommonpage();
-        }else{
-          this.$Message.error("删除成功!");
-        }
-        console.log(res);
-      });
-    },
-    //查询
-    query(e){
-      this.dicName=e.dicName
-      this.createTimestamp=e.createTimestamp
-      this.validFlag=e.validFlag
-      console.log(e)
-      this.getCommonpage()
-    }
-  },
-  mounted() {
-    this.getCommonpage();
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
 .integral-table {
   margin-top: 30px;
 }
@@ -364,5 +339,17 @@ export default {
 }
 .sdate {
   margin-left: 15px;
+}
+.table-btn {
+  position: relative;
+}
+.icon {
+  position: absolute;
+  padding: 2px;
+  top: 0;
+  right: 0;
+  transform: translateY(-50%);
+  background: yellow;
+  color: #000;
 }
 </style>

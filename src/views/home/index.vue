@@ -138,38 +138,38 @@
         <p>活动总览</p>
         <ul>
           <li>
+            <span>已下架</span>
             <span class="hd-shu">{{
               activityOverview.offShelfActivityCount
             }}</span>
-            <span>已下架</span>
           </li>
           <li>
+            <span>已发布</span>
             <span class="hd-shu">{{
               activityOverview.publishActivityCount
             }}</span>
-            <span>已发布</span>
           </li>
           <li>
+            <span>进行中</span>
             <span class="hd-shu">{{
               activityOverview.beginningActivityCount
             }}</span>
-            <span>进行中</span>
           </li>
           <li>
+            <span>已结束</span>
             <span class="hd-shu">{{
               activityOverview.endingActivityCount
             }}</span>
-            <span>已结束</span>
           </li>
           <li>
+            <span>已取消</span>
             <span class="hd-shu">{{
               activityOverview.cancelActivityCount
             }}</span>
-            <span>已取消</span>
           </li>
           <li>
-            <span class="hd-shu">{{ activityOverview.allActivityCount }}</span>
             <span>全部活动</span>
+            <span class="hd-shu">{{ activityOverview.allActivityCount }}</span>
           </li>
         </ul>
       </div>
@@ -177,22 +177,22 @@
         <p>用户总览</p>
         <ul>
           <li>
-            <span class="hd-shu">{{ userOverview.todayNewUserCount }}</span>
             <span>今日新增</span>
+            <span class="hd-shu">{{ userOverview.todayNewUserCount }}</span>
           </li>
           <li>
-            <span class="hd-shu">{{ userOverview.yesterdayNewUserCount }}</span>
             <span>昨日新增</span>
+            <span class="hd-shu">{{ userOverview.yesterdayNewUserCount }}</span>
           </li>
           <li>
+            <span>本月新增</span>
             <span class="hd-shu">{{
               userOverview.currentMonthNewUserCount
             }}</span>
-            <span>本月新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{ userOverview.memberTatolCount }}</span>
             <span>会员总数</span>
+            <span class="hd-shu">{{ userOverview.memberTatolCount }}</span>
           </li>
         </ul>
       </div>
@@ -745,34 +745,39 @@ export default {
 }
 .hd-on,
 .hd-tw {
+  padding: 30px 22px;
   background: #ffffff;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
   height: 179px;
   p {
-    padding-left: 20px;
     height: 45px;
-    line-height: 45px;
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 18px;
+    color: #1b2331;
   }
 
   ul {
     background: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    height: 153px;
+    justify-content: space-between;
+
     li {
-      height: 100px;
       width: 80px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      span {
+        font-size: 16px;
+        color: #8e9192;
+      }
       .hd-shu {
-        font-size: 20px;
-        color: red;
-        margin-bottom: 20px;
+        font-size: 30px;
+        color: #1b2331;
+        text-align: center;
+        margin-top: 13px;
       }
     }
   }

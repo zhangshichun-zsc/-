@@ -5,63 +5,84 @@
     <div class="jr">
       <ul>
         <li>
-          <div>
-            <Icon type="md-aperture" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>今日活动总数</p>
-            <span>{{activity.activityBatchCount}}</span>
+            <span>{{ activity.activityBatchCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity2.png" />
           </div>
         </li>
         <li>
-          <div>
-            <Icon type="ios-aperture-outline" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>昨日活动总数</p>
-            <span>{{activity.yesterdayActivityCount}}</span>
+            <span>{{ activity.yesterdayActivityCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity3.png" />
           </div>
         </li>
         <li>
-          <div>
-            <Icon type="md-trending-up" size="40" color="green" />
-          </div>
           <div class="jj">
             <p>近7天总数</p>
-            <span>{{activity.latest7dayActivityCount}}</span>
+            <span>{{ activity.latest7dayActivityCount }}</span>
+          </div>
+          <div>
+            <img class="icon-img" src="@/assets/images/activity4.png" />
           </div>
         </li>
       </ul>
     </div>
-    <div class="sw">
-      <p class="dai">
-        <span class="cl">待处理事务</span>
-        <span class="gd">更多</span>
-      </p>
-      <div class="sw-bo">
-        <ul class="sh">
-          <li>
-            <span>
-              <a @click="examine(3)">待审核报名</a>
-            </span>
-           <span>
-              (
-              <b>{{Pending.waitAuditSignUpCount}}</b>)
-            </span>
-          </li>
-          <li>
-            <span>
-              <a @click="examine(3)">广告位即将到期</a>
-            </span>
+
+    <div class="pending-box">
+      <div class="pending-left">
+        <p class="pending-left-title">
+          <span>待处理事务</span>
+        </p>
+        <div class="pending-left-content">
+          <li v-for="(item, index) in examinelist" :key="item.name">
+            <p>
+              <Icon type="md-arrow-dropright" />
+              <a @click="examine(index)" href="javascript:;">{{
+                item.name || 其他
+              }}</a>
+              <span v-show="Pending[item.data] > 0" class="dot"></span>
+            </p>
             <span>
               (
-              <b>{{Pending.willExpiredAdvCount}}</b>)
+              <b>{{ Pending[item.data] }}</b
+              >)
             </span>
           </li>
-        </ul>
+        </div>
+      </div>
+      <div class="pending-right">
+        <p class="pending-right-title">快捷入口</p>
+        <div class="pending-right-content">
+          <ul>
+            <li
+              @click="Jump(index)"
+              v-for="(item, index) in Jumplist"
+              :key="index"
+            >
+              <div>
+                <img
+                  class="icon-img2"
+                  :src="
+                    `https://rhzgtest.co-inclusion.org/app/menu_images/${item.icon}.png`
+                  "
+                />
+              </div>
+              <div>
+                <a class="name-btn" href="javascript:;">{{ item.name }}</a>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="rk-head">
+
+    <!-- <div class="rk-head">
       <p class="rk-top">快捷入口</p>
       <ul class="rk-hd">
         <li>
@@ -88,33 +109,43 @@
           <a>快捷入口管理</a>
         </li>
       </ul>
-    </div>
+    </div> -->
     <div class="hd-ma">
       <div class="hd-on">
         <p>活动总览</p>
         <ul>
           <li>
-            <span class="hd-shu">{{activityOverview.offShelfActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.offShelfActivityCount
+            }}</span>
             <span>已下架</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.publishActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.publishActivityCount
+            }}</span>
             <span>已发布</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.beginningActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.beginningActivityCount
+            }}</span>
             <span>进行中</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.endingActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.endingActivityCount
+            }}</span>
             <span>已结束</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.cancelActivityCount}}</span>
+            <span class="hd-shu">{{
+              activityOverview.cancelActivityCount
+            }}</span>
             <span>已取消</span>
           </li>
           <li>
-            <span class="hd-shu">{{activityOverview.allActivityCount}}</span>
+            <span class="hd-shu">{{ activityOverview.allActivityCount }}</span>
             <span>全部活动</span>
           </li>
         </ul>
@@ -123,25 +154,27 @@
         <p>用户总览</p>
         <ul>
           <li>
-            <span class="hd-shu">{{userOverview.todayNewUserCount}}</span>
+            <span class="hd-shu">{{ userOverview.todayNewUserCount }}</span>
             <span>今日新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{userOverview.yesterdayNewUserCount}}</span>
+            <span class="hd-shu">{{ userOverview.yesterdayNewUserCount }}</span>
             <span>昨日新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{userOverview.currentMonthNewUserCount}}</span>
+            <span class="hd-shu">{{
+              userOverview.currentMonthNewUserCount
+            }}</span>
             <span>本月新增</span>
           </li>
           <li>
-            <span class="hd-shu">{{userOverview.voluTatolCount}}</span>
+            <span class="hd-shu">{{ userOverview.voluTatolCount }}</span>
             <span>会员总数</span>
           </li>
         </ul>
       </div>
     </div>
-    <div class="lx-on" style="margin-top:20px;">
+    <!-- <div class="lx-on" style="margin-top:20px;">
       <p>活动统计</p>
       <div class="lx-nr">
         <div class="lx-left">
@@ -150,9 +183,8 @@
               <span class="lx-by">本月活动总数</span>
               <span class="lx-su">40</span>
               <h2>
-                <span class="lx-bai">
-                  <Icon type="md-arrow-dropup" />10%
-                </span>同比上月
+                <span class="lx-bai"> <Icon type="md-arrow-dropup" />10% </span
+                >同比上月
               </h2>
             </li>
             <li>
@@ -160,14 +192,19 @@
               <span class="lx-su">10</span>
               <h2>
                 <span class="lx-bai-two">
-                  <Icon type="md-arrow-dropdown" />10%
-                </span>同比上周
+                  <Icon type="md-arrow-dropdown" />10% </span
+                >同比上周
               </h2>
             </li>
           </ul>
         </div>
         <div class="lx-right">
-          <ve-line :data="chartData" width="900px" height="323px" :settings="chartSettings"></ve-line>
+          <ve-line
+            :data="chartData"
+            width="900px"
+            height="323px"
+            :settings="chartSettings"
+          ></ve-line>
           <i-col span="12">
             <Date-picker
               :value="value2"
@@ -180,7 +217,7 @@
           </i-col>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -215,9 +252,54 @@ export default {
       Pending: [],
       activityOverview: [],
       userOverview: [],
-       examinelist:[
-      {name:'广告位即将过期',query: "/recommend/vp_adlist"},
-      {name:'待审核报名',query: "/activity/list"},
+      examinelist: [
+        {
+          name: "活动立项审批",
+          query: "/activity/approval",
+          data: "unauditActivityCount"
+        },
+        {
+          name: "广告位即将过期",
+          query: "/recommend/vp_adlist",
+          data: "willExpiredAdvCount"
+        }
+      ],
+      Jumplist: [
+        {
+          name: "活动立项",
+          query: "/activity/approval",
+          icon: "shortcutEntry_1"
+        },
+        {
+          name: "活动管理",
+          query: "/activity/manager",
+          icon: "shortcutEntry_2"
+        },
+        {
+          name: "用户列表",
+          query: "/user/all_member_hy",
+          icon: "shortcutEntry_3"
+        },
+        {
+          name: "报表统计",
+          query: "/activity/approval",
+          icon: "shortcutEntry_4"
+        },
+        {
+          name: "消息管理",
+          query: "/operate/vp_message",
+          icon: "shortcutEntry_5"
+        },
+        {
+          name: "广告管理",
+          query: "/recommend/vp_adlist",
+          icon: "shortcutEntry_6"
+        },
+        {
+          name: "快捷入口管理",
+          query: "",
+          icon: "shortcutEntry_7"
+        }
       ]
     };
   },
@@ -263,43 +345,183 @@ export default {
         if (res.code == 200) {
           this.userOverview = res.data.userOverview;
           this.activityOverview = res.data.activityOverview;
-        }else{
+        } else {
           this.$Message.error(res.msg);
         }
         console.log(res);
       });
     },
-    examine(index){
+    Jump(index) {
+      if (!this.Jumplist[index].query) {
+        this.$Message.info("此功能暂未开放，敬请期待~");
+        return;
+      }
       this.$router.push({
-        path:this.examinelist[index].query
-      })
+        path: this.Jumplist[index].query
+      });
+    },
+    examine(index) {
+      this.$router.push({
+        path: this.examinelist[index].query
+      });
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+@media screen and (max-width: 1600px) {
+}
+
+@media screen and (max-width: 1200px) {
+  .jr li {
+    width: 360px !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .jr li {
+    width: 360px !important;
+  }
+
+  .jr li div {
+    padding: 40px 30px;
+  }
+}
+
 .jr ul {
   display: flex;
+  justify-content: space-between;
   margin: 20px 0;
 }
 .jr li {
-  width: 250px;
-  height: 100px;
-  display: flex;
-  margin-right: 20px;
-  justify-content: flex-start;
-  background: #ffffff;
+  width: 376px;
+  height: 150px;
   border: #e4e4e4 1px solid;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  display: flex;
 }
 .jr li div {
-  margin: 25px;
+  // margin: 25px;
+  padding: 40px 30px;
 }
 .jj p {
   width: 6rem;
-  font-size: 0.75rem;
-  margin: 10px 15px 10px 0;
-  color: gray;
+  margin: 10px 15px 0 0;
+  font-size: 16px;
+  color: #8e9192;
+  line-height: 20px;
 }
+.jj span {
+  font-size: 36px;
+  color: #1b2331;
+  line-height: 35px;
+  // font-weight: 800;
+}
+
+//待处理事务
+.pending-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+.pending-left {
+  padding: 22px 32px;
+  width: 1070px;
+  height: 320px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
+.pending-right {
+  padding: 22px 32px;
+  width: 410px;
+  height: 320px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
+
+.pending-left-title {
+  font-size: 18px;
+  color: #1b2331;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+}
+.pending-left .more {
+  font-size: 16px;
+  color: #8e9192;
+  text-align: right;
+}
+.pending-left-content {
+  margin-bottom: 20px;
+}
+.pending-left-content li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  font-size: 16px;
+  color: #1b2331;
+  letter-spacing: 0;
+  line-height: 42px;
+  position: relative;
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #fc4c51;
+    border-radius: 50%;
+    margin-top: 8px;
+    vertical-align: top;
+  }
+}
+.pending-left-content li a {
+  margin-left: 5px;
+  margin-right: 5px;
+  color: #1b2331;
+}
+
+.pending-right-title {
+  font-size: 18px;
+  color: #1b2331;
+  font-weight: 800;
+}
+.pending-right-content {
+  // padding: 28px 40px;
+  ul {
+    li {
+      width: 25%;
+      margin-top: 30px;
+      display: inline-block;
+      div {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+      }
+      .icon-img2 {
+        vertical-align: middle;
+        border-radius: 50%;
+        background: #fef4f5;
+        margin: 0 auto;
+      }
+      .name-btn {
+        text-align: center;
+        font-size: 12px;
+        color: #333333;
+        text-align: center;
+        line-height: 16px;
+      }
+    }
+  }
+}
+
 //待处理事务
 .sw {
   border: 2px solid #eeeeee;
@@ -326,7 +548,6 @@ export default {
 .sh {
   background: #ffffff;
   display: flex;
-
   flex-direction: column;
 }
 .sh li,
@@ -386,12 +607,25 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+.del {
+  color: red;
+  margin-top: 10px;
+  a {
+    color: red;
+  }
 }
 
 .rk-hd li a {
   font-size: 14px;
   color: black;
 }
+// .rk-hd li a:hover{
+//   a{
+//     color: green;
+//   }
+// }
 .rk-hd li:hover {
   background: #ebebeb;
   a {
@@ -403,37 +637,47 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+.hd-on {
+  width: 1070px;
+}
+.hd-tw {
+  width: 410px;
+}
 .hd-on,
 .hd-tw {
-  height: 200px;
-  width: 520px;
-  border: #e4e4e4 solid 1px;
+  padding: 30px 22px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  height: 179px;
   p {
-    background: #f3f3f3;
-    padding-left: 20px;
     height: 45px;
-    line-height: 45px;
-    font-weight: 700;
-    border-bottom: #e4e4e4 solid 1px;
+    font-weight: 800;
+    font-size: 18px;
+    color: #1b2331;
   }
 
   ul {
     background: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    height: 153px;
+    justify-content: space-between;
+
     li {
-      height: 100px;
       width: 80px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      span {
+        font-size: 16px;
+        color: #8e9192;
+      }
       .hd-shu {
-        font-size: 20px;
-        color: red;
-        margin-bottom: 20px;
+        font-size: 30px;
+        color: #1b2331;
+        text-align: center;
+        margin-top: 13px;
       }
     }
   }

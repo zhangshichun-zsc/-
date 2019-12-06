@@ -9,7 +9,7 @@ import { get, post, posts, postdel } from './http'
 export const login = p => get('/backstage/backstageLojin', p) // 登陆
 
 // /backstage/out
-export const loginout = p => get('/backstage/out', p) // 登陆
+export const loginout = p => get('/backstage/out', p) // 登出
 
 
 export const homepage = p => get('/sysMenu/findAllMenuByRoloe', p) // 主页
@@ -132,6 +132,16 @@ export const Activerulepage = p => get('/activity-manage/get-activity-rule-page'
 
 
 // 基础资料
+
+// 家长职业类型管理（会员）
+// 志愿者特长管理（共用）
+// 志愿者活动分类管理（志愿者）
+// 官方活动分类管理
+// 障碍类型
+export const Basicsearch = p => posts('/volunteer-manager/queryUserBasicData', p)  //查询
+export const Basicbatch = p => postdel('/volunteer-manager/updateUserBasicData', p)  //操作
+
+
 export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p) //协议管理--协议分页
 
 export const Agreementdel = p => post('/agreement-manage/del-agreement', p) //删除协议
@@ -434,11 +444,17 @@ export const departmentStatu = p => get('/web/dept/changgeStatus', p) //部门�
 
 export const departmentmember = p => posts('/web/dept/findDeptUser', p) //部门管理--查询部门成员
 
+export const findDeptUserName = p => posts('/web/dept/findDeptUserName', p) // 查询过所有成员
+
 export const departmentedit = p => posts('/web/dept/editDept', p) //部门管理--部门列表编辑
 
 export const departmentadd = p => posts('/web/dept/addDept', p) //部门管理--部门列表添加
 
+export const editDeptUser = p => posts('/web/dept/editDeptUser', p) //编辑成员信息、
+
 export const departaddDeptUser = p => posts('/web/dept/addDeptUser', p) //部门管理--部门添加
+
+export const findRoleMenu = p => get('/sysRole/findRoleMenu', p) //部门管理--部门添加
 
 
 

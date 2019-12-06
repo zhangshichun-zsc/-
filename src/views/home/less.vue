@@ -3,35 +3,55 @@
   <div class="less">
     <Navigation :labels="navigation1"></Navigation>
     <div class="zh">
-      <p class="zh-sz">账户设置</p>
-
       <div class="zh-nr">
-        <div class="start-wap">
-          <div class="upload" v-if="imgUrl == null" @click="()=>{ this.$refs.files.click()}">
-            <div class="file">
-              <input
-                style=" display:none;"
-                type="file"
-                accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                ref="files"
-                @change="uploadFile()"
-                multiple
-              />
-              <Button icon="ios-cloud-upload-outline">上传头像</Button>
-              <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+        <Form
+          ref="formValidate"
+          :model="formValidate"
+          :rules="ruleValidate"
+          :label-width="120"
+        >
+          <FormItem label="上传头像">
+            <div class="start-wap">
+              <!-- v-if="imgUrl == null" -->
+              <div
+                class="upload"
+                @click="
+                  () => {
+                    this.$refs.files.click();
+                  }
+                "
+              >
+                <div class="file">
+                  <input
+                    style="display:none; width:0; hidht:0"
+                    type="file"
+                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                    ref="files"
+                    @change="uploadFile()"
+                    multiple
+                  />
+                  <!-- <Button icon="ios-cloud-upload-outline">上传头像</Button> -->
+                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  <img
+                    v-show="imgUrl"
+                    :src="imgUrl || null"
+                    style="height:104px;width:104px;"
+                  />
+                  <div v-show="!imgUrl" class="file-text">
+                    <img src="@/assets/images/fix-img.png" />
+                  </div>
+                  <Icon
+                    type="ios-trash"
+                    v-show="imgUrl !== ''"
+                    class="cancel"
+                    :size="26"
+                    @click.stop.prevent="cancelImg()"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          </FormItem>
 
-          <img :src="imgUrl" style="height:150px;width:150px;" />
-          <Icon
-            type="ios-trash"
-            v-if="imgUrl != null"
-            class="cancel"
-            :size="26"
-            @click="cancelImg()"
-          />
-        </div>
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
           <FormItem label="用户名">
             <Input v-model="formValidate.name" disabled />
           </FormItem>
@@ -45,10 +65,12 @@
             <Input type="password" v-model="formValidate.newPassword" />
           </FormItem>
           <FormItem label="确认密码" prop="confirm">
-            <Input  type="password" v-model="formValidate.confirm" />
+            <Input type="password" v-model="formValidate.confirm" />
           </FormItem>
           <FormItem>
-            <Button type="success" @click="handleSubmit('formValidate')">提交</Button>
+            <Button type="success" @click="handleSubmit('formValidate')"
+              >提交</Button
+            >
           </FormItem>
         </Form>
       </div>
@@ -87,7 +109,7 @@ export default {
       },
       formValidate: {
         name: this.$store.state.userName,
-        number: this.$store.state.tel?this.$store.state.tel:'',
+        number: this.$store.state.tel ? this.$store.state.tel : "",
         oldPassword: "",
         newPassword: "",
         confirm: ""
@@ -105,8 +127,8 @@ export default {
         confirm: [{ validator: confirm, trigger: "blur" }]
       },
 
-      picUrl: null,
-      imgUrl: null
+      picUrl: "",
+      imgUrl: ""
     };
   },
 
@@ -138,15 +160,14 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          console.log(this.picUrl)
+          console.log(this.picUrl);
 
-            // if(this.formValidate.oldPassword!=this.formValidate.confirm){
-            //   this.$Message.error('两次密码不一致!')
-            // }else{
-            //  this.getSetup();
-            // }
-            this.getSetup();
-
+          // if(this.formValidate.oldPassword!=this.formValidate.confirm){
+          //   this.$Message.error('两次密码不一致!')
+          // }else{
+          //  this.getSetup();
+          // }
+          this.getSetup();
         } else {
           this.$Message.error("必填项未填!");
         }
@@ -168,7 +189,6 @@ export default {
         reader.onload = e => {
           this.imgUrl = e.target.result;
           this.picUrl = res.data;
-
         };
       });
     },
@@ -177,8 +197,8 @@ export default {
       orgimgdel({ path: this.picUrl }).then(res => {
         if (res.code == 200) {
           this.$Message.success("删除成功");
-          this.picUrl = null;
-          this.imgUrl = null;
+          this.picUrl = "";
+          this.imgUrl = "";
         } else {
           this.$Message.success(res.msg);
         }
@@ -213,15 +233,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .zh {
-  .zh-sz {
-    height: 50px;
-    padding-left: 20px;
-    font-size: 12px;
-    background: #f3f3f3;
-    line-height: 50px;
-    border: #e4e4e4 solid 1px;
-    margin-top: 20px;
-  }
+  background: #fff;
+  padding-bottom: 50px;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 .zh-nr {
   height: 600px;
@@ -235,7 +250,27 @@ export default {
     border: 1px solid #ccc;
   }
 }
-
+.file {
+  height: 150px;
+  position: relative;
+}
+.cancel {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 2;
+}
+.file-text {
+  width: 150px;
+  height: 150%;
+  font-size: 14px;
+  color: #1b2331;
+  text-align: justify;
+  line-height: 24px;
+  img {
+    width: 100%;
+  }
+}
 .ivu-input {
   width: 240px;
   height: 40px;
@@ -246,5 +281,12 @@ export default {
 .ivu-input-type {
   width: 230px;
   height: 40px;
+}
+
+input:-webkit-autofill {
+  background-color: #fff;
+  outline: none;
+  color: #333333;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
 }
 </style>

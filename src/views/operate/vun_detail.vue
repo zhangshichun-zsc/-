@@ -164,7 +164,7 @@ export default {
     getInvitationDetailed() {
       InvitationDetailed({
         sysType: this.sysType,
-        memberId: this.$route.query.memberId
+        volunteerId: this.$route.query.volunteerId
       }).then(res => {
         if (res.code == 200) {
           this.data1 = res.data;

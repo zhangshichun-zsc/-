@@ -14,7 +14,8 @@
             style="width: 200px"
             @on-search="querys"
           />
-        </p>&nbsp;&nbsp;&nbsp;
+        </p>
+        &nbsp;&nbsp;&nbsp;
         <p>
           <span>所属角色:</span>&nbsp;
           <Select v-model="role" style="width:200px" :transfer="true">
@@ -22,7 +23,8 @@
               v-for="item in List"
               :value="item.sysRoleName"
               :key="item.sysRoleId"
-            >{{ item.sysRoleName }}</Option>
+              >{{ item.sysRoleName }}</Option
+            >
           </Select>
         </p>
       </div>
@@ -41,20 +43,27 @@
                     :label-width="120"
                   >
                     <FormItem label="角色名称" prop="name">
-                      <Input v-model="formValidate.name"  />
+                      <Input v-model="formValidate.name" />
                     </FormItem>
                     <FormItem label="职能描述" prop="sysRoleNames">
                       <Input v-model="formValidate.sysRoleNames" />
                     </FormItem>
                   </Form>
                   <div slot="footer">
-                    <Button type="text" size="large" @click="modalcancel()">取消</Button>
-                    <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+                    <Button type="text" size="large" @click="modalcancel()"
+                      >取消</Button
+                    >
+                    <Button
+                      type="primary"
+                      size="large"
+                      @click="modalOk('formValidate')"
+                      >确定</Button
+                    >
                   </div>
                 </Modal>
               </div>
               <div class="layout-nav">
-                <span>{{role}}</span>
+                <span>{{ role }}</span>
               </div>
               <div class="btn">
                 <Button @click="function1">权限设置</Button>
@@ -62,7 +71,7 @@
             </Menu>
           </Header>
           <Layout>
-            <Sider hide-trigger :style="{background: '#008e40'}">
+            <Sider hide-trigger :style="{ background: '#008e40' }">
               <Menu
                 :active-name="`1-${role}`"
                 width="auto"
@@ -75,16 +84,27 @@
                   </template>
                   <MenuItem
                     :name="`1-${item.sysRoleName}`"
-                    v-for="(item,index) in List"
+                    v-for="(item, index) in List"
                     :key="index"
                     @click.native="option(item.sysRoleName)"
-                  >{{item.sysRoleName}}</MenuItem>
+                    >{{ item.sysRoleName }}</MenuItem
+                  >
                 </Submenu>
               </Menu>
             </Sider>
-            <Layout :style="{padding: '0 24px 24px'}">
-              <Button :style="{margin: '24px 0',maxWidth:'100px'}" @click="newadd">添加人员</Button>
-              <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
+            <Layout :style="{ padding: '0 24px 24px' }">
+              <Button
+                :style="{ margin: '24px 0', maxWidth: '100px' }"
+                @click="newadd"
+                >添加人员</Button
+              >
+              <Content
+                :style="{
+                  padding: '24px',
+                  minHeight: '280px',
+                  background: '#fff'
+                }"
+              >
                 <Table border :columns="columns" :data="data"></Table>
               </Content>
               <Modal v-model="modal2" title="添加人员">
@@ -96,7 +116,9 @@
                 ></Transfer>
                 <div slot="footer">
                   <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
-                  <Button type="primary" size="large" @click="addmodalOk">确定</Button>
+                  <Button type="primary" size="large" @click="addmodalOk"
+                    >确定</Button
+                  >
                 </div>
               </Modal>
               <Modal v-model="addstate" width="360">
@@ -222,7 +244,8 @@ export default {
                         query: {
                           userId: params.row.userId,
                           name: this.role,
-                          states: 3
+                          states: 3,
+                          fromURL: this.$route.name
                         }
                       });
                     }
@@ -503,7 +526,8 @@ export default {
         name: "function",
         query: {
           sysRoleName: this.add[0].sysRoleName,
-          sysRoleId: this.add[0].sysRoleId
+          sysRoleId: this.add[0].sysRoleId,
+          fromURL: this.$route.name
         }
       });
     },
