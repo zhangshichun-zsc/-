@@ -385,7 +385,7 @@ import { filterNull } from '@/libs/utils'
           image:this.image
         }
         sessionStorage.setItem('data',JSON.stringify(data))
-        this.$router.push({ name: 'volunteer_compile',params: { i } })
+        this.$router.push({ name: 'volunteer_compile',query: { i } })
       },
       deleItem(i,m){
         let feed = this.feed
@@ -506,8 +506,7 @@ import { filterNull } from '@/libs/utils'
         this.dateTwo = e
       },
       changeInput(e){
-        console.log(e)
-        let param = e.data
+        let param = this.judge
         getOrgId({ orgId:this.args.orgId, param}).then(res => {
           this.judgeList = res.data
           this.showJudge = res.data.length == 0?false:true
@@ -532,8 +531,12 @@ import { filterNull } from '@/libs/utils'
         }]
       },
       getMap(e){
-        let args = this.args
-        this.args = Object.assign(args,e)
+        this.args.provinceId = e.provinceId
+        this.args.cityId = e.cityId
+        this.args.districtId = e.districtId
+        this.args.xx = e.xx
+        this.args.yy = e.yy
+        this.$set(this.args,'address',e.address)
       },
       sumbmit(i){
         let item = this.args
