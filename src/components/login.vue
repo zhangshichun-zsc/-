@@ -85,6 +85,7 @@
 
 <script>
 import { login, homepage } from "../request/api";
+import {axios} from 'axios'
 export default {
   data() {
     return {
@@ -124,8 +125,29 @@ export default {
   created() {},
   mounted() {},
   methods: {
+//     get(){
+//       axios({
+//     url: 'http://192.168.0.5:8084/rhzg-web/backstage/backstageLojin',
+//       method: 'GET',
+//     params: {
+//        loginName: this.formValidate.user,
+//         loginPwd: this.formValidate.password
+//     },
+//     xhrFields: {
+//           withCredentials: true
+//      },
+//      crossDomain: true,
+
+// }).then( res => {
+//     console.log(res)
+// })
+
+//     },
+
+
     getlogin() {
       console.log(123);
+
       login({
         loginName: this.formValidate.user,
         loginPwd: this.formValidate.password
@@ -164,6 +186,7 @@ export default {
     handleSubmit() {
       if (this.formValidate.user && this.formValidate.password) {
         this.getlogin();
+        // this.get()
       } else {
         this.$Message.error("请输入密码或账号!");
       }

@@ -19,7 +19,7 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛 6
   ],
-  API_INDEX: 0
+  API_INDEX: 6
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
@@ -29,6 +29,8 @@ const token = localStorage.getItem("token");
 export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]; // 导出文件
 
 axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
+
+axios.defaults.withCredentials = true  //让ajax携带cookie
 
 // 请求超时时间
 axios.defaults.timeout = 100000;
@@ -51,6 +53,8 @@ axios.interceptors.request.use(
           token: store.state.token,
           ...config.params
         };
+      }else if(config.method === "options"){
+        // config.url = `${config.url}?token=${store.state.token}`;
       }
     }
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
@@ -118,9 +122,8 @@ export function get(url, params) {
   // params.token = token
   return new Promise((resolve, reject) => {
     axios
-      .get(url, {
-        params: params
-      })
+      .get(url,{params:params}
+       )
       .then(res => {
         resolve(res.data);
       })

@@ -1,7 +1,6 @@
 <!-- 项目管理(会员) -->
 <template>
   <div class="integral">
-
     <div class="integral-header">
       <basicdata :navigation1="navigation1" @query="query"></basicdata>
     </div>
@@ -10,37 +9,40 @@
         <div>
           全选
           <span>已选择{{arr.length}}</span>
-          <Button class="table-btn">批量删除</Button>
-          <Button class="table-btn" type="primary" @click="modal1 = true">新增项目</Button>
-          <Modal v-model="modal1" title="新增项目" @on-ok="ok" @on-cancel="cancel" class="mol">
+          <!-- <Button class="table-btn">批量删除</Button> -->
+          <Button class="table-btn" type="primary" @click="added">新增项目</Button>
+          <Modal v-model="modal1" :title=text class="mol">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
-                <Input v-model="formValidate.name"></Input>
+                <Input v-model="formValidate.name" />
               </FormItem>
-              <FormItem label="总计预算" prop="budget">
-                <Input v-model="formValidate.budget"></Input>
+              <FormItem label="总计预算" prop="allBudget">
+                <Input v-model="formValidate.allBudget" />
               </FormItem>
-              <FormItem label="预算来源" prop="source">
-                <Input v-model="formValidate.source"></Input>
-              </FormItem>
-            </Form>
-          </Modal>
-          <Modal v-model="modal2" title="新增项目" class="mol">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="项目名称" prop="name">
-                <Input v-model="formValidate.name"></Input>
-              </FormItem>
-              <FormItem label="总计预算" prop="budget">
-                <Input v-model="formValidate.budget"></Input>
-              </FormItem>
-              <FormItem label="预算来源" prop="source">
-                <Input v-model="formValidate.source"></Input>
+              <FormItem label="预算来源" prop="orgId">
+                <Select v-model="formValidate.orgId" style="width:200px">
+                  <Option
+                    v-for="item in budgetlist"
+                    :value="item.orgId"
+                    :key="item.orgId"
+                  >{{ item.orgName }}</Option>
+                </Select>
               </FormItem>
             </Form>
+            <div slot="footer">
+              <Button type="text" size="large" @click="cancel">取消</Button>
+              <Button type="primary" size="large" @click="ok">确定</Button>
+            </div>
           </Modal>
         </div>
       </div>
-        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+      <Table
+        ref="selection"
+        border
+        :columns="columns"
+        :data="data"
+        @on-selection-change="handleSelectionChange"
+      ></Table>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -58,8 +60,8 @@
 
 <script>
 import basicdata from "@/components/basicdata";
-import { projectmanpage} from '@/request/api'
-import {date1,formatDate} from '@/request/datatime'
+import { projectsetlist, projectsetadd, budgetlist } from "@/request/api";
+import { formatDate } from "@/request/datatime";
 export default {
   data() {
     return {
@@ -68,22 +70,29 @@ export default {
       },
       formValidate: {
         name: "",
-        budget: "",
-        source: ""
+        allBudget: "",
+        orgId: null
       },
       ruleValidate: {
         name: [
           { required: true, message: "职业名称不能为空", trigger: "blur" }
         ],
-        budget: [
-          { required: true, message: "总计预算不能为空", trigger: "blur" }
+        allBudget: [
+          { required: true, message: "总计预算格式不正确", trigger: "blur", type: "number",transform(value) {
+                return Number(value);
+              }}
         ],
-        source: [
-          { required: true, message: "预算来源不能为空", trigger: "blur" }
+        orgId: [
+          {
+            required: true,
+            message: "预算来源不能为空",
+            trigger: "change",
+            type: "number"
+          }
         ]
       },
       modal1: false,
-      modal2: false,
+
       columns: [
         {
           type: "selection",
@@ -92,24 +101,19 @@ export default {
         },
         {
           title: "项目名称",
-          key: "categoryName"
+          key: "name"
         },
         {
           title: "总预算",
-          key: "allBudget",
-
+          key: "allBudget"
         },
         {
           title: "预算来源",
-          key: "orgName",
-
+          key: "orgName"
         },
         {
           title: "创建时间",
-          key: "createTimestamp",
-          render: (h, params) => {
-            return h("div", formatDate(params.row.createTimestamp));
-          }
+          key: "createAt"
         },
         {
           title: "有效状态",
@@ -119,12 +123,21 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.status == 1
+                  value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {
                     console.log(e);
-                    // this.getmodifystate(params.row.dicId, e);
+                      this.categoryId=params.row.categoryId
+                    if(e){
+                      this.validFlags=1
+
+                      this.getprojectstate()
+
+                    }else{
+                      this.validFlags=0
+                      this.getprojectstate()
+                    }
                   }
                 }
               })
@@ -146,27 +159,30 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.modal2 = true;
-                      // this.$router.push({ name: 'integral_detail' })
+                       this.getbudgetlist();
+                      this.text='编辑项目'
+                      this.formValidate=params.row
+                      this.modal1 = true;
+                      this.categoryId=params.row.categoryId
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {}
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {}
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
@@ -176,56 +192,99 @@ export default {
       size: 10,
       dataCount: 0,
       arr: [],
-      typelist: [
-        {
-          value: "",
-          name: "全部"
-        },
-        {
-          value: "1",
-          name: "有效"
-        },
-        {
-          value: "0",
-          name: "无效"
-        }
-      ],
-      validFlag: null,
-      sysType:1,
-      categoryName:null,
-      status:null,
-      enddata:null
+
+      validFlag: '',
+      sysType: 1,
+      targetName: '',
+      status: null,
+
+      params: null,
+      budgetlist: [],
+      typeFlag:1,
+      text:'新增项目',
+      validFlags:''
     };
   },
 
-  components: {basicdata },
+  components: { basicdata },
 
   computed: {},
 
   created() {},
   mounted() {
-    this.getprojectmanpage()
+    this.getprojectsetlist();
   },
   methods: {
     //基础资料--获取项目分页
-    getprojectmanpage(){
-      projectmanpage({
-        page:{page:this.page,size:this.size},
-        sysType:this.sysType,
-        categoryName:this.categoryName,
-        status:this.status,
-        createTimestamp:this.enddata
-      }).then(res=>{
-        if(res.code==200){
-          this.data = res.data.list
+    getprojectsetlist() {
+      let params = {
+        page: { page: this.page, size: this.size },
+        targetName:this.targetName,
+        startAt: this.startAt,
+        endAt: this.endAt,
+        validFlag:this.validFlag
+      };
+      this.params = this.util.remove(params);
+
+      projectsetlist(this.params).then(res => {
+        if (res.code == 200) {
+          this.data = res.data.list;
           this.dataCount = res.data.totalSize;
-        }else{
-          this.$Message.error(res.msg)
+        } else {
+          this.$Message.error(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
+    //新增 编辑
+    getprojectsetadd() {
+      let params = [{
+        categoryId: this.categoryId,
+        name: this.formValidate.name,
+        typeFlag: this.typeFlag,
+        allBudget: this.formValidate.allBudget,
+        orgId: this.formValidate.orgId
+      }]
+      params = this.util.remove(params);
+      projectsetadd({list:params}).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("新增成功");
+          this.modal1 = true;
+        }
+        console.log(res);
+      });
+    },
+
+    //修改状态
+     getprojectstate() {
+      let params = [{
+        categoryId: this.categoryId,
+        validFlag: this.validFlags
+      }]
+      projectsetadd({list:params}).then(res => {
+        if (res.code == 200) {
+          this.getprojectsetlist();
+          this.$Message.info("操作成功");
+        }
+        console.log(res);
+      });
+    },
+    //预算列表
+    getbudgetlist() {
+      budgetlist({}).then(res => {
+        if (res.code == 200) {
+          this.budgetlist = res.data;
+        }
+      });
+    },
+    //新增
+    added() {
+      this.$refs.formValidate.resetFields();
+      this.categoryId=''
+      this.modal1 = true;
+      this.getbudgetlist();
+    },
 
     //分页功能
     changepages(index) {
@@ -236,13 +295,12 @@ export default {
 
     // 查询结果按钮
     query(e) {
-       if(e.createTimestamp!=''){
-        this.enddata = e.createTimestamp.getTime()
-      }
-      this.status=e.validFlag
-      this.categoryName=e.dicName
-
-      this.getprojectmanpage();
+      console.log(e);
+      this.targetName = e.dicName;
+      this.startAt = e.createTimestamp[0];
+      this.endAt = e.createTimestamp[1];
+      this.validFlag = e.validFlag;
+      this.getprojectsetlist();
     },
 
     //每条数据单选框的状态
@@ -256,18 +314,24 @@ export default {
       } else {
         this.status = false;
       }
-      //选择的数据id
-      this.arr = this.arr.map(item=>{
-        return item.categoryId;
-      }).toString()
-      console.log(this.arr);
+    },
+
+    clear(){
+      this.$refs.formValidate.resetFields();
     },
 
     ok() {
-      this.$Message.info("新增成功");
+      this.$refs.formValidate.validate(valid => {
+        if (valid) {
+         this.getprojectsetadd()
+        } else {
+          this.$Message.error("必填项未填!");
+        }
+      });
     },
     cancel() {
-      this.$Message.info("新增失败");
+       this.modal1 = false
+      this.$Message.info("取消成功");
     }
   }
 };
