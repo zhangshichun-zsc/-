@@ -89,9 +89,9 @@
               </FormItem>
             </Form>
           </Modal>
-          <Button @click="modal1 = true" class="btns">
+          <Button disabled @click="modal1 = true" class="btns">
             群发短信
-            <Icon type="md-arrow-dropdown"></Icon>
+            
           </Button>
           <!--群发站内信-->
           <Modal v-model="modal2" title="群发站内信">
@@ -123,7 +123,7 @@
           </Modal>
           <Button @click="modal2 = true" class="btns">
             群发站内信
-            <Icon type="md-arrow-dropdown"></Icon>
+         
           </Button>
           <!--微信推送-->
           <Modal width="200" v-model="modal3" draggable :styles="{top: '220px'}" footer-hide>
@@ -286,9 +286,9 @@
               </Modal>
             </ButtonGroup>
           </Modal>
-          <Button @click="modal3 = true" class="btns">
+          <Button disabled @click="modal3 = true" class="btns">
             微信推送
-            <Icon type="md-arrow-dropdown"></Icon>
+        
           </Button>
           <!--设置标签-->
           <Modal v-model="modal4" title="设置标签">
@@ -296,13 +296,13 @@
           </Modal>
           <Button @click="modal4 = true" class="btns">
             设置标签
-            <Icon type="md-arrow-dropdown"></Icon>
+        
           </Button>
           <!--导出数据-->
           <Dropdown>
             <Button @click="exportData">
               导出数据
-              <Icon type="md-arrow-dropdown"></Icon>
+           
             </Button>
           </Dropdown>
         </div>

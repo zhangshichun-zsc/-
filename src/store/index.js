@@ -10,7 +10,13 @@ export default new Vuex.Store({
     userName: localStorage.getItem('userName') ? localStorage.getItem('userName') : '',
     userId: localStorage.getItem('userId') ? localStorage.getItem('userId') : '',
 
-    tel: localStorage.getItem('tel') ? localStorage.getItem('tel') : ''
+    tel: localStorage.getItem('tel') ? localStorage.getItem('tel') : '',
+
+    // 成员管理
+    MGTpage: { page: 1, size: 10 },
+    MGTlist: { list: [], count: 0 },
+    activityType: [],
+    deplist: []
   },
   getters: {
 
@@ -28,6 +34,18 @@ export default new Vuex.Store({
       state.user = '';
       state.token = null
     },
+    updatePage(state, MGTpage) {
+      state.MGTpage = MGTpage
+    },
+    updateList(state, MGTlist) {
+      state.MGTlist = MGTlist
+    },
+    activityType(state, activityType) {
+      state.activityType = activityType
+    },
+    deplist(state, deplist) {
+      state.deplist = deplist
+    }
   },
   actions: {
 

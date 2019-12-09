@@ -15,17 +15,21 @@
             type="text"
             v-model="formValidate.user"
             placeholder="请输入用户名称"
-            @on-enter="handleSubmit()"
+            @keyup.enter="handleSubmit()"
           />
 
           <input
             type="password"
             v-model="formValidate.password"
             placeholder="请输入登陆密码"
-            @on-enter="handleSubmit()"
+            @keyup.enter="handleSubmit()"
           />
 
-          <a class="login-btn" href="javascript:;" @click="handleSubmit()"
+          <a
+            class="login-btn"
+            href="javascript:;"
+            @click="handleSubmit()"
+            @keyup.enter="handleSubmit()"
             >登录</a
           >
         </form>
