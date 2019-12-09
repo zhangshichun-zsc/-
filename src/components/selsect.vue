@@ -61,30 +61,23 @@ export default {
   methods: {
     changeProve(i, e) {
       console.log(i,e)
+      let ids = []
       let id = 1
       if (i == 0) {
-        let i = this.val[0]
         let city = this.area[this.val[0]].citys[0].name
         let county=this.area[this.val[0]].citys[0].areas[0]
-
         this.$set(this.val,1,0)
         this.$set(this.val,2,0)
-        this.ids = getAdressId(e.label, city, county)
-        console.log(this.ids,i)
+        ids = getAdressId(e.label, city, county)
       } else if (i == 1) {
         let county=this.area[this.val[0]].citys[0].areas[0]
         this.$set(this.val,2,0)
-        id = getAdressId('', e.label, county)
-        let p = this.ids[0]
-        this.ids=[p,...id]
-         console.log(e.label,county,p,id)
+        ids = [this.ids[0],...getAdressId('', e.label, county)]
       } else {
-        // this.ids = getAdressId('', '', e.label)[0]
-        console.log(this.ids)
-        this.$set(this.ids[2])
+        ids = [this.ids[0],this.ids[1],getAdressId('', '', e.label)[0]]
       }
-      this.$set(this.ids, i, id)
-      console.log(this.ids)
+      this.ids = ids
+      console.log(ids)
       this.$emit('change', this.ids)
     },
     showArea(arr){

@@ -3,6 +3,7 @@
   <div>
     <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
+ 
     <div class="post">
       <ul>
         <li class="flex-between">
@@ -29,7 +30,7 @@
         <li class="flex-between">
           <span class="post-left">招募数量：</span>
           <div><i-input v-model="args.recruitNum"  type="number"  style="width:300px"/></div></li>
-        <li class="flex-between">
+        <li class="flex-between" v-if='args.zmType==2'>
           <span class="post-left">可预约数量：</span>
           <div><i-input v-model="args.apptNum"  type="number" style="width:300px"/></div></li>
         <li class="flex-start">
@@ -43,7 +44,7 @@
                   <i-switch v-model="item.isMustWrite" :true-value='1' :false-value='0'/>
                   <span>必填</span>
                 </div>
-                <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
+                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb'/>
               </div>
               <div class="flex-between" v-else-if=' ~~item.itemType  === 1 '>
                 <i-input placeholder="请输入单文本标题" v-model="item.detailText" :disabled="isDisb" style="width:300px"/>
@@ -51,7 +52,7 @@
                   <i-switch  v-model="item.isMustWrite" :true-value='1' :false-value='0' />
                   <span>必填</span>
                 </div>
-                <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
+                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb'/>
               </div>
               <div class="flex-between" v-else-if=' ~~item.itemType  === 6 '>
                 <i-input placeholder="请输入多行文本标题" v-model="item.detailText" :disabled="isDisb" style="width:300px"/>
@@ -59,7 +60,7 @@
                   <i-switch v-model="item.isMustWrite" :true-value='1' :false-value='0' />
                   <span>必填</span>
                 </div>
-                <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
+                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb'/>
               </div>
               <div class=""  v-else-if=' ~~item.itemType  === 3 '>
                 <div v-if='item.isNewItem == 0' class="flex-between">
@@ -139,39 +140,19 @@
                     <i-input v-model="item.data[1]" :disabled="isDisb"/>
                   </div>
                   <div v-else-if='item.ruleId == 4'>
-                    <Select v-model="item.data[0]" style="width:200px" @on-change='changeProve(0,$event)' :label-in-value='true'>
-                      <Option
-                        v-for="(item,i) in area"
-                        :value="i"
-                        :key="i"
-                      >{{ item.name }}</Option>
-                    </Select>
-                    <Select v-model="item.data[1]" style="width:200px" @on-change='changeProve(1,$event)' :label-in-value='true'>
-                      <Option
-                        v-for="(item,i) in area[val[0]].citys"
-                        :value="i"
-                        :key="i"
-                      >{{ item.name }}</Option>
-                    </Select>
-                    <Select v-model="item.data[2]" style="width:200px" @on-change='changeProve(2,$event)' :label-in-value='true'>
-                      <Option
-                        v-for="(item,i) in area[val[0]].citys[val[1]].areas"
-                        :value="i"
-                        :key="i"
-                      >{{ item }}</Option>
-                    </Select>
+                   <selsect @change="changeCity(index,$event)" :arr='proCity(item.ruleValue)'/>
                   </div>
                   <div v-else>
-                    <Select v-model="item.ruleValue" style="width:200px">
+                    <Select v-model="item.ruleValue" style="width:200px" @on-change='selectDrap(index,limit,0,$event)'>
                       <Option
-                        v-for="(item,i) in item.data"
-                        :value="item.dicId"
+                        v-for="(val,i) in item.data"
+                        :value="item.ruleId==5?val.orgId:val.dicId"
                         :key="i"
-                      >{{ item.name }}</Option>
+                      >{{ val.name }}</Option>
                     </Select>
                   </div>
                 </div>
-                <Icon type="ios-trash"  @click="deleLimitItem(index)" v-if='!isDisb'/>
+                <Icon type="ios-trash"  @click="deleLimitItem(index,item.fors)" v-if='!isDisb'/>
               </div>
               <div class="items flex">
                 <p class="items-tit">常用限制项</p>
@@ -182,7 +163,7 @@
             </div>
           </div>
         </li>
-        <li class="flex-start">
+        <li class="flex-start"  v-if='args.zmType==2'>
           <span class="post-left">优先设置</span>
           <div>
              <p class="flex-between"><span>报名项名称</span><span>是否必填</span><span>操作</span></p>
@@ -191,17 +172,17 @@
                  <span>{{index+1}}</span>
                  <span>{{ item.ruleName }}</span>
                  <div v-if=' ~~item.ruleId == 23'>
-                    <Select v-model="item.ruleValue" style="width:300px">
+                    <Select v-model="item.ruleValue" style="width:300px" @on-change='selectDrap(index,good,1,$event)'>
                       <Option
                         v-for="(val,i) in item.data"
                         :value="val.dicId"
                         :key="i"
-                      >{{ item.name }}</Option>
+                      >{{ val.name }}</Option>
                     </Select>
                  </div>
                  <div>
                    <Icon type="md-arrow-up" color='red' @click="ranktab(index)"/>
-                   <Icon type="ios-trash"  @click="deleGoodItem(index)" v-if='!isDisb'/>
+                   <Icon type="ios-trash"  @click="deleGoodItem(index,item.fors)" v-if='!isDisb'/>
                   </div>
                 </div>
                 <div class="items flex">
@@ -232,9 +213,9 @@
 
 <script>
 import {getActiveType,getActiveSign,getActiveLimit,getGood } from '@/request/api'
-import { CITYSDATA } from '@/libs/sele'
 import { getAdressId,getAreaAdress } from '@/libs/utils'
 import adress from'_c/map'
+import selsect from '_c/selsect'
 export default {
   data () {
     return {
@@ -249,13 +230,11 @@ export default {
       limitList:[],
       limit:[],
       isDisb:false,
-      area:CITYSDATA,
-      val:[0,0,0],
-      name:[],
       items:[],
       feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
       array:[],
       args:{
+        zmType:null,
         roleId:2,
         isAutoChoose:2,
         isTrainMust:2,
@@ -268,9 +247,17 @@ export default {
     }
   },
 
-  components: { adress },
+  components: { adress, selsect },
 
-  computed: {},
+  computed: {
+    proCity(){
+      return (val)=>{
+        if(!!val)return val.split(",")
+        return []
+      }
+     
+    }
+  },
 
   created () {
     this.initData()
@@ -278,32 +265,50 @@ export default {
   },
 
   methods: {
+    changeCity(i,e){
+      this.$set(this.limit[i],'ruleValue',e.join(','))
+    },
     changeDate(e,m){
       this.args.setTime = e
     },
     changePos(e){
       this.args.userPositionName = e.label
     },
-    changeProve(i,e){
-      this.$set(this.name,i,e.label)
+    selectDrap(index,arr,m,e){
+      let id = arr[index].ruleId
+      if((id == 2 || id == 5) || (m==1&&id==23)){
+        arr.forEach((val,i)=>{
+          if(val.ruleId == id&&val.ruleValue == e&&index !== i){
+            this.$set(arr[index],'ruleValue','')
+            this.$Message.warning("不能重复选择")
+            return
+          } 
+        })
+      }
+
     },
     addItem(item,isNewItem,index){
+      let fors = -1
       if(isNewItem == 0){
         this.$set(this.items[index],'disabled',true)
+        fors = index
       }
       let itemList = this.args.coActivityItemList
       let itemId =  isNewItem === 0?item.itemId:null
       let itemName = isNewItem === 0?item.name:null
       let itemType = isNewItem === 0?item.typeFlag:item.type
       let sort = itemList.length+1
-      let args = { itemName, itemType, isMustWrite: 0, isNewItem, itemId, sort, sysId: 2}
+      let args = { itemName, itemType, isMustWrite: 0, isNewItem, itemId, sort, sysId: 2,fors }
       if (itemType == 3 || itemType == 4){
         args.arr = [{ value: null }, { value: null }, { value: null }]
       }
       itemList.push(args)
       this.args.coActivityItemList = itemList
     },
-   deleItem(i,m){
+    deleItem(i,m,fors){
+      if(fors !== -1&& fors !== undefined){
+        this.$set(this.items[fors],'disabled',false)
+      }
       let items = this.args.coActivityItemList
       if (m !== null) {
         let arr = items[i].arr
@@ -330,8 +335,10 @@ export default {
       arr.push({ value: null })
       this.args.coActivityItemList = items
     },
-    deleLimitItem(m){
-       this.$set(this.limitList[m],'disabled',false)
+    deleLimitItem(m,fors){
+      if(fors !== -1){
+        this.$set(this.limitList[fors],'disabled',false)
+      }
       let limit = this.limit
       limit.splice(m, 1)
       for (let i = 0, len = limit.length; i < len; i++) {
@@ -340,18 +347,24 @@ export default {
       this.limit = limit
     },
     addLimitItem(item,index){
-      this.$set(this.limitList[index],'disabled',true)
+      let fors = -1
+      if(item.ruleId !== 2 && item.ruleId !== 5){
+        this.$set(this.limitList[index],'disabled',true)
+        fors = index
+      }
       let limit = this.limit
-      let data = item.ruleId == 4?[0,0,0]:item.ruleId ==3?['','']:item.data
+      let data = item.ruleId == 4?[]:item.ruleId ==3?['','']:item.data
+      let ruleValue = item.ruleId == 4?"1,1,1":null
       limit.push({
         ruleId:item.ruleId,
-        ruleType:3,
-        ruleValue: null,
+        ruleType:1,
+        ruleValue,
         ruleName:item.name,
         data,
         sort:limit.length+1,
         sysId:2,
         typeFlag:3,
+        fors
       })
       this.limit = limit
     },
@@ -365,8 +378,8 @@ export default {
       }
       this.good = good
     },
-    deleGoodItem(i){
-       this.$set(this.goodList[i],'disabled',false)
+    deleGoodItem(i,fors){
+      if(fors != -1) this.$set(this.goodList[fors],'disabled',false)
       let good = this.good
       good.splice(i, 1)
       for (let i = 0, len = good.length; i < len; i++) {
@@ -375,17 +388,19 @@ export default {
       this.good = good
     },
     addGoodItem(item,index){
-      this.$set(this.goodList[index],'disabled',true)
+      let fors = -1
+      if(item.ruleId !== 23)  this.$set(this.goodList[index],'disabled',true); fors = index;
       let good = this.good
       good.push({
         ruleId: item.ruleId,
-        ruleType: 4,
+        ruleType: 2,
         ruleValue: null,
         ruleName: item.name,
         sort: good.length+1,
         data:item.object?item.object:[],
         sysId: 2,
         typeFlag: 3,
+        fors
       })
       this.good = good
     },
@@ -401,12 +416,13 @@ export default {
         this.limitList = res.data
         // this.splitLimit()
       })
-      getGood({roleId:2}).then(res => {
+      getGood({roleId:2,sysId:2,userId}).then(res => {
         this.goodList = res.data
       })
     },
     dealData(){
-       this.i =  this.$route.params.i
+       this.i =  this.$route.query.i
+       console.log(this.i)
        let data = JSON.parse(sessionStorage.getItem("data"))
        this.isDisb = data.isDisb
        if(this.i !== -1){
@@ -451,9 +467,9 @@ export default {
       this.args.provinceId = e.provinceId
       this.args.cityId = e.cityId
       this.args.districtId = e.districtId
-      this.args.setAddr = e.address
       this.args.xx = e.xx
       this.args.yy = e.yy
+      this.$set(this.args,'setAddr',e.address)
     },
     success(){
       if (!this.args.userPosition){
@@ -465,7 +481,10 @@ export default {
       } else if (!this.args.recruitNum || this.args.recruitNum == 0){
         this.$Message.warning('招募数量没填写')
         return
-      }
+      }else if (~~this.args.zmType == 2 && ~~this.args.recruitNum > ~~this.args.apptNum){
+         this.$Message.warning('可预约人数不能小于招募人数')
+      return
+    } 
       let data = JSON.parse(sessionStorage.getItem("data"))
       let args = this.args
       let list = data.args.coActivityUserConfParamList
@@ -479,8 +498,6 @@ export default {
       for(let val of limit){
         if(val.ruleId == 3){
           val.ruleValue = (val.data).join(',')
-        }else if(val.ruleId == 4){
-          val.ruleValue = getAdressId(this.name[0],this.name[1],this.name[2]).join(',')
         }
       }
       args.coActivityRuleParamList = [...limit,...this.good]

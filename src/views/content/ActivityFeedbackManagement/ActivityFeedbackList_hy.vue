@@ -13,17 +13,17 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button size="small">查询结果</Button>
+          <Button size="small" @click="query">查询结果</Button>
         </div>
       </div>
       <div class="con bk inp flex-center-start">
         <p>
           <span>活动名称:</span>&nbsp;
-          <Input size="small" placeholder="活动名称" style="width: 8rem" />
+          <Input size="small" placeholder="活动名称" style="width: 8rem" v-model="activityName"/>
         </p>
         <p>
           <span>所属项目:</span>&nbsp;
-          <Select style="width:6rem;" placeholder="全部" size="small">
+          <Select style="width:6rem;" size="small" v-model="categoryId" placement='top'>
             <Option v-for="item in OptionsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </p>
@@ -36,14 +36,13 @@
           <span>数据列表</span>
         </p>
         <div class="flex-center-end">
-          <Button size="small">
-            显示条数
-            <Icon type="md-arrow-dropdown" />
-          </Button>
-          <Button size="small">
-            排序方式
-            <Icon type="md-arrow-dropdown" />
-          </Button>
+            <Select size='small' placeholder="显示条数" @on-change='changeNum' placement='top'>
+              <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
+            </Select>
+              <Select size='small' placeholder="排序方式"  @on-change='changeSort' placement='top'>
+              <Option value="create_at desc">升序</Option>
+              <Option value="create_at asc">降序</Option>
+            </Select>
         </div>
       </div>
       <div class="con">
@@ -59,7 +58,7 @@
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button> -->
         </div>
-        <Page :total="dataCount" show-elevator show-total size="small" :page-size="pageSize" @on-change="changepages" />
+        <Page :total="dataCount" show-elevator show-total size="small" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>
@@ -68,6 +67,7 @@
 <script>
 import { formatDate } from '@/request/datatime'
 import { Activitypage, Activitybatch } from '@/request/api'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -75,6 +75,7 @@ export default {
         head: '活动反馈列表(会员)'
       },
       OptionsList: [
+        { value: '', label:'全部' },
         { value: 'ProductEvaluation', label: '商品评价' },
         { value: 'topics', label: '话题内容' },
         { value: 'UserComments', label: '用户评论' }
@@ -83,10 +84,9 @@ export default {
       page: 1, //每页显示多少数据
       size: 10, //数据条数
       dataCount: 0,
-      pageSize: 10,
       sysType: 1,
       activityName: '',
-      categoryId: 1,
+      categoryId:  null,
       arr: [],
       batch: null,
       status: false,
@@ -186,6 +186,8 @@ export default {
           }
         }
       ],
+      numList:[10,15,20],
+      sort:'',
       // batchList: [{ value: "1", label: "删除" }],
       modalView: false,
       FeedbackDate: {
@@ -198,6 +200,19 @@ export default {
     }
   },
   methods: {
+    query(){
+      this.getActivitypage()
+    },
+    changeNum(e){
+      this.size = e
+      this.page = 1
+      this.getActivitypage()
+    },
+    changeSort(e){
+      this.sort = e
+      this.page = 1
+      this.getActivitypage()
+    },
     ok() {
       this.$Message.info('添加成功')
     },
@@ -205,16 +220,18 @@ export default {
       this.$Message.info('已取消')
     },
     getActivitypage() {
-      Activitypage({
-        page: { page: this.page, size: this.size },
+      Activitypage(filterNull({
+        activityName:this.activityName,
+        categoryId:this.categoryId,
+        page: { page: this.page, size: this.size,sort:this.sort },
         sysType: this.sysType
-      }).then(res => {
+      })).then(res => {
         if (res.code == 200) {
           this.data = res.data.list
-
           this.dataCount = res.data.totalSize
+        }else{
+          this.$Message.error(res.msg)
         }
-        console.log(res)
       })
     },
 
@@ -234,7 +251,6 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index
-      console.log(index)
       this.getActivitypage()
     },
 
