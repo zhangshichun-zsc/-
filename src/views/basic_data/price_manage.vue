@@ -237,7 +237,7 @@ export default {
 		    contactUserPhone:null,
 		    validFlag:1,
         status:2,
-        delFlag:0,//1删除
+        delFlag:0, //1删除
       },
       list:[]
     };

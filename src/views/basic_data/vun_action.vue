@@ -88,9 +88,11 @@ export default {
                 on: {
                   input: e => {
                     if(e){
+                      this.dicId=params.row.dicId
                       this.states=1
                       this.getBasicbatch(2)
                     }else{
+                      this.dicId=params.row.dicId
                       this.states=0
                        this.getBasicbatch(2)
                     }
