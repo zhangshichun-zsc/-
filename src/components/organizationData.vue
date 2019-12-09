@@ -3,17 +3,12 @@
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
     <div class="basis">
-      <div class="content bk">
-        <div class="title bk-xia flex-center-between">
+      <div class="content">
+        <div class="title flex-between">
           <p>
-            <Icon type="ios-search" />
-            <span>筛选查询</span>
+            <span style="font-weight:bold">筛选查询</span>
           </p>
           <div class="flex-center-end">
-            <Button class="space" @click="jump()">
-              <Icon type="md-person-add" />新建组织
-            </Button>
-            <Button class="space">导入组织</Button>
             <div class="Pack space" @click="Retractbtn">
               <Icon type="ios-arrow-down" v-if="Retract==true" />
               <Icon type="ios-arrow-up" v-if="Retract==false" />
@@ -24,31 +19,20 @@
                 <a class="sai">启用筛选</a>
               </span>
             </div>
-            <ButtonGroup class="spaces">
-              <Button @click="query" class="button-red"><Icon type="ios-search"/>查询结果</Button>
-              <Button class="button-red"> <Icon type="ios-search"/>高级检索</Button>
-            </ButtonGroup>
           </div>
         </div>
-        <Form
-          ref="formInline"
-          :model="formInline"
-          :label-width="80"
-          inline
-          class="forms"
-          v-if="Retract==true"
-        >
-          <FormItem label="组织名称:">
-            <Input v-model="orgName"  placeholder="组织名称" style="width: 160px" />
+        <Form ref="formInline" :model="formInline" inline class="forms" v-if="Retract==true" :label-width='60'>
+          <FormItem label="组织名称:" >
+            <Input v-model="orgName" placeholder="组织名称" style="width: 120px" />
           </FormItem>
           <FormItem label="组织地址:">
-            <Input v-model="address" placeholder="组织地址" style="width: 160px" />
+            <Input v-model="address" placeholder="组织地址" style="width: 120px" />
           </FormItem>
-          <FormItem label="负责人:">
-            <Input v-model="ownerUserName" placeholder="请选择负责人" style="width: 160px" />
+          <FormItem label="负责人:" >
+            <Input v-model="ownerUserName" placeholder="请选择负责人" style="width: 120px" />
           </FormItem>
-          <FormItem label="分类:" class="types" v-if="this.navigation1.id==100 ">
-            <Select v-model="orgType" style="width:160px" :transfer="true">
+          <FormItem label="分类:"  class="types" v-if="this.navigation1.id==100 ">
+            <Select v-model="orgType" style="width:120px" :transfer="true">
               <Option
                 v-for="item in typelist"
                 :value="item.dicCode"
@@ -56,76 +40,101 @@
               >{{ item.dataValue }}</Option>
             </Select>
           </FormItem>
+          <ButtonGroup>
+            <Button @click="query" class="searchred">
+              <Icon type="ios-search" />查询结果
+            </Button>
+          </ButtonGroup>
         </Form>
       </div>
-      <div class>
+      <div>
         <div class="title bk-szy flex-center-between">
           <span>
             <Icon type="ios-list" />数据列表
           </span>
-          <div class="options flex-center-start">
-            <Dropdown class="space">
-              <Button @click="exportData">导出数据</Button>
-            </Dropdown>
-            <Select v-model="size" style="width:120px" placeholder="显示条数">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <!-- <a @click="modal1 = true">
-              <Icon type="ios-settings-outline" />
-            </a>-->
-          </div>
         </div>
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="data"
-          @on-selection-change="handleSelectionChange"
-        ></Table>
-
-        <Modal v-model="modal1" title="自定义展示字段" @on-ok="ok" @on-cancel="cancel">
-          <div class="con">
-            <p>目前显示字段顺序</p>
-            <p>拖拽调整列显示顺序</p>
-            <p>
-              <span>机构名称</span>
-              <span>地址</span>
-              <span>负责人</span>
-              <span>机构分类</span>
-            </p>
-            <p>备选字段</p>
-            <p>
-              <span>基本信息</span>
-              <CheckboxGroup v-model="options">
-                <Checkbox label="options1">机构名称</Checkbox>
-                <Checkbox label="options2">地址</Checkbox>
-                <Checkbox label="options3">负责人</Checkbox>
-                <Checkbox label="options4">Logo</Checkbox>
-                <Checkbox label="options5">创建时间</Checkbox>
-                <Checkbox label="options6">省份</Checkbox>
-                <Checkbox label="options7">网站</Checkbox>
-                <Checkbox label="options8">网站</Checkbox>
-              </CheckboxGroup>
-            </p>
-            <a @click="jump1()" style="color: #515a6e;">
-              <Icon type="ios-settings-outline" />自定义扩展字段
-            </a>
-          </div>
-        </Modal>
-      </div>
-      <div class="pages flex-center-between">
         <div>
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="type">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Button class="space" @click="batch">确定</Button>
+          <div class="bk-szy sleft">
+            <Button @click="chackall()" style="border:0px;">
+              <Checkbox v-model="status"></Checkbox>全选
+            </Button>
+            <div class="flex-start">
+              <div class="flex-center-end">
+                <Dropdown class="space">
+                  <Button @click="exportData">导出数据</Button>
+                </Dropdown>
+              </div>
+              <div class="flex-center-end">
+                <Button class="space" @click="jump()">
+                  <Icon type="md-person-add" />新建组织
+                </Button>
+                <Button class="space">导入组织</Button>
+              </div>
+              <div class="flex-center-end">
+                <Select v-model="size" style="width:80px;margin:0 20px 0 10px;" placeholder="显示条数">
+                  <Option
+                    v-for="item in Article"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+                <Select placeholder="排序方式" style="width: 80px;" v-model="sort">
+                  <Option
+                    v-for="item in sorting"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+              </div>
+            </div>
+          </div>
+          <Table
+            ref="selection"
+            border
+            :columns="columns"
+            :data="data"
+            @on-selection-change="handleSelectionChange"
+          ></Table>
         </div>
+        <div class="flex-center-end">
+          <Modal v-model="modal1" title="自定义展示字段" @on-ok="ok" @on-cancel="cancel">
+            <div class="con">
+              <p>目前显示字段顺序</p>
+              <p>拖拽调整列显示顺序</p>
+              <p>
+                <span>机构名称</span>
+                <span>地址</span>
+                <span>负责人</span>
+                <span>机构分类</span>
+              </p>
+              <p>备选字段</p>
+              <p>
+                <span>基本信息</span>
+                <CheckboxGroup v-model="options">
+                  <Checkbox label="options1">机构名称</Checkbox>
+                  <Checkbox label="options2">地址</Checkbox>
+                  <Checkbox label="options3">负责人</Checkbox>
+                  <Checkbox label="options4">Logo</Checkbox>
+                  <Checkbox label="options5">创建时间</Checkbox>
+                  <Checkbox label="options6">省份</Checkbox>
+                  <Checkbox label="options7">网站</Checkbox>
+                  <Checkbox label="options8">网站</Checkbox>
+                </CheckboxGroup>
+              </p>
+              <a @click="jump1()" style="color: #515a6e;">
+                <Icon type="ios-settings-outline" />自定义扩展字段
+              </a>
+            </div>
+          </Modal>
+        </div>
+      </div>
+      <div class="padd">
+        <Select placeholder="批量操作" style="width: 120px" v-model="type">
+          <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+        <Button class="space" @click="batch">确定</Button>
+      </div>
+      <div class="pages flex-center">
         <Page
           :total="dataCount"
           show-elevator
@@ -158,7 +167,7 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 40,
           align: "center"
         },
         {
@@ -291,7 +300,10 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.typelist =[{dataKey:0,dataValue:'全部',dicCode:0},...res.data]
+          this.typelist = [
+            { dataKey: 0, dataValue: "全部", dicCode: 0 },
+            ...res.data
+          ];
         }
         console.log(res);
       });
@@ -451,41 +463,38 @@ body {
 .main {
   background-color: #ffffff;
 }
+.padd {
+  padding: 10px 0 10px 50px;
+}
 .basis {
   margin: 0.5rem;
+  padding: 10px 0;
 }
 .content {
   margin-bottom: 0.5rem;
-
 }
-.bk {
-  border: 1px solid #e4e4e4;
-
+.sleft {
+  margin-left: 5px;
 }
 .bk-szy {
-  border-left: 1px solid #e4e4e4;
-  border-right: 1px solid #e4e4e4;
-  border-top: 1px solid #e4e4e4;
   display: flex;
   align-items: center;
-}
-.bk-xia {
-  border-bottom: 1px solid #e4e4e4;
-  display: flex;
-  align-items: center;
+  margin-bottom: 10px;
   justify-content: space-between;
 }
 .title {
-  background-color: #f3f3f3;
   padding: 0.2rem 0.5rem;
 }
-.Pack,
+.Pack {
+  margin: 0 0.4rem;
+}
 .space {
-  margin: 0 0.2rem;
+  margin: 0 10px;
 }
 
 .pages {
-  margin: 0.5rem;
+  margin: 20px auto;
+  text-align: center;
 }
 .ivu-form-item {
   margin-bottom: 0;
@@ -510,13 +519,20 @@ body {
   margin: 20px 0;
   display: flex;
 }
-.forms {
-  width: 80px;
-}
+
 .ivu-form-item-content {
   margin-left: 80px;
 }
 .sai {
   color: black;
+}
+.searchred {
+  width: 110px;
+  height: 32px !important;
+  background-color: #ff565a;
+  text-align: center;
+  line-height: 16px !important;
+  color: white;
+  border-radius: 15px;
 }
 </style>

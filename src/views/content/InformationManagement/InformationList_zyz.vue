@@ -20,11 +20,11 @@
         <div class="con inp flex-center-start">
           <p>
             <span>资讯标题:</span>&nbsp;
-            <Input size="large" placeholder="标题关键字" style="width: 200px" v-model="title" />
+            <Input size="large" placeholder="标题关键字" style="width: 200px" v-model="querys.title" />
           </p>
           <p>
             <span>资讯分类:</span>&nbsp;
-            <Select style="width:200px" placeholder="全部" v-model="infomationType">
+            <Select style="width:200px" placeholder="全部" v-model="querys.infomationType">
               <Option
                 v-for="item in type"
                 :value="item.dataKey"
@@ -270,13 +270,22 @@ export default {
       batch: null,
       informationIds: "",
       arr:[],
-
+      querys:{
+        title:'',
+        infomationType:''
+      }
     };
   },
   //事件监听
   watch: {
-    size: "getAddressList",
-    sort: "getAddressList"
+    'size':()=>{
+      this.page = 1
+      this.getAddressList()
+    },
+    'sort':()=>{
+      this.page = 1
+      this.getAddressList()
+    },
   },
   methods: {
     addBut() {
@@ -295,13 +304,15 @@ export default {
 
     // 查询结果按钮
     query() {
+      this.page = 1
+      this.title = this.querys.title
+      this.infomationType = this.querys.infomationType
+      this.$Message.success("查询成功")
       this.getAddressList();
     },
 
     // 质询列表
     getAddressList() {
-
-
       AddressList({
         sysType: this.sysType,
         title: this.title,

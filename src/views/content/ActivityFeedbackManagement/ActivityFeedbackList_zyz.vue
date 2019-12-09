@@ -13,17 +13,17 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button size="small">查询结果</Button>
+          <Button size="small" @click="query()">查询结果</Button>
         </div>
       </div>
       <div class="con bk inp flex-center-start">
         <p>
           <span>活动名称:</span>&nbsp;
-          <Input size="small" placeholder="活动名称" style="width: 8rem" />
+          <Input size="small" placeholder="活动名称" style="width: 8rem" v-model="querys.activityName"/>
         </p>
         <p>
           <span>所属项目:</span>&nbsp;
-          <Select style="width:6rem;" placeholder="全部" size="small">
+          <Select style="width:6rem;" placeholder="全部" size="small" v-model="querys.categoryId">
             <Option v-for="item in OptionsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </p>
@@ -196,11 +196,19 @@ export default {
         FeedbackSuggestions: '希望此类活动更多些'
       },
       choose1: 'choose-A',
-      choose2: 'choose-C'
+      choose2: 'choose-C',
+      querys:{
+        activityName:'',
+        categoryId:null
+      }
     }
   },
   methods: {
     query(){
+      this.page = 1
+      this.activityName = this.querys.activityName
+      this.categoryId = this.querys.categoryId
+      this.$Message.success("查询成功")
       this.getActivitypage()
     },
     changeNum(e){

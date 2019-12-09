@@ -79,7 +79,7 @@ export default {
           }
         },
         {
-          title: "修改时间",
+          title: "最后修改时间",
           key: "updateAt",
           align: "center",
           render: (h, params) => {
@@ -87,13 +87,13 @@ export default {
           }
         },
         {
-          title: "操作人",
+          title: "最后操作人",
           key: "userName",
           align: "center"
         },
 
         {
-          title: "操作",
+          title: "是否启用",
           align: "center",
           render: (h, params) => {
             return h("div", [

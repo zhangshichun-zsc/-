@@ -88,9 +88,11 @@ export default {
                 on: {
                   input: e => {
                     if(e){
+                      this.dicId=params.row.dicId
                       this.states=1
                       this.getBasicbatch(2)
                     }else{
+                      this.dicId=params.row.dicId
                       this.states=0
                        this.getBasicbatch(2)
                     }
@@ -161,7 +163,7 @@ export default {
       page: 1,
       size: 10,
       dataCount: 0,
-      sysId: 1,
+      sysId: 2,
       typeFlag: 7,  //每个页面写死
       startAt: "",
       endAt: "",
