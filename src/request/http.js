@@ -74,7 +74,6 @@ axios.interceptors.response.use(
           }
         });
     } else if (response.data.code == 105) {
-
       router.currentRoute.path != "/login" &&
         router.replace({
           path: "/login",

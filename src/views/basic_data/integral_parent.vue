@@ -233,6 +233,15 @@ export default {
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
+          if(e==0){
+            this.$Message.info('添加成功')
+          }else if(e==1){
+            this.$Message.info('编辑成功')
+
+          }else if(e==2){
+            this.$Message.info('操作成功')
+
+          }
           this.getBasicsearch();
           this.modal1 = false;
         }
