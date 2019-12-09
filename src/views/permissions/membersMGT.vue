@@ -35,9 +35,11 @@
       </div>
 
       <div>
-        <a href="javascript:;" class="addmember-btn" @click="addmember"
-          >添加成员</a
-        >
+        <div style=" display: flex; justify-content: flex-end">
+          <a href="javascript:;" class="addmember-btn" @click="addmember"
+            >添加成员</a
+          >
+        </div>
         <!-- <Button
           :style="{ margin: '24px 0', maxWidth: '100px' }"
          
@@ -125,20 +127,20 @@ export default {
         },
         {
           title: "部门",
-          key: "deptNames",
+          key: "deptName",
 
           align: "center"
         },
         {
           title: "是否启用",
-          key: "status",
+          key: "userEnable",
 
           algin: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.validFag == 1
+                  value: params.row.userEnable == 1
                 },
                 on: {
                   input: e => {
@@ -156,29 +158,29 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h(
-                "a",
-                {
-                  clssName: "action",
-                  style: {
-                    color: "#FF565A",
-                    padding: "10px"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({
-                        name: "function",
-                        query: {
-                          sysRoleName: params.row.userName,
-                          sysRoleId: params.row.deptUserId,
-                          fromURL: this.$route.name
-                        }
-                      });
-                    }
-                  }
-                },
-                "权限设置"
-              ),
+              // h(
+              //   "a",
+              //   {
+              //     clssName: "action",
+              //     style: {
+              //       color: "#FF565A",
+              //       padding: "10px"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.$router.push({
+              //           name: "function",
+              //           query: {
+              //             sysRoleName: params.row.userName,
+              //             sysRoleId: params.row.deptUserId,
+              //             fromURL: this.$route.name
+              //           }
+              //         });
+              //       }
+              //     }
+              //   },
+              //   "权限设置"
+              // ),
               h(
                 "a",
                 {
@@ -249,7 +251,7 @@ export default {
         if (res.code == 200) {
           this.deplist = [
             {
-              deptId: 0,
+              deptId: "",
               deptName: "全部"
             },
             ...res.data
@@ -261,12 +263,14 @@ export default {
 
     // 查询部门成员
     getdepartmentmember() {
-      findDeptUserName({
+      let obj = this.util.remove({
         page: { page: this.page, size: this.size },
-        deptId: this.role,
+        deptId: this.role == 0 ? "" : this.role,
         sort: "",
         name: this.name
-      }).then(res => {
+      });
+
+      findDeptUserName(obj).then(res => {
         if (res.code == 200) {
           this.data2 = res.data.list;
           this.dataCount = res.data.totalSize;
@@ -279,12 +283,14 @@ export default {
 
     //成员管理列表
     getmemberlist() {
-      memberlist({
+      let obj = this.util.remove({
         page: { page: this.page, size: this.size },
-        deptId: this.deptId,
+        deptId: this.deptId == 0 ? "" : this.deptId,
         userId: "",
         name: this.name
-      }).then(res => {
+      });
+      console.log(obj);
+      memberlist(obj).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;

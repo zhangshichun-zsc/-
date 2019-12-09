@@ -6,11 +6,16 @@
       <div class="con">
         <div class="title bk-szy flex-center-start">
           <p>
-            <Icon type="ios-square-outline" />
             <span>数据列表</span>
           </p>
           <div class="but">
-            <Button @click="add">添加部门</Button>
+            <a
+              class="btn"
+              href="javascript:;"
+              @click="add"
+              style="margin-right:15px"
+              >添加部门</a
+            >
             <Modal v-model="modal1" :title="text">
               <Form
                 ref="AddDate"
@@ -31,7 +36,11 @@
                   />
                 </FormItem>
                 <FormItem label="上级部门" prop="parentId">
-                  <Select v-model="AddDate.parentId" style="width:200px">
+                  <Select
+                    v-model="AddDate.parentId"
+                    :disabled="isdispabled"
+                    style="width: 10rem"
+                  >
                     <Option
                       v-for="item in deplist"
                       :value="item.deptId"
@@ -45,9 +54,17 @@
                 </FormItem>
                 <FormItem label="活动类型" prop="ssproject">
                   <Select
+                    multiple
                     style="width: 10rem"
                     v-model="AddDate.ssproject"
-                  ></Select>
+                  >
+                    <Option
+                      v-for="item in ssproject"
+                      :value="item.dicId"
+                      :key="item.dicId"
+                      >{{ item.dicName }}</Option
+                    >
+                  </Select>
                 </FormItem>
               </Form>
               <div slot="footer">
@@ -65,14 +82,14 @@
                 >{{ item.label }}</Option
               >
             </Select>
-            <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+            <!-- <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
               <Option
                 v-for="item in sorting"
                 :value="item.value"
                 :key="item.value"
                 >{{ item.label }}</Option
               >
-            </Select>
+            </Select> -->
           </div>
         </div>
         <Table border :columns="columns1" :data="data1"></Table>
@@ -82,11 +99,13 @@
               <span>成员列表</span>
             </p>
             <div class="but">
-              <Button @click="AddMembers()">添加成员</Button>
+              <a class="btn" href="javascript:;" @click="AddMembers()"
+                >添加成员</a
+              >
             </div>
           </div>
         </div>
-        <Table border :columns="columns2" :data="data2"></Table>
+        <Table border :columns="columns2" :data="datalist"></Table>
       </div>
       <div class="pages">
         <Page
@@ -121,7 +140,7 @@ export default {
   data() {
     return {
       modal1: false,
-
+      isdispabled: false, // 是否禁用当前部门
       navigation1: {
         head: "部门管理(共用)"
       },
@@ -130,8 +149,9 @@ export default {
         description: "",
         parentId: "",
         leader: "",
-        ssproject: ""
+        ssproject: "" // 用户选择的活动类型
       },
+      ssproject: [],
       ruleValidate: {
         deptName: [
           { required: true, message: "部门名称不能为空", trigger: "blur" }
@@ -150,9 +170,6 @@ export default {
         ],
         leader: [
           { required: true, message: "请输入负责人姓名", trigger: "blur" }
-        ],
-        ssproject: [
-          { required: true, message: "请输入活动类型", trigger: "blur" }
         ]
       },
       rpw: null,
@@ -171,7 +188,17 @@ export default {
                   this.rpw = e;
                   console.log(this.rpw);
                 }}
-              ></expandRow>
+              >
+                <expandRow
+                  row={params.row}
+                  dom={<expandRow row={this.rpw} />}
+                  onChanges={e => {
+                    this.rpw = e;
+
+                    console.log(this.rpw);
+                  }}
+                ></expandRow>
+              </expandRow>
             );
           }
         },
@@ -257,7 +284,8 @@ export default {
                     on: {
                       click: () => {
                         this.modal1 = true;
-                        this.text = "编辑成员";
+                        this.text = "编辑部门";
+                        this.isdispabled = true;
                         this.getdepartmentSup();
                         this.AddDate = params.row;
                         this.AddDate.parentId = params.row.parentId;
@@ -406,11 +434,30 @@ export default {
       // obj:''
     };
   },
+  computed: {
+    datalist() {
+      console.log(this.$store.state.MGTlist.list);
+      return this.$store.state.MGTlist.list;
+    },
+    datalistCount() {
+      console.log(this.$store.state.MGTlist.count);
+      return this.$store.state.MGTlist.count;
+    }
+  },
   //事件监听
   watch: {
-    size: "getdepartmentmember",
+    size() {
+      this.$store.commit("updatePage", { page: this.page, size: this.size });
+      this.getdepartmentmember();
+    },
+
+    page() {
+      this.$store.commit("updatePage", { page: this.page, size: this.size });
+      this.getdepartmentmember();
+    },
     sort: "getdepartmentmember"
   },
+
   mounted() {
     this.getdepartmentlist();
     this.getdeparttype();
@@ -433,10 +480,11 @@ export default {
       });
     },
 
-    //查询分类
+    //查询活动分类
     getdeparttype() {
       departtype({}).then(res => {
-        console.log(res);
+        this.$store.commit("activityType", res.data);
+        this.ssproject = res.data;
       });
     },
 
@@ -467,9 +515,15 @@ export default {
         sort: ""
       }).then(res => {
         if (res.code == 200) {
-          this.data2 = res.data.list;
-          this.dataCount = res.data.totalSize;
-          this.$Message.info("查询成功");
+          // this.data2 = res.data.list;
+          // this.dataCount = res.data.totalSize;
+
+          this.$store.commit("updateList", {
+            list: res.data.list,
+            count: res.data.totalSize
+          });
+
+          // this.$Message.info("查询成功");
         } else {
           this.$Message.error(res.msg);
         }
@@ -483,7 +537,7 @@ export default {
         deptName: this.AddDate.deptName,
         description: this.AddDate.description,
         leader: this.AddDate.leader,
-        dicIds: this.dicIds
+        dicIds: this.AddDate.ssproject.toString()
       }).then(res => {
         if (res.code == 200) {
         }
@@ -496,7 +550,8 @@ export default {
         deptName: this.AddDate.deptName,
         description: this.AddDate.description,
         parentId: this.AddDate.parentId,
-        leader: this.AddDate.leader
+        leader: this.AddDate.leader,
+        dicIds: this.AddDate.ssproject.toString()
       }).then(res => {
         if (res.code == 200) {
           this.getdepartmentlist();
@@ -535,6 +590,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.deplist = res.data;
+          this.$store.commit("deplist", res.data);
         }
         console.log(res);
       });
@@ -563,8 +619,9 @@ export default {
     },
     //添加部门
     add() {
-      this.text = "添加成员";
+      this.text = "添加部门";
       this.modal1 = true;
+      this.isdispabled = false;
       this.clear();
       this.getdepartmentall();
     },
@@ -625,5 +682,17 @@ tr td.ivu-table-expanded-cell {
 }
 td.ivu-table-expanded-cell {
   padding: 0;
+}
+
+.btn {
+  display: inline-block;
+  width: 110px;
+  height: 32px;
+  background: #ff565a;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 32px;
+  text-align: center;
 }
 </style>

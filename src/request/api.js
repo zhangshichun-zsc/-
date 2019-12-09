@@ -300,6 +300,9 @@ export const setUpdate = p => posts('/user-list/update-user-info', p) //会员�
 export const optTime = p => posts('/user-list/opt-vip-time', p) //修改vip道到期时间
 
 
+export const userListMsg = p => posts('/user-list/user/inner/msg', p) //用户列表 站内下信
+
+
 
 
 
