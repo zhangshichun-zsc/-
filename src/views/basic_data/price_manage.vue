@@ -24,9 +24,9 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="args.validFlag">
-            <Option value="">全部</Option>
-            <Option value="1">有效状态</Option>
-            <Option value="0">无效状态</Option>
+            <Option value="-1">全部</Option>
+            <Option value="1">有效</Option>
+            <Option value="0">无效</Option>
           </Select>
         </div>
         <div class="flex-center-start">
@@ -89,12 +89,12 @@ export default {
      const validatePhone = (rule, value, callback) => {
         if (!value) {
             return callback(new Error('手机号不能为空'));
-        }else if(!(/^1[3456789]\d{9}$/.test(value))){ 
+        }else if(!(/^1[3456789]\d{9}$/.test(value))){
              return callback(new Error('手机号码有误，请重填'));
         }else{
             callback();
         }
-      };       
+      };
     return {
       time:'请选择时间段',
       open:false,
@@ -176,12 +176,12 @@ export default {
                   },
                   on: {
                     click: () => {
-                      if(params.row.validFlag === 1){
+                      if(params.row.validFlag == '1'){
                          this.showModal(params.row)
                       }else{
                         this.$Message.error('无效状态不能编辑')
                       }
-                    
+
                     }
                   }
                 },
@@ -253,6 +253,9 @@ export default {
 
   methods: {
     getList(){
+      if(this.args.validFlag==-1){
+        this.args.validFlag=''
+      }
       let args = filterNull(this.args)
       getfund(args).then(res => {
         this.sumSize = res.data.totalSize
