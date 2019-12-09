@@ -26,7 +26,7 @@
                   <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
                 </div>
               </div>
-              <img class="imgs" style="height:50px;width:50px;" v-else :src="AddData.image" />
+              <img class="imgs" style="height:50px;width:50px;"  v-if="AddData.image != null" :src="AddData.image" />
               <Icon type="ios-trash" v-if="AddData.image != null" class="cancel" :size="26" @click="cancelImg()" />
             </div>
           </FormItem>

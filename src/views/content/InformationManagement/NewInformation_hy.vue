@@ -154,7 +154,7 @@ export default {
       imgs: null
     }
   },
-   components: {  wangeditor},
+  components: {  wangeditor },
   methods: {
     //资讯类型下拉
     getinquiryReltype() {
@@ -234,7 +234,8 @@ export default {
 
     //富文本
     btn(e){
-      this.editorContent=e
+      console.log(e)
+      this.editorContent = e
     },
 
 

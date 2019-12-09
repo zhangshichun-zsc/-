@@ -46,7 +46,7 @@
                   <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
                 </div>
               </div>
-              <img class="imgs" style="height:50px;width:50px;" v-else :src="AddData.image" />
+              <img class="imgs" style="height:50px;width:50px;" v-if="AddData.image != null" :src="AddData.image" />
               <Icon
                 type="ios-trash"
                 v-if="AddData.image != null"
@@ -101,6 +101,7 @@ import {
   inquiryadd,
   orgimgdel
 } from "@/request/api";
+import { constants } from 'fs';
 export default {
   data() {
     return {
@@ -277,8 +278,9 @@ export default {
           this.datas = res.data.list;
           this.dataCount = res.data.totalSize;
           this.status = false;
+        }else{
+          this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
 
@@ -293,7 +295,6 @@ export default {
           this.$Message.info("操作成功");
           this.getinquirytype();
         }
-        console.log(res);
       });
     },
     //删除
@@ -308,7 +309,6 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
       });
     },
 
@@ -350,7 +350,6 @@ export default {
         } else if (res.code == 500) {
           this.$Message.error("类型已存在");
         }
-        console.log(res);
       });
     },
 
@@ -403,7 +402,6 @@ export default {
         } else if (this.types == 2) {
           this.getinquirydel();
         }
-        console.log(this.ids);
       }
     },
 
@@ -445,7 +443,6 @@ export default {
     //每条数据单选框的状态
     handleSelectionChange(val) {
       this.arr = val;
-      console.log(this.arr);
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
