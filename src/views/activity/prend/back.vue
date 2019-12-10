@@ -8,10 +8,9 @@
         <span class="select-template">模板名称</span>
         <Input  style="width:300px;margin-top:20px" v-model="args.fkMouldName"></Input>
       </div>
-      <div class="select">
+      <div class="actType">
         <span class="select-template">活动分类</span>
-        <Input  style="width:300px;margin-top:20px" value="篮球" v-model="args.typeDicName">
-        </Input>
+        <span>{{args.typeDicName}}</span>
       </div>
       <div class="select">
         <span class="select-template">反馈简介</span>
@@ -95,7 +94,7 @@ export default {
       feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
       feed: [],
       details:[   {
-            type:6,
+            type:0,
             context: null,
             isMust:0
             
@@ -175,11 +174,25 @@ export default {
     feedback(){
       let args = this.args
       if(!args.fkMouldName || !this.details[0].context || !args.typeDicName){
-        this.$Message.console.warning('不完整')
+        this.$Message.warning('信息填写不完整')
         return
       }
       args.details = [...this.details,...this.feed]
-      args = filterNull(args)
+      // args = filterNull(args)
+      for(let i in args.details){
+        if(args.details[i].context==''){
+          this.$Message.warning('信息填写不完整')
+          return
+        }else if(args.details[i].type==3 || args.details[i].type==4){
+          for(let j in args.details[i].answer){
+            if(args.details[i].answer[j].answer=='' || args.details[i].answer[j].answer==null){
+              this.$Message.warning('信息填写不完整')
+              return
+            }
+          }
+        }
+      }
+      console.log(args)
       addActiveTypeItem(args).then(res => {
          if(res.code == 200){
             this.$Message.success('添加成功')
@@ -305,6 +318,15 @@ export default {
     border: 1px solid #797979;
     margin-right: 10px;
     // color: #f3f3f3;/
+  }
+}
+.actType{
+  display: flex;
+  align-items: center;
+  background: #fff;
+  .select-template {
+    margin: 20px 50px;
+    width: 100px;
   }
 }
 
