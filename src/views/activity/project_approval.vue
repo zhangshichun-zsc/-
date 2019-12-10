@@ -70,7 +70,6 @@
         border
         :columns="columns"
         :data="datax"
-        height='525px'
         @on-selection-change="handleSelectionChange"
       ></Table>
       <div class="pages">
@@ -365,9 +364,9 @@ export default {
   }
 }
 
-.ivu-table-wrapper {
-  height: 500px;
-}
+// .ivu-table-wrapper {
+//   height: 500px;
+// }
 .pages {
   height: 50px;
   display: flex;
