@@ -3,7 +3,7 @@
   <div class="main">
     <div class="layout">
       <Layout>
-        <Header :style="{position: 'fixed', width: '100%'}">
+        <Header :style="{ position: 'fixed', width: '100%',zIndex:200 }">
           <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-nav">
               <div class="layout-logo">

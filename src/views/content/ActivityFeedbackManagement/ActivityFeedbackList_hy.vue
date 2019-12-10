@@ -19,12 +19,13 @@
       <div class="con bk inp flex-center-start">
         <p>
           <span>活动名称:</span>&nbsp;
-          <Input size="small" placeholder="活动名称" style="width: 8rem" v-model="activityName"/>
+          <Input size="small" placeholder="活动名称" style="width: 8rem" v-model="querys.activityName"/>
         </p>
         <p>
           <span>所属项目:</span>&nbsp;
-          <Select style="width:6rem;" size="small" v-model="categoryId" placement='top'>
-            <Option v-for="item in OptionsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select style="width:6rem;" size="small" v-model="querys.categoryId" placement='top'>
+            <Option :value="''">全部</Option>
+            <Option v-for="(item,index) in OptionsList" :value="item.categoryId+''" :key="index">{{ item.name }}</Option>
           </Select>
         </p>
       </div>
@@ -66,7 +67,7 @@
 
 <script>
 import { formatDate } from '@/request/datatime'
-import { Activitypage, Activitybatch } from '@/request/api'
+import { Activitypage, Activitybatch, getTypeFeed } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 export default {
   data() {
@@ -139,7 +140,8 @@ export default {
                         name: 'ActivityFeedbackDetails_hy',
                         query: {
                           activityId: params.row.activityId,
-                          name: params.row.activityName
+                          name: params.row.activityName,
+                          num: params.row.feedbackNum
                         }
                       })
                     }
@@ -196,11 +198,33 @@ export default {
         FeedbackSuggestions: '希望此类活动更多些'
       },
       choose1: 'choose-A',
-      choose2: 'choose-C'
+      choose2: 'choose-C',
+      querys:{
+        activityName:'',
+        categoryId: ''
+      },
+      userId:null
     }
   },
+  created(){
+    this.userId = this.$store.state.userId
+    this.getType()
+  },
   methods: {
+    getType(){
+      getTypeFeed({ sysId:1 }).then(res => {
+         if(res.code == 200){
+          this.OptionsList = res.data
+        }else{
+          this.$Message.error(res.msg)
+        }
+      })
+    },
     query(){
+      this.page = 1
+      this.activityName = this.querys.activityName
+      this.categoryId = this.querys.categoryId
+      this.$Message.success("查询成功")
       this.getActivitypage()
     },
     changeNum(e){
@@ -224,7 +248,8 @@ export default {
         activityName:this.activityName,
         categoryId:this.categoryId,
         page: { page: this.page, size: this.size,sort:this.sort },
-        sysType: this.sysType
+        sysType: this.sysType,
+        userId:14
       })).then(res => {
         if (res.code == 200) {
           this.data = res.data.list

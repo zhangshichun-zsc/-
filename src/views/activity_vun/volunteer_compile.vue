@@ -412,11 +412,11 @@ export default {
       getActiveSign({}).then(res => {
         this.items = res.data
       })
-      getActiveLimit({roleId: 2, userId}).then(res => {
+      getActiveLimit({ roleId: 2, sysId:2, userId }).then(res => {
         this.limitList = res.data
         // this.splitLimit()
       })
-      getGood({roleId:2,sysId:2,userId}).then(res => {
+      getGood({ roleId:2, sysId:2, userId}).then(res => {
         this.goodList = res.data
       })
     },
