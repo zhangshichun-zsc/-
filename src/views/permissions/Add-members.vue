@@ -265,10 +265,6 @@ export default {
 
     //成员添加
     getdepartaddDeptUser() {
-      console.log("----------------------");
-      console.log(this.AddDate.deplNames);
-      console.log(this.AddDate.sysRoleNames);
-      console.log("----------------------");
       departaddDeptUser({
         sysRoleIds: this.AddDate.sysRoleNames.toString(),
         tel: this.AddDate.tel,
@@ -279,6 +275,14 @@ export default {
         loginPwd: this.AddDate.loginPwd
       }).then(res => {
         console.log(res);
+        if (res.code === 200) {
+          this.$Message.info("添加成功");
+          this.$router.push({
+            name: this.$route.query.fromURL
+          });
+        } else {
+          this.$Message.error(res.msg);
+        }
       });
     },
 

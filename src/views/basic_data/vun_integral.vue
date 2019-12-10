@@ -39,7 +39,7 @@
           <span>数据列表</span>
         </div>
         <div>
-          <Button class="table-btn" @click="modify">批量修改</Button>
+          <!-- <Button class="table-btn" @click="modify">批量修改</Button> -->
           <Button class="table-btn" @click="exportData">
             导出数据
             <Icon type="md-arrow-dropdown" />
@@ -353,16 +353,16 @@ export default {
     },
 
 
-     //批量修改
-    modify() {
-      console.log(this.arr);
-      if(this.arr.length==0){
-        this.$Message.error("至少选择一个！")
-      }else{
-        this.clearinput();
-        this.userIds=this.arr
-      }
-    },
+    //  //批量修改
+    // modify() {
+    //   console.log(this.arr);
+    //   if(this.arr.length==0){
+    //     this.$Message.error("至少选择一个！")
+    //   }else{
+    //     this.clearinput();
+    //     this.userIds=this.arr
+    //   }
+    // },
 
     clearinput() {
       this.formItem.remark = "";

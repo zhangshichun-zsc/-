@@ -771,15 +771,17 @@ export default {
 
   watch: {
     size(newVlaue, oldValue) {
+      this.ALLINFO = false
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
     },
     page(newVlaue, oldValue) {
+        this.ALLINFO = false
       if (newVlaue === oldValue) return
-
       this.getUsetList(this.paramsObj)
     },
     sort(newVlaue) {
+        this.ALLINFO = false
       this.getUsetList(this.paramsObj)
     },
     ALLINFO(newVlaue, oldValue) {
@@ -859,7 +861,7 @@ export default {
             this.batchState = ''
           }
         } else {
-          // TODO 操作失败之后， 状态不变更
+
           this.$Message.error({
             background: true,
             content: '状态变更失败，请联系管理员查看'

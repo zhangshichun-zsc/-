@@ -30,6 +30,8 @@ export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]; // 导�
 
 axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
 
+axios.defaults.withCredentials = true  //让ajax携带cookie
+
 // 请求超时时间
 axios.defaults.timeout = 100000;
 
@@ -51,6 +53,8 @@ axios.interceptors.request.use(
           token: store.state.token,
           ...config.params
         };
+      }else if(config.method === "options"){
+        // config.url = `${config.url}?token=${store.state.token}`;
       }
     }
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
@@ -118,9 +122,8 @@ export function get(url, params) {
   // params.token = token
   return new Promise((resolve, reject) => {
     axios
-      .get(url, {
-        params: params
-      })
+      .get(url,{params:params}
+       )
       .then(res => {
         resolve(res.data);
       })

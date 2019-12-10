@@ -9,22 +9,33 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-          <div class="integral-rig">
+          <div class="integral-rig" @click="showScreen = !showScreen">
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
           <Button class="integral-rig" @click="result">查询结果</Button>
-          <Button class="integral-rig">高级检索</Button>
+          <!-- TODO 暂时不做 -->
+          <!-- <Button class="integral-rig">高级检索</Button> -->
         </div>
       </div>
-      <div class="flex-center-start integral-body">
+      <div class="flex-center-start integral-body" v-show="showScreen">
         <div class="flex-center-start">
           <span>姓名/手机号/昵称:</span>
-          <Input size="large" placeholder="姓名/手机号/昵称" class="inpt" v-model="info" />
+          <Input
+            size="large"
+            placeholder="姓名/手机号/昵称"
+            class="inpt"
+            v-model="info"
+          />
         </div>
         <div class="flex-center-start">
           <span>组织名称:</span>
-          <Input size="large" placeholder="组织名称" class="inpt" v-model="orgName" />
+          <Input
+            size="large"
+            placeholder="组织名称"
+            class="inpt"
+            v-model="orgName"
+          />
         </div>
         <div class="flex-center-start">
           <span>注册时间:</span>
@@ -38,7 +49,12 @@
         </div>
         <div class="flex-center-start">
           <span>标签:</span>
-          <Input size="large" placeholder="标签" class="inpt" v-model="labelName" />
+          <Input
+            size="large"
+            placeholder="标签"
+            class="inpt"
+            v-model="labelName"
+          />
         </div>
         <div class="flex-center-start">
           <a @click="jump2()" style="color: #666666;">标签管理</a>
@@ -71,7 +87,7 @@
                 <Input
                   v-model="formValidate1.Message"
                   type="textarea"
-                  :autosize="{minRows: 5,maxRows: 8}"
+                  :autosize="{ minRows: 5, maxRows: 8 }"
                 ></Input>
                 <p style="font-size: 12px;">
                   内容上限不能超过
@@ -89,12 +105,17 @@
               </FormItem>
             </Form>
           </Modal>
-          <Button @click="modal1 = true" class="btns">
+          <Button disabled @click="modal1 = true" class="btns">
             群发短信
-            <Icon type="md-arrow-dropdown"></Icon>
           </Button>
           <!--群发站内信-->
-          <Modal v-model="modal2" title="群发站内信">
+          <Modal
+            v-model="modal2"
+            title="群发站内信"
+            @on-ok="onStation"
+            @on-cancel="onStation"
+            :mask-closable="false"
+          >
             <Form
               ref="formValidate2"
               :model="formValidate2"
@@ -104,7 +125,7 @@
               <FormItem label="发送对象：" prop="tag">
                 <p>
                   <span>共</span>
-                  <span class="red">20</span>
+                  <span class="red">{{ this.ALLLIST.length }}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
@@ -113,20 +134,25 @@
               </FormItem>
               <FormItem label="内容：" prop="content">
                 <Input
-                  v-model="formValidate2.content"
+                  v-model="formValidate2.msg"
                   type="textarea"
-                  :autosize="{minRows: 5,maxRows: 8}"
+                  :autosize="{ minRows: 5, maxRows: 8 }"
                 ></Input>
-                <p style="font-size: 12px;">站内信标题不能超过20个字，内容不能超过100个字。</p>
+                <p style="font-size: 12px;">
+                  站内信标题不能超过20个字，内容不能超过100个字。
+                </p>
               </FormItem>
             </Form>
           </Modal>
-          <Button @click="modal2 = true" class="btns">
-            群发站内信
-            <Icon type="md-arrow-dropdown"></Icon>
-          </Button>
+
           <!--微信推送-->
-          <Modal width="200" v-model="modal3" draggable :styles="{top: '220px'}" footer-hide>
+          <Modal
+            width="200"
+            v-model="modal3"
+            draggable
+            :styles="{ top: '220px' }"
+            footer-hide
+          >
             <ButtonGroup vertical>
               <Button @click="modal3_1 = true">APP推送(链接)</Button>
               <Modal v-model="modal3_1" title="APP推送(链接)">
@@ -157,7 +183,9 @@
                   </FormItem>
                   <FormItem label="推送内容" prop="PushContent">
                     <Input v-model="formValidate3.PushContent"></Input>
-                    <p style="font-size: 12px">推送标题不能超过14个字，内容不能超过20个字。</p>
+                    <p style="font-size: 12px">
+                      推送标题不能超过14个字，内容不能超过20个字。
+                    </p>
                   </FormItem>
                 </Form>
               </Modal>
@@ -186,9 +214,16 @@
                     </CheckboxGroup>
                   </FormItem>
                   <FormItem label="选择资讯" prop="SelectInformation">
-                    <Button type="success" @click="modal3_2_1 = true">选择资讯</Button>
+                    <Button type="success" @click="modal3_2_1 = true"
+                      >选择资讯</Button
+                    >
                     <Modal v-model="modal3_2_1" title="选择资讯" footer-hide>
-                      <Input search enter-button placeholder="名称搜索" style="width: auto" />
+                      <Input
+                        search
+                        enter-button
+                        placeholder="名称搜索"
+                        style="width: auto"
+                      />
                       <Table :columns="columns1" :data="data1"></Table>
                       <Page :total="100" />
                     </Modal>
@@ -198,7 +233,9 @@
                   </FormItem>
                   <FormItem label="推送内容" prop="PushContent">
                     <Input v-model="formValidate3.PushContent"></Input>
-                    <p style="font-size: 12px">推送标题不能超过14个字，内容不能超过20个字。</p>
+                    <p style="font-size: 12px">
+                      推送标题不能超过14个字，内容不能超过20个字。
+                    </p>
                   </FormItem>
                 </Form>
               </Modal>
@@ -227,9 +264,16 @@
                     </CheckboxGroup>
                   </FormItem>
                   <FormItem label="选择活动" prop="ChoiceActivity">
-                    <Button type="success" @click="modal3_3_1 = true">选择活动</Button>
+                    <Button type="success" @click="modal3_3_1 = true"
+                      >选择活动</Button
+                    >
                     <Modal v-model="modal3_3_1" title="选择活动" footer-hide>
-                      <Input search enter-button placeholder="名称搜索" style="width: auto" />
+                      <Input
+                        search
+                        enter-button
+                        placeholder="名称搜索"
+                        style="width: auto"
+                      />
                       <Table :columns="columns2" :data="data2"></Table>
                       <Page :total="100" />
                     </Modal>
@@ -239,7 +283,9 @@
                   </FormItem>
                   <FormItem label="推送内容" prop="PushContent">
                     <Input v-model="formValidate3.PushContent"></Input>
-                    <p style="font-size: 12px">推送标题不能超过14个字，内容不能超过20个字。</p>
+                    <p style="font-size: 12px">
+                      推送标题不能超过14个字，内容不能超过20个字。
+                    </p>
                   </FormItem>
                 </Form>
               </Modal>
@@ -268,9 +314,16 @@
                     </CheckboxGroup>
                   </FormItem>
                   <FormItem label="选择商品" prop="ChooseGoods">
-                    <Button type="success" @click="modal3_4_1 = true">选择商品</Button>
+                    <Button type="success" @click="modal3_4_1 = true"
+                      >选择商品</Button
+                    >
                     <Modal v-model="modal3_4_1" title="选择商品" footer-hide>
-                      <Input search enter-button placeholder="名称搜索" style="width: auto" />
+                      <Input
+                        search
+                        enter-button
+                        placeholder="名称搜索"
+                        style="width: auto"
+                      />
                       <Table :columns="columns3" :data="data3"></Table>
                       <Page :total="100" />
                     </Modal>
@@ -280,21 +333,37 @@
                   </FormItem>
                   <FormItem label="推送内容" prop="PushContent">
                     <Input v-model="formValidate3.PushContent"></Input>
-                    <p style="font-size: 12px">推送标题不能超过14个字，内容不能超过20个字。</p>
+                    <p style="font-size: 12px">
+                      推送标题不能超过14个字，内容不能超过20个字。
+                    </p>
                   </FormItem>
                 </Form>
               </Modal>
             </ButtonGroup>
           </Modal>
-          <Button @click="modal3 = true" class="btns">
-            微信推送
-            <Icon type="md-arrow-dropdown"></Icon>
-          </Button>
+          <Dropdown @on-click="isALL">
+            <Button @click="ismodal2">
+              群发站内信
+            </Button>
+            <DropdownMenu slot="list">
+              <DropdownItem name="ON" ref="ON" :selected="Sele2.ON"
+                >选中用户</DropdownItem
+              >
+              <DropdownItem name="ALL" :selected="Sele2.ALL">
+                全部用户</DropdownItem
+              >
+            </DropdownMenu>
+          </Dropdown>
           <!--设置标签-->
           <Modal v-model="modal4" title="设置标签">
-            <Checkbox v-for="(item1,index) in label1" :name="item1" :key="index">{{item1}}</Checkbox>
+            <Checkbox
+              v-for="(item1, index) in label1"
+              :name="item1"
+              :key="index"
+              >{{ item1 }}</Checkbox
+            >
           </Modal>
-          <Button @click="modal4 = true" class="btns">
+          <Button disabled @click="modal4 = true" class="btns">
             设置标签
             <Icon type="md-arrow-dropdown"></Icon>
           </Button>
@@ -307,18 +376,38 @@
           </Dropdown>
         </div>
         <div>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-          <Icon
+          <Select
+            v-model="size"
+            style="width:120px"
+            placeholder="显示条数"
+            class="space"
+          >
+            <Option
+              v-for="item in Article"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
+          </Select>
+          <Select
+            placeholder="排序方式"
+            class="space"
+            style="width: 120px;"
+            v-model="sort"
+          >
+            <Option
+              v-for="item in sorting"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
+          </Select>
+          <!-- <Icon
             type="ios-cog-outline"
             size="30"
             class="table-btn"
             @click="()=>{ this.isShow = true }"
-          />
+          /> -->
           <Modal v-model="isShow" title="自定义展示字段">
             <div class="model">
               <div>目前显示字段顺序</div>
@@ -376,7 +465,11 @@
                   type="ios-cog-outline"
                   size="25"
                   class="table-btn"
-                  @click="() => { this.$router.push({name: 'user_field'}) }"
+                  @click="
+                    () => {
+                      this.$router.push({ name: 'user_field' });
+                    }
+                  "
                 />
                 <a @click="jump1()">自定义扩展字段</a>
               </div>
@@ -389,15 +482,22 @@
         border
         :columns="columns"
         :data="data"
-        @on-selection-change="tablechange"
+        @on-selection-change="handleSelectionChange"
       ></Table>
+
+      <!--  @on-selection-change="tablechange" -->
       <div class="pages">
         <div class="batch">
           <Button @click="chackall()" style="border:0px">
             <Checkbox v-model="userEnable"></Checkbox>全选
           </Button>
           <Select placeholder="批量操作" style="width: 150px" v-model="batch">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option
+              v-for="item in batchList"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
@@ -417,7 +517,7 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { Userpage, Userbatch } from "@/request/api";
+import { Userpage, Userbatch, userListMsg } from "@/request/api";
 export default {
   data() {
     return {
@@ -426,8 +526,7 @@ export default {
       },
       batchList: [
         { value: "0", label: "禁用" },
-        { value: "1", label: "启用" },
-        { value: "2", label: "删除" }
+        { value: "1", label: "启用" }
       ],
       modal1: false, //群发短信
       formValidate1: {
@@ -441,8 +540,9 @@ export default {
       },
       modal2: false, //群发站内信
       formValidate2: {
-        title: "",
-        content: ""
+        // 群发 站内信
+        msg: '',
+        title: ''
       },
       ruleValidate2: {
         tag: [{ required: true, trigger: "blur" }],
@@ -712,21 +812,21 @@ export default {
                   }
                 },
                 "二维码"
-              ),
-              h(
-                "span",
-                {
-                  style: {
-                    color: "green"
-                  },
-                  on: {
-                    click: () => {
-                      this.remove(params.row.userId, 2);
-                    }
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "span",
+              //   {
+              //     style: {
+              //       color: "green"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.remove(params.row.userId, 2);
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
@@ -756,8 +856,8 @@ export default {
       OrganizeInformation: ["options1"],
       SummaryInformation: ["options1"],
       OtherInformation: ["options2", "options4"],
-      arrs:[],
-        Article: [
+      arrs: [],
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -767,6 +867,14 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
+      showScreen: true,
+      Sele2: {
+        ON: false,
+        ALL: false
+      },
+      QRCode: "",
+      ALLINFO: false, // 是否全选
+      ALLLIST: [] // 选中的人员
     };
   },
 
@@ -779,7 +887,20 @@ export default {
   //事件监听
   watch: {
     size: "getUserPage",
-    sort: "getUserPage"
+    sort: "getUserPage",
+    ALLINFO(newVlaue, oldValue) {
+      //  全选 and 全不选
+      if (newVlaue === true) {
+        this.$refs.volunteerSel.selectAll(true);
+        let arr = this.data.map(item => {
+          return item.userId;
+        });
+        this.ALLLIST = arr;
+      } else {
+        this.$refs.volunteerSel.selectAll(false);
+        this.ALLLIST = [];
+      }
+    }
   },
 
   methods: {
@@ -850,9 +971,9 @@ export default {
     //   }
     // },
 
-     //批量操作
+    //批量操作
     batches() {
-      if (this.arr== "") {
+      if (this.arr == "") {
         this.$Message.error("至少选择一个");
       } else if (this.batch == "") {
         this.$Message.error("请选择操作类型");
@@ -865,6 +986,74 @@ export default {
         this.getUserBatch();
         this.userEnable = false;
       }
+    },
+    // 显示站内信模态框
+    ismodal2() {
+      if (this.letters) {
+        if (this.letters === "ON") {
+          if (this.ALLLIST.length > 0) {
+            this.modal2 = true;
+          } else {
+            this.$Message.error({
+              background: true,
+              content: "请选择要修改的人员"
+            });
+          }
+        } else {
+          this.ALLINFO = true;
+          this.modal2 = true;
+        }
+      } else {
+        this.$Message.error({
+          background: true,
+          content: "请选择全部用户or选中用户"
+        });
+      }
+    },
+    // 选中站内信菜单
+    isALL(name) {
+      this.Sele2 = {
+        ON: false,
+        ALL: false
+      };
+      this.Sele2[name] = true;
+      this.letters = name;
+    },
+      // 发送站内信
+    onStation() {
+      let ids = this.ALLLIST.toString()
+      this.setsend({ ids, ...this.formValidate2 })
+    },
+        // 站内信
+    setsend(params) {
+      userListMsg({
+        sysId: '1',
+        ...params
+      }).then(res => {
+        if (res.code === 200) {
+          this.$Message.info('站内信发送成功~')
+        } else {
+          this.$Message.error({
+            background: true,
+            content: '发送失败，请联系负责人'
+          })
+
+          console.log(res.msg)
+        }
+      })
+    },
+
+       // 选中 内容
+    handleSelectionChange(val) {
+      if (val.length === this.data.length) {
+        this.ALLINFO = true
+      } else {
+        this.ALLINFO = false
+      }
+      let arr = val.map(item => {
+        return item.userId
+      })
+      this.ALLLIST = arr
     },
 
     ok() {
@@ -888,7 +1077,7 @@ export default {
     },
     //每条数据单选框的状态
     tablechange(selection) {
-      this.arrs=selection
+      this.arrs = selection;
       this.arr = selection;
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
@@ -915,8 +1104,8 @@ export default {
 }
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: #fff;
+  // border-bottom: 1px solid #fff;
 }
 .integral-header .integral-rig {
   margin-left: 20px;
@@ -940,6 +1129,9 @@ export default {
   padding: 10px 20px;
   background: rgb(228, 228, 228);
   border: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 .table-header .table-btn {
   margin-left: 15px;

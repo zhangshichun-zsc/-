@@ -56,10 +56,10 @@
             <Input v-model="formValidate.name" disabled />
           </FormItem>
           <FormItem label="手机号" prop="number">
-            <Input v-model="formValidate.number" disabled />
+            <Input v-model="formValidate.number || ''" disabled />
           </FormItem>
           <FormItem label="旧密码" prop="oldPassword">
-            <Input v-model="formValidate.oldPassword" />
+            <Input type="password" v-model="formValidate.oldPassword" />
           </FormItem>
           <FormItem label="新密码" prop="newPassword">
             <Input type="password" v-model="formValidate.newPassword" />
@@ -68,9 +68,16 @@
             <Input type="password" v-model="formValidate.confirm" />
           </FormItem>
           <FormItem>
-            <Button type="success" @click="handleSubmit('formValidate')"
-              >提交</Button
+            <a
+              href="javascript:;"
+              class="adduserbtn"
+              @click="handleSubmit('formValidate')"
+              >提交</a
             >
+            <!-- <Button
+              type="success"
+              @click="handleSubmit('formValidate')"
+            ></Button> -->
           </FormItem>
         </Form>
       </div>
@@ -79,7 +86,7 @@
 </template>
 
 <script>
-import { Setup, orgimgdel } from "../../request/api";
+import { Setup, orgimgdel, loginout } from "../../request/api";
 import { upload } from "../../request/http";
 export default {
   data() {
@@ -109,7 +116,11 @@ export default {
       },
       formValidate: {
         name: this.$store.state.userName,
-        number: this.$store.state.tel ? this.$store.state.tel : "",
+        number:
+          this.$store.state.tel && this.$store.state.tel !== "undefined"
+            ? this.$store.state.tel
+            : "",
+
         oldPassword: "",
         newPassword: "",
         confirm: ""
@@ -150,6 +161,14 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("修改成功!");
+          loginout({
+            userId: this.$store.state.userId
+          }).then(res => {
+            if (res.code == 200) {
+              this.$store.commit("clearToken");
+              this.$router.push({ name: "login" });
+            }
+          });
         } else {
           this.$Message.error(res.msg);
         }
@@ -288,5 +307,16 @@ input:-webkit-autofill {
   outline: none;
   color: #333333;
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+}
+.adduserbtn {
+  display: block;
+  width: 110px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background: #ff565a;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #ffffff;
 }
 </style>

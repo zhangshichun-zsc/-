@@ -431,7 +431,7 @@
           </Select>
           <Button style="margin-left: 10px" @click='batchOperation'>确定</Button>
         </div>
-        <Page :total="totalSize" show-elevator show-total size='small' />
+        <Page :total="totalSize" show-elevator show-total size='small'  @on-change='setPage' />
       </div>
     </div>
     <Modal title="二维码" v-model="modal4" style='text-align: center;' :closable='false'>
@@ -858,13 +858,16 @@ export default {
   },
   watch: {
     sort(newVlaue) {
+        this.ALLINFO = false
       this.getUsetList(this.paramsObj)
     },
     size(newVlaue, oldValue) {
+      this.ALLINFO = false
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
     },
     page(newVlaue, oldValue) {
+      this.ALLINFO = false
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
     },
@@ -1238,7 +1241,10 @@ export default {
         }
       }
     },
-
+    // 选中页码
+    setPage(res){
+      this.page =res
+    },
     toExamine() {
       this.optTime()
     },

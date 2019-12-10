@@ -166,6 +166,12 @@ export const Agreementclassadd = p => posts('/agreement-manage/agree/type/set', 
 
 export const Agreementclassstats = p => posts('/agreement-manage/agree/type/del', p) //协议管理协议状态
 
+export const projectsetlist = p => posts('/volunteer-manager/queryCoActCategoryList', p) //项目管理-分页
+
+export const projectsetadd = p => posts('/volunteer-manager/updateCoActCategory', p) //项目管理-新增
+
+export const budgetlist = p => get('/volunteer-manager/queryOrgListForCoActCategory', p) //项目管理-预算来源
+
 
 
 //智障类型
@@ -292,6 +298,9 @@ export const getVipUserInfo = p => get('/user-list/get-user-info', p) //会员�
 export const setUpdate = p => posts('/user-list/update-user-info', p) //会员设置编辑资料
 
 export const optTime = p => posts('/user-list/opt-vip-time', p) //修改vip道到期时间
+
+
+export const userListMsg = p => posts('/user-list/user/inner/msg', p) //用户列表 站内下信
 
 
 

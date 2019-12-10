@@ -17,6 +17,10 @@ import "./assets/css/dist/styles/iview.css";
 import "./libs/style.scss";
 import "./libs/rest.css";
 import "./libs/rem.js";
+
+
+
+
 Vue.prototype.$Message = Message;
 
 // const routerPush = router.prototype.push
