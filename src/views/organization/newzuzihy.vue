@@ -68,6 +68,7 @@
                   class="cancel"
                   :size="26"
                   @click="cancelImg()"
+
                 />
               </div>
             </FormItem>
