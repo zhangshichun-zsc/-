@@ -625,7 +625,6 @@ export default {
             this.getactiveManager()
           this.$Message.info('下架成功')
         }else{
-
           this.$Message.error(res.msg)
         }
         console.log(res);

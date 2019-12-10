@@ -1,21 +1,21 @@
 <!-- 障碍类型 -->
 <template>
   <div>
-     <basicdata :navigation1="navigation1" @query="query"></basicdata>
-     <div class="integral-table">
+    <basicdata :navigation1="navigation1" @query="query"></basicdata>
+    <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btn" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label=障碍类型 prop="dicName">
+              <FormItem label="障碍类型" prop="dicName">
                 <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk">确定</Button>
+              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
@@ -33,7 +33,6 @@
         />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -83,16 +82,15 @@ export default {
                 },
                 on: {
                   input: e => {
-                    if(e){
-                      this.dicId=params.row.dicId
-                      this.states=1
-                      this.getBasicbatch(2)
-                    }else{
-                      this.dicId=params.row.dicId
-                      this.states=0
-                       this.getBasicbatch(2)
+                    if (e) {
+                      this.dicId = params.row.dicId;
+                      this.states = 1;
+                      this.getBasicbatch(2);
+                    } else {
+                      this.dicId = params.row.dicId;
+                      this.states = 0;
+                      this.getBasicbatch(2);
                     }
-
                   }
                 }
               })
@@ -115,11 +113,10 @@ export default {
                   on: {
                     click: () => {
                       this.modal1 = true;
-                      this.dicId=params.row.dicId
+                      this.dicId = params.row.dicId;
                       this.text = "修改障碍类型";
-                      this.id=0
+                      this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
-
                     }
                   }
                 },
@@ -145,22 +142,29 @@ export default {
       ],
       data1: [],
       modal1: false,
-      top:[{
-        name:'名称',
-        type:'input',
-        value:''
-      },{
-        name:'有效日期',
-        type:'select',
-        list:[{dataKey:'',dataValue:'全部',},{dataKey:'0',dataValue:'无效',},{dataKey:'1',dataValue:'有效',}],
-        value:''
-      },],
+      top: [
+        {
+          name: "名称",
+          type: "input",
+          value: ""
+        },
+        {
+          name: "有效日期",
+          type: "select",
+          list: [
+            { dataKey: "", dataValue: "全部" },
+            { dataKey: "0", dataValue: "无效" },
+            { dataKey: "1", dataValue: "有效" }
+          ],
+          value: ""
+        }
+      ],
 
       page: 1,
       size: 10,
       dataCount: 0,
       sysId: 1,
-      typeFlag: 9,  //每个页面写死
+      typeFlag: 9, //每个页面写死
       startAt: "",
       endAt: "",
       validFlag: "",
@@ -169,8 +173,8 @@ export default {
 
       list: [],
       text: "添加智障类型",
-      states:'',
-      id:0
+      states: "",
+      id: 0
     };
   },
 
@@ -210,8 +214,8 @@ export default {
 
     // 批量操作"list": [{"orgId": "70", "validFlag": "0"}]
     getBasicbatch(e) {
-      if (e==0) {
-         (this.list = [
+      if (e == 0) {
+        this.list = [
           {
             sysId: this.sysId,
             dicName: this.formValidate.dicName,
@@ -222,41 +226,39 @@ export default {
             dicCode: this.dicCode,
             orgId: 1
           }
-        ]);
+        ];
       } else if (e == 1) {
-         (this.list = [
+        this.list = [
           {
             dicId: this.dicId,
             dicName: this.formValidate.dicName
           }
-        ]);
+        ];
       } else if (e == 2) {
-         (this.list = [
+        this.list = [
           {
             dicId: this.dicId,
             validFlag: this.states
           }
-        ]);
+        ];
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
           this.getBasicsearch();
           this.modal1 = false;
-          if(e==0){
-            this.$Message.info('添加成功')
-          }else if(e==1){
-            this.$Message.info('编辑成功')
-
-          }else if(e==2){
-            this.$Message.info('操作成功')
-
+          if (e == 0) {
+            this.$Message.info("添加成功");
+          } else if (e == 1) {
+            this.$Message.info("编辑成功");
+          } else if (e == 2) {
+            this.$Message.info("操作成功");
           }
         }
         console.log(res);
       });
     },
 
-     //查询
+    //查询
     query(e) {
       this.page = 1;
       this.validFlag = e.validFlag;
@@ -282,32 +284,32 @@ export default {
       this.formValidate.dicName = "";
     },
     //确定
-    modalOk() {
-      if (this.dicName == "") {
-        this.$Message.error("名称不能为空");
-      } else {
-        if (this.id == 0) {
-          this.getBasicbatch(1);
+    modalOk(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          if (this.id == 0) {
+            this.getBasicbatch(1);
+          } else {
+            this.getBasicbatch(0);
+          }
         } else {
-          this.getBasicbatch(0);
+          this.$Message.error("必填项不能为空!");
         }
-      }
+      });
     },
 
     //弹出框
-    btn(){
-      this.modal1=true
-      this.id=1
-      this.formValidate.dicName=''
+    btn() {
+      this.modal1 = true;
+      this.id = 1;
+      this.formValidate.dicName = "";
     },
 
     //分页功能
     changepages(index) {
       this.page = index;
       this.getBasicsearch();
-    },
-
-
+    }
   }
 };
 </script>

@@ -146,7 +146,9 @@ export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p)
 
 export const Agreementdel = p => post('/agreement-manage/del-agreement', p) //删除协议
 
-export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
+export const Agreementadd = p => posts('/agreement-manage/updateAgreeMent', p) //添加协议
+
+// export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
 
 export const AgreementList = p => get('/agreement-manage/get-agreement-type-list', p) //获取协议类型列表
 
@@ -171,6 +173,12 @@ export const projectsetlist = p => posts('/volunteer-manager/queryCoActCategoryL
 export const projectsetadd = p => posts('/volunteer-manager/updateCoActCategory', p) //项目管理-新增
 
 export const budgetlist = p => get('/volunteer-manager/queryOrgListForCoActCategory', p) //项目管理-预算来源
+
+export const Costlist = p => posts('/dues/queryMemberVipManagement', p) //会费管理-预算来源
+
+export const Costadd = p => posts('/dues/updateCoDueData', p) //会费管理-新增
+
+export const Costdels = p => get('/dues/queryDuesDetail', p) //项目管理-详情
 
 
 

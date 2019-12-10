@@ -48,7 +48,7 @@
         </div>
         <div class="flex-center-start">
           <span style="margin-right:20px">创建时间</span>
-           <DatePicker type="daterange" format="yyyy/MM/dd" v-model="search.createTimestamp" confirm placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+           <DatePicker type="daterange" format="yyyy/MM/dd"  @on-change="handleChange" v-model="search.createTimestamp" confirm placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
         </div>
       </div>
     </div>
@@ -90,13 +90,26 @@ export default {
   created() {},
 
   methods: {
+
+    handleChange(e) {
+      let start = e[0];
+      let end = e[1];
+      this.time = e[0] + "-" + e[1];
+      if (start && end) {
+        if (start === end) {
+          start = start + " 00:00:00";
+          end = end + " 23:59:59";
+        } else {
+          start = start + " 00:00:00";
+          end = end + " 00:00:00";
+        }
+      }
+       this.search.createTimestamp[0] = start;
+       this.search.createTimestamp[1] = end;
+    },
+
     //查询
     query() {
-      // console.log(this.search)
-      // if(this.search.createTimestamp[0] === this.search.createTimestamp[1]){
-      //     this.search.createTimestamp[0] = this.search.createTimestamp[0] + '00:00:00'
-      //     this.search.createTimestamp[1] = this.search.createTimestamp[1] + ' 23:59:59'
-      //   }
       this.$emit("query", this.search);
     },
     //收起筛选
