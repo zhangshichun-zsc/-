@@ -76,7 +76,7 @@
                         <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                       </div>
                   </div>
-                  <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
+                  <img class="imgs" style="width:300px;height:200px" v-else :src="projectMsg.batchPicShow"/>
                   <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
                 </div>
               </li>
@@ -102,7 +102,7 @@
           </div>
 
           <div class="parnter">
-            <div class="styles">合作方</div>
+            <div class="styles" style="padding:10px 35px">合作方</div>
             <ul class="parnter-sans">
               <li v-for="(item,i) in projectMsg.partnerList" :key="i">
                 <span>{{item.partName}}</span>
@@ -132,7 +132,7 @@
           <div class="select">
             <span class="select-template">选择模板</span>
             <Select v-model="batch.actTypeName" style="width:340px">
-              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name">{{ item.name }}</Option>
+              <Option v-for="item in templateList" :value="item.name" :key="item.name" @click.native="getTemplateDetail(item)">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="activitives">
@@ -145,7 +145,7 @@
                   <span class="same_style">活动名称</span>
                   <Input placeholder="请输入活动名称" v-model="batch.actName"></Input>
                 </li>
-                <li class="imges">
+                <li>
                   <span>主题图片</span>
                   <div class="start-wap">
                     <div class="upload" v-if='batch.actShowPic == null'>
@@ -154,7 +154,7 @@
                           <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                         </div>
                     </div>
-                    <img class="imgs" v-else :src="batch.actShowPic"/>
+                    <img class="imgs" style="width:300px;height:200px" v-else :src="batch.actShowPic"/>
                     <Icon src="" alt="" v-if='batch.actShowPic == null' class="cancel" @click="cancelActImg()"/>
                   </div>
                 </li>
@@ -166,7 +166,7 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择日期"
-                      style="width: 600px"
+                      style="width: 200px"
                       @on-change="getBatchDate"
                     ></Date-picker>
                   </i-col>
@@ -309,7 +309,7 @@
     </div>
 
     <!-- 弹出框 -->
-    <div class="add" v-if="add">
+    <div class="contents add-partner" v-if="add">
       <p class="add-head">设置活动合作方</p>
       <div class="add-content">
         <ul>
@@ -330,7 +330,7 @@
                     <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                   </div>
               </div>
-              <img class="imgs" v-else :src="partner.partPicShow"/>
+              <img class="imgs" style="width:300px;height:200px" v-else :src="partner.partPicShow"/>
               <Icon src="" alt="" v-if='partner.partPicShow == null' class="cancel" @click="cancelPartnerImg()"/>
             </div>
           </li>
@@ -366,14 +366,14 @@
               </ul>
             </div>
           </li>
-          <li class="upload">
-            <span>上传附件</span>
-          </li>
         </ul>
       </div>
       <p class="add-deal">
         <a @click="addAgrees">+新增协议</a>
       </p>
+      <div class="upload">
+        <span>上传附件</span>
+      </div>
       <p class="table-btn-p">
         <Button class="table-btn" @click="off()">取消</Button>
         <Button class="table-btn active" @click="save()">保存</Button>
@@ -458,7 +458,7 @@
                 <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
               </div>
           </div>
-          <img class="imgs" v-else :src="projectMsg.batchPicShow"/>
+          <img class="imgs" style="width:300px;height:200px" v-else :src="projectMsg.batchPicShow"/>
           <Icon src="" alt="" v-if='projectMsg.batchPicShow == null' class="cancel" @click="cancelImg()"/>
         </div>
       </div>
@@ -508,7 +508,7 @@
 </template>
 
 <script>
-import { projectItem, partner,batchItem,leader,projectApproval } from "@/request/api";
+import { projectItem, partner,batchItem,leader,projectApproval,chooseTempalte,templateMsg } from "@/request/api";
 
 import role from "./compile_beneficiary.vue"
 import adress from'_c/map'
@@ -547,7 +547,6 @@ export default {
       batch:{
         userConfList:[],
         actResList:[],
-        actShowPic: '',
         workerIdList:[{}]
       },
       itemsList: [],
@@ -588,7 +587,8 @@ export default {
       },
       roleI:0,  //招募角色下标
       adr:false,
-      pcNum:0
+      pcNum:0,
+      templateList:[]
     };
   },
 
@@ -654,6 +654,7 @@ export default {
         this.partner = p;
       }
       this.add = true;
+      this.selects = false
     },
     //删除合作方
     deletePartner(e) {
@@ -682,6 +683,7 @@ export default {
         this.projectMsg.partnerList.push(this.partner);
       }
       this.add = false;
+      this.selects = true
     },
     //取消
     off() {
@@ -734,6 +736,24 @@ export default {
     getActiveTypeId(val){
       this.batch.actTypeName = val.name
       this.batch.actTypeId = val.dicId
+      this.getTemplate()
+    },
+    getTemplate(){
+      chooseTempalte(this.batch.actTypeId).then(res => {
+        console.log(res)
+        this.templateList = res.data
+      })
+    },
+    getTemplateDetail(e){
+      templateMsg(e.activityId).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.batch = res.data
+          if (!this.batch.workerIdList) {
+            this.batch.workerIdList = [{}]
+          }
+        }
+      })
     },
     //活动标签
     getActiveLabels(val){
@@ -1222,6 +1242,10 @@ export default {
 }
 
 // 第二步
+.add-partner{
+  padding: 10px;
+  background-color: #fff;
+}
 .content {
   background: #f3f3f3;
   margin-top: 10px;
