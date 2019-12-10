@@ -19,7 +19,7 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛 6
   ],
-  API_INDEX: 3
+  API_INDEX: 0
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
@@ -53,7 +53,7 @@ axios.interceptors.request.use(
           token: store.state.token,
           ...config.params
         };
-      }else if(config.method === "options"){
+      } else if (config.method === "options") {
         // config.url = `${config.url}?token=${store.state.token}`;
       }
     }
@@ -122,8 +122,8 @@ export function get(url, params) {
   // params.token = token
   return new Promise((resolve, reject) => {
     axios
-      .get(url,{params:params}
-       )
+      .get(url, { params: params }
+      )
       .then(res => {
         resolve(res.data);
       })

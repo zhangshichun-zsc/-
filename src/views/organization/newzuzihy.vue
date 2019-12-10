@@ -7,7 +7,7 @@
         <p class="title">分类</p>
         <div class="content middle">
           <RadioGroup v-model="orgTypes">
-            <Radio :label="item.dataKey" v-for="item in list" :key="item.dicCode">{{item.dataValue}}</Radio>
+            <Radio :label="item.dicCode" v-for="item in list" :key="item.dicCode">{{item.dataValue}}</Radio>
           </RadioGroup>
         </div>
       </div>
@@ -73,7 +73,7 @@
             </FormItem>
             <FormItem label="详情:" prop="orgName">
               <Input
-                v-model="formValidate.remark"
+                v-model="formValidate.description"
                 type="textarea"
                 :autosize="{minRows: 5,maxRows: 8}"
               />
@@ -178,11 +178,11 @@ export default {
         picUrl: null,
         ownerUserName: "",
         ownerUserPhone: "",
-        imgUrl: null,
-
-        province: "",
-        city: "",
-        county: "",
+        imgUrl:null,
+        description:'',
+        province:'',
+        city:'',
+        county:'',
 
         texturl:null,
         text:null,
@@ -212,7 +212,6 @@ export default {
         ]
       },
       list: [],
-      createUserId: 1,
       ownerUserId: "",
       value: "",
       provinceList: [],
@@ -249,20 +248,23 @@ export default {
         sysId: this.$route.query.sysId,
         orgType: this.orgTypes,
         orgName: this.formValidate.orgName,
-        address: this.formValidate.address,
-        createUserId: this.createUserId,
-        remark: this.formValidate.remark,
+        provinceId:this.formValidate.provinceId,
+        cityId: this.cityId,
+        districtId:this.districtId,
+        createUserId: this.$store.state.userId,
+        wechatOfficeAccount:this.formValidate.wechatOfficeAccount,
+        remark: this.value,
         ownerUserName: this.formValidate.ownerUserName,
         ownerUserPhone: this.formValidate.ownerUserPhone,
-        orgPic: this.formValidate.orgPic,
-        file: this.file
+        orgPic:this.formValidate.orgPic,
+        file:this.file,
+        description:this.formValidate.description
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success(res.msg);
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
       });
     },
     //省市区
@@ -276,7 +278,6 @@ export default {
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      console.log(file);
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {

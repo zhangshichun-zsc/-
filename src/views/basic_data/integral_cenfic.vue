@@ -251,7 +251,7 @@ export default {
       if(start&&end){
         if(start === end){
           start = start + ' 00:00:00'
-          end = end + ' 59:59:59'
+          end = end + ' 23:59:59'
         }else{
           start = start + ' 00:00:00'
           end = end + ' 00:00:00'

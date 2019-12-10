@@ -23,8 +23,9 @@
         </p>
         <p>
           <span>所属项目:</span>&nbsp;
-          <Select style="width:6rem;" placeholder="全部" size="small" v-model="querys.categoryId">
-            <Option v-for="item in OptionsList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select style="width:6rem;" size="small" v-model="querys.categoryId" placement='top'>
+            <Option :value="''">全部</Option>
+            <Option v-for="item in OptionsList" :value="item.categoryId" :key="item.value">{{ item.name }}</Option>
           </Select>
         </p>
       </div>
@@ -66,7 +67,7 @@
 
 <script>
 import { formatDate } from '@/request/datatime'
-import { Activitypage, Activitybatch } from '@/request/api'
+import { Activitypage, Activitybatch, getTypeFeed } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 export default {
   data() {
@@ -75,10 +76,6 @@ export default {
         head: '活动反馈列表(志愿者)'
       },
       OptionsList: [
-        { value: '', label:'全部' },
-        { value: 'ProductEvaluation', label: '商品评价' },
-        { value: 'topics', label: '话题内容' },
-        { value: 'UserComments', label: '用户评论' }
       ],
       data: [],
       page: 1, //每页显示多少数据
@@ -200,10 +197,20 @@ export default {
       querys:{
         activityName:'',
         categoryId:null
-      }
+      },
+      userId:null
     }
   },
+  created(){
+    this.userId = this.$store.state.userId
+    this.getActivitypage()
+  },
   methods: {
+     getType(){
+      getTypeFeed({ sysId:1 }).then(res => {
+        this.OptionsList = res.data
+      })
+    },
     query(){
       this.page = 1
       this.activityName = this.querys.activityName
@@ -232,7 +239,8 @@ export default {
         activityName:this.activityName,
         categoryId:this.categoryId,
         page: { page: this.page, size: this.size,sort:this.sort },
-        sysType: this.sysType
+        sysType: this.sysType,
+        userId:this.userId
       })).then(res => {
         if (res.code == 200) {
           this.data = res.data.list
@@ -308,10 +316,6 @@ export default {
     //   this.batch=1
     //   this.getActivityBatch(1);
     // },
-  },
-
-  mounted() {
-    this.getActivitypage()
   }
 }
 </script>
