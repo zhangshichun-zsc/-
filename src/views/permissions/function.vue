@@ -55,6 +55,9 @@
 import { Permissionset, roleSetup, findRoleMenu } from "@/request/api";
 import Table from "iview/src/components/table/table";
 import { log } from "util";
+// import Treeselectfrom 'vue-treeselect'
+// import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 export default {
   components: { Table },
   data() {
@@ -78,9 +81,10 @@ export default {
       arr: [],
       parentMenu: [], // 父级菜单，
       subMenu: [],
-
       indeterminate: true,
       checkAll: false
+
+      //全部的菜单
     };
   },
   watch: {},
@@ -91,9 +95,36 @@ export default {
       findRoleMenu({ roleId }).then(res => {
         if (res.code == 200) {
           this.ALLLIST = res.data.menuList; // 所有的菜单
-          this.USERLIST = res.data.subMenuRoles.map(item => {
+          let userArr = res.data.subMenuRoles.map(item => {
             return item.sysMenuId;
           });
+          let obj = {};
+          res.data.menuList.forEach(item => {
+            obj[item.sysMenuId] = {
+              list: item.list.map(key => {
+                return {
+                  parentid: key.parentId, // 父级ID
+                  id: key.sysMenuId, //子级的id
+                  checked: userArr.includes(key.sysMenuId) //选中状态
+                };
+              }),
+              checkAll: false
+            };
+          });
+
+          // res.data.parentMenuRoles.forEach(item => {
+          //   obj[item.sysMenuId] = {
+          //     checked: false,
+          //     list: [
+          //       {
+          //         parentid: item.sysMenuId, // 父级ID
+          //         id: 0, //子级的id
+          //         checked: false //选中状态
+          //       }
+          //     ]
+          //   };
+          // });
+          console.log(obj);
         } else {
           this.$Message.info(res.msg);
         }
