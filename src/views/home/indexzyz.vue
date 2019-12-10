@@ -255,7 +255,7 @@ export default {
       examinelist: [
         {
           name: "活动立项审批",
-          query: "/activity/approval",
+          query: "/activity/project_approval",
           data: "unauditActivityCount"
         },
         {

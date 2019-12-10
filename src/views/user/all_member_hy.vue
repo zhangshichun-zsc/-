@@ -13,7 +13,8 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button class="integral-rig" @click="result">查询结果</Button>
+          <a class="btn" href="javascript:;" @click="result">查询结果</a>
+          <!-- <Button class="integral-rig" @click="result">查询结果</Button> -->
           <!-- TODO 暂时不做 -->
           <!-- <Button class="integral-rig">高级检索</Button> -->
         </div>
@@ -57,7 +58,7 @@
           />
         </div>
         <div class="flex-center-start">
-          <a @click="jump2()" style="color: #666666;">标签管理</a>
+          <!-- <a @click="jump2()" style="color: #666666;">标签管理</a> -->
         </div>
       </div>
     </div>
@@ -107,6 +108,7 @@
           </Modal>
           <Button disabled @click="modal1 = true" class="btns">
             群发短信
+            <Icon type="md-arrow-dropdown"></Icon>
           </Button>
           <!--群发站内信-->
           <Modal
@@ -476,22 +478,43 @@
             </div>
           </Modal>
         </div>
+
+        <Modal
+          title="二维码"
+          v-model="modaQR"
+          style="text-align: center;"
+          :closable="false"
+        >
+          <div class="bg">
+            <img :src="QRCode" alt="二维码" />
+          </div>
+          <div slot="footer">
+            <Button type="text" size="large" @click="modalCancel">取消</Button>
+            <Button type="primary" size="large" @click="modalCancel"
+              >确定</Button
+            >
+          </div>
+        </Modal>
       </div>
       <Table
-        ref="selection"
+        ref="volunteerSel"
         border
         :columns="columns"
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
-
-      <!--  @on-selection-change="tablechange" -->
       <div class="pages">
         <div class="batch">
-          <Button @click="chackall()" style="border:0px">
-            <Checkbox v-model="userEnable"></Checkbox>全选
+          <!--  @click="chackall()" -->
+          <Button style="border:0px">
+            <Checkbox v-model="ALLINFO"></Checkbox>全选
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+          <Select
+            placement="top"
+            placeholder="批量操作"
+            style="width: 150px"
+            v-model="batch"
+          >
             <Option
               v-for="item in batchList"
               :value="item.value"
@@ -499,7 +522,8 @@
               >{{ item.label }}</Option
             >
           </Select>
-          <Button style="margin-left: 10px" @click="batches()">确定</Button>
+          <a class="btn" href="javascript:;" @click="batches">确定</a>
+          <!-- <Button style="margin-left: 10px" @click="batches()"></Button> -->
         </div>
         <Page
           :total="dataCount"
@@ -517,7 +541,7 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { Userpage, Userbatch, userListMsg } from "@/request/api";
+import { Userpage, Userbatch, userListMsg, userEnable } from "@/request/api";
 export default {
   data() {
     return {
@@ -541,8 +565,8 @@ export default {
       modal2: false, //群发站内信
       formValidate2: {
         // 群发 站内信
-        msg: '',
-        title: ''
+        msg: "",
+        title: ""
       },
       ruleValidate2: {
         tag: [{ required: true, trigger: "blur" }],
@@ -557,6 +581,8 @@ export default {
       modal3_3_1: false, //选择活动
       modal3_4: false, //APP推送(商品)
       modal3_4_1: false, //选择商品
+      modal4: false,
+      modaQR: false,
       formValidate3: {
         PushType1: ["options1"], //APP推送(链接)推送类型
         PushType2: ["options2", "options4"], //APP推送(专题)推送类型
@@ -712,7 +738,7 @@ export default {
           }
         }
       ],
-      modal4: false, //设置标签
+      modalBQ: false, //设置标签
       label1: [
         "用户标签名称",
         "用户标签名称",
@@ -768,7 +794,9 @@ export default {
                   value: params.row.userEnable == 1
                 },
                 on: {
-                  input: e => {}
+                  input: e => {
+                    this.setUserEnable(params.row.userId, e);
+                  }
                 }
               })
             ]);
@@ -808,7 +836,10 @@ export default {
                     color: "green"
                   },
                   on: {
-                    click: () => {}
+                    click: () => {
+                      this.modaQR = true;
+                      this.QRCode = params.row.qrCodePath;
+                    }
                   }
                 },
                 "二维码"
@@ -872,6 +903,11 @@ export default {
         ON: false,
         ALL: false
       },
+      paramsObj: {
+        info: "",
+        orgName: "",
+        labelName: ""
+      },
       QRCode: "",
       ALLINFO: false, // 是否全选
       ALLLIST: [] // 选中的人员
@@ -896,6 +932,7 @@ export default {
           return item.userId;
         });
         this.ALLLIST = arr;
+        console.log(arr);
       } else {
         this.$refs.volunteerSel.selectAll(false);
         this.ALLLIST = [];
@@ -932,15 +969,26 @@ export default {
     },
     //批量操作接口
     getUserBatch() {
-      Userbatch({
-        sysType: 1,
-        userIds: this.arr,
-        oprType: this.batch
+ 
+      userEnable({
+        userId: this.ALLLIST,
+        enable: this.batch
       }).then(res => {
-        if (res.code == 200) {
-          this.getUserPage(1);
+        if (res.code === 200) {
+          this.batch == "1"
+            ? this.$Message.info("启用成功")
+            : this.$Message.info("禁用成功");
+          this.getUserPage(this.paramsObj);
+          this.ALLLIST = [];
+          this.ALLINFO = false;
+          this.batch = null;
+        } else {
+          this.$Message.error({
+            background: true,
+            content: "状态变更失败，请联系管理员查看"
+          });
+          this.getUserPage(this.paramsObj);
         }
-        console.log(res);
       });
     },
 
@@ -951,38 +999,14 @@ export default {
       this.getUserPage();
     },
 
-    //全选按钮
-    chackall() {
-      this.userEnable = !this.userEnable;
-      this.$refs.selection.selectAll(this.userEnable);
-    },
-
-    // //批量操作
-    // batches() {
-    //   if (this.arr.length > 0) {
-    //     this.arr = this.arr
-    //       .map(item => {
-    //         return item.userId;
-    //       })
-    //       .toString();
-    //     this.getUserBatch();
-    //     this.userEnable = false;
-    //   } else {
-    //   }
-    // },
-
-    //批量操作
+    // 批量操作全选按钮
     batches() {
-      if (this.arr == "") {
+      console.log(this.batch);
+      if (this.ALLLIST.length < 1) {
         this.$Message.error("至少选择一个");
-      } else if (this.batch == "") {
+      } else if (!this.batch) {
         this.$Message.error("请选择操作类型");
       } else {
-        this.arr = this.arr
-          .map(item => {
-            return item.userId;
-          })
-          .toString();
         this.getUserBatch();
         this.userEnable = false;
       }
@@ -1019,41 +1043,65 @@ export default {
       this.Sele2[name] = true;
       this.letters = name;
     },
-      // 发送站内信
+    // 发送站内信
     onStation() {
-      let ids = this.ALLLIST.toString()
-      this.setsend({ ids, ...this.formValidate2 })
+      let ids = this.ALLLIST;
+      this.setsend({ ids, ...this.formValidate2 });
     },
-        // 站内信
+    // 站内信
     setsend(params) {
       userListMsg({
-        sysId: '1',
+        sysId: "1",
         ...params
       }).then(res => {
         if (res.code === 200) {
-          this.$Message.info('站内信发送成功~')
+          this.$Message.info("站内信发送成功~");
         } else {
           this.$Message.error({
             background: true,
-            content: '发送失败，请联系负责人'
-          })
+            content: "发送失败，请联系负责人"
+          });
 
-          console.log(res.msg)
+          console.log(res.msg);
         }
-      })
+      });
     },
 
-       // 选中 内容
+    // 选中 内容
     handleSelectionChange(val) {
       if (val.length === this.data.length) {
-        this.ALLINFO = true
+        this.ALLINFO = true;
+      } else if (val.length === 0) {
+        this.ALLINFO = false;
+        this.$refs.volunteerSel.selectAll(false);
+        this.ALLLIST = [];
       } else {
-        this.ALLINFO = false
+        this.ALLINFO = false;
       }
       let arr = val.map(item => {
-        return item.userId
-      })
-      this.ALLLIST = arr
+        return item.userId;
+      });
+      this.ALLLIST = arr;
+    },
+    // 单个 用户状态 变更
+    setUserEnable(params, type) {
+      userEnable({
+        userId: [params],
+        enable: type ? "1" : "0"
+      }).then(res => {
+        if (res.code === 200) {
+          type
+            ? this.$Message.info("启用成功")
+            : this.$Message.info("禁用成功");
+             this.getUserPage(this.paramsObj);
+        } else {
+          this.$Message.error({
+            background: true,
+            content: "状态变更失败，请联系管理员查看"
+          });
+          this.getUserPage(this.paramsObj);
+        }
+      });
     },
 
     ok() {
@@ -1075,22 +1123,15 @@ export default {
       this.batch = startid;
       this.getUserBatch(2);
     },
-    //每条数据单选框的状态
-    tablechange(selection) {
-      this.arrs = selection;
-      this.arr = selection;
-      if (
-        (this.arr.length == this.dataCount && this.dataCount != 0) ||
-        this.arr.length == this.size
-      ) {
-        this.userEnable = true;
-      } else {
-        this.userEnable = false;
-      }
-    },
+
     //查询
     result() {
       this.getUserPage();
+    },
+    // 关闭 二维码
+    modalCancel() {
+      this.QRCode = "";
+      this.modaQR = false;
     }
   },
   mounted() {
@@ -1110,6 +1151,20 @@ export default {
 .integral-header .integral-rig {
   margin-left: 20px;
 }
+.btn {
+  display: inline-block;
+  width: 110px;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 32px;
+  line-height: 32px;
+  background: #ff565a;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
+}
+
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;

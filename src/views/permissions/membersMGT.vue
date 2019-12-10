@@ -54,6 +54,7 @@
           show-total
           size="small"
           style="margin: auto"
+          @on-change="changepages"
         />
       </div>
     </div>
@@ -243,7 +244,12 @@ export default {
     this.getdepartmentall();
     this.getdepartmentmember();
   },
-
+  watch: {
+    page() {
+      console.log(11);
+      this.getdepartmentmember();
+    }
+  },
   methods: {
     // 查询所有部门名称
     getdepartmentall() {
@@ -349,6 +355,9 @@ export default {
         name: "Add-members",
         query: { states: 2, fromURL: this.$route.name }
       });
+    },
+    changepages(page) {
+      this.page = page;
     }
   }
 };

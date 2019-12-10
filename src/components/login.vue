@@ -1,38 +1,40 @@
 <!-- 基础资料(共用) -->
 <template>
   <div class="box">
-    <header>
-      <span>融合中国 </span><span> | </span
-      ><span class="title"> 后台管理系统</span>
-    </header>
-    <div class="login-box">
-      <img src="@/assets/images/login_bg.svg" />
-      <div class="login-from">
-        <form class="form" autocomplete="off">
-          <p>欢迎登录</p>
+    <div class="content">
+      <header>
+        <span>融合中国 </span><span> | </span
+        ><span class="title"> 后台管理系统</span>
+      </header>
+      <div class="login-box">
+        <img src="@/assets/images/login_bg.svg" />
+        <div class="login-from">
+          <form class="form" autocomplete="off">
+            <p>欢迎登录</p>
 
-          <input
-            type="text"
-            v-model="formValidate.user"
-            placeholder="请输入用户名称"
-            @keyup.enter="handleSubmit()"
-          />
+            <input
+              type="text"
+              v-model="formValidate.user"
+              placeholder="请输入用户名称"
+              @keyup.enter="handleSubmit()"
+            />
 
-          <input
-            type="password"
-            v-model="formValidate.password"
-            placeholder="请输入登陆密码"
-            @keyup.enter="handleSubmit()"
-          />
+            <input
+              type="password"
+              v-model="formValidate.password"
+              placeholder="请输入登陆密码"
+              @keyup.enter="handleSubmit()"
+            />
 
-          <a
-            class="login-btn"
-            href="javascript:;"
-            @click="handleSubmit()"
-            @keyup.enter="handleSubmit()"
-            >登录</a
-          >
-        </form>
+            <a
+              class="login-btn"
+              href="javascript:;"
+              @click="handleSubmit()"
+              @keyup.enter="handleSubmit()"
+              >登录</a
+            >
+          </form>
+        </div>
       </div>
     </div>
     <!-- <img class="banner" src="@/assets/images/login_bg.png" /> -->
@@ -89,7 +91,7 @@
 
 <script>
 import { login, homepage } from "../request/api";
-import {axios} from 'axios'
+import { axios } from "axios";
 export default {
   data() {
     return {
@@ -129,29 +131,26 @@ export default {
   created() {},
   mounted() {},
   methods: {
-//     get(){
-//       axios({
-//     url: 'http://192.168.0.5:8084/rhzg-web/backstage/backstageLojin',
-//       method: 'GET',
-//     params: {
-//        loginName: this.formValidate.user,
-//         loginPwd: this.formValidate.password
-//     },
-//     xhrFields: {
-//           withCredentials: true
-//      },
-//      crossDomain: true,
+    //     get(){
+    //       axios({
+    //     url: 'http://192.168.0.5:8084/rhzg-web/backstage/backstageLojin',
+    //       method: 'GET',
+    //     params: {
+    //        loginName: this.formValidate.user,
+    //         loginPwd: this.formValidate.password
+    //     },
+    //     xhrFields: {
+    //           withCredentials: true
+    //      },
+    //      crossDomain: true,
 
-// }).then( res => {
-//     console.log(res)
-// })
+    // }).then( res => {
+    //     console.log(res)
+    // })
 
-//     },
-
+    //     },
 
     getlogin() {
-      console.log(123);
-
       login({
         loginName: this.formValidate.user,
         loginPwd: this.formValidate.password
@@ -294,5 +293,11 @@ input:-webkit-autofill {
   line-height: 48px;
   font-size: 18px;
   color: #ffffff;
+}
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

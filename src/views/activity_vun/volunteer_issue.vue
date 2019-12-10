@@ -51,39 +51,41 @@
                 >{{ item.orgName }}</Option>
               </Select>
             </li>
-            <li>
+            <li class="flex-start">
               <span>活动时间</span>
-              <Row>
-                <Col :span="12">
-                  <DatePicker
-                    type="datetimerange"
-                    v-model="dateOne"
-                    @on-change="handleChange"
-                    placement="bottom-end"
-                    placeholder="Select date"
-                    style="width:300px"
-                  ></DatePicker>
-                </Col>
-              </Row>
+              <DatePicker
+                :start-date='new Date()'
+                :open="openOne"
+                confirm
+                type="datetimerange"
+                format="yyyy-MM-dd HH:mm"
+                @on-change="handleChange(0,$event)"
+                @on-ok="successOk(0)">
+                <a href="javascript:void(0)" @click="openOne = true">
+                    <Icon type="ios-calendar-outline"></Icon>
+                    <template>{{ dateOne }}</template>
+                </a>
+              </DatePicker>
             </li>
-            <li>
+            <li class="flex-start">
               <span>招募时间</span>
-              <Row>
-                <Col span="12">
-                  <DatePicker
-                   @on-change="handleChangeTwo"
-                   v-model="dateTwo"
-                  type="datetimerange"
-                  placement="bottom-end"
-                  placeholder="Select date"
-                  style="width: 300px"
-                  ></DatePicker>
-                </Col>
-              </Row>
+              <DatePicker
+                :start-date='new Date()'
+                :open="openTwo"
+                confirm
+                type="datetimerange"
+                format="yyyy-MM-dd HH:mm"
+                @on-change="handleChange(1,$event)"
+                @on-ok="successOk(1)">
+                <a href="javascript:void(0)" @click="openTwo = true">
+                    <Icon type="ios-calendar-outline"></Icon>
+                    <template>{{ dateTwo }}</template>
+                </a>
+              </DatePicker>
             </li>
-            <li>
-              <span>>活动地址</span>
-              <span @click="()=>{this.adr = true}">{{ args.address == null?"点击选中地址":args.address}}</span>
+            <li class="flex-start">
+              <span>活动地址</span>
+              <div @click="()=>{this.adr = true}" class="adr">{{ args.address == null?"点击选中地址":args.address}}</div>
             </li>
             <li>
               <span>现场负责人</span>
@@ -245,14 +247,14 @@
                    </div>
                 </div>
               </li>
-              <li>
+            </ul>
+            <div class="active-adds">
+              <Button @click="add = true">添加</Button>
+              <div v-if='add'>
                 <span class="active-span">受益群体人数</span>
                 <Input v-model="args.memberGroupNum" placeholder="Enter something..." style="width: 200px" />
-              </li>
-            </ul>
-            <p class="active-adds">
-              <a>+添加</a>
-            </p>
+              </div>
+            </div>
             <p class="active-adds">
               <Radio v-model="single">
                 我同意
@@ -277,100 +279,105 @@ import wangeditor from'_c/wangeditor'
 import adress from'_c/map'
 import { upload }from '@/request/http'
 import { filterNull } from '@/libs/utils'
+import { stat } from 'fs';
   export default {
     data() {
-        return {
-            navigation1: {
-                head: "志愿者活动发布(志愿者)"
-            },
-            single: true,
-            dateTwo:[],
-            dateOne:[],
-            adr:false,
-            feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
-            isDisb:false,
-            feed: [{
-              sysId: 2,
-              typeFlag: 1,
-              targetType: 3,
-              detailText: null,
-              sort: 1
-            }, {
-              sysId: 2,
-              typeFlag: 9,
-              targetType: 3,
-              detailText: null,
-              sort: 2
-            }],
-            train: null,
-            isFeedback:0,
-            isTrain: 0,
-            actveType:'',
-            array:[],
-            judge:'',
-            judgeList:[],
-            showJudge:false,
-            zhaStart:null,
-            zhaEnd:null,
-            isEdit:2,
-            orgList:[],
-            ab:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'],
-            args:{
-              isNeedCertMould:null,
-              name:null,
-              pic:null,
-              coverPic:null,
-              orgId:null,
-              startAt:null,
-              endAt:null,
-              provinceId:null,
-              cityId:null,
-              districtId:null,
-              address:null,
-              xx:null,
-              yy:null,
-              ownerUserId:null,
-              ownerUserName:null,
-              ownerUserTel:null,
-              flyFlag:null,
-              isInsurance:null,
-              voluCertMouldId:null,
-              isShowHolder:null,
-              detail:null,
-              memberGroupNum: null,
-              pay: null,
-              releaseTime: null,
-              activityQrcode: null,
-              status: null,
-              userId: null,
-              voluXx: null,
-              voluYy: null,
-              volunteerMsgFlag: null,
-              isNeedVolu: null,
-              coActCatTypeList: [{
-                typeDicId: null,
-                typeDicName: null,
-                typeFlag: 3
-              }],
-              coActivityUserConfParamList: [],
-               sysId:2,
-              typeFlag:3,
-              isNeedVolu:0,
-              isMouldFlag:1,
-              isWorkAct:1,
-              channel:2,
-            },
-            image:null,
-            cover:null,
-            once:false
-        };
+      return {
+        add:false,
+        navigation1: {
+            head: "志愿者活动发布(志愿者)"
+        },
+        single: true,
+        openOne: false,
+        openTwo: false,
+        dateTwo: '请选择时间段',
+        dateOne: '请选择时间段',
+        adr:false,
+        feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
+        isDisb:false,
+        feed: [{
+          sysId: 2,
+          typeFlag: 1,
+          targetType: 3,
+          detailText: null,
+          sort: 1
+        }, {
+          sysId: 2,
+          typeFlag: 9,
+          targetType: 3,
+          detailText: null,
+          sort: 2
+        }],
+        train: null,
+        isFeedback:0,
+        isTrain: 0,
+        actveType:'',
+        array:[],
+        judge:'',
+        judgeList:[],
+        showJudge:false,
+        zhaStart:null,
+        zhaEnd:null,
+        isEdit:2,
+        orgList:[],
+        ab:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'],
+        args:{
+          isNeedCertMould:null,
+          name:null,
+          pic:null,
+          coverPic:null,
+          orgId:null,
+          startAt:null,
+          endAt:null,
+          provinceId:null,
+          cityId:null,
+          districtId:null,
+          address:null,
+          xx:null,
+          yy:null,
+          ownerUserId:null,
+          ownerUserName:null,
+          ownerUserTel:null,
+          flyFlag:null,
+          isInsurance:null,
+          voluCertMouldId:null,
+          isShowHolder:null,
+          detail:null,
+          memberGroupNum: null,
+          pay: null,
+          releaseTime: null,
+          activityQrcode: null,
+          status: null,
+          userId: null,
+          voluXx: null,
+          voluYy: null,
+          volunteerMsgFlag: null,
+          isNeedVolu: null,
+          coActCatTypeList: [{
+            typeDicId: null,
+            typeDicName: null,
+            typeFlag: 3
+          }],
+          coActivityUserConfParamList: [],
+            sysId:2,
+          typeFlag:3,
+          isNeedVolu:0,
+          isMouldFlag:1,
+          isWorkAct:1,
+          channel:2,
+        },
+        image:null,
+        cover:null,
+        once:false
+      }
     },
 
-    components: { wangeditor,adress },
+    components: { wangeditor, adress },
 
     created() {
       this.initData()
     },
+
     methods: {
       deletUserPost(i){
         this.$delete(this.args.coActivityUserConfParamList,i)
@@ -495,16 +502,6 @@ import { filterNull } from '@/libs/utils'
           }
         })
       },
-      handleChange(e){
-        this.args.startAt = e[0]
-        this.args.endAt = e[1]
-        this.dateOne = e
-      },
-      handleChangeTwo(e){
-        this.zhaStart = e[0]
-        this.zhaEnd = e[1]
-        this.dateTwo = e
-      },
       changeInput(e){
         let param = this.judge
         getOrgId({ orgId:this.args.orgId, param}).then(res => {
@@ -538,14 +535,47 @@ import { filterNull } from '@/libs/utils'
         this.args.yy = e.yy
         this.$set(this.args,'address',e.address)
       },
+      successOk(i){
+        if(i===0){
+          if(!this.args.startAt&&!this.args.endAt){
+            this.dateOne='请选择时间段'
+          }
+          this.openOne = false
+        }else{
+          if(!this.zhaStart&&!this.zhaEnd){
+            this.dateTwo='请选择时间段'
+          }
+          this.openTwo = false
+        }
+      
+      },
+      handleChange(i,e){
+        let start = e[0]
+        let end = e[1]
+        if(start&&end){
+          start = start + ':00'
+          end = end + ':00'
+        }
+        if(i === 0){
+          this.dateOne = e[0] + '-' + e[1]
+          this.args.startAt = start
+          this.args.endAt = end
+        }else{
+          this.dateTwo = e[0] + '-' + e[1]
+          this.zhaStart = start
+          this.zhaEnd = end
+        }
+      
+      
+      },
       sumbmit(i){
         let item = this.args
         if(i==1){
           if (this.single == false) {
             this.$Message.warning('你没有同意发布规则')
             return
-          } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.pay == null || item.detail == null || this.args.ownerUserName == null) {
-            this.$Message.warning('报名项填写不完整')
+          } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.detail == null || this.args.ownerUserName == null) {
+            this.$Message.warning('活动内容填写不完整')
             return
           } else if (this.args.ownerUserId == null) {
              this.$Message.warning('现在负责人没有对应的归属团队')
@@ -588,6 +618,7 @@ import { filterNull } from '@/libs/utils'
         saveActive(obj).then(res => {
           this.once = false
           if(res.code == 200){
+            this.$router.replace('manager')
             sessionStorage.removeItem("data")
             this.$Message.success('发布成功')
           }else{
@@ -671,6 +702,10 @@ import { filterNull } from '@/libs/utils'
             margin: 20px;
             display: flex;
             align-items: center;
+            .adr{
+              flex: 1;
+              cursor: pointer;
+            }
             .juge{
               width: 300rpx;
               position: relative;
@@ -709,6 +744,7 @@ import { filterNull } from '@/libs/utils'
               background: #e4e4e4;
             }
             .imgss {
+              width: 150px;
               height: 150px;
             }
             .phone {
@@ -868,7 +904,8 @@ import { filterNull } from '@/libs/utils'
     .cancel{
       position: absolute;
       top: 10px;
-      right: 10px;
+      right: -30px;
+      z-index: 10;
     }
     .upload .file{
       width: 100%;

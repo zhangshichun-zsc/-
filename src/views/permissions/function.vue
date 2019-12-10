@@ -24,22 +24,9 @@
                       <template slot="title">
                         <!-- ！ 点击全选， 选中一部分， 展示不同的样式 -->
 
-                        {{ arr[item.sysMenuId].checkAll }}
-                        <!--    :value="arr[item.sysMenuId].checkAll" -->
-                        <CheckboxGroup v-model="menuONE">
-                          <Checkbox
-                            :value="true"
-                            :label="item.sysMenuId"
-                            :indeterminate="arr[item.sysMenuId].indeterminate"
-                            @click.prevent.native="handleCheckAll"
-                            >{{ item.parentName }}}</Checkbox
-                          >
-                        </CheckboxGroup>
+                        <Checkbox>{{ item.parentName }}</Checkbox>
                       </template>
-                      <CheckboxGroup
-                        v-model="checkAllGroup"
-                        @on-change="checkAllGroupChange"
-                      >
+                      <CheckboxGroup v-model="USERLIST">
                         <MenuItem
                           name="1-1"
                           v-for="(value, keys) in item.list"
@@ -65,17 +52,12 @@
 </template>
 
 <script>
-/**
- *  ! 实现 :1 展示选中的子项
- *  ! 2: 展示选中的父项
- *  ! 3: 实现全选,
- *  ! 4: 实现全不选
- *
- */
-
 import { Permissionset, roleSetup, findRoleMenu } from "@/request/api";
 import Table from "iview/src/components/table/table";
 import { log } from "util";
+// import Treeselectfrom 'vue-treeselect'
+// import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 export default {
   components: { Table },
   data() {
@@ -93,11 +75,16 @@ export default {
       firstClassMenu: [],
       ALLLIST: [], // 全部菜单
       USERLIST: [], // 用户选中的
-      menuONE: [], // 一级菜单
+      menuONE: {
+        0: [true]
+      }, // 一级菜单
       arr: [],
-      checkAllGroup: [], // 已选的才当
+      parentMenu: [], // 父级菜单，
+      subMenu: [],
       indeterminate: true,
       checkAll: false
+
+      //全部的菜单
     };
   },
   watch: {},
@@ -107,26 +94,37 @@ export default {
       let roleId = this.sysRoleId;
       findRoleMenu({ roleId }).then(res => {
         if (res.code == 200) {
-          this.ALLLIST = res.data.menuList;
-          this.checkAllGroup = res.data.subMenuRoles.map(item => {
+          this.ALLLIST = res.data.menuList; // 所有的菜单
+          let userArr = res.data.subMenuRoles.map(item => {
             return item.sysMenuId;
           });
-
-          /**
-           * !用来控制 一级菜单的首选项
-           */
           let obj = {};
-          res.data.parentMenuRoles
-            .map(item => {
-              return item.sysMenuId;
-            })
-            .forEach(key => {
-              obj[key] = {
-                indeterminate: false,
-                checkAll: true
-              };
-            });
-          this.arr = obj;
+          res.data.menuList.forEach(item => {
+            obj[item.sysMenuId] = {
+              list: item.list.map(key => {
+                return {
+                  parentid: key.parentId, // 父级ID
+                  id: key.sysMenuId, //子级的id
+                  checked: userArr.includes(key.sysMenuId) //选中状态
+                };
+              }),
+              checkAll: false
+            };
+          });
+
+          // res.data.parentMenuRoles.forEach(item => {
+          //   obj[item.sysMenuId] = {
+          //     checked: false,
+          //     list: [
+          //       {
+          //         parentid: item.sysMenuId, // 父级ID
+          //         id: 0, //子级的id
+          //         checked: false //选中状态
+          //       }
+          //     ]
+          //   };
+          // });
+          console.log(obj);
         } else {
           this.$Message.info(res.msg);
         }
@@ -151,46 +149,11 @@ export default {
         }
       });
     },
-    // 全选中一部分
-    handleCheckAll() {
-      if (this.indeterminate) {
-        this.checkAll = false;
-      } else {
-        this.checkAll = !this.checkAll;
-      }
-      this.indeterminate = false;
 
-      if (this.checkAll) {
-        let menuArr = this.ALLLIST;
-        // TODO  保存所有的 满足父节菜单 的菜单
-        // this.checkAllGroup = menuArr.map(item => {
-        //   return item.sysMenuId;
-        // });
-      } else {
-        this.checkAllGroup = [];
-      }
-    },
-
-    // 全选中的情况
-    checkAllGroupChange(data) {
-      // console.log(data);
-      if (data.length === 104) {
-        this.indeterminate = false;
-        this.checkAll = true;
-      } else if (data.length > 0) {
-        this.indeterminate = true;
-        this.checkAll = false;
-      } else {
-        this.indeterminate = false;
-        this.checkAll = true;
-      }
-    },
-
-    // 全选 END
     //保存
     save() {
-      console.log(this.checkAllGroup);
-      console.log(this.menuONE);
+      console.log(this.USERLIST);
+
       // this.getroleSetup();
     }
   },

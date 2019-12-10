@@ -252,28 +252,28 @@ export default {
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      if (this.role == "") {
-                        this.$Message.error("请先选择角色");
-                      } else {
-                        this.ids = params.row.userId;
-                        this.addstate = true;
-                      }
-                    }
-                  }
-                },
-                "删除"
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         if (this.role == "") {
+              //           this.$Message.error("请先选择角色");
+              //         } else {
+              //           this.ids = params.row.userId;
+              //           this.addstate = true;
+              //         }
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
@@ -405,6 +405,8 @@ export default {
           this.$Message.success(res.msg);
           this.modal1 = false;
           this.getrolequery();
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
