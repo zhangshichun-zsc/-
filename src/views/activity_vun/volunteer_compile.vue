@@ -414,7 +414,6 @@ export default {
       })
       getActiveLimit({ roleId: 2, sysId:2, userId }).then(res => {
         this.limitList = res.data
-        // this.splitLimit()
       })
       getGood({ roleId:2, sysId:2, userId}).then(res => {
         this.goodList = res.data
@@ -422,7 +421,6 @@ export default {
     },
     dealData(){
        this.i =  this.$route.query.i
-       console.log(this.i)
        let data = JSON.parse(sessionStorage.getItem("data"))
        this.isDisb = data.isDisb
        if(this.i !== -1){
@@ -481,12 +479,13 @@ export default {
       } else if (!this.args.recruitNum || this.args.recruitNum == 0){
         this.$Message.warning('招募数量没填写')
         return
-      }else if (~~this.args.zmType == 2 && ~~this.args.recruitNum > ~~this.args.apptNum){
+      }else if (~~this.args.zmType == 2 && !!this.args.apptNum &&~~this.args.recruitNum > ~~this.args.apptNum){
          this.$Message.warning('可预约人数不能小于招募人数')
       return
     } 
       let data = JSON.parse(sessionStorage.getItem("data"))
       let args = this.args
+       if(!args.apptNum)args.apptNum = args.recruitNum
       let list = data.args.coActivityUserConfParamList
       for(let item of list){
         if(item.userPosition == args.userPosition && this.i == -1){
