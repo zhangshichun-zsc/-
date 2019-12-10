@@ -173,15 +173,13 @@
           </div>
         </div>
         </Col>
-      </Row>
-      
-        
+      </Row> 
       <div class="active-details">
         <Row>
           <Col span='18'>
             <div>
               <p class="active-text"><span>活动详情</span></p>
-              <wangeditor id='wange' :labels="args.detail" @change='changeEditor'/>
+              <wangeditor id='wange' :labels="args.detail" @change='changeEditor' :disabled='status == 3 || status == 4?false:isDisb'/>
             </div>
           </Col>
         </Row>
@@ -299,7 +297,7 @@
 </template>
 
 <script>
-import { getActiveType, getActiveLimit, getActiveSign, getOrgTeam, getOrgId, orgimgdel, saveActive } from '@/request/api'
+import { getActiveType, getActiveLimit, getActiveSign, getOrgTeam, getOrgId, orgimgdel, saveActive, getActiveRelse } from '@/request/api'
 import { getAdressId } from '@/libs/utils'
 import wangeditor from'_c/wangeditor'
 import adress from'_c/map'
@@ -401,10 +399,90 @@ export default {
   components: { wangeditor, adress },
 
   created() {
+    let isEdit = this.$route.query.isEdit || 2
+    let status = this.$route.query.status || 0
+    let isDisb = Number(isEdit) === 0 || Number(isEdit) === -1 || (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))? true : false
+    this.isEdit = isEdit
+    this.status = status
+    this.activityId = this.$route.query.activityId
     this.initData()
+    this.getRelse()
   },
 
   methods: {
+    getRelse(){
+      if(!this.activityId)return
+      getActiveRelse({activityId:this.activityId}).then(res => {
+        if(res.code == 200){
+          let args = Object.assign(this.args, res.data)
+          let add = !!args.memberGroupNum? true : false
+          this.args = args
+          this.args.startAt = res.data.startAt + ':00'
+          this.args.endAt = res.data.endAt + ':00'
+          this.dateOne = res.data.startAt + '-' + res.data.endAt
+          this.dateTwo = res.data.enrollStarttime + '-' + res.data.enrollEndtime
+          this.image = res.data.picPath
+          this.zhaStart = res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = res.data.enrollEndtime + ':00' || null,
+          this.judge = res.data.result || '',
+          this.isFeedback = res.data.isFeedback || 0,
+          this.isTrain = res.data.isTrain || 0,
+          this.orgName = res.data.orgName,
+          this.cover = res.data.coverPicPath,
+          this.add = add
+          this.separation()
+          this.filter()
+        }else{
+          this.$Message.error(res.msg)
+        }
+      })
+    },
+    filter(){
+      let list = this.args.coActivityUserConfParamList
+      for(let item of list){
+        if (item.coActivityItemList){
+          this.forlist(item.coActivityItemList)
+        }
+        if (item.coActivityRuleParamList){
+          this.forlist(item.coActivityRuleParamList)
+        }
+      }
+      this.args.coActivityUserConfParamList = list
+    },
+    forlist(list){
+      for (let val of list) {
+        if (val.actUserConfId || val.activityId || val.activityRuleId) {
+          delete val.actUserConfId
+          delete val.activityId
+          delete val.activityRuleId
+        }
+        if (val.activityItemId){
+          delete val.activityItemId
+        }
+      }
+    },
+    separation(){
+      let args = this.args
+      this.train = args.trainComments || null,
+      this.feed = args.coDetailList
+      this.spliced()
+    },
+    spliced() {
+      if (this.isEdit !== 2) {
+        let itemList = this.feed
+        for (let item of itemList) {
+          if ((~~item.targetType === 3 || ~~item.targetType === 4) && typeof item.arr[0] !== 'object') {
+            let arr = []
+            let list = item.arr
+            for (let m = 0, len = list.length; m < len; m++) {
+              arr.push({ value: list[m] })
+            }
+            item.arr = arr
+          }
+        }
+        this.feed = itemList
+      }
+    }, 
     deletUserPost(i){
       this.$delete(this.args.coActivityUserConfParamList,i)
     },
@@ -569,11 +647,25 @@ export default {
       if(i===0){
         if(!this.args.startAt&&!this.args.endAt){
           this.dateOne='请选择时间段'
+        }else{
+          if(!!this.zhaEnd&&new Date(this.args.startAt).getTime()>new Date(this.zhaEnd).getTime()){
+            this.$Message.warning("招募时间要早于活动时间")
+            this.dateOne='请选择时间段'
+            this.args.startAt = ''
+            this.args.endAt = ''
+          }
         }
         this.openOne = false
       }else{
         if(!this.zhaStart&&!this.zhaEnd){
           this.dateTwo='请选择时间段'
+        }else{
+            if(!!this.args.startAt&&new Date(this.args.startAt).getTime()>new Date(this.zhaEnd).getTime()){
+            this.$Message.warning("招募时间要早于活动时间")
+            this.dateTwo='请选择时间段'
+            this.zhaStart = ''
+            this.zhaEnd = ''
+          }
         }
         this.openTwo = false
       }
