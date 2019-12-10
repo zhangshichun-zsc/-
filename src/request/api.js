@@ -166,6 +166,12 @@ export const Agreementclassadd = p => posts('/agreement-manage/agree/type/set', 
 
 export const Agreementclassstats = p => posts('/agreement-manage/agree/type/del', p) //协议管理协议状态
 
+export const projectsetlist = p => posts('/volunteer-manager/queryCoActCategoryList', p) //项目管理-分页
+
+export const projectsetadd = p => posts('/volunteer-manager/updateCoActCategory', p) //项目管理-新增
+
+export const budgetlist = p => get('/volunteer-manager/queryOrgListForCoActCategory', p) //项目管理-预算来源
+
 
 
 //智障类型
@@ -312,11 +318,11 @@ export const UserList = p => get('/user-list/get-user-page', p) //-用户列表-
 
 
 //活动
-export const Activitypage = p => get('/activity-feedback/get-activity-feelback-page', p) //-活动反馈管理--获取活动反馈分页
+export const Activitypage = p => posts('/activity-feedback/get-activity-feelback-page', p) //-活动反馈管理--获取活动反馈分页
 
-export const Activityuserpage = p => get('/activity-feedback/get-feelback-page-by-activityid', p) //-活动反馈管理--获取活动反馈用户分页
+export const Activityuserpage = p => posts('/activity-feedback/getFeedbackList', p) //-活动反馈管理--获取活动反馈用户分页
 
-export const Activitydetail = p => get('/activity-feedback/get-feelback-detail', p) //-活动反馈管理--获取反馈详情
+export const Activitydetail = p => get('/activity-feedback/activity-feedback-list', p) //-活动反馈管理--获取反馈详情
 
 export const Activitybatch = p => post('/activity-feedback/batch-opr-act-feedback', p) //-活动反馈管理--批量操作反馈
 
@@ -591,3 +597,5 @@ export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p
 export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
 export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
+export const getFeedDetail = p => get("/activity-feedback/getDetail",p)
+export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)

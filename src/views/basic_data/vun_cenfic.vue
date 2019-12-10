@@ -54,7 +54,7 @@
                     placement="bottom-end"
                     placeholder="选择日期"
                     style="width: 200px"
-                    type="datetime" 
+                    type="datetime"
                     v-model="params.effectiveAt"
                     @on-change='changeDate'
                     :options="options"
@@ -296,6 +296,7 @@ export default {
       this.params.effectiveAt = ''
     },
     changeNum(e){
+      console.log(e)
       this.size = e
       this.page = 1
       this.getList({})

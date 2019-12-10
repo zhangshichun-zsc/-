@@ -24,9 +24,9 @@
         <div class="flex-center-start">
           <span>有效状态</span>
           <Select size="small" class="inpt" v-model="query.validFlag">
-             <Option value="">全部</Option>
-            <Option value="1">有效状态</Option>
-            <Option value="0">无效状态</Option>
+             <Option value="-1">全部</Option>
+            <Option value="1">有效</Option>
+            <Option value="0">无效</Option>
           </Select>
         </div>
         <div class="flex-center-start">
@@ -251,7 +251,7 @@ export default {
       if(start&&end){
         if(start === end){
           start = start + ' 00:00:00'
-          end = end + ' 59:59:59'
+          end = end + ' 23:59:59'
         }else{
           start = start + ' 00:00:00'
           end = end + ' 00:00:00'
@@ -265,6 +265,9 @@ export default {
       this.getList()
     },
     queryMet(){
+      if(this.query.validFlag=='-1'){
+        this.query.validFlag=''
+      }
       this.params = Object.assign(this.params,this.query)
       this.$set(this.params.page,'page',1)
       this.getList()
