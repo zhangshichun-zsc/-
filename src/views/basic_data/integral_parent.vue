@@ -16,7 +16,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk">确定</Button>
+              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
@@ -87,9 +87,11 @@ export default {
                 on: {
                   input: e => {
                     if(e){
+                      this.dicId=params.row.dicId
                       this.states=1
                       this.getBasicbatch(2)
                     }else{
+                      this.dicId=params.row.dicId
                       this.states=0
                        this.getBasicbatch(2)
                     }
@@ -274,18 +276,23 @@ export default {
       this.modal1 = false;
       this.formValidate.dicName = "";
     },
+
     //确定
-    modalOk() {
-      if (this.dicName == "") {
-        this.$Message.error("名称不能为空");
-      } else {
-        if (this.id==0) {
-          this.getBasicbatch(1);
+    modalOk(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          if (this.id == 0) {
+            this.getBasicbatch(1);
+          } else {
+            this.getBasicbatch(0);
+          }
         } else {
-          this.getBasicbatch(0);
+          this.$Message.error("名称不能为空!");
         }
-      }
+      });
     },
+
+
 
     //弹出框
     btn(){
