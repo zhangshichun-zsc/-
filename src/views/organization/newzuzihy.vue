@@ -24,14 +24,14 @@
             <FormItem label="名称:" prop="orgName">
               <Input v-model="formValidate.orgName" placeholder="点 击 输 入" style="width: 220px" />
             </FormItem>
-            <FormItem label="联系人:" prop="orgName">
-              <Input v-model="formValidate.ownerUserName" placeholder="自动带出" style="width: 220px" />
+            <FormItem label="联系人:" prop="contactUserName">
+              <Input v-model="formValidate.contactUserName" placeholder="自动带出" style="width: 220px" />
             </FormItem>
-            <FormItem label="地址:" prop="address">
-              <Selsect :arr="[province,city,county,]" @change="selbtn"></Selsect>
+            <FormItem label="地址:">
+               <Selsect :arr='[province,city,county,]' @change='selbtn'></Selsect>
             </FormItem>
-            <FormItem label="联系方式:" prop="orgName">
-              <Input v-model="formValidate.ownerUserPhone" style="width: 220px" />
+            <FormItem label="联系方式:" prop="contactUserPhone">
+              <Input v-model="formValidate.contactUserPhone" style="width: 220px" />
             </FormItem>
             <FormItem label="微信公众号:" prop="wechatOfficeAccount">
               <Input
@@ -42,34 +42,30 @@
             </FormItem>
             <FormItem label="图片:" prop="imgUrl">
               <div class="start-wap">
-                <div
-                  class="upload"
-                  v-if="formValidate.imgUrl == null"
-                  @click="()=>{ this.$refs.files.click()}"
-                >
-                  <div class="file">
-                    <input
-                      style=" display:none;"
-                      type="file"
-                      accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                      ref="files"
-                      @change="uploadFile()"
-                      multiple
-                    />
-                    <Button icon="ios-cloud-upload-outline">上传图片</Button>
-                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-                  </div>
-                </div>
+          <div class="upload" v-if="formValidate.imgUrl == null" @click="()=>{ this.$refs.files.click()}">
+            <div class="file">
+              <input
+                style=" display:none;"
+                type="file"
+                accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                ref="files"
+                @change="uploadFile()"
+                multiple
+              />
+              <Button icon="ios-cloud-upload-outline">上传图片</Button>
+              <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+            </div>
+          </div>
 
-                <img :src="formValidate.imgUrl" style="height:150px;width:150px;" />
-                <Icon
-                  type="ios-trash"
-                  v-if="formValidate.imgUrl!= null"
-                  class="cancel"
-                  :size="26"
-                  @click="cancelImg()"
-                />
-              </div>
+          <img :src="formValidate.imgUrl" style="height:150px;width:150px;" />
+          <Icon
+            type="ios-trash"
+            v-if="formValidate.imgUrl!= null"
+            class="cancel"
+            :size="26"
+            @click="cancelImg()"
+          />
+        </div>
             </FormItem>
             <FormItem label="详情:" prop="orgName">
               <Input
@@ -175,41 +171,19 @@ export default {
         wx: "",
         text: "",
         fileList: [],
-        picUrl: null,
-        ownerUserName: "",
-        ownerUserPhone: "",
+        picUrl:null,
         imgUrl:null,
         description:'',
         province:'',
         city:'',
         county:'',
-
-        texturl:null,
-        text:null,
+        provinceId:1
       },
       ruleValidate: {
-        orgName: [
-          {
-            required: true,
-            message: "必填项不能为空",
-            trigger: "blur"
-          }
-        ],
-        city: [
-          {
-            required: true,
-            message: "请选择地址",
-            trigger: "blur"
-            // type:
-          }
-        ],
-        imgUrl: [
-          {
-            required: true,
-            message: "图片不能为空",
-            trigger: "blur"
-          }
-        ]
+        orgName: [{ required: true, message: "团队名称不能为空", trigger: "blur" }],
+        contactUserName: [{ required: true, message: "联系人不能为空", trigger: "blur" }],
+        contactUserPhone: [{ required: true, message: "联系电话不能为空", trigger: "blur" }],
+        description: [{ required: true, message: "详情不能为空", trigger: "blur" }],
       },
       list: [],
       ownerUserId: "",
@@ -217,15 +191,15 @@ export default {
       provinceList: [],
       cityList: [],
       districtList: [],
-
       name: null,
-      orgimg: "",
-      types: [],
-
-      province: "",
-      city: "",
-      county: "",
-      file: ""
+      orgimg:'',
+      types:[],
+      province:'',
+      city:'',
+      county:'',
+      file:'',
+      cityId: 1,
+      districtId:1,
     };
   },
   components: { Selsect },
@@ -254,13 +228,14 @@ export default {
         createUserId: this.$store.state.userId,
         wechatOfficeAccount:this.formValidate.wechatOfficeAccount,
         remark: this.value,
-        ownerUserName: this.formValidate.ownerUserName,
-        ownerUserPhone: this.formValidate.ownerUserPhone,
+        contactUserName: this.formValidate.contactUserName,
+        contactUserPhone: this.formValidate.contactUserPhone,
         orgPic:this.formValidate.orgPic,
         file:this.file,
         description:this.formValidate.description
       }).then(res => {
         if (res.code == 200) {
+          this.$router.back()
           this.$Message.success(res.msg);
         } else {
           this.$Message.error(res.msg);
@@ -285,7 +260,7 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           this.formValidate.imgUrl = e.target.result;
-          this.formValidate.picUrl = res.data;
+          this.formValidate.orgPic = res.data;
         };
       });
     },
@@ -304,11 +279,14 @@ export default {
 
     //表单提交
     handleSubmit(name) {
+      if(!this.formValidate.orgPic){
+        this.$Message.error("图片未上传！")
+        return
+      }
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getorgadd();
         } else {
-          console.log(this.formValidate.provinceId);
           this.$Message.error("必填项未填！");
         }
       });
