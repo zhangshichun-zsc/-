@@ -30,7 +30,7 @@ export const userExprotUrl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]; // 导�
 
 axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
 
-axios.defaults.withCredentials = true  //让ajax携带cookie
+// axios.defaults.withCredentials = true  //让ajax携带cookie
 
 // 请求超时时间
 axios.defaults.timeout = 100000;
