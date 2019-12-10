@@ -297,6 +297,9 @@ export const optTime = p => posts('/user-list/opt-vip-time', p) //修改vip道�
 export const userListMsg = p => posts('/user-list/user/inner/msg', p) //用户列表 站内下信
 
 
+export const userEnable = p => posts('/user-list/account/enable/update', p) // 用户列表的启用and禁用
+
+
 
 
 
@@ -459,6 +462,8 @@ export const departaddDeptUser = p => posts('/web/dept/addDeptUser', p) //部门
 
 export const findRoleMenu = p => get('/sysRole/findRoleMenu', p) //部门管理--部门添加
 
+export const editfindDicName = p => get('/web/dept/editfindDicName', p) // 获取当前部门的 活动分类
+
 
 
 
@@ -491,7 +496,10 @@ export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除�
 
 
 //权限设置
-export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--权限设置
+export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--
+
+
+export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称 
 
 
 

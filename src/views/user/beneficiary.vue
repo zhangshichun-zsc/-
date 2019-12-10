@@ -425,7 +425,8 @@
       <Table border ref="volunteerSel" :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
-          <Checkbox v-model="ALLINFO">全选</Checkbox>
+          <Checkbox @click="setALL">全选</Checkbox>
+          <!-- <Checkbox @click="setALL" v-model="ALLINFO">全选</Checkbox> -->
           <Select placeholder=" 批量操作" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -871,19 +872,19 @@ export default {
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
     },
-    ALLINFO(newVlaue, oldValue) {
-      //  全选 and 全不选
-      if (newVlaue === true) {
-        this.$refs.volunteerSel.selectAll(true)
-        let arr = this.data.map(item => {
-          return item.userId
-        })
-        this.ALLLIST = arr
-      } else {
-        this.$refs.volunteerSel.selectAll(false)
-        this.ALLLIST = []
-      }
-    }
+    // ALLINFO(newVlaue, oldValue) {
+    //   //  全选 and 全不选
+    //   if (newVlaue === true) {
+    //     this.$refs.volunteerSel.selectAll(true)
+    //     let arr = this.data.map(item => {
+    //       return item.userId
+    //     })
+    //     this.ALLLIST = arr
+    //   } else {
+    //     this.$refs.volunteerSel.selectAll(false)
+    //     this.ALLLIST = []
+    //   }
+    // }
   },
   created() {
     // this.userId = localStorage.getItem('userId' | '')
@@ -1241,6 +1242,11 @@ export default {
         }
       }
     },
+
+      setALL(){
+        console.log(123)
+        console.log(this.ALLINFO)
+      },
     // 选中页码
     setPage(res){
       this.page =res

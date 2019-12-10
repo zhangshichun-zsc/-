@@ -134,7 +134,8 @@ import {
   departmentStatus,
   departmentSup,
   departmentall,
-  departtype
+  departtype,
+  editfindDicName
 } from "@/request/api";
 export default {
   data() {
@@ -145,6 +146,7 @@ export default {
         head: "部门管理(共用)"
       },
       AddDate: {
+        getName: [],
         deptName: "",
         description: "",
         parentId: "",
@@ -287,7 +289,9 @@ export default {
                         this.text = "编辑部门";
                         this.isdispabled = true;
                         this.getdepartmentSup();
+                        this.getName(params.row.deptId);
                         this.AddDate = params.row;
+                        this.deptId = params.row.deptId;
                         this.AddDate.parentId = params.row.parentId;
                       }
                     }
@@ -515,9 +519,6 @@ export default {
         sort: ""
       }).then(res => {
         if (res.code == 200) {
-          // this.data2 = res.data.list;
-          // this.dataCount = res.data.totalSize;
-
           this.$store.commit("updateList", {
             list: res.data.list,
             count: res.data.totalSize
@@ -533,13 +534,15 @@ export default {
     // 部门列表编辑
     getdepartmentedit() {
       departmentedit({
-        deptId: this.AddDate.parentId,
+        deptId: this.deptId,
         deptName: this.AddDate.deptName,
         description: this.AddDate.description,
         leader: this.AddDate.leader,
         dicIds: this.AddDate.ssproject.toString()
       }).then(res => {
         if (res.code == 200) {
+          this.$Message.info("修改成功");
+          this.getdepartmentlist();
         }
         console.log(res);
       });
@@ -595,6 +598,16 @@ export default {
         console.log(res);
       });
     },
+    //  查询 当前部门的活动类型
+    getName(deptId) {
+      editfindDicName({ deptId: deptId }).then(res => {
+        let arr = res.data.map(item => {
+          return item.dicId;
+        });
+        this.AddDate.ssproject = arr;
+      });
+    },
+
     // 查询所有部门名称
     getdepartmentall() {
       departmentall({}).then(res => {
@@ -629,7 +642,13 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.getdepartmentadd();
+          if (this.text == "编辑部门") {
+            // 编辑
+            this.getdepartmentedit();
+          } else {
+            // 新增
+            this.getdepartmentadd();
+          }
         } else {
           this.$Message.error("必填项未填!");
         }

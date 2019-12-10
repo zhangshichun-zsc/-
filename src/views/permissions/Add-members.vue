@@ -42,8 +42,9 @@
             <FormItem label="所属部门:" prop="deplNames">
               <Select
                 style="width: 10rem"
-                v-model="AddDate.deplNames"
+                v-model="AddDate.deptId"
                 placeholder="请选择所属部门"
+                :disabled="this.$route.query.states == 3"
               >
                 <Option
                   :value="item.deptId"
@@ -139,7 +140,7 @@ export default {
         tel: "",
         email: "",
         deplNames: "",
-        sysRoleNames: "",
+        sysRoleNames: [],
         loginPwd: "",
         comments: ""
       },
@@ -170,11 +171,12 @@ export default {
           }
         ],
         loginPwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        loginPwd: [
-          { required: true, message: "请输入初始密码", trigger: "blur" }
-        ],
+        // loginPwd: [
+        //   { required: true, message: "请输入初始密码", trigger: "blur" }
+        // ],
         comments: []
       },
+      deptId: "",
       page: 1,
       size: 10,
       list: [],
@@ -235,26 +237,24 @@ export default {
       findDeptUserName({
         userId: this.$route.query.userId,
         name: this.$route.query.name,
-        deptId: "0",
+        // deptId: "0",
         page: {
           page: this.page,
           size: this.size
         }
       }).then(res => {
         if (res.code == 200) {
-          console.log(res.data.list[0].sysRoleIds);
           if (res.data.list.length > 0) {
             this.AddDate = res.data.list[0];
+            console.log(res.data.list[0].sysRoleIds);
+
             this.AddDate.sysRoleNames = res.data.list[0].sysRoleIds
               .split(",")
               .map(item => {
                 return Number(item);
               });
-            this.AddDate.deplNames = res.data.list[0].deptIds
-              .split(",")
-              .map(item => {
-                return Number(item);
-              });
+
+            this.AddDate.deplNames = res.data.list[0].deptIds;
           }
         } else {
           this.$Message.error(res.msg);
