@@ -51,7 +51,7 @@
           />
         </FormItem>
         <FormItem label="上级部门" prop="parentId">
-          <Select v-model="AddDate.parentId" style="width: 10rem">
+          <Select disabled v-model="AddDate.parentId" style="width: 10rem">
             <Option
               v-for="item in deplist"
               :value="item.deptId"
@@ -88,7 +88,10 @@ import {
   departmentsub,
   departmentStatu,
   departmentmember,
-  departmentSup
+  departmentSup,
+  getParentIdName,
+  departmentedit,
+  editfindDicName
 } from "@/request/api";
 export default {
   data() {
@@ -180,7 +183,12 @@ export default {
                     },
                     on: {
                       click: () => {
+                        console.log(params.row);
                         this.modal1 = true;
+                        this.deptId = params.row.deptId;
+                        this.AddDate.deptName = params.row.deptName;
+                        this.AddDate.leader = params.row.leader;
+                        this.AddDate.description = params.row.description;
                         this.AddDate.parentId = params.row.parentId;
                       }
                     }
@@ -234,7 +242,13 @@ export default {
       this.getdepartmentsub(val);
     },
     modal1(val) {
-      if (val === true) this.getdepartmentSup();
+      if (val === true) {
+        // this.getdepartmentSup();
+        this.getParentIdName();
+        console.log(this.deptId);
+
+        this.getName(this.deptId);
+      }
     }
   },
   computed: {
@@ -279,17 +293,18 @@ export default {
         }
       });
     },
-    // 获取上级部门
-    getdepartmentSup() {
-      departmentSup({
-        parentId: this.AddDate.parentId
-      }).then(res => {
-        if (res.code == 200) {
-          this.deplist = res.data;
-        }
-        console.log(res);
-      });
-    },
+    // // 获取上级部门
+    // getdepartmentSup() {
+    //   departmentSup({
+    //     parentId: this.AddDate.parentId
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       this.deplist = res.data;
+    //     }
+    //     console.log(res);
+    //   });
+    // },
+    // 查询 当前部门下的成员
     getdepartmentmember() {
       let page = {
         page: this.$store.state.MGTpage.page,
@@ -313,6 +328,63 @@ export default {
           this.$Message.error(res.msg);
         }
         console.log(res);
+      });
+    },
+    // 获取当前部门的直属上级部门
+    getParentIdName() {
+      getParentIdName({ deptId: this.deptId }).then(res => {
+        console.log(res);
+        if (res.code == 200) {
+          this.deplist = [
+            { deptId: res.data.deptId, deptName: res.data.deptName }
+          ];
+          this.AddDate.parentId = res.data.deptId;
+        }
+      });
+    },
+    // 部门 编辑
+    getdepartmentedit() {
+      departmentedit({
+        deptId: this.deptId,
+        deptName: this.AddDate.deptName,
+        description: this.AddDate.description,
+        leader: this.AddDate.leader,
+        dicIds: this.AddDate.ssproject.toString()
+      }).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("修改成功!");
+          this.modal1 = false;
+          this.AddDate = {
+            deptName: "",
+            description: "",
+            parentId: "",
+            leader: "",
+            ssproject: ""
+          };
+        } else {
+          this.$Message.error("修改失败!");
+          this.modal1 = false;
+        }
+        console.log(res);
+      });
+    },
+    // 获取当前部门的活动类型
+    getName(deptId) {
+      editfindDicName({ deptId: deptId }).then(res => {
+        let arr = res.data.map(item => {
+          return item.dicId;
+        });
+        this.AddDate.ssproject = arr;
+      });
+    },
+
+    modalOk(name) {
+      this.$refs.AddDate.validate(valid => {
+        if (valid) {
+          this.getdepartmentedit();
+        } else {
+          this.$Message.error("必填项未填!");
+        }
       });
     }
   }

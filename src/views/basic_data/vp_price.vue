@@ -1,13 +1,14 @@
 <!-- 会费管理(会员) -->
 <template>
   <div class="integral">
-    <tophead :navigation1="navigation1" :top="top" @query="query"></tophead>
+      <basicdata :navigation1="navigation1" @query="query"></basicdata>
+
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <Button @click="chackall()" style="border:0px;">
+          <!-- <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
-          </Button>
+          </Button> -->
           <span>已选择{{arr.length}}</span>
           <Button class="table-btn" type="primary" @click="add('formValidate')">{{Newly}}</Button>
           <Modal v-model="modal1" title="新增会费" draggable width="800">
@@ -16,8 +17,7 @@
                 <Input v-model="formValidate.name" />
               </FormItem>
               <FormItem label="金额" prop="amount">
-                 <InputNumber  :min="0" v-model="formValidate.amount"></InputNumber>
-
+                <InputNumber :min="0" v-model="formValidate.amount"></InputNumber>
               </FormItem>
               <FormItem label="会费期限" prop="imonth">
                 <InputNumber :max="99" :min="1" v-model="formValidate.imonth"></InputNumber>
@@ -30,7 +30,7 @@
                 </RadioGroup>
               </FormItem>
               <FormItem label="会费详情">
-                <wangeditor id="exccccc" :labels=editorContent  @change="btn"></wangeditor>
+                <wangeditor id="exccccc" :labels="editorContent" @change="btn"></wangeditor>
                 <!-- <div id="editorContent" style="text-align:left"></div> -->
               </FormItem>
             </Form>
@@ -64,10 +64,12 @@
 </template>
 
 <script>
-import wangeditor from '@/components/wangeditor';
-import tophead from "@/components/tophead";
+import wangeditor from "@/components/wangeditor";
+import basicdata from "@/components/basicdata";
+
 import { formatDate } from "@/request/datatime";
-import { Cost, Costdel, Costmodify, CostAdd, Costbatch } from "@/request/api";
+import { Costlist, Costadd, Costdels } from "@/request/api";
+
 export default {
   name: "editor",
   data() {
@@ -90,7 +92,7 @@ export default {
             message: "输入格式不正确",
             trigger: "blur",
             pattern: /^[a-z0-9]+$/,
-            type: "number",
+            type: "number"
             // transform(value) {
             //   return Number(value);
             // }
@@ -126,7 +128,7 @@ export default {
         },
         {
           title: "会费期限",
-          key: "duesLength",
+          key: "imonth",
           align: "center"
         },
         {
@@ -142,10 +144,7 @@ export default {
         {
           title: "创建时间",
           key: "createAt",
-          align: "center",
-          render: (h, params) => {
-            return h("div", [h("p", formatDate(params.row.createAt))]);
-          }
+          align: "center"
         },
         {
           title: "有效状态",
@@ -155,12 +154,19 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.status == 1
+                  value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {
                     console.log(e);
-                    this.Effective(params.row.duesId, e);
+                    this.duesId=params.row.duesId
+                    if(e){
+                      this.validFlags=1
+                      this.getCostadd(2)
+                    }else{
+                      this.validFlags=0
+                      this.getCostadd(2)
+                    }
                   }
                 }
               })
@@ -183,7 +189,8 @@ export default {
                   on: {
                     click: () => {
                       this.modal1 = true;
-                      this.edit(params.row.duesId);
+                      this.duesId=params.row.duesId
+                      this.getCostdels()
                     }
                   }
                 },
@@ -203,44 +210,119 @@ export default {
       size: 10,
       pageSize: 10,
       dataCount: 0,
-      totalNum: "",
+
       name: "",
       createTimeStamp: "",
       datas: "",
       status: false,
       statues: "",
-      duesId: "",
+      duesId: '',
       arr: [],
-      top: [
-        { name: "名称", type: "input", value: "" },
-        {
-          name: "有效状态",
-          type: "select",
-          list: [
-            { dataValue: "全部", dataKey: "" },
-            { dataValue: "有效", dataKey: "1" },
-            { dataValue: "无效", dataKey: "0" }
-          ],
-          value: ""
-        },
-        { name: "时间", type: "date", value: "" }
-      ],
-      startAt:'',
+
+      startAt: "",
       endAt: "",
-      editorContent:''
+      editorContent: "",
+      name: "",
+      validFlag: "",
+      names: "",
+      amount: "",
+      detail: "",
+      list: "",
+      validFlags:'',
+
     };
   },
-  components: { tophead ,wangeditor},
+  components: { basicdata, wangeditor },
 
   computed: {},
 
   created() {},
 
   mounted() {
-
-    this.getCost();
+    this.getCostlist();
   },
   methods: {
+    //分页
+    getCostlist() {
+      let params = {
+        page: {
+          page: this.page,
+          size: this.size
+        },
+        name: this.name,
+        validFlag: this.validFlag,
+        startAt: this.startAt,
+        endAt: this.endAt
+      };
+      this.params = this.util.remove(params);
+      Costlist(this.params).then(res => {
+        if (res.code == 200) {
+          this.data = res.data.list;
+          this.dataCount = res.data.totalSize;
+        }
+        console.log(res);
+      });
+    },
+
+    //增加修改
+    getCostadd(e) {
+      if (e==0) {  //新增
+        this.list = [{
+          duesId: this.duesId,
+          validFlag: this.formValidate.validFlag,
+          name: this.formValidate.name,
+          amount: this.formValidate.amount,
+          imonth:this.formValidate.imonth,
+          detail: this.editorContent,
+          packageFlag:this.formValidate.packageFlag
+        }];
+      }else if(e==1){ //编辑
+        this.list = [{
+          validFlag: this.formValidate.validFlag,
+          name: this.formValidate.name,
+          amount: this.formValidate.amount,
+          imonth:this.formValidate.imonth,
+          detail: this.editorContent,
+          packageFlag:this.formValidate.packageFlag
+        }];
+      }else if(e==2){
+        this.list =[{
+          duesId:this.duesId,
+          validFlag:this.validFlags
+        }]
+      }
+      this.list = this.util.remove(this.list);
+      Costadd({
+        list: this.list
+      }).then(res => {
+        if(res.code==200){
+          if(e==0){
+            this.modal1=false
+            this.$Message.info('添加成功')
+          }else if(e==1){
+            this.modal1=false
+            this.$Message.info('修改成功')
+          }else if(e==2){
+            this.$Message.info('操作成功')
+          }
+          this.getCostlist()
+        }
+
+        console.log(res);
+      });
+    },
+
+    //详情
+    getCostdels() {
+      Costdels({ duesId: this.duesId }).then(res => {
+        if(res.code==200){
+          this.formValidate=res.data
+          this.editorContent=res.data.detail
+        }
+        console.log(res);
+      });
+    },
+
     //取消
     modalCancel() {
       this.modal1 = false;
@@ -249,147 +331,44 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          console.log(name);
-          if (this.duesId) {
-            this.getCostmodify();
-          } else {
-            this.getCostAdd();
+          if(this.duesId==''){
+            this.getCostadd(0)
+          }else{
+            this.getCostadd(1)
           }
         } else {
           this.$Message.error("必填项为空！");
         }
       });
     },
-    //列表page
-    getCost() {
-      if (this.createTimeStamp != "") {
-        this.datas = this.createTimeStamp.getTime();
-        this.endAt = new Date().getTime();
-        if (this.datas > this.endAt) {
-          this.startAt=this.endAt
-          this.endAt=this.datas
-        }else{
-          this.startAt=this.datas
-        }
-      }
 
-      Cost({
-        page: { page: this.page, size: this.size },
-        name: this.name,
-        status: this.statues,
-        startAt: this.startAt,
-        endAt: this.endAt
-      }).then(res => {
-        console.log(res);
-        if (res.code == 200) {
-          this.dataCount = res.data.totalSize;
-          this.data = res.data.list;
-          this.$refs.selection.selectAll(false);
-        } else {
-          this.$Message.error(res.msg);
-        }
-      }).catch(res=>{
-        console.log(res)
-      })
-    },
-    // 会费详情
-    getCostdel() {
-      Costdel({
-        duesId: this.duesId
-      }).then(res => {
-        if (res.code == 200) {
-          let lists = res.data;
-          (this.formValidate.name = lists.name),
-            (this.editorContent = lists.detail),
-            (this.formValidate.packageFlag = lists.packageFlag),
-            (this.formValidate.imonth = Number(lists.imonth)),
-            (this.formValidate.amount = Number(lists.amount));
-
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res);
-      });
-    },
-
-    // 修改会费
-    getCostmodify() {
-      Costmodify({
-        duesId: this.duesId,
-        name: this.formValidate.name,
-        detail: this.editorContent,
-        packageFlag: this.formValidate.packageFlag,
-        imonth: this.formValidate.imonth,
-        amount: this.formValidate.amount
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("提交成功!");
-
-
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res);
-      });
-    },
-
-    // 添加会费
-    getCostAdd() {
-      CostAdd({
-        name: this.formValidate.name,
-        detail: this.editorContent,
-        packageFlag: this.formValidate.packageFlag,
-        imonth: this.formValidate.imonth,
-        amount: this.formValidate.amount
-      }).then(res => {
-        if (res.code == 200) {
-          this.getCost();
-          this.$Message.success(res.data.msg);
-          this.modal1 = false;
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res, 11);
-      });
-    },
-
-    // 批量操作会费
-    getCostbatch() {
-      Costbatch({
-        duesIds: this.duesId,
-        oprType: this.oprType
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("操作成功");
-        }
-        console.log(res);
-      });
-    },
     //富文本
-    btn(e){
-      this.editorContent=e
+    btn(e) {
+      this.editorContent = e;
     },
 
     //查询
     query(e) {
-      this.page=1
-      this.name = e[0].value;
-      this.createTimeStamp = e[2].value;
-      this.statues = e[1].value;
-      this.getCost();
+      this.page = 1;
+       this.statues = e.validFlag;
+      this.name = e.dicName;
+      this.startAt = e.createTimestamp[0];
+      this.endAt = e.createTimestamp[1];
+
+      this.getCostlist();
     },
 
     //分页功能
     changepages(index) {
       this.page = index;
-      this.getCost();
+      this.getCostlist();
     },
-    //全选按钮
-    chackall() {
-      console.log(this.status);
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
-    },
+    // //全选按钮
+    // chackall() {
+    //   console.log(this.status);
+    //   this.status = !this.status;
+    //   this.$refs.selection.selectAll(this.status);
+    // },
     //选择内容
     handleSelectionChange(val) {
       this.arr = val;
@@ -406,21 +385,11 @@ export default {
     //编辑
     edit(e) {
       this.duesId = e;
-      this.getCostdel();
     },
-    //有效切换
-    Effective(stat, e) {
-      this.duesId = stat;
-      if (e == true) {
-        this.oprType = 2;
-        this.getCostbatch();
-      } else {
-        this.oprType = 3;
-        this.getCostbatch();
-      }
-    },
+    //新增
     add(name) {
-      this.editorContent=''
+      this.duesId=''
+      this.editorContent = "";
       this.$refs[name].resetFields();
       this.modal1 = true;
     }

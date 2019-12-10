@@ -91,9 +91,38 @@
             <Button shape="circle" icon="md-close" style="margin-top: 0.5rem;"></Button>
           </div>
           <div class="middle">
-            <Upload :action=orgimg :on-success="handleSuccess">
+            <div class="start-wap">
+                <div
+                  class="upload"
+                  v-if="formValidate.texturl == null"
+                  @click="()=>{ this.$refs.files.click()}"
+                >
+                  <div class="file">
+                    <input
+                      style=" display:none;"
+                      type="file"
+                      accept=".txt,.zip,.doc,.ppt,.xls,.pdf,.docx,.xlsx"
+                      ref="filess"
+                      @change="uploadFiles()"
+                      multiple
+                    />
+                    <Button icon="ios-cloud-upload-outline">上传附件</Button>
+                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  </div>
+                </div>
+
+                <!-- <img :src="formValidate.text" style="height:30px;width:100px;" /> -->
+                <Icon
+                  type="ios-trash"
+                  v-if="formValidate.texturl!= null"
+                  class="cancel"
+                  :size="26"
+                  @click="cancelImg()"
+                />
+              </div>
+            <!-- <Upload :action="orgimg" :on-success="handleSuccess">
               <Button icon="ios-cloud-upload-outline">添加附件</Button>
-            </Upload>
+            </Upload> -->
           </div>
         </div>
       </div>
@@ -110,9 +139,9 @@
   </div>
 </template>
 <script>
-import Selsect from '@/components/selsect'
+import Selsect from "@/components/selsect";
 import { upload } from "../../request/http";
-import {orgimg} from '@/request/http'
+import { orgimg } from "@/request/http";
 import {
   orgtype,
   orgadd,
@@ -159,7 +188,7 @@ export default {
       list: [],
       ownerUserId: "",
       value: "",
-      provinceList:[],
+      provinceList: [],
       cityList: [],
       districtList: [],
       name: null,
@@ -182,7 +211,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.list = res.data;
-          this.orgimg=orgimg
+          this.orgimg = orgimg;
         }
         console.log(res);
       });
@@ -214,10 +243,11 @@ export default {
       });
     },
     //省市区
-    selbtn(e){
-      this.formValidate.provinceId=e[0];
-      this.cityId=e[1];
-      this.districtId=e[2];
+    selbtn(e) {
+      this.formValidate.provinceId = e[0];
+      this.cityId = e[1];
+      this.districtId = e[2];
+      console.log(e);
     },
 
     //图片上传
@@ -264,18 +294,33 @@ export default {
 
     //附件上传
     handleSuccess(res, file) {
-      this.file=res.data
+      this.file = res.data;
+      console.log(res, file);
     },
-
+     //附件上传
+    uploadFiles() {
+      let file = this.$refs.filess.file[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.formValidate.texturl = e.target.result;
+          this.formValidate.text = res.data;
+          console.log(this.formValidate.texturl,this.formValidate.text)
+        };
+      });
+    },
   },
   mounted() {
     if (this.$route.query.sysId == "1") {
-
       this.navigation1.head = "新建组织(会员)";
       this.getorgtype();
     } else if (this.$route.query.sysId == "2") {
-
       this.navigation1.head = "新建组织(志愿者)";
+      //  this.getorgtype();
       this.list = [{ dataKey: 8, dataValue: "志愿者团队" }];
       this.orgTypes = 8;
     }

@@ -333,10 +333,15 @@ export default {
                         {
                           nativeOn: {
                             click: name => {
-                              this.$router.push({
-                                name: "summarize",
-                                query: { acitvityId: params.row.acitvityId }
-                              });
+                              let status = this.statelist[Number(params.row.statusText)-1].name
+                              if(status=="已结束"){
+                                this.$router.push({
+                                  name: "summarize",
+                                  query: { acitvityId: params.row.acitvityId,activityName:params.row.activityName }
+                                });
+                              }else{
+                                this.$Message.warning("只有已结束的活动才可进行活动总结");
+                              }
                             }
                           }
                         },
@@ -620,7 +625,6 @@ export default {
             this.getactiveManager()
           this.$Message.info('下架成功')
         }else{
-
           this.$Message.error(res.msg)
         }
         console.log(res);

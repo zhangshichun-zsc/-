@@ -88,9 +88,12 @@ export default {
         },
         {
           title: "相关",
-          key: "agFile",
+          key: "nameA",
           width: "100px",
           align: "center",
+           render: (h, params) => {
+            return h("div",params.row.nameA);
+          }
         },
         {
           title: "操作",
@@ -140,7 +143,6 @@ export default {
       page: 1, //每页显示多少数据
       size: 10, //数据条数
       dataCount: 0,
-      pageSize: 10,
       agreementId:'',
       sysType:1,
       agreementObject:'',
@@ -163,7 +165,9 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
+
+
     };
   },
 
@@ -195,7 +199,6 @@ export default {
           this.data=res.data.list
           this.dataCount = res.data.totalSize;
         }
-
       });
     },
     //删除协议

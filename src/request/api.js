@@ -146,7 +146,9 @@ export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p)
 
 export const Agreementdel = p => post('/agreement-manage/del-agreement', p) //删除协议
 
-export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
+export const Agreementadd = p => posts('/agreement-manage/updateAgreeMent', p) //添加协议
+
+// export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
 
 export const AgreementList = p => get('/agreement-manage/get-agreement-type-list', p) //获取协议类型列表
 
@@ -171,6 +173,12 @@ export const projectsetlist = p => posts('/volunteer-manager/queryCoActCategoryL
 export const projectsetadd = p => posts('/volunteer-manager/updateCoActCategory', p) //项目管理-新增
 
 export const budgetlist = p => get('/volunteer-manager/queryOrgListForCoActCategory', p) //项目管理-预算来源
+
+export const Costlist = p => posts('/dues/queryMemberVipManagement', p) //会费管理-预算来源
+
+export const Costadd = p => posts('/dues/updateCoDueData', p) //会费管理-新增
+
+export const Costdels = p => get('/dues/queryDuesDetail', p) //项目管理-详情
 
 
 
@@ -301,6 +309,9 @@ export const optTime = p => posts('/user-list/opt-vip-time', p) //修改vip道�
 
 
 export const userListMsg = p => posts('/user-list/user/inner/msg', p) //用户列表 站内下信
+
+
+export const userEnable = p => posts('/user-list/account/enable/update', p) // 用户列表的启用and禁用
 
 
 
@@ -465,6 +476,8 @@ export const departaddDeptUser = p => posts('/web/dept/addDeptUser', p) //部门
 
 export const findRoleMenu = p => get('/sysRole/findRoleMenu', p) //部门管理--部门添加
 
+export const editfindDicName = p => get('/web/dept/editfindDicName', p) // 获取当前部门的 活动分类
+
 
 
 
@@ -497,7 +510,10 @@ export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除�
 
 
 //权限设置
-export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--权限设置
+export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--
+
+
+export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称 
 
 
 
@@ -534,6 +550,8 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 
 //立项前置信息查询
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
+export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
+export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
