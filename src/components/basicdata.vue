@@ -94,7 +94,6 @@ export default {
     handleChange(e) {
       let start = e[0];
       let end = e[1];
-      this.time = e[0] + "-" + e[1];
       if (start && end) {
         if (start === end) {
           start = start + " 00:00:00";

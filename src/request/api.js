@@ -205,6 +205,10 @@ export const integralrule = p => get('/score/get-score-rule-list', p) //-积分�
 
 export const OffSubmission = p => posts('/score/rule/set', p) //-积分管理--提交
 
+export const integralnum = p => get('/score/queryScoreRuleByTypeFlag', p) //-查询积分数值
+
+export const integralset = p => posts('/score/updateScoreRule', p) //-设置积分数值
+
 
 export const Integralaudit = p => post('/score/score-audit', p) //-积分管理--审核积分
 
@@ -513,7 +517,7 @@ export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除�
 export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--
 
 
-export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称 
+export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称
 
 
 
