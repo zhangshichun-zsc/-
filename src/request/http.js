@@ -36,7 +36,7 @@ axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
 axios.defaults.timeout = 100000;
 
 // post请求头
-axios.defaults.headers.post["Content-Type"] ="application/x-www-form-urlencoded;charset=UTF-8";
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
