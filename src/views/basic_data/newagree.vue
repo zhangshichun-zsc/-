@@ -337,18 +337,18 @@ export default {
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      console.log(file);
         this.formInline.nameA= file.name;
       const dataForm = new FormData();
       dataForm.append("file", file);
+      console.log(dataForm)
       upload(dataForm).then(res => {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = e => {
-          // this.texturl = e.target.result;
-          // this.formInline.name = res.data;
-          this.formInline.agPicA=file.name;
-          this.formInline.agPicA=res.data
+          this.texturl = e.target.result;
+          this.formInline.name = res.data;
+          // this.formInline.agPicA=file.name;
+          // this.formInline.agPicA=res.data
         };
       });
     },

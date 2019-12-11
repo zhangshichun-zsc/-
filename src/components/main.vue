@@ -460,7 +460,7 @@ export default {
     width: 240px !important;
     min-width: 240px !important;
     padding-top: 82px;
-    
+
   }
 
 //  当宽度界限 lg: '992px',xl: '1200px', xxl: '1600'
@@ -473,7 +473,7 @@ export default {
     width: 240px !important;
     min-width: 240px !important;
     padding-top: 72px !important;
-    
+
   }
 }
 
