@@ -5,7 +5,6 @@
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-between integral-top">
         <div>
-          <Icon type="ios-search-outline" />
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
@@ -19,7 +18,6 @@
               <a class="sai">启用筛选</a>
             </span>
           </div>
-          <Button @click="query">查询结果</Button>
         </div>
       </div>
       <div class="flex-center-start integral-body" v-if="Retract == true">
@@ -36,7 +34,7 @@
           <span>有效状态:</span>
           <Select
             v-model="search.validFlag"
-            style="width: 250px;margin-left:20px"
+            style="width: 160px;margin-left:20px"
           >
             <Option
               v-for="item in typelist"
@@ -47,8 +45,11 @@
           </Select>
         </div>
         <div class="flex-center-start">
-          <span style="margin-right:20px">创建时间</span>
+          <span style="margin-right:20px">创建时间:</span>
            <DatePicker type="daterange" format="yyyy/MM/dd"  @on-change="handleChange" v-model="search.createTimestamp" confirm placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+        </div>
+         <div class="flex-center-start">
+           <Button class="search" @click="query">查询结果</Button>
         </div>
       </div>
     </div>
@@ -121,12 +122,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-header {
-  border: 1px solid #eee;
+
 }
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
+}
+.search{
+  width: 110px;
+  height: 32px;
+  background: #FF565A;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 16px !important;
+  color: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;

@@ -214,9 +214,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-table {
-  margin-top: 30px;
-}
+
 .table-header {
   padding: 5px 20px;
   background: rgb(228, 228, 228);

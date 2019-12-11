@@ -21,17 +21,17 @@
             </div>
           </div>
         </div>
-        <Form ref="formInline" :model="formInline" inline class="forms" v-if="Retract==true" :label-width='60'>
-          <FormItem label="组织名称:" >
+        <Form ref="formInline" :model="formInline" inline class="forms" v-if="Retract==true" >
+          <FormItem label="组织名称:" :label-width="80">
             <Input v-model="orgName" placeholder="组织名称" style="width: 120px" />
           </FormItem>
-          <FormItem label="组织地址:">
+          <FormItem label="组织地址:" :label-width="80">
             <Input v-model="address" placeholder="组织地址" style="width: 120px" />
           </FormItem>
-          <FormItem label="负责人:" >
+          <FormItem label="负责人:" :label-width="80">
             <Input v-model="ownerUserName" placeholder="请选择负责人" style="width: 120px" />
           </FormItem>
-          <FormItem label="分类:"  class="types" v-if="this.navigation1.id==100 ">
+          <FormItem label="分类:"  class="types" v-if="this.navigation1.id==100 " :label-width="60">
             <Select v-model="orgType" style="width:120px" :transfer="true">
               <Option
                 v-for="item in typelist"
@@ -41,7 +41,7 @@
             </Select>
           </FormItem>
           <ButtonGroup>
-            <Button @click="query" class="searchred">
+            <Button @click="query" class="search">
               <Icon type="ios-search" />查询结果
             </Button>
           </ButtonGroup>
@@ -526,13 +526,5 @@ body {
 .sai {
   color: black;
 }
-.searchred {
-  width: 110px;
-  height: 32px !important;
-  background-color: #ff565a;
-  text-align: center;
-  line-height: 16px !important;
-  color: white;
-  border-radius: 15px;
-}
+
 </style>

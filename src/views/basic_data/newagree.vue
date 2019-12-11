@@ -12,10 +12,10 @@
     <div class="integral-table"></div>
     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
       <FormItem label="甲方" prop="partA">
-        <Input v-model="formInline.partA" placeholder="广告名称" style="width:300px"></Input>
+        <Input v-model="formInline.partA" placeholder="广告名称" style="width:300px" />
       </FormItem>
       <FormItem label="乙方" prop="partB">
-        <Input v-model="formInline.partB" placeholder="广告名称" style="width:300px"></Input>
+        <Input v-model="formInline.partB" placeholder="广告名称" style="width:300px" />
       </FormItem>
       <FormItem label="协议分类" prop="typeDicId">
         <Select v-model="formInline.typeDicId" placeholder="Select your city" style="width:300px">
@@ -33,68 +33,41 @@
       </FormItem>
 
       <FormItem label="协议时间" prop="agTime">
-        <!-- <DatePicker v-model="formInline.agTime" format="yyyy/MM/dd" type="date" style="width: 200px" @on-change="addForm.Birthday=$event"></DatePicker> -->
-           <DatePicker type="date" format="yyyy-MM-dd"  @on-change="handleChange"  v-model="formInline.agTime"  style="width: 200px"></DatePicker>
-
-        <!-- <FormItem prop="endAt">
-          <DatePicker
-            icon="ios-clock-outline"
-            type="date"
-            placeholder="请选择时间"
-            v-model="formInline.agTime"
-            format="yyyy/MM/dd"
-          ></DatePicker>
-        </FormItem> -->
+        <DatePicker
+          type="date"
+          v-model="formInline.agTime"
+          format="yyyy-MM-dd"
+          @on-change="handleChange"
+          placeholder="Select date"
+          style="width: 200px"
+        ></DatePicker>
       </FormItem>
       <FormItem label="广告附件" prop="agFile">
-        <p>{{Enclosure}}</p>
-        <!-- <Upload
-          :action=orgimg
-          :before-upload="handleUpload"
-          :show-upload-list="false"
-        >
-          <Button icon="ios-cloud-upload-outline">上传附件</Button>
-        </Upload>-->
-        <div class="start-wap">
-          <!-- v-if="imgUrl == null" -->
-          <div
-            class="upload"
-            @click="
-                  () => {
-                    this.$refs.files.click();
-                  }
-                "
-          >
-            <div class="file">
-              <input
-                style="display:none; width:0; hidht:0"
-                type="file"
-                accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                ref="files"
-                @change="uploadFile()"
-                multiple
-              />
-              <!-- <Button icon="ios-cloud-upload-outline">上传头像</Button> -->
-              <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-              <img
-                v-show="this.formInline.agPicA"
-                :src="this.formInline.agPicA || null"
-                style="height:104px;width:104px;"
-              />
-              <span>{{formInline.nameA}}</span>
-              <div v-show="!this.formInline.agPicA" class="file-text">
-                <img src="@/assets/images/fix-img.png" />
-              </div>
-              <Icon
-                type="ios-trash"
-                v-show="this.formInline.agPicA !=null"
-                class="cancel"
-                :size="26"
-                @click.stop.prevent="cancelImg()"
-              />
-            </div>
+         <div class="start-wap">
+                <div class="upload" v-if="texturl == null">
+                  <div class="file" @click="()=>{ this.$refs.files.click()}">
+                    <input
+                      type="file"
+                      style="display:none;"
+                      accept=".txt,.zip,.doc,.ppt,.xls,.pdf,.docx,.xlsx"
+                      ref="files"
+                      @change="uploadFile()"
+                      multiple
+                    />
+                    <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+                  </div>
+                </div>
+                <span v-else>{{formInline.nameA}}</span>
+                <!-- <img class="imgs" v-else :src="texturl" style="width:100px;height:100px"/> -->
+                <Icon
+                  type="ios-trash"
+                  v-if="texturl !== null"
+                  class="cancel"
+                  size='32'
+                  @click="cancelImg()"
+                />
+
           </div>
-        </div>
       </FormItem>
     </Form>
     <br />
@@ -130,13 +103,13 @@ export default {
         categoryId: "",
         agFile: null,
         name: null,
-         agPicA: "",
-      agPicB: "",
-      agPicC: "",
+        agPicA: "",
+        agPicB: "",
+        agPicC: "",
 
-      nameA: "",
-      nameB: "",
-      nameC: "",
+        nameA: "",
+        nameB: "",
+        nameC: ""
       },
       ruleInline: {
         partA: [
@@ -177,10 +150,10 @@ export default {
       orgimg: "",
       Enclosure: "",
 
-      texturl: "",
+      texturl: null,
 
-
-      params:''
+      params: "",
+      Times: ""
     };
   },
 
@@ -223,7 +196,6 @@ export default {
       AgreementList({}).then(res => {
         console.log(res);
         if (res.code == 200) {
-
           this.locations = res.data;
         }
       });
@@ -243,7 +215,6 @@ export default {
 
     //新增协议
     getAgreementadd() {
-
       let params = {
         sysId: this.sysId,
         // name: this.name,
@@ -254,8 +225,7 @@ export default {
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-
-        agTime: this.formInline.agTime,
+        agTime: this.Times,
 
         agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
@@ -263,9 +233,9 @@ export default {
 
         nameA: this.formInline.nameA,
         nameB: this.formInline.nameB,
-        nameC: this.formInline.nameC,
-      }
-       this.params = this.util.remove(params);
+        nameC: this.formInline.nameC
+      };
+      this.params = this.util.remove(params);
       Agreementadd(params).then(res => {
         if (res.code == 200) {
           this.$Message.success("添加成功!");
@@ -300,10 +270,10 @@ export default {
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-        agTime: this.formInline.agTime,
+        agTime: this.Times,
         // agTime: this.data1,
         // agFile: this.formInline.agFile,
-          agPicA: this.formInline.agPicA,
+        agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
         agPicC: this.formInline.agPicC,
 
@@ -311,9 +281,9 @@ export default {
         nameB: this.formInline.nameB,
         nameC: this.formInline.nameC,
         name: this.formInline.name
-      }
-       this.params = this.util.remove(params);
-      Agreementadd( this.params).then(res => {
+      };
+      this.params = this.util.remove(params);
+      Agreementadd(this.params).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功!");
           this.$router.push({
@@ -325,30 +295,27 @@ export default {
         console.log(res);
       });
     },
-    handleChange(e){
-      let datas =e
-      datas = datas + " 00:00:00";
-      this.formInline.agTime=datas
-      console.log(e)
+    handleChange(e) {
+      if (e != "") {
+        let datas = e;
+        datas = datas + " 00:00:00";
+        this.Times = datas;
+        console.log(e, datas, this.Times);
+      }
     },
-
-
 
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-        this.formInline.nameA= file.name;
+      this.formInline.nameA = file.name;
       const dataForm = new FormData();
       dataForm.append("file", file);
-      console.log(dataForm)
       upload(dataForm).then(res => {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = e => {
           this.texturl = e.target.result;
-          this.formInline.name = res.data;
-          // this.formInline.agPicA=file.name;
-          // this.formInline.agPicA=res.data
+          this.formInline.agPicA=res.data
         };
       });
     },
@@ -358,12 +325,14 @@ export default {
         if (res.code == 200) {
           this.$Message.success("删除成功");
           this.formInline.agPicA = null;
-          this.formInline.name = null;
+          this.formInline.nameA = null;
+          this.texturl=null
+
         } else {
           this.$Message.success(res.msg);
         }
       });
-    },
+    }
   }
 };
 </script>
