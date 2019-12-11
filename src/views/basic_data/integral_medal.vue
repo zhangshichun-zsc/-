@@ -293,9 +293,7 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.integral-table {
-  margin-top: 30px;
-}
+
 .table-header {
   padding: 5px 20px;
   background: rgb(228, 228, 228);

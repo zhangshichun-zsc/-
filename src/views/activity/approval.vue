@@ -197,11 +197,19 @@
                     <Input v-model="batch.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
                   </p>
                   <p v-if='addLeader'>
-                    <ul>
+                    <!-- <ul>
                       <li v-for="item in leaderList" @click="getLeader(item)">
                         {{item.name}}
                       </li>
-                    </ul>
+                    </ul> -->
+                    <Select style="width:300px" placeholder="请选择">
+                      <Option
+                        v-for="(item,idx) in leaderList"
+                        :value="item.name"
+                        :key="idx"
+                        @click.native="getLeader(item)"
+                      >{{ item.name }} {{item.tel}}</Option>
+                    </Select>
                   </p>
                 </li>
                 <li>
@@ -216,11 +224,19 @@
                     <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
                     <span @click="deleteWorker(index)">删除</span>
                     <p v-if='addWorker'>
-                      <ul>
+                      <!-- <ul>
                         <li v-for="i in workerList" @click="getWorker(i)">
                           {{i.name}}
                         </li>
-                      </ul>
+                      </ul> -->
+                      <Select style="width:300px" placeholder="请选择">
+                        <Option
+                          v-for="(i,idx) in workerList"
+                          :value="i.name"
+                          :key="idx"
+                          @click.native="getWorker(i)"
+                        >{{ i.name }} {{i.tel}}</Option>
+                      </Select>
                     </p>
                   </p>
                 </li>
@@ -291,7 +307,7 @@
               <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
             </RadioGroup>
             <i-col span="12" v-if='releaseTimeSelf'>
-              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+              <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
             </i-col>
           </div>
           <div class="button-food">
@@ -808,6 +824,7 @@ export default {
       console.log(val)
       this.batch.ownerUserName = val.name
       this.batch.ownerUserTel = val.tel
+      this.batch.ownerUserId = val.userId
       this.addLeader = false
     },
     //工作人员
@@ -815,6 +832,7 @@ export default {
       console.log(val)
       this.batch.workerIdList[this.workerIndex].ownerUserName = val.name
       this.batch.workerIdList[this.workerIndex].ownerUserTel = val.tel
+      this.batch.workerIdList[this.workerIndex].ownerUserId = val.userId
       this.addWorker = false
     },
     //添加工作人员
@@ -1048,7 +1066,8 @@ export default {
     getMap(e){
       this.batch.actXx = e.xx
       this.batch.actYy = e.yy
-      this.batch.actAddress = e.address
+      // this.batch.actAddress = e.address
+      this.$set(this.batch,'actAddress',e.address)
       console.log(e)
     },
   }

@@ -315,10 +315,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-table {
-  margin-top: 30px;
+  margin-top: 0px;
 }
 .table-header {
-  padding: 5px 20px;
+  padding: 5px 0px;
   background: rgb(228, 228, 228);
   border: 1px solid #eee;
 }
@@ -327,7 +327,7 @@ export default {
 }
 .integral-table .pages {
   padding: 5px 20px;
-  margin-top: 50px;
+
   background: #fff;
 }
 .pages {

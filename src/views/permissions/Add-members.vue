@@ -42,7 +42,7 @@
             <FormItem label="所属部门:" prop="deplNames">
               <Select
                 style="width: 10rem"
-                v-model="AddDate.deptId"
+                v-model="AddDate.deplNames"
                 placeholder="请选择所属部门"
                 :disabled="this.$route.query.states == 3"
               >
@@ -151,14 +151,13 @@ export default {
         tel: [{ required: true, validator: validatePhone, trigger: "blur" }],
 
         email: [
-          { required: true, message: "邮箱地址不能为空", trigger: "blur" },
           { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
         ],
         deplNames: [
           {
             required: true,
             message: "请选择部门类型",
-            trigger: "blur",
+            trigger: "change",
             type: "number"
           }
         ],
@@ -166,7 +165,7 @@ export default {
           {
             required: true,
             message: "请选择角色类型",
-            trigger: "blur",
+            trigger: "change",
             type: "array"
           }
         ],
@@ -319,6 +318,7 @@ export default {
 
     //提交
     handleReset(name) {
+      console.log(this.AddDate.deptId);
       this.$refs[name].validate(valid => {
         if (valid) {
           if (this.$route.query.states == 2) {

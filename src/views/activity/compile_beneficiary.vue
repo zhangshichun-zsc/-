@@ -1,6 +1,7 @@
 <!--编辑招募报名项-受益方（会员）-->
 <template>
   <div>
+    <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="compole">
       <p class="compole-head">编辑招募报名项</p>
@@ -38,10 +39,10 @@
           </li>
           <li>
             <span>模式</span>
-            <Checkbox-group v-model="oneRole.zmType">
-              <Checkbox label="1">先到先得</Checkbox>
-              <Checkbox label="2">预约型</Checkbox>
-            </Checkbox-group>
+            <RadioGroup v-model="oneRole.zmType">
+              <Radio label="1" >先到先得</Radio>
+              <Radio label="2">预约型</Radio>
+            </RadioGroup>
           </li>
           <li v-if="oneRole.zmType==1">
             <ul>
@@ -309,8 +310,7 @@
               </li>
               <li>
                 <span>集合地址</span>
-                <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-                </iframe>
+                <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
               </li>
               <li>
                 <span>优先限制</span>
@@ -697,8 +697,7 @@
               </li>
               <li>
                 <span>集合地址</span>
-                <iframe id="mapPage" width="100%" height="500px" frameborder=0 src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">
-                </iframe>
+                <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
               </li>
               <li>
                 <span>优先限制</span>
@@ -943,6 +942,8 @@
 <script>
 import { batchItem,signType, signPost,signLimits,signItems,firstList } from "../../request/api";
 import selects from'_c/selsect'
+import adress from'_c/map'
+import { upload }from '@/request/http'
 
 export default {
   props:['oneRole'],
@@ -955,6 +956,7 @@ export default {
       //   itemList:[],
       //   choiceRuleList:[]
       // },
+      adr:false,
       signTypeList: [],
       signPostList: [],
       navigation1: {
@@ -1015,7 +1017,7 @@ export default {
     // editor1.create()
     // editor2.create()
   },
-  components: {selects},
+  components: {selects,adress},
 
   computed: {},
 
@@ -1075,8 +1077,9 @@ export default {
     },
     //招募岗位
     getPost(val) {
+      console.log(val)
       this.oneRole.positionName = val.name;
-      this.oneRole.userPosition = val.roleId;
+      this.oneRole.userPosition = val.dicId;
     },
     addItem(e){
       this.oneRole.fdList.push(e)
@@ -1109,16 +1112,22 @@ export default {
     //获取日期
     getDate(e) {
       this.oneRole.enrollStarttime = e[0];
-      this.oneRole.enrollStarttime = e[1];
+      this.oneRole.enrollEndtime = e[1];
     },
     //获取日期
     getDatea(e) {
-      this.oneRole.outrollEndtime = e[0];
+      this.oneRole.outrollStarttime = e[0];
       this.oneRole.outrollEndtime = e[1];
     },
     //获取日期
     getDates(e) {
       this.oneRole.setTime = e
+    },
+    getMap(e){
+      this.oneRole.xx = e.xx
+      this.oneRole.yy = e.yy
+      this.$set(this.oneRole,'setAddr',e.address)
+      console.log(e)
     },
     getLimits(e){
       console.log(e)

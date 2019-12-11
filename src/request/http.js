@@ -19,7 +19,7 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛 6
   ],
-  API_INDEX: 3
+  API_INDEX: 4
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
@@ -86,7 +86,7 @@ axios.interceptors.response.use(
         });
     } else if (response.data.code == 1003) {
 
-    }else{
+    } else {
       // this.$Message.error(response.data.msg)
     }
     return response;
@@ -95,26 +95,26 @@ axios.interceptors.response.use(
 );
 
 // error => {
-  //   console.log(error)
-  //   if (error.response) {
-  //     switch (error.response.status) {
-  //       case 106:
-  //         console.log(11)
-  //         this.$router.push({
-  //           name: 'login'
-  //         })
-  //         // 401 清除token信息并跳转到登录页面
-  //         localStorage.clear();
-  //         // 只有在当前路由不是登录页面才跳转
-  //         router.currentRoute.path != '/login' &&
-  //           router.replace({
-  //             path: '/login',
-  //             // query: { redirect: router.currentRoute.path },
-  //           });
-  //     }
-  //   }
-  //   return Promise.reject(error.response.data)
-  // },
+//   console.log(error)
+//   if (error.response) {
+//     switch (error.response.status) {
+//       case 106:
+//         console.log(11)
+//         this.$router.push({
+//           name: 'login'
+//         })
+//         // 401 清除token信息并跳转到登录页面
+//         localStorage.clear();
+//         // 只有在当前路由不是登录页面才跳转
+//         router.currentRoute.path != '/login' &&
+//           router.replace({
+//             path: '/login',
+//             // query: { redirect: router.currentRoute.path },
+//           });
+//     }
+//   }
+//   return Promise.reject(error.response.data)
+// },
 
 /**
  * get方法，对应get请求

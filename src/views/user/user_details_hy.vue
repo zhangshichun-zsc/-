@@ -7,39 +7,33 @@
       <a href="javascript:;" @click="Log()">登录日志</a>
     </div>
     <div class="content-box">
-      <!-- <Navigation style="background:#fff" :labels="navigation1"></Navigation> -->
       <header class="header">
-        <p>{{ navigation1.head }}</p>
+        <p class="title">{{ navigation1.head }}</p>
+        <div class="userInfo">
+          <div>
+            <img
+              class="img-src"
+              v-if="basicInfo.avatarPath"
+              :src="basicInfo.avatarPath"
+              alt=""
+            />
+            <span class="username"> {{ basicInfo.userName }}</span>
+          </div>
+          <div>
+            <span class="itemizes">分类 </span>
+            <span class="itemize" v-for="item in role">{{ item }}</span>
+            <span class="noitemize" v-if="role.length == 0">暂无分类</span>
+          </div>
+          <div style="flex:2">
+            <span class="itemizes">标签 </span>
+            <span class="itemize" v-for="item in userLabel">{{ item }}</span>
+            <span class="noitemize" v-if="userLabel.length == 0">暂无标签</span>
+          </div>
+        </div>
       </header>
+
       <div class="main">
         <div class="content-top flex-center-start">
-          <div class="bk">
-            <div class="portrait">
-              <img
-                class="img-src"
-                v-if="basicInfo.avatarPath"
-                :src="basicInfo.avatarPath"
-                alt=""
-              />
-              <Avatar v-else icon="ios-person" size="large" />
-              <!-- <p>
-              <span>黄金会员</span>
-              <Icon type="ios-cog-outline" size='30' @click="jump()" />
-            </p> -->
-            </div>
-            <div class="details">
-              <p>
-                <span>分类：</span>
-                <span v-for="item in role">{{ item }}</span>
-              </p>
-            </div>
-            <div class="details">
-              <p>
-                <span>标签：</span>
-                <span v-for="item in userLabel">{{ item }}</span>
-              </p>
-            </div>
-          </div>
           <table>
             <tr>
               <th>姓名</th>
@@ -76,28 +70,28 @@
         <div class="content bk">
           <div class="content-item">
             <div class="item-title">
-              <Icon type="md-bookmark" />
+              <Icon type="md-bookmark" color="#FD585E" />
               <span>统计信息</span>
             </div>
             <Table border :columns="columns1" :data="statisticsInfo"></Table>
           </div>
           <div class="content-item">
             <div class="item-title">
-              <Icon type="md-bookmark" />
+              <Icon type="md-bookmark" color="#FD585E" />
               <span>组织信息</span>
             </div>
             <Table border :columns="columns2" :data="orgRecordList"></Table>
           </div>
           <div class="content-item">
             <div class="item-title">
-              <Icon type="md-bookmark" />
+              <Icon type="md-bookmark" color="#FD585E" />
               <span>收货地址</span>
             </div>
             <Table border :columns="columns3" :data="userAdderes"></Table>
           </div>
           <div class="content-item">
             <div class="item-title">
-              <Icon type="md-bookmark" />
+              <Icon type="md-bookmark" color="#FD585E" />
               <span>活动记录</span>
             </div>
             <Table border :columns="columns4" :data="activityRecord"></Table>
@@ -242,7 +236,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "#FD585E"
                   },
                   on: {
                     click: () => {
@@ -360,12 +354,10 @@ export default {
 
 <style lang="scss" scoped>
 .main {
-  width: 50rem;
   margin: 0 auto;
+  margin-top: 15px;
 }
-.bk {
-  border: 1px solid #e4e4e4;
-}
+
 .portrait {
   padding: 0.5rem;
   display: block;
@@ -395,8 +387,13 @@ export default {
   }
 }
 .content-top {
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 30px;
   table {
     border: 1px solid #e4e4e4;
+    margin: 0 auto;
     td,
     th {
       height: 32px;
@@ -416,11 +413,14 @@ export default {
   }
 }
 .content {
-  margin: 1rem 0;
-  padding: 0.5rem;
+  padding: 30px 0;
 }
 .content-item {
-  margin: 0.5rem;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
 }
 .item-title {
   padding: 0.5rem 0;
@@ -453,11 +453,57 @@ export default {
 }
 .header {
   margin-top: 20px;
-  width: 1560px;
+
   height: 162px;
   background: #ffffff;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
   padding: 22px 30px;
+}
+.userInfo {
+  display: flex;
+  align-items: center;
+  padding: 30px 0;
+  img {
+    vertical-align: middle;
+  }
+  div {
+    flex: 1;
+  }
+}
+.title {
+  font-size: 18px;
+  color: #1b2331;
+  font-weight: 800;
+}
+.username {
+  margin-left: 20px;
+  font-size: 18px;
+  color: #1b2331;
+}
+.itemizes {
+  font-size: 15px;
+  color: #1b2331;
+}
+
+.itemize {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 0 10px;
+  background: #fef4f5;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #fd585e;
+  line-height: 32px;
+}
+.noitemize {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 0 10px;
+  background: #ccc;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #fff;
+  line-height: 32px;
 }
 </style>
