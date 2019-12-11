@@ -445,7 +445,7 @@ export const rolequery = p => get('/sysRole/findAllRole', p) //角色管理--查
 
 export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建角色
 
-export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
+export const roleSetup = p => posts('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
 export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
@@ -608,6 +608,6 @@ export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p
 export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
 export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
-export const getFeedDetail = p => get("/activity-feedback/getDetail",p)
-export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
-export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId",p)
+export const getFeedDetail = p => get("/activity-feedback/getDetail", p)
+export const getTypeFeed = p => get("/activity-feedback/getCategotyList", p)
+export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId", p)

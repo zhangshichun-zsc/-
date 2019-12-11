@@ -10,7 +10,10 @@
               <span>数据列表</span>
             </p>
             <div class="but">
-              <Button @click="AddSP()">添加审批流程</Button>
+              <a href="javascript:;" class="btn" @click="AddSP()"
+                >添加审批流程</a
+              >
+
               <Select
                 v-model="size"
                 style="width:120px"
@@ -212,5 +215,17 @@ body {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+}
+.btn {
+  display: inline-block;
+  width: 110px;
+  height: 32px;
+  line-height: 32px;
+  margin: 0 15px;
+  background: #ff565a;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
 }
 </style>
