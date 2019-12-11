@@ -109,7 +109,7 @@
       </div>
       <div class="pages">
         <Page
-          :total="dataCount"
+          :total="datalistCount"
           show-elevator
           show-total
           size="small"
@@ -125,7 +125,7 @@
 <script>
 import expandRow from "@/components/table-expand.vue";
 import {
-  departmentlist,
+  // departmentlist,
   departmentsub,
   departmentStatu,
   departmentmember,
@@ -471,8 +471,8 @@ export default {
     },
     // 部门列表
     getdepartmentlist() {
-      departmentlist({
-        parentId: 0
+      departmentsub({
+        depId: 0
       }).then(res => {
         if (res.code == 200) {
           this.data1 = res.data;
@@ -518,12 +518,11 @@ export default {
         sort: ""
       }).then(res => {
         if (res.code == 200) {
+          console.log(res.data);
           this.$store.commit("updateList", {
             list: res.data.list,
             count: res.data.totalSize
           });
-
-          // this.$Message.info("查询成功");
         } else {
           this.$Message.error(res.msg);
         }
