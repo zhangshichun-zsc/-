@@ -15,7 +15,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk">确定</Button>
+              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
@@ -52,7 +52,7 @@ export default {
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "志愿者特长不能为空", trigger: "blur" }
+          { required: true, message: "志愿者活动名称不能为空", trigger: "blur" }
         ]
       },
       title: "新增活动分类",
@@ -72,7 +72,7 @@ export default {
         },
         {
           title:'创建人',
-          key:'center'
+          key:'userName'
         },
 
         {
@@ -285,17 +285,20 @@ export default {
       this.modal1 = false;
       this.formValidate.dicName = "";
     },
-    //确定
-    modalOk() {
-      if (this.dicName == "") {
-        this.$Message.error("名称不能为空");
-      } else {
-        if (this.id == 0) {
-          this.getBasicbatch(1);
+
+     //确定
+    modalOk(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          if (this.id == 0) {
+            this.getBasicbatch(1);
+          } else {
+            this.getBasicbatch(0);
+          }
         } else {
-          this.getBasicbatch(0);
+          this.$Message.error("名称不能为空");
         }
-      }
+      });
     },
 
     //弹出框

@@ -205,6 +205,10 @@ export const integralrule = p => get('/score/get-score-rule-list', p) //-积分�
 
 export const OffSubmission = p => posts('/score/rule/set', p) //-积分管理--提交
 
+export const integralnum = p => get('/score/queryScoreRuleByTypeFlag', p) //-查询积分数值
+
+export const integralset = p => posts('/score/updateScoreRule', p) //-设置积分数值
+
 
 export const Integralaudit = p => post('/score/score-audit', p) //-积分管理--审核积分
 
@@ -445,7 +449,7 @@ export const rolequery = p => get('/sysRole/findAllRole', p) //角色管理--查
 
 export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建角色
 
-export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
+export const roleSetup = p => posts('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
 export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
@@ -513,7 +517,7 @@ export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除�
 export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--
 
 
-export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称 
+export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称
 
 
 
@@ -608,5 +612,6 @@ export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p
 export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
 export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
-export const getFeedDetail = p => get("/activity-feedback/getDetail",p)
-export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
+export const getFeedDetail = p => get("/activity-feedback/getDetail", p)
+export const getTypeFeed = p => get("/activity-feedback/getCategotyList", p)
+export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId", p)

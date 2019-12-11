@@ -72,7 +72,7 @@ export default {
         },
         {
           title: "创建人",
-          key: "creater"
+          key: "userName"
         },
         {
           title: "有效状态",

@@ -810,11 +810,12 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "span",
+                "a",
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "#FD585E",
+           
                   },
                   on: {
                     click: () => {
@@ -828,12 +829,13 @@ export default {
                 "查看"
               ),
               h(
-                "span",
+                "a",
                 {
                   style: {
                     marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "green"
+                    marginLeft: "10px",
+                   
+                    color: "#FD585E"
                   },
                   on: {
                     click: () => {

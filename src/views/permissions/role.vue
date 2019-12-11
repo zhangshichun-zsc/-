@@ -12,7 +12,6 @@
             placeholder="姓名"
             v-model="name"
             style="width: 200px"
-            @on-search="querys"
           />
         </p>
         &nbsp;&nbsp;&nbsp;
@@ -27,14 +26,22 @@
             >
           </Select>
         </p>
+
+        <p>
+          <a href="javascript:;" @click="querys" class="btn">查询</a>
+        </p>
       </div>
       <div class="layout">
         <Layout>
-          <Header>
+          <Header style="background:  #fff">
             <Menu mode="horizontal" theme="dark" active-name="1">
-              <div class="layout-logo">角色</div>
-              <div class="btn1">
-                <Button @click="newbtn">新建角色</Button>
+              <div class="header-box">
+                <div>角色</div>
+                <span class="content-btn">{{ role }}</span>
+                <a href="javascript:;" class="btn" @click="newbtn">新建角色</a>
+                <a href="javascript:;" class="btn" @click="function1"
+                  >权限设置</a
+                >
                 <Modal v-model="modal1" title="新建角色">
                   <Form
                     ref="formValidate"
@@ -60,29 +67,26 @@
                       >确定</Button
                     >
                   </div>
+
+                  <div></div>
                 </Modal>
-              </div>
-              <div class="layout-nav">
-                <span>{{ role }}</span>
-              </div>
-              <div class="btn">
-                <Button @click="function1">权限设置</Button>
               </div>
             </Menu>
           </Header>
           <Layout>
-            <Sider hide-trigger :style="{ background: '#008e40' }">
+            <Sider hide-trigger :style="{ background: '#fff', colot: '#000' }">
               <Menu
                 :active-name="`1-${role}`"
                 width="auto"
                 :open-names="['1']"
-                style="background-color: #008e40;color: white;"
+                style="background-color: #fff;"
               >
-                <Submenu name="1">
+                <Submenu name="1" style="color: #000;">
                   <template slot="title">
                     <Icon type="ios-navigate" />融爱融乐
                   </template>
                   <MenuItem
+                    style="color: #000;"
                     :name="`1-${item.sysRoleName}`"
                     v-for="(item, index) in List"
                     :key="index"
@@ -93,11 +97,8 @@
               </Menu>
             </Sider>
             <Layout :style="{ padding: '0 24px 24px' }">
-              <Button
-                :style="{ margin: '24px 0', maxWidth: '100px' }"
-                @click="newadd"
-                >添加人员</Button
-              >
+              <!-- <Button :style="{ margin: '24px 0', maxWidth: '100px' }"></Button> -->
+              <a href="javascript:;" class="btn" @click="newadd">添加人员</a>
               <Content
                 :style="{
                   padding: '24px',
@@ -235,7 +236,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
@@ -613,12 +614,7 @@ body {
   top: 5px;
   left: 10px;
 }
-.btn {
-  float: left;
-  position: relative;
-  top: 5px;
-  left: 60px;
-}
+
 .ivu-menu-vertical .ivu-menu-submenu-title-icon {
   right: 0.2rem !important;
 }
@@ -639,5 +635,34 @@ li {
 .ivu-menu-light.ivu-menu-vertical
   .ivu-menu-item-active:not(.ivu-menu-submenu):after {
   width: 0;
+}
+.header-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.btn {
+  display: inline-block;
+  width: 110px;
+  height: 32px;
+  line-height: 32px;
+
+  border-radius: 15px;
+  font-size: 14px;
+
+  margin: 0 15px;
+  text-align: center;
+  background: #ff565a;
+  color: #fff;
+}
+.content-btn {
+  width: 220px;
+  line-height: 32px;
+  font-size: 14px;
+  margin: 0 15px;
+  text-align: center;
+  color: #ff565a;
+  background: #fef4f5;
+  border-radius: 15px;
 }
 </style>
