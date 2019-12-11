@@ -3,7 +3,6 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <p class="content-head">新增活动立项</p>
       <div class="establish">
         <ul>
           <li>
@@ -11,10 +10,8 @@
             <span>{{list.createUserName}}</span>
           </li>
           <li>
-            <span>选择项目</span>
-            <i-select :model.sync="model1" style="width:200px">
-              <i-option v-for="(item,index) in cityList" :value="item.value" :key="index">{{ item.label }}</i-option>
-            </i-select>
+            <span>项目</span>
+            <span>{{list.categoryName}}</span>
           </li>
           <li>
             <span>活动预算</span>
@@ -22,9 +19,7 @@
           </li>
           <li>
             <span>有效期限</span>
-            <Col span="12">
-            <DatePicker v-model="datas" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
-            </Col>
+            <span>{{list.startTime}}~{{list.endTime}}</span>
           </li>
         </ul>
       </div>
@@ -40,19 +35,15 @@
           </li>
           <li>
             <span>小组归属</span>
-            <i-select :model.sync="model1" style="width:200px">
-              <i-option v-for="(item,index) in cityList" :value="item.value" :key="index">{{ item.label }}</i-option>
-            </i-select>
+            <span>{{list.orgName}}</span>
           </li>
           <li>
             <span>招募类型</span>
-            <Radio :checked.sync="single">{{list.recuitTypeText}}</Radio>
+            <span>{{list.recuitTypeText}}</span>
           </li>
         </ul>
         <div>
-          <Upload action="//jsonplaceholder.typicode.com/posts/">
-            <Button icon="ios-cloud-upload-outline">上传图片</Button>
-          </Upload>
+          <img :src="list.pic" alt="" style="width:190px;heigth:130px">
         </div>
       </div>
       <div class="project-content">
@@ -70,29 +61,17 @@
           </ul>
         </div>
       </div>
-      <div class="cooperation">
-        <ul>
-          <li class="border-no">合作方</li>
-          <li v-for="item in list.actBatchPartners" :key="item.batchPartId">
-            <span>{{item.partName}}</span>
-            <span>详情</span>
-          </li>
-        </ul>
+      <div class="btn">
+        <Button class="table-btn">拒绝</Button>
+        <Button class="table-btn active" @click="adopt">通过</Button>
       </div>
-      <div class="introduce">
-        <p>
-          北京融爱融乐心智障碍者家庭支持中心
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.
-        </p>
-      </div>
-      <div class="btn"><Button class="table-btn">拒绝</Button><Button class="table-btn active" @click="adopt">通过</Button></div>
     </div>
   </div>
 </template>
 
 <script>
 import { formatDate, date1 } from '../../request/datatime'
-import { approvaldet } from '../../request/api'
+import { approvaldet,programApproval } from '../../request/api'
 export default {
   data() {
     return {
@@ -151,6 +130,14 @@ export default {
     //通过
     adopt() {
       console.log(this.datas)
+      programApproval({
+        userId:this.$store.state.userId, 
+        auditId, 
+        type,
+        reason
+      }).then(res=>{
+        console.log(res)
+      })
     }
   }
 }

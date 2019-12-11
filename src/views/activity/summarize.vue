@@ -3,8 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="head">
-      <p>5.12"行走在夏日"游园活动</p>
-      <span>未开始</span>
+      <p>{{activityName}}</p>
     </div>
     <div class="content">
       <div class="summarize">
@@ -57,7 +56,8 @@ export default {
       pics:[], //上传后
       userId:1,
       activityId:1,
-      text:''
+      text:'',
+      activityName:''
     };
   },
 
@@ -66,7 +66,8 @@ export default {
   computed: {},
 
   created() {
-    this.userId = this.$store.state.userId
+    this.userId = this.$store.state.userId,
+    this.activityName = this.$route.query.activityName
   },
 
   methods: {

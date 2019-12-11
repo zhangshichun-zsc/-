@@ -201,7 +201,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "editing",query:{ acitvityId:params.row.acitvityId} });
+                      console.log(params.row.activityId)
+                      this.$router.push({ name: 'volunteer_issue', query: { activityId:params.row.activityId } })
                     }
                   }
                 },
@@ -218,7 +219,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "profile",query:{ acitvityId:params.row.acitvityId} });
+                      this.$router.push({ name: "volunteer_issue",query:{ activityId:params.row.activityId} });
                     }
                   }
                 },

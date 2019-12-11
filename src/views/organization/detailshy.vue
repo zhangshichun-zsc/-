@@ -102,7 +102,7 @@
             <FormItem label="联系人:" prop="orgName">
               <Input v-model="BasicDate.contactUserName" placeholder="自动带出" style="width: 220px" />
             </FormItem>
-            <FormItem label="地址:" prop="city">
+            <FormItem label="地址:" prop="citys">
               <Selsect :arr="[province,city,county,]" @change="selbtn"></Selsect>
             </FormItem>
             <FormItem label="联系方式:" prop="orgName">
@@ -313,7 +313,7 @@ export default {
             trigger: "blur"
           }
         ],
-        city: [
+        citys: [
           {
             required: true,
             message: "请选择地址",

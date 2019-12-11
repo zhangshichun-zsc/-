@@ -24,7 +24,46 @@
               </Select>
             </FormItem>
             <FormItem label="分类图标" prop="imgs">
-              <img :src="formItem.imgs" style="width:100px;" />
+              <div class="start-wap">
+              <!-- v-if="formItem.imgs == null" -->
+              <div
+                class="upload"
+                @click="
+                  () => {
+                    this.$refs.files.click();
+                  }
+                "
+              >
+                <div class="file">
+                  <input
+                    style="display:none; width:0; hidht:0"
+                    type="file"
+                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                    ref="files"
+                    @change="uploadFile()"
+                    multiple
+                  />
+                  <!-- <Button icon="ios-cloud-upload-outline">上传头像</Button> -->
+                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  <img
+                    v-show="formItem.imgs"
+                    :src="formItem.imgs || null"
+                    style="height:104px;width:104px;"
+                  />
+                  <div v-show="!formItem.imgs" class="file-text">
+                    <img src="@/assets/images/fix-img.png" />
+                  </div>
+                  <Icon
+                    type="ios-trash"
+                    v-show="formItem.imgs != null"
+                    class="cancel"
+                    :size="26"
+                    @click.stop="cancelImg()"
+                  />
+                </div>
+              </div>
+            </div>
+              <!-- <img :src="formItem.imgs" style="width:100px;" />
               <Upload
                 :action="orgimg"
                 :format="['jpg','jpeg','png']"
@@ -33,7 +72,7 @@
               >
                 <Button icon="ios-cloud-upload-outline">选择上传图片</Button>
                 <p style="color: #666666;font-size: 14px">只能上传jpg/png格式文件，文件不能超过50kb</p>
-              </Upload>
+              </Upload> -->
             </FormItem>
             <FormItem label="是否显示">
               <i-switch v-model="formItem.validadd" />
@@ -63,11 +102,14 @@
 </template>
 
 <script>
+import { upload } from "../../request/http";
+
 import { orgimg } from "../../request/http";
 import {
   Agreementclasslist,
   Agreementclassadd,
-  Agreementclassstats
+  Agreementclassstats,
+  orgimgdel
 } from "../../request/api";
 export default {
   data() {
@@ -80,7 +122,7 @@ export default {
         name: "",
         type: "",
         validadd: false,
-        imgs: ""
+        imgs: null
       },
       ruleValidate: {
         name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
@@ -243,6 +285,34 @@ export default {
         console.log(res);
       });
     },
+
+     //图片上传
+    uploadFile() {
+      let file = this.$refs.files.files[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+           this.formItem.imgs = e.target.result;
+          this.file = res.data;
+        };
+      });
+    },
+    //删除图片
+    cancelImg() {
+      orgimgdel({ path: this.file }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.file = null;
+           this.formItem.imgs = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
     //添加
     add(){
       this.modal1=true
@@ -264,31 +334,31 @@ export default {
     modalCancel() {
       this.modal1 = false;
     },
-    //图片上传
-    handleBeforeUpload(file) {
-      console.log(file);
-      if (file.type == "image/jpeg") {
-        this.file = file;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          const _base64 = reader.result;
-          this.formItem.imgs = _base64;
-          this.picUrl = file.name;
-        };
-        return false;
-      } else {
-        this.$Message.error("格式不正确！");
-      }
-    },
+    // //图片上传
+    // handleBeforeUpload(file) {
+    //   console.log(file);
+    //   if (file.type == "image/jpeg") {
+    //     this.file = file;
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.onload = () => {
+    //       const _base64 = reader.result;
+    //       this.formItem.imgs = _base64;
+    //       this.picUrl = file.name;
+    //     };
+    //     return false;
+    //   } else {
+    //     this.$Message.error("格式不正确！");
+    //   }
+    // },
 
     //清除
     clear(){
-      this.formItem.name=''
+      this.formItem.name=null
       this.formItem.type=''
       this.formItem.validadd=false,
-      this.formItem.imgs=''
-      this.file=''
+      this.formItem.imgs=null
+      this.file=null
     }
   }
 };

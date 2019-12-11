@@ -34,7 +34,7 @@
       </Select>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-center-between" style="display:flex">
         <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
@@ -253,6 +253,7 @@ export default {
     //选择内容
     handleSelectionChange(val) {
       console.log(val);
+      this.page = 1
       this.arr = val;
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||

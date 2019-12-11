@@ -33,24 +33,68 @@
       </FormItem>
 
       <FormItem label="协议时间" prop="agTime">
-        <FormItem prop="endAt">
+        <!-- <DatePicker v-model="formInline.agTime" format="yyyy/MM/dd" type="date" style="width: 200px" @on-change="addForm.Birthday=$event"></DatePicker> -->
+           <DatePicker type="date" format="yyyy/MM/dd"  v-model="formInline.agTime"  style="width: 200px"></DatePicker>
+
+        <!-- <FormItem prop="endAt">
           <DatePicker
             icon="ios-clock-outline"
             type="date"
             placeholder="请选择时间"
             v-model="formInline.agTime"
+            format="yyyy/MM/dd"
           ></DatePicker>
-        </FormItem>
+        </FormItem> -->
       </FormItem>
       <FormItem label="广告附件" prop="agFile">
         <p>{{Enclosure}}</p>
-        <Upload
-          :action="orgimg"
+        <!-- <Upload
+          :action=orgimg
           :before-upload="handleUpload"
           :show-upload-list="false"
         >
           <Button icon="ios-cloud-upload-outline">上传附件</Button>
-        </Upload>
+        </Upload>-->
+        <div class="start-wap">
+          <!-- v-if="imgUrl == null" -->
+          <div
+            class="upload"
+            @click="
+                  () => {
+                    this.$refs.files.click();
+                  }
+                "
+          >
+            <div class="file">
+              <input
+                style="display:none; width:0; hidht:0"
+                type="file"
+                accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                ref="files"
+                @change="uploadFile()"
+                multiple
+              />
+              <!-- <Button icon="ios-cloud-upload-outline">上传头像</Button> -->
+              <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+              <img
+                v-show="this.formInline.agPicA"
+                :src="this.formInline.agPicA || null"
+                style="height:104px;width:104px;"
+              />
+              <span>{{formInline.nameA}}</span>
+              <div v-show="!this.formInline.agPicA" class="file-text">
+                <img src="@/assets/images/fix-img.png" />
+              </div>
+              <Icon
+                type="ios-trash"
+                v-show="this.formInline.agPicA !=null"
+                class="cancel"
+                :size="26"
+                @click.stop.prevent="cancelImg()"
+              />
+            </div>
+          </div>
+        </div>
       </FormItem>
     </Form>
     <br />
@@ -59,13 +103,15 @@
 </template>
 
 <script>
+import { upload } from "../../request/http";
 import { orgimg } from "@/request/http";
 import {
   Agreementadd,
   AgreementNewList,
   AgreementList,
   Agreementdet,
-  Agreementmodify
+  Agreementmodify,
+  orgimgdel
 } from "@/request/api";
 import { date1 } from "@/request/datatime";
 export default {
@@ -82,7 +128,15 @@ export default {
         typeDicId: "",
         agTime: "",
         categoryId: "",
-        agFile: ""
+        agFile: null,
+        name: null,
+         agPicA: "",
+      agPicB: "",
+      agPicC: "",
+
+      nameA: "",
+      nameB: "",
+      nameC: "",
       },
       ruleInline: {
         partA: [
@@ -121,7 +175,12 @@ export default {
       data1: "",
 
       orgimg: "",
-      Enclosure:''
+      Enclosure: "",
+
+      texturl: "",
+
+
+      params:''
     };
   },
 
@@ -132,21 +191,19 @@ export default {
     this.getAgreementNewList();
     this.getAgreementList();
     if (this.$route.query.agreementId) {
-      this.navigation1.head='编辑协议'
+      this.navigation1.head = "编辑协议";
       this.getAgreementdet();
     }
     this.orgimg = orgimg;
   },
 
-  created() {
-
-  },
+  created() {},
 
   methods: {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if ((this.file =='')) {
+          if (this.formInline.agPicA == null) {
             this.$Message.error("请上传附件");
           } else {
             if (this.$route.query.agreementId) {
@@ -166,7 +223,7 @@ export default {
       AgreementList({}).then(res => {
         console.log(res);
         if (res.code == 200) {
-          // res.data.unshift({ dataKey: "", dataValue: "全部" });
+
           this.locations = res.data;
         }
       });
@@ -186,11 +243,15 @@ export default {
 
     //新增协议
     getAgreementadd() {
-      console.log(this.sysId);
-      this.data1 = this.formInline.agTime.getTime();
-      Agreementadd({
+      let datas
+      if(this.formInline.agTime!=''){
+        datas=this.formInline.agTime.getTime()
+        datas=this.util.formatDate(datas)
+      }
+      console.log(this.formInline.agTime);
+      let params = {
         sysId: this.sysId,
-        name: this.name,
+        // name: this.name,
         targetType: this.targetType,
         typeDicId: this.formInline.typeDicId,
         actTypeDicId: this.actTypeDicId,
@@ -198,11 +259,19 @@ export default {
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-        agPic: this.agPic,
-        agTime: this.data1,
-        agFile: this.formInline.agFile,
-        sort: this.sort
-      }).then(res => {
+
+        agTime: datas,
+
+        agPicA: this.formInline.agPicA,
+        agPicB: this.formInline.agPicB,
+        agPicC: this.formInline.agPicC,
+
+        nameA: this.formInline.nameA,
+        nameB: this.formInline.nameB,
+        nameC: this.formInline.nameC,
+      }
+       this.params = this.util.remove(params);
+      Agreementadd(params).then(res => {
         if (res.code == 200) {
           this.$Message.success("添加成功!");
           this.$router.push({
@@ -230,6 +299,7 @@ export default {
 
     //修改接口
     getAgreementmodify() {
+
       this.data1 = this.formInline.agTime.getTime();
       Agreementmodify({
         agreementId: this.formInline.agreementId,
@@ -237,8 +307,17 @@ export default {
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-        agTime: this.data1,
-        agFile: this.formInline.agFile
+        agTime: this.data1 ,
+        // agTime: this.data1,
+        // agFile: this.formInline.agFile,
+          agPicA: this.formInline.agPicA,
+        agPicB: this.formInline.agPicB,
+        agPicC: this.formInline.agPicC,
+
+        nameA: this.formInline.nameA,
+        nameB: this.formInline.nameB,
+        nameC: this.formInline.nameC,
+        name: this.formInline.name
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功!");
@@ -252,11 +331,38 @@ export default {
       });
     },
 
+
+
     //图片上传
-    handleUpload(file) {
-      this.Enclosure=file.name
+    uploadFile() {
+      let file = this.$refs.files.files[0];
       console.log(file);
-    }
+        this.formInline.nameA= file.name;
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          // this.texturl = e.target.result;
+          // this.formInline.name = res.data;
+          this.formInline.agPicA=file.name;
+          this.formInline.agPicA=res.data
+        };
+      });
+    },
+    //删除图片
+    cancelImg() {
+      orgimgdel({ path: this.formInline.agPicA }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          this.formInline.agPicA = null;
+          this.formInline.name = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
   }
 };
 </script>

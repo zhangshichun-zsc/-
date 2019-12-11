@@ -146,7 +146,9 @@ export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p)
 
 export const Agreementdel = p => post('/agreement-manage/del-agreement', p) //删除协议
 
-export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
+export const Agreementadd = p => posts('/agreement-manage/updateAgreeMent', p) //添加协议
+
+// export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
 
 export const AgreementList = p => get('/agreement-manage/get-agreement-type-list', p) //获取协议类型列表
 
@@ -171,6 +173,12 @@ export const projectsetlist = p => posts('/volunteer-manager/queryCoActCategoryL
 export const projectsetadd = p => posts('/volunteer-manager/updateCoActCategory', p) //项目管理-新增
 
 export const budgetlist = p => get('/volunteer-manager/queryOrgListForCoActCategory', p) //项目管理-预算来源
+
+export const Costlist = p => posts('/dues/queryMemberVipManagement', p) //会费管理-预算来源
+
+export const Costadd = p => posts('/dues/updateCoDueData', p) //会费管理-新增
+
+export const Costdels = p => get('/dues/queryDuesDetail', p) //项目管理-详情
 
 
 
@@ -542,6 +550,9 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 
 //立项前置信息查询
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
+export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
+export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
+export const programApproval = p => posts("/activity-manage/batch/audit/do", p) //立项审批
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
@@ -599,3 +610,4 @@ export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
 export const getFeedDetail = p => get("/activity-feedback/getDetail", p)
 export const getTypeFeed = p => get("/activity-feedback/getCategotyList", p)
+export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId", p)

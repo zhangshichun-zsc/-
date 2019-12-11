@@ -24,14 +24,14 @@
             <FormItem label="名称:" prop="orgName">
               <Input v-model="formValidate.orgName" placeholder="点 击 输 入" style="width: 220px" />
             </FormItem>
-            <FormItem label="联系人:" prop="orgName">
-              <Input v-model="formValidate.ownerUserName" placeholder="自动带出" style="width: 220px" />
+            <FormItem label="联系人:" prop="contactUserName">
+              <Input v-model="formValidate.contactUserName" placeholder="自动带出" style="width: 220px" />
             </FormItem>
-            <FormItem label="地址:" prop="address">
+            <FormItem label="地址:">
                <Selsect :arr='[province,city,county,]' @change='selbtn'></Selsect>
             </FormItem>
-            <FormItem label="联系方式:" prop="orgName">
-              <Input v-model="formValidate.ownerUserPhone" style="width: 220px" />
+            <FormItem label="联系方式:" prop="contactUserPhone">
+              <Input v-model="formValidate.contactUserPhone" style="width: 220px" />
             </FormItem>
             <FormItem label="微信公众号:" prop="wechatOfficeAccount">
               <Input
@@ -66,7 +66,6 @@
             @click="cancelImg()"
           />
         </div>
-
             </FormItem>
             <FormItem label="详情:" prop="orgName">
               <Input
@@ -92,9 +91,38 @@
             <Button shape="circle" icon="md-close" style="margin-top: 0.5rem;"></Button>
           </div>
           <div class="middle">
-            <Upload :action=orgimg :on-success="handleSuccess">
+            <div class="start-wap">
+                <div
+                  class="upload"
+                  v-if="formValidate.texturl == null"
+                  @click="()=>{ this.$refs.files.click()}"
+                >
+                  <div class="file">
+                    <input
+                      style=" display:none;"
+                      type="file"
+                      accept=".txt,.zip,.doc,.ppt,.xls,.pdf,.docx,.xlsx"
+                      ref="filess"
+                      @change="uploadFiles()"
+                      multiple
+                    />
+                    <Button icon="ios-cloud-upload-outline">上传附件</Button>
+                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  </div>
+                </div>
+
+                <!-- <img :src="formValidate.text" style="height:30px;width:100px;" /> -->
+                <Icon
+                  type="ios-trash"
+                  v-if="formValidate.texturl!= null"
+                  class="cancel"
+                  :size="26"
+                  @click="cancelImg()"
+                />
+              </div>
+            <!-- <Upload :action="orgimg" :on-success="handleSuccess">
               <Button icon="ios-cloud-upload-outline">添加附件</Button>
-            </Upload>
+            </Upload> -->
           </div>
         </div>
       </div>
@@ -111,9 +139,9 @@
   </div>
 </template>
 <script>
-import Selsect from '@/components/selsect'
+import Selsect from "@/components/selsect";
 import { upload } from "../../request/http";
-import {orgimg} from '@/request/http'
+import { orgimg } from "@/request/http";
 import {
   orgtype,
   orgadd,
@@ -144,54 +172,34 @@ export default {
         text: "",
         fileList: [],
         picUrl:null,
-        ownerUserName: "",
-        ownerUserPhone: "",
         imgUrl:null,
         description:'',
         province:'',
         city:'',
         county:'',
-
+        provinceId:1
       },
       ruleValidate: {
-        orgName: [
-          {
-            required: true,
-            message: "必填项不能为空",
-            trigger: "blur"
-          }
-        ],
-        city: [
-          {
-            required: true,
-            message: "请选择地址",
-            trigger: "blur"
-            // type:
-          }
-        ],
-        imgUrl:[  {
-            required: true,
-            message: "图片不能为空",
-            trigger: "blur"
-
-          }]
+        orgName: [{ required: true, message: "团队名称不能为空", trigger: "blur" }],
+        contactUserName: [{ required: true, message: "联系人不能为空", trigger: "blur" }],
+        contactUserPhone: [{ required: true, message: "联系电话不能为空", trigger: "blur" }],
+        description: [{ required: true, message: "详情不能为空", trigger: "blur" }],
       },
       list: [],
       ownerUserId: "",
       value: "",
-      provinceList:[],
+      provinceList: [],
       cityList: [],
       districtList: [],
-
       name: null,
       orgimg:'',
       types:[],
-
-        province:'',
-        city:'',
-        county:'',
-        file:''
-
+      province:'',
+      city:'',
+      county:'',
+      file:'',
+      cityId: 1,
+      districtId:1,
     };
   },
   components: { Selsect },
@@ -203,7 +211,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.list = res.data;
-          this.orgimg=orgimg
+          this.orgimg = orgimg;
         }
         console.log(res);
       });
@@ -220,13 +228,14 @@ export default {
         createUserId: this.$store.state.userId,
         wechatOfficeAccount:this.formValidate.wechatOfficeAccount,
         remark: this.value,
-        ownerUserName: this.formValidate.ownerUserName,
-        ownerUserPhone: this.formValidate.ownerUserPhone,
+        contactUserName: this.formValidate.contactUserName,
+        contactUserPhone: this.formValidate.contactUserPhone,
         orgPic:this.formValidate.orgPic,
         file:this.file,
         description:this.formValidate.description
       }).then(res => {
         if (res.code == 200) {
+          this.$router.back()
           this.$Message.success(res.msg);
         } else {
           this.$Message.error(res.msg);
@@ -234,10 +243,11 @@ export default {
       });
     },
     //省市区
-    selbtn(e){
-      this.formValidate.provinceId=e[0];
-      this.cityId=e[1];
-      this.districtId=e[2];
+    selbtn(e) {
+      this.formValidate.provinceId = e[0];
+      this.cityId = e[1];
+      this.districtId = e[2];
+      console.log(e);
     },
 
     //图片上传
@@ -250,7 +260,7 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           this.formValidate.imgUrl = e.target.result;
-          this.formValidate.picUrl = res.data;
+          this.formValidate.orgPic = res.data;
         };
       });
     },
@@ -269,11 +279,14 @@ export default {
 
     //表单提交
     handleSubmit(name) {
+      if(!this.formValidate.orgPic){
+        this.$Message.error("图片未上传！")
+        return
+      }
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getorgadd();
         } else {
-          console.log(this.formValidate.provinceId)
           this.$Message.error("必填项未填！");
         }
       });
@@ -281,18 +294,33 @@ export default {
 
     //附件上传
     handleSuccess(res, file) {
-      this.file=res.data
+      this.file = res.data;
+      console.log(res, file);
     },
-
+     //附件上传
+    uploadFiles() {
+      let file = this.$refs.filess.file[0];
+      console.log(file);
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          this.formValidate.texturl = e.target.result;
+          this.formValidate.text = res.data;
+          console.log(this.formValidate.texturl,this.formValidate.text)
+        };
+      });
+    },
   },
   mounted() {
     if (this.$route.query.sysId == "1") {
-
       this.navigation1.head = "新建组织(会员)";
       this.getorgtype();
     } else if (this.$route.query.sysId == "2") {
-
       this.navigation1.head = "新建组织(志愿者)";
+      //  this.getorgtype();
       this.list = [{ dataKey: 8, dataValue: "志愿者团队" }];
       this.orgTypes = 8;
     }
