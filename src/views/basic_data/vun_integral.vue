@@ -10,7 +10,7 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-          <Button class="integral-rig" @click="modal2=true">志愿活动积分比例设置</Button>
+          <Button class="integral-rig" @click="set">志愿活动积分比例设置</Button>
           <Button class="integral-rig" :to="{ name: 'vunintegral_set' }">积分规则设置</Button>
           <div class="integral-rig"  @click="Retractbtn">
             <Icon type="ios-arrow-down" v-if="Retract==true" />
@@ -83,7 +83,9 @@
         <Modal v-model="modal2" title="志愿者活动积分比例设置">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
             <FormItem label="1小时服务时长：" prop="serve">
-              <Input v-model="formValidate.serve" placeholder="请输入大于0的整数" style="width:250px"/>
+              <InputNumber :max="100" :min="0" placeholder="请输入大于0的整数" v-model="formValidate.serve" style="width:200px"></InputNumber>
+
+              <!-- // <Input v-model="formValidate.serve" placeholder="请输入大于0的整数" style="width:250px"/> -->
               <Button style="background:#ccc">分</Button>
             </FormItem>
           </Form>
@@ -117,7 +119,7 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { integralpage, integralmodify } from "../../request/api";
+import { integralpage, integralmodify,integralnum,integralset} from "../../request/api";
 export default {
   data() {
     return {
@@ -128,11 +130,11 @@ export default {
         addScore2: 1,
       },
       formValidate: {
-        serve: ""
+        serve: 0
       },
       ruleValidate: {
         serve: [
-          { required: true, message: "服务时长不能为空", trigger: "blur" }
+          { required: true, message: "服务时长不能为空", trigger: "blur",type:'number' }
         ]
       },
       ruleValidates: {
@@ -267,7 +269,9 @@ export default {
       operationUserId: 8,
       userIds:'',
       Retract:true,
-      num:''
+      num:'',
+      typeFlag:13,
+      scoreRuleId:''
     };
   },
 
@@ -276,6 +280,7 @@ export default {
   computed: {},
   mounted() {
     this.getintegralpage();
+
   },
 
   mixins: [tablepage],
@@ -328,6 +333,35 @@ export default {
         console.log(res);
       });
     },
+    //查询积分比例
+    getintegralnum(){
+      integralnum({
+        typeFlag:this.typeFlag
+      }).then(res=>{
+        if(res.code==200){
+           this.formValidate.serve=res.data.score
+          this.scoreRuleId=res.data.scoreRuleId
+        }
+        console.log(res)
+      })
+    },
+
+    //设置积分
+    getintegralset(){
+      integralset({
+        scoreRuleId:this.scoreRuleId,
+        score:this.formValidate.serve
+      }).then(res=>{
+        if(res.code==200){
+          this.modal2=false
+        }
+        console.log(res)
+      })
+    },
+    set(){
+      this.modal2=true
+      this.getintegralnum()
+    },
 
     //分页功能
     changepages(index) {
@@ -373,6 +407,7 @@ export default {
 
     //搜索结果
     query() {
+      this.page=1
       this.getintegralpage();
     },
 
@@ -411,15 +446,15 @@ export default {
       console.log(11);
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.modal2 = false;
-          this.$Message.success("修改成功");
+          this.getintegralset()
+          // this.modal2 = false;
+
         } else {
           this.$Message.error("必填项未填");
         }
       });
     },
     modalCancel2() {
-      this.formValidate.serve=''
       this.modal2 = false;
     }
   }

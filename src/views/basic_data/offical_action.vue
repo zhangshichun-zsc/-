@@ -49,16 +49,20 @@
           全选
           <span>已选择{{arr.length}}人</span>
           <Button class="table-btn" type="primary" @click="add">新增活动分类</Button>
-          <Modal v-model="modal2" :title=text >
+          <Modal v-model="modal2" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicNamemod">
                 <Input v-model="formValidate.dicNamemod" placeholder="环保" />
               </FormItem>
-               <FormItem label="收益对象" prop="actTypeFlag">
-               <Select v-model="formValidate.actTypeFlag" style="width: 150px;margin-right:10px">
-            <Option v-for="item in actTypelist" :value="item.value" :key="item.value">{{ item.name }}</Option>
-          </Select>
-               </FormItem>
+              <FormItem label="收益对象" prop="actTypeFlag">
+                <Select v-model="formValidate.actTypeFlag" style="width: 150px;margin-right:10px">
+                  <Option
+                    v-for="item in actTypelist"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.name }}</Option>
+                </Select>
+              </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="canceltwo">取消</Button>
@@ -107,14 +111,19 @@ export default {
       },
       formValidate: {
         dicNamemod: "",
-         actTypeFlag:1,
+        actTypeFlag: 1
       },
       ruleValidate: {
         dicNamemod: [
           { required: true, message: "活动名称不能为空", trigger: "blur" }
         ],
-        actTypeFlag:[
-          { required: true, message: "收益对象不能为空", trigger: "change",type:'number' }
+        actTypeFlag: [
+          {
+            required: true,
+            message: "收益对象不能为空",
+            trigger: "change",
+            type: "number"
+          }
         ]
       },
       // modal1: false,
@@ -239,7 +248,7 @@ export default {
       arr: [],
       text: "",
 
-      actTypelist:[{name:'家长',value:1},{name:'孩子',value:2}]
+      actTypelist: [{ name: "家长", value: 1 }, { name: "孩子", value: 2 }]
     };
   },
 
@@ -247,9 +256,7 @@ export default {
 
   computed: {},
 
-  created() {
-
-  },
+  created() {},
   mounted() {
     this.getOffactivities();
   },
@@ -285,7 +292,7 @@ export default {
       }
       modifystate({
         dicId: id,
-        validFlag: this.validFlags,
+        validFlag: this.validFlags
       }).then(res => {
         if (res.code == 200) {
           this.getOffactivities();
@@ -316,12 +323,12 @@ export default {
       Offactivitemod({
         dicId: this.dicId,
         dicName: this.formValidate.dicNamemod,
-         actTypeFlag:this.formValidate.actTypeFlag
+        actTypeFlag: this.formValidate.actTypeFlag
       }).then(res => {
         if (res.code == 200) {
           this.getOffactivities();
           this.$Message.info("修改成功");
-          this.modal2=false
+          this.modal2 = false;
         } else {
           this.$Message.error(res.msg);
         }
@@ -331,13 +338,14 @@ export default {
     // 添加字典信息
     getOffactiviteadd() {
       Offactiviteadd({
+        userId:this.$store.state.userId,
         typeFlag: 8,
         dicName: this.formValidate.dicNamemod,
         oprUserId: this.$store.state.userId,
-        actTypeFlag:this.formValidate.actTypeFlag
+        actTypeFlag: this.formValidate.actTypeFlag
       }).then(res => {
         if (res.code == 200) {
-          this.modal2=false
+          this.modal2 = false;
           this.getOffactivities();
           this.$Message.info("添加成功");
         } else {
@@ -348,22 +356,28 @@ export default {
     },
 
     //修改模态框
-    oktwo() {
+    oktwo(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          if (this.dicId != "") {
+            this.getOffactivitemod();
+          } else {
+            this.getOffactiviteadd();
+          }
+        } else {
+          this.$Message.error("名称不能为空");
+        }
+      });
       console.log(this.dicId);
-      if (this.dicId != "") {
-        this.getOffactivitemod();
-      } else {
-        this.getOffactiviteadd();
-      }
     },
     //取消
     canceltwo() {
-      this.modal2=false
+      this.modal2 = false;
     },
 
     //新增
     add() {
-      this.formValidate.dicNamemod=''
+      this.formValidate.dicNamemod = "";
       this.text = "新增活动分类";
       this.modal2 = true;
     },
@@ -376,7 +390,7 @@ export default {
 
     // 查询结果按钮
     query() {
-      this.page=1
+      this.page = 1;
       this.getOffactivities();
     },
     //每条数据单选框的状态
@@ -391,7 +405,7 @@ export default {
       } else {
         this.status = false;
       }
-    },
+    }
   }
 };
 </script>

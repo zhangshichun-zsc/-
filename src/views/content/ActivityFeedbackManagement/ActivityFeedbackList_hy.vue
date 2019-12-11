@@ -249,7 +249,7 @@ export default {
         categoryId:this.categoryId,
         page: { page: this.page, size: this.size,sort:this.sort },
         sysType: this.sysType,
-        userId:14
+        userId: this.userId
       })).then(res => {
         if (res.code == 200) {
           this.data = res.data.list

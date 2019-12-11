@@ -19,7 +19,7 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛 6
   ],
-  API_INDEX: 1
+  API_INDEX: 0
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
@@ -36,8 +36,7 @@ axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
 axios.defaults.timeout = 100000;
 
 // post请求头
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded;charset=UTF-8";
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
 // 请求拦截器
 axios.interceptors.request.use(
   config => {
