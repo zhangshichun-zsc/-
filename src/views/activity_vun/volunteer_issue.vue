@@ -56,7 +56,7 @@
                 <li class="flex-start">
                   <span>活动时间</span>
                   <DatePicker
-                    :start-date='new Date()'
+                    :options="options"
                     :open="openOne"
                     confirm
                     type="datetimerange"
@@ -72,7 +72,7 @@
                 <li class="flex-start">
                   <span>招募时间</span>
                   <DatePicker
-                    :start-date='new Date()'
+                    :options="options"
                     :open="openTwo"
                     confirm
                     type="datetimerange"
@@ -110,7 +110,7 @@
               </li>
               <li class="jobs">
                 <span>招募岗位</span>
-                <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)">
+                <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)" style="cursor: pointer;">
                   <span>{{ item.userPositionName }}</span>
                   <span>{{ item.recruitNum }}人</span>
                   <span>
@@ -120,9 +120,7 @@
                 </p>
               </li>
               <li>
-                <p class="adds" @click="jump(-1)">
-                +新增招募角色
-                </p>
+                <Button @click="jump(-1)">+新增招募角色</Button>
               </li>
               <li>
                 <span>是否交保险</span>
@@ -176,7 +174,7 @@
       </Row> 
       <div class="active-details">
         <Row>
-          <Col span='18'>
+          <Col span='16'  push='1'>
             <div>
               <p class="active-text"><span>活动详情</span></p>
               <wangeditor id='wange' :labels="args.detail" @change='changeEditor' :disabled='status == 3 || status == 4?false:isDisb'/>
@@ -184,14 +182,14 @@
           </Col>
         </Row>
         <Row>
-           <Col span='12'>
+           <Col span='12' push='1'>
             <div class="active-pud">
               <div class="active-list">
                 <ul>
                   <li>
                     <p><span class="active-span">培训内容</span> <i-switch v-model="isTrain" :true-value='1' :false-value='0' /></p>
                     <div v-if='isTrain === 1'>
-                      <wangeditor :labels="train" id="ed1" @change='changeEditorTrain'></wangeditor>
+                      <wangeditor :labels="train" id="ed1" @change='changeEditorTrain' :disabled='isDisb'/>
                     </div>
                   </li>
                   <li>
@@ -202,11 +200,11 @@
                           <div>反馈简介</div>
                           <i-input placeholder="请输入反馈内容" class="txt" v-model="item.detailText" type="textarea" :disabled="isDisb"/>
                         </div>
-                        <view class="ls-item flex-between" v-else-if='index == 1'>
+                        <view class="ls-item flex-between" v-else-if='~~item.typeFlag === 9'>
                           <text>是否上传图片</text>
                           <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.detailText"></switch>
                         </view>
-                        <div class="ls-item flex-between" v-else-if=' item.typeFlag === 1 '>
+                        <div class="ls-item flex-between" v-else-if=' ~~item.typeFlag === 1 '>
                           <i-input placeholder="请输入单文本标题" v-model="item.detailText" :disabled="isDisb"/>
                           <div>
                             <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
@@ -214,7 +212,7 @@
                           </div>
                           <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                         </div>
-                        <div class="ls-item flex-between" v-else-if=' item.typeFlag === 6 '>
+                        <div class="ls-item flex-between" v-else-if=' ~~item.typeFlag === 6 '>
                           <i-input placeholder="请输入多行文本标题" v-model="item.detailText" :disabled="isDisb"/>
                           <div>
                             <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
@@ -222,7 +220,7 @@
                           </div>
                           <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                         </div>
-                        <div class="ls-item"  v-else-if='item.typeFlag === 3 '>
+                        <div class="ls-item"  v-else-if='~~item.typeFlag === 3 '>
                           <div class="flex-between">
                             <i-input placeholder="请输入单选标题" v-model="item.detailText" :disabled="isDisb"/>
                             <div>
@@ -303,10 +301,15 @@ import wangeditor from'_c/wangeditor'
 import adress from'_c/map'
 import { upload }from '@/request/http'
 import { filterNull } from '@/libs/utils'
-import { stat } from 'fs'
+import { stat, constants } from 'fs'
 export default {
   data() {
     return {
+       options: {
+          disabledDate (date) {
+              return date && date.valueOf() < Date.now() - 86400000;
+          }
+      },
       add:false,
       navigation1: {
           head: "志愿者活动发布(志愿者)"
@@ -324,12 +327,14 @@ export default {
         typeFlag: 1,
         targetType: 3,
         detailText: null,
+        isMust:1,
         sort: 1
       }, {
         sysId: 2,
         typeFlag: 9,
         targetType: 3,
-        detailText: null,
+        detailText: 0,
+        isMust:1,
         sort: 2
       }],
       train: null,
@@ -395,7 +400,10 @@ export default {
       once:false
     }
   },
-
+  beforeRouteLeave (to, from, next) {
+    if(to.name !== 'volunteer_compile')sessionStorage.removeItem("data")
+     next()
+  },
   components: { wangeditor, adress },
 
   created() {
@@ -408,7 +416,9 @@ export default {
     this.initData()
     this.getRelse()
   },
-
+  beforeDestroy(){
+    console.log(111)
+  },
   methods: {
     getRelse(){
       if(!this.activityId)return
@@ -488,14 +498,19 @@ export default {
     },
     jump(i){
       let data = {
+        isFeedback:this.isFeedback,
+        isTrain:this.isTrain,
         zhaEnd:this.zhaEnd,
         zhaStart:this.zhaStart,
         dateOne: this.dateOne,
         dateTwo: this.dateTwo,
         isDisb:this.isDisb,
+        isEdit:this.isEdit,
         args:this.args,
         judge:this.judge,
-        image:this.image
+        image:this.image,
+        train:this.train,
+        feed:this.feed
       }
       sessionStorage.setItem('data',JSON.stringify(data))
       this.$router.push({ name: 'volunteer_compile',query: { i } })
@@ -560,6 +575,10 @@ export default {
         this.image = data.image
         this.dateOne = data.dateOne
         this.dateTwo = data.dateTwo
+        this.isFeedback = data.isFeedback
+        this.isTrain = data.isTrain
+        this.train = data.train,
+        this.feed = data.feed
       }
       getOrgTeam({}).then(res => {
         this.orgList = res.data
@@ -569,9 +588,8 @@ export default {
       })
     },
     uploadFile (img,e) {
-      console.log(img,img=='cover')
-        let file = e.target.files[0]
-        const dataForm = new FormData()
+      let file = e.target.files[0]
+      const dataForm = new FormData()
       dataForm.append('file', file)
       upload(dataForm).then(res => {
         if(res.code == 200){
@@ -648,7 +666,7 @@ export default {
         if(!this.args.startAt&&!this.args.endAt){
           this.dateOne='请选择时间段'
         }else{
-          if(!!this.zhaEnd&&new Date(this.args.startAt).getTime()>new Date(this.zhaEnd).getTime()){
+          if(this.zhaEnd&&new Date(this.args.startAt).getTime()<new Date(this.zhaEnd).getTime()){
             this.$Message.warning("招募时间要早于活动时间")
             this.dateOne='请选择时间段'
             this.args.startAt = ''
@@ -660,7 +678,7 @@ export default {
         if(!this.zhaStart&&!this.zhaEnd){
           this.dateTwo='请选择时间段'
         }else{
-            if(!!this.args.startAt&&new Date(this.args.startAt).getTime()>new Date(this.zhaEnd).getTime()){
+            if(this.args.startAt&&new Date(this.args.startAt).getTime()<new Date(this.zhaEnd).getTime()){
             this.$Message.warning("招募时间要早于活动时间")
             this.dateTwo='请选择时间段'
             this.zhaStart = ''
@@ -669,7 +687,6 @@ export default {
         }
         this.openTwo = false
       }
-    
     },
     handleChange(i,e){
       let start = e[0]
@@ -687,8 +704,6 @@ export default {
         this.zhaStart = start
         this.zhaEnd = end
       }
-    
-    
     },
     sumbmit(i){
       let item = this.args
@@ -699,21 +714,32 @@ export default {
         } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.detail == null || this.args.ownerUserName == null) {
           this.$Message.warning('活动内容填写不完整')
           return
-        } else if (this.args.ownerUserId == null) {
-            this.$Message.warning('现在负责人没有对应的归属团队')
+        } else if (item.ownerUserId == null) {
+          this.$Message.warning('现在负责人没有对应的归属团队')
           return
+        }else if(this.isFeedback == 1){
+          for(let val of this.feed){
+            if(val.detailText == '' || val.detailText == null){
+              this.$Message.warning('你已经勾选反馈，必须完善反馈项')
+              return
+            }
+          }
+        }else if(this.isTrain == 1){
+          if(!this.train){
+            this.$Message.warning('你已经勾选培训，必须完善')
+            return
+          }
         }
-
       }else{
         if (item.name == null){
           this.$Message.warning('至少填写活动名称')
           return
         }
-        if (item.isFeedback == 1 && item.coActivityUserConfParamList.length == 0){
+        if (this.isFeedback == 1 && item.coActivityUserConfParamList.length == 0){
           this.$Message.warning('反馈填写，岗位必须填写')
           return
         }
-        if (item.isTrain == 1 &&item.coActivityUserConfParamList.length == 0) {
+        if (this.isTrain == 1 &&item.coActivityUserConfParamList.length == 0) {
           this.$Message.warning('培训填写，岗位必须填写')
           return
         }
@@ -842,6 +868,7 @@ export default {
                   height: 50px;
                   line-height: 50px;
                   text-align: center;
+                  background: #eee;
                   border-bottom: 1px solid #eee;
                   color: #fff;
                 }
@@ -882,16 +909,6 @@ export default {
             .ivu-radio-default {
               margin-right: 30px;
             }
-
-            .adds {
-              width: 600px;
-              text-align: center;
-              a {
-                color: green;
-                font-size: 14px;
-              }
-            }
-
           }
           .active-cost{
             display: flex;
@@ -951,7 +968,6 @@ export default {
         border: #e4e4e4 1px solid;
       }
       .active-list {
-        padding-left: 70px;
         ul {
           li {
             .active-span {
