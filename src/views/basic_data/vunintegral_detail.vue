@@ -12,30 +12,40 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-
-          <div class="integral-center"  @click="Retractbtn">
-             <Icon type="ios-arrow-down" v-if="Retract==true" />
-              <Icon type="ios-arrow-up" v-if="Retract==false" />
-              <span v-if="Retract==true">
-                <a class="sai">收起筛选</a>
-              </span>
-              <span v-if="Retract==false">
-                <a class="sai">启用筛选</a>
-              </span>
+          <div class="integral-center" @click="Retractbtn">
+            <Icon type="ios-arrow-down" v-if="Retract==true" />
+            <Icon type="ios-arrow-up" v-if="Retract==false" />
+            <span v-if="Retract==true">
+              <a class="sai">收起筛选</a>
+            </span>
+            <span v-if="Retract==false">
+              <a class="sai">启用筛选</a>
+            </span>
           </div>
           <Button @click="query">查询结果</Button>
         </div>
       </div>
-      <div class="flex-center-start integral-body"  v-if="Retract==true">
+      <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start">
           <span>积分来源</span>
           <Select size="large" class="inpt" v-model="scoreRuleId">
-            <Option  v-for="item in list" :value="item.scoreRuleId"  :key="item.scoreRuleId">{{item.comments}}</Option>
+            <Option
+              v-for="item in list"
+              :value="item.scoreRuleId"
+              :key="item.scoreRuleId"
+            >{{item.comments}}</Option>
           </Select>
         </div>
         <div class="flex-center-start">
           <span>操作时间</span>
-           <DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="updateTimeStamp"></DatePicker>
+          <DatePicker
+            type="date"
+            @change="time"
+            format="yyyy/MM/dd"
+            placeholder="Select date"
+            style="width: 200px"
+            v-model="updateTimeStamp"
+          ></DatePicker>
         </div>
       </div>
     </div>
@@ -51,11 +61,11 @@
             <Icon type="md-arrow-dropdown" />
           </Button>
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
       </div>
       <Table
@@ -82,9 +92,9 @@
 </template>
 
 <script>
-import  {tablepage} from '@/request/mixin';
-import { date1 } from "@/request/datatime";
-import { integralDet, integralHistory,integralrule } from "@/request/api";
+import { tablepage } from "@/request/mixin";
+import { formatDate } from "@/request/datatime";
+import { integralDet, integralHistory, integralrule } from "@/request/api";
 export default {
   data() {
     return {
@@ -122,8 +132,8 @@ export default {
         {
           title: "时间",
           key: "time",
-          render:(h,params)=>{
-              return h("div",date1('Y-m-dH:i:s',params.row.releaseTimestamp))
+          render: (h, params) => {
+            return h("div", formatDate(params.row.time));
           }
         },
         {
@@ -132,7 +142,7 @@ export default {
         }
       ],
 
-       Article: [
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -151,14 +161,14 @@ export default {
       updateTimeStamp: "",
       scoreRuleId: "",
       arrs: [],
-      datas:'',
-      list:[],
-      Retract:true
+      datas: "",
+      list: [],
+      Retract: true
     };
   },
 
   components: {},
-   mixins:[tablepage],
+  mixins: [tablepage],
   computed: {},
 
   //事件监听
@@ -171,20 +181,20 @@ export default {
   mounted() {
     this.getintegralDet();
     this.getintegralHistory();
-    this.getintegralrule()
+    this.getintegralrule();
   },
 
   methods: {
     // 获取积分规则列表
-    getintegralrule(){
+    getintegralrule() {
       integralrule({
-        sysType:this.sysType
-      }).then(res=>{
-        console.log(res)
-        if(res.code==200){
-          this.list = res.data
+        sysType: this.sysType
+      }).then(res => {
+        console.log(res);
+        if (res.code == 200) {
+          this.list = res.data;
         }
-      })
+      });
     },
     // 用户积分基础信息
     getintegralDet() {
@@ -200,18 +210,22 @@ export default {
     },
     // 积分历史记录分页
     getintegralHistory() {
-      if(this.updateTimeStamp!=''){
-        this.datas=this.updateTimeStamp.getTime()
-        console.log(this.datas)
-      }else{
-        this.datas=''
+      if (this.updateTimeStamp != "") {
+        this.datas = this.updateTimeStamp.getTime();
+        console.log(this.datas);
+      } else {
+        this.datas = "";
       }
       integralHistory({
         sysType: this.sysType,
         userId: this.$route.query.userId,
         scoreRuleId: this.scoreRuleId,
         updateTimeStamp: this.datas,
-        page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort}
+        page: {
+          page: this.page,
+          size: this.size,
+          sort: "createAt" + " " + this.sort
+        }
       }).then(res => {
         if (res.code == 200) {
           this.data2 = res.data.list;
@@ -220,7 +234,12 @@ export default {
         console.log(res);
       });
     },
-     //收起筛选
+    time(e) {
+      let start = e;
+      let end = e[1];
+      this.updateTimeStamp = start + " 00:00:00";
+    },
+    //收起筛选
     Retractbtn() {
       this.Retract = !this.Retract;
       console.log(11);
@@ -239,6 +258,7 @@ export default {
     },
     //查询
     query() {
+      this.page=1
       this.getintegralHistory();
     }
   }

@@ -34,7 +34,7 @@
 
       <FormItem label="协议时间" prop="agTime">
         <!-- <DatePicker v-model="formInline.agTime" format="yyyy/MM/dd" type="date" style="width: 200px" @on-change="addForm.Birthday=$event"></DatePicker> -->
-           <DatePicker type="date" format="yyyy/MM/dd"  v-model="formInline.agTime"  style="width: 200px"></DatePicker>
+           <DatePicker type="date" format="yyyy-MM-dd"  @on-change="handleChange"  v-model="formInline.agTime"  style="width: 200px"></DatePicker>
 
         <!-- <FormItem prop="endAt">
           <DatePicker
@@ -243,12 +243,7 @@ export default {
 
     //新增协议
     getAgreementadd() {
-      let datas
-      if(this.formInline.agTime!=''){
-        datas=this.formInline.agTime.getTime()
-        datas=this.util.formatDate(datas)
-      }
-      console.log(this.formInline.agTime);
+
       let params = {
         sysId: this.sysId,
         // name: this.name,
@@ -260,7 +255,7 @@ export default {
         partA: this.formInline.partA,
         partB: this.formInline.partB,
 
-        agTime: datas,
+        agTime: this.formInline.agTime,
 
         agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
@@ -299,15 +294,13 @@ export default {
 
     //修改接口
     getAgreementmodify() {
-
-      this.data1 = this.formInline.agTime.getTime();
-      Agreementmodify({
+      let params = {
         agreementId: this.formInline.agreementId,
         typeDicId: this.typeDicId,
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-        agTime: this.data1 ,
+        agTime: this.formInline.agTime,
         // agTime: this.data1,
         // agFile: this.formInline.agFile,
           agPicA: this.formInline.agPicA,
@@ -318,7 +311,9 @@ export default {
         nameB: this.formInline.nameB,
         nameC: this.formInline.nameC,
         name: this.formInline.name
-      }).then(res => {
+      }
+       this.params = this.util.remove(params);
+      Agreementadd( this.params).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功!");
           this.$router.push({
@@ -330,24 +325,30 @@ export default {
         console.log(res);
       });
     },
+    handleChange(e){
+      let datas =e
+      datas = datas + " 00:00:00";
+      this.formInline.agTime=datas
+      console.log(e)
+    },
 
 
 
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      console.log(file);
         this.formInline.nameA= file.name;
       const dataForm = new FormData();
       dataForm.append("file", file);
+      console.log(dataForm)
       upload(dataForm).then(res => {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = e => {
-          // this.texturl = e.target.result;
-          // this.formInline.name = res.data;
-          this.formInline.agPicA=file.name;
-          this.formInline.agPicA=res.data
+          this.texturl = e.target.result;
+          this.formInline.name = res.data;
+          // this.formInline.agPicA=file.name;
+          // this.formInline.agPicA=res.data
         };
       });
     },

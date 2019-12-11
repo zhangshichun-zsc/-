@@ -80,7 +80,6 @@ export default {
         },
         {
           title: "协议时间",
-
           align: "center",
           render: (h, params) => {
             return h("div",formatDate(params.row.agreementTimestamp) );
@@ -119,22 +118,22 @@ export default {
                 },
                 "详情"
               ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.delete(params.row.agreementId)
-                    }
-                  }
-                },
-                "删除"
-              )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.delete(params.row.agreementId)
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }
@@ -186,6 +185,7 @@ export default {
   },
 
   methods: {
+
     //协议分页
     getAgreementpage() {
       Agreementpage({
@@ -201,6 +201,7 @@ export default {
         }
       });
     },
+
     //删除协议
     getAgreementdel() {
       Agreementdel({

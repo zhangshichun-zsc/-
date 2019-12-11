@@ -10,7 +10,7 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-          <Button class="integral-rig" @click="modal2=true">志愿活动积分比例设置</Button>
+          <Button class="integral-rig" @click="set">志愿活动积分比例设置</Button>
           <Button class="integral-rig" :to="{ name: 'vunintegral_set' }">积分规则设置</Button>
           <div class="integral-rig"  @click="Retractbtn">
             <Icon type="ios-arrow-down" v-if="Retract==true" />
@@ -54,21 +54,20 @@
         <Modal v-model="modal1" title="修改积分">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
-              <RadioGroup v-model="formItem.addType" vertical>
+              <RadioGroup v-model="formItem.addType">
                 <Radio label="1">
                   增加
-                  <InputNumber :min="1" v-model="formItem.addScore1" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
-                  <!-- <Input placeholder="请输入大于0的整数" v-model="formItem.addScore1"/> -->
-                  <Button style="background:#ccc">分</Button>
+
                 </Radio>
                 <Radio label="2">
                   减少
-                  <InputNumber :min="1" v-model="formItem.addScore2" style="width: 160px;"  placeholder="请输入大于0的整数"></InputNumber>
 
-                  <!-- <Input placeholder="请输入大于0的整数" v-model="formItem.addScore2"/> -->
-                  <Button style="background:#ccc">分</Button>
                 </Radio>
               </RadioGroup>
+            </FormItem>
+             <FormItem label="数值：" prop="addScore">
+               <InputNumber :min="1" v-model="formItem.addScore" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
+                  <Button style="background:#ccc">分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
               <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
@@ -83,7 +82,9 @@
         <Modal v-model="modal2" title="志愿者活动积分比例设置">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
             <FormItem label="1小时服务时长：" prop="serve">
-              <Input v-model="formValidate.serve" placeholder="请输入大于0的整数" style="width:250px"/>
+              <InputNumber :max="100" :min="0" placeholder="请输入大于0的整数" v-model="formValidate.serve" style="width:200px"></InputNumber>
+
+              <!-- // <Input v-model="formValidate.serve" placeholder="请输入大于0的整数" style="width:250px"/> -->
               <Button style="background:#ccc">分</Button>
             </FormItem>
           </Form>
@@ -117,30 +118,36 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { integralpage, integralmodify } from "../../request/api";
+import { integralpage, integralmodify,integralnum,integralset} from "../../request/api";
 export default {
   data() {
     return {
       formItem: {
         remark: "",
         addType: "1",
-        addScore1: 1,
-        addScore2: 1,
+         addScore:1,
+
       },
       formValidate: {
-        serve: ""
+        serve: 0
       },
       ruleValidate: {
         serve: [
-          { required: true, message: "服务时长不能为空", trigger: "blur" }
+          { required: true, message: "服务时长不能为空", trigger: "blur",type:'number' }
         ]
       },
       ruleValidates: {
+         addType:[{
+           required: true,
+            message: "必填项不能为空",
+            trigger: "change",
+        }],
         addScore: [
           {
             required: true,
             message: "必填项不能为空",
-            trigger: "blur"
+            trigger: "blur",
+            type:'number'
           }
         ],
         remark: [
@@ -267,7 +274,9 @@ export default {
       operationUserId: 8,
       userIds:'',
       Retract:true,
-      num:''
+      num:'',
+      typeFlag:13,
+      scoreRuleId:''
     };
   },
 
@@ -276,6 +285,7 @@ export default {
   computed: {},
   mounted() {
     this.getintegralpage();
+
   },
 
   mixins: [tablepage],
@@ -314,19 +324,49 @@ export default {
       integralmodify({
         userIds: this.userIds,
         sysType: this.sysType,
-        addScore: this.num,
+        addScore: this.formItem.addScore,
         addType: this.formItem.addType,
         remark: this.formItem.remark,
-        operationUserId: this.operationUserId
+        operationUserId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
           this.modal1 = false;
+          this.getintegralpage()
           this.$Message.info(res.msg);
         } else {
           this.$Message.error(res.msg);
         }
         console.log(res);
       });
+    },
+    //查询积分比例
+    getintegralnum(){
+      integralnum({
+        typeFlag:this.typeFlag
+      }).then(res=>{
+        if(res.code==200){
+           this.formValidate.serve=res.data.score
+          this.scoreRuleId=res.data.scoreRuleId
+        }
+        console.log(res)
+      })
+    },
+
+    //设置积分
+    getintegralset(){
+      integralset({
+        scoreRuleId:this.scoreRuleId,
+        score:this.formValidate.serve
+      }).then(res=>{
+        if(res.code==200){
+          this.modal2=false
+        }
+        console.log(res)
+      })
+    },
+    set(){
+      this.modal2=true
+      this.getintegralnum()
     },
 
     //分页功能
@@ -373,6 +413,7 @@ export default {
 
     //搜索结果
     query() {
+      this.page=1
       this.getintegralpage();
     },
 
@@ -411,15 +452,15 @@ export default {
       console.log(11);
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.modal2 = false;
-          this.$Message.success("修改成功");
+          this.getintegralset()
+          // this.modal2 = false;
+
         } else {
           this.$Message.error("必填项未填");
         }
       });
     },
     modalCancel2() {
-      this.formValidate.serve=''
       this.modal2 = false;
     }
   }
