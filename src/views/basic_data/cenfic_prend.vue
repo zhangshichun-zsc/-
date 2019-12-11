@@ -11,8 +11,8 @@
         <p>  感谢 </p>
         <p>   于    年    月      日至    年    月    日</p>
         <p>
-                     
-                      
+
+
 为融爱融乐的心智障碍者融合服务提供了珍贵的       小时的志愿支持。
     感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
           生命的多元，让我们的社会更平等、文明、融合。
@@ -59,7 +59,7 @@
 
 <script>
 import { updateBooks,getBooksDetails,orgimgdel } from '@/request/api'
-import { upload }from '@/request/http' 
+import { upload }from '@/request/http'
 export default {
   data() {
     return {
@@ -104,7 +104,7 @@ export default {
           this[src] = res.data
         }
       })
-      
+
     },
     cancelImg(src){
         orgimgdel({path:this[src]}).then(res => {
@@ -119,6 +119,7 @@ export default {
         })
     },
     location(){
+      console.log(this.logoPic,this.officeSealPic)
       if( !this.logoPic || !this.officeSealPic){
         this.$Message.warning('logo或者尾部照片没有选择')
         return

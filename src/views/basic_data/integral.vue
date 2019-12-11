@@ -52,21 +52,20 @@
         <Modal v-model="modal1" title="修改积分">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
-              <RadioGroup v-model="formItem.addType" vertical>
+              <RadioGroup v-model="formItem.addType">
                 <Radio label="1">
                   增加
-                  <InputNumber :min="1" v-model="formItem.addScore1" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
-                  <!-- <Input placeholder="请输入大于0的整数" v-model="formItem.addScore1"/> -->
-                  <Button style="background:#ccc">分</Button>
+
                 </Radio>
                 <Radio label="2">
                   减少
-                  <InputNumber :min="1" v-model="formItem.addScore2" style="width: 160px;"  placeholder="请输入大于0的整数"></InputNumber>
 
-                  <!-- <Input placeholder="请输入大于0的整数" v-model="formItem.addScore2"/> -->
-                  <Button style="background:#ccc">分</Button>
                 </Radio>
               </RadioGroup>
+            </FormItem>
+             <FormItem label="数值：" prop="addScore">
+               <InputNumber :min="1" v-model="formItem.addScore" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
+                  <Button style="background:#ccc">分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
               <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
@@ -109,8 +108,8 @@ export default {
       formItem: {
         remark: "",
         addType: "1",
-        addScore1:1,
-        addScore2:1,
+        addScore:1,
+
       },
       formValidate: {
         serve: ""
@@ -121,11 +120,17 @@ export default {
         ]
       },
       ruleValidates: {
+        addType:[{
+           required: true,
+            message: "必填项不能为空",
+            trigger: "change",
+        }],
         addScore: [
           {
             required: true,
             message: "必填项不能为空",
-            trigger: "blur"
+            trigger: "blur",
+            type:'number'
           }
         ],
         remark: [
@@ -183,7 +188,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "vunintegral_detail",
+                        name: "integral_detail",
                         query: { userId: params.row.userId }
                       });
                     }
@@ -203,7 +208,6 @@ export default {
                     click: () => {
                       this.clearinput();
                       this.userIds = params.row.userId;
-                       console.log(this.userIds);
                     }
                   }
                 },
@@ -301,13 +305,14 @@ export default {
       integralmodify({
         userIds: this.userIds,
         sysType: this.sysType,
-        addScore: this.num,
+        addScore: this.formItem.addScore,
         addType: this.formItem.addType,
         remark: this.formItem.remark,
-        operationUserId: this.operationUserId
+        operationUserId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
           this.modal1 = false;
+          this.getintegralpage()
           this.$Message.info(res.msg);
         } else {
           this.$Message.error(res.msg);
@@ -353,8 +358,8 @@ export default {
 
     clearinput() {
       this.formItem.remark = "";
-      this.formItem.addScore1 = 0;
-      this.formItem.addScore2 = 0;
+      this.formItem.addScore = 0;
+      // this.formItem.addScore2 = 0;
       this.modal1 = true;
     },
 
@@ -367,18 +372,18 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (this.formItem.addType == 1 && this.formItem.addScore1 !=null) {
-            this.num = this.formItem.addScore1;
+          // if (this.formItem.addType == 1 && this.formItem.addScore1 !=null) {
+          //   this.num = this.formItem.addScore1;
+          //   this.getintegralmodify();
+          // } else if (
+          //   this.formItem.addType == 2 &&
+          //   this.formItem.addScore2 != null
+          // ) {
+          //   this.num = this.formItem.addScore2;
             this.getintegralmodify();
-          } else if (
-            this.formItem.addType == 2 &&
-            this.formItem.addScore2 != null
-          ) {
-            this.num = this.formItem.addScore2;
-            this.getintegralmodify();
-          } else {
-            this.$Message.error("数值不能为空");
-          }
+          // } else {
+          //   this.$Message.error("数值不能为空");
+          // }
         } else {
           this.$Message.error("必填项未填");
         }
