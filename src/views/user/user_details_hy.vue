@@ -7,7 +7,10 @@
       <a href="javascript:;" @click="Log()">登录日志</a>
     </div>
     <div class="content-box">
-      <Navigation style="background:#fff" :labels="navigation1"></Navigation>
+      <!-- <Navigation style="background:#fff" :labels="navigation1"></Navigation> -->
+      <header class="header">
+        <p>{{ navigation1.head }}</p>
+      </header>
       <div class="main">
         <div class="content-top flex-center-start">
           <div class="bk">
@@ -447,5 +450,14 @@ export default {
   border-radius: 20px;
   font-size: 15px;
   color: #1b2331;
+}
+.header {
+  margin-top: 20px;
+  width: 1560px;
+  height: 162px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 22px 30px;
 }
 </style>
