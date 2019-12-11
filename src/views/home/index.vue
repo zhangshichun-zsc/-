@@ -74,6 +74,7 @@
               @click="Jump(index)"
               v-for="(item, index) in Jumplist"
               :key="index"
+              :style="item.name == '快捷入口管理' ? 'width:35%' : ''"
             >
               <div>
                 <img
@@ -622,6 +623,8 @@ export default {
         border-radius: 50%;
         background: #fef4f5;
         margin: 0 auto;
+        width: 50px;
+        height: 50px;
       }
       .name-btn {
         text-align: center;

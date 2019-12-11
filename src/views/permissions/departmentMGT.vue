@@ -210,12 +210,11 @@ export default {
           align: "center",
           render: (h, params) => {
             return h(
-              "span",
+              "a",
               {
-                // style: {
-                //   color: 'blue',
-                //   cursor: 'pointer'
-                // },
+                style: {
+                  color: "#000"
+                },
                 on: {
                   click: () => {
                     this.deptId = params.row.deptId;

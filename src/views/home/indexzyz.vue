@@ -64,6 +64,7 @@
               @click="Jump(index)"
               v-for="(item, index) in Jumplist"
               :key="index"
+              :style="item.name == '快捷入口管理' ? 'width:35%' : ''"
             >
               <div>
                 <img
