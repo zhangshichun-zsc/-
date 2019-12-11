@@ -39,18 +39,25 @@
           />
         </div>
         <div class="flex-center-start">
-          <span>注册时间:</span>
+         <span>注册时间/时间段:</span>
           <DatePicker
+            style="width: 180px"
             type="date"
-            placeholder="注册时间"
-            class="inpt"
-            size="large"
-            v-model="registrationTimeStamp"
+            placeholder="请选择开始时间"
+            v-model="startAt"
+          ></DatePicker>
+          <span>-</span>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            placeholder="请选择结束时间"
+            v-model="endAt"
           ></DatePicker>
         </div>
         <div class="flex-center-start">
           <span>标签:</span>
           <Input
+          disabled
             size="large"
             placeholder="标签"
             class="inpt"
@@ -814,12 +821,12 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                   color: "#FD585E"
+                    color: "#FD585E"
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "user_details_hy",
+                        name: "user_details_zyz",
                         query: { userId: params.row.userId }
                       });
                     }
@@ -833,7 +840,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                 
+
                     color: "#FD585E"
                   },
                   on: {
@@ -944,6 +951,14 @@ export default {
   methods: {
     //用户列表
     getUserPage() {
+      let startAt = this.startAt;
+      let endAt = this.endAt;
+
+      let dueation = this.sameday({
+        star: this.formatTime(this.startAt),
+        end: this.formatTime(this.endAt)
+      });
+
       //获取用户分页
       Userpage({
         page: this.page,
@@ -952,7 +967,8 @@ export default {
         info: this.info,
         nickname: this.nickname,
         orgName: this.orgName,
-        registrationTimeStamp: this.registrationTimeStamp,
+        registrationStartTimeStamp: dueation.star,
+        registrationEndTimeStamp: dueation.end,
         labelName: this.labelName,
         account: this.account,
         levelId: this.levelId,
@@ -991,7 +1007,29 @@ export default {
         }
       });
     },
-
+    formatTime(time) {
+      if (!time) return "";
+      return time.getTime();
+    },
+    sameday(timeObj) {
+      let { star, end } = timeObj;
+      if (!star || !end) return { star: star, end: end };
+      if (star === end) {
+        let time1 = this.util.formatDate(star);
+        let time2 = this.util.formatDate(end).split(" ")[0] + " 23:59:59";
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        };
+      } else {
+        let time1 = this.util.formatDate(star);
+        let time2 = this.util.formatDate(end).split(" ")[0] + " 23:59:59";
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        };
+      }
+    },
     //分页功能
     changepages(index) {
       this.page = index;
@@ -1094,7 +1132,7 @@ export default {
             ? this.$Message.info("启用成功")
             : this.$Message.info("禁用成功");
           this.getUserPage(this.paramsObj);
-        } else {    
+        } else {
           this.$Message.error({
             background: true,
             content: "状态变更失败，请联系管理员查看"

@@ -227,6 +227,8 @@ export default {
         if (res.code == 200) {
           this.$Message.info(res.msg);
           this.$router.push({ name: "examinationMGT" });
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });

@@ -1,285 +1,263 @@
 <!--用户详情(志愿者)-->
 <template>
-  <div>
-    <Navigation :labels="navigation1"></Navigation>
-    <div class="main">
-      <ButtonGroup>
-        <Button type="success">用户详情</Button>
-        <Button @click="Editor()">编辑资料</Button>
-        <Button @click="Log()">登录日志</Button>
-      </ButtonGroup>
-      <div class="content-top flex-center-start">
-        <div class="bk">
-          <div class="portrait">
-            <img class='img-src' v-if='basicInfo.avatarPath' :src="basicInfo.avatarPath" alt="">
-            <Avatar v-else icon="ios-person" size="large" />
-            <p>
-              <span>{{basicInfo.level|| '暂无等级'}}</span>
-              <Icon type="ios-cog-outline" size='30' @click="jump()" />
-            </p>
+  <div class="box">
+    <div class="btn-box">
+      <a href="javascript:;" class="act-tn ">用户详情</a>
+      <a href="javascript:;" @click="Editor()">编辑资料</a>
+      <a href="javascript:;" @click="Log()">登录日志</a>
+    </div>
+    <div class="content-box">
+      <header class="header">
+        <p class="title">{{ navigation1.head }}</p>
+        <div class="userInfo">
+          <div class="left">
+            <img
+              class="img-src"
+              v-if="basicInfo.avatarPath"
+              :src="basicInfo.avatarPath"
+              alt=""
+            />
+            <div style="margin-left:15px">
+              <p class="username">{{ basicInfo.userName }}</p>
+              <p>
+                <span class="level-btn"
+                  >{{ basicInfo.level || "暂无等级" }}
+                </span>
+                <!-- <Icon type="ios-cog-outline" size="20" @click="jump()" /> -->
+              </p>
+            </div>
           </div>
-          <div class="details">
-            <p>
-              <span>分类：</span>
-              <span v-for='item in role'>{{item}}</span>
-            </p>
+          <div>
+            <span class="itemizes">分类 </span>
+            <span class="itemize" v-for="item in role">{{ item }}</span>
+            <span class="noitemize" v-if="role.length == 0">暂无分类</span>
           </div>
-          <div class="details">
-            <p>
-              <span>标签：</span>
-              <span v-for='item in userLabel'>{{item}}</span>
-            </p>
+          <div style="flex:2">
+            <span class="itemizes">标签 </span>
+            <span class="itemize" v-for="item in userLabel">{{ item }}</span>
+            <span class="noitemize" v-if="userLabel.length == 0">暂无标签</span>
           </div>
         </div>
-        <table>
-          <tr>
-            <th>姓名</th>
-            <td>{{basicInfo.userName}}</td>
-            <th>身份证号</th>
-            <td>{{basicInfo.idCard}}</td>
-          </tr>
-          <tr>
-            <th>昵称</th>
-            <td>{{basicInfo.nickname}}</td>
-            <th>邮箱</th>
-            <td>{{basicInfo.email}}</td>
-          </tr>
-          <tr>
-            <th>性别</th>
-            <td>{{basicInfo.sex}}</td>
-            <th>活动关注型</th>
-            <td>{{basicInfo.role}}</td>
-          </tr>
-          <tr>
-            <th>生日</th>
-            <td>{{basicInfo.birthday}}</td>
-            <th>注册时间</th>
-            <td>{{basicInfo.createTime}}</td>
-          </tr>
-          <tr>
-            <th>城市</th>
-            <td>{{basicInfo.city}}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="content bk">
-        <div class="content-item">
-          <div class="item-title">
-            <Icon type="md-bookmark" />
-            <span>统计信息</span>
+      </header>
+
+      <div class="main">
+        <div class="content ">
+          <div class="content-item">
+            <div class="item-title">
+              <Icon type="md-bookmark" style="color:#FF565A" />
+              <span>统计信息</span>
+            </div>
+            <Table border :columns="columns1" :data="statisticsInfo"></Table>
           </div>
-          <Table border :columns="columns1" :data="statisticsInfo"></Table>
-        </div>
-        <div class="content-item">
-          <div class="item-title">
-            <Icon type="md-bookmark" />
-            <span>组织信息</span>
+          <div class="content-item">
+            <div class="item-title">
+              <Icon type="md-bookmark" style="color:#FF565A" />
+              <span>组织信息</span>
+            </div>
+            <Table border :columns="columns2" :data="orgRecordList"></Table>
           </div>
-          <Table border :columns="columns2" :data="orgRecordList"></Table>
-        </div>
-        <div class="content-item">
-          <div class="item-title">
-            <Icon type="md-bookmark" />
-            <span>收货地址</span>
+          <div class="content-item">
+            <div class="item-title">
+              <Icon type="md-bookmark" style="color:#FF565A" />
+              <span>收货地址</span>
+            </div>
+            <Table border :columns="columns3" :data="userAdderes"></Table>
           </div>
-          <Table border :columns="columns3" :data="userAdderes"></Table>
-        </div>
-        <div class="content-item">
-          <div class="item-title">
-            <Icon type="md-bookmark" />
-            <span>活动记录</span>
+          <div class="content-item">
+            <div class="item-title">
+              <Icon type="md-bookmark" style="color:#FF565A" />
+              <span>活动记录</span>
+            </div>
+            <Table border :columns="columns4" :data="activityRecord"></Table>
           </div>
-          <Table border :columns="columns4" :data="activityRecord"></Table>
-        </div>
-        <!-- <div class="content-item">
+          <!-- <div class="content-item">
           <div class="item-title">
             <Icon type="md-bookmark" />
             <span>赞助记录</span>
           </div>
           <Table border :columns="columns5" :data="data5"></Table>
         </div> -->
-
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import Public from './config/index'
+import Public from "./config/index";
 export default {
   data() {
     return {
       navigation1: {
-        head: '用户详情(志愿者)'
+        head: "用户详情(志愿者)"
       },
       columns1: [
         {
-          title: '立项数量',
-          key: 'establishNum'
+          title: "立项数量",
+          key: "establishNum"
         },
         {
-          title: '活动报名数量',
-          key: 'signUpNum'
+          title: "活动报名数量",
+          key: "signUpNum"
         },
         {
-          title: '积分',
-          key: 'score'
+          title: "积分",
+          key: "score"
         },
         {
-          title: '收藏类型(个)',
-          key: 'collectNum'
+          title: "收藏类型(个)",
+          key: "collectNum"
         },
         {
-          title: '活动评价',
-          key: 'activityEvaluateNum'
+          title: "活动评价",
+          key: "activityEvaluateNum"
         },
         {
-          title: '活动反馈',
-          key: 'activityFeedbackNum'
+          title: "活动反馈",
+          key: "activityFeedbackNum"
         },
         {
-          title: '邀请好友',
-          key: 'inviteNum'
+          title: "邀请好友",
+          key: "inviteNum"
         },
         {
-          title: '活动时长（小时）',
-          key: 'joinActLength'
+          title: "活动时长（小时）",
+          key: "joinActLength"
         }
       ],
       columns2: [
         {
-          title: '组织名称',
-          key: 'orgName'
+          title: "组织名称",
+          key: "orgName"
         },
         {
-          title: '省份',
-          key: 'provinceName'
+          title: "省份",
+          key: "provinceName"
         },
         {
-          title: '地址',
-          key: 'address'
+          title: "地址",
+          key: "address"
         },
         {
-          title: '单位职务',
-          key: 'userType'
+          title: "单位职务",
+          key: "userType"
         }
       ],
 
       columns3: [
         {
-          title: '姓名',
-          key: 'consignee'
+          title: "姓名",
+          key: "consignee"
         },
         {
-          title: '手机号码',
-          key: 'tel'
+          title: "手机号码",
+          key: "tel"
         },
         {
-          title: '详细地址',
-          key: 'address'
+          title: "详细地址",
+          key: "address"
         },
         {
-          title: '默认地址',
-          key: 'defaultAddress',
+          title: "默认地址",
+          key: "defaultAddress",
           render: (h, params) => {
-            return h('div', [
-              h('i-switch', {
+            return h("div", [
+              h("i-switch", {
                 props: {
                   value: true,
                   disabled: true
                 }
               })
-            ])
+            ]);
           }
         }
       ],
 
       columns4: [
         {
-          title: '活动名称',
-          key: 'name'
+          title: "活动名称",
+          key: "name"
         },
         {
-          title: '活动时间',
-          key: 'startAt'
+          title: "活动时间",
+          key: "startAt"
         },
         {
-          title: '用户账号',
-          key: 'account'
+          title: "用户账号",
+          key: "account"
         },
         {
-          title: '参与类型',
-          key: 'joinType'
+          title: "参与类型",
+          key: "joinType"
         },
         {
-          title: '活动类型',
-          key: 'categoryName'
+          title: "活动类型",
+          key: "categoryName"
         },
         {
-          title: '状态',
-          key: 'joinStatus'
+          title: "状态",
+          key: "joinStatus"
         },
         {
-          title: '操作',
-          key: 'operation',
+          title: "操作",
+          key: "operation",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'span',
+                "span",
                 {
-                  clssName: 'action',
+                  clssName: "action",
                   style: {
-                    color: 'green'
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: 'profile',
+                        name: "volunteer_general",
                         query: {
                           userId: params.row.activityId
                         }
-                      })
+                      });
                     }
                   }
                 },
-                '查看活动'
+                "查看活动"
               )
-            ])
+            ]);
           }
         }
       ],
 
       columns5: [
         {
-          title: '赞助时间',
-          key: 'SponsoredTime'
+          title: "赞助时间",
+          key: "SponsoredTime"
         },
         {
-          title: '用户账号',
-          key: 'UserAccount'
+          title: "用户账号",
+          key: "UserAccount"
         },
         {
-          title: '赞助类型',
-          key: 'SponsorshipType'
+          title: "赞助类型",
+          key: "SponsorshipType"
         },
         {
-          title: '额度',
-          key: 'lines'
+          title: "额度",
+          key: "lines"
         },
         {
-          title: '周期',
-          key: 'cycle'
+          title: "周期",
+          key: "cycle"
         },
         {
-          title: '总金额',
-          key: 'TotalAmount',
-          Color: '#1ABD9D'
+          title: "总金额",
+          key: "TotalAmount",
+          Color: "#1ABD9D"
         },
         {
-          title: '记录人',
-          key: 'recorder',
-          Color: '#1ABD9D'
+          title: "记录人",
+          key: "recorder",
+          Color: "#1ABD9D"
         }
       ],
 
@@ -290,66 +268,64 @@ export default {
       activityRecord: [], // 活动记录
       userAdderes: [], //收货地址
       orgRecordList: [] // 组织
-    }
+    };
   },
   mounted() {
-    this.getUserdetail()
+    this.getUserdetail();
   },
   methods: {
     // 获取数据
     getUserdetail() {
       Public.Userdetail({
-        sysType: '2',
+        sysType: "2",
         userId: this.$route.query.userId
       }).then(res => {
         if (res.code == 200) {
-          this.basicInfo = res.data.basicInfo
-          this.statisticsInfo = [res.data.statisticsInfo]
-          this.activityRecord = res.data.activityRecord
-          this.userAdderes = res.data.userAdderes
-          this.orgRecordList = res.data.orgRecordList
+          this.basicInfo = res.data.basicInfo;
+          this.statisticsInfo = [res.data.statisticsInfo];
+          this.activityRecord = res.data.activityRecord;
+          this.userAdderes = res.data.userAdderes;
+          this.orgRecordList = res.data.orgRecordList;
 
           if (this.basicInfo.userLabel) {
-            console.log()
-            this.userLabel = res.data.basicInfo.userLabel.split(',')
+            console.log();
+            this.userLabel = res.data.basicInfo.userLabel.split(",");
           }
           if (this.basicInfo.role) {
-            this.role = res.data.basicInfo.role.split(',')
+            this.role = res.data.basicInfo.role.split(",");
           }
         }
-      })
+      });
     },
     Editor() {
       this.$router.push({
-        name: 'Edit_data_zyz',
+        name: "Edit_data_zyz",
         query: {
           userId: this.$route.query.userId
         }
-      })
+      });
     },
     Log() {
       this.$router.push({
-        name: 'Login_zyz',
+        name: "Login_zyz",
         query: {
           userId: this.$route.query.userId
         }
-      })
+      });
     },
     jump() {
-      this.$router.push({ name: 'Volunteer_level_setting' })
+      this.$router.push({ name: "Volunteer_level_setting" });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .main {
-  width: 50rem;
   margin: 0 auto;
+  margin-top: 15px;
 }
-.bk {
-  border: 1px solid #e4e4e4;
-}
+
 .portrait {
   padding: 0.5rem;
   display: block;
@@ -379,8 +355,13 @@ export default {
   }
 }
 .content-top {
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 30px;
   table {
     border: 1px solid #e4e4e4;
+    margin: 0 auto;
     td,
     th {
       height: 32px;
@@ -400,11 +381,14 @@ export default {
   }
 }
 .content {
-  margin: 1rem 0;
-  padding: 0.5rem;
+  padding: 30px 0;
 }
 .content-item {
-  margin: 0.5rem;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
 }
 .item-title {
   padding: 0.5rem 0;
@@ -413,5 +397,92 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
+}
+.box {
+  padding-top: 26px;
+}
+.btn-box a {
+  display: inline-block;
+  width: 104px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 15px;
+  color: #8e9192;
+  text-align: center;
+  margin: 0 5px;
+}
+.btn-box .act-tn {
+  background: #ffffff;
+  border-radius: 20px;
+  font-size: 15px;
+  color: #1b2331;
+}
+.header {
+  margin-top: 20px;
+  height: 162px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 22px 30px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  padding: 30px 0;
+  img {
+    vertical-align: middle;
+  }
+  div {
+    flex: 1;
+  }
+}
+.title {
+  font-size: 18px;
+  color: #1b2331;
+  font-weight: 800;
+}
+.username {
+  margin-left: 20px;
+  font-size: 18px;
+  color: #1b2331;
+}
+.itemizes {
+  font-size: 15px;
+  color: #1b2331;
+}
+
+.itemize {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 0 10px;
+  background: #fef4f5;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #fd585e;
+  line-height: 32px;
+}
+.noitemize {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 0 10px;
+  background: #ccc;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #fff;
+  line-height: 32px;
+}
+.left {
+  display: flex;
+  align-content: center;
+}
+
+.level-btn {
+  padding: 0 10px;
+  background: #fef4f5;
+  border-radius: 15px;
+  font-size: 14px;
+  color: #fd585e;
+  line-height: 32px;
 }
 </style>
