@@ -177,7 +177,7 @@ export default {
                     }
                   }
                 },
-                "修改"
+                "详情"
               ),
               h(
                 "span",

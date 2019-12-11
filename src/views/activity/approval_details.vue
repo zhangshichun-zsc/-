@@ -71,7 +71,7 @@
 
 <script>
 import { formatDate, date1 } from '../../request/datatime'
-import { approvaldet } from '../../request/api'
+import { approvaldet,programApproval } from '../../request/api'
 export default {
   data() {
     return {
@@ -130,6 +130,14 @@ export default {
     //通过
     adopt() {
       console.log(this.datas)
+      programApproval({
+        userId:this.$store.state.userId, 
+        auditId, 
+        type,
+        reason
+      }).then(res=>{
+        console.log(res)
+      })
     }
   }
 }

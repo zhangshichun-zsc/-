@@ -6,7 +6,9 @@
       <div class="con">
         <div class="title bk">
           <p>
-            <span>当前人员:{{ sysRoleName ? sysRoleName : "" }}</span>
+            <span class="btn"
+              >当前人员:{{ sysRoleName ? sysRoleName : "" }}</span
+            >
           </p>
         </div>
         <div class="choose">
@@ -14,32 +16,16 @@
             <TabPane label="功能权限设置" name="name1">
               <Row>
                 <Col span="8">
-                  <Menu>
-                    <!-- <CheckboxGroup v-model="fruit"> -->
-                    <Submenu
-                      :name="index"
-                      v-for="(item, index) in ALLLIST"
-                      :key="index"
-                    >
-                      <template slot="title">
-                        <!-- ！ 点击全选， 选中一部分， 展示不同的样式 -->
-
-                        <Checkbox>{{ item.parentName }}</Checkbox>
-                      </template>
-                      <CheckboxGroup v-model="USERLIST">
-                        <MenuItem
-                          name="1-1"
-                          v-for="(value, keys) in item.list"
-                          :key="keys"
-                        >
-                          <Checkbox :label="value.sysMenuId">{{
-                            value.name
-                          }}</Checkbox>
-                        </MenuItem>
-                      </CheckboxGroup>
-                    </Submenu>
-                    <!-- </CheckboxGroup> -->
-                  </Menu>
+                  <!--  :default-checked-keys="USERLIST" -->
+                  <chu-tree
+                    accordion
+                    :data="data"
+                    show-checkbox
+                    node-key="id"
+                    :props="defaultProps"
+                    :default-checked-keys="USERLIST"
+                    ref="tree"
+                  ></chu-tree>
                 </Col>
               </Row>
               <Button type="success" @click="save">保存</Button>
@@ -54,9 +40,6 @@
 <script>
 import { Permissionset, roleSetup, findRoleMenu } from "@/request/api";
 import Table from "iview/src/components/table/table";
-import { log } from "util";
-// import Treeselectfrom 'vue-treeselect'
-// import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   components: { Table },
@@ -82,9 +65,15 @@ export default {
       parentMenu: [], // 父级菜单，
       subMenu: [],
       indeterminate: true,
-      checkAll: false
+      checkAll: false,
 
-      //全部的菜单
+      // 菜单、
+
+      data: [],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      }
     };
   },
   watch: {},
@@ -95,36 +84,29 @@ export default {
       findRoleMenu({ roleId }).then(res => {
         if (res.code == 200) {
           this.ALLLIST = res.data.menuList; // 所有的菜单
+          // ! 用户选择的数据
           let userArr = res.data.subMenuRoles.map(item => {
             return item.sysMenuId;
           });
-          let obj = {};
+          this.USERLIST = userArr;
+          //  ! 将数据转成 插件的数据结构
+          let obj = [];
           res.data.menuList.forEach(item => {
-            obj[item.sysMenuId] = {
-              list: item.list.map(key => {
-                return {
-                  parentid: key.parentId, // 父级ID
-                  id: key.sysMenuId, //子级的id
-                  checked: userArr.includes(key.sysMenuId) //选中状态
-                };
-              }),
-              checkAll: false
-            };
+            obj.push({
+              id: item.sysMenuId,
+              label: item.parentName,
+              children: [
+                ...item.list.map(key => {
+                  return {
+                    id: key.sysMenuId,
+                    label: key.name
+                  };
+                })
+              ]
+            });
           });
 
-          // res.data.parentMenuRoles.forEach(item => {
-          //   obj[item.sysMenuId] = {
-          //     checked: false,
-          //     list: [
-          //       {
-          //         parentid: item.sysMenuId, // 父级ID
-          //         id: 0, //子级的id
-          //         checked: false //选中状态
-          //       }
-          //     ]
-          //   };
-          // });
-          console.log(obj);
+          this.data = obj;
         } else {
           this.$Message.info(res.msg);
         }
@@ -134,10 +116,11 @@ export default {
 
     // 角色权限设置
     getroleSetup() {
-      this.list = this.fruit.toString();
+      let list = this.list.toString();
+
       roleSetup({
         sysRoleId: this.sysRoleId,
-        sysMenuIds: this.list
+        sysMenuIds: list
       }).then(res => {
         this.getPermissionset();
         this.$Message.info(res.msg);
@@ -152,9 +135,14 @@ export default {
 
     //保存
     save() {
-      console.log(this.USERLIST);
+      let arr = [];
 
-      // this.getroleSetup();
+      this.$refs.tree.getCheckedNodes().map(item => {
+        arr.push(item.id);
+      });
+
+      this.list = arr;
+      this.getroleSetup();
     }
   },
   mounted() {
@@ -233,5 +221,16 @@ table td,
 }
 .ivu-checkbox-wrapper .ivu-checkbox span {
   display: none !important;
+}
+.btn {
+  display: inline-block;
+  padding: 0 15px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 14px;
+  color: #fff;
+  text-align: justify;
+  background: #ff565a;
+  border-radius: 15px;
 }
 </style>

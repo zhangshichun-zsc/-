@@ -449,7 +449,7 @@ export const rolequery = p => get('/sysRole/findAllRole', p) //角色管理--查
 
 export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建角色
 
-export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
+export const roleSetup = p => posts('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
 export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
@@ -556,6 +556,7 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
+export const programApproval = p => posts("/activity-manage/batch/audit/do", p) //立项审批
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
@@ -611,5 +612,6 @@ export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p
 export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
 export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
-export const getFeedDetail = p => get("/activity-feedback/getDetail",p)
-export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
+export const getFeedDetail = p => get("/activity-feedback/getDetail", p)
+export const getTypeFeed = p => get("/activity-feedback/getCategotyList", p)
+export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId", p)
