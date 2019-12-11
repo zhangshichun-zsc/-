@@ -1,14 +1,38 @@
 <!-- 省市区 -->
 <template>
   <div>
-    <Select v-model="val[0]" style="width:180px" @on-change='changeProve(0,$event)' :label-in-value='true'>
-      <Option v-for="(item,i) in area" :value="i" :key="i">{{ item.name }}</Option>
+    <Select
+      v-model="val[0]"
+      :style="'width:' + widthNum + 'px; margin-bottom:8px; display: block;'"
+      @on-change="changeProve(0, $event)"
+      :label-in-value="true"
+    >
+      <Option v-for="(item, i) in area" :value="i" :key="i">{{
+        item.name
+      }}</Option>
     </Select>
-    <Select v-model="val[1]" style="width:180px" @on-change='changeProve(1,$event)' :label-in-value='true'>
-      <Option v-for="(item,i) in area[val[0]].citys" :value="i" :key="i">{{ item.name }}</Option>
+    <Select
+      v-model="val[1]"
+      :style="'width:' + widthNum + 'px;margin-bottom:8px; display: block;'"
+      @on-change="changeProve(1, $event)"
+      :label-in-value="true"
+    >
+      <Option v-for="(item, i) in area[val[0]].citys" :value="i" :key="i">{{
+        item.name
+      }}</Option>
     </Select>
-    <Select v-model="val[2]" style="width:180px" @on-change='changeProve(2,$event)' :label-in-value='true'>
-      <Option v-for="(item,i) in area[val[0]].citys[val[1]].areas" :value="i" :key="i">{{ item }}</Option>
+    <Select
+      v-model="val[2]"
+      :style="'width:' + widthNum + 'px;margin-bottom:8px; display: block;'"
+      @on-change="changeProve(2, $event)"
+      :label-in-value="true"
+    >
+      <Option
+        v-for="(item, i) in area[val[0]].citys[val[1]].areas"
+        :value="i"
+        :key="i"
+        >{{ item }}</Option
+      >
     </Select>
   </div>
 </template>
@@ -19,17 +43,18 @@
  *
  * 事件 change
  */
-import { CITYSDATA } from '@/libs/sele'
-import { getAdressId, getAreaAdress } from '@/libs/utils'
+import { CITYSDATA } from "@/libs/sele";
+import { getAdressId, getAreaAdress } from "@/libs/utils";
 export default {
-  name: 'adress',
+  name: "adress",
   data() {
     return {
       area: CITYSDATA,
       val: [0, 0, 0],
-      name: ['北京市', '北京市', '东城区'],
-      ids: [1, 1, 1]
-    }
+      name: ["北京市", "北京市", "东城区"],
+      ids: [1, 1, 1],
+      widthNum: ""
+    };
   },
   props: {
     /**
@@ -38,14 +63,17 @@ export default {
     arr: {
       type: Array,
       default: () => {
-        return []
+        return [];
       }
+    },
+    styles: {
+      type: Number
     }
   },
-  watch:{
-    arr(val){
-      if(val.length !==0){
-        this.showArea(val)
+  watch: {
+    arr(val) {
+      if (val.length !== 0) {
+        this.showArea(val);
       }
     }
   },
@@ -53,51 +81,52 @@ export default {
 
   computed: {},
 
-  created () {
-
+  created() {
+    if (this.$props.styles) {
+      this.widthNum = this.$props.styles;
+    }
   },
-
 
   methods: {
     changeProve(i, e) {
-      console.log(i,e)
-      let ids = []
-      let id = 1
+      console.log(i, e);
+      let ids = [];
+      let id = 1;
       if (i == 0) {
-        let city = this.area[this.val[0]].citys[0].name
-        let county=this.area[this.val[0]].citys[0].areas[0]
-        this.$set(this.val,1,0)
-        this.$set(this.val,2,0)
-        ids = getAdressId(e.label, city, county)
+        let city = this.area[this.val[0]].citys[0].name;
+        let county = this.area[this.val[0]].citys[0].areas[0];
+        this.$set(this.val, 1, 0);
+        this.$set(this.val, 2, 0);
+        ids = getAdressId(e.label, city, county);
       } else if (i == 1) {
-        let county=this.area[this.val[0]].citys[0].areas[0]
-        this.$set(this.val,2,0)
-        ids = [this.ids[0],...getAdressId('', e.label, county)]
+        let county = this.area[this.val[0]].citys[0].areas[0];
+        this.$set(this.val, 2, 0);
+        ids = [this.ids[0], ...getAdressId("", e.label, county)];
       } else {
-        ids = [this.ids[0],this.ids[1],getAdressId('', '', e.label)[0]]
+        ids = [this.ids[0], this.ids[1], getAdressId("", "", e.label)[0]];
       }
-      this.ids = ids
-      console.log(ids)
-      this.$emit('change', this.ids)
+      this.ids = ids;
+      console.log(ids);
+      this.$emit("change", this.ids);
     },
-    showArea(arr){
-      this.ids = arr
-      if (arr.length == 0) return
-      let name = getAreaAdress(arr[0], arr[1], arr[2])
-      let list = this.area
-      let len = list.length
+    showArea(arr) {
+      this.ids = arr;
+      if (arr.length == 0) return;
+      let name = getAreaAdress(arr[0], arr[1], arr[2]);
+      let list = this.area;
+      let len = list.length;
       for (let i = 0; i < len; i++) {
         if (list[i].name == name[0]) {
-          this.$set(this.val, 0, i)
-          let citys = list[0].citys
+          this.$set(this.val, 0, i);
+          let citys = list[0].citys;
           for (let m = 0, l = citys.length; m < l; m++) {
             if (citys[m].name == name[1]) {
-              this.$set(this.val, 1, m)
-              let ars = citys[m].areas
+              this.$set(this.val, 1, m);
+              let ars = citys[m].areas;
               for (let n = 0, le = ars.length; n < le; n++) {
                 if (ars[n] == name[2]) {
-                  this.$set(this.val, 2, n)
-                  return
+                  this.$set(this.val, 2, n);
+                  return;
                 }
               }
             }
@@ -106,7 +135,6 @@ export default {
       }
     }
   }
-}
+};
 </script>
-<style lang="scss">
-</style>
+<style lang="scss"></style>

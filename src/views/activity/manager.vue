@@ -192,6 +192,7 @@ import {
   activedown
 } from "../../request/api";
 export default {
+  inject: ['reload'],
   data() {
     return {
       status: false,
@@ -447,11 +448,13 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.statusText != "10"
+                  value: params.row.statusText != "10",
+                   disabled: params.row.statusText!="10"?false:"disabled"
                 },
-                on: {
-                  input: e => {
+                'on':{
+                  'on-change': e => {
                     if (params.row.statusText == "10") {
+
                     } else {
                       this.activityId=params.row.acitvityId
                       this.addstate=true
@@ -474,7 +477,7 @@ export default {
       ],
       sort: "asc",
       datax: [],
-      sysType: 2,
+      sysType: 1,
       page: 1,
       size: 10,
       dataCount: 0,
@@ -622,7 +625,7 @@ export default {
       }).then(res => {
          if(res.code==200){
            this.addstate=false
-            this.getactiveManager()
+          this.getactiveManager()
           this.$Message.info('下架成功')
         }else{
           this.$Message.error(res.msg)
@@ -643,12 +646,11 @@ export default {
     //取消
     modalCancel(){
       this.addstate=false
-      this.getactiveManager()
+       this.reload()
     },
 
     //确定
     modalOkdel(){
-
       this.getactivedown(this.activityId)
     },
 

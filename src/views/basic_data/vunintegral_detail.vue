@@ -133,7 +133,7 @@ export default {
           title: "时间",
           key: "time",
           render: (h, params) => {
-            return h("div", formatDate(params.row.releaseTimestamp));
+            return h("div", formatDate(params.row.time));
           }
         },
         {
@@ -258,6 +258,7 @@ export default {
     },
     //查询
     query() {
+      this.page=1
       this.getintegralHistory();
     }
   }

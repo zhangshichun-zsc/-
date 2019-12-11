@@ -86,31 +86,35 @@ axios.interceptors.response.use(
         });
     } else if (response.data.code == 1003) {
 
+    } else {
+      // this.$Message.error(response.data.msg)
     }
     return response;
   }
-  // error => {
-  //   console.log(error)
-  //   if (error.response) {
-  //     switch (error.response.status) {
-  //       case 106:
-  //         console.log(11)
-  //         this.$router.push({
-  //           name: 'login'
-  //         })
-  //         // 401 清除token信息并跳转到登录页面
-  //         localStorage.clear();
-  //         // 只有在当前路由不是登录页面才跳转
-  //         router.currentRoute.path != '/login' &&
-  //           router.replace({
-  //             path: '/login',
-  //             // query: { redirect: router.currentRoute.path },
-  //           });
-  //     }
-  //   }
-  //   return Promise.reject(error.response.data)
-  // },
+
 );
+
+// error => {
+//   console.log(error)
+//   if (error.response) {
+//     switch (error.response.status) {
+//       case 106:
+//         console.log(11)
+//         this.$router.push({
+//           name: 'login'
+//         })
+//         // 401 清除token信息并跳转到登录页面
+//         localStorage.clear();
+//         // 只有在当前路由不是登录页面才跳转
+//         router.currentRoute.path != '/login' &&
+//           router.replace({
+//             path: '/login',
+//             // query: { redirect: router.currentRoute.path },
+//           });
+//     }
+//   }
+//   return Promise.reject(error.response.data)
+// },
 
 /**
  * get方法，对应get请求

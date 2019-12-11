@@ -39,18 +39,25 @@
           />
         </div>
         <div class="flex-center-start">
-          <span>注册时间:</span>
+          <span>注册时间/时间段:</span>
           <DatePicker
+            style="width: 180px"
             type="date"
-            placeholder="注册时间"
-            class="inpt"
-            size="large"
-            v-model="registrationTimeStamp"
+            placeholder="请选择开始时间"
+            v-model="startAt"
+          ></DatePicker>
+          <span>-</span>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            placeholder="请选择结束时间"
+            v-model="endAt"
           ></DatePicker>
         </div>
         <div class="flex-center-start">
           <span>标签:</span>
           <Input
+            disabled
             size="large"
             placeholder="标签"
             class="inpt"
@@ -814,8 +821,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#FD585E",
-           
+                    color: "#FD585E"
                   },
                   on: {
                     click: () => {
@@ -834,7 +840,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "10px",
-                   
+
                     color: "#FD585E"
                   },
                   on: {
@@ -890,6 +896,8 @@ export default {
       SummaryInformation: ["options1"],
       OtherInformation: ["options2", "options4"],
       arrs: [],
+      startAt: "",
+      endAt: "",
       Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
@@ -946,6 +954,14 @@ export default {
     //用户列表
     getUserPage() {
       //获取用户分页
+      let startAt = this.startAt;
+      let endAt = this.endAt;
+
+      let dueation = this.sameday({
+        star: this.formatTime(this.startAt),
+        end: this.formatTime(this.endAt)
+      });
+
       Userpage({
         page: this.page,
         size: this.size,
@@ -953,14 +969,15 @@ export default {
         info: this.info,
         nickname: this.nickname,
         orgName: this.orgName,
-        registrationTimeStamp: this.registrationTimeStamp,
         labelName: this.labelName,
         account: this.account,
         levelId: this.levelId,
         labelId: this.labelId,
         memberType: this.memberType,
         memberPayTimestamp: this.memberPayTimestamp,
-        roleId: this.roleId
+        roleId: this.roleId,
+        registrationStartTimeStamp: dueation.star,
+        registrationEndTimeStamp: dueation.end
       }).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
@@ -971,7 +988,6 @@ export default {
     },
     //批量操作接口
     getUserBatch() {
- 
       userEnable({
         userId: this.ALLLIST,
         enable: this.batch
@@ -1095,7 +1111,7 @@ export default {
           type
             ? this.$Message.info("启用成功")
             : this.$Message.info("禁用成功");
-             this.getUserPage(this.paramsObj);
+          this.getUserPage(this.paramsObj);
         } else {
           this.$Message.error({
             background: true,
@@ -1134,6 +1150,29 @@ export default {
     modalCancel() {
       this.QRCode = "";
       this.modaQR = false;
+    },
+    formatTime(time) {
+      if (!time) return "";
+      return time.getTime();
+    },
+    sameday(timeObj) {
+      let { star, end } = timeObj;
+      if (!star || !end) return { star: star, end: end };
+      if (star === end) {
+        let time1 = this.util.formatDate(star);
+        let time2 = this.util.formatDate(end).split(" ")[0] + " 23:59:59";
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        };
+      } else {
+        let time1 = this.util.formatDate(star);
+        let time2 = this.util.formatDate(end).split(" ")[0] + " 23:59:59";
+        return {
+          star: new Date(time1).getTime(),
+          end: new Date(time2).getTime()
+        };
+      }
     }
   },
   mounted() {

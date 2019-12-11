@@ -111,8 +111,11 @@ export default {
           align: "center",
           render: (h, params) => {
             return h(
-              "span",
+              "a",
               {
+                style: {
+                  color: "#000"
+                },
                 on: {
                   click: () => {
                     this.deptId = params.row.deptId;
@@ -322,8 +325,6 @@ export default {
             list: res.data.list,
             count: res.data.totalSize
           });
-
-          this.$Message.info("查询成功");
         } else {
           this.$Message.error(res.msg);
         }
