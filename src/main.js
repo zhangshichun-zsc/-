@@ -17,8 +17,7 @@ import "./assets/css/dist/styles/iview.css";
 import "./libs/style.scss";
 import "./libs/rest.css";
 import "./libs/rem.js";
-
-
+import chuView from 'chu-tree-iview'
 
 
 Vue.prototype.$Message = Message;
@@ -56,6 +55,7 @@ Vue.use(head);
 Vue.use(topheads);
 Vue.use(page);
 Vue.use(number);
+Vue.use(chuView)
 Vue.component("v-distpicker", VDistpicker);
 Vue.component(VeLine.name, VeLine);
 
