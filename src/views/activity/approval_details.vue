@@ -92,7 +92,8 @@ export default {
       single: false,
       list: [],
       datas: ['2019-08-21', '2019-10-1'],
-      actlist: []
+      actlist: [],
+      reason:''
     }
   },
 
@@ -132,11 +133,31 @@ export default {
       console.log(this.datas)
       programApproval({
         userId:this.$store.state.userId, 
-        auditId, 
-        type,
-        reason
+        auditId:this.list.auditId, 
+        type:2,
       }).then(res=>{
         console.log(res)
+        if(res.code==200){
+          this.$Message.success(res.msg);
+        }else{
+           this.$Message.warning(res.msg);
+        }
+      })
+    },
+    refuse() {
+      console.log(this.datas)
+      programApproval({
+        userId:this.$store.state.userId, 
+        auditId:this.list.auditId, 
+        type:3,
+        reason:this.reason
+      }).then(res=>{
+        console.log(res)
+        if(res.code==200){
+          this.$Message.success(res.msg);
+        }else{
+           this.$Message.warning(res.msg);
+        }
       })
     }
   }
