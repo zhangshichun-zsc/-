@@ -158,9 +158,7 @@ a {
   margin: 1rem auto;
   background: #c3cbcb;
 }
-.integral-table {
-  margin-top: 30px;
-}
+
 button {
     padding: 5px;
   font-size: 14px;

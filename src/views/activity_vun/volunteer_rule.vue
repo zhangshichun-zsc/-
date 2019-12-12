@@ -206,22 +206,20 @@ export default {
     },
     //活动规则池--获取活动规则分页
     getActiverulepage() {
-
       Activerulepage({
         sysType: this.sysType,
         page: { page: this.page, size: this.size,sort: this.sort},
         ruleType: this.ruleType
       }).then(res => {
         if (res.code == 200) {
-          if (this.ruleType == 1) {
+          if (this.ruleType == 3) {
             this.data = res.data.list;
           } else {
             this.data1 = res.data.list;
           }
           this.dataCount = res.data.totalSize;
         }
-        console.log(res);
-      });
+      })
     },
     //批量操作
     stater(id, e) {
@@ -237,7 +235,6 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getActiverulepage();
     },
     //单选

@@ -1,0 +1,35 @@
+.table-header {
+    
+    background:#fff;
+    padding: 20px 0px;
+    /* border: 1px solid #eee; */
+  }
+  .table-header .table-btn {
+    margin-left: 15px;
+  }
+  .integral-table .pages {
+    padding: 50px 0;
+  
+    background: #fff;
+  }
+  .pages {
+    text-align: center;
+  }
+  .ipt {
+    margin-left: 10px;
+  }
+  .sdate {
+    margin-left: 15px;
+  }
+  .table-btn {
+    position: relative;
+  }
+  /* .icon {
+    position: absolute;
+    padding: 2px;
+    top: 0;
+    right: 0;
+    transform: translateY(-50%);
+    background: yellow;
+    color: #000;
+  } */

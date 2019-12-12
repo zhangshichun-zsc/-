@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="integral-table">
- 
+
     </div>
      <Table border :columns="columns1" :data="data1"></Table><br>
     <Upload action="//jsonplaceholder.typicode.com/posts/">
@@ -38,7 +38,7 @@ export default {
                         title: '融融',
                         key: 'rong'
                     }
-                
+
                 ],
       data1: [
                 {
@@ -97,7 +97,7 @@ export default {
 }
 
 .integral-table {
-  margin-top: 30px;
+
    display: flex;
   flex-direction: column;
   align-items: center;

@@ -23,15 +23,14 @@
       </div>
       <Table ref="selection" border :columns="columns" :data="data1"></Table>
       <div class="pages">
-        <Page
-          :total="dataCount"
+        <Page  :total="dataCount"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
           :page-size="size"
-          @on-change="changepages"
-        />
+          @on-change="changepages" />
+
       </div>
     </div>
   </div>
@@ -312,41 +311,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.table-btn {
-  position: relative;
-}
-.icon {
-  position: absolute;
-  padding: 2px;
-  top: 0;
-  right: 0;
-  transform: translateY(-50%);
-  background: yellow;
-  color: #000;
-}
+@import "../../libs/basicdata.css"
+
 </style>
