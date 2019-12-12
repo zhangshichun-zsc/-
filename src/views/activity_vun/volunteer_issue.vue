@@ -189,17 +189,17 @@
         </i-col>
       </Row> 
       <Row class-name="row20">
+        <i-col span='3' push='1'>
+          活动详情
+        </i-col>
         <i-col span='16'  push='1'>
-          <div>
-            <p class="active-text"><span>活动详情</span></p>
             <wangeditor id='wange' :labels="args.detail" @change='changeEditor' :disabled='status == 3 || status == 4?false:isDisb'/>
-          </div>
         </i-col>
       </Row>
       <Row class-name="row20">
         <i-col span='12' push='1'>
           <Row class-name="row20">
-            <Row>
+            <Row class-name="row10">
               <i-col span='3'>
                 培训内容
               </i-col>
@@ -222,19 +222,19 @@
             </Row>
             <Row v-if='isFeedback === 1'>
               <Row v-for="(item,index) in feed" :key='index'>
-                <Row v-if=' index ==0 ' class-name="row10">
+                <Row v-if=' index ==0 ' class-name="row10" type="flex" justify="space-between">
                   <i-col span='5'>反馈简介</i-col>
                   <i-col span='16'> 
                     <i-input placeholder="请输入反馈内容" v-model="item.detailText" type="textarea" :disabled="isDisb" :row='4'/>
                   </i-col>
                 </Row>
-                <Row v-else-if='~~item.typeFlag === 9' class-name="row10">
+                <Row v-else-if='~~item.typeFlag === 9' class-name="row10" type="flex" justify="space-between">
                   <i-col span='5'>是否上传图片</i-col>
                   <i-col span='16'>
                     <i-switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.detailText"/>
                   </i-col>
                 </Row>
-                <Row v-else-if=' ~~item.typeFlag === 1 || ~~item.typeFlag === 6 ' class-name="row10">
+                <Row v-else-if=' ~~item.typeFlag === 1 || ~~item.typeFlag === 6 ' class-name="row10" type="flex" justify="space-between">
                   <i-col span='5'>
                     <i-input placeholder="标题" v-model="item.detailText" :disabled="isDisb"/>
                   </i-col>
@@ -246,29 +246,29 @@
                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                   </i-col>
                 </Row>
-                <Row v-else-if='~~item.typeFlag === 3 || ~~item.typeFlag === 4 ' class-name="row10">
-                  <Row>
+                <Row v-else-if='~~item.typeFlag === 3 || ~~item.typeFlag === 4 '>
+                  <Row type="flex" justify="space-between"  class-name="row10">
                     <i-col span='5'>
                       <i-input placeholder="请输入标题" v-model="item.detailText" :disabled="isDisb"/>
                     </i-col>
                     <i-col span='4'>
-                      <switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"></switch>
+                      <i-switch :disabled="isDisb" :true-value='1' :false-value='0' v-model="item.isMust"/>
                       <span>必填</span>
                     </i-col>
-                    <i-col span='4'>
+                    <i-col span='2'>
                       <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
                     </i-col>
                   </Row>
-                  <Row v-for="(val,i) in item.arr" :key='i'>
-                    <i-col span='10'>
+                  <Row v-for="(val,i) in item.arr" :key='i' class-name="row10">
+                    <i-col span='5'>
                         <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
                     </i-col>
-                    <i-col span='3'>
+                    <i-col span='2' push='2'>
                       <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
                     </i-col>
                   </Row>
                   <Row>
-                    <i-col>
+                    <i-col push='8' span='2'>
                       <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
                     </i-col>
                   </Row>
@@ -277,13 +277,13 @@
               <Row>
                 <i-col span='3'>新增反馈项</i-col>
                 <i-col span='19' push='2'>
-                  <Button v-for="(item,index) in feedList" :key='index' class="add-item" @click="addItem(item.type)">{{ item.name }}</Button>
+                  <Button class="btn" v-for="(item,index) in feedList" :key='index' @click="addItem(item.type)">{{ item.name }}</Button>
                 </i-col>
               </Row>
             </Row>
           </Row>
           <Row class-name="row20">
-            <Button @click="add = true">添加</Button>
+            <Button @click="add = true" v-if='!add'>添加</Button>
             <Row v-if='add'>
               <i-col span='4'>受益群体人数</i-col>
               <i-col span='4' push='2'>
@@ -444,8 +444,6 @@ export default {
           this.args = args
           this.args.startAt = res.data.startAt + ':00'
           this.args.endAt = res.data.endAt + ':00'
-          this.dateOne = res.data.startAt + '-' + res.data.endAt
-          this.dateTwo = res.data.enrollStarttime + '-' + res.data.enrollEndtime
           this.image = res.data.picPath
           this.zhaStart = res.data.enrollStarttime + ':00' || null,
           this.zhaEnd = res.data.enrollEndtime + ':00' || null,
@@ -588,8 +586,6 @@ export default {
         this.dateOne = [data.args.startAt,data.args.endAt]
         this.dateTwo = [data.zhaStart,data.zhaEnd]
         this.image = data.image
-        this.dateOne = data.dateOne
-        this.dateTwo = data.dateTwo
         this.isFeedback = data.isFeedback
         this.isTrain = data.isTrain
         this.train = data.train,
@@ -999,10 +995,23 @@ export default {
   .start-firt{
     width: 150px;
   }
+  .btns{
+    .right{
+      margin-left: 20px;
+    }
+  }
   .row20{
     margin-bottom: 20px;
   }
   .row10{
     margin-bottom: 10px;
+  }
+  .btn{
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  .btn:hover{
+    border-color:#FF565A;
+    color: #FF565A
   }
 </style>
