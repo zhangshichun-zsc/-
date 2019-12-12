@@ -460,7 +460,7 @@ export const roleAddtos = p => post('/sysRole/addRoleToUser', p) //角色管理-
 export const roleedit = p => posts('/sysRole/edicRoleUser', p) //角色管理--编辑成员
 
 //部门管理
-export const departmentlist = p => get('/web/dept/findAllDept', p) //部门管理--部门列表
+// export const departmentlist = p => get('/web/dept/findAllDept', p) //部门管理--部门列表
 
 export const departmentsub = p => get('/web/dept/findLevelDept', p) //部门管理--查询下级部门
 

@@ -5,7 +5,7 @@
     <div class="content bk">
       <div class="Members-search">
         <p>
-          <span>输入搜索:</span>&nbsp;
+          <span>姓名:</span>&nbsp;
           <Input
             search
             size="large"
@@ -42,6 +42,7 @@
                 <a href="javascript:;" class="btn" @click="function1"
                   >权限设置</a
                 >
+                <a href="javascript:;" class="btn" @click="newadd">添加人员</a>
                 <Modal v-model="modal1" title="新建角色">
                   <Form
                     ref="formValidate"
@@ -74,19 +75,29 @@
             </Menu>
           </Header>
           <Layout>
-            <Sider hide-trigger :style="{ background: '#fff', colot: '#000' }">
+            <Sider
+              hide-trigger
+              :style="{
+                background: '#fff',
+                colot: '#1B2331',
+                width: '300px',
+                'min-width': '300px',
+                'max-width': '300px',
+                flex: '0 0 200px'
+              }"
+            >
               <Menu
                 :active-name="`1-${role}`"
                 width="auto"
                 :open-names="['1']"
                 style="background-color: #fff;"
               >
-                <Submenu name="1" style="color: #000;">
+                <Submenu name="1" style="color: #1B2331; font-size:16px">
                   <template slot="title">
                     <Icon type="ios-navigate" />融爱融乐
                   </template>
                   <MenuItem
-                    style="color: #000;"
+                    style="color: #1B2331; font-size:14px; line-height: 3px"
                     :name="`1-${item.sysRoleName}`"
                     v-for="(item, index) in List"
                     :key="index"
@@ -96,12 +107,11 @@
                 </Submenu>
               </Menu>
             </Sider>
-            <Layout :style="{ padding: '0 24px 24px' }">
+            <Layout>
               <!-- <Button :style="{ margin: '24px 0', maxWidth: '100px' }"></Button> -->
-              <a href="javascript:;" class="btn" @click="newadd">添加人员</a>
+
               <Content
                 :style="{
-                  padding: '24px',
                   minHeight: '280px',
                   background: '#fff'
                 }"
@@ -195,39 +205,45 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          width: "100",
           align: "center"
         },
         {
           title: "邮箱地址",
           key: "email",
+          width: "200",
           align: "center"
         },
         {
           title: "联系方式",
           key: "tel",
+          width: "140",
           align: "center"
         },
         {
           title: "最近登录时间",
           key: "login",
-          width: "140",
+          width: "180",
           align: "center",
           render: (h, params) => {
             return h("div", [
-              h("p", this.util.formatDate(params.row.lastLogin))
+              h(
+                "p",
+                params.row.lastLogin
+                  ? this.util.formatDate(params.row.lastLogin)
+                  : ""
+              )
             ]);
           }
         },
         {
           title: "部门",
           key: "deplNames",
-          width: "100",
-          algin: "center"
+          align: "center"
         },
         {
           title: "操作",
           key: "action",
+          width: "100",
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -240,11 +256,12 @@ export default {
                   },
                   on: {
                     click: () => {
+                      console.log(params.row);
                       this.$router.push({
                         name: "Add-members",
                         query: {
                           userId: params.row.userId,
-                          name: this.role,
+                          name: params.row.userName,
                           states: 3,
                           fromURL: this.$route.name
                         }
@@ -558,11 +575,8 @@ body {
 .content {
   margin: 10px;
 }
-.bk {
-  border: 1px solid #e4e4e4;
-}
+
 .Members-search {
-  background-color: #f3f3f3;
   display: flex;
   justify-content: flex-start;
   padding: 10px 30px;
@@ -574,12 +588,12 @@ body {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+  padding: 15px 0;
 }
 .layout {
-  border: 1px solid #d7dde4;
   background: #f5f7f9;
   position: relative;
-  border-radius: 4px;
+
   overflow: hidden;
 }
 .layout-logo {
@@ -603,7 +617,6 @@ body {
   background: white;
   color: black;
   line-height: 40px;
-  border: 1px solid black;
 }
 .layout-nav span {
   padding-left: 30%;
@@ -624,7 +637,6 @@ body {
 }
 .addperson div:nth-of-type(2n-1) {
   padding: 10px;
-  border: 1px solid #ccc;
 }
 li {
   height: 24px;
@@ -646,10 +658,8 @@ li {
   width: 110px;
   height: 32px;
   line-height: 32px;
-
   border-radius: 15px;
-  font-size: 14px;
-
+  font-size: 16px;
   margin: 0 15px;
   text-align: center;
   background: #ff565a;

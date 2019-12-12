@@ -6,16 +6,9 @@
       <div class="con">
         <div class="title bk-szy flex-center-start">
           <p>
-            <span>数据列表</span>
+            <span>列表</span>
           </p>
           <div class="but">
-            <a
-              class="btn"
-              href="javascript:;"
-              @click="add"
-              style="margin-right:15px"
-              >添加部门</a
-            >
             <Modal v-model="modal1" :title="text">
               <Form
                 ref="AddDate"
@@ -82,6 +75,13 @@
                 >{{ item.label }}</Option
               >
             </Select>
+            <a
+              class="btn"
+              href="javascript:;"
+              @click="add"
+              style="margin-left:15px"
+              >添加部门</a
+            >
             <!-- <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
               <Option
                 v-for="item in sorting"
@@ -109,7 +109,7 @@
       </div>
       <div class="pages">
         <Page
-          :total="dataCount"
+          :total="datalistCount"
           show-elevator
           show-total
           size="small"
@@ -125,7 +125,7 @@
 <script>
 import expandRow from "@/components/table-expand.vue";
 import {
-  departmentlist,
+  // departmentlist,
   departmentsub,
   departmentStatu,
   departmentmember,
@@ -234,7 +234,8 @@ export default {
         {
           title: "成员数量",
           key: "sum",
-          align: "center"
+          align: "center",
+          width: 100
         },
         {
           title: "负责人",
@@ -245,6 +246,7 @@ export default {
           title: "是否启用",
           key: "status",
           align: "center",
+          width: 80,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -264,6 +266,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width: 80,
           render: (h, params) => {
             return h(
               "div",
@@ -317,7 +320,8 @@ export default {
         {
           title: "联系方式",
           key: "tel",
-          align: "center"
+          align: "center",
+          width: 110
         },
         {
           title: "角色",
@@ -333,6 +337,7 @@ export default {
           title: "是否启用",
           key: "status",
           align: "center",
+          width: 80,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -353,6 +358,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width: 140,
           render: (h, params) => {
             return h(
               "div",
@@ -360,7 +366,8 @@ export default {
                 style: {
                   display: "flex",
                   justifyContent: "space-around",
-                  MaxfontSize: "16px"
+                  MaxfontSize: "16px",
+                  color: "#FD585E"
                 }
               },
               [
@@ -392,7 +399,7 @@ export default {
                   {
                     clssName: "action",
                     style: {
-                      color: "#1ABD9D"
+                      color: "#FD585E"
                     },
                     on: {
                       click: () => {
@@ -433,8 +440,8 @@ export default {
       sort: "asc",
       dataCount: 0,
       status: "",
-      text: ""
-      // obj:''
+      text: "",
+      throttleFlag: true
     };
   },
   computed: {
@@ -471,8 +478,8 @@ export default {
     },
     // 部门列表
     getdepartmentlist() {
-      departmentlist({
-        parentId: 0
+      departmentsub({
+        depId: 0
       }).then(res => {
         if (res.code == 200) {
           this.data1 = res.data;
@@ -512,21 +519,23 @@ export default {
     },
     // 查询部门成员
     getdepartmentmember() {
+      if (!this.throttleFlag) return;
+      this.throttleFlag = false;
       departmentmember({
         page: { page: this.page, size: this.size },
         depId: this.deptId,
         sort: ""
       }).then(res => {
         if (res.code == 200) {
+          console.log(res.data);
           this.$store.commit("updateList", {
             list: res.data.list,
             count: res.data.totalSize
           });
-
-          // this.$Message.info("查询成功");
         } else {
           this.$Message.error(res.msg);
         }
+        this.throttleFlag = true;
         console.log(res);
       });
     },
@@ -688,12 +697,13 @@ body {
   padding: 5px 20px;
 }
 .con-margin {
-  margin-top: 10px;
+  margin-top: 30px;
 }
 .pages {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+  padding: 15px 0;
 }
 tr td.ivu-table-expanded-cell {
   padding: 0 !important;
@@ -708,7 +718,7 @@ td.ivu-table-expanded-cell {
   height: 32px;
   background: #ff565a;
   border-radius: 15px;
-  font-size: 14px;
+  font-size: 16px;
   color: #ffffff;
   line-height: 32px;
   text-align: center;

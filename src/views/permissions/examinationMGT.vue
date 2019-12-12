@@ -93,6 +93,7 @@ export default {
         {
           title: "是否启用",
           key: "status",
+          width: "100",
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -215,6 +216,7 @@ body {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+  padding: 15px 0;
 }
 .btn {
   display: inline-block;
@@ -224,7 +226,7 @@ body {
   margin: 0 15px;
   background: #ff565a;
   border-radius: 15px;
-  font-size: 14px;
+  font-size: 16px;
   color: #ffffff;
   text-align: center;
 }

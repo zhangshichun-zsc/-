@@ -3,7 +3,7 @@
   <div class="main">
     <div class="layout">
       <Layout>
-        <Header :style="{ position: 'fixed', width: '100%',zIndex:200 }">
+        <Header :style="{ position: 'fixed', width: '100%', zIndex: 200 }">
           <Menu mode="horizontal" theme="dark" active-name="1">
             <div class="layout-nav">
               <div class="layout-logo">
@@ -12,7 +12,13 @@
               </div>
               <div class="icon">
                 <span>
-                  <Icon title="系统首页" @click="home" type="ios-home-outline" size="26" style="cursor: pointer;" />
+                  <Icon
+                    title="系统首页"
+                    @click="home"
+                    type="ios-home-outline"
+                    size="26"
+                    style="cursor: pointer;"
+                  />
                 </span>
 
                 <Dropdown prop="transfer:true">
@@ -20,21 +26,30 @@
                     <Icon title="常用菜单" type="ios-menu-outline" size="26" />
                   </span>
                   <DropdownMenu slot="list" style="width:300px" class="drop">
-                    <DropdownItem style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p style="color:gray">常用菜单</p>
-                      <p style="color:green" @click="modal2=true">菜单管理</p>
+                      <p style="color:green" @click="modal2 = true">菜单管理</p>
                     </DropdownItem>
-                    <DropdownItem divided style="display:flex;justify-content: space-around">
+                    <DropdownItem
+                      divided
+                      style="display:flex;justify-content: space-around"
+                    >
                       <p @click="manger">活动管理</p>
                       <p @click="group">机构列表</p>
                       <p @click="order">订单列表</p>
                     </DropdownItem>
-                    <DropdownItem style="display:flex;justify-content: space-around">
+                    <DropdownItem
+                      style="display:flex;justify-content: space-around"
+                    >
                       <p @click="user">用户列表</p>
                       <p @click="approval">活动立项</p>
                       <p @click="adlist">广告列表</p>
                     </DropdownItem>
-                    <DropdownItem style="display:flex;justify-content: space-around">
+                    <DropdownItem
+                      style="display:flex;justify-content: space-around"
+                    >
                       <p>专题列表</p>
                       <p @click="department">部门管理</p>
                       <p @click="member">成员管理</p>
@@ -47,13 +62,19 @@
                     <Icon type="ios-contact-outline" size="26" />admin
                   </span>
                   <DropdownMenu slot="list">
-                    <DropdownItem style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p>账户信息</p>
                       <p style="color:green" @click="less">账户设置</p>
                     </DropdownItem>
-                    <DropdownItem divided>• 所在部门：IT系统管理部</DropdownItem>
+                    <DropdownItem divided
+                      >• 所在部门：IT系统管理部</DropdownItem
+                    >
                     <DropdownItem>• 本次登录：2019-07-01 14:36:21</DropdownItem>
-                    <DropdownItem>• 登录地区：北京市 (IP：1.1.1.1)</DropdownItem>
+                    <DropdownItem
+                      >• 登录地区：北京市 (IP：1.1.1.1)</DropdownItem
+                    >
                     <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -63,7 +84,9 @@
                     <span>常用菜单设置</span>
                   </p>
                   <p slot="header" style="color:#ccc;font-weight:normal">
-                    <span>通过点击勾选可添加菜单为管理常用操作项，最多添加9个</span>
+                    <span
+                      >通过点击勾选可添加菜单为管理常用操作项，最多添加9个</span
+                    >
                   </p>
                   <div class="cai">
                     <ul>
@@ -218,32 +241,51 @@
                 <Dropdown>
                   <span class="mess">
                     <div class="message">50</div>
-                    <Icon title="系统消息" type="ios-notifications-outline" size="26" />
+                    <Icon
+                      title="系统消息"
+                      type="ios-notifications-outline"
+                      size="26"
+                    />
                   </span>
                   <DropdownMenu slot="list" style="width:260px">
                     <DropdownItem>
                       <p style="color:gray">提示</p>
                     </DropdownItem>
-                    <DropdownItem divided style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      divided
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p @click="pend">报名待审核</p>
                       <p>（10）</p>
                     </DropdownItem>
-                    <DropdownItem divided style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      divided
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p @click="pend">转移待审核</p>
                       <p>（10）</p>
                     </DropdownItem>
-                    <DropdownItem divided style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      divided
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p @click="pend">待领取物资</p>
                       <p>（10）</p>
                     </DropdownItem>
-                    <DropdownItem divided style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      divided
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p @click="pend">待发放物资</p>
                       <p>（10）</p>
                     </DropdownItem>
                     <DropdownItem divided style="color:gray">
                       <p>广告位提示</p>
                     </DropdownItem>
-                    <DropdownItem divided style="display:flex;justify-content: space-between">
+                    <DropdownItem
+                      divided
+                      style="display:flex;justify-content: space-between"
+                    >
                       <p @click="adlist">广告位即将到期</p>
                       <p>（10）</p>
                     </DropdownItem>
@@ -251,13 +293,23 @@
                 </Dropdown>
                 <span>|</span>
                 <span>
-                  <Icon title="退出登录" @click="modal1=true" type="ios-power-outline" size="26" style="cursor: pointer;" />
+                  <Icon
+                    title="退出登录"
+                    @click="modal1 = true"
+                    type="ios-power-outline"
+                    size="26"
+                    style="cursor: pointer;"
+                  />
                 </span>
                 <Modal v-model="modal1" title="退出确认">
                   <h4>确定要退出登录吗？</h4>
                   <div slot="footer">
-                    <Button type="text" size="large" @click="modalOk(0)">取消</Button>
-                    <Button type="primary" size="large" @click="modalOk(1)">确定</Button>
+                    <Button type="text" size="large" @click="modalOk(0)"
+                      >取消</Button
+                    >
+                    <Button type="primary" size="large" @click="modalOk(1)"
+                      >确定</Button
+                    >
                   </div>
                 </Modal>
               </div>
@@ -265,20 +317,64 @@
           </Menu>
         </Header>
         <Layout>
-
-          <Sider hide-trigger breakpoint="md" collapsible :collapsed-width="78" id='sider' :style="{position: 'fixed',  'min-width': '200px',  height: '100vh', left: 0, overflow: 'auto', background:'#fff'}">
+          <Sider
+            hide-trigger
+            breakpoint="md"
+            collapsible
+            :collapsed-width="78"
+            id="sider"
+            :style="{
+              position: 'fixed',
+              'min-width': '200px',
+              height: '100vh',
+              left: 0,
+              overflow: 'auto',
+              background: '#fff'
+            }"
+          >
             <!-- <div class="toggle-button">|||</div> -->
-            <Menu :active-name="active" :open-names="['1']" theme="dark" width="auto" ref="child" accordion>
-              <Submenu :name="index+1" id='top' v-for="(item, index) in routelist" :key="index">
+            <Menu
+              :active-name="active"
+              :open-names="['1']"
+              theme="dark"
+              width="auto"
+              ref="child"
+              accordion
+            >
+              <Submenu
+                :name="index + 1"
+                id="top"
+                v-for="(item, index) in routelist"
+                :key="index"
+              >
                 <template slot="title">
-
-                  <img class='icon-img' :src="item.icon?`https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg`:'https://rhzgtest.co-inclusion.org/app/menu_icon/content.svg'">
+                  <img
+                    class="icon-img"
+                    :src="
+                      item.icon
+                        ? `https://rhzgtest.co-inclusion.org/app/menu_icon/${item.icon}.svg`
+                        : 'https://rhzgtest.co-inclusion.org/app/menu_icon/content.svg'
+                    "
+                  />
                   <!-- <Icon v-else type="ios-bookmark" /> -->
-                  <span style='font-size: 14px;color: #1B2331;line-height: 14px;'>{{ item.parentName}}</span>
+                  <span
+                    class="prenName"
+                    style="line-height: 14px;font-size: 16px;"
+                    >{{ item.parentName }}</span
+                  >
                 </template>
-                <Menu-item :name="`${index+1}-${keys+1}`" v-for="(value,keys) in item.list" :key="keys" :to="{name: value.url}" @click.native="savestate(`${index+1}-${keys+1}`)">
+                <Menu-item
+                  :name="`${index + 1}-${keys + 1}`"
+                  v-for="(value, keys) in item.list"
+                  :key="keys"
+                  :to="{ name: value.url }"
+                  @click.native="savestate(`${index + 1}-${keys + 1}`)"
+                >
+                  <!--  style="padding-left:10px" -->
                   <Icon type="md-arrow-dropright" />
-                  <span class='color: #1b2331'> {{ value.name }}</span>
+                  <span style="font-size: 14px;color: #1b2331">
+                    {{ value.name }}</span
+                  >
                 </Menu-item>
               </Submenu>
             </Menu>
@@ -295,21 +391,21 @@
 </template>
 
 <script>
-import { homepage,loginout} from '../request/api'
+import { homepage, loginout } from "../request/api";
 export default {
-  props: ['labels'],
+  props: ["labels"],
   data() {
     return {
       routelist: this.gethomepage(),
       modal1: false,
       modal2: false,
-      active: '',
-      token: '',
+      active: "",
+      token: "",
       list: function() {
-        this.routelist = sessionStorage.getItem('routelist')
-        console.log(this.routelist, sessionStorage.getItem('routelist'))
+        this.routelist = sessionStorage.getItem("routelist");
+        console.log(this.routelist, sessionStorage.getItem("routelist"));
       }
-    }
+    };
   },
 
   components: {},
@@ -318,93 +414,109 @@ export default {
 
   //保存储存的信息
   created() {
-    this.active = window.sessionStorage.getItem('active')
+    this.active = window.sessionStorage.getItem("active");
     // this.routelist = window.sessionStorage.getItem('routelist')
     // console.log(this.routelist)
   },
-
+  beforeRouteLeave(to, from, next) {
+    if (to.name === from.name) return;
+    let toName = to.name;
+    let menuList = this.$store.state.menuList;
+    if (!menuList.includes(toName, 0)) {
+      this.$Message.error("此账号无该权限！");
+    } else {
+      next();
+    }
+  },
   methods: {
     gethomepage() {
       homepage({
         userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
-          this.routelist = res.data
+          this.routelist = res.data;
+
+          //   将 当前用户的菜单保存到 vueX 中
+          let arr = [];
+          res.data.forEach(item => {
+            item.list.map(key => {
+              key.url && arr.push(key.url);
+            });
+          });
+          this.$store.commit("menuList", arr);
         }
-        console.log(res)
-      })
+      });
     },
 
     //退出登录
-    getloginout(){
+    getloginout() {
       loginout({
-        userId:this.$store.state.userId
-      }).then(res=>{
-        if(res.code==200){
-            this.$store.commit('clearToken')
-        this.$router.push({ name: 'login' })
-        console.log(this.$store.state.token)
-          this.$Message.info('退出成功')
-        }else{
-          this.$Message.error(res.msg)
+        userId: this.$store.state.userId
+      }).then(res => {
+        if (res.code == 200) {
+          this.$store.commit("clearToken");
+          this.$router.push({ name: "login" });
+          console.log(this.$store.state.token);
+          this.$Message.info("退出成功");
+        } else {
+          this.$Message.error(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
     home() {
-      this.$router.push({ name: 'index' })
+      this.$router.push({ name: "index" });
     },
     less() {
-      this.$router.push({ name: 'less' })
+      this.$router.push({ name: "less" });
     },
     pend() {
-      this.$router.push({ name: 'volunteer_pending' })
+      this.$router.push({ name: "volunteer_pending" });
     },
     adlist() {
-      this.$router.push({ name: 'vp_adlist' })
+      this.$router.push({ name: "vp_adlist" });
     },
     manger() {
-      this.$router.push({ name: 'manager' })
+      this.$router.push({ name: "manager" });
     },
     group() {
-      this.$router.push({ name: 'grouplisthy' })
+      this.$router.push({ name: "grouplisthy" });
     },
     order() {
-      this.$router.push({ name: 'order' })
+      this.$router.push({ name: "order" });
     },
     user() {
-      this.$router.push({ name: 'all_member_hy' })
+      this.$router.push({ name: "all_member_hy" });
     },
     approval() {
-      this.$router.push({ name: 'approval' })
+      this.$router.push({ name: "approval" });
     },
     department() {
-      this.$router.push({ name: 'departmentMGT' })
+      this.$router.push({ name: "departmentMGT" });
     },
     member() {
-      this.$router.push({ name: 'membersMGT' })
+      this.$router.push({ name: "membersMGT" });
     },
     //保存点击的信息
     savestate(active) {
-      window.sessionStorage.setItem('active', active)
+      window.sessionStorage.setItem("active", active);
     },
 
     modalOk(e) {
-      this.modal1 = false
+      this.modal1 = false;
       if (e == 1) {
-        this.getloginout()
-
+        this.getloginout();
       }
     },
 
     one() {
-      console.log(111, this.$router.options.routes)
+      console.log(111, this.$router.options.routes);
     }
   },
   mounted() {
     // this.gethomepage()
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .layout {
@@ -455,13 +567,12 @@ export default {
   background-color: #f2f2f2;
 }
 
-
-    #sider {
-    width: 240px !important;
-    min-width: 240px !important;
-    padding-top: 82px;
-
-  }
+#sider {
+  width: 240px !important;
+  min-width: 240px !important;
+  padding-top: 82px;
+  max-width: 240px !important;
+}
 
 //  当宽度界限 lg: '992px',xl: '1200px', xxl: '1600'
 @media screen and (max-width: 1600px) {
@@ -469,11 +580,10 @@ export default {
     padding-left: 280px;
   }
   #sider {
-
-    width: 240px !important;
-    min-width: 240px !important;
+    width: 250px !important;
+    min-width: 250px !important;
     padding-top: 72px !important;
-
+    max-width: 250px !important;
   }
 }
 
@@ -483,9 +593,10 @@ export default {
   }
   #sider {
     background: red;
-    width: 240px !important;
-    min-width: 240px !important;
+    width: 250px !important;
+    min-width: 250px !important;
     padding-top: 70px !important;
+    max-width: 250px !important;
   }
 }
 
@@ -500,7 +611,6 @@ export default {
     padding-top: 80px !important;
   }
 }
-
 
 .ivu-layout .ivu-layout-header,
 .ivu-layout-header .ivu-menu {
@@ -541,6 +651,9 @@ export default {
 }
 .mess {
   position: relative;
+}
+.prenName {
+  color: #1b2331;
 }
 .message {
   position: absolute;
@@ -598,7 +711,7 @@ export default {
 .ivu-menu-item {
   color: #1b2331;
 }
-//  隐藏滚动条的样式
+// //  隐藏滚动条的样式
 ::-webkit-scrollbar {
   width: 0px;
   background-color: transparent;
