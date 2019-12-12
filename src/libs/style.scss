@@ -1,54 +1,81 @@
 .flex-start {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .flex-center-start {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .flex-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .flex-center-end {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .flex-wrap-between {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .flex-wrap-start {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .distpicker-address-wrapper select {
-    height: 50px;
+  height: 50px;
 }
 
 //查询按钮
-.button-red{ background: #FF565A; border-radius: 15px; height: 32px; width: 110px; font-size: 14px; color: #FFFFFF; text-align: center; line-height: 14px; margin: 0 20px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -ms-border-radius: 15px; -o-border-radius: 15px;
+.button-red {
+  background: #ff565a;
+  border-radius: 15px;
+  height: 32px;
+  width: 110px;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 14px;
+  margin: 0 20px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
 }
 
 //查询按钮
-.search{
-    width: 110px;
-    height: 32px;
-    background: #FF565A;
-    border-radius: 15px;
-    text-align: center;
-    line-height: 16px !important;
-    color: white;
-  }
+.search {
+  width: 110px;
+  height: 32px;
+  background: #ff565a;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 16px !important;
+  color: white;
+}
+
+html ::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+html ::-webkit-scrollbar-track {
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+html ::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border-radius: 10px;
+}

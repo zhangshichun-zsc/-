@@ -227,7 +227,7 @@ table td,
   padding: 0 15px;
   height: 32px;
   line-height: 32px;
-  font-size: 14px;
+  font-size: 16px;
   color: #fff;
   text-align: justify;
   background: #ff565a;

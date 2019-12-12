@@ -235,7 +235,8 @@ export default {
       ids: "",
       validFlag: "",
       deptId: "",
-      deplist: []
+      deplist: [],
+      throttleFlag: true
     };
   },
   props: ["row", "dom"],
@@ -296,19 +297,11 @@ export default {
         }
       });
     },
-    // // 获取上级部门
-    // getdepartmentSup() {
-    //   departmentSup({
-    //     parentId: this.AddDate.parentId
-    //   }).then(res => {
-    //     if (res.code == 200) {
-    //       this.deplist = res.data;
-    //     }
-    //     console.log(res);
-    //   });
-    // },
+
     // 查询 当前部门下的成员
     getdepartmentmember() {
+      if (!this.throttleFlag) return;
+      this.throttleFlag = false;
       let page = {
         page: this.$store.state.MGTpage.page,
         size: this.$store.state.MGTpage.size
@@ -329,6 +322,7 @@ export default {
           this.$Message.error(res.msg);
         }
         console.log(res);
+        this.throttleFlag = true;
       });
     },
     // 获取当前部门的直属上级部门

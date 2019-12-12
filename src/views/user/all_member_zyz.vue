@@ -3,22 +3,6 @@
   <div class="member">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-rig" @click="showScreen = !showScreen">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-          <a class="btn" href="javascript:;" @click="result">查询结果</a>
-          <!-- <Button class="integral-rig" @click="result">查询结果</Button> -->
-          <!-- TODO 暂时不做 -->
-          <!-- <Button class="integral-rig">高级检索</Button> -->
-        </div>
-      </div>
       <div class="flex-center-start integral-body" v-show="showScreen">
         <div class="flex-center-start">
           <span>姓名/手机号/昵称:</span>
@@ -39,7 +23,7 @@
           />
         </div>
         <div class="flex-center-start">
-         <span>注册时间/时间段:</span>
+          <span>注册时间/时间段:</span>
           <DatePicker
             style="width: 180px"
             type="date"
@@ -57,7 +41,7 @@
         <div class="flex-center-start">
           <span>标签:</span>
           <Input
-          disabled
+            disabled
             size="large"
             placeholder="标签"
             class="inpt"
@@ -65,6 +49,7 @@
           />
         </div>
         <div class="flex-center-start">
+          <a class="btn" href="javascript:;" @click="result">查询</a>
           <!-- <a @click="jump2()" style="color: #666666;">标签管理</a> -->
         </div>
       </div>
@@ -537,7 +522,7 @@
           show-elevator
           show-total
           size="small"
-          style="margin: auto"
+          style="padding-right: 30px;"
           :page-size="size"
           @on-change="changepages"
         />
@@ -759,41 +744,53 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 50,
           align: "center"
         },
         {
           title: "姓名",
-          key: "userName"
+          key: "userName",
+          align: "center"
         },
         {
           title: "手机号",
-          key: "tel"
+          key: "tel",
+          align: "center",
+          width: 120
         },
         {
           title: "用户昵称",
-          key: "nickname"
+          key: "nickname",
+          align: "center"
         },
         {
           title: "分类",
-          key: "roles"
+          key: "roles",
+          align: "center",
+          width: 120
         },
         {
           title: "标签",
-          key: "labels"
+          key: "labels",
+          align: "center",
         },
         {
           title: "参与活动数",
-          key: "joinActivityNum"
+          key: "joinActivityNum",
+          align: "center",
+          width: 100
         },
         {
           title: "积分",
-          key: "score"
+          key: "score",
+          align: "center",
+          width: 100
         },
         {
           title: "账户启用状态",
           key: "userEnable",
           align: "center",
+          width: 110,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -812,7 +809,7 @@ export default {
         {
           title: "操作",
           key: "action",
-          width: 200,
+          width: 160,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -980,6 +977,8 @@ export default {
         if (res.code == 200) {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -1198,7 +1197,7 @@ export default {
   line-height: 32px;
   background: #ff565a;
   border-radius: 15px;
-  font-size: 14px;
+  font-size: 16px;
   color: #ffffff;
   text-align: center;
 }
@@ -1217,6 +1216,7 @@ export default {
 }
 .integral-table {
   margin-top: 30px;
+  background: #fff;
 }
 .table-header {
   padding: 10px 20px;
@@ -1230,8 +1230,7 @@ export default {
   margin-left: 15px;
 }
 .integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
+  padding: 15px 20px;
   background: #fff;
 }
 .model .model-port {

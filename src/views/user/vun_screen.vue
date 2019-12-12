@@ -17,65 +17,77 @@
         </div>
       </div>
       <div class="flex-center-start integral-body">
-          <div class="push">
+        <div class="push">
           <div class="object">
-             <div class="tit">
-                 <span>最近参与活动:</span>
-                 <Tag color="success">不限</Tag>
-             </div>
-            <div>
-               <Tag v-for="item1 in count" :key="item1" :name="item1">{{item1}}</Tag>
-               <Tag color="success">自定义</Tag>
+            <div class="tit">
+              <span>最近参与活动:</span>
+              <Tag color="success">不限</Tag>
             </div>
-       </div>
-       <div class="object">
-             <div class="tit">
-                 <span>活动次数:</span>
-                 <Tag color="success">不限</Tag>
-             </div>
             <div>
-               <Tag v-for="item2 in num" :key="item2" :name="item2">{{item2}}</Tag>
-               <Tag color="success">自定义</Tag>
+              <Tag v-for="item1 in count" :key="item1" :name="item1">{{
+                item1
+              }}</Tag>
+              <Tag color="success">自定义</Tag>
             </div>
-       </div>
-       <div class="object">
-             <div class="tit">
-                 <span>关注类型:</span>
-                 <Tag color="success">不限</Tag>
-             </div>
+          </div>
+          <div class="object">
+            <div class="tit">
+              <span>活动次数:</span>
+              <Tag color="success">不限</Tag>
+            </div>
             <div>
-               <Tag v-for="item3 in focus" :key="item3" :name="item3">{{item3}}</Tag>
+              <Tag v-for="item2 in num" :key="item2" :name="item2">{{
+                item2
+              }}</Tag>
+              <Tag color="success">自定义</Tag>
             </div>
-       </div>
-       <div class="object">
-             <div class="tit">
-                 <span>用户类型:</span>
-                 <Tag color="success">不限</Tag>
-             </div>
+          </div>
+          <div class="object">
+            <div class="tit">
+              <span>关注类型:</span>
+              <Tag color="success">不限</Tag>
+            </div>
             <div>
-               <Tag v-for="item4 in user" :key="item4" :name="item4">{{item4}}</Tag>
+              <Tag v-for="item3 in focus" :key="item3" :name="item3">{{
+                item3
+              }}</Tag>
             </div>
-       </div>
-       <div class="object">
-             <div class="tit">
-                 <span>等级:</span>
-                 <Tag color="success">不限</Tag>
-             </div>
+          </div>
+          <div class="object">
+            <div class="tit">
+              <span>用户类型:</span>
+              <Tag color="success">不限</Tag>
+            </div>
             <div>
-               <Tag v-for="item5 in cla" :key="item5" :name="item5">{{item5}}</Tag>
+              <Tag v-for="item4 in user" :key="item4" :name="item4">{{
+                item4
+              }}</Tag>
             </div>
-       </div>
-       <div class="object">
-             <div class="tit">
-                 <span>用户标签:</span>
-                 <Tag color="success">不限</Tag>
-             </div>
+          </div>
+          <div class="object">
+            <div class="tit">
+              <span>等级:</span>
+              <Tag color="success">不限</Tag>
+            </div>
             <div>
-               <Tag v-for="item6 in tag" :key="item6" :name="item6">{{item6}}</Tag>
-               <Tag color="success">更多>></Tag>
+              <Tag v-for="item5 in cla" :key="item5" :name="item5">{{
+                item5
+              }}</Tag>
             </div>
-       </div>
-      </div>
+          </div>
+          <div class="object">
+            <div class="tit">
+              <span>用户标签:</span>
+              <Tag color="success">不限</Tag>
+            </div>
+            <div>
+              <Tag v-for="item6 in tag" :key="item6" :name="item6">{{
+                item6
+              }}</Tag>
+              <Tag color="success">更多>></Tag>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="integral-table">
@@ -85,113 +97,152 @@
           <span>数据列表</span>
         </div>
         <div class="flex-center">
-            <Button class="btn" @click="modal1 = true">群发短信</Button>
-            <Button class="btn" @click="modal2 = true">群发站内信</Button>
-            <Button class="btn" @click="modal3 = true">微信推送</Button>
-            <Button class="btn" @click="modal4 = true">设置标签</Button>
-            <Modal v-model="modal1" title="群发短信">
-             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="发送对象" prop="object">
-                   <Input v-model="formValidate.object" placeholder="请输入对象"></Input>
-                  </FormItem>
-                   <FormItem label="短信内容" prop="content">
-                     <Input v-model="formValidate.content" type="textarea" :autosize="{minRows: 4,maxRows: 4}" placeholder="请输入内容..."></Input>
-                  </FormItem>
-              </Form>
-           </Modal>
-            <Modal v-model="modal2" title="群发站内信">
-             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="发送对象" prop="object">
-                   <Input v-model="formValidate.object" placeholder="请输入对象"></Input>
-                  </FormItem>
-                 <FormItem label="标题" prop="title">
-                   <Input v-model="formValidate.title" placeholder="请输入标题"></Input>
-                  </FormItem>
-                   <FormItem label="短信内容" prop="content">
-                     <Input v-model="formValidate.content" type="textarea" :autosize="{minRows: 4,maxRows: 4}" placeholder="请输入内容..."></Input>
-                  </FormItem>
-              </Form>
-           </Modal>
-            <Modal v-model="modal3" title="微信推送">
-             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="推送类型" prop="class">
-                    <RadioGroup v-model="formValidate.class">
-                        <Radio label="链接"></Radio>
-                        <Radio label="专题"></Radio>
-                        <Radio label="活动"></Radio>
-                        <Radio label="商品"></Radio>
-                    </RadioGroup> 
-                  </FormItem>
-                  <FormItem label="标题" prop="title">
-                   <Input v-model="formValidate.title"></Input>
-                  </FormItem>
-                  <FormItem label="推送标题" prop="pushtitle">
-                   <Input v-model="formValidate.pushtitle"></Input>
-                  </FormItem>
-                   <FormItem label="推送内容" prop="pushcontent">
-                     <Input v-model="formValidate.pushcontent" type="textarea" :autosize="{minRows: 4,maxRows: 4}" placeholder="请输入内容..."></Input>
-                  </FormItem>
-              </Form>
-           </Modal>
-            <Modal v-model="modal4" title="设置标签">
-                <div class="taps">
-                    <ul>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                        <li>
-                           <Checkbox>用户标签名称</Checkbox>
-                        </li>
-                    </ul>
-                </div>
-           </Modal>
+          <Button class="btn" @click="modal1 = true">群发短信</Button>
+          <Button class="btn" @click="modal2 = true">群发站内信</Button>
+          <Button class="btn" @click="modal3 = true">微信推送</Button>
+          <Button class="btn" @click="modal4 = true">设置标签</Button>
+          <Modal v-model="modal1" title="群发短信">
+            <Form
+              ref="formValidate"
+              :model="formValidate"
+              :rules="ruleValidate"
+              :label-width="120"
+            >
+              <FormItem label="发送对象" prop="object">
+                <Input
+                  v-model="formValidate.object"
+                  placeholder="请输入对象"
+                ></Input>
+              </FormItem>
+              <FormItem label="短信内容" prop="content">
+                <Input
+                  v-model="formValidate.content"
+                  type="textarea"
+                  :autosize="{ minRows: 4, maxRows: 4 }"
+                  placeholder="请输入内容..."
+                ></Input>
+              </FormItem>
+            </Form>
+          </Modal>
+          <Modal v-model="modal2" title="群发站内信">
+            <Form
+              ref="formValidate"
+              :model="formValidate"
+              :rules="ruleValidate"
+              :label-width="120"
+            >
+              <FormItem label="发送对象" prop="object">
+                <Input
+                  v-model="formValidate.object"
+                  placeholder="请输入对象"
+                ></Input>
+              </FormItem>
+              <FormItem label="标题" prop="title">
+                <Input
+                  v-model="formValidate.title"
+                  placeholder="请输入标题"
+                ></Input>
+              </FormItem>
+              <FormItem label="短信内容" prop="content">
+                <Input
+                  v-model="formValidate.content"
+                  type="textarea"
+                  :autosize="{ minRows: 4, maxRows: 4 }"
+                  placeholder="请输入内容..."
+                ></Input>
+              </FormItem>
+            </Form>
+          </Modal>
+          <Modal v-model="modal3" title="微信推送">
+            <Form
+              ref="formValidate"
+              :model="formValidate"
+              :rules="ruleValidate"
+              :label-width="120"
+            >
+              <FormItem label="推送类型" prop="class">
+                <RadioGroup v-model="formValidate.class">
+                  <Radio label="链接"></Radio>
+                  <Radio label="专题"></Radio>
+                  <Radio label="活动"></Radio>
+                  <Radio label="商品"></Radio>
+                </RadioGroup>
+              </FormItem>
+              <FormItem label="标题" prop="title">
+                <Input v-model="formValidate.title"></Input>
+              </FormItem>
+              <FormItem label="推送标题" prop="pushtitle">
+                <Input v-model="formValidate.pushtitle"></Input>
+              </FormItem>
+              <FormItem label="推送内容" prop="pushcontent">
+                <Input
+                  v-model="formValidate.pushcontent"
+                  type="textarea"
+                  :autosize="{ minRows: 4, maxRows: 4 }"
+                  placeholder="请输入内容..."
+                ></Input>
+              </FormItem>
+            </Form>
+          </Modal>
+          <Modal v-model="modal4" title="设置标签">
+            <div class="taps">
+              <ul>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+                <li>
+                  <Checkbox>用户标签名称</Checkbox>
+                </li>
+              </ul>
+            </div>
+          </Modal>
         </div>
         <div class="flex-center-end">
           <Select size="small" class="inpt" placeholder="显示条数"></Select>
@@ -203,7 +254,12 @@
         <div class="batch">
           <Checkbox>全选</Checkbox>
           <Select placeholder="批量操作" style="width: 150px">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option
+              v-for="item in batchList"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
           <Button style="margin-left: 10px">确定</Button>
         </div>
@@ -217,58 +273,64 @@
 export default {
   data() {
     return {
-      count: ["一周内","两周内","1个月内","一个月前","两个月前","三个月前","六个月前"],
-      num:["1次+","2次+","3次+","4次+","10次+","20次+","30次+"],
-      focus:["环保","老人","助残"],
-      user:["志愿者"],
-      cla:["注册志愿者","黄金会员","白金会员","钻石会员"],
-      tag:["会员","志愿者","普通用户","爱心人士"],
+      count: [
+        "一周内",
+        "两周内",
+        "1个月内",
+        "一个月前",
+        "两个月前",
+        "三个月前",
+        "六个月前"
+      ],
+      num: ["1次+", "2次+", "3次+", "4次+", "10次+", "20次+", "30次+"],
+      focus: ["环保", "老人", "助残"],
+      user: ["志愿者"],
+      cla: ["注册志愿者", "黄金会员", "白金会员", "钻石会员"],
+      tag: ["会员", "志愿者", "普通用户", "爱心人士"],
       modal1: false,
       modal2: false,
       modal3: false,
       modal4: false,
-        formItem: {
-        input: '',
-        textarea: ''
-                },
-       formValidate:{
-          object:"",
-          content:"",
-          title:"",
-          class:"",
-          pushtitle:"",
-          pushcontent:""
-       },
-       ruleValidate:{
-          object: [
-          { required: true, message: '发送对象不能为空', trigger: 'blur' }
-                ],
-          content: [
-          { required: true, message: '短信内容不能为空', trigger: 'blur' }
-                ],
-          title: [
-          { required: true, message: '标题不能为空', trigger: 'blur' }
-                ],
-          pushtitle: [
-          { required: true, message: '推送标题不能为空', trigger: 'blur' }
-                ],
-          pushcontent: [
-          { required: true, message: '推送内容不能为空', trigger: 'blur' }
-                ],
-          class: [
-          { required: true, message: '推送类型不能为空', trigger: 'change' }
-                ],
-       },
-       navigation1: {
-        head: "用户筛选(志愿者)"
-       },
-        batchList:[
-          {value: 'recommended',label: '设为推荐'},
-          {value: 'cancel',label: '取消推荐'},
-          {value: 'hidden',label: '设为隐藏'},
-          {value: 'According',label: '设为显示'},
-          {value: 'delete',label: '删除'}
+      formItem: {
+        input: "",
+        textarea: ""
+      },
+      formValidate: {
+        object: "",
+        content: "",
+        title: "",
+        class: "",
+        pushtitle: "",
+        pushcontent: ""
+      },
+      ruleValidate: {
+        object: [
+          { required: true, message: "发送对象不能为空", trigger: "blur" }
         ],
+        content: [
+          { required: true, message: "短信内容不能为空", trigger: "blur" }
+        ],
+        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        pushtitle: [
+          { required: true, message: "推送标题不能为空", trigger: "blur" }
+        ],
+        pushcontent: [
+          { required: true, message: "推送内容不能为空", trigger: "blur" }
+        ],
+        class: [
+          { required: true, message: "推送类型不能为空", trigger: "change" }
+        ]
+      },
+      navigation1: {
+        head: "用户筛选(志愿者)"
+      },
+      batchList: [
+        { value: "recommended", label: "设为推荐" },
+        { value: "cancel", label: "取消推荐" },
+        { value: "hidden", label: "设为隐藏" },
+        { value: "According", label: "设为显示" },
+        { value: "delete", label: "删除" }
+      ],
       columns: [
         {
           type: "selection",
@@ -296,18 +358,18 @@ export default {
             return h("div", "200");
           }
         },
-         {
+        {
           title: "活动次数",
           key: "numaction",
           render: (h, params) => {
             return h("div", "10");
           }
         },
-         {
+        {
           title: "最近购买时间",
           key: "modifytime",
-          render:(h,params)=>{
-              return h("div","2019-07-03 14:36:21")
+          render: (h, params) => {
+            return h("div", "2019-07-03 14:36:21");
           }
         },
         {
@@ -335,18 +397,7 @@ export default {
           }
         }
       ],
-      data: [
-       {},
-       {},
-       {},
-       {},
-       {},
-       {},
-       {},
-       {},
-       {},
-       {},
-      ]
+      data: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     };
   },
 
@@ -357,12 +408,12 @@ export default {
   created() {},
 
   methods: {
-    ok () {
-      this.$Message.info('Clicked ok');
+    ok() {
+      this.$Message.info("Clicked ok");
     },
-    cancel () {
-      this.$Message.info('Clicked cancel');
-    },
+    cancel() {
+      this.$Message.info("Clicked cancel");
+    }
   }
 };
 </script>
@@ -414,32 +465,32 @@ export default {
 .sdate {
   margin-left: 15px;
 }
-.btn{
-    margin-right: 10px;
+.btn {
+  margin-right: 10px;
 }
-.push{
-  margin:10px 0;
+.push {
+  margin: 10px 0;
 }
-.object{
+.object {
   display: flex;
   margin: 15px 0;
 }
-.tit{
+.tit {
   width: 10rem;
-  text-align: right
+  text-align: right;
 }
-.object span{
+.object span {
   font-size: 14px;
   margin-right: 10px;
 }
-.taps ul{
-    display: flex;
-    justify-content: space-around; 
-    margin-top: 10px;
+.taps ul {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
 }
-.pages{
-    display: flex;
-    justify-content: space-between;
-    margin: 10px auto;
-  }
+.pages {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px auto;
+}
 </style>

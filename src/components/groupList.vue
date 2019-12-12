@@ -332,7 +332,7 @@ export default {
       queryCoAuditConfig({
         userId: this.userId,
         typeFlag: this.navigation1.name === "parent" ? "5" : "6",
-        sysId: this.navigation1.name === "parent" ? "1,2" : "2,3"
+        sysId: this.navigation1.name === "parent" ? "1,3" : "2,3"
       }).then(res => {
         this.jurisdiction = res.data.isAudit;
       });
