@@ -19,7 +19,7 @@ const SERVICE_URL = {
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web" // 王盛 6
   ],
-  API_INDEX: 3
+  API_INDEX: 4
 }
 
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
