@@ -63,12 +63,15 @@
           </Modal>
         </div>
       </div>
+       <div class="min-height">
       <Table
         ref="selection"
         border
         :columns="columns"
         :data="data1"
       ></Table>
+      </div>
+
       <div class="pages">
         <Page
           :total="sumSize"
@@ -104,15 +107,21 @@ export default {
       columns: [
         {
           title: "名称",
-          key: "name"
+          key: "name",
+           width: 300,
+          align: "center",
         },
         {
           title: "创建时间",
           key: "createAt",
+           width: 140,
+          align: "center",
         },
         {
           title: "创建人",
           key: "userName",
+           width: 300,
+          align: "center",
           render: (h,params) => {
             return h("span",params.row.userName?params.row.userName:'系统管理员')
           }
@@ -145,6 +154,8 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+           width: 90,
+
           render: (h, params) => {
             return h("div", [
               h(
@@ -276,63 +287,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.table-btn {
-  position: relative;
-}
-.icon {
-  position: absolute;
-  padding: 2px;
-  top: 0;
-  right: 0;
-  transform: translateY(-50%);
-  background: yellow;
-  color: #000;
-}
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
+@import "../../libs/basicdata.css"
 </style>

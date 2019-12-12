@@ -160,14 +160,15 @@ export default {
           }
         },
         {
-          title: "时间",
+          title: "起止时间",
           key: "time",
           align: "center",
+          width:280,
           render: (h, params) => {
-            return h("div", [
-              h("p", "开始时间:" + formatDate(params.row.startAt)),
-              h("p", "到期时间:" + formatDate(params.row.endAt))
-            ]);
+            return h("div",
+              formatDate(params.row.startAt)+'/'+formatDate(params.row.endAt),
+
+            );
           }
         },
         {

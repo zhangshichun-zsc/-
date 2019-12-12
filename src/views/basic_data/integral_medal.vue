@@ -56,10 +56,10 @@
                     </Upload>
                  </FormItem>
                  <FormItem label="勋章名称" prop="name">
-                     <Input v-model="formValidate.name" placeholder="请输入勋章名称"></Input>
+                     <Input v-model="formValidate.name" placeholder="请输入勋章名称"/>
                  </FormItem>
                  <FormItem label="活动规则" prop="rules">
-                     <Input v-model="formValidate.rules" placeholder="请输入规则"></Input>
+                     <Input v-model="formValidate.rules" placeholder="请输入规则" />
                  </FormItem>
               </Form>
              </Modal>
@@ -71,10 +71,10 @@
                     </Upload>
                  </FormItem>
                  <FormItem label="勋章名称" prop="name">
-                     <Input v-model="formValidate.name" placeholder="请输入勋章名称"></Input>
+                     <Input v-model="formValidate.name" placeholder="请输入勋章名称" />
                  </FormItem>
                  <FormItem label="规则" prop="rules">
-                     <Input v-model="formValidate.rules" placeholder="请输入规则"></Input>
+                     <Input v-model="formValidate.rules" placeholder="请输入规则" />
                  </FormItem>
               </Form>
              </Modal>
