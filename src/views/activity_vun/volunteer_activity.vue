@@ -202,7 +202,11 @@ export default {
                   on: {
                     click: () => {
                       console.log(params.row.activityId)
-                      this.$router.push({ name: 'volunteer_issue', query: { activityId:params.row.activityId } })
+                      if(params.row.statusText==1 || params.row.statusText==2 ||params.row.statusText==3||params.row.statusText==4){
+                        this.$router.push({ name: 'volunteer_issue', query: { activityId:params.row.activityId,isEdit:1,status:params.row.statusText } })
+                      }else{
+                        this.$Message.warning('该活动状态不可编辑')
+                      }
                     }
                   }
                 },
