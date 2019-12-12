@@ -10,7 +10,7 @@
             <Checkbox v-model="status"></Checkbox>全选
           </Button> -->
           <span>已选择{{arr.length}}</span>
-          <Button class="table-btn" type="primary" @click="add('formValidate')">{{Newly}}</Button>
+          <Button class="table-btns"  @click="add('formValidate')">{{Newly}}</Button>
           <Modal v-model="modal1" title="新增会费" draggable width="800">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称" prop="name">
@@ -41,13 +41,16 @@
           </Modal>
         </div>
       </div>
-      <Table
+       <div class="min-height">
+        <Table
         ref="selection"
         border
         :columns="columns"
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
+      </div>
+
       <div class="pages">
         <Page
           :total="dataCount"
@@ -86,6 +89,9 @@ export default {
         name: [
           { required: true, message: "会费名称不能为空", trigger: "blur" }
         ],
+        packageFlag:[{
+          required: true,  trigger: "change"
+        }],
         amount: [
           {
             required: true,
@@ -124,12 +130,14 @@ export default {
         {
           title: "名称",
           key: "name",
-          align: "center"
+          align: "center",
+          width:350,
         },
         {
           title: "会费期限",
           key: "imonth",
-          align: "center"
+          align: "center",
+          width:120,
         },
         {
           title: "金额",
@@ -144,12 +152,14 @@ export default {
         {
           title: "创建时间",
           key: "createAt",
-          align: "center"
+          align: "center",
+          width:160,
         },
         {
           title: "有效状态",
           key: "status",
           algin: "center",
+          width:100,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -177,6 +187,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width:80,
           render: (h, params) => {
             return h("div", [
               h(
@@ -397,51 +408,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
+@import "../../libs/basicdata.css"
 </style>

@@ -213,7 +213,7 @@ export default {
         ruleType: this.ruleType
       }).then(res => {
         if (res.code == 200) {
-          if (this.ruleType == 1) {
+          if (this.ruleType == 3) {
             this.data = res.data.list;
           } else {
             this.data1 = res.data.list;

@@ -7,11 +7,11 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          全选
+
           <span>已选择{{arr.length}}</span>
           <!-- <Button class="table-btn">批量删除</Button> -->
-          <Button class="table-btn" type="primary" @click="added">新增项目</Button>
-          <Modal v-model="modal1" :title=text class="mol">
+          <Button class="table-btns"  @click="added">新增项目</Button>
+          <Modal v-model="modal1" :title="text" class="mol">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
                 <Input v-model="formValidate.name" />
@@ -36,13 +36,16 @@
           </Modal>
         </div>
       </div>
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data"
-        @on-selection-change="handleSelectionChange"
-      ></Table>
+      <div class="min-height">
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="data"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
+      </div>
+
       <div class="pages">
         <Page
           :total="dataCount"
@@ -78,9 +81,15 @@ export default {
           { required: true, message: "职业名称不能为空", trigger: "blur" }
         ],
         allBudget: [
-          { required: true, message: "总计预算格式不正确", trigger: "blur", type: "number",transform(value) {
-                return Number(value);
-              }}
+          {
+            required: true,
+            message: "总计预算格式不正确",
+            trigger: "blur",
+            type: "number",
+            transform(value) {
+              return Number(value);
+            }
+          }
         ],
         orgId: [
           {
@@ -101,24 +110,33 @@ export default {
         },
         {
           title: "项目名称",
-          key: "name"
+          key: "name",
+          align: "center",
+          width: 260
         },
         {
           title: "总预算",
-          key: "allBudget"
+          key: "allBudget",
+           align: "center",
+           width: 130
         },
         {
           title: "预算来源",
-          key: "orgName"
+          key: "orgName",
+          align: "center",
+            width: 350,
         },
         {
           title: "创建时间",
-          key: "createAt"
+          key: "createAt",
+          align: "center",
+          width: 130
         },
         {
           title: "有效状态",
           key: "status",
           algin: "center",
+           width: 100,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -128,15 +146,14 @@ export default {
                 on: {
                   input: e => {
                     console.log(e);
-                      this.categoryId=params.row.categoryId
-                    if(e){
-                      this.validFlags=1
+                    this.categoryId = params.row.categoryId;
+                    if (e) {
+                      this.validFlags = 1;
 
-                      this.getprojectstate()
-
-                    }else{
-                      this.validFlags=0
-                      this.getprojectstate()
+                      this.getprojectstate();
+                    } else {
+                      this.validFlags = 0;
+                      this.getprojectstate();
                     }
                   }
                 }
@@ -148,6 +165,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+           width: 100,
           render: (h, params) => {
             return h("div", [
               h(
@@ -159,11 +177,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                       this.getbudgetlist();
-                      this.text='编辑项目'
-                      this.formValidate=params.row
+                      this.getbudgetlist();
+                      this.text = "编辑项目";
+                      this.formValidate = params.row;
                       this.modal1 = true;
-                      this.categoryId=params.row.categoryId
+                      this.categoryId = params.row.categoryId;
                     }
                   }
                 },
@@ -193,16 +211,16 @@ export default {
       dataCount: 0,
       arr: [],
 
-      validFlag: '',
+      validFlag: "",
       sysType: 1,
-      targetName: '',
+      targetName: "",
       status: null,
 
       params: null,
       budgetlist: [],
-      typeFlag:1,
-      text:'新增项目',
-      validFlags:''
+      typeFlag: 1,
+      text: "新增项目",
+      validFlags: ""
     };
   },
 
@@ -219,10 +237,10 @@ export default {
     getprojectsetlist() {
       let params = {
         page: { page: this.page, size: this.size },
-        targetName:this.targetName,
+        targetName: this.targetName,
         startAt: this.startAt,
         endAt: this.endAt,
-        validFlag:this.validFlag
+        validFlag: this.validFlag
       };
       this.params = this.util.remove(params);
 
@@ -239,15 +257,17 @@ export default {
 
     //新增 编辑
     getprojectsetadd() {
-      let params = [{
-        categoryId: this.categoryId,
-        name: this.formValidate.name,
-        typeFlag: this.typeFlag,
-        allBudget: this.formValidate.allBudget,
-        orgId: this.formValidate.orgId
-      }]
+      let params = [
+        {
+          categoryId: this.categoryId,
+          name: this.formValidate.name,
+          typeFlag: this.typeFlag,
+          allBudget: this.formValidate.allBudget,
+          orgId: this.formValidate.orgId
+        }
+      ];
       params = this.util.remove(params);
-      projectsetadd({list:params}).then(res => {
+      projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
           this.$Message.info("新增成功");
           this.modal1 = true;
@@ -257,12 +277,14 @@ export default {
     },
 
     //修改状态
-     getprojectstate() {
-      let params = [{
-        categoryId: this.categoryId,
-        validFlag: this.validFlags
-      }]
-      projectsetadd({list:params}).then(res => {
+    getprojectstate() {
+      let params = [
+        {
+          categoryId: this.categoryId,
+          validFlag: this.validFlags
+        }
+      ];
+      projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
           this.getprojectsetlist();
           this.$Message.info("操作成功");
@@ -281,7 +303,7 @@ export default {
     //新增
     added() {
       this.$refs.formValidate.resetFields();
-      this.categoryId=''
+      this.categoryId = "";
       this.modal1 = true;
       this.getbudgetlist();
     },
@@ -316,73 +338,26 @@ export default {
       }
     },
 
-    clear(){
+    clear() {
       this.$refs.formValidate.resetFields();
     },
 
     ok() {
       this.$refs.formValidate.validate(valid => {
         if (valid) {
-         this.getprojectsetadd()
+          this.getprojectsetadd();
         } else {
           this.$Message.error("必填项未填!");
         }
       });
     },
     cancel() {
-       this.modal1 = false
+      this.modal1 = false;
       this.$Message.info("取消成功");
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.mol div {
-  margin: 10px;
-}
+@import "../../libs/basicdata.css";
 </style>
