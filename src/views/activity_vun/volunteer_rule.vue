@@ -29,7 +29,6 @@
             </TabPane>
           </Tabs>
         </div>
-        </div>
         <div class="pages">
           <Page
             :total="dataCount"
@@ -41,6 +40,7 @@
             @on-change="changepages"
           />
         </div>
+      </div>
     </div>
   </div>
 </template>
