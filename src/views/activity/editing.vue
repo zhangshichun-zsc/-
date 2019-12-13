@@ -2,32 +2,36 @@
 <template>
   <div class="lx-content">
     <adress :value='adr' @change='getMap'/>
-          <div class="select">
-            <span class="select-template">活动分类</span>
-            <Select v-model="batch.actTypeName" style="width:200px">
-              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name" @click.native="getActiveTypeId(item)">{{ item.name }}</Option>
-            </Select>
-          </div>
-          <div class="select">
-            <span class="select-template">选择模板</span>
-            <Select v-model="model1" style="width:200px">
-              <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name">{{ item.name }}</Option>
-            </Select>
-          </div>
-          <div class="activitives">
-            <p class="activitives-top">
-              <span>活动内容</span>
-            </p>
-            <div class="main1">
-              <ul>
-                <li>
-                  <span class="same_style">活动名称</span>
-                  <Input placeholder="请输入活动名称" v-model="batch.actName" style="width:200px"></Input>
-                </li>
-                <li class="imges">
-                  <span class="same_style">主题图片</span>
-                  <div class="imgs">
-                    <img :src='batch.actShowPic' />
+    <Navigation :labels="navigation1"></Navigation>
+    <div class="lx-cont">
+      <div v-if='two'>
+        <Row>
+          <Col span='10'>
+            <ul>
+              <li class="first-li">
+                <span class="first-span">活动分类</span>
+                <Select v-model="batch.actTypeName" style="width:300px">
+                  <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name" @click.native="getActiveTypeId(item)">{{ item.name }}</Option>
+                </Select>
+              </li>
+              <li class="first-li">
+                <span class="first-span">选择模板</span>
+                <Select v-model="batch.actTypeName" style="width:300px">
+                  <Option v-for="item in templateList" :value="item.name" :key="item.name" @click.native="getTemplateDetail(item)">{{ item.name }}</Option>
+                </Select>
+              </li>
+              <li class="first-li">
+                <span class="first-span">活动名称</span>
+                <Input placeholder="请输入活动名称" v-model="batch.actName" style="width:300px"></Input>
+              </li>
+              <li class="first-li">
+                <span class="first-span">封面图片</span>
+                <div>
+                  <div class="first-pic" v-if='batch.actCoverShowPic == null'>
+                    <div class="" @click="()=>{ this.$refs.files.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFmFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                    </div>
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="batch.actCoverShowPic"/>
@@ -521,151 +525,16 @@ export default {
 .lx-content {
   background-color: #fff;
 }
-.content {
-  background: #f3f3f3;
-  border-top: #e4e4e4 solid 1px;
-  margin-top: 20px;
-  .content-activity {
-    height: 50px;
-    line-height: 50px;
-    padding-left: 20px;
-  }
-  .select {
-    display: flex;
-    background: #ffffff;
-    height: 40px;
-    align-items: center;
-    .select-template {
-      margin: 0 50px;
-    }
-  }
-  .activitives {
-    background: #ffffff;
-    margin-bottom: 40px;
-    // height: 900px;
-    .activitives-top {
-      height: 40px;
-      margin-top: 40px;
-      background: #ffffff;
-      span {
-        width: 140px;
-        height: 40px;
-        text-align: center;
-        line-height: 40px;
-        background: #008e40;
-        color: #ffffff;
-        font-size: 14px;
-        display: inline-block;
-      }
-    }
-  }
-  .main1 {
-    padding: 0 50px;
-    background: #ffffff;
-    ul {
-      padding: 20px 0;
-      li {
-        margin-bottom: 20px;
-        // height: 40px;
-        display: flex;
-        align-items: center;
-        .same_style {
-          display: inline-block;
-          width: 100px;
-          margin-right: 70px;
-        }
-        .style-no {
-          margin-right: 55px;
-        }
-        .imgs {
-          width: 400px;
-          height: 200px;
-          background: #797979;
-        }
-      }
-      .imges {
-        align-items: flex-start;
-      }
-      .linkman {
-        display: flex;
-        height: 80px;
-        align-items: flex-start;
-      }
-      .staff {
-        p {
-          margin-bottom: 20px;
-          .same-staff {
-            margin-right: 20px;
-          }
-          .relation {
-            margin-right: 10px;
-          }
-        }
-      }
-    }
-  }
+.lx-cont{
+  padding: 20px;
 }
-.relation {
+.first-li{
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+.first-span{
   margin-right: 10px;
-}
-.same-staff {
-  margin-right: 20px;
-}
-.details,
-.recruit,
-.material {
-  background: #ffffff;
-  margin-bottom: 40px;
-  .details-head,
-  .recruit-head,
-  .material-head {
-    height: 40px;
-    background: #ffffff;
-    span {
-      width: 140px;
-      height: 40px;
-      text-align: center;
-      line-height: 40px;
-      background: #008e40;
-      color: #ffffff;
-      font-size: 14px;
-      display: inline-block;
-    }
-  }
-  .recruitment {
-    padding: 5px 50px;
-    // height: 160px;
-    p {
-      padding: 0 50px;
-      height: 40px;
-      width: 700px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #e4e4e4;
-      margin: 20px 0;
-      line-height: 40px;
-      .ivu-input-default {
-        border: 0;
-      }
-    }
-    h2,
-    .added {
-      text-align: center !important;
-      height: 40px;
-      line-height: 40px;
-      border: 0;
-      width: 700px;
-      a {
-        color: #008e40;
-      }
-    }
-  }
-  .ivu-icon-md-close-circle{
-    font-size: 16px;
-    color: #e4e4e4;
-    margin-left: 10px;
-  }
 }
 .wave{
   display: flex;
