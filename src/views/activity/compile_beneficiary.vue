@@ -197,7 +197,7 @@
               </div>
             </li>
             <li v-if="oneRole.refund.refundRule==1 || oneRole.refund.refundRule==2">
-              <RadioGroup v-model="oneRole.refund.refundRule" vertical @on-change='getRefund'>
+              <RadioGroup v-model="oneRole.refund.refundRule" vertical>
                 <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
                 <Radio label="2" :trueValue='2'>
                   活动开始前
