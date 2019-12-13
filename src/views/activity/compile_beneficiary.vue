@@ -52,6 +52,7 @@
                 v-model="oneRole.positionComments"
                 placeholder="请输入岗位描述"
                 style="width: 300px;"
+                :rows='5'
               ></Input>
             </li>
             <li class="first-li">

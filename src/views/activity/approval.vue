@@ -487,7 +487,7 @@
             </li>
             <li class="first-li">
               <span class="first-span">介绍</span>
-              <Input type="textarea" v-model="partner.description" placeholder="请输入合作方介绍" style="width: 300px;heigth:100px;margin-left: 30px;"></Input>
+              <Input type="textarea" v-model="partner.description" placeholder="请输入合作方介绍" style="width: 300px;margin-left: 30px;" :rows='5'></Input>
             </li>
             <li class="first-li">
                 <span class="first-span">图片</span>
