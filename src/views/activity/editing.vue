@@ -1,6 +1,6 @@
 <!--编辑活动(会员)-->
 <template>
-  <div class="content">
+  <div class="lx-content">
     <adress :value='adr' @change='getMap'/>
           <div class="select">
             <span class="select-template">活动分类</span>
@@ -29,150 +29,188 @@
                   <div class="imgs">
                     <img :src='batch.actShowPic' />
                   </div>
-                </li>
-                <li>
-                  <span class="same_style">活动时间</span>
-                  <i-col span="12">
+                  <div class="first-pic" v-else>
+                    <img class="imgs" style="width:283px;height:188px" :src="batch.actCoverShowPic"/>
+                    <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
+                  </div>
+                </div>
+              </li>
+              <li class="first-li">
+                <span class="first-span">主题图片</span>
+                <div>
+                  <div class="first-pic" v-if='batch.actShowPic == null'>
+                    <div class="" @click="()=>{ this.$refs.files.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                    </div>
+                  </div>
+                  <div class="first-pic" v-else>
+                    <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
+                    <span v-if='batch.actShowPic' class="cancel" @click="cancelActImg()">X</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </Col>
+          <Col span='10'>
+            <ul>
+              <li class="first-li">
+                <span class="first-span">活动时间</span>
+                <Row>
+                  <Col span="11">
                     <Date-picker
-                      type="datetimerange" 
+                      type="datetime"
+                      v-model="batch.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 200px"
-                      @on-change="getBatchDate"
+                      placeholder="选择活动开始时间"
+                      style="width: 140px"
+                      :editable="false"
+                      @on-change="getBatchStartDate"
                     ></Date-picker>
-                  </i-col>
-                </li>
-                <li>
-                  <span class="same_style">活动地址</span>
-                  <span @click="()=>{this.adr = true}">{{ batch.actAddress == null?"点击选中地址":batch.actAddress}}</span>
-                </li>
-                <li>
-                  <span class="same_style">出行方式</span>
-                  <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
-                    <Radio label="自驾">自驾</Radio>
-                    <Radio label="大巴">大巴</Radio>
-                    <Radio label="自定义" :true-value='tripSelf'>自定义</Radio>
-                  </RadioGroup>
-                </li>
-                <li v-if="tripSelf">
-                  <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
-                </li>
-                <li>
-                  <span class="same_style">现场联系人</span>
-                  <p>
-                    <span class="relation">姓名</span>
-                    <Input v-model="batch.ownerUserName" style="width: 200px" class="same-staff" @on-change='getLeaderList'></Input>
-                    <span class="relation">联系方式</span>
-                    <Input v-model="batch.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
-                  </p>
-                  <p v-if='addLeader'>
-                    <ul>
-                      <li v-for="item in leaderList" @click="getLeader(item)">
-                        {{item.name}}
-                      </li>
-                    </ul>
-                  </p>
-                </li>
-                <li>
-                  <span class="same_style">工作人员</span>
-                  <span @click="addWorkers">添加</span>
-                </li>
-                <li v-for="(item,index) in batch.workerIdList">
-                  <p>
-                    <span class="relation">姓名</span>
-                    <Input v-model="item.ownerUserName" style="width: 200px" class="same-staff" @on-change='getWorkerList(item,index)'></Input>
-                    <span class="relation">联系方式</span>
-                    <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
-                    <span @click="deleteWorker(index)">删除</span>
-                    <p v-if='addWorker'>
-                      <ul>
-                        <li v-for="i in workerList" @click="getWorker(i)">
-                          {{i.name}}
-                        </li>
-                      </ul>
-                    </p>
-                  </p>
-                </li>
-                <li>
-                  <span class="same_style">活动标签</span>
-                  <Select v-model="batch.actLabelName" style="width:340px" placeholder="请选择活动标签">
-                    <Option
-                      v-for="item in batchItemList.labels"
-                      :value="item.name"
-                      :key="item.name"
-                      @click.native="getActiveLabels(item)"
-                    >{{ item.name }}</Option>
-                  </Select>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="details">
-            <p class="details-head">
-              <span>活动详情</span>
-            </p>
-            <wangeditor :labels="editor1" id="ed1"></wangeditor>
-          </div>
+                  </Col>
+                  <Col span="2" class="wave">~</Col>
+                  <Col span="11">
+                    <Date-picker
+                      type="datetime"
+                      v-model="batch.endT"
+                      format="yyyy-MM-dd HH:mm"
+                      placement="bottom-end"
+                      placeholder="选择活动结束时间"
+                      style="width: 140px"
+                      :editable="false"
+                      @on-change="getBatchEndDate"
+                    ></Date-picker>
+                  </Col>
+                </Row>
+              </li>
+              <li class="first-li">
+                <span class="first-span">活动地址</span>
+                <span @click="()=>{this.adr = true}">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</span>
+              </li>
+              <li class="first-li">
+                <span class="first-span">出行方式</span>
+                <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
+                  <Radio label="自驾">自驾</Radio>
+                  <Radio label="大巴">大巴</Radio>
+                  <Radio label="自定义" :true-value='tripSelf'>自定义</Radio>
+                </RadioGroup>
+              </li>
+              <li v-if="tripSelf">
+                <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
+              </li>
+              <li class="li-flex-between">
+                <span class="first-span">现场联系人</span>
+                <span class="first-span">姓名</span>
+                <Input v-model="batch.ownerUserName" style="width: 150px" class="same-staff" @on-change='getLeaderList'></Input>
+                <span class="first-span">联系方式</span>
+                <Input v-model="batch.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
+              </li>
+              <li v-if='addLeader'>
+                <Select style="width:300px" placeholder="请选择现场联系人">
+                  <Option
+                    v-for="(item,idx) in leaderList"
+                    :value="item.name"
+                    :key="idx"
+                    @click.native="getLeader(item)"
+                  >{{ item.name }} {{item.tel}}</Option>
+                </Select>
+              </li>
+              <li class="first-li">
+                <span class="first-span">工作人员</span>
+                <Button @click="addWorkers">添加</Button>
+              </li>
+              <li v-for="(item,index) in batch.workerIdList" class="li-flex-around">
+                <span>姓名</span>
+                <Input v-model="item.ownerUserName" style="width: 200px" class="same-staff" @on-change='getWorkerList(item,index)'></Input>
+                <span>联系方式</span>
+                <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
+                <span @click="deleteWorker(index)">删除</span>
+              </li>
+              <li v-if='addWorker'>
+                <Select style="width:300px" placeholder="请选择工作人员">
+                  <Option
+                    v-for="(i,idx) in workerList"
+                    :value="i.name"
+                    :key="idx"
+                    @click.native="getWorker(i)"
+                  >{{ i.name }} {{i.tel}}</Option>
+                </Select>
+              </li>
+              <li class="first-li">
+                <span class="first-span">活动标签</span>
+                <Select v-model="batch.actLabelName" style="width:300px" placeholder="请选择活动标签">
+                  <Option
+                    v-for="item in batchItemList.labels"
+                    :value="item.name"
+                    :key="item.name"
+                    @click.native="getActiveLabels(item)"
+                  >{{ item.name }}</Option>
+                </Select>
+              </li>
+              <li class="first-li">招募角色</li>
+              <li>
+                <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource">
+                  <span>{{item.roleName}}</span>
+                  <span>{{item.recruitNum}}</span>
+                  <span @click="changeRoles(i)">详情</span>
+                  <span @click="deleteRole(i)">删除</span>
+                </p>
+              </li>
+              <li class="lx-flex-center">
+                <Button @click="addRoles()">+新增招募角色</Button>
+              </li>
+              <li class="first-li">所需物资</li>
+              <li>
+                <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource">
+                  <span>{{item.resourcesName}}</span>
+                  <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"></Input>
+                  <span>
+                    <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
+                    <Icon type="ios-close" @click="deleteResources(i)"></Icon>
+                  </span>
+                </p>
+              </li>
+              <li class="lx-flex-center">
+                <Button @click="addResources">+新增物质</Button>
+              </li>
+              <li v-if="adds">
+                <Button v-for="item in batchItemList.resources" @click="chooseResource(item)">{{item.name}}</Button>
+              </li>
+              <li class="first-li">
+                <span class="first-span">发布时间</span>
+                <RadioGroup v-model="batch.releaseTime" @on-change='releaseTime'>
+                  <Radio label="0">活动开始前一个月自动发布</Radio>
+                  <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
+                </RadioGroup>
+                <Date-picker v-model="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+              </li>
+            </ul>
+          </Col>
+        </Row>
+        <Row style="margin-top:40px">
+          <Col style="margin-bottom:10px;">活动详情</Col>
+          <Col>
+            <wangeditor :labels="batch.detail" id="ed1" @change="changeEditorTrain"></wangeditor>
+          </Col>
+        </Row>
+      </div>
 
-          <div class="recruit">
-            <p class="recruit-head">
-              <span>招募角色</span>
-            </p>
-            <div class="recruitment">
-              <p v-for="(item,i) in batch.userConfList">
-                <span>{{item.roleName}}</span>
-                <span>{{item.recruitNum}}</span>
-                <span>详情</span>
-                <span @click="deleteRole(i)">删除</span>
-              </p>
-              <h2 class="added">
-                <a @click="addRoles">+新增招募角色</a>
-              </h2>
-            </div>
-          </div>
-          <div class="material">
-            <p class="material-head">
-              <span>所需物质</span>
-            </p>
-            <div class="recruitment">
-              <p v-for="(item,i) in batch.actResList">
-                <span>{{item.resourcesName}}</span>
-                <Input v-model="item.num" style="width: 200px"></Input>
-                <span>
-                  <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
-                  <Icon type="ios-close" @click="deleteResources(i)"></Icon>
-                </span>
-              </p>
-              <h2 class="added" v-if="addbtns">
-                <a @click="addResources">+新增物质</a>
-              </h2>
-              <p v-if="adds">
-                <ul>
-                  <li v-for="item in batchItemList.resources" @click="chooseResource(item)">{{item.name}}</li>
-                </ul>
-              </p>
-            </div>
-          </div>
-          <div class="issue">
-            <span>发布时间</span>
-            <RadioGroup v-model="batch.releaseTime" @on-change='releaseTime'>
-              <Radio label="0">活动开始前一个月自动发布</Radio>
-              <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
-            </RadioGroup>
-            <i-col span="12" v-if='releaseTimeSelf'>
-              <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
-            </i-col>
-          </div>
-          <div class="button-food">
-            <Button @click="save">保存</Button>
-          </div>
-        </div>
+      <div class="" v-if="isAddRole">
+        <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
+      </div>
+
+      <div v-if='two' class="lx-flex-center" style="margin-top:80px;">
+        <Button @click="save()">保存</Button>
+      </div>
+
+    </div>
+  </div>
 </template>
 
 <script>
-  import E from 'wangeditor';
-import { batchItem,leader,projectDetail,projectEdit } from "@/request/api";
+import E from 'wangeditor';
+import { batchItem,leader,projectDetail,projectEdit,chooseTempalte } from "@/request/api";
 import { projectApproval } from '../../request/api';
 import role from "./compile_beneficiary.vue"
 import adress from'_c/map'
@@ -183,6 +221,7 @@ export default {
   data() {
     return {
       adr:false,
+      two:true,
       batch:{
         userConfList:[],
         actResList:[],
@@ -192,66 +231,9 @@ export default {
       batchItemList:[],
       editorContent1: '',
       navigation1: {
-        head: "编辑活动(会员)"
+        head: "编辑活动"
       },
-      drill1: [
-        {
-          value: "basketball",
-          label: "篮球训练"
-        },
-        {
-          value: "mountaineering",
-          label: "登山"
-        }
-      ],
-      drill2: [
-        {
-          value: "basketball",
-          label: "篮球训练"
-        },
-        {
-          value: "mountaineering",
-          label: "登山"
-        }
-      ],
-      drill3: [
-        {
-          value: "basketball",
-          label: "篮球训练"
-        },
-        {
-          value: "mountaineering",
-          label: "登山"
-        }
-      ],
       model1: "basketball",
-      cityList: [
-        {
-          value: "beijing",
-          label: "北京市"
-        },
-        {
-          value: "shanghai",
-          label: "上海市"
-        },
-        {
-          value: "shenzhen",
-          label: "深圳市"
-        },
-        {
-          value: "hangzhou",
-          label: "杭州市"
-        },
-        {
-          value: "nanjing",
-          label: "南京市"
-        },
-        {
-          value: "chongqing",
-          label: "重庆市"
-        }
-      ],
-
       animal: "daba",
       value: "",
       single: "",
@@ -262,7 +244,8 @@ export default {
       addWorker:false,
       releaseTimeSelf:false,
       isAddRole:false,
-      editor1:''
+      editor1:'',
+      templateList: []
     };
   },
 
@@ -271,6 +254,7 @@ export default {
   computed: {},
 
   created() {
+    this.userId = this.$store.state.userId;
     this.getBatchItem();
     this.getProjectDetail()
   },
@@ -287,11 +271,42 @@ export default {
     changeEditorTrain(e){
       this.batch.detail = e
     },
+    getTemplate() {
+      chooseTempalte(this.batch.actTypeId).then(res => {
+        console.log(res);
+        this.templateList = res.data;
+      });
+    },
+    //活动日期
+    getBatchStartDate(e) {
+      this.batch.startT = e
+    },
+    getBatchEndDate(e) {
+      this.batch.endT = e
+    },
     getMap(e){
       this.batch.actXx = e.xx
       this.batch.actYy = e.yy
       this.batch.actAddress = e.address
       console.log(e)
+    },
+    cancelRole(e) {
+      console.log(e);
+      this.isAddRole = false;
+      this.two = true;
+    },
+    getRole(e) {
+      console.log(e);
+      console.log(this.roleI);
+      this.batch.userConfList[this.roleI] = e;
+      if (this.roleI >= 0) {
+        this.batch.userConfList[this.roleI] = e;
+        delete this.roleI;
+      } else {
+        this.batch.userConfList.push(e);
+      }
+      this.isAddRole = false
+      this.two = true;
     },
     getProjectDetail(){
        projectDetail({
@@ -321,7 +336,7 @@ export default {
     //批次活动前置信息查询
     getBatchItem(){
       batchItem({
-        userId:1
+        userId:this.userId
       }).then(res => {
         console.log(res);
         this.batchItemList = res.data
@@ -503,8 +518,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.head {
-  margin-bottom: 0px;
+.lx-content {
+  background-color: #fff;
 }
 .content {
   background: #f3f3f3;
@@ -652,40 +667,92 @@ export default {
     margin-left: 10px;
   }
 }
-.issue {
+.wave{
   display: flex;
   align-items: center;
-  justify-content:flex-start;
-  font-size: 14px;
-  background: #ffffff;
-  height: 50px;
-  padding-left: 50px;
-  span{
-    margin-right: 50px;
-  }
-  .self{
-    margin-left: 100px;
-  }
+  justify-content: center;
+  padding-top: 8px;
+  padding-left: 5px;
 }
-.button-food {
-  margin-top: 50px;
+.first-pic{
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px solid;
+  position: relative;
+}
+.cancel{
+  position: absolute;
+  top: -82px;
+  right: 8px;
+}
+.par-col{
+  display: flex;
+  align-items: center;
+}
+.ins{
+  margin-top: 60px;
+}
+.ins-p{
+  font-family: PingFangSC-Medium;
+  font-size: 16px;
+  color: #1B2331;
+  letter-spacing: 0;
+  text-align: justify;
+  line-height: 24px;
+}
+.ins-b{
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #8E9192;
+  letter-spacing: 0;
+  text-align: justify;
+  line-height: 24px;
+  margin-top: 10px;
+}
+.lx-flex-center{
   display: flex;
   justify-content: center;
-  .ivu-btn-default {
-    height: 40px;
-    width: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: #ffffff;
-    border: 1px solid #797979;
-    margin-right: 10px;
-    // color: #f3f3f3;/
-  }
+  align-items: center;
 }
-
-.ivu-select-default{
-  margin-right: 10px;
+.lx-draft{
+  background: #F6F7F9;
+  border-radius: 15px;
+  width: 110px;
+  margin-right: 20px;
+}
+.lx-next{
+  background: #FF565A;
+  border-radius: 15px;
+  color: #FFF;
+  width: 110px;
+}
+.lx-submit{
+  background: #00FF7F;
+  border-radius: 15px;
+  width: 110px;
+}
+.li-flex-around{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+}
+.li-flex-between{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+.lx-resource{
+  padding: 5px 0;
+}
+.lx-btn{
+  margin-top: 20px;
+}
+.lx-jd{
+  height: 80px;
+  padding-top: 30px;
 }
 </style>
