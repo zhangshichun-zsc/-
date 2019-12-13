@@ -163,6 +163,7 @@
                     v-model="parameOBJ.volInfo.info.speciality"
                     style="width: 224px;"
                     placeholder="请选择"
+                    multiple
                   >
                     <Option
                       v-for="item in parameOBJ.volInfo.speciality"
@@ -174,6 +175,7 @@
                 </FormItem>
                 <FormItem label="志愿者特长">
                   <Select
+                  multiple
                     v-model="parameOBJ.volInfo.info.voluSpeciality"
                     style="width: 224px;"
                     placeholder="请选择"
@@ -188,6 +190,7 @@
                 </FormItem>
                 <FormItem label="期待参加的活动种类">
                   <Select
+                  multiple
                     v-model="parameOBJ.volInfo.info.actTypeLike"
                     style="width: 224px;"
                     placeholder="请选择"
@@ -1235,9 +1238,9 @@ export default {
         volInfo: {
           // 志愿者信息
           eduStatus: _volInfo.eduStatus,
-          actTypeLike: _volInfo.actTypeLike,
-          voluSpeciality: _volInfo.voluSpeciality,
-          speciality: _volInfo.speciality,
+          actTypeLike: _volInfo.actTypeLike.toString(),
+          voluSpeciality: _volInfo.voluSpeciality.toString(),
+          speciality: _volInfo.speciality.toString(),
           email: _volInfo.email
         },
         memInfo: {
@@ -1684,5 +1687,8 @@ export default {
   color: #FF565A;
   text-align: right;
   vertical-align: center;
+}
+p{
+  font-size: 14px;
 }
 </style>

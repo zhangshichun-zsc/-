@@ -39,10 +39,10 @@
                 v-model="AddDate.email"
               />
             </FormItem>
-            <FormItem label="所属部门:" prop="deplNames">
+            <FormItem label="所属部门:" prop="deptId">
               <Select
                 style="width: 10rem"
-                v-model="AddDate.deplNames"
+                v-model="AddDate.deptId"
                 placeholder="请选择所属部门"
                 :disabled="this.$route.query.states == 3"
               >
@@ -140,6 +140,7 @@ export default {
         tel: "",
         email: "",
         deplNames: "",
+        deptId: "",
         sysRoleNames: [],
         loginPwd: "",
         comments: ""
@@ -154,6 +155,14 @@ export default {
           { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
         ],
         deplNames: [
+          {
+            required: true,
+            message: "请选择部门类型",
+            trigger: "change",
+            type: "number"
+          }
+        ],
+        deptId: [
           {
             required: true,
             message: "请选择部门类型",
@@ -200,7 +209,7 @@ export default {
         sysRoleIds: this.AddDate.sysRoleNames.toString(),
         tel: this.AddDate.tel,
         userName: this.AddDate.userName,
-        deptIds: this.AddDate.deplNames.toString(),
+        deptIds: this.AddDate.deptId.toString(),
         email: this.AddDate.email,
         comments: this.AddDate.comments,
         loginPwd: this.AddDate.loginPwd

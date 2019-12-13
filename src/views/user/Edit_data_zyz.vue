@@ -42,7 +42,7 @@
       </div>
     </header>
 
-      <div class="edit-box">
+    <div class="edit-box">
       <Row style="width:100%">
         <Col span="12">
           <div class="content-item" style="margin-right: 15px;">
@@ -160,6 +160,7 @@
               >
                 <FormItem label="特长">
                   <Select
+                    multiple
                     v-model="parameOBJ.volInfo.info.speciality"
                     style="width: 224px;"
                     placeholder="请选择"
@@ -174,6 +175,7 @@
                 </FormItem>
                 <FormItem label="志愿者特长">
                   <Select
+                    multiple
                     v-model="parameOBJ.volInfo.info.voluSpeciality"
                     style="width: 224px;"
                     placeholder="请选择"
@@ -188,6 +190,7 @@
                 </FormItem>
                 <FormItem label="期待参加的活动种类">
                   <Select
+                    multiple
                     v-model="parameOBJ.volInfo.info.actTypeLike"
                     style="width: 224px;"
                     placeholder="请选择"
@@ -226,7 +229,7 @@
           </div>
         </Col>
         <Col span="12">
-          <div class="content-item" >
+          <div class="content-item">
             <!-- 收益方 -->
             <div class="con-box bk item">
               <div class="constant-title flex-center-between">
@@ -265,7 +268,8 @@
                   </p>
                 </FormItem>
                 <div style="text-align: center;" @click="showBenefitModel">
-                   <span class='show-btn'>显示更多</span><Icon type="ios-arrow-forward" />
+                  <span class="show-btn">显示更多</span
+                  ><Icon type="ios-arrow-forward" />
                 </div>
               </Form>
             </div>
@@ -275,7 +279,7 @@
     </div>
 
     <div class="btn-box">
-      <a href="javascript:;"  @click="setUpdata" class="btn">保存</a>
+      <a href="javascript:;" @click="setUpdata" class="btn">保存</a>
     </div>
     <!-- 弹窗 -->
     <Modal
@@ -911,7 +915,7 @@
       </div>
 
       <div slot="footer" class="footer">
-         <a href="javascript:;" class="modelbtn" @click="setUpdata(2)">保存</a>
+        <a href="javascript:;" class="modelbtn" @click="setUpdata(2)">保存</a>
       </div>
     </Modal>
     <Modal v-model="modallable" title="设置标签" @on-ok="onSetLabel">
@@ -929,7 +933,9 @@
 
 <script>
 import Public from "./config/index";
+import Selsect from "@/components/selsect";
 export default {
+  components: { Selsect },
   data() {
     return {
       navigation1: {
@@ -1251,9 +1257,9 @@ export default {
         volInfo: {
           // 志愿者信息
           eduStatus: _volInfo.eduStatus,
-          actTypeLike: _volInfo.actTypeLike,
-          voluSpeciality: _volInfo.voluSpeciality,
-          speciality: _volInfo.speciality,
+          actTypeLike: _volInfo.actTypeLike.toString(),
+          voluSpeciality: _volInfo.voluSpeciality.toString(),
+          speciality: _volInfo.speciality.toString(),
           email: _volInfo.email
         },
         memInfo: {
@@ -1761,8 +1767,11 @@ export default {
 }
 .show-btn {
   font-size: 15px;
-  color: #FF565A;
+  color: #ff565a;
   text-align: right;
   vertical-align: center;
+}
+p {
+  font-size: 14px;
 }
 </style>
