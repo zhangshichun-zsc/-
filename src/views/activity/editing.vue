@@ -4,13 +4,13 @@
     <adress :value='adr' @change='getMap'/>
           <div class="select">
             <span class="select-template">活动分类</span>
-            <Select v-model="batch.actTypeName" style="width:340px">
+            <Select v-model="batch.actTypeName" style="width:200px">
               <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name" @click.native="getActiveTypeId(item)">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="select">
             <span class="select-template">选择模板</span>
-            <Select v-model="model1" style="width:340px">
+            <Select v-model="model1" style="width:200px">
               <Option v-for="item in batchItemList.actTypes" :value="item.name" :key="item.name">{{ item.name }}</Option>
             </Select>
           </div>
@@ -22,7 +22,7 @@
               <ul>
                 <li>
                   <span class="same_style">活动名称</span>
-                  <Input placeholder="请输入活动名称" v-model="batch.actName"></Input>
+                  <Input placeholder="请输入活动名称" v-model="batch.actName" style="width:200px"></Input>
                 </li>
                 <li class="imges">
                   <span class="same_style">主题图片</span>
@@ -555,6 +555,8 @@ export default {
         display: flex;
         align-items: center;
         .same_style {
+          display: inline-block;
+          width: 100px;
           margin-right: 70px;
         }
         .style-no {
@@ -587,6 +589,12 @@ export default {
       }
     }
   }
+}
+.relation {
+  margin-right: 10px;
+}
+.same-staff {
+  margin-right: 20px;
 }
 .details,
 .recruit,
