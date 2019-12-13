@@ -53,7 +53,7 @@
           全选
           <span>已选择{{list.length}}</span>
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
-          <Button class="table-btn" @click="showModal(null)">新增</Button>
+          <Button class="table-btns" @click="showModal(null)">新增</Button>
           <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
@@ -72,7 +72,10 @@
           </Modal>
         </div>
       </div>
+      <div class="min-height">
       <Table border :columns="columns" :data="data" @on-select='select' @on-select-cancel='select' @on-select-all='select' @on-select-all-cancel='select'></Table>
+
+      </div>
       <div class="pages">
         <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
       </div>
@@ -169,10 +172,11 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "Button",
+                "a",
                 {
-                  props:{
-                    type:'primary'
+                   clssName: "action",
+                  style: {
+                    color: "#097276"
                   },
                   on: {
                     click: () => {
@@ -341,52 +345,6 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
+<style lang="scss" scoped>
+@import "../../libs/basicdata.css"
 </style>

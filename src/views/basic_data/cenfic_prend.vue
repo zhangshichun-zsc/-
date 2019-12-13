@@ -48,7 +48,7 @@
                 </div>
             </div>
             <img class="imgs" v-else :src="footimg"/>
-            <Icon type="ios-trash" v-if='!show && footimg !== null' class="cancel" @click="cancelImg('officeSealPic')"/>
+            <Icon type="ios-trash" v-if='!show && footimg != null' class="cancel" @click="cancelImg('officeSealPic')"/>
         </div>
         <Button type="primary" icon="ios-cloud-saved-outline" @click="location" v-if='show'>保存图片</Button>
       </Col>
@@ -78,6 +78,7 @@ export default {
       this.getList()
     }else{
       this.show = true
+      this.getList()
     }
   },
   methods: {

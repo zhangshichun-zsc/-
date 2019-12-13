@@ -6,7 +6,8 @@
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
-          <Button class="table-btn" @click="btn">{{title}}</Button>
+
+          <Button class="table-btns" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="障碍类型" prop="dicName">
@@ -20,7 +21,10 @@
           </Modal>
         </div>
       </div>
+      <div class="min-height">
       <Table ref="selection" border :columns="columns" :data="data1"></Table>
+
+      </div>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -63,11 +67,14 @@ export default {
         },
         {
           title: "特长名称",
-          key: "dicName"
+          key: "dicName",
+          align: "center",
+          width:320,
         },
         {
           title: "创建时间",
-          key: "creatAt"
+          key: "creatAt",
+          align: "center"
         },
 
         {
@@ -106,7 +113,7 @@ export default {
               h(
                 "a",
                 {
-                  clssName: "action",
+                   clssName: "action",
                   style: {
                     color: "#097276"
                   },
@@ -265,16 +272,6 @@ export default {
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-      // if (e.createTimestamp == "") {
-      // this.startAt = '';
-      // this.endAt = '';
-      // } else if (new Date() > e.createTimestamp) {
-      //   this.startAt = e.createTimestamp;
-      //   this.endAt = new Date();
-      // } else {
-      //   this.startAt = new Date();
-      //   this.endAt = e.createTimestamp;
-      // }
       this.getBasicsearch();
     },
 
@@ -314,41 +311,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-table {
-  margin-top: 0px;
-}
-.table-header {
-  padding: 5px 0px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.table-btn {
-  position: relative;
-}
-.icon {
-  position: absolute;
-  padding: 2px;
-  top: 0;
-  right: 0;
-  transform: translateY(-50%);
-  background: yellow;
-  color: #000;
-}
+@import "../../libs/basicdata.css"
 </style>

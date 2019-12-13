@@ -3,7 +3,7 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <span>筛选查询</span>
         </div>
@@ -19,7 +19,7 @@
             </span>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="flex-center-start integral-body" v-if="Retract == true">
         <div class="flex-center-start">
           <span>名称:</span>
@@ -49,7 +49,7 @@
            <DatePicker type="daterange" format="yyyy/MM/dd"  @on-change="handleChange" v-model="search.createTimestamp" confirm placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
         </div>
          <div class="flex-center-start">
-           <Button class="search" @click="query">查询结果</Button>
+           <Button class="search" @click="query">查询</Button>
         </div>
       </div>
     </div>
@@ -112,18 +112,16 @@ export default {
     query() {
       this.$emit("query", this.search);
     },
-    //收起筛选
-    Retractbtn() {
-      this.Retract = !this.Retract;
-      console.log(11);
-    }
+    // //收起筛选
+    // Retractbtn() {
+    //   this.Retract = !this.Retract;
+    //   console.log(11);
+    // }
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
 
-}
 .integral-header .integral-top {
   padding: 15px 20px;
   background: white;

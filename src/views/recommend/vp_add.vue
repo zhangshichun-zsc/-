@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "添加广告(会员)"
+        head: "添加广告"
       },
       citys:[],
       data1:'',

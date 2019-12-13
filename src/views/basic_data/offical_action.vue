@@ -48,7 +48,7 @@
         <div>
           全选
           <span>已选择{{arr.length}}人</span>
-          <Button class="table-btn" type="primary" @click="add">新增活动分类</Button>
+          <Button class="table-btns"  @click="add">新增活动分类</Button>
           <Modal v-model="modal2" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicNamemod">
@@ -71,6 +71,7 @@
           </Modal>
         </div>
       </div>
+       <div class="min-height">
       <Table
         ref="selection"
         border
@@ -78,6 +79,8 @@
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
+      </div>
+
 
       <div class="pages">
         <Page
@@ -136,22 +139,30 @@ export default {
         },
         {
           title: "活动分类名称",
-          key: "dicName"
+          key: "dicName",
+           width: 300,
+          align: "center"
         },
         {
           title: "受益对象",
-          key: "beneficiary"
+          key: "beneficiary",
+           width: 100,
+          align: "center"
         },
         {
           title: "创建时间",
           key: "createTimestamp",
+           width: 140,
+          align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createTimestamp));
           }
         },
         {
           title: "创建人",
-          key: "userName"
+          key: "userName",
+           width: 300,
+          align: "center"
         },
         {
           title: "有效状态",
@@ -163,6 +174,9 @@ export default {
                 props: {
                   value: params.row.validFlag == 1
                 },
+               style:{
+                 text:'center'
+               },
                 on: {
                   input: e => {
                     console.log(e);
@@ -177,6 +191,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+
           render: (h, params) => {
             return h("div", [
               h(
@@ -409,52 +424,6 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
+<style lang="scss" scoped>
+@import "../../libs/basicdata.css"
 </style>
