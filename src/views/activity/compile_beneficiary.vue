@@ -2,15 +2,14 @@
 <template>
   <div>
     <adress :value='adr' @change='getMap'/>
-    <Navigation :labels="navigation1"></Navigation>
     <div class="compole">
       <p class="compole-head">编辑招募报名项</p>
-      <div class="compole-content">
-        <ul>
-          <li>
-            <span>招募类型</span>
-            <div>
-              <Select v-model="oneRole.roleName" style="width:200px">
+      <Row class="role-row">
+        <Col span="10">
+          <ul>
+            <li class="first-li">
+              <span class="first-span">招募类型</span>
+              <Select v-model="oneRole.roleName" style="width:300px">
                 <Option
                   v-for="(item,index) in signTypeList"
                   :value="item.name"
@@ -18,7 +17,10 @@
                   @click.native="getType(item)"
                 >{{ item.name }}</Option>
               </Select>
-              <Select v-model="oneRole.positionName" style="width:200px">
+            </li>
+            <li class="first-li">
+              <span class="first-span">招募岗位</span>
+              <Select v-model="oneRole.positionName" style="width:300px">
                 <Option
                   v-for="(item,index) in signPostList"
                   :value="item.name"
@@ -26,914 +28,485 @@
                   @click.native="getPost(item)"
                 >{{ item.name }}</Option>
               </Select>
-            </div>
-          </li>
-          <li>
-            <span>岗位职责</span>
-            <Input
-              type="textarea"
-              v-model="oneRole.positionComments"
-              placeholder="请输入..."
-              style="width: 600px"
-            ></Input>
-          </li>
-          <li>
-            <span>模式</span>
-            <RadioGroup v-model="oneRole.zmType">
-              <Radio label="1" >先到先得</Radio>
-              <Radio label="2">预约型</Radio>
-            </RadioGroup>
-          </li>
-          <li v-if="oneRole.zmType==1">
-            <ul>
-              <li>
-                <span>票价</span>
-                <div class="tables">
-                  <table>
-                    <tr>
-                      <th>票价</th>
-                      <th>VIP价</th>
-                      <th>数量</th>
-                      <th>可预约数量</th>
-                      <th>可获得积分</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Input v-model="oneRole.amount" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.vipAmount" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.recruitNum" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.apptNum" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.score" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                    </tr>
-                  </table>
-                  <div class="audit">
-                    <span class="audit-span">是否审核</span>
-                    <i-switch v-model="oneRole.isHaveSubsidy" @on-change="change" :true-value='1' :false-value='2' />
-                    <span>报名后需要我审核</span>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>退款设置</span>
-                <div class="refund">
-                  <p>
-                    支持退款
-                    <i-switch v-model="oneRole.refund.refundRule" @on-change="refund" :false-value='3' :true-value='1 || 2' />
-                  </p>
-                  <div class="refund-div" v-if="oneRole.refund.refundRule==1 || oneRole.refund.refundRule==2">
-                    <RadioGroup v-model="oneRole.refund.refundRule" vertical @on-change='getRefund'>
-                      <Radio label="1" :true-value='1'>活动结束前均可退款</Radio>
-                      <Radio label="2" :true-value='2'>
-                        活动开始前
-                        <Input
-                          v-model="oneRole.refund.refundDays"
-                          placeholder="Enter something..."
-                          style="width: 80px"
-                        />天可退款
-                      </Radio>
-                    </RadioGroup>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>是否发放补助</span>
-                <div class="li-subsidy">
-                  <RadioGroup v-model="oneRole.isHaveSubsidy">
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
-                  </RadioGroup>
-                  <div class="li-subsidys" v-if="oneRole.isHaveSubsidy==1">
-                    <p>
-                      <span>补助类型：</span>
-                      <RadioGroup v-model="oneRole.subsidyType">
-                        <Radio label="1">现金</Radio>
-                        <Radio label="2">物质</Radio>
-                      </RadioGroup>
-                    </p>
-                    <p v-if='oneRole.subsidyType==1'>
-                      <Input placeholder="请输入补助金额" v-model="oneRole.subsidyCash" type="number"></Input>
-                    </p>
-                    <p v-if='oneRole.subsidyType==2'>
-                      <span>物资类型：</span>
-                      <Select v-model="oneRole.resourcesName" style="width:100px">
+            </li>
+            <li class="first-li">
+              <span class="first-span">票价</span>
+              <Input v-model="oneRole.amount" placeholder="请输入票价" style="width: 300px"></Input>
+            </li>
+            <li class="first-li">
+              <span class="first-span">VIP价</span>
+              <Input v-model="oneRole.vipAmount" placeholder="请输入VIP价" style="width: 300px"></Input>
+            </li>
+            <li class="first-li">
+              <span class="first-span">招募人数</span>
+              <Input v-model="oneRole.recruitNum" placeholder="请输入招募人数" style="width: 300px"></Input>
+            </li>
+            <li class="first-li">
+              <span class="first-span">积分</span>
+              <Input v-model="oneRole.score" placeholder="请输入积分" style="width: 300px"></Input>
+            </li>
+            <li class="first-li">
+              <span class="first-span">岗位描述</span>
+              <Input
+                type="textarea"
+                v-model="oneRole.positionComments"
+                placeholder="请输入岗位描述"
+                style="width: 300px;"
+              ></Input>
+            </li>
+            <li class="first-li">
+              <span class="first-span">报名时间</span>
+              <Row>
+                <Col span="11">
+                  <Date-picker
+                    type="datetime"
+                    v-model="oneRole.enrollStarttime"
+                    format="yyyy-MM-dd HH:mm"
+                    placement="bottom-end"
+                    placeholder="选择报名开始时间"
+                    style="width: 140px"
+                    :editable="false"
+                    @on-change="getStartDate"
+                  ></Date-picker>
+                </Col>
+                <Col span="2" class="wave">~</Col>
+                <Col span="11">
+                  <Date-picker
+                    type="datetime"
+                    v-model="oneRole.enrollEndtime"
+                    format="yyyy-MM-dd HH:mm"
+                    placement="bottom-end"
+                    placeholder="选择报名结束时间"
+                    style="width: 140px"
+                    :editable="false"
+                    @on-change="getEndDate"
+                  ></Date-picker>
+                </Col>
+              </Row>
+            </li>
+            <li class="first-li">
+              <span class="first-span">取消时间</span>
+              <Row>
+                <Col span="11">
+                  <Date-picker
+                    type="datetime"
+                    v-model="oneRole.outrollStarttime"
+                    format="yyyy-MM-dd HH:mm"
+                    placement="bottom-end"
+                    placeholder="选择报名取消开始时间"
+                    style="width: 140px"
+                    :editable="false"
+                    @on-change="getStartDatec"
+                  ></Date-picker>
+                </Col>
+                <Col span="2" class="wave">~</Col>
+                <Col span="11">
+                  <Date-picker
+                    type="datetime"
+                    v-model="oneRole.outrollEndtime"
+                    format="yyyy-MM-dd HH:mm"
+                    placement="bottom-end"
+                    placeholder="选择报名取消结束时间"
+                    style="width: 140px"
+                    :editable="false"
+                    @on-change="getEndDatec"
+                  ></Date-picker>
+                </Col>
+              </Row>
+            </li>
+            <li class="first-li">
+              <span class="first-span">集合时间</span>
+              <Row>
+                <Col span="12">
+                  <Date-picker
+                    type="date"
+                    v-model="oneRole.setTime"
+                    format="yyyy-MM-dd HH:mm"
+                    placement="bottom-end"
+                    placeholder="选择集合日期"
+                    style="width: 300px"
+                    @on-change="getDates"
+                  ></Date-picker>
+                </Col>
+              </Row>
+            </li>
+            <li class="first-li">
+              <span class="first-span">集合地址</span>
+              <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
+            </li>
+            <li class="first-li">
+              <span class="first-span">模式</span>
+              <RadioGroup v-model="oneRole.zmType">
+                <Radio label="1" >先到先得</Radio>
+                <Radio label="2">预约型</Radio>
+              </RadioGroup>
+            </li>
+            <li class="first-li" v-if="oneRole.zmType==2">
+              <span class="first-span">预约数量</span>
+              <Input v-model="oneRole.apptNum" placeholder="请输入预约数量" style="width: 300px"></Input>
+            </li>
+            <li class="first-li" v-if="oneRole.zmType==2">
+              <span class="first-span">需要审核</span>
+              <i-switch v-model="oneRole.isHaveSubsidy" :trueValue='1' :falseValue='2' />
+            </li>
+            <li class="first-li" v-if="oneRole.zmType==2">
+              <span class="first-span">是否自动筛选替补人员</span>
+              <RadioGroup v-model="oneRole.isAutoChoose">
+                <Radio label="0" :trueValue='0'>是</Radio>
+                <Radio label="1" :trueValue='1'>否</Radio>
+              </RadioGroup>
+            </li>
+            <li class="first-li">
+              <span class="first-span">是否发放补助</span>
+              <RadioGroup v-model="oneRole.isHaveSubsidy">
+                <Radio label="1">是</Radio>
+                <Radio label="2">否</Radio>
+              </RadioGroup>
+            </li>
+            <li class="first-li" v-if="oneRole.isHaveSubsidy==1">
+              <span class="first-span">补助类型</span>
+              <RadioGroup v-model="oneRole.subsidyType">
+                <Radio label="1">现金</Radio>
+                <Radio label="2">物质</Radio>
+              </RadioGroup>
+            </li>
+            <li class="first-li" v-if="oneRole.subsidyType==1">
+              <span class="first-span">补助金额</span>
+              <Input placeholder="请输入补助金额" v-model="oneRole.subsidyCash" type="number" style="width:300px"></Input>
+            </li>
+            <li class="first-li" v-if="oneRole.subsidyType==2">
+              <span class="first-span">物资类型</span>
+              <Select v-model="oneRole.resourcesName" style="width:150px;margin-right:10px">
+                <Option
+                  v-for="item in batchItemList.resources"
+                  :value="item.name"
+                  :key="item.name"
+                  @click.native='getResources(item)'
+                >{{ item.name }}</Option>
+              </Select>
+              <Input v-model="oneRole.resourcesRemark" placeholder="备注" style="width: 150px" />
+            </li>
+            <li class="first-li">
+              <span class="first-span">退款设置</span>
+              <div class="refund">
+                <p>
+                  <i-switch v-model="oneRole.refund.refundRule" @on-change="refund" :falseValue='3' :trueValue='1 || 2' />
+                  支持退款
+                </p>
+              </div>
+            </li>
+            <li v-if="oneRole.refund.refundRule==1 || oneRole.refund.refundRule==2">
+              <RadioGroup v-model="oneRole.refund.refundRule" vertical @on-change='getRefund'>
+                <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
+                <Radio label="2" :trueValue='2'>
+                  活动开始前
+                  <Input v-model="oneRole.refund.refundDays" style="width: 80px" />天可退款
+                </Radio>
+              </RadioGroup>
+            </li>
+            <li class="first-li">
+              <span>限制设置</span>
+            </li>
+            <li>
+              <table v-for="(item,index) in oneRole.signRuleList" class="role-table">
+                  <tr v-if="item.ruleId==21 || item.ruleId==3" class="role-tr">
+                    <td>年龄限制</td>
+                    <td>
+                      <Input
+                        v-model="value"
+                        placeholder="Enter something..."
+                        style="width: 70px"
+                      />
+                      <b>——</b>
+                      <Input
+                        v-model="value"
+                        placeholder="Enter something..."
+                        style="width: 70px"
+                      />
+                    </td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==6" class="role-tr">
+                    <td>所属家长小组限制</td>
+                    <td>
+                      <Select v-model="item.ruleName" style="width:200px">
                         <Option
-                          v-for="item in batchItemList.resources"
+                          v-for="(item,i) in  signLimitsList[0].data"
                           :value="item.name"
-                          :key="item.name"
-                          @click.native='getResources(item)'
+                          :key="i"
+                          @click.native="getLimitValue1(item,i)"
                         >{{ item.name }}</Option>
                       </Select>
-                      <Input
-                        v-model="oneRole.resourcesRemark"
-                        placeholder="备注"
-                        style="width: 100px"
-                      />
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>限制设置</span>
-                <div class="impose">
-                  <table v-for="(item,index) in oneRole.signRuleList" :key='index'>
-                      <tr v-if="item.ruleId==21 || item.ruleId==3">
-                        <td>年龄限制</td>
-                        <td>
-                          <Input
-                            v-model="value"
-                            placeholder="Enter something..."
-                            style="width: 70px"
-                          />
-                          <b>——</b>
-                          <Input
-                            v-model="value"
-                            placeholder="Enter something..."
-                            style="width: 70px"
-                          />
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==6">
-                        <td>所属家长小组限制</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[0].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==7">
-                        <td>障碍类型</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[1].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==8">
-                        <td>本月生日</td>
-                        <td></td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==9">
-                        <td>限VIP</td>
-                        <td></td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==22 || item.ruleId==4">
-                        <td>居住地区限制</td>
-                        <td>
-                          <selects @change='getAddr'></selects>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==2">
-                        <td>志愿特长</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[0].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==5">
-                        <td>所属社团限制</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[0].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                  </table>
-                  <!-- <div class="impose-text">
-                    <a>+新增限制条件</a>
-                  </div> -->
-                  <div class="impose-div">
-                    <span>常用限制项</span>
-                    <div v-for="item in signLimitsList">
-                      <Button @click.native="getLimits(item)">{{item.name}}</Button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>报名时间</span>
-                <Row>
-                  <Col span="8">
-                    <Date-picker
-                      type="datetimerange" 
-                      format="yyyy-MM-dd HH:mm"
-                      placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 300px"
-                      @on-change="getDate"
-                    ></Date-picker>
-                  </Col>
-                </Row>
-              </li>
-              <li>
-                <span>取消时间</span>
-                <Row>
-                  <Col span="8">
-                    <Date-picker
-                      type="datetimerange" 
-                      format="yyyy-MM-dd HH:mm"
-                      placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 300px"
-                      @on-change="getDatea"
-                    ></Date-picker>
-                  </Col>
-                </Row>
-              </li>
-              <li>
-                <span>集合时间</span>
-                <Row>
-                  <Col span="12">
-                    <Date-picker
-                      type="date" 
-                      format="yyyy-MM-dd HH:mm"
-                      placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 300px"
-                      @on-change="getDates"
-                    ></Date-picker>
-                  </Col>
-                </Row>
-              </li>
-              <li>
-                <span>集合地址</span>
-                <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
-              </li>
-              <li>
-                <span>优先限制</span>
-                <div class="impose">
-                  <table>
-                    <thead>
-                      <th>优先级别</th>
-                      <th>优先项</th>
-                      <th>操作</th>
-                    </thead>
-                    <tbody v-for="(item,index) in oneRole.choiceRuleList">
-                      <tr>
-                        <td>{{index+1}}.{{item.firstName}}</td>
-                        <td>
-                          <Button @click.native="sortFirst(index)">上移</Button>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteFirst(index)">删除</Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <!-- <div class="impose-text">
-                    <a>+新增优先条件</a>
-                  </div> -->
-                  <div class="impose-div">
-                    <span>优先规则项</span>
-                    <Button v-for="item in firstItemList" @click.native="getFirst(item)">{{item.name}}</Button>
-                  </div>
-                </div>
-              </li>
-              <li class="other">
-                <span>是否自动筛选替补人员</span>
-                <RadioGroup v-model="oneRole.isAutoChoose">
-                  <Radio label="0" :true-value='0'>是</Radio>
-                  <Radio label="1" :true-value='1'>否</Radio>
-                </RadioGroup>
-              </li>
-              <!-- <li class="other">
-                <span>是否发放志愿证书</span>
-                <RadioGroup v-model="oneRole.isAutoChoose">
-                  <Radio label="0" :true-value='0'>是</Radio>
-                  <Radio label="1" :true-value='1'>否</Radio>
-                </RadioGroup>
-              </li> -->
-              <li>
-                <span>报名项设置</span>
-                <div class="impose">
-                  <div v-for="(item,index) in oneRole.itemList" :key="index">
-                    <div class="ls-item" v-if='!item.isNew'>
-                      <div>{{item.itemName}}</div>
-                      <Checkbox v-model="item.isMust" :true-value='1'>必填</Checkbox>
-                      <Button @click.native="deleteItem(index)">删除</Button>
-                    </div>
-                    <div class="ls-item flex-between" v-else-if=" item.type === 1 ">
-                      <i-input placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
-                      <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                      <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                    </div>
-                    <div class="ls-item flex-between" v-else-if=" item.type === 6 ">
-                      <i-input placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
-                      <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                      <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                    </div>
-                    <div class="ls-item" v-else-if="item.type === 3 ">
-                      <div class="flex-between">
-                        <i-input placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
-                        <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                        <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                      </div>
-                      <div class="item flex-between" v-for="(val,i) in item.answer" :key="i">
-                        <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
-                        <span @click="deleteItems(index,i)" v-if="!isDisb">x</span>
-                      </div>
-                      <div class="item-add" @click="addItemIput(index)" v-if="!isDisb">+</div>
-                    </div>
-                    <div class="ls-item" v-else>
-                      <div class="flex-between">
-                        <i-input placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
-                        <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                        <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                      </div>
-                      <div class="item flex-between" v-for="(val,i) in item.answer" :key="i">
-                        <input :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
-                        <span @click="deleteItems(index,i)" v-if="!isDisb">x</span>
-                      </div>
-                      <div class="item-add" @click="addItemIput(index)" v-if="!isDisb">+</div>
-                    </div>
-                  </div>
-                  <div class="apply">
-                    <!-- <div class="adds">
-                      <a>新增报名项</a>
-                    </div> -->
-                    <div class="apply-btn">
-                      <p class="apply-btn-p">
-                        <span>常用报名项</span>
-                        <Button v-for="item in signItemList" @click.native="getSign(item)">{{item.name}}</Button>
-                        
-                      </p>
-                      <p class="apply-btn-p">
-                        <span>自定义报名项</span>
-                        <Button v-for="item in signList" @click.native="addSign(item)">{{item.itemName}}</Button>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>群二维码</span>
-                <div class="start-wap">
-                  <div class="upload" v-if='oneRole.qrCodeShow == null'>
-                      <div class="file" @click="()=>{ this.$refs.files.click()}">
-                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
-                      </div>
-                  </div>
-                  <img class="imgs" v-else :src="oneRole.qrCodeShow"/>
-                  <Icon src="" alt="" v-if='oneRole.qrCodeShow == null' class="cancel" @click="cancelImg()"/>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li v-if="oneRole.zmType==2">
-            <ul>
-              <li>
-                <span>票价</span>
-                <div class="tables">
-                  <table>
-                    <tr>
-                      <th>票价</th>
-                      <th>VIP价</th>
-                      <th>数量</th>
-                      <th>可预约数量</th>
-                      <th>可获得积分</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Input v-model="oneRole.amount" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.vipAmount" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.recruitNum" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.apptNum" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                      <td>
-                        <Input v-model="oneRole.score" placeholder="请输入..." style="width: 90px"></Input>
-                      </td>
-                    </tr>
-                  </table>
-                  <div class="audit">
-                    <span class="audit-span">是否审核</span>
-                    <i-switch v-model="oneRole.isHaveSubsidy" @on-change="change" :true-value='1' :false-value='2' />
-                    <span>报名后需要我审核</span>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>退款设置</span>
-                <div class="refund">
-                  <p>
-                    支持退款
-                    <i-switch v-model="oneRole.refund.refundRule" @on-change="refund" :false-value='3' :true-value='1 || 2' />
-                  </p>
-                  <div class="refund-div" v-if="oneRole.refund.refundRule==1 || oneRole.refund.refundRule==2">
-                    <RadioGroup v-model="oneRole.refund.refundRule" vertical @on-change='getRefund'>
-                      <Radio label="1" :true-value='1'>活动结束前均可退款</Radio>
-                      <Radio label="2" :true-value='2'>
-                        活动开始前
-                        <Input
-                          v-model="oneRole.refund.refundDays"
-                          placeholder="Enter something..."
-                          style="width: 80px"
-                        />天可退款
-                      </Radio>
-                    </RadioGroup>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>是否发放补助</span>
-                <div class="li-subsidy">
-                  <RadioGroup v-model="oneRole.isHaveSubsidy">
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
-                  </RadioGroup>
-                  <div class="li-subsidys" v-if="oneRole.isHaveSubsidy==1">
-                    <p>
-                      <span>补助类型：</span>
-                      <RadioGroup v-model="oneRole.subsidyType">
-                        <Radio label="1">现金</Radio>
-                        <Radio label="2">物质</Radio>
-                      </RadioGroup>
-                    </p>
-                    <p v-if='oneRole.subsidyType==1'>
-                      <Input placeholder="请输入补助金额" v-model="oneRole.subsidyCash" type="number"></Input>
-                    </p>
-                    <p v-if='oneRole.subsidyType==2'>
-                      <span>物资类型：</span>
-                      <Select v-model="oneRole.resourcesName" style="width:100px">
+                    </td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==7" class="role-tr">
+                    <td>障碍类型</td>
+                    <td>
+                      <Select v-model="item.ruleName" style="width:200px">
                         <Option
-                          v-for="item in batchItemList.resources"
+                          v-for="(item,i) in  signLimitsList[1].data"
                           :value="item.name"
-                          :key="item.name"
-                          @click.native='getResources(item)'
+                          :key="i"
+                          @click.native="getLimitValue1(item,i)"
                         >{{ item.name }}</Option>
                       </Select>
-                      <Input
-                        v-model="oneRole.resourcesRemark"
-                        placeholder="备注"
-                        style="width: 100px"
-                      />
-                    </p>
+                    </td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==8" class="role-tr">
+                    <td>本月生日</td>
+                    <td></td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==9" class="role-tr">
+                    <td>限VIP</td>
+                    <td></td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==22 || item.ruleId==4" class="role-tr">
+                    <td>居住地区限制</td>
+                    <td></td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==2" class="role-tr">
+                    <td>志愿特长</td>
+                    <td>
+                      <Select v-model="item.ruleName" style="width:200px">
+                        <Option
+                          v-for="(item,i) in  signLimitsList[0].data"
+                          :value="item.name"
+                          :key="i"
+                          @click.native="getLimitValue1(item,i)"
+                        >{{ item.name }}</Option>
+                      </Select>
+                    </td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.ruleId==5" class="role-tr">
+                    <td>所属社团限制</td>
+                    <td>
+                      <Select v-model="item.ruleName" style="width:200px">
+                        <Option
+                          v-for="(item,i) in  signLimitsList[0].data"
+                          :value="item.name"
+                          :key="i"
+                          @click.native="getLimitValue1(item,i)"
+                        >{{ item.name }}</Option>
+                      </Select>
+                    </td>
+                    <td>
+                      <Button @click.native="deleteLimits(index)">删除</Button>
+                    </td>
+                  </tr>
+              </table>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0">
+              <div class="first-span">常用限制项</div>
+            </li>
+            <li class="lx-flex-around" style="padding:8px 0">
+              <div v-for="item in signLimitsList">
+                <Button @click.native="getLimits(item)">{{item.name}}</Button>
+              </div>
+            </li>
+            <li class="first-li">
+              <span>报名项设置</span>
+            </li>
+            <li>
+              <div v-for="(item,index) in oneRole.itemList" :key="index" class="role-table">
+                <div v-if='!item.isNew' class="role-tr">
+                  <div>{{item.itemName}}</div>
+                  <Checkbox v-model="item.isMust" :true-value='1'>必填</Checkbox>
+                  <Button @click.native="deleteItem(index)">删除</Button>
+                </div>
+                <div v-else-if=" item.type === 1" class="role-tr">
+                  <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
+                  <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
+                  <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
+                </div>
+                <div v-else-if=" item.type === 6 " class="role-tr">
+                  <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
+                  <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
+                  <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
+                </div>
+                <div v-else-if="item.type === 3 " style="width:80%">
+                  <div class="role-trs">
+                    <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
+                    <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
+                    <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
+                  </div>
+                  <div v-for="(val,i) in item.answer" :key="i" class="role-trs">
+                    <i-input style="width:60%" :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
+                    <span @click="deleteItems(index,i)" v-if="!isDisb">x</span>
+                  </div>
+                  <div class="lx-flex-center" v-if="!isDisb">
+                    <Button @click="addItemIput(index)">+</Button>
                   </div>
                 </div>
-              </li>
-              <li>
-                <span>限制设置</span>
-                <div class="impose">
-                  <table v-for="(item,index) in oneRole.signRuleList">
-                      <tr v-if="item.ruleId==21 || item.ruleId==3">
-                        <td>年龄限制</td>
-                        <td>
-                          <Input
-                            v-model="value"
-                            placeholder="Enter something..."
-                            style="width: 70px"
-                          />
-                          <b>——</b>
-                          <Input
-                            v-model="value"
-                            placeholder="Enter something..."
-                            style="width: 70px"
-                          />
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==6">
-                        <td>所属家长小组限制</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[0].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==7">
-                        <td>障碍类型</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[1].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==8">
-                        <td>本月生日</td>
-                        <td></td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==9">
-                        <td>限VIP</td>
-                        <td></td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==22 || item.ruleId==4">
-                        <td>居住地区限制</td>
-                        <td></td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==2">
-                        <td>志愿特长</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[0].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                      <tr v-if="item.ruleId==5">
-                        <td>所属社团限制</td>
-                        <td>
-                          <Select v-model="item.ruleName" style="width:200px">
-                            <Option
-                              v-for="(item,i) in  signLimitsList[0].data"
-                              :value="item.name"
-                              :key="i"
-                              @click.native="getLimitValue1(item,i)"
-                            >{{ item.name }}</Option>
-                          </Select>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteLimits(index)">删除</Button>
-                        </td>
-                      </tr>
-                  </table>
-                  <!-- <div class="impose-text">
-                    <a>+新增限制条件</a>
-                  </div> -->
-                  <div class="impose-div">
-                    <span>常用限制项</span>
-                    <div v-for="item in signLimitsList">
-                      <Button @click.native="getLimits(item)">{{item.name}}</Button>
-                    </div>
+                <div v-else style="width:80%">
+                  <div class="role-trs">
+                    <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
+                    <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
+                    <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
+                  </div>
+                  <div v-for="(val,i) in item.answer" :key="i" class="role-trs">
+                    <i-input style="width:60%" :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
+                    <span @click="deleteItems(index,i)" v-if="!isDisb">x</span>
+                  </div>
+                  <div class="lx-flex-center" v-if="!isDisb">
+                    <Button @click="addItemIput(index)">+</Button>
                   </div>
                 </div>
-              </li>
-              <li>
-                <span>报名时间</span>
-                <Row>
-                  <Col span="8">
-                    <Date-picker
-                      type="datetimerange" 
-                      format="yyyy-MM-dd HH:mm"
-                      placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 300px"
-                      @on-change="getDate"
-                    ></Date-picker>
-                  </Col>
-                </Row>
-              </li>
-              <li>
-                <span>取消时间</span>
-                <Row>
-                  <Col span="8">
-                    <Date-picker
-                      type="datetimerange" 
-                      format="yyyy-MM-dd HH:mm"
-                      placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 300px"
-                      @on-change="getDatea"
-                    ></Date-picker>
-                  </Col>
-                </Row>
-              </li>
-              <li>
-                <span>集合时间</span>
-                <Row>
-                  <Col span="12">
-                    <Date-picker
-                      type="date" 
-                      format="yyyy-MM-dd HH:mm"
-                      placement="bottom-end"
-                      placeholder="选择日期"
-                      style="width: 300px"
-                      @on-change="getDates"
-                    ></Date-picker>
-                  </Col>
-                </Row>
-              </li>
-              <li>
-                <span>集合地址</span>
-                <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
-              </li>
-              <li>
-                <span>优先限制</span>
-                <div class="impose">
-                  <table>
-                    <thead>
-                      <th>优先级别</th>
-                      <th>优先项</th>
-                      <th>操作</th>
-                    </thead>
-                    <tbody v-for="(item,index) in oneRole.choiceRuleList">
-                      <tr>
-                        <td>{{index+1}}.{{item.firstName}}</td>
-                        <td>
-                          <Button @click.native="sortFirst(index)">上移</Button>
-                        </td>
-                        <td>
-                          <Button @click.native="deleteFirst(index)">删除</Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <!-- <div class="impose-text">
-                    <a>+新增优先条件</a>
-                  </div> -->
-                  <div class="impose-div">
-                    <span>优先规则项</span>
-                    <Button v-for="item in firstItemList" @click.native="getFirst(item)">{{item.name}}</Button>
-                  </div>
-                </div>
-              </li>
-              <li class="other">
-                <span>是否自动筛选替补人员</span>
-                <RadioGroup v-model="oneRole.isAutoChoose">
-                  <Radio label="0" :true-value='0'>是</Radio>
-                  <Radio label="1" :true-value='1'>否</Radio>
-                </RadioGroup>
-              </li>
-              <!-- <li class="other">
-                <span>是否发放志愿证书</span>
-                <RadioGroup v-model="oneRole.isAutoChoose">
-                  <Radio label="0" :true-value='0'>是</Radio>
-                  <Radio label="1" :true-value='1'>否</Radio>
-                </RadioGroup>
-              </li> -->
-              <li>
-                <span>报名项设置</span>
-                <div class="impose">
-                  <div v-for="(item,index) in oneRole.itemList" :key="index">
-                    <div class="ls-item" v-if='!item.isNew'>
-                      <div>{{item.itemName}}</div>
-                      <Checkbox v-model="item.isMust" :true-value='1'>必填</Checkbox>
-                      <Button @click.native="deleteItem(index)">删除</Button>
-                    </div>
-                    <div class="ls-item flex-between" v-else-if=" item.type === 1 ">
-                      <i-input placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
-                      <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                      <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                    </div>
-                    <div class="ls-item flex-between" v-else-if=" item.type === 6 ">
-                      <i-input placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
-                      <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                      <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                    </div>
-                    <div class="ls-item" v-else-if="item.type === 3 ">
-                      <div class="flex-between">
-                        <i-input placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
-                        <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                        <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                      </div>
-                      <div class="item flex-between" v-for="(val,i) in item.answer" :key="i">
-                        <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
-                        <span @click="deleteItems(index,i)" v-if="!isDisb">x</span>
-                      </div>
-                      <div class="item-add" @click="addItemIput(index)" v-if="!isDisb">+</div>
-                    </div>
-                    <div class="ls-item" v-else>
-                      <div class="flex-between">
-                        <i-input placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
-                        <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
-                        <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
-                      </div>
-                      <div class="item flex-between" v-for="(val,i) in item.answer" :key="i">
-                        <input :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
-                        <span @click="deleteItems(index,i)" v-if="!isDisb">x</span>
-                      </div>
-                      <div class="item-add" @click="addItemIput(index)" v-if="!isDisb">+</div>
-                    </div>
-                  </div>
-                  <div class="apply">
-                    <!-- <div class="adds">
-                      <a>新增报名项</a>
-                    </div> -->
-                    <div class="apply-btn">
-                      <p class="apply-btn-p">
-                        <span>常用报名项</span>
-                        <Button v-for="item in signItemList" @click.native="getSign(item)">{{item.name}}</Button>
-                        
-                      </p>
-                      <p class="apply-btn-p">
-                        <span>自定义报名项</span>
-                        <Button v-for="item in signList" @click.native="addSign(item)">{{item.itemName}}</Button>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span>群二维码</span>
-                <div class="start-wap">
-                  <div class="upload" v-if='oneRole.qrCodeShow == null'>
-                      <div class="file" @click="()=>{ this.$refs.files.click()}">
-                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
-                      </div>
-                  </div>
-                  <img class="imgs" v-else :src="oneRole.qrCodeShow"/>
-                  <Icon src="" alt="" v-if='oneRole.qrCodeShow == null' class="cancel" @click="cancelImg()"/>
-                </div>
-              </li>
-            </ul>
-          </li>
-
-          <li>
-            <span>培训内容</span>
-            <i-switch v-model="oneRole.isTrain" :true-value='1' :false-value='2' @on-change="change" />
-            <Checkbox v-model="oneRole.isTrainMust" :true-value='1'>是否必填</Checkbox>
-          </li>
-          <!-- <li v-if="oneRole.isTrain==1">
-            <span>
-              <Button>选择模块</Button>
-            </span>
-            <Input v-model="value" placeholder="4" style="width: 200px" />
-          </li> -->
-          <!-- <li v-if="oneRole.isTrain==1">
-            <span>培训标题</span>
-            <Input v-model="value" placeholder="4" style="width: 200px" />
-          </li>
-          <li v-if="oneRole.isTrain==1">
-            <span>培训图片</span>
-            <div class="photo">
-              <img />
-            </div>
-          </li>
-          <li v-if="oneRole.isTrain==1">
-            <span>培训视频</span>
-            <div class="video">
-              <img />
-            </div>
-          </li> -->
-          <li class="rich-text" v-if="oneRole.isTrain==1">
-            <span>培训详情</span>
-            <div v-if="oneRole.isTrain === 1">
+              </div>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0">
+              <div class="first-span">常用报名项</div>
+            </li>
+            <li class="lx-flex-around" style="padding:8px 0">
+              <div v-for="item in signItemList">
+                <Button @click.native="getSign(item)">{{item.name}}</Button>
+              </div>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0">
+              <div class="first-span">自定义报名项</div>
+            </li>
+            <li class="lx-flex-around" style="padding:8px 0">
+              <div v-for="item in signList">
+                <Button @click.native="addSign(item)">{{item.itemName}}</Button>
+              </div>
+            </li>
+            <li class="first-li">
+              <span>优先设置</span>
+            </li>
+            <li class="role-table">
+              <table style="width:80%">
+                <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
+                  <tr class="role-tr">
+                    <td>{{index+1}}.{{item.firstName}}</td>
+                    <td>
+                      <Button @click.native="sortFirst(index)">上移</Button>
+                    </td>
+                    <td>
+                      <Button @click.native="deleteFirst(index)">删除</Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0">
+              <div class="first-span">优先规则</div>
+            </li>
+            <li class="lx-flex-around" style="padding:8px 0">
+              <div v-for="item in firstItemList">
+                <Button @click.native="getFirst(item)">{{item.name}}</Button>
+              </div>
+            </li>
+          </ul>
+        </Col>
+      </Row>
+      <Row class="role-row">
+        <Col span="10">
+          <ul>
+            <li class="first-li">
+              <span class="first-span">培训内容</span>
+              <i-switch v-model="oneRole.isTrain" :true-value='1' :false-value='2' />
+              <Checkbox v-model="oneRole.isTrainMust" :true-value='1'>是否必须培训</Checkbox>
+            </li>
+            <li class="first-li" v-if="oneRole.isTrain==1">
               <wangeditor :labels="oneRole.trainComments" id="ed1" @change="changeEditorTrain"></wangeditor>
-            </div>
-          </li>
-          <li>
-            <p>
-              <span class="active-span">反馈内容</span>
+            </li>
+            <li class="first-li">
+              <span class="first-span">反馈内容</span>
               <i-switch v-model="oneRole.isFeedback" :true-value="1" :false-value="2" />
-            </p>
-            <div v-if="oneRole.isFeedback === 1">
-              <div v-for="(item,index) in oneRole.fdList" :key="index">
-                <div class="ls-item" v-if=" index ==0 ">
+            </li>
+            <li v-if="oneRole.isFeedback === 1">
+              <div v-for="(item,index) in oneRole.fdList" :key="index" class="role-table">
+                <div class="role-tr" v-if=" item.type ==0 " style="width:90%">
                   <div>反馈简介</div>
                   <Input
-                    placeholder="请输入反馈内容"
+                    placeholder="请输入反馈简介"
                     class="txt"
                     v-model="item.context"
                     type="textarea"
+                    :rows='5'
                     :disabled="isDisb"
                   />
                 </div>
-                <div class="ls-item flex-between" v-else-if=" item.type === 1 ">
-                  <i-input placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
+                <div v-else-if="item.type == 9 ">
+                  <span class="first-span">上传图片</span>
+                  <i-switch v-model="item.context" :true-value="1" :false-value="2" />
+                </div>
+                <div class="role-tr" v-else-if=" item.type === 1 ">
+                  <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="ls-item flex-between" v-else-if=" item.type === 6 ">
-                  <i-input placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
+                <div class="role-tr" v-else-if=" item.type === 6 ">
+                  <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="ls-item" v-else-if="item.type === 3 ">
-                  <div class="flex-between">
-                    <i-input placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
+                <div v-else-if="item.type === 3 " style="width:90%">
+                  <div class="role-trs">
+                    <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                     <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                   </div>
-                  <div class="item flex-between" v-for="(val,i) in item.answer" :key="i">
-                    <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
+                  <div class="role-trs" v-for="(val,i) in item.answer" :key="i">
+                    <i-input style="width:60%" :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
                     <span @click="deleItem(index,i)" v-if="!isDisb">x</span>
                   </div>
-                  <div class="item-add" @click="addSignIput(index)" v-if="!isDisb">+</div>
+                  <div class="lx-flex-center" v-if="!isDisb">
+                    <Button @click="addSignIput(index)">+</Button>
+                  </div>
                 </div>
-                <div class="ls-item" v-else>
-                  <div class="flex-between">
-                    <i-input placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
+                <div v-else-if="item.type === 4 " style="width:90%">
+                  <div class="role-trs">
+                    <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                     <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                   </div>
-                  <div class="item flex-between" v-for="(val,i) in item.answer" :key="i">
-                    <input :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
+                  <div class="role-trs" v-for="(val,i) in item.answer" :key="i">
+                    <i-input style="width:60%" :placeholder="`输入选项${i+1}`" v-model="val.answer" :disabled="isDisb" />
                     <span @click="deleItem(index,i)" v-if="!isDisb">x</span>
                   </div>
-                  <div class="item-add" @click="addSignIput(index)" v-if="!isDisb">+</div>
+                  <div class="lx-flex-center" v-if="!isDisb">
+                    <Button @click="addSignIput(index)">+</Button>
+                  </div>
                 </div>
               </div>
-              <div class="add">
-                <p>新增反馈项</p>
-                <div class="flex-between">
-                  <div
-                    v-for="(item,index) in feedList"
-                    :key="index"
-                    class="add-item"
-                    @click="addItem(item)"
-                  >{{ item.name }}</div>
-                </div>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
+              <div class="first-span">新增反馈项</div>
+            </li>
+            <li class="lx-flex-around" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
+              <div v-for="(item,index) in feedList">
+                <Button @click.native="addItem(item)">{{item.name}}</Button>
               </div>
-            </div>
-          </li>
-          <!-- <li v-if="oneRole.isFeedback === 1">
-            <span>
-              <Button>选择模块</Button>
-            </span>
-            <Input v-model="value" placeholder="4" style="width: 200px" />
-          </li>
-          <li v-if="oneRole.isFeedback === 1">
-            <span>反馈标题</span>
-            <Input v-model="value" placeholder="4" style="width: 200px" />
-          </li> -->
-        </ul>
-      </div>
-      <div class="btns-foot">
-        <Button @click.native="cancel">取消</Button>
-        <Button class="active" @click.native="save">保存</Button>
+            </li>
+          </ul>
+        </Col>
+      </Row>
+
+      <div class="role-row" style="margin-top:80px">
+        <div class="lx-flex-around" style="width:40%">
+          <Button @click.native="cancel">取消</Button>
+          <Button class="active" @click.native="save">保存</Button>
+        </div>
       </div>
     </div>
   </div>
@@ -949,13 +522,6 @@ export default {
   props:['oneRole'],
   data() {
     return {
-      // oneRole: {
-      //   fdList:[{ name: '反馈简介', type: 0}],
-      //   refund:{},
-      //   signRuleList:[],
-      //   itemList:[],
-      //   choiceRuleList:[]
-      // },
       adr:false,
       signTypeList: [],
       signPostList: [],
@@ -1006,22 +572,14 @@ export default {
     };
   },
   mounted() {
-    // var editor1 = new E('.editorElem1');
-    // var editor2 = new E('.editorElem2');
-    // editor1.customConfig.onchange = (html) => {
-    //   this.editorContent1 = html
-    // };
-    // editor2.customConfig.onchange = (html) => {
-    //   this.editorContent2 = html
-    // };
-    // editor1.create()
-    // editor2.create()
+    console.log(this.oneRole)
   },
   components: {selects,adress},
 
   computed: {},
 
   created() {
+    this.userId = this.$store.state.userId;
     this.getSignType();
     this.getBatchItem();
   },
@@ -1036,9 +594,9 @@ export default {
         this.batchItemList = res.data
       });
     },
-    change(status) {
-      this.$Message.info("开关状态：" + status);
-    },
+    // change(status) {
+    //   this.$Message.info("开关状态：" + status);
+    // },
     refund(e){
       console.log(e)
     },
@@ -1060,7 +618,8 @@ export default {
       });
       signLimits({
         userId:this.userId,
-        roleId:val.roleId
+        roleId:val.roleId,
+        sysId:1
       }).then(res=>{
         this.signLimitsList = res.data
       })
@@ -1070,6 +629,8 @@ export default {
         this.signItemList = res.data
       })
       firstList({
+        userId:this.userId,
+        sysId:1,
         roleId:val.roleId
       }).then(res=>{
         this.firstItemList = res.data
@@ -1110,24 +671,27 @@ export default {
       this.oneRole.resourcesName = e.name
     },
     //获取日期
-    getDate(e) {
-      this.oneRole.enrollStarttime = e[0];
-      this.oneRole.enrollEndtime = e[1];
+    getStartDate(e) {
+      this.oneRole.enrollStarttime = e
     },
-    //获取日期
-    getDatea(e) {
-      this.oneRole.outrollStarttime = e[0];
-      this.oneRole.outrollEndtime = e[1];
+    getEndDate(e) {
+      this.oneRole.enrollEndtime = e
+    },
+    getStartDatec(e) {
+      this.oneRole.outrollStarttime = e
+    },
+    getEndDatec(e) {
+      this.oneRole.outrollEndtime = e
     },
     //获取日期
     getDates(e) {
       this.oneRole.setTime = e
     },
     getMap(e){
+      console.log(e)
       this.oneRole.xx = e.xx
       this.oneRole.yy = e.yy
       this.$set(this.oneRole,'setAddr',e.address)
-      console.log(e)
     },
     getLimits(e){
       console.log(e)
@@ -1255,209 +819,6 @@ export default {
   .compole-head {
     height: 50px;
     line-height: 50px;
-    padding-left: 20px;
-    border-bottom: #e4e4e4 1px solid;
-  }
-  .compole-content {
-    padding: 10px 0;
-    width: 900px;
-    background: #ffffff;
-    ul {
-      padding-left: 50px;
-      li {
-        display: flex;
-        margin: 20px 0;
-        span {
-          display: block;
-          width: 140px;
-          height: 40px;
-          // line-height: 40px;
-          font-size: 14px;
-          // margin: 0 50px;
-        }
-        .ivu-switch-default {
-          width: 45px;
-          height: 23px;
-          margin-right: 20px;
-        }
-        .tables {
-          table {
-            width: 620px;
-            th {
-              background: #f2f2f2;
-              text-align: center;
-              height: 45px;
-              border-left: #e4e4e4 1px solid;
-              line-height: 45px;
-              width: 100px;
-            }
-            td {
-              height: 70px;
-              background: #ffffff;
-              text-align: center;
-              line-height: 70px;
-            }
-          }
-        }
-        .audit {
-          display: flex;
-          background: #e4e4e4;
-          align-items: center;
-          padding-left: 10px;
-          span {
-            line-height: 40px;
-          }
-          .audit-span {
-            width: 80px;
-          }
-        }
-        .refund {
-          p {
-            display: flex;
-            align-items: flex-start;
-          }
-
-          span {
-            margin: 0 10px;
-            font-size: 14px;
-          }
-          .refund-div {
-            margin-top: 10px;
-            border: 1px solid #e4e4e4;
-            width: 600px;
-            height: 80px;
-            padding: 7px;
-          }
-        }
-        .li-subsidy {
-          .li-subsidys {
-            p {
-              display: flex;
-              align-items: center;
-              span {
-                line-height: 40px;
-                width: 70px;
-              }
-            }
-          }
-        }
-
-        .impose {
-          border: #e4e4e4 1px solid;
-          table {
-            // border-bottom: 0;
-
-            th {
-              width: 200px;
-              text-align: center;
-              font-size: 14px;
-              line-height: 40px;
-              background: #e4e4e4;
-              border: #e4e4e4 1px solid;
-            }
-            td {
-              font-size: 14px;
-              text-align: center;
-              height: 50px;
-              line-height: 50px;
-            }
-          }
-
-          .ivu-radio-default {
-            margin: 5px 10px;
-          }
-        }
-
-        .impose-div {
-          display: flex;
-          background: #e4e4e4;
-          align-items: center;
-          justify-content: space-around;
-          span {
-            text-align: center;
-            line-height: 40px;
-          }
-          button {
-            margin: 0px 5px;
-            width: 100px;
-          }
-          .takes {
-            width: 120px;
-          }
-        }
-
-        .impose-text {
-          text-align: center;
-          height: 40px;
-          line-height: 40px;
-          border: #e4e4e4 1px solid;
-          a {
-            color: #339933;
-            font-size: 14px;
-          }
-        }
-
-        .company {
-          border-bottom: #e4e4e4 1px solid;
-        }
-
-        .imgess {
-          height: 150px;
-          width: 240px;
-          background: #e4e4e4;
-        }
-
-        .apply-btn {
-          height: 100px;
-          background: #e4e4e4;
-          .apply-btn-p {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            span {
-              line-height: 40px;
-              text-align: center;
-            }
-            button {
-              margin: 0 10px;
-              height: 30px;
-            }
-          }
-        }
-
-        .adds {
-          height: 40px;
-          text-align: center;
-          line-height: 40px;
-          border-bottom: #e4e4e4 solid 1px;
-          a {
-            color: #339933;
-          }
-        }
-
-        .video,
-        .photo {
-          height: 150px;
-          width: 300px;
-          background: #e4e4e4;
-        }
-      }
-
-      .rich-text {
-        display: flex;
-        flex-direction: column;
-        span {
-          height: 30px;
-        }
-        .rich-texts {
-          height: 240px;
-          width: 600px;
-          background: #e4e4e4;
-          border: #e4e4e4 solid 1px;
-        }
-      }
-    }
   }
   .btns-foot {
     display: flex;
@@ -1473,38 +834,58 @@ export default {
     }
   }
 }
-.ivu-select-default {
+.first-li{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+.first-span{
   margin-right: 10px;
 }
-.other {
-  span {
-    margin-right: 20px;
-  }
+.wave{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 8px;
+  padding-left: 5px;
 }
-.start-wap{
-    position: relative;
-    height: 150px;
-    width: 300px;
-    .cancel{
-      width: 30px;
-      height: 30px;
-      background: #000;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .upload .file{
-      height: 150px;
-      width: 300px;
-      border: 1px dashed #dcdee2;
-      text-align: center;
-      padding: 20px 0;
-    }
-    .upload .file:hover{
-      border: 1px dashed #2d8cf0;
-    }
-    .upload .file input{
-      display: none;
-    }
-  }
+.lx-flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.lx-flex-around{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.role-table{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.role-tr{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  padding: 5px 0;
+}
+.role-trs{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px 0;
+}
+.role-row{
+  display: flex;
+  justify-content: center;
+  width: 80%;
+}
+.txt{
+  width: 80%;
+}
 </style>
