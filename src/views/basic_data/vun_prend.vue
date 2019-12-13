@@ -4,7 +4,7 @@
     <!-- <Row class="row">
       <Col span="10">
         <button>选择志愿者团队</button>
-      </Col> 
+      </Col>
       <Col span="14">
         <Select v-model="model1" style="width:80%">
           <Option v-for="item in team" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -19,7 +19,7 @@
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
         </div>
-        <p>    
+        <p>
           兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。
      期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p>
         <Row>
@@ -63,7 +63,7 @@
 
 <script>
 import { updateBooks,getBooksDetails,orgimgdel } from '@/request/api'
-import { upload }from '@/request/http' 
+import { upload }from '@/request/http'
 export default {
   data() {
     return {
@@ -73,8 +73,8 @@ export default {
       footimg:null,
       officeSealPic:null,
       i:1,
-      certMouldId:this.$route.params.certMouldId,
-      show:this.$route.params.show
+      certMouldId:this.$route.query.certMouldId,
+      show:this.$route.query.show
     };
   },
   created() {
@@ -109,7 +109,7 @@ export default {
           this[src] = res.data
         }
       })
-      
+
     },
     cancelImg(src){
         orgimgdel({path:this[src]}).then(res => {

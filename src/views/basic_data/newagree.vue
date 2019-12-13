@@ -1,77 +1,102 @@
 <!-- 新建协议（会员） -->
 <template>
   <div class="integral">
-    <div class="integral-header">
-      <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
-        <div>
-          <span>新建协议</span>
-        </div>
+    <Navigation :labels="navigation1"></Navigation>
+    <div class="xieyi">
+      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80">
+        <FormItem label="甲方" prop="partA">
+          <Input v-model="formInline.partA" placeholder="广告名称" style="width:300px" />
+        </FormItem>
+        <FormItem label="乙方" prop="partB">
+          <Input v-model="formInline.partB" placeholder="广告名称" style="width:300px" />
+        </FormItem>
+        <FormItem label="协议分类" prop="typeDicId">
+          <Select v-model="formInline.typeDicId" placeholder="Select your city" style="width:300px">
+            <Option
+              v-for="item in locations"
+              :value="item.dataKey"
+              :key="item.dataValue"
+            >{{ item.dataValue }}</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="所属项目" prop="categoryId">
+          <Select
+            v-model="formInline.categoryId"
+            placeholder="Select your city"
+            style="width:300px"
+          >
+            <Option
+              v-for="item in typeList"
+              :value="item.categoryId"
+              :key="item.name"
+            >{{ item.name }}</Option>
+          </Select>
+        </FormItem>
+
+        <FormItem label="协议时间" prop="agTime">
+          <DatePicker
+            type="date"
+            v-model="formInline.agTime"
+            format="yyyy-MM-dd"
+            @on-change="handleChange"
+            placeholder="Select date"
+            style="width: 200px"
+          ></DatePicker>
+        </FormItem>
+        <FormItem label="广告附件" prop="agFile">
+          <div class="flex-wrap-center">
+            <p class="imgs" v-if="formInline.nameA != null">
+              <span>{{formInline.nameA}}</span>
+              <Icon
+                type="ios-trash"
+                class="cancel"
+                size="24"
+                @click="cancelImg(formInline.agPicA,formInline.nameA)"
+              />
+            </p>
+            <p class="imgs" v-if="formInline.nameB != null">
+              <span>{{formInline.nameB}}</span>
+              <Icon
+                type="ios-trash"
+                class="cancel"
+                size="24"
+                @click="cancelImg(formInline.agPicB,formInline.nameB)"
+              />
+            </p>
+            <p class="imgs" v-if="formInline.nameC != null">
+              <span>{{formInline.nameC}}</span>
+              <Icon
+                type="ios-trash"
+                class="cancel"
+                size="24"
+                @click="cancelImg(formInline.agPicC,formInline.nameC)"
+              />
+            </p>
+          </div>
+          <div class="start-wap">
+            <div class="upload">
+              <div class="file" @click="()=>{ this.$refs.files.click()}">
+                <input
+                  type="file"
+                  style="display:none;"
+                  accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
+                  ref="files"
+                  @change="uploadFile()"
+                  multiple
+                />
+                <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+              </div>
+            </div>
+
+            <!-- <img class="imgs" v-else :src="texturl" style="width:100px;height:100px"/> -->
+          </div>
+        </FormItem>
+      </Form>
+      <br />
+      <div class="centers">
+        <Button align="center" type="success" @click="handleSubmit('formInline')">保存</Button>
       </div>
     </div>
-    <div class="integral-table"></div>
-    <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
-      <FormItem label="甲方" prop="partA">
-        <Input v-model="formInline.partA" placeholder="广告名称" style="width:300px" />
-      </FormItem>
-      <FormItem label="乙方" prop="partB">
-        <Input v-model="formInline.partB" placeholder="广告名称" style="width:300px" />
-      </FormItem>
-      <FormItem label="协议分类" prop="typeDicId">
-        <Select v-model="formInline.typeDicId" placeholder="Select your city" style="width:300px">
-          <Option
-            v-for="item in locations"
-            :value="item.dataKey"
-            :key="item.dataValue"
-          >{{ item.dataValue }}</Option>
-        </Select>
-      </FormItem>
-      <FormItem label="所属项目" prop="categoryId">
-        <Select v-model="formInline.categoryId" placeholder="Select your city" style="width:300px">
-          <Option v-for="item in typeList" :value="item.categoryId" :key="item.name">{{ item.name }}</Option>
-        </Select>
-      </FormItem>
-
-      <FormItem label="协议时间" prop="agTime">
-        <DatePicker
-          type="date"
-          v-model="formInline.agTime"
-          format="yyyy-MM-dd"
-          @on-change="handleChange"
-          placeholder="Select date"
-          style="width: 200px"
-        ></DatePicker>
-      </FormItem>
-      <FormItem label="广告附件" prop="agFile">
-         <div class="start-wap">
-                <div class="upload" v-if="texturl == null">
-                  <div class="file" @click="()=>{ this.$refs.files.click()}">
-                    <input
-                      type="file"
-                      style="display:none;"
-                      accept=".txt,.zip,.doc,.ppt,.xls,.pdf,.docx,.xlsx"
-                      ref="files"
-                      @change="uploadFile()"
-                      multiple
-                    />
-                    <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
-                  </div>
-                </div>
-                <span v-else>{{formInline.nameA}}</span>
-                <!-- <img class="imgs" v-else :src="texturl" style="width:100px;height:100px"/> -->
-                <Icon
-                  type="ios-trash"
-                  v-if="texturl !== null"
-                  class="cancel"
-                  size='32'
-                  @click="cancelImg()"
-                />
-
-          </div>
-      </FormItem>
-    </Form>
-    <br />
-    <Button align="center" type="success" @click="handleSubmit('formInline')">保存</Button>
   </div>
 </template>
 
@@ -103,13 +128,13 @@ export default {
         categoryId: "",
         agFile: null,
         name: null,
-        agPicA: "",
-        agPicB: "",
-        agPicC: "",
+        agPicA: null,
+        agPicB: null,
+        agPicC: null,
 
-        nameA: "",
-        nameB: "",
-        nameC: ""
+        nameA: null,
+        nameB: null,
+        nameC: null
       },
       ruleInline: {
         partA: [
@@ -279,8 +304,8 @@ export default {
 
         nameA: this.formInline.nameA,
         nameB: this.formInline.nameB,
-        nameC: this.formInline.nameC,
-        name: this.formInline.name
+        nameC: this.formInline.nameC
+        // name: this.formInline.name
       };
       this.params = this.util.remove(params);
       Agreementadd(this.params).then(res => {
@@ -307,27 +332,52 @@ export default {
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      this.formInline.nameA = file.name;
-      const dataForm = new FormData();
+      if (this.formInline.nameA == null) {
+        this.formInline.nameA = file.name;
+      } else if (this.formInline.nameB == null) {
+        this.formInline.nameB = file.name;
+      } else if (this.formInline.nameC == null) {
+        this.formInline.nameC = file.name;
+      }
+      let dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = e => {
           this.texturl = e.target.result;
-          this.formInline.agPicA=res.data
+          // this.formInline.agPicA = res.data;
+          if (this.formInline.agPicA == null) {
+            this.formInline.agPicA = res.data;
+            return;
+          } else if (this.formInline.agPicB == null) {
+            this.formInline.agPicB = res.data;
+            return;
+          } else if (this.formInline.agPicC == null) {
+            this.formInline.agPicC = res.data;
+            return;
+          } else {
+            this.$Message.error("最多上传三个附件!");
+          }
         };
       });
     },
     //删除图片
-    cancelImg() {
-      orgimgdel({ path: this.formInline.agPicA }).then(res => {
+    cancelImg(pic, name) {
+      orgimgdel({ path: pic }).then(res => {
         if (res.code == 200) {
           this.$Message.success("删除成功");
-          this.formInline.agPicA = null;
-          this.formInline.nameA = null;
-          this.texturl=null
-
+          if (name == this.formInline.nameA) {
+            (this.formInline.nameA = null), (this.formInline.agPicA = null);
+            return;
+          } else if (name == this.formInline.nameB) {
+            (this.formInline.nameB = null), (this.formInline.agPicB = null);
+            return;
+          } else if ((name = this.formInline.nameC)) {
+            (this.formInline.nameC = null), (this.formInline.agPicC = null);
+            return;
+          }
+          this.texturl = null;
         } else {
           this.$Message.success(res.msg);
         }
@@ -356,5 +406,27 @@ export default {
   padding: 5px 20px;
   background: rgb(228, 228, 228);
   border: 1px solid #eee;
+}
+.xieyi {
+  padding-top: 50px;
+  padding-left: 50px;
+  background: #ffffff;
+  min-height: 800px;
+  width: 900px;
+}
+.centers {
+  padding-left: 40px;
+}
+.start-wap {
+  height: 200px;
+}
+.imgs {
+  display: flex;
+  width: 500px;
+  span {
+    display: block;
+
+    font-size: 18px;
+  }
 }
 </style>

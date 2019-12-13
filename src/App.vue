@@ -5,43 +5,43 @@
 </template>
 <script>
 export default {
-  name: 'App',
+  name: "App",
   provide() {
     return {
       reload: this.reload
-    }
+    };
   },
   data() {
     return {
       isRouterAlive: true
-    }
+    };
   },
   methods: {
     reload() {
-      this.isRouterAlive = false
+      this.isRouterAlive = false;
       this.$nextTick(function() {
-        this.isRouterAlive = true
-      })
+        this.isRouterAlive = true;
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   font-size: 16px;
 }
 
-//  隐藏滚动条的样式
-::-webkit-scrollbar {
-  width: 0px;
-  background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background-color: transparent;
-}
+// //  隐藏滚动条的样式
+// ::-webkit-scrollbar {
+//   width: 0px;
+//   background-color: transparent;
+// }
+// ::-webkit-scrollbar-thumb {
+//   background-color: transparent;
+// }
 </style>

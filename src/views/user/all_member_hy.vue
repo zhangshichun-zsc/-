@@ -3,22 +3,6 @@
   <div class="member">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-rig" @click="showScreen = !showScreen">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-          <a class="btn" href="javascript:;" @click="result">查询结果</a>
-          <!-- <Button class="integral-rig" @click="result">查询结果</Button> -->
-          <!-- TODO 暂时不做 -->
-          <!-- <Button class="integral-rig">高级检索</Button> -->
-        </div>
-      </div>
       <div class="flex-center-start integral-body" v-show="showScreen">
         <div class="flex-center-start">
           <span>姓名/手机号/昵称:</span>
@@ -65,6 +49,7 @@
           />
         </div>
         <div class="flex-center-start">
+          <a class="btn" href="javascript:;" @click="result">查询</a>
           <!-- <a @click="jump2()" style="color: #666666;">标签管理</a> -->
         </div>
       </div>
@@ -537,7 +522,7 @@
           show-elevator
           show-total
           size="small"
-          style="margin: auto"
+          style="padding-right: 30px;"
           :page-size="size"
           @on-change="changepages"
         />
@@ -759,40 +744,52 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 50,
           align: "center"
         },
         {
           title: "姓名",
-          key: "userName"
+          key: "userName",
+          align: "center"
         },
         {
           title: "手机号",
-          key: "tel"
+          key: "tel",
+          align: "center",
+          width: 110,
         },
         {
           title: "用户昵称",
-          key: "nickname"
+          key: "nickname",
+          align: "center"
         },
         {
           title: "分类",
-          key: "roles"
+          key: "roles",
+          align: "center",
+          width: 140,
         },
         {
           title: "标签",
-          key: "labels"
+          key: "labels",
+          align: "center"
         },
         {
           title: "参与活动数",
-          key: "joinActivityNum"
+          key: "joinActivityNum",
+          width: 100,
+          align: "center"
         },
         {
           title: "积分",
-          key: "score"
+          key: "score",
+          width: 100,
+          align: "center"
         },
         {
           title: "账户启用状态",
           key: "userEnable",
+          width: 110,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -812,7 +809,7 @@ export default {
         {
           title: "操作",
           key: "action",
-          width: 200,
+          width: 140,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -840,7 +837,6 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "10px",
-
                     color: "#FD585E"
                   },
                   on: {
@@ -982,6 +978,8 @@ export default {
         if (res.code == 200) {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -1201,7 +1199,7 @@ export default {
   line-height: 32px;
   background: #ff565a;
   border-radius: 15px;
-  font-size: 14px;
+  font-size: 16px;
   color: #ffffff;
   text-align: center;
 }
@@ -1220,6 +1218,7 @@ export default {
 }
 .integral-table {
   margin-top: 30px;
+  background: #fff;
 }
 .table-header {
   padding: 10px 20px;
@@ -1233,8 +1232,7 @@ export default {
   margin-left: 15px;
 }
 .integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
+  padding: 15px 20px;
   background: #fff;
 }
 .model .model-port {

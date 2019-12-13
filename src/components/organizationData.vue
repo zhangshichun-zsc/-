@@ -41,9 +41,8 @@
             </Select>
           </FormItem>
           <ButtonGroup>
-            <Button @click="query" class="search">
-              <Icon type="ios-search" />查询结果
-            </Button>
+            <Button class="search" @click="query">  <Icon type="ios-search" />查询结果</Button>
+
           </ButtonGroup>
         </Form>
       </div>
@@ -526,5 +525,16 @@ body {
 .sai {
   color: black;
 }
+
+.search{
+    width: 110px;
+    height: 32px;
+    background: #FF565A;
+    border-radius: 15px;
+    text-align: center;
+    line-height: 16px !important;
+    font-size: 16px;
+    color: white;
+  }
 
 </style>

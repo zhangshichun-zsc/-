@@ -6,7 +6,7 @@
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
-          <Button class="table-btn" @click="btn">{{title}}</Button>
+          <Button class="table-btns" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label=活动分类 prop="dicName">
@@ -20,7 +20,11 @@
           </Modal>
         </div>
       </div>
-      <Table ref="selection" border :columns="columns" :data="data1"></Table>
+       <div class="min-height">
+    <Table ref="selection" border :columns="columns" :data="data1"></Table>
+      </div>
+
+
       <div class="pages">
         <Page
           :total="dataCount"
@@ -64,15 +68,21 @@ export default {
         },
         {
           title: "活动分类名称",
-          key: "dicName"
+          key: "dicName",
+           align: "center",
+           width: 300,
         },
         {
           title: "创建时间",
-          key: "creatAt"
+          key: "creatAt",
+          width: 140,
+          align: "center",
         },
         {
           title:'创建人',
-          key:'userName'
+          key:'userName',
+          width: 240,
+          align: "center",
         },
 
         {
@@ -107,6 +117,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width:80,
           render: (h, params) => {
             return h("div", [
               h(
@@ -320,41 +331,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.table-btn {
-  position: relative;
-}
-.icon {
-  position: absolute;
-  padding: 2px;
-  top: 0;
-  right: 0;
-  transform: translateY(-50%);
-  background: yellow;
-  color: #000;
-}
+@import "../../libs/basicdata.css"
 </style>

@@ -16,7 +16,10 @@ export default new Vuex.Store({
     MGTpage: { page: 1, size: 10 },
     MGTlist: { list: [], count: 0 },
     activityType: [],
-    deplist: []
+    deplist: [],
+
+    // 菜单
+    menuList: []
   },
   getters: {
 
@@ -45,6 +48,9 @@ export default new Vuex.Store({
     },
     deplist(state, deplist) {
       state.deplist = deplist
+    },
+    menuList(state, menuList) {
+      state.menuList = menuList
     }
   },
   actions: {

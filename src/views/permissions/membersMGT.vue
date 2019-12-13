@@ -4,7 +4,7 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="content bk">
       <div class="Members-search">
-        <p>
+        <p class="item">
           <span>输入搜索:</span>&nbsp;
           <Input
             search
@@ -16,7 +16,7 @@
           <!-- <Input search size="large" placeholder="用户名/姓名" style="width: 200px" /> -->
         </p>
         &nbsp;&nbsp;&nbsp;
-        <p>
+        <p class="item">
           <span>所属部门:</span>
           <Select v-model="role" style="width:200px" :transfer="true">
             <Option
@@ -27,19 +27,25 @@
             >
           </Select>
         </p>
-        <p>
+        <p class="item">
           <a href="javascript:;" class="getInfo" @click="getdepartmentmember">
             <Icon type="ios-search-outline" />查询</a
           >
         </p>
-      </div>
-
-      <div>
-        <div style=" display: flex; justify-content: flex-end">
+        <div
+          class="item"
+          style=" flex:2; display: flex; justify-content: flex-end"
+        >
           <a href="javascript:;" class="addmember-btn" @click="addmember"
             >添加成员</a
           >
         </div>
+        <!-- <div style=" display: flex; justify-content: flex-end">
+         
+        </div> -->
+      </div>
+
+      <div>
         <!-- <Button
           :style="{ margin: '24px 0', maxWidth: '100px' }"
          
@@ -107,7 +113,6 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          width: "100",
           align: "center"
         },
         {
@@ -118,7 +123,8 @@ export default {
         {
           title: "联系方式",
           key: "tel",
-          align: "center"
+          align: "center",
+          width: 110
         },
         {
           title: "角色",
@@ -129,19 +135,22 @@ export default {
         {
           title: "部门",
           key: "deptName",
-
           align: "center"
         },
         {
           title: "是否启用",
           key: "userEnable",
-
-          algin: "center",
+          align: "center",
+          width: 80,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
                 props: {
                   value: params.row.userEnable == 1
+                },
+                style: {
+                  margin: "0 auto",
+                  "text-align": "center"
                 },
                 on: {
                   input: e => {
@@ -157,6 +166,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width: 80,
           render: (h, params) => {
             return h("div", [
               // h(
@@ -379,8 +389,11 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 10px 30px;
-  width: 1000px;
 }
+.Members-search .item {
+  flex: 2;
+}
+
 .ivu-menu li {
   color: white;
 }

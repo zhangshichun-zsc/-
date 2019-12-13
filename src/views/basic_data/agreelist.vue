@@ -3,23 +3,25 @@
   <div class="integral">
     <tophead :navigation1="navigation1" :top="top" @query="query"></tophead>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-between">
         <div class="flex-center-start">
           <Icon type="md-list" />
           <span>数据列表</span>
         </div>
         <div class="flex-center-end">
-          <Button size="small" @click="newagree">新建协议</Button>
-          <Button size="small" @click="newclass">分类管理</Button>
-           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+          <Button class="table-btns" @click="newagree">新建协议</Button>
+          <Button class="table-btns" @click="newclass">分类管理</Button>
+          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+      <div class="min-height">
+        <Table border :columns="columns" :data="data"></Table>
+      </div>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -36,7 +38,7 @@
 </template>
 
 <script>
-import {formatDate} from '../../request/datatime'
+import { formatDate } from "../../request/datatime";
 import tophead from "../../components/tophead";
 import {
   Agreementpage,
@@ -60,44 +62,49 @@ export default {
           title: "甲方",
           key: "partA",
           align: "center",
-
+          width:270,
         },
         {
           title: "乙方",
           key: "partB",
-          align: "center"
+          align: "center",
+          width:270,
         },
         {
           title: "协议分类",
           key: "agreementTypeText",
-          align: "center"
+          align: "center",
+           width:170,
         },
         {
           title: "所属项目",
           key: "categoryName",
           align: "center",
-
+           width:170,
         },
         {
           title: "协议时间",
           align: "center",
+           width:140,
           render: (h, params) => {
-            return h("div",formatDate(params.row.agreementTimestamp) );
+            return h("div", formatDate(params.row.agreementTimestamp));
           }
         },
         {
           title: "相关",
           key: "nameA",
-          width: "100px",
+          // width: "240px",
           align: "center",
-           render: (h, params) => {
-            return h("div",params.row.nameA);
+          width:240,
+          render: (h, params) => {
+            return h("div", params.row.nameA);
           }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width:80,
           render: (h, params) => {
             return h("div", [
               h(
@@ -110,14 +117,17 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "newagree",query: {
+                      this.$router.push({
+                        name: "newagree",
+                        query: {
                           agreementId: params.row.agreementId
-                        }});
+                        }
+                      });
                     }
                   }
                 },
                 "详情"
-              ),
+              )
               // h(
               //   "a",
               //   {
@@ -142,10 +152,10 @@ export default {
       page: 1, //每页显示多少数据
       size: 10, //数据条数
       dataCount: 0,
-      agreementId:'',
-      sysType:1,
-      agreementObject:'',
-      agreementType:'',
+      agreementId: "",
+      sysType: 1,
+      agreementObject: "",
+      agreementType: "",
       top: [
         { name: "甲乙方", type: "input", value: "" },
         {
@@ -155,7 +165,7 @@ export default {
           value: ""
         }
       ],
-       Article: [
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -164,9 +174,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "desc",
-
-
+      sort: "desc"
     };
   },
 
@@ -175,8 +183,8 @@ export default {
   computed: {},
 
   created() {
-    this.getAgreementList()
-    this.getAgreementpage()
+    this.getAgreementList();
+    this.getAgreementpage();
   },
   //事件监听
   watch: {
@@ -185,18 +193,21 @@ export default {
   },
 
   methods: {
-
     //协议分页
     getAgreementpage() {
       Agreementpage({
-        page:{ page: this.page, size: this.size, sort: "createAt" + " " + this.sort},
+        page: {
+          page: this.page,
+          size: this.size,
+          sort: "createAt" + " " + this.sort
+        },
         sysType: this.sysType,
         agreementObject: this.agreementObject,
         agreementType: this.agreementType
       }).then(res => {
         console.log(res);
-        if(res.code==200){
-          this.data=res.data.list
+        if (res.code == 200) {
+          this.data = res.data.list;
           this.dataCount = res.data.totalSize;
         }
       });
@@ -207,8 +218,8 @@ export default {
       Agreementdel({
         agreementId: this.agreementId
       }).then(res => {
-        if(res.code==200){
-          this.getAgreementpage()
+        if (res.code == 200) {
+          this.getAgreementpage();
           this.$Message.info(res.msg);
         }
         console.log(res);
@@ -217,26 +228,25 @@ export default {
 
     //协议分页列表
     getAgreementList() {
-      AgreementList({
-      }).then(res => {
+      AgreementList({}).then(res => {
         console.log(res);
-        if(res.code==200){
-          res.data.unshift({dataKey:'0',dataValue:'全部'})
-          this.top[1].list=res.data
+        if (res.code == 200) {
+          res.data.unshift({ dataKey: "0", dataValue: "全部" });
+          this.top[1].list = res.data;
         }
       });
     },
 
     //查询
-    query(e){
-      this.agreementObject=e[0].value
-      if(e[1].value==0){
-        this.agreementType=''
-      }else{
-        this.agreementType=e[1].value
+    query(e) {
+      this.agreementObject = e[0].value;
+      if (e[1].value == 0) {
+        this.agreementType = "";
+      } else {
+        this.agreementType = e[1].value;
       }
-      this.getAgreementpage()
-      console.log(e)
+      this.getAgreementpage();
+      console.log(e);
     },
 
     newagree() {
@@ -252,68 +262,19 @@ export default {
       this.getAgreementpage();
     },
     //删除
-    delete(e){
-      this.agreementId=e
-      this.getAgreementdel()
+    delete(e) {
+      this.agreementId = e;
+      this.getAgreementdel();
     },
 
     //查看
-    See(){
+    See() {
       this.getAgreementpage();
     }
   },
-  mounted(){
-
-  }
+  mounted() {}
 };
 </script>
-<style lang="scss">
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-button {
-  margin-right: 0.5rem;
-}
+<style lang="scss" scoped>
+@import "../../libs/basicdata.css"
 </style>

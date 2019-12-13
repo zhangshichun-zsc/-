@@ -31,17 +31,16 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-between">
         <div>
           <Icon type="md-reorder" size="20" />
           <span>数据列表</span>
         </div>
         <div>
-          <!-- <Button class="table-btn" @click="modify">批量修改</Button> -->
-          <Button class="table-btn" @click="exportData">
+          <!-- <Button class="table-btns" @click="exportData">
             导出数据
             <Icon type="md-arrow-dropdown" />
-          </Button>
+          </Button>-->
           <Select v-model="size" style="width:120px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -53,19 +52,18 @@
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
               <RadioGroup v-model="formItem.addType">
-                <Radio label="1">
-                  增加
-
-                </Radio>
-                <Radio label="2">
-                  减少
-
-                </Radio>
+                <Radio label="1">增加</Radio>
+                <Radio label="2">减少</Radio>
               </RadioGroup>
             </FormItem>
-             <FormItem label="数值：" prop="addScore">
-               <InputNumber :min="1" v-model="formItem.addScore" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
-                  <Button style="background:#ccc">分</Button>
+            <FormItem label="数值：" prop="addScore">
+              <InputNumber
+                :min="1"
+                v-model="formItem.addScore"
+                style="width: 160px;"
+                placeholder="请输入大于0的整数"
+              ></InputNumber>
+              <Button style="background:#ccc">分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
               <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
@@ -77,13 +75,16 @@
           </div>
         </Modal>
       </div>
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="datax"
-        @on-selection-change="handleSelectionChange"
-      ></Table>
+      <div class="min-height">
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="datax"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
+      </div>
+
       <div class="pages">
         <Page
           :total="dataCount"
@@ -108,8 +109,7 @@ export default {
       formItem: {
         remark: "",
         addType: "1",
-        addScore:1,
-
+        addScore: 1
       },
       formValidate: {
         serve: ""
@@ -120,17 +120,19 @@ export default {
         ]
       },
       ruleValidates: {
-        addType:[{
-           required: true,
+        addType: [
+          {
+            required: true,
             message: "必填项不能为空",
-            trigger: "change",
-        }],
+            trigger: "change"
+          }
+        ],
         addScore: [
           {
             required: true,
             message: "必填项不能为空",
             trigger: "blur",
-            type:'number'
+            type: "number"
           }
         ],
         remark: [
@@ -154,28 +156,39 @@ export default {
         },
         {
           title: "用户账号",
-          key: "userAccount"
+          key: "userAccount",
+          align: "center",
+          width: 120
         },
         {
           title: "用户昵称",
-          key: "nickname"
+          key: "nickname",
+          align: "center",
+          width: 350
         },
         {
           title: "用户类型",
-          key: "userType"
+          key: "userType",
+          align: "center",
+          width: 150
         },
         {
           title: "可用积分",
-          key: "score"
+          key: "score",
+          align: "center",
+          width: 90
         },
         {
           title: "待审积分",
-          key: "unAuditScore"
+          key: "unAuditScore",
+          align: "center",
+          width: 130
         },
         {
           title: "操作",
           key: "action",
           align: "center",
+
           render: (h, params) => {
             return h("div", [
               h(
@@ -312,7 +325,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.modal1 = false;
-          this.getintegralpage()
+          this.getintegralpage();
           this.$Message.info(res.msg);
         } else {
           this.$Message.error(res.msg);
@@ -380,7 +393,7 @@ export default {
           //   this.formItem.addScore2 != null
           // ) {
           //   this.num = this.formItem.addScore2;
-            this.getintegralmodify();
+          this.getintegralmodify();
           // } else {
           //   this.$Message.error("数值不能为空");
           // }
@@ -412,7 +425,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .integral-header {
   border: 1px solid #eee;
 }
@@ -436,20 +449,5 @@ export default {
   margin-right: 20px;
 }
 
-.table-header {
-  padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  margin-top: 2.5rem;
-}
+@import "../../libs/basicdata.css";
 </style>

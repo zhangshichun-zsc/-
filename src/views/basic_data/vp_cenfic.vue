@@ -39,7 +39,7 @@
           </Row>
         </div>
         <div class="flex-center-start">
-          <Button @click="modal1 = true">新增模板</Button>
+          <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
@@ -54,7 +54,7 @@
                 </Select>
               </FormItem>
               <FormItem label="模板名称" prop="title">
-                <Input v-model="params.title"></Input>
+                <Input v-model="params.title" />
               </FormItem>
               <FormItem label="生效日期" prop="effectiveAt">
                 <Date-picker
@@ -76,23 +76,25 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div class="data-ios">
+      <div class="table-header flex-between">
+
           <div class="flex-center-start">
             <span>数据列表</span>
           </div>
           <div class="flex-center-end">
-            <Select size="small" class="inpt" placeholder="显示条数" @on-change="changeNum">
+            <Select size="small" class="inpt" style="width:140px" placeholder="显示条数" @on-change="changeNum">
               <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
             </Select>
-            <Select size="small" class="inpt" placeholder="排序方式" @on-change="changeSort">
+            <Select size="small" class="inpt" style="width:140px" placeholder="排序方式" @on-change="changeSort">
               <Option value="create_at desc">升序</Option>
               <Option value="create_at asc">降序</Option>
             </Select>
-          </div>
+
         </div>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+       <div class="min-height">
+    <Table border :columns="columns" :data="data"></Table>
+      </div>
       <div class="pages">
         <Page :total="sumSize" show-elevator @on-change="changePage" :page-size="size" />
       </div>
@@ -139,23 +141,35 @@ export default {
       columns: [
         {
           title: "组织",
-          key: "orgName"
+          key: "orgName",
+          width: 300,
+          align: "center",
         },
         {
           title: "证书名称",
-          key: "title"
+          key: "title",
+           width: 300,
+           align: "center",
         },
         {
-          title: "生效期限",
-          key: "effectiveAt"
+          title: "生效时间",
+          key: "effectiveAt",
+          align: "center",
+           width: 140,
+
         },
         {
           title: "失效时间",
-          key: "inEffectiveAt"
+          key: "inEffectiveAt",
+          align: "center",
+          width: 140,
+
         },
         {
           title: "创建时间",
-          key: "createAt"
+          key: "createAt",
+          width: 140,
+           align: "center",
         },
         {
           title: "操作",
@@ -168,7 +182,8 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#097276",
+                     marginRight: "5px"
                   },
                   on: {
                     click: () => {
@@ -341,43 +356,13 @@ export default {
   padding: 20px;
   background: #fff;
 }
-.inpt {
+.integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
   margin-left: 15px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.integral-table {
-  margin-top: 30px;
-}
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-  margin-top: 2.5rem;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.data-ios {
-  padding: 5px;
-}
-.inpt {
-  margin: 5px;
-}
+
+@import "../../libs/basicdata.css"
 </style>

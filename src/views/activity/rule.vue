@@ -73,6 +73,7 @@ export default {
         {
           title: "新增时间",
           key: "createAt",
+          width: 180,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -81,6 +82,7 @@ export default {
         {
           title: "最后修改时间",
           key: "updateAt",
+          width: 180,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.updateAt));
@@ -94,6 +96,7 @@ export default {
 
         {
           title: "是否启用",
+          width: 120,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -126,27 +129,30 @@ export default {
         {
           title: "新增时间",
           key: "createAt",
+          width: 180,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
           }
         },
         {
-          title: "修改时间",
+          title: "最后修改时间",
           key: "updateAt",
+          width: 180,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
           }
         },
         {
-          title: "操作人",
+          title: "最后操作人",
           key: "userName",
           align: "center"
         },
 
         {
-          title: "操作",
+          title: "是否启用",
+          width: 120,
           align: "center",
           render: (h, params) => {
             return h("div", [

@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "添加广告(会员)"
+        head: "添加广告"
       },
       citys:[],
       data1:'',
@@ -216,7 +216,7 @@ export default {
       }).then(res=>{
         if(res.code==200){
          this.$Message.success("提交成功!");
-         this.$router.push({ name: 'vp_adlist' })
+         this.$router.push({ name: 'vun_adlist' })
   }
         console.log(res)
       }).catch(res=>{

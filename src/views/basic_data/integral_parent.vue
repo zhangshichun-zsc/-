@@ -1,13 +1,12 @@
 <!-- 家长职业类型管理(会员) -->
 <template>
   <div>
-
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
-          <Button class="table-btn" @click="btn">{{title}}</Button>
+          <Button class="table-btns" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="dicName">
@@ -21,16 +20,19 @@
           </Modal>
         </div>
       </div>
-      <Table ref="selection" border :columns="columns" :data="data1"></Table>
+      <div class="min-height">
+        <Table ref="selection" border :columns="columns" :data="data1"></Table>
+      </div>
       <div class="pages">
-        <Page  :total="dataCount"
+        <Page
+          :total="dataCount"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
           :page-size="size"
-          @on-change="changepages" />
-
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
@@ -51,7 +53,7 @@ export default {
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "就业情况不能为空", trigger: "blur" }
+          { required: true, message: "职业名称不能为空", trigger: "blur" }
         ]
       },
       title: "家长职业类型管理",
@@ -63,15 +65,19 @@ export default {
         },
         {
           title: "职业名称",
-          key: "dicName"
+          key: "dicName",
+          align: "center",
+          width: 260
         },
         {
           title: "创建时间",
-          key: "creatAt"
+          key: "creatAt",
+          align: "center"
         },
         {
           title: "创建人",
-          key: "userName"
+          key: "userName",
+          align: "center"
         },
         {
           title: "有效状态",
@@ -85,16 +91,15 @@ export default {
                 },
                 on: {
                   input: e => {
-                    if(e){
-                      this.dicId=params.row.dicId
-                      this.states=1
-                      this.getBasicbatch(2)
-                    }else{
-                      this.dicId=params.row.dicId
-                      this.states=0
-                       this.getBasicbatch(2)
+                    if (e) {
+                      this.dicId = params.row.dicId;
+                      this.states = 1;
+                      this.getBasicbatch(2);
+                    } else {
+                      this.dicId = params.row.dicId;
+                      this.states = 0;
+                      this.getBasicbatch(2);
                     }
-
                   }
                 }
               })
@@ -112,16 +117,16 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#097276",
+                    align: "center"
                   },
                   on: {
                     click: () => {
                       this.modal1 = true;
-                      this.dicId=params.row.dicId
+                      this.dicId = params.row.dicId;
                       this.text = "编辑新增家长职业类型管理";
-                       this.id=0
+                      this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
-
                     }
                   }
                 },
@@ -148,13 +153,11 @@ export default {
       data1: [],
       modal1: false,
 
-
-
       page: 1,
       size: 10,
       dataCount: 0,
       sysId: 1,
-      typeFlag: 1,  //每个页面写死
+      typeFlag: 1, //每个页面写死
       startAt: "",
       endAt: "",
       validFlag: "",
@@ -163,8 +166,8 @@ export default {
 
       list: [],
       text: "新增家长职业类型管理",
-      states:'',
-      id:0
+      states: "",
+      id: 0
     };
   },
 
@@ -204,8 +207,8 @@ export default {
 
     // 批量操作"list": [{"orgId": "70", "validFlag": "0"}]
     getBasicbatch(e) {
-      if (e==0) {
-         (this.list = [
+      if (e == 0) {
+        this.list = [
           {
             sysId: this.sysId,
             dicName: this.formValidate.dicName,
@@ -216,32 +219,30 @@ export default {
             dicCode: this.dicCode,
             orgId: 1
           }
-        ]);
+        ];
       } else if (e == 1) {
-         (this.list = [
+        this.list = [
           {
             dicId: this.dicId,
             dicName: this.formValidate.dicName
           }
-        ]);
+        ];
       } else if (e == 2) {
-         (this.list = [
+        this.list = [
           {
             dicId: this.dicId,
             validFlag: this.states
           }
-        ]);
+        ];
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
-          if(e==0){
-            this.$Message.info('添加成功')
-          }else if(e==1){
-            this.$Message.info('编辑成功')
-
-          }else if(e==2){
-            this.$Message.info('操作成功')
-
+          if (e == 0) {
+            this.$Message.info("添加成功");
+          } else if (e == 1) {
+            this.$Message.info("编辑成功");
+          } else if (e == 2) {
+            this.$Message.info("操作成功");
           }
           this.getBasicsearch();
           this.modal1 = false;
@@ -257,16 +258,7 @@ export default {
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-      // if (e.createTimestamp == "") {
-      // this.startAt = '';
-      // this.endAt = '';
-      // } else if (new Date() > e.createTimestamp) {
-      //   this.startAt = e.createTimestamp;
-      //   this.endAt = new Date();
-      // } else {
-      //   this.startAt = new Date();
-      //   this.endAt = e.createTimestamp;
-      // }
+
       this.getBasicsearch();
     },
 
@@ -291,26 +283,23 @@ export default {
       });
     },
 
-
-
     //弹出框
-    btn(){
-      this.modal1=true
-      this.id=1
-      this.formValidate.dicName=''
+    btn() {
+      this.modal1 = true;
+      this.id = 1;
+      this.formValidate.dicName = "";
     },
 
     //分页功能
     changepages(index) {
       this.page = index;
       this.getBasicsearch();
-    },
-
-
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-@import "../../libs/basicdata.css"
+@import "../../libs/basicdata.css";
+
 
 </style>
