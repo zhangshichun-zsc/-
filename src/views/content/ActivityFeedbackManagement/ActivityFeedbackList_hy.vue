@@ -100,11 +100,13 @@ export default {
         {
           title: '反馈人数',
           key: 'feedbackNum',
+          width: 100,
           align: 'center'
         },
         {
           title: '活动时间',
           key: 'activityTimestamp',
+          width: 180,
           align: 'center',
           render: (h, params) => {
             return h('div', [h('p', formatDate(params.row.activityTimestamp))])
@@ -113,6 +115,7 @@ export default {
         {
           title: '操作',
           key: 'action',
+          width: 150,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -332,11 +335,15 @@ export default {
     .btn{
       background: #FF565A !important;
       color: #fff !important;
+      border-color:none !important;
+    }
+    .btn:hover{
+      border:1px solid #dcdee2 !important;
+      color: #dcdee2 !important;
+      background: #fff !important;
     }
   }
 }
-
-
 .con-top {
   background-color: #f3f3f3;
   justify-content: space-between;

@@ -104,7 +104,7 @@
                     <i-col span='8'>
                       <i-input placeholder="请输入标题" v-model="item.itemName" :disabled="isDisb"/>
                     </i-col>
-                    <i-col> span='2'
+                    <i-col span='5'> 
                       <i-switch v-model="item.isMustWrite" :true-value='1' :false-value='0' :disabled="isDisb" />
                       <span>必填</span>
                     </i-col>
@@ -189,7 +189,7 @@
       <Row v-if='args.zmType==2' class-name="row">
         <i-col span='3'>优先设置</i-col>
         <i-col span='12'>
-           <Row type="flex" justify="space-between">
+           <Row type="flex" justify="space-between" class-name="row10">
             <i-col span='2'>序号</i-col>
             <i-col span='10'>优先项名称</i-col>
             <i-col span='4'>操作</i-col>
@@ -232,7 +232,7 @@
       <Row class-name="row">
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
-           <DatePicker  size="small" placeholder="Select time" v-model="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"/>
+           <DatePicker  size="small" placeholder="Select time" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"/>
         </i-col>
       </Row>
       <Row class-name="row">
@@ -431,8 +431,7 @@ export default {
         data,
         sort:limit.length+1,
         sysId:2,
-        typeFlag:3,
-        fors
+        typeFlag:3
       })
       this.limit = limit
     },
@@ -470,8 +469,7 @@ export default {
         sort: good.length+1,
         data:item.object?item.object:[],
         sysId: 2,
-        typeFlag: 3,
-        fors
+        typeFlag: 3
       })
       this.good = good
     },
