@@ -187,17 +187,18 @@ export default {
           width: 50,
           render: (h, params) => {
             //  ! 根据 当前是否有子集生成多个 table
-            return params.row.children
-              ? params.row.children.map(item => {
-                  return (
-                    <Table
-                      columns={this.columns1}
-                      data={params.row.children}
-                      show-header={false}
-                    ></Table>
-                  );
-                })
-              : "";
+            let children = params.row.children;
+            if (!children) {
+              return "";
+            } else {
+              return (
+                <Table
+                  columns={this.columns1}
+                  data={children}
+                  show-header={false}
+                ></Table>
+              );
+            }
           }
         },
         {
