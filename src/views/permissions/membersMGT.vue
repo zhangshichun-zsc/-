@@ -141,7 +141,7 @@ export default {
           title: "是否启用",
           key: "userEnable",
           align: "center",
-          width: 80,
+          width: 100,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
