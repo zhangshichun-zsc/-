@@ -223,7 +223,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "volunteer_issue",query:{ activityId:params.row.activityId} });
+                      this.$router.push({ name: "volunteer_general",query:{ activityId:params.row.activityId} });
                     }
                   }
                 },
