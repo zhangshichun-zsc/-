@@ -43,7 +43,7 @@ export default {
     list: Array,
     from: {
       type: String,
-      default: 'actrain'
+      default: 'editing'
     },
     name: {
       type: String,
