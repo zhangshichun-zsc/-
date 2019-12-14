@@ -16,9 +16,9 @@
         <span class="select-template">反馈简介</span>
         <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}" v-model="details[0].context"/>
       </div>
-      <div class="select">
+      <div class="select flex-start">
         <span class="select-template">反馈内容</span>
-        <div>
+        <div class="wap">
           <div v-for="(item,index) in feed" :key='index'>
             <div class="ls-item flex-between" v-if=' item.type === 1 '>
               <i-input placeholder="请输入单文本标题" v-model="item.context"/>
@@ -37,7 +37,7 @@
                 <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
                 <Icon type="ios-trash"  @click="deleItem(index,i)"/>
               </div>
-              <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
+              <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
             <div class="ls-item" v-else>
               <div class="flex-between">
@@ -48,7 +48,7 @@
                 <input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
                 <Icon type="ios-trash"  @click="deleItem(index,i)"/>
               </div>
-              <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
+              <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
           </div>
           <div class="add flex-center-start">
@@ -64,8 +64,8 @@
          <i-switch style="margin-top:20px" v-model="args.isPicFlag"  :true-value='1' :false-value='0'></i-switch>
       </div>
       <div class="button-food">
-        <i-button @click="feedback()">保存</i-button>
-        <i-button @click="delFeed()">作废</i-button>
+        <i-button @click="feedback()" shape="circle" size='large' class="btn">保存</i-button>
+        <i-button @click="delFeed()" shape="circle" size='large' class="btn">作废</i-button>
       </div>
     </div>
   </div>
@@ -240,6 +240,26 @@ export default {
     background: #ffffff;
     padding: 10px 0;
     // align-items: center;
+    .wap{
+      .ls-item{
+        .ivu-input-wrapper{
+          width: 300px;
+        }
+        .btn{
+          margin-right: 100px;
+        }
+        .item{
+           margin-bottom: 10px;
+        }
+        margin-bottom: 10px;
+      }
+      .add{
+        p{
+          margin-right: 20px;
+        }
+      }
+      margin: 20px 0;
+    }
     .select-template {
       margin: 20px 50px;
       width: 100px;
@@ -301,17 +321,15 @@ export default {
   padding: 50px 20px;
   display: flex;
   justify-content: center;
-  .ivu-btn-default {
-    height: 40px;
-    width: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: #ffffff;
-    border: 1px solid #797979;
-    margin-right: 10px;
-    // color: #f3f3f3;/
+  .btn{
+    background: #FF565A !important;
+    color: #fff !important;
+    border-color:none !important;
+  }
+  .btn:hover{
+    border:1px solid #FF565A !important;
+    color: #FF565A !important;
+    background: #fff !important;
   }
 }
 .actType{
