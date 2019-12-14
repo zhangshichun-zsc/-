@@ -36,8 +36,7 @@
               </p>
             </div>
             <Divider />
-            <div class="paper-con">
-              <p>{{list.content}}</p>
+            <div class="paper-con" v-html="list.content">
             </div>
           </div>
           <!-- <div class="paper">

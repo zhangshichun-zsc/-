@@ -1,22 +1,13 @@
 <!--资讯列表(会员)-->
 <template>
   <div class="main">
+    <Modal
+      v-model="modal1">
+      <img :src="showImg" alt="" class="showimg"/>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <div class="con top bk">
-        <div class="title bk-xia flex-center-start">
-          <p>
-            <Icon type="ios-search" />
-            <span>筛选查询</span>
-          </p>
-          <div class="flex-center-end">
-            <div class="Pack">
-              <Icon type="ios-arrow-down" />
-              <span>收起筛选</span>
-            </div>
-            <Button @click="query()">查询结果</Button>
-          </div>
-        </div>
+      <div class="con top flex-between">
         <div class="con inp flex-center-start">
           <p>
             <span>资讯标题:</span>&nbsp;
@@ -35,6 +26,7 @@
           </p>
 
         </div>
+         <Button @click="query()" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
       </div>
       <div class="con">
         <div class="title bk-szy flex-center-start">
@@ -89,25 +81,30 @@ export default {
       navigation1: {
         head: "资讯管理(会员)"
       },
+      modal1:false,
+      showImg:'',
       data: [],
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 50,
           align: "center",
         },
         {
-          title: "封面图片",
+          title: "封面图",
           key: "coverImg",
+          width: 80,
           align: "center",
           render: (h,params) => {
-            return h("img", {
-              attrs: {
-                src: params.row.coverImgPath
+            return h("Icon", {
+              props: {
+                type: 'md-images',
               },
-              style: {
-                width: "4rem",
-                height: "4rem"
+              on: {
+                click: () => {
+                  this.modal1 = true
+                  this.showImg = params.row.coverImgPath
+                }
               }
             });
           }
@@ -120,17 +117,20 @@ export default {
         {
           title: "展示窗口",
           key: "showLocationText",
+          width: 150,
           align: "center"
         },
         {
           title: "分类",
           key: "informationTypeText",
+          width: 150,
           align: "center"
         },
         {
           title: "热门",
           key: "status",
           align: "center",
+          width: 120,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -149,12 +149,14 @@ export default {
         },
         {
           title: "资讯所属",
+          width: 100,
           key: "informationOwner",
           align: "center"
         },
         {
           title: "发布时间",
           key: "releaseTimestamp",
+          width: 150,
           align: "center",
           render:(h,params)=>{
               return h("div",formatDate(params.row.releaseTimestamp))
@@ -162,42 +164,37 @@ export default {
         },
         {
           title: "相关",
-          // key: "collectionNum",
           align: "center",
+          width: 120,
           render: (h, params) => {
             return h("div", [
               h(
                 "p",
-
-                ("收藏:"+params.row.collectNum)
+                 {
+                  style: {
+                    marginBottom: "5px",
+                    marginTop: '5px'
+                  },
+                },
+                ("收藏:"+(params.row.collectionNum))
               ),
               h(
                 "p",
                 {
                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
+                    marginBottom: "5px",
                   },
                 },
-                ("阅读:"+0)
+                ("阅读:"+params.row.readNum)
               ),
-              h(
-                "p",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                  },
-                },
-                ("评论:"+'0')
-              )
-            ]);
+            ])
           }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width:120,
           render: (h, params) => {
             return h("div", [
               h(
@@ -279,11 +276,9 @@ export default {
   //事件监听
   watch: {
     'size':()=>{
-      this.page = 1
       this.getAddressList()
     },
     'sort':()=>{
-      this.page = 1
       this.getAddressList()
     },
   },
@@ -422,6 +417,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.showimg{
+    width: 100%;
+    height: auto;
+}
+.content{
+  .btn{
+    background: #FF565A !important;
+    color: #fff !important;
+    border-color:none !important;
+  }
+  .btn:hover{
+    border:1px solid #FF565A !important;
+    color: #FF565A !important;
+    background: #fff !important;
+  }
+}
 html,
 body {
   margin: auto;

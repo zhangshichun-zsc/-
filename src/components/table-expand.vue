@@ -236,7 +236,8 @@ export default {
       validFlag: "",
       deptId: "",
       deplist: [],
-      throttleFlag: true
+      throttleFlag: true,
+      throttleFlag_two: true
     };
   },
   props: ["row", "dom"],
@@ -267,7 +268,8 @@ export default {
   methods: {
     // 查询下级部门
     getdepartmentsub(val) {
-      // console.log(val)
+      if (!this.throttleFlag_two) return;
+      this.throttleFlag_two = false;
       this.ids = val.deptId;
       departmentsub({
         depId: this.ids
@@ -275,7 +277,7 @@ export default {
         if (res.code == 200) {
           this.data = res.data;
         }
-        console.log(res);
+        this.throttleFlag_two = true;
       });
     },
     // 修改启用状态
@@ -393,6 +395,6 @@ export default {
   padding: 0 !important;
 }
 td.ivu-table-expanded-cell {
-  padding: 0;
+  padding: 0 !important;
 }
 </style>

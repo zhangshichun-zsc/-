@@ -15,19 +15,19 @@
               <ul>
                 <li>
                   <span>活动名称</span>
-                  <Input v-model="args.name" placeholder="Enter something..." style="width: 300px" />
+                  <Input v-model="args.name" placeholder="请输入名称" style="width: 300px" />
                 </li>
                 <li class="start">
                   <span>封面图片</span>
                   <div class="start-wap start-firt">
                     <div class="upload shae" v-if='cover == null'>
-                        <div class="file" @click="()=>{ this.$refs.filess.click()}">
+                        <div class="file " @click="()=>{ this.$refs.filess.click()}">
                           <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('cover',$event)">
                           <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                         </div>
                     </div>
                     <img class="imgss" v-else :src="cover"/>
-                    <Icon type="ios-trash" v-if='cover !== null' class="cancel" @click="cancelImg('cover')" color='#FF565A'/>
+                    <Icon type="ios-trash" v-if='cover !== null' class="cancel" @click="cancelImg('cover')" color='#FF565A' size='28'/>
                   </div>
                 </li>
                 <li class="start">
@@ -40,12 +40,12 @@
                         </div>
                     </div>
                     <img class="imgs" v-else :src="image"/>
-                    <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg('image')" color='#FF565A'/>
+                    <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg('image')" color='#FF565A' size='26'/>
                   </div>
                 </li>
                 <li>
                   <span>活动归属团队</span>
-                  <Select v-model="args.orgId" style="width:300px">
+                  <Select v-model="args.orgId" style="width:300px" placement='bottom'>
                     <Option
                       v-for="(item,index) in orgList"
                       :value="item.orgId"
@@ -86,8 +86,8 @@
                    placeholder="开始时间"
                    confirm 
                    style="width: 150px"
-                   @on-change="handleChange($event)"
-                   @on-ok="successOk(1,'zhaStart',2)"    
+                   @on-change="handleChange(1,'zhaStart',$event)"
+                   @on-ok="successOk(2)"    
                    format="yyyy-MM-dd HH:mm"/>
                    <i>-</i>
                    <DatePicker
@@ -116,7 +116,7 @@
                 <li>
                   <span>现场负责人</span>
                   <div class="juge">
-                    <Input v-model="judge" placeholder="Enter something..." @on-change='changeInput'/>
+                    <Input v-model="judge" placeholder="请输入" @on-change='changeInput'/>
                     <div class="juge-drap" v-if="showJudge">
                       <div class="drap-item" v-for="(item,index) in judgeList" :key='index' @click="getOwn(index)">
                         {{ item.result }}
@@ -179,7 +179,7 @@
                 <li class="active-cost">
                   <span>活动费用</span>
                   <div class="cost">
-                    <Input v-model="args.pay" placeholder="Enter something..." style="width: 300px" type="number"/>
+                    <Input v-model="args.pay" placeholder="请输入" style="width: 300px" type="number"/>
                     <p>此活动费用仅供参考，无需缴费</p>
                   </div>
                 </li>
@@ -222,7 +222,7 @@
             </Row>
             <Row v-if='isFeedback === 1'>
               <Row v-for="(item,index) in feed" :key='index'>
-                <Row v-if=' index ==0 ' class-name="row10" type="flex" justify="space-between">
+                <Row v-if=' index == 0 ' class-name="row10" type="flex" justify="space-between">
                   <i-col span='5'>反馈简介</i-col>
                   <i-col span='16'> 
                     <i-input placeholder="请输入反馈内容" v-model="item.detailText" type="textarea" :disabled="isDisb" :row='4'/>
@@ -332,8 +332,6 @@ export default {
           head: "志愿者活动发布(志愿者)"
       },
       single: false,
-      dateTwo: '请选择时间段',
-      dateOne: '请选择时间段',
       adr:false,
       feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
       isDisb:false,
@@ -515,10 +513,9 @@ export default {
         isTrain:this.isTrain,
         zhaEnd:this.zhaEnd,
         zhaStart:this.zhaStart,
-        dateOne: this.dateOne,
-        dateTwo: this.dateTwo,
         isDisb:this.isDisb,
         isEdit:this.isEdit,
+        cover:this.cover,
         args:this.args,
         judge:this.judge,
         image:this.image,
@@ -583,9 +580,8 @@ export default {
         this.zhaStart = data.zhaStart
         this.zhaEnd = data.zhaEnd
         this.judge = data.judge
-        this.dateOne = [data.args.startAt,data.args.endAt]
-        this.dateTwo = [data.zhaStart,data.zhaEnd]
         this.image = data.image
+        this.cover = data.cover
         this.isFeedback = data.isFeedback
         this.isTrain = data.isTrain
         this.train = data.train,
@@ -622,7 +618,8 @@ export default {
 
     },
     cancelImg(img){
-      orgimgdel({path:this.args.pic}).then(res => {
+      let path = img == 'cover'?this.args.coverPic:this.args.pic
+      orgimgdel({path}).then(res => {
         if(res.code == 200){
             if(img === 'cover'){
               this.cover =  null
@@ -631,8 +628,6 @@ export default {
               this.image = null
               this.args.pic = null
             }
-          this.image = null
-          this.args.pic = null
           this.$Message.success('删除成功')
         }else{
             this.$Message.warning(res.msg)
@@ -640,6 +635,10 @@ export default {
       })
     },
     changeInput(e){
+      if(!this.args.orgId){
+        this.$Message.info('需要选择团队归属')
+        return
+      }
       let param = this.judge
       getOrgId({ orgId:this.args.orgId, param}).then(res => {
         this.judgeList = res.data
@@ -673,7 +672,6 @@ export default {
       this.$set(this.args,'address',e.address)
     },
     successOk(m){
-      console.log(!!this.args.startAt&&new Date(this.args.startAt).getTime()>new Date(this.args.endAt).getTime(),m == 1 && !!this.args.endAt)
       if(m == 0 || m == 1){
         if(m == 0 &&!!this.args.startAt){
           if(!!this.args.endAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
@@ -731,9 +729,16 @@ export default {
           return
         }else if(this.isFeedback == 1){
           for(let val of this.feed){
-            if(val.detailText == '' || val.detailText == null){
+            if(val.detailText === '' || val.detailText === null){
               this.$Message.warning('你已经勾选反馈，必须完善反馈项')
               return
+            }else if(val.arr){
+              for(let em of val.arr){
+                if(em.value === '' || em.value === null){
+                  this.$Message.warning('你已经勾选反馈，选项没完善')
+                  return
+                }
+              }
             }
           }
         }else if(this.isTrain == 1){
@@ -778,7 +783,7 @@ export default {
       saveActive(obj).then(res => {
         this.once = false
         if(res.code == 200){
-          this.$router.replace('manager')
+          this.$router.replace({name:'manager'})
           sessionStorage.removeItem("data")
           this.$Message.success('发布成功')
         }else{
@@ -869,23 +874,23 @@ export default {
               cursor: pointer;
             }
             .juge{
-              width: 300rpx;
+              width: 300px;
               position: relative;
               .juge-drap{
                 position: absolute;
+                z-index: 100;
                 top: 46px;
                 left: 0;
                 width: 100%;
-                max-height: 300px;
-                overflow: scroll;
-                box-shadow: 10px 10px #eee;
+                max-height: 310px;
+                overflow-y: scroll;
+                background: #fff;
+                box-shadow: 0px 1px 6px rgba(0,0,0,0.2);
                 .drap-item{
                   height: 50px;
                   line-height: 50px;
                   text-align: center;
-                  background: #eee;
                   border-bottom: 1px solid #eee;
-                  color: #fff;
                 }
               }
             }
@@ -982,7 +987,7 @@ export default {
       padding: 20px 0;
     }
     .upload .file:hover{
-      border: 1px dashed #2d8cf0;
+      border: 1px dashed #FF565A;
     }
     .upload .file input{
       display: none;

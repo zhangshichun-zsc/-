@@ -2,35 +2,33 @@
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="select">
-      <RadioGroup v-model="sysType" @on-change="Singles">
-        <Radio label="1">会员</Radio>
-        <Radio label="2">
-          <span @click="vun">志愿者</span>
-        </Radio>
-      </RadioGroup>
-      <div style="float:right">
-        <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-          <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-        <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-          <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
+    <div class="wapper">
+      <div class="select flex-between">
+        <RadioGroup v-model="sysType" @on-change="Singles">
+          <Radio label="1">会员</Radio>
+          <Radio label="2">
+            <span @click="vun">志愿者</span>
+          </Radio>
+        </RadioGroup>
+        <div>
+          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </div>
       </div>
-    </div>
-    <div class="content">
-      <div class="integral-table">
-        <div class="table-header">
-          <div>
-            <Tabs type="card" v-model="ruleType" @on-click="Single">
-              <TabPane label="限制规则" name="1">
-                <Table border :columns="columns" :data="data" width="600px"></Table>
-              </TabPane>
-              <TabPane label="优先规则" name="2">
-                <Table border :columns="columns1" :data="data1" width="600px"></Table>
-              </TabPane>
-            </Tabs>
-          </div>
+      <div class="content">
+        <div>
+          <Tabs type="card" v-model="ruleType" @on-click="Single">
+            <TabPane label="限制规则" name="1">
+              <Table border :columns="columns" :data="data" width="600px"></Table>
+            </TabPane>
+            <TabPane label="优先规则" name="2">
+              <Table border :columns="columns1" :data="data1" width="600px"></Table>
+            </TabPane>
+          </Tabs>
         </div>
         <div class="pages">
           <Page
@@ -278,25 +276,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .select {
-  height: 50px;
   background: #ffffff;
-  line-height: 50px;
-  padding-left: 30px;
-  border: #e4e4e4 1px solid;
+  padding: 10px 20px;
+  margin-bottom: 30px;
 }
-
-.content {
-  height: 700px;
-  .integral-table {
-    height: 50px;
-    border: #e4e4e4 1px solid;
-    margin-top: 10px;
-    .table-btn {
-      margin: 0 5px;
-    }
+.wapper{
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  .space{
+    margin-right: 20px;
   }
 }
 .pages {
+  margin-top: 20px;
   text-align: center;
 }
 </style>

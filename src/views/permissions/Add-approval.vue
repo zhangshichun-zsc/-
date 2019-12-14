@@ -25,7 +25,7 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="谁可以发起申请:" prop="applyRoles">
+        <FormItem v-show="flag_show" label="谁可以发起申请:" prop="applyRoles">
           <Select v-model="formValidate.applyRoles" style="width:200px">
             <Option
               v-for="item in rolelist"
@@ -36,7 +36,7 @@
             >
           </Select>
         </FormItem>
-        <FormItem label="项目所属:" prop="categoryId">
+        <FormItem v-show="flag_show" label="项目所属:" prop="categoryId">
           <Select
             placeholder="快乐活动营"
             style="width: 10rem"
@@ -150,8 +150,19 @@ export default {
       userNamea: null,
       auditUser2Id: null,
       userNameb: null,
-      enableFLag: 1
+      enableFLag: 1,
+      flag_show: false
     };
+  },
+  watch: {
+    "formValidate.typeFlag"(newValue, oldValue) {
+      console.log(newValue);
+      if (newValue === 1) {
+        this.flag_show = true;
+      } else {
+        this.flag_show = false;
+      }
+    }
   },
   mounted() {
     this.getAgreementNewList();
@@ -203,16 +214,6 @@ export default {
     },
     // -添加审批流程
     getpoweradd() {
-      // let Applicant = null;
-      // if (this.formValidate.applyRoles == 0) {
-      //   Applicant = this.rolelist.map(item => {
-      //     return item.roleId;
-      //   }).toString;
-      // } else {
-      //   Applicant = this.formValidate.applyRoles.toString();
-      // }
-
-      console.log(this.formValidate.applyRoles);
       poweradd({
         sysId: this.sysType,
         typeFlag: this.formValidate.typeFlag,
@@ -256,19 +257,28 @@ export default {
 
     //保存
     det(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          if (this.auditUser1Id == null) {
-            this.$Message.info("请先选择审批人");
-          } else if (this.auditUser1Id == this.auditUser2Id) {
-            this.$Message.info("审批人不能相同");
+      // 如果 没有选择 活动立项， 即审批的问题
+      if (this.formValidate.typeFlag === 1) {
+        this.$refs[name].validate(valid => {
+          if (valid) {
+            if (this.auditUser1Id == null) {
+              this.$Message.info("请先选择审批人");
+            } else if (this.auditUser1Id == this.auditUser2Id) {
+              this.$Message.info("审批人不能相同");
+            } else {
+              this.getpoweradd();
+            }
           } else {
-            this.getpoweradd();
+            this.$Message.error("有必选项未填");
           }
+        });
+      } else {
+        if (this.formValidate.typeFlag) {
+          this.getpoweradd();
         } else {
-          this.$Message.error("有必选项未填");
+          this.$Message.error("请选择审批类型！");
         }
-      });
+      }
     }
   }
 };

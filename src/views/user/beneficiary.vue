@@ -690,7 +690,6 @@ export default {
           type: 'selection',
           width: 50,
           align: 'center',
-          fixed: 'left'
         },
         {
           title: '姓名',
@@ -703,7 +702,7 @@ export default {
           title: '手机号',
           key: 'tel',
           align: 'center',
-          width: 110
+          width: 120
         },
         {
           title: '用户昵称',
@@ -738,7 +737,8 @@ export default {
         {
           title: '标签',
           key: 'labels',
-          align: 'center'
+          align: 'center',
+          width: 180
         },
         {
           title: '参与活动数',

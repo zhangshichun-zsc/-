@@ -1,0 +1,38 @@
+tablist: [
+    {
+      title: "parent 1",
+      expand: false,
+      children: [
+        {
+          title: "child 1-1",
+          expand: false,
+          children: [
+            {
+              title: "leaf 1-1-1",
+              expand: false,
+              children: [
+                {
+                  title: "leaf 1-1-1-1",
+                  expand: false
+                }
+              ]
+            },
+            {
+              title: "leaf 1-1-2",
+              expand: false
+            }
+          ]
+        },
+        {
+          title: "child 1-2",
+          expand: false,
+          children: [
+            {
+              title: "leaf 1-2-1",
+              expand: false
+            }
+          ]
+        }
+      ]
+    }
+  ],
