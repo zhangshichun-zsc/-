@@ -934,7 +934,6 @@ export default {
       this.two = false;
     },
     changeRoles(e) {
-      debugger
       this.roleI = e;
       this.oneRole = this.batch.userConfList[e];
       this.isAddRole = true;

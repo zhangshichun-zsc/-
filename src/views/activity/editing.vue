@@ -214,7 +214,7 @@
 
 <script>
 import E from 'wangeditor';
-import { batchItem,leader,projectDetail,projectEdit,chooseTempalte } from "@/request/api";
+import { batchItem,leader,projectDetail,projectEdit,chooseTempalte,orgimgdel } from "@/request/api";
 import { projectApproval } from '../../request/api';
 import role from "./compile_beneficiary.vue"
 import adress from'_c/map'
