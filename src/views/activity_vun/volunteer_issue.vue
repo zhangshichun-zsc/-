@@ -111,7 +111,7 @@
               <ul>
                 <li class="flex-start">
                   <span>活动地址</span>
-                  <div @click="()=>{this.adr = true}" class="adr">{{ args.address == null?"点击选中地址":args.address}}</div>
+                  <div @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</div>
                 </li>
                 <li>
                   <span>现场负责人</span>
@@ -433,6 +433,10 @@ export default {
     console.log(111)
   },
   methods: {
+    getAdr(){
+      console.log(this.adr)
+      this.adr = true
+    },
     getRelse(){
       if(!this.activityId)return
       getActiveRelse({activityId:this.activityId}).then(res => {
