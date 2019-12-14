@@ -2,16 +2,6 @@
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="flex-center-between integral-top">
-      <div>
-        <Icon type="ios-search-outline" />
-        <span>筛选查询</span>
-      </div>
-      <div class="flex-center-end">
-        <Button @click="approval">新建立项</Button>
-        <Button @click="query">查询结果</Button>
-      </div>
-    </div>
     <div class="flex-center-start integral-body">
       <div class="flex-center-start list">
         <span>活动名称:</span>
@@ -23,7 +13,7 @@
           <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
-      <div class="flex-center-start">
+      <div class="flex-center-start" style="margin-right:20px;">
         <span>提交日期:</span>
         <row class="flex-data inpt">
           <i-col>
@@ -34,7 +24,7 @@
               v-model="creataTimeTimeStampFrom"
             ></Date-picker>
           </i-col>
-          <span>——</span>
+          <i-col style="padding-top:7px;">——</i-col>
           <i-col>
             <Date-picker
              type="date"
@@ -45,9 +35,13 @@
           </i-col>
         </row>
       </div>
+      <div class="flex-center-end">
+        <Button @click="approval" style="margin-right:10px">新建立项</Button>
+        <Button @click="query">查询结果</Button>
+      </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between" style="display:flex">
+      <div class="table-header flex-center-between" style="display:flex;background-color:#fff;">
         <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
@@ -57,7 +51,7 @@
         </div>
         <div>
           <Button class="table-btn">导出</Button>
-           <Select v-model="size" style="width:120px" placeholder="显示条数">
+            <Select v-model="size" style="width:120px" placeholder="显示条数">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
@@ -374,6 +368,5 @@ export default {
   align-items: center;
   background: #ffffff;
   border: 1px solid #e4e4e4;
-  margin-top: 30px;
 }
 </style>
