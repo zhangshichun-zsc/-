@@ -133,7 +133,11 @@ export default {
       let feed = this.feed
       if (m !== null) {
         let arr = feed[i].answer
-        arr.splice(m, 1)
+        if(arr.length<3){
+          this.$Message.warning("最少保留两项")
+        }else{
+          arr.splice(m, 1)
+        }
       } else {
         feed.splice(i, 1)
       }
@@ -142,8 +146,12 @@ export default {
     addSignIput(i){
       let feed = this.feed
       let arr = feed[i].answer
-      arr.push({ answer: null })
-      this.feed = feed
+      if(arr.length>5){
+        this.$Message.warning("最多添加六项")
+      }else{
+        arr.push({ answer: null })
+        this.feed = feed
+      }
     },
     getDetail(){
       getActiveFeedBack({actFkMouldId: this.args.actFkMouldId}).then(res => {
