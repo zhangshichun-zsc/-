@@ -9,7 +9,11 @@
             <span>列表</span>
           </p>
           <div class="but">
-            <Modal v-model="modal1" :title="text">
+            <Modal
+              v-model="modal1"
+              :title="text"
+              class-name="vertical-center-modal"
+            >
               <Form
                 ref="AddDate"
                 :model="AddDate"

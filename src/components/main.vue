@@ -85,7 +85,11 @@
                   </DropdownMenu>
                 </Dropdown>
 
-                <Modal v-model="modal2" width="800px">
+                <Modal
+                  v-model="modal2"
+                  width="800px"
+                  class="vertical-center-modal"
+                >
                   <p slot="header">
                     <span>常用菜单设置</span>
                   </p>
@@ -307,7 +311,12 @@
                     style="cursor: pointer;"
                   />
                 </span>
-                <Modal v-model="modal1" title="退出确认">
+
+                <Modal
+                  v-model="modal1"
+                  title="退出确认"
+                  class-name="out-modal"
+                >
                   <h4>确定要退出登录吗？</h4>
                   <div slot="footer">
                     <Button type="text" size="large" @click="modalOk(0)"

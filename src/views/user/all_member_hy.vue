@@ -62,7 +62,7 @@
         </div>
         <div>
           <!--群发短信-->
-          <Modal v-model="modal1" title="群发短信">
+          <Modal v-model="modal1" title="群发短信" class='vertical-center-modal'>
             <Form
               ref="formValidate1"
               :model="formValidate1"
