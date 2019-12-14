@@ -11,7 +11,6 @@ export default new Vuex.Store({
     userId: localStorage.getItem('userId') ? localStorage.getItem('userId') : '',
 
     tel: localStorage.getItem('tel') ? localStorage.getItem('tel') : '',
-
     // 成员管理
     MGTpage: { page: 1, size: 10 },
     MGTlist: { list: [], count: 0 },
@@ -31,7 +30,6 @@ export default new Vuex.Store({
       state.token = userInfo.token;
       state.userId = userInfo.userId;
     },
-
     clearToken(state) {
       localStorage.clear();
       state.user = '';

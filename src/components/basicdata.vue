@@ -19,37 +19,44 @@
             </span>
           </div>
         </div>
-      </div> -->
+      </div>-->
       <div class="flex-center-start integral-body" v-if="Retract == true">
         <div class="flex-center-start">
           <span>名称:</span>
-          <Input
-            size="large"
-            placeholder="兴趣爱好"
-            class="inpt"
-            v-model="search.dicName"
-          />
+          <Input size="large" placeholder="请输入名称" class="inpt" v-model="search.dicName" />
         </div>
         <div class="flex-center-start">
           <span>有效状态:</span>
-          <Select
-            v-model="search.validFlag"
-            style="width: 160px;margin-left:20px"
-          >
-            <Option
-              v-for="item in typelist"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.name }}</Option
-            >
+          <Select v-model="search.validFlag" style="width: 160px;margin-left:20px">
+            <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.name }}</Option>
           </Select>
         </div>
         <div class="flex-center-start">
+          <span>创建时间/时间段:</span>
+          <DatePicker
+            style="width: 180px"
+            :options="set"
+            type="date"
+            @on-change="startTimeChange"
+            placeholder="请选择开始时间"
+            v-model="search.createTimestamp[0]"
+          ></DatePicker>
+          <span>~</span>
+          <DatePicker
+            style="width: 180px"
+            :options="end"
+            type="date"
+            @on-change="endTimeChange"
+            placeholder="请选择结束时间"
+            v-model="search.createTimestamp[1]"
+          ></DatePicker>
+        </div>
+        <!-- <div class="flex-center-start">
           <span style="margin-right:20px">创建时间:</span>
            <DatePicker type="daterange" format="yyyy/MM/dd"  @on-change="handleChange" v-model="search.createTimestamp" confirm placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
-        </div>
-         <div class="flex-center-start">
-           <Button class="search" @click="query">查询</Button>
+        </div>-->
+        <div class="flex-center-start">
+          <Button class="search" @click="query">查询</Button>
         </div>
       </div>
     </div>
@@ -77,9 +84,11 @@ export default {
       search: {
         dicName: "",
         validFlag: "",
-        createTimestamp: ""
+        createTimestamp: ["", ""]
       },
-      Retract: true
+      Retract: true,
+      set: {},
+      end: {}
     };
   },
   props: ["navigation1"],
@@ -91,27 +100,74 @@ export default {
   created() {},
 
   methods: {
-
-    handleChange(e) {
-      let start = e[0];
-      let end = e[1];
-      if (start && end) {
-        if (start === end) {
-          start = start + " 00:00:00";
-          end = end + " 23:59:59";
-        } else {
-          start = start + " 00:00:00";
-          end = end + " 00:00:00";
-        }
+    startTimeChange(e) {
+      this.search.createTimestamp[0] = e;
+      if(this.search.createTimestamp[1]==''){
+        return
       }
-       this.search.createTimestamp[0] = start;
-       this.search.createTimestamp[1] = end;
+      this.end = {
+        disabledDate: date => {
+          let startTime =
+            this.search.createTimestamp[0] != ""
+              ? new Date(this.search.createTimestamp[0]).valueOf() -
+                1 * 24 * 60 * 60 * 1000
+              : "";
+          // console.log(startTime)
+          return date && date.valueOf() < startTime;
+        }
+      };
+      console.log(e);
     },
+
+    endTimeChange(e) {
+      this.search.createTimestamp[1] = e;
+      let endTime =
+        this.search.createTimestamp[1] != ""
+          ? new Date(this.search.createTimestamp[1]).valueOf()
+          : "";
+      this.set = {
+        disabledDate(date) {
+          return date && date.valueOf() > endTime;
+        }
+      };
+      console.log(e);
+    },
+
+    // handleChange(e) {
+    //   let start = e[0];
+    //   let end = e[1];
+    //   if (start && end) {
+    //     if (start === end) {
+    //       start = start + " 00:00:00";
+    //       end = end + " 23:59:59";
+    //     } else {
+    //       start = start + " 00:00:00";
+    //       end = end + " 00:00:00";
+    //     }
+    //   }
+    //   this.search.createTimestamp[0] = start;
+    //   this.search.createTimestamp[1] = end;
+    // },
 
     //查询
     query() {
+      if (this.search.createTimestamp[0] && this.search.createTimestamp[1]) {
+        if (this.search.createTimestamp[0] === this.search.createTimestamp[1]) {
+          this.search.createTimestamp[0] =
+            this.search.createTimestamp[0] + " 00:00:00";
+          this.search.createTimestamp[1] =
+            this.search.createTimestamp[1] + " 23:59:59";
+        } else {
+          this.search.createTimestamp[0] =
+            this.search.createTimestamp[0] + " 00:00:00";
+          this.search.createTimestamp[1] =
+            this.search.createTimestamp[1] + " 00:00:00";
+        }
+      }
+
+      console.log(this.search);
       this.$emit("query", this.search);
-    },
+    }
     // //收起筛选
     // Retractbtn() {
     //   this.Retract = !this.Retract;
@@ -121,15 +177,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .integral-header .integral-top {
   padding: 15px 20px;
   background: white;
 }
-.search{
+.search {
   width: 110px;
   height: 32px;
-  background: #FF565A;
+  background: #ff565a;
   border-radius: 15px;
   text-align: center;
   line-height: 16px !important;
@@ -141,6 +196,7 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+  padding-top: 40px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;

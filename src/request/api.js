@@ -559,6 +559,8 @@ export const projectApproval = p => posts('activity-manage/apply/batch/add', p) 
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
 export const programApproval = p => posts("/activity-manage/batch/audit/do", p) //立项审批
+export const draftsDetail = p => posts("/activity-manage/batch/param", p) //复制立项
+export const actMemberlist = p => posts("/activity-manage/member-work/getActUserList", p) //复制立项
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 

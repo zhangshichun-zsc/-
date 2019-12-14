@@ -74,13 +74,15 @@ export default {
         {
           title: "创建时间",
           key: "creatAt",
-          align: "center"
+          align: "center",
+          width:247,
         },
 
         {
           title: "有效状态",
           key: "status",
-          algin: "center",
+           align: "center",
+            width:247,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -108,6 +110,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+           width:247,
           render: (h, params) => {
             return h("div", [
               h(

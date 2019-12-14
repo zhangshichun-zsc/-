@@ -3,7 +3,7 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
@@ -13,22 +13,22 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button @click="query">查询结果</Button>
+
         </div>
-      </div>
+      </div> -->
       <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span>名称</span>
+        <div class="flex-center-start name">
+          <span>名称:</span>
           <Input size="large" placeholder="活动分类名称" class="inpt" v-model="dicName" />
         </div>
-        <div class="flex-center-start">
-          <span>有效状态</span>
+        <div class="flex-center-start name">
+          <span>有效状态:</span>
           <Select v-model="validFlag" style="width: 150px;margin-right:10px">
             <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.name }}</Option>
           </Select>
         </div>
-        <div class="flex-center-start">
-          <span>创建时间</span>
+        <div class="flex-center-start name">
+          <span>创建时间:</span>
           <Row>
             <Col span="12">
               <DatePicker
@@ -41,13 +41,14 @@
             </Col>
           </Row>
         </div>
+         <Button class="table-btns" @click="query">查询结果</Button>
       </div>
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          全选
-          <span>已选择{{arr.length}}人</span>
+
+          <!-- <span>已选择{{arr.length}}人</span> -->
           <Button class="table-btns"  @click="add">新增活动分类</Button>
           <Modal v-model="modal2" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -77,7 +78,7 @@
         border
         :columns="columns"
         :data="data"
-        @on-selection-change="handleSelectionChange"
+
       ></Table>
       </div>
 
@@ -167,7 +168,7 @@ export default {
         {
           title: "有效状态",
           key: "status",
-          algin: "center",
+         align: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -281,6 +282,8 @@ export default {
     getOffactivities() {
       if (this.createTimestamp != "") {
         this.statsdata = this.createTimestamp.getTime();
+      }else{
+        this.statsdata=''
       }
       Offactivities({
         page: { page: this.page, size: this.size },
@@ -405,25 +408,32 @@ export default {
 
     // 查询结果按钮
     query() {
+      console.log(this.createTimestamp)
       this.page = 1;
       this.getOffactivities();
     },
-    //每条数据单选框的状态
-    handleSelectionChange(val) {
-      this.arr = val;
-      console.log(this.arr);
-      if (
-        (this.arr.length == this.dataCount && this.dataCount != 0) ||
-        this.arr.length == this.size
-      ) {
-        this.status = true;
-      } else {
-        this.status = false;
-      }
-    }
+
+
+
   }
 };
 </script>
 <style lang="scss" scoped>
+.integral-body{
+  padding: 30px 20px 20px 20px;
+
+  display: flex;
+  height: 80px;
+  background: #ffffff;
+  border: 0;
+
+}
+.name{
+  margin-right: 20px;
+  span{
+    display: block;
+    width: 80px;
+  }
+}
 @import "../../libs/basicdata.css"
 </style>

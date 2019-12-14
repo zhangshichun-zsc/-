@@ -564,7 +564,7 @@ import {
   projectApproval,
   chooseTempalte,
   templateMsg,
-  orgimgdel
+  orgimgdel,draftsDetail
 } from "@/request/api";
 
 import role from "./compile_beneficiary.vue";
@@ -645,7 +645,7 @@ export default {
       roleI: 0, //招募角色下标
       adr: false,
       pcNum: 0,
-      templateList: []
+      templateList: [],
     };
   },
 
@@ -655,6 +655,12 @@ export default {
 
   created() {
     this.userId = this.$store.state.userId;
+    if(this.$route.query.batchId){
+      if (this.$route.query.copy != 1){
+        this.batchId= this.$route.query.batchId
+      }
+      this.getDraftsDetail(this.$route.query.batchId)
+    }
     this.getProjectItem();
     this.getPartner();
     this.getBatchItem();
@@ -664,6 +670,15 @@ export default {
   },
 
   methods: {
+    getDraftsDetail(e){
+      draftsDetail({
+        batchId:e, 
+        isTime:this.batchId?2:null
+      }).then(res=>{
+        console.log(res)
+        this.projectMsg = res.data
+      })
+    },
     //立项前置项查询
     getProjectItem() {
       projectItem({

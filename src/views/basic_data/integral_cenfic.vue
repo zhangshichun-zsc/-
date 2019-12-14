@@ -2,8 +2,8 @@
 <template>
   <div>
     <div class="integral-header">
-      <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <Navigation :labels="navigation1"></Navigation> -->
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
@@ -13,24 +13,24 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button @click="queryMet()">查询结果</Button>
+
         </div>
-      </div>
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span>名称</span>
+      </div> -->
+      <!-- <div class="flex-center-start integral-body">
+        <div class="flex-center-start name">
+          <span>名称:</span>
           <Input size="large" placeholder="基金名称" class="inpt" v-model="query.name" />
         </div>
-        <div class="flex-center-start">
-          <span>有效状态</span>
-          <Select size="small" class="inpt" v-model="query.validFlag">
+        <div class="flex-center-start name">
+          <span>有效状态:</span>
+          <Select  class="inpt" v-model="query.validFlag" style="width: 150px;margin-right:10px">
              <Option value="-1">全部</Option>
             <Option value="1">有效</Option>
             <Option value="0">无效</Option>
           </Select>
         </div>
-        <div class="flex-center-start">
-          <span>创建时间</span>
+        <div class="flex-center-start name">
+          <span>创建时间:</span>
           <Row>
              <DatePicker
               :open="open"
@@ -45,7 +45,9 @@
             </DatePicker>
           </Row>
         </div>
-      </div>
+         <Button class="table-btns" @click="queryMet()">查询结果</Button>
+      </div> -->
+       <basicdata :navigation1="navigation1" @query="queryMet"></basicdata>
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
@@ -88,8 +90,9 @@
 </template>
 
 <script>
+import basicdata from "@/components/basicdata";
 import {formatDate} from '../../request/datatime'
-import basicdata from "../../components/basicdata"
+
 import { getCard,updateCard } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 export default {
@@ -129,7 +132,7 @@ export default {
         {
           title: "有效状态",
           key: "validFlag",
-          algin: "center",
+         align: "center",
           render: (h, params) => {
             return h('div', [
               h('i-switch',{
@@ -249,36 +252,17 @@ export default {
       this.args.dicId = null
       this.args.validFlag = null
     },
-    successOk(){
-      if(!this.query.startAt&&!this.query.endAt){
-        this.time='请选择时间段'
-      }
-      this.open = false
-    },
-    handleChange(e){
-      let start = e[0]
-      let end = e[1]
-      this.time = e[0] + '-' + e[1]
-      if(start&&end){
-        if(start === end){
-          start = start + ' 00:00:00'
-          end = end + ' 23:59:59'
-        }else{
-          start = start + ' 00:00:00'
-          end = end + ' 00:00:00'
-        }
-      }
-      this.query.startAt = start
-      this.query.endAt = end
-    },
+
+
     changepages(e){
       this.params.page = e
       this.getList()
     },
-    queryMet(){
-      if(this.query.validFlag=='-1'){
-        this.query.validFlag=''
-      }
+    queryMet(e){
+      this.query.startAt=e.createTimestamp[0]
+      this.query.endAt=e.createTimestamp[1]
+      this.query.validFlag=e.validFlag
+      this.query.name=e.dicName
       this.params = Object.assign(this.params,this.query)
       this.$set(this.params.page,'page',1)
       this.getList()
@@ -287,5 +271,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.integral-body{
+  padding: 30px 20px 20px 20px;
+
+  display: flex;
+  height: 80px;
+  background: #ffffff;
+  border: 0;
+
+}
+.name{
+  span{
+    display: block;
+    width: 80px;
+  };
+ margin-right: 20px;
+}
 @import "../../libs/basicdata.css"
 </style>
