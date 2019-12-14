@@ -267,18 +267,18 @@ export default {
       ],
       Jumplist: [
         {
-          name: "活动立项",
-          query: "/activity/approval",
+          name: "活动发布",
+          query: "/activity_vun/volunteer_issue",
           icon: "shortcutEntry_1"
         },
         {
           name: "活动管理",
-          query: "/activity/manager",
+          query: "/activity_vun/volunteer_activity",
           icon: "shortcutEntry_2"
         },
         {
           name: "用户列表",
-          query: "/user/all_member_hy",
+          query: "/user/all_member_zyz",
           icon: "shortcutEntry_3"
         },
         {
@@ -288,12 +288,12 @@ export default {
         },
         {
           name: "消息管理",
-          query: "/operate/vp_message",
+          query: "/operate/vun_message",
           icon: "shortcutEntry_5"
         },
         {
           name: "广告管理",
-          query: "/recommend/vp_adlist",
+          query: "/recommend/vun_adlist",
           icon: "shortcutEntry_6"
         },
         {

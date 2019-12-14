@@ -436,6 +436,7 @@ export default {
     if (to.name === "login") {
       return next();
     }
+
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {
