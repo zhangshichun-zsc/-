@@ -1,4 +1,4 @@
-<!-- 用户列表(会员) -->
+<!-- 用户列表(志愿者) -->
 <template>
   <div class="member">
     <div class="integral-header">
@@ -538,7 +538,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "用户列表(会员)"
+        head: "用户列表(志愿者)"
       },
       batchList: [
         { value: "0", label: "禁用" },

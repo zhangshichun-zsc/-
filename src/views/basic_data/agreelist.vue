@@ -1,10 +1,23 @@
 <!-- 协议管理(会员)-->
 <template>
   <div class="integral">
-    <tophead :navigation1="navigation1" :top="top" @query="query"></tophead>
+    <Navigation :labels="navigation1"></Navigation>
+     <div class="flex-center-start integral-body" >
+        <div class="flex-center-start name">
+          <span>甲乙方:</span>
+          <Input size="large" placeholder="甲乙方名称" class="inpt" v-model="agreementObject" />
+        </div>
+        <div class="flex-center-start name">
+          <span>协议分类:</span>
+           <Select v-model="agreementType" style="width: 160px;margin-left:20px" placeholder="协议类型">
+            <Option v-for="item in typelist" :value="item.dataKey" :key="item.dataKey">{{ item.dataValue }}</Option>
+          </Select>
+        </div>
+        <Button class="table-btns" @click="query">查询结果</Button>
+      </div>
     <div class="integral-table">
       <div class="table-header flex-between">
-        <div class="flex-center-start">
+        <div class="flex-center-start paddings">
           <Icon type="md-list" />
           <span>数据列表</span>
         </div>
@@ -174,7 +187,8 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "desc"
+      sort: "desc",
+      typelist:[],
     };
   },
 
@@ -232,21 +246,19 @@ export default {
         console.log(res);
         if (res.code == 200) {
           res.data.unshift({ dataKey: "0", dataValue: "全部" });
-          this.top[1].list = res.data;
+          this.typelist = res.data;
         }
       });
     },
 
     //查询
     query(e) {
-      this.agreementObject = e[0].value;
-      if (e[1].value == 0) {
+      this.page=1
+      if (this.agreementType == 0) {
         this.agreementType = "";
-      } else {
-        this.agreementType = e[1].value;
       }
       this.getAgreementpage();
-      console.log(e);
+
     },
 
     newagree() {
@@ -276,5 +288,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.integral-body {
+  padding: 30px 20px 20px 20px;
+
+  display: flex;
+  height: 80px;
+  background: #ffffff;
+  border: 0;
+}
+.name {
+  span {
+    display: block;
+    width: 120px;
+  }
+  .inpt {
+    margin-right: 30px;
+  }
+}
 @import "../../libs/basicdata.css"
 </style>

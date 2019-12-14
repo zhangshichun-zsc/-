@@ -3,7 +3,7 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
@@ -13,9 +13,9 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button @click="query()">查询结果</Button>
+
         </div>
-      </div>
+      </div> -->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>组织</span>
@@ -39,6 +39,7 @@
           </Row>
         </div>
         <div class="flex-center-start">
+          <Button class="table-btns" @click="query()">查询结果</Button>
           <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
@@ -82,10 +83,10 @@
             <span>数据列表</span>
           </div>
           <div class="flex-center-end">
-            <Select size="small" class="inpt" style="width:140px" placeholder="显示条数" @on-change="changeNum">
+            <Select  class="inpt" style="width:100px" placeholder="显示条数" @on-change="changeNum">
               <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
             </Select>
-            <Select size="small" class="inpt" style="width:140px" placeholder="排序方式" @on-change="changeSort">
+            <Select  class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
               <Option value="create_at desc">升序</Option>
               <Option value="create_at asc">降序</Option>
             </Select>
@@ -363,6 +364,7 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
+
 
 @import "../../libs/basicdata.css"
 </style>

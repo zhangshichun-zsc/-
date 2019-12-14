@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { Setup, orgimgdel, loginout } from "../../request/api";
+import { Setup, orgimgdel, loginout, queryUserDetail } from "../../request/api";
 import { upload } from "../../request/http";
 export default {
   data() {
@@ -115,7 +115,7 @@ export default {
         head: "账户设置"
       },
       formValidate: {
-        name: this.$store.state.userName,
+        name: "",
         number:
           this.$store.state.tel && this.$store.state.tel !== "undefined"
             ? this.$store.state.tel
@@ -148,9 +148,21 @@ export default {
   computed: {},
 
   created() {},
-  mounted() {},
+  mounted() {
+    this.getUserInfo();
+  },
 
   methods: {
+    // 获取当前账号的 头像姓名
+    getUserInfo() {
+      let userId = this.$store.state.userId;
+      if (!userId) {
+        this.$router.push({ name: "login" });
+      }
+      queryUserDetail({ userId }).then(res => {
+        this.formValidate.name = res.data.userName;
+      });
+    },
     //提交
     getSetup() {
       Setup({

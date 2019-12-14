@@ -1,6 +1,7 @@
 <!-- 证书维护（志愿者） -->
 <template>
   <div class="integral">
+    <Navigation :labels="navigation1"></Navigation>
     <!-- <Row class="row">
       <Col span="10">
         <button>选择志愿者团队</button>
@@ -74,7 +75,10 @@ export default {
       officeSealPic:null,
       i:1,
       certMouldId:this.$route.query.certMouldId,
-      show:this.$route.query.show
+      show:this.$route.query.show,
+       navigation1: {
+        head: "融爱证书维护(会员)"
+      },
     };
   },
   created() {

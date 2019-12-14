@@ -9,21 +9,21 @@
           <!-- <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button> -->
-          <span>已选择{{arr.length}}</span>
+          <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns"  @click="add('formValidate')">{{Newly}}</Button>
           <Modal v-model="modal1" title="新增会费" draggable width="800">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="会费名称" prop="name">
-                <Input v-model="formValidate.name" />
+              <FormItem label="会费名称:" prop="name">
+                <Input v-model="formValidate.name" style="width: 220px"/>
               </FormItem>
-              <FormItem label="金额" prop="amount">
-                <InputNumber :min="0" v-model="formValidate.amount"></InputNumber>
+              <FormItem label="金额:" prop="amount">
+                <InputNumber :min="0" v-model="formValidate.amount"  style="width: 220px"></InputNumber>
               </FormItem>
-              <FormItem label="会费期限" prop="imonth">
-                <InputNumber :max="99" :min="1" v-model="formValidate.imonth"></InputNumber>
-                <span>个月</span>
+              <FormItem label="会费期限:" prop="imonth">
+                <InputNumber :max="99" :min="1" v-model="formValidate.imonth"  style="width: 220px"></InputNumber>
+                <span>月</span>
               </FormItem>
-              <FormItem label="会员包" prop="packageFlag">
+              <FormItem label="会员包:" prop="packageFlag">
                 <RadioGroup v-model="formValidate.packageFlag">
                   <Radio label="1">有</Radio>
                   <Radio label="0">无</Radio>
@@ -35,12 +35,24 @@
               </FormItem>
             </Form>
             <div slot="footer">
-              <Button type="text" size="large" @click="modalCancel">取消</Button>
+              <Button type="text" size="large" @click="modalCancel1">取消</Button>
               <Button type="primary" size="large" @click="handleSubmit('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
       </div>
+       <Modal v-model="addstate" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                  <span>新增确定</span>
+                </p>
+                <div style="text-align:center">
+                  <p>是否确认新增，新增后上一条有效数据将自动设为无效</p>
+                </div>
+                <div slot="footer">
+                  <Button type="error" @click="modalCancel2">取消</Button>
+                  <Button type="success" @click="modalOkdel2">确定</Button>
+                </div>
+              </Modal>
        <div class="min-height">
         <Table
         ref="selection"
@@ -138,6 +150,20 @@ export default {
           key: "imonth",
           align: "center",
           width:120,
+          render:(h,params)=>{
+            // let imonths
+            // if(params.row.imonth>12){
+            //   let year = Math.floor(params.row.imonth/12)
+            //   let imonth =params.row.imonth%12
+            //   console.log(year,imonth)
+            //   imonths=year+'年'+imonth+'月'
+
+            // }else{
+            //   imonths=params.row.imonth+'月'
+
+            // }
+            return h('p',params.row.imonth+'月')
+          }
         },
         {
           title: "金额",
@@ -158,7 +184,7 @@ export default {
         {
           title: "有效状态",
           key: "status",
-          algin: "center",
+          align: "center",
           width:100,
           render: (h, params) => {
             return h("div", [
@@ -195,13 +221,18 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: params.row.validFlag==1?"#097276":'#ccc'
                   },
                   on: {
                     click: () => {
-                      this.modal1 = true;
-                      this.duesId=params.row.duesId
-                      this.getCostdels()
+                      if(params.row.validFlag==0){
+                        return
+                      }else{
+                        this.modal1 = true;
+                        this.duesId=params.row.duesId
+                        this.getCostdels()
+                      }
+
                     }
                   }
                 },
@@ -241,6 +272,8 @@ export default {
       list: "",
       validFlags:'',
 
+      addstate:false,
+
     };
   },
   components: { basicdata, wangeditor },
@@ -277,7 +310,7 @@ export default {
 
     //增加修改
     getCostadd(e) {
-      if (e==0) {  //新增
+      if (e==0) {  //编辑
         this.list = [{
           duesId: this.duesId,
           validFlag: this.formValidate.validFlag,
@@ -287,7 +320,7 @@ export default {
           detail: this.editorContent,
           packageFlag:this.formValidate.packageFlag
         }];
-      }else if(e==1){ //编辑
+      }else if(e==1){ //新增
         this.list = [{
           validFlag: this.formValidate.validFlag,
           name: this.formValidate.name,
@@ -334,18 +367,28 @@ export default {
       });
     },
 
+    //取消框
+    modalCancel2(){
+      this.addstate=false
+    },
+    //确认框
+    modalOkdel2(){
+      this.modal1=true
+      this.addstate=false
+    },
+
     //取消
-    modalCancel() {
+    modalCancel1() {
       this.modal1 = false;
     },
     //确定
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if(this.duesId==''){
-            this.getCostadd(0)
-          }else{
+          if(this.duesId==''){//新增
             this.getCostadd(1)
+          }else{            //编辑
+            this.getCostadd(0)
           }
         } else {
           this.$Message.error("必填项为空！");
@@ -402,7 +445,7 @@ export default {
       this.duesId=''
       this.editorContent = "";
       this.$refs[name].resetFields();
-      this.modal1 = true;
+      this.addstate = true;
     }
   }
 };
