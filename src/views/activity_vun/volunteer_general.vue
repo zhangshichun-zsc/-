@@ -110,7 +110,7 @@ export default {
       value: "",
       xuan: false,
       navigation1: {
-        head: "活动概况(会员)"
+        head: "活动概况(志愿者)"
       },
       cityList1: [
         {
