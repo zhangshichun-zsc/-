@@ -750,18 +750,20 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          align: "center"
+          align: "center",
+          width: 180
         },
         {
           title: "手机号",
           key: "tel",
           align: "center",
-          width: 110,
+          width: 120,
         },
         {
           title: "用户昵称",
           key: "nickname",
-          align: "center"
+          align: "center",
+           width: 180
         },
         {
           title: "分类",
@@ -772,7 +774,8 @@ export default {
         {
           title: "标签",
           key: "labels",
-          align: "center"
+          align: "center",
+           width: 180
         },
         {
           title: "参与活动数",

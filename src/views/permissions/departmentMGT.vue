@@ -92,7 +92,8 @@
             </Select> -->
           </div>
         </div>
-        <Table border :columns="columns1" :data="data1"></Table>
+        <Table :columns="columns1" :data="data1"></Table>
+
         <div class="con con-margin">
           <div class="title bk-szy flex-center-start">
             <p>
@@ -123,9 +124,9 @@
 </template>
 
 <script>
-import expandRow from "@/components/table-expand.vue";
+// import expandRow from "@/components/table-expand-1.vue";
 import {
-  // departmentlist,
+  departmentlist,
   departmentsub,
   departmentStatu,
   departmentmember,
@@ -181,27 +182,18 @@ export default {
           type: "expand",
           width: 50,
           render: (h, params) => {
-            // let data = this.getdepartmentsub(params.row.deptId);
-            return (
-              <expandRow
-                row={params.row}
-                dom={<expandRow row={this.rpw} />}
-                onChanges={e => {
-                  this.rpw = e;
-                  console.log(this.rpw);
-                }}
-              >
-                <expandRow
-                  row={params.row}
-                  dom={<expandRow row={this.rpw} />}
-                  onChanges={e => {
-                    this.rpw = e;
-
-                    console.log(this.rpw);
-                  }}
-                ></expandRow>
-              </expandRow>
-            );
+            //  ! 根据 当前是否有子集生成多个 table
+            return params.row.children
+              ? params.row.children.map(item => {
+                  return (
+                    <Table
+                      columns={this.columns1}
+                      data={params.row.children}
+                      show-header={false}
+                    ></Table>
+                  );
+                })
+              : "";
           }
         },
         {
@@ -376,29 +368,6 @@ export default {
                   {
                     clssName: "action",
                     style: {
-                      color: "#1ABD9D"
-                    },
-                    on: {
-                      click: () => {
-                        this.$router.push({
-                          name: "function",
-                          query: {
-                            sysRoleName: params.row.userName,
-                            sysRoleId: params.row.deptUserId,
-                            status: 1,
-                            fromURL: this.$route.name
-                          }
-                        });
-                      }
-                    }
-                  },
-                  "权限设置"
-                ),
-                h(
-                  "a",
-                  {
-                    clssName: "action",
-                    style: {
                       color: "#FD585E"
                     },
                     on: {
@@ -441,7 +410,53 @@ export default {
       dataCount: 0,
       status: "",
       text: "",
-      throttleFlag: true
+      throttleFlag: true,
+      tablist: [
+        {
+          title: "parent 1",
+          expand: false,
+          children: [
+            {
+              title: "child 1-1",
+              expand: false,
+              children: [
+                {
+                  title: "leaf 1-1-1",
+                  expand: false,
+                  children: [
+                    {
+                      title: "leaf 1-1-1-1",
+                      expand: false
+                    }
+                  ]
+                },
+                {
+                  title: "leaf 1-1-2",
+                  expand: false
+                }
+              ]
+            },
+            {
+              title: "child 1-2",
+              expand: false,
+              children: [
+                {
+                  title: "leaf 1-2-1",
+                  expand: false
+                },
+                {
+                  title: "leaf 1-2-1",
+                  expand: false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      buttonProps: {
+        type: "default",
+        size: "small"
+      }
     };
   },
   computed: {
@@ -473,15 +488,126 @@ export default {
     this.getdeparttype();
   },
   methods: {
-    changeData(e) {
-      console.log(e);
+    // render生成的 控件
+    renderContent(h, { root, node, data }) {
+      return h(
+        "p",
+        {
+          style: {
+            display: "inline-block",
+            width: "95%",
+            float: "right",
+            display: "flex",
+            "justify-content": "space-around"
+          }
+        },
+        [
+          h("p", [
+            h(
+              "a",
+              {
+                style: {
+                  marginRight: "8px"
+                },
+                on: {
+                  click: () => {
+                    this.deptId = data.deptId;
+                    this.getdepartmentmember();
+                  }
+                }
+              },
+
+              data.deptName
+            )
+          ]),
+          h("span", [h("span", data.description)]),
+          h("span", [h("span", data.sum)]),
+          h("span", [h("span", data.leader)]),
+          h("span", [h("span", data.deptName)]),
+          h("a", [
+            h(
+              "a",
+              {
+                style: {
+                  marginRight: "8px"
+                },
+                on: {
+                  click: () => {
+                    this.modal1 = true;
+                    this.text = "编辑部门";
+                    this.isdispabled = true;
+                    this.getdepartmentSup();
+                    this.getName(params.row.deptId);
+                    this.AddDate = params.row;
+                    this.deptId = params.row.deptId;
+                    this.AddDate.parentId = params.row.parentId;
+                  }
+                }
+              },
+              "编辑"
+            )
+          ])
+          // [
+          //   (h(
+          //     "a",
+          //     {
+          //       style: {
+          //         marginRight: "8px"
+          //       },
+          //       on: {
+          //         click: () => {
+          //           this.append(data);
+          //         }
+          //       }
+          //     },
+          //     "部门名称"
+          //   ),
+          //   h("span", "职能描述"),
+          //   h("span", "成员数量"),
+          //   h("span", "负责人"),
+          //   h("i-switch", {
+          //     props: {
+          //       value: true
+          //     },
+          //     on: {
+          //       input: e => {
+          //         this.getdepartmentStatus(params.row.userId, e);
+          //       }
+          //     }
+          //   }),
+          //   h(
+          //     "Button",
+          //     {
+          //       style: {
+          //         marginRight: "8px"
+          //       },
+          //       on: {
+          //         click: () => {
+          //           this.modal1 = true;
+          //           this.text = "编辑部门";
+          //           this.isdispabled = true;
+          //           this.getdepartmentSup();
+          //           this.getName(params.row.deptId);
+          //           this.AddDate = params.row;
+          //           this.deptId = params.row.deptId;
+          //           this.AddDate.parentId = params.row.parentId;
+          //         }
+          //       }
+          //     },
+          //     "编辑"
+          //   ))
+          // ]
+        ]
+      );
     },
     // 部门列表
-    getdepartmentlist() {
-      departmentsub({
-        depId: 0
+    getdepartmentlist(depId) {
+      let key = depId ? depId : 0;
+      departmentlist({
+        parentId: 0
       }).then(res => {
         if (res.code == 200) {
+          this.tablist = res.data;
           this.data1 = res.data;
         } else {
           this.$Message.error(res.msg);
@@ -670,8 +796,7 @@ export default {
         query: { states: 2, fromURL: this.$route.name }
       });
     }
-  },
-  components: { expandRow }
+  }
 };
 </script>
 
@@ -709,7 +834,7 @@ tr td.ivu-table-expanded-cell {
   padding: 0 !important;
 }
 td.ivu-table-expanded-cell {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .btn {
@@ -722,5 +847,13 @@ td.ivu-table-expanded-cell {
   color: #ffffff;
   line-height: 32px;
   text-align: center;
+}
+/* .block {
+  
+} */
+
+.depart-item {
+  flex: 1;
+  border: 1px solid #ccc;
 }
 </style>

@@ -11,16 +11,16 @@
       <Modal v-model="modal1" title="新增培训模板">
         <p>请选择活动分类</p>
         <div class="tabs">
-          <Button v-for='(item,index) in arr' :key="index" @click="train(item.dicId,item.dicName,0)">{{ item.dicName }}</Button>
+          <Button class="btn" v-for='(item,index) in arr' :key="index" @click="train(item.dicId,item.dicName,0)">{{ item.dicName }}</Button>
         </div>
       </Modal>
     </div>
     <div class="content">
       <ul>
-        <li v-for="item in list">
+        <li v-for="(item,index) in list" :key='index'>
           <p class="content-head">{{item.dicName}}</p>
-          <div class="option" v-for="i in item.mouldList">
-            <p @click="train(i[id],i[name],1)">{{ i[name] }}</p>
+          <div class="wap">
+            <Button @click="train(i[id],i[name],1)" v-for="(i,m) in item.mouldList" :key='m' class="btn">{{ i[name] }}</Button>
           </div>
         </li>
       </ul>
@@ -43,7 +43,7 @@ export default {
     list: Array,
     from: {
       type: String,
-      default: 'actrain'
+      default: 'editing'
     },
     name: {
       type: String,
@@ -114,33 +114,22 @@ export default {
         font-size: 16px;
         margin: 20px 0;
       }
-      .option {
-        display: flex;
-        justify-content: space-between;
-        p {
-          height: 50px;
-          width: 200px;
-          border: #e4e4e4 1px solid;
-          text-align: center;
-          line-height: 50px;
-          cursor: pointer;
-          margin-top: 10px;
+      .wap{
+        padding: 20px;
+        .btn {
+          margin-right:20px;
+          margin-bottom: 20px; 
         }
       }
-      .btn {
-        text-align: center;
-        margin: 20px 0;
-      }
+     
     }
   }
 }
 .tabs {
   margin: 10px 0;
 }
-.tabs button {
-  width: 120px;
-  height: 26px;
-  text-align: center;
-  line-height: normal;
+.tabs .btn {
+  margin-right:20px;
+  margin-bottom: 20px; 
 }
 </style>

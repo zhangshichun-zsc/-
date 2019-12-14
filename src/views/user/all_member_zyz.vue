@@ -1,4 +1,4 @@
-<!-- 用户列表(会员) -->
+<!-- 用户列表(志愿者) -->
 <template>
   <div class="member">
     <div class="integral-header">
@@ -538,7 +538,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "用户列表(会员)"
+        head: "用户列表(志愿者)"
       },
       batchList: [
         { value: "0", label: "禁用" },
@@ -750,7 +750,8 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          align: "center"
+          align: "center",
+          width: 180
         },
         {
           title: "手机号",
@@ -761,7 +762,8 @@ export default {
         {
           title: "用户昵称",
           key: "nickname",
-          align: "center"
+          align: "center",
+          width: 180
         },
         {
           title: "分类",
@@ -773,6 +775,7 @@ export default {
           title: "标签",
           key: "labels",
           align: "center",
+          width: 160
         },
         {
           title: "参与活动数",
@@ -902,6 +905,8 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
+      startAt:'',
+      endAt:'',
       sort: "asc",
       showScreen: true,
       Sele2: {

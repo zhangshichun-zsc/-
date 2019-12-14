@@ -85,7 +85,7 @@ axios.interceptors.response.use(
         });
     } else if (response.data.code == 1003) {
 
-    } else if(response.data.code==500){
+    } else if (response.data.code == 500) {
 
       $Message.error(response.data.msg)
     }

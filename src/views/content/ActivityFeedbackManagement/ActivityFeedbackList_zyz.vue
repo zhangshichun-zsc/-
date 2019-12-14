@@ -2,64 +2,54 @@
 <template>
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
-    <div class="content">
-      <div class="con-top bk-szy flex-center-start">
-        <p>
-          <Icon type="ios-search" size="30" />
-          <span>筛选查询</span>
-        </p>
-        <div class="flex-center-end">
-          <div class="Pack">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
+    <div class="wapper">
+      <div class="flex-between header">
+        <div class="con bk inp flex-center-start">
+          <p>
+            <span>活动名称:</span>&nbsp;
+            <Input size="small" placeholder="活动名称" style="width: 8rem" v-model="querys.activityName"/>
+          </p>
+          <p>
+            <span>所属项目:</span>&nbsp;
+            <Select style="width:6rem;" size="small" v-model="querys.categoryId" placement='top'>
+              <Option :value="''">全部</Option>
+              <Option v-for="item in OptionsList" :value="item.categoryId" :key="item.value">{{ item.name }}</Option>
+            </Select>
+          </p>
+        </div>
+        <Button @click="query()"  shape="circle" size='large' icon="ios-search">查询结果</Button>
+      </div>
+      <div>
+        <div class="con-top bk-szy flex-center-start">
+          <p>
+            <Icon type="ios-list" size="30" />
+            <span>数据列表</span>
+          </p>
+          <div class="flex-center-end">
+            <Select size='small' placeholder="显示条数" @on-change='changeNum'>
+                <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
+            </Select>
+              <Select size='small' placeholder="排序方式"  @on-change='changeSort'>
+              <Option value="create_at desc">升序</Option>
+              <Option value="create_at asc">降序</Option>
+            </Select>
           </div>
-          <Button size="small" @click="query()">查询结果</Button>
         </div>
-      </div>
-      <div class="con bk inp flex-center-start">
-        <p>
-          <span>活动名称:</span>&nbsp;
-          <Input size="small" placeholder="活动名称" style="width: 8rem" v-model="querys.activityName"/>
-        </p>
-        <p>
-          <span>所属项目:</span>&nbsp;
-          <Select style="width:6rem;" size="small" v-model="querys.categoryId" placement='top'>
-            <Option :value="''">全部</Option>
-            <Option v-for="item in OptionsList" :value="item.categoryId" :key="item.value">{{ item.name }}</Option>
-          </Select>
-        </p>
-      </div>
-    </div>
-    <div class="content">
-      <div class="con-top bk-szy flex-center-start">
-        <p>
-          <Icon type="ios-list" size="30" />
-          <span>数据列表</span>
-        </p>
-        <div class="flex-center-end">
-          <Select size='small' placeholder="显示条数" @on-change='changeNum'>
-              <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
-          </Select>
-            <Select size='small' placeholder="排序方式"  @on-change='changeSort'>
-            <Option value="create_at desc">升序</Option>
-            <Option value="create_at asc">降序</Option>
-          </Select>
+        <div class="con">
+          <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="tablechange"></Table>
         </div>
-      </div>
-      <div class="con">
-        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="tablechange"></Table>
-      </div>
-      <div class="pages">
-        <div class="batch">
-          <Button @click="chackall()">
-            <Checkbox v-model="status" style="border:0px;">全选</Checkbox>
-          </Button>
-          <!-- <Select placeholder="批量操作" style="width: 150px" v-model="batch">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Button style="margin-left: 10px" @click="batches()">确定</Button> -->
+        <div class="pages">
+          <div class="batch">
+            <Button @click="chackall()">
+              <Checkbox v-model="status" style="border:0px;">全选</Checkbox>
+            </Button>
+            <!-- <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+              <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Button style="margin-left: 10px" @click="batches()">确定</Button> -->
+          </div>
+          <Page :total="dataCount" show-elevator show-total size="small" :page-size="size" @on-change="changepages" />
         </div>
-        <Page :total="dataCount" show-elevator show-total size="small" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>
@@ -108,11 +98,13 @@ export default {
         {
           title: '反馈人数',
           key: 'feedbackNum',
+          width: 100,
           align: 'center'
         },
         {
           title: '活动时间',
           key: 'activityTimestamp',
+          width: 180,
           align: 'center',
           render: (h, params) => {
             return h('div', [h('p', formatDate(params.row.activityTimestamp))])
@@ -121,6 +113,7 @@ export default {
         {
           title: '操作',
           key: 'action',
+          width: 150,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -138,7 +131,8 @@ export default {
                         name: 'ActivityFeedbackDetails_zyz',
                         query: {
                           activityId: params.row.activityId,
-                          name: params.row.activityName
+                          name: params.row.activityName,
+                          num: params.row.feedbackNum
                         }
                       })
                     }
@@ -207,8 +201,12 @@ export default {
   },
   methods: {
      getType(){
-      getTypeFeed({ sysId:1 }).then(res => {
-        this.OptionsList = res.data
+      getTypeFeed({ sysId:2 }).then(res => {
+        if(res.code == 200){
+          this.OptionsList = res.data
+        }else{
+          this.$Message.error(res.msg)
+        }
       })
     },
     query(){
@@ -320,19 +318,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-html,
-body {
-  margin: auto;
-}
-.main {
-  background-color: #ffffff;
-}
-
-.bk {
-  border: 1px solid #e4e4e4;
-}
-.content {
-  margin: 1rem;
+.wapper{
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  .header{
+    margin-bottom: 30px;
+    .btn{
+      background: #FF565A !important;
+      color: #fff !important;
+      border-color:none !important;
+    }
+    .btn:hover{
+      border:1px solid #dcdee2 !important;
+      color: #dcdee2 !important;
+    }
+  }
 }
 .con-top {
   background-color: #f3f3f3;

@@ -59,23 +59,29 @@
 
                 <Dropdown prop="transfer:true">
                   <span title="账户信息">
-                    <Icon type="ios-contact-outline" size="26" />admin
+                    <img
+                      class="userimg"
+                      v-if="userInfo.userimg"
+                      :src="userInfo.userimg"
+                    />
+                    <Icon v-else type="ios-contact-outline" size="26" />
+                    {{ userInfo.name }}
                   </span>
                   <DropdownMenu slot="list">
                     <DropdownItem
                       style="display:flex;justify-content: space-between"
                     >
-                      <p>账户信息</p>
-                      <p style="color:green" @click="less">账户设置</p>
+                      <!-- <p>账户信息</p> -->
+                      <p><a style="" @click="less">账户设置</a></p>
                     </DropdownItem>
-                    <DropdownItem divided
+                    <!-- <DropdownItem divided
                       >• 所在部门：IT系统管理部</DropdownItem
                     >
                     <DropdownItem>• 本次登录：2019-07-01 14:36:21</DropdownItem>
                     <DropdownItem
                       >• 登录地区：北京市 (IP：1.1.1.1)</DropdownItem
                     >
-                    <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem>
+                    <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem> -->
                   </DropdownMenu>
                 </Dropdown>
 
@@ -237,7 +243,7 @@
                     </ul>
                   </div>
                 </Modal>
-                <span>|</span>
+                <!-- 
                 <Dropdown>
                   <span class="mess">
                     <div class="message">50</div>
@@ -290,8 +296,8 @@
                       <p>（10）</p>
                     </DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
-                <span>|</span>
+                </Dropdown> -->
+
                 <span>
                   <Icon
                     title="退出登录"
@@ -391,7 +397,7 @@
 </template>
 
 <script>
-import { homepage, loginout } from "../request/api";
+import { homepage, loginout, queryUserDetail } from "../request/api";
 export default {
   props: ["labels"],
   data() {
@@ -404,6 +410,10 @@ export default {
       list: function() {
         this.routelist = sessionStorage.getItem("routelist");
         console.log(this.routelist, sessionStorage.getItem("routelist"));
+      },
+      userInfo: {
+        name: "",
+        userimg: ""
       }
     };
   },
@@ -422,6 +432,11 @@ export default {
     if (to.name === from.name) return;
     let toName = to.name;
     let menuList = this.$store.state.menuList;
+
+    if (to.name === "login") {
+      return next();
+    }
+
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {
@@ -429,6 +444,19 @@ export default {
     }
   },
   methods: {
+    // 获取当前账号的 头像姓名
+    getUserInfo() {
+      let userId = this.$store.state.userId;
+      if (!userId) {
+        this.$router.push({ name: "login" });
+      }
+      queryUserDetail({ userId }).then(res => {
+        this.userInfo = {
+          name: res.data.userName,
+          userimg: res.data.avatarPath
+        };
+      });
+    },
     gethomepage() {
       homepage({
         userId: this.$store.state.userId
@@ -515,6 +543,7 @@ export default {
   },
   mounted() {
     // this.gethomepage()
+    this.getUserInfo();
   }
 };
 </script>
@@ -718,5 +747,11 @@ export default {
 }
 ::-webkit-scrollbar-thumb {
   background-color: transparent;
+}
+.userimg {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  border-radius: 50%;
 }
 </style>

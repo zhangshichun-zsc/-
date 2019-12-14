@@ -8,9 +8,6 @@
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
         </div>
-        <div class="flex-center-end">
-          <Button @click="result">查询结果</Button>
-        </div>
       </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
@@ -44,6 +41,9 @@
               ></Date-picker>
             </i-col>
           </row>
+        </div>
+        <div class="flex-center-end">
+          <Button @click="result">查询结果</Button>
         </div>
       </div>
     </div>

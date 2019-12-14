@@ -344,6 +344,8 @@ export const Activitysummary = p => get('/activity-overview/get-act-overview-sta
 
 export const Commonpage = p => get('/common/get-dic-page', p) //-公共模块--字典分页
 
+export const queryUserDetail = p => get('/volunteer-manager/queryUserDetail', p) //-当前账号的 头像和信息
+
 export const Commonadd = p => post('/common/add-dic-info', p) //-公共模块--添加字典信息
 
 export const Commonmodify = p => post('/common/modify-dic-info', p) //-公共模块--修改字典信息
@@ -460,7 +462,7 @@ export const roleAddtos = p => post('/sysRole/addRoleToUser', p) //角色管理-
 export const roleedit = p => posts('/sysRole/edicRoleUser', p) //角色管理--编辑成员
 
 //部门管理
-// export const departmentlist = p => get('/web/dept/findAllDept', p) //部门管理--部门列表
+export const departmentlist = p => get('/web/dept/findAllDept', p) //部门管理--部门列表
 
 export const departmentsub = p => get('/web/dept/findLevelDept', p) //部门管理--查询下级部门
 
