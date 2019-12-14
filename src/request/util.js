@@ -90,10 +90,10 @@ export default {
   userExprot,
 
   //数组去重在a数组中去除与b数组相同的元素
-   arrChange( a, b ){
+  arrChange(a, b) {
     for (let i = 0; i < b.length; i++) {
       for (let j = 0; j < a.length; j++) {
-        if (a[ j ] == b[ i ]) { //如果是id相同的，那么a[ j ].id == b[ i ].id
+        if (a[j] == b[i]) { //如果是id相同的，那么a[ j ].id == b[ i ].id
           a.splice(j, 1);
           j = j - 1;
         }
@@ -103,15 +103,26 @@ export default {
   },
 
   //字符串转数组
-  strarr(a){
-    a.split(",").map(item=>{
+  strarr(a) {
+    a.split(",").map(item => {
       return Number(item)
     })
+  },
+  keydowenter(vm, Callback) {
+
+    if (!Callback) return console.error('请添加调用的事件处理函数')
+    if (!vm) return console.error('请添当前的this 实例')
+    let then = vm
+    then.Callback = function () {
+      return Callback()
+    }
+    document.onkeydown = function () {
+      var key = window.event.keyCode;
+      if (key == 13) {
+        Callback && then.Callback()
+      }
+    };
   }
-
-
-
-
 
 }
 

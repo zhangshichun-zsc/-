@@ -5,22 +5,34 @@
     <div class="head">
       <p>培训模板</p>
       <p>
-        <Button class="table-btn" @click="modal1=true">新增模板</Button>
+        <Button class="table-btn" @click="modal1 = true">新增模板</Button>
         <Button class="table-btn">作废模板</Button>
       </p>
       <Modal v-model="modal1" title="新增培训模板">
         <p>请选择活动分类</p>
         <div class="tabs">
-          <Button class="btn" v-for='(item,index) in arr' :key="index" @click="train(item.dicId,item.dicName,0)">{{ item.dicName }}</Button>
+          <Button
+            class="btn"
+            v-for="(item, index) in arr"
+            :key="index"
+            @click="train(item.dicId, item.dicName, 0)"
+            >{{ item.dicName }}</Button
+          >
         </div>
       </Modal>
     </div>
     <div class="content">
       <ul>
-        <li v-for="(item,index) in list" :key='index'>
-          <p class="content-head">{{item.dicName}}</p>
+        <li v-for="(item, index) in list" :key="index">
+          <p class="content-head">{{ item.dicName }}</p>
           <div class="wap">
-            <Button @click="train(i[id],i[name],1)" v-for="(i,m) in item.mouldList" :key='m' class="btn">{{ i[name] }}</Button>
+            <Button
+              @click="train(i[id], i[name], 1)"
+              v-for="(i, m) in item.mouldList"
+              :key="m"
+              class="btn"
+              >{{ i[name] }}</Button
+            >
           </div>
         </li>
       </ul>
@@ -29,29 +41,29 @@
 </template>
 
 <script>
-import { getActiveTypeItem } from '@/request/api'
+import { getActiveTypeItem } from "@/request/api";
 export default {
   data() {
     return {
       show: false,
       modal1: false,
       arr: []
-    }
+    };
   },
   props: {
     navigation1: Object,
     list: Array,
     from: {
       type: String,
-      default: 'editing'
+      default: "editing"
     },
     name: {
       type: String,
-      default: 'activityName'
+      default: "activityName"
     },
     id: {
       type: String,
-      default: 'activityId'
+      default: "activityId"
     }
   },
   components: {},
@@ -59,29 +71,32 @@ export default {
   computed: {},
 
   created() {
-    this.getList()
+    this.getList();
   },
 
   methods: {
     train(id, name, ble) {
-      this.$router.push({ name: this.from, query: { activityId:id, name, ble } })
+      this.$router.push({
+        name: this.from,
+        query: { activityId: id, name, ble }
+      });
     },
     more() {
       if (this.show === false) {
-        this.show = true
+        this.show = true;
       } else {
-        this.show = false
+        this.show = false;
       }
     },
     getList() {
-      console.log(11)
+      console.log(11);
       getActiveTypeItem({}).then(res => {
-        this.arr = res.data
-        console.log(res)
-      })
+        this.arr = res.data;
+        console.log(res);
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .head {
@@ -114,14 +129,13 @@ export default {
         font-size: 16px;
         margin: 20px 0;
       }
-      .wap{
+      .wap {
         padding: 20px;
         .btn {
-          margin-right:20px;
-          margin-bottom: 20px; 
+          margin-right: 20px;
+          margin-bottom: 20px;
         }
       }
-     
     }
   }
 }
@@ -129,7 +143,7 @@ export default {
   margin: 10px 0;
 }
 .tabs .btn {
-  margin-right:20px;
-  margin-bottom: 20px; 
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
 </style>

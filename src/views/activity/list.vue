@@ -202,7 +202,22 @@ export default {
       this.$router.push({ name: "approval" });
     },
     onall(index) {
+      console.log(index)
       this.num = index;
+      if(index==0){
+        this.userType = ''
+      }else if(index==1){
+        this.userType = 1
+      }else if(index==2){
+        this.userType = 2
+      }else if(index==3){
+        this.userType = 2
+      }else if(index==4){
+        this.userType = 9
+      }else if(index==5){
+        this.userType = 7
+      }
+      this.getactiveAddManager()
     },
 
 

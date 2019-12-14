@@ -255,13 +255,8 @@ export default {
       userOverview: [],
       examinelist: [
         {
-          name: "活动立项审批",
-          query: "/activity/project_approval",
-          data: "unauditActivityCount"
-        },
-        {
           name: "广告位即将过期",
-          query: "/recommend/vp_adlist",
+          query: "/recommend/vun_adlist",
           data: "willExpiredAdvCount"
         }
       ],

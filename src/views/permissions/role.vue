@@ -132,7 +132,11 @@
                   >
                 </div>
               </Modal>
-              <Modal v-model="addstate" width="360">
+              <Modal
+                v-model="addstate"
+                width="360"
+                class="vertical-center-modal"
+              >
                 <p slot="header" style="color:#f60;text-align:center">
                   <span>删除确定</span>
                 </p>
