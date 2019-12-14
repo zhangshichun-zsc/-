@@ -14,64 +14,58 @@
       </div>
       <div class="select">
         <span class="select-template">反馈简介</span>
-        <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}" v-model="details[0].context"></Input>
+        <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}" v-model="details[0].context"/>
       </div>
-      <div class="select">
+      <div class="select flex-start">
         <span class="select-template">反馈内容</span>
-        <div>
+        <div class="wap">
           <div v-for="(item,index) in feed" :key='index'>
             <div class="ls-item flex-between" v-if=' item.type === 1 '>
-              <span>请输入单文本标题</span>
               <i-input placeholder="请输入单文本标题" v-model="item.context"/>
               <Icon type="ios-trash"  @click="deleItem(index,null)"/>
             </div>
             <div class="ls-item flex-between" v-else-if=' item.type === 6 '>
-              <span>请输入多行文本标题</span>
               <i-input placeholder="请输入多行文本标题" v-model="item.context"/>
               <Icon type="ios-trash"  @click="deleItem(index,null)"/>
             </div>
             <div class="ls-item"  v-else-if='item.type === 3 '>
-              <div class="flex-between">
-                <span>请输入单选标题</span>
+              <div class="item flex-between">
                 <i-input placeholder="请输入单选标题" v-model="item.context"/>
                 <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
               <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
-                <span>单选{{i+1}}</span>
                 <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
                 <Icon type="ios-trash"  @click="deleItem(index,i)"/>
               </div>
-              <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
+              <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
             <div class="ls-item" v-else>
-              <div class="flex-between">
-                <span>请输入多选标题</span>
+              <div class="item flex-between">
                 <i-input placeholder="请输入多选标题" v-model="item.context"/>
                 <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
               <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
-                <span>多选{{i+1}}</span>
                 <input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
                 <Icon type="ios-trash"  @click="deleItem(index,i)"/>
               </div>
-              <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
+              <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
           </div>
-          <div class="add">
+          <div class="add flex-center-start">
             <p>新增反馈项</p>
             <div class="flex-between">
               <i-button v-for="(item,index) in feedList" :key='index' class="add-item" @click="addItem(item.type)">{{ item.name }}</i-button>
             </div>
           </div>
-          </div>
+        </div>
       </div>
        <div class="select">
         <span class="select-template">上传图片</span>
          <i-switch style="margin-top:20px" v-model="args.isPicFlag"  :true-value='1' :false-value='0'></i-switch>
       </div>
       <div class="button-food">
-        <i-button @click="feedback()">保存</i-button>
-        <i-button @click="delFeed()">作废</i-button>
+        <i-button @click="feedback()" shape="circle" size='large' class="btn">保存</i-button>
+        <i-button @click="delFeed()" shape="circle" size='large' class="btn">作废</i-button>
       </div>
     </div>
   </div>
@@ -133,7 +127,11 @@ export default {
       let feed = this.feed
       if (m !== null) {
         let arr = feed[i].answer
-        arr.splice(m, 1)
+        if(arr.length<3){
+          this.$Message.warning("最少保留两项")
+        }else{
+          arr.splice(m, 1)
+        }
       } else {
         feed.splice(i, 1)
       }
@@ -142,8 +140,12 @@ export default {
     addSignIput(i){
       let feed = this.feed
       let arr = feed[i].answer
-      arr.push({ answer: null })
-      this.feed = feed
+      if(arr.length>5){
+        this.$Message.warning("最多添加六项")
+      }else{
+        arr.push({ answer: null })
+        this.feed = feed
+      }
     },
     getDetail(){
       getActiveFeedBack({actFkMouldId: this.args.actFkMouldId}).then(res => {
@@ -235,8 +237,7 @@ export default {
 }
 .content {
   background: #f3f3f3;
-  border-top: #e4e4e4 solid 1px;
-  margin-top: 20px;
+  padding: 20px;
   .content-activity {
     height: 50px;
     line-height: 50px;
@@ -245,7 +246,32 @@ export default {
   .select {
     display: flex;
     background: #ffffff;
+    padding: 10px 0;
     // align-items: center;
+    .wap{
+      .ls-item{
+        .ivu-input-wrapper{
+          width: 300px;
+        }
+        .btn{
+          margin-left: 100px;
+        }
+        .item{
+           margin-bottom: 10px;
+        }
+        margin-bottom: 10px;
+      }
+      .add{
+        .add-item{
+          margin-right: 20px;
+          margin-bottom: 15px;
+        }
+        p{
+          margin-right: 20px;
+        }
+      }
+      margin: 20px 0;
+    }
     .select-template {
       margin: 20px 50px;
       width: 100px;
@@ -307,17 +333,17 @@ export default {
   padding: 50px 20px;
   display: flex;
   justify-content: center;
-  .ivu-btn-default {
-    height: 40px;
-    width: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: #ffffff;
-    border: 1px solid #797979;
-    margin-right: 10px;
-    // color: #f3f3f3;/
+  .btn{
+    padding: 10px 30px !important;
+    background: #FF565A !important;
+    color: #fff !important;
+    border-color:none !important;
+    margin-right: 30px !important;
+  }
+  .btn:hover{
+    border:1px solid #FF565A !important;
+    color: #FF565A !important;
+    background: #fff !important;
   }
 }
 .actType{
