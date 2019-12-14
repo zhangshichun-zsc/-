@@ -346,6 +346,59 @@ export default {
         this.batchItemList = res.data
       });
     },
+    getTemplateDetail(e) {
+      templateMsg(e.activityId).then(res => {
+        console.log(res);
+        if (res.code == 200) {
+          this.batch = res.data;
+          if (!this.batch.workerIdList) {
+            this.batch.workerIdList = [{}];
+          }
+        }
+      });
+    },
+    uploadActFmFile() {
+      let file = this.$refs.files.files[0];
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          console.log(e);
+          this.$set(this.batch, "actCoverShowPic", e.target.result);
+          this.$set(this.batch, "actCoverPic", res.data);
+        };
+      });
+    },
+    cancelActFmImg() {
+      orgimgdel({ path: this.batch.actPic }).then(res => {
+        this.batch.actCoverShowPic = null;
+        this.batch.actCoverPic = null;
+        this.$Message.success("删除成功");
+      });
+    },
+    uploadActFile() {
+      let file = this.$refs.files.files[0];
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          console.log(e);
+          this.batch.actShowPic = e.target.result;
+          this.batch.actPic = res.data;
+        };
+      });
+    },
+    cancelActImg() {
+      orgimgdel({ path: this.batch.actPic }).then(res => {
+        this.batch.actShowPic = null;
+        this.batch.actPic = null;
+        this.$Message.success("删除成功");
+      });
+    },
     //现场负责人列表
     getLeaderList(e){
       console.log(this.batch.ownerUserName)
@@ -383,19 +436,6 @@ export default {
         this.tripSelf = true
         this.batch.actVehicle = ''
       }
-    },
-    //现场负责人列表
-    getLeaderList(e){
-      console.log(this.batch.ownerUserName)
-      leader({
-        name:this.batch.ownerUserName
-      }).then(res => {
-        console.log(res);
-        if(res.code==200){
-          this.addLeader = true
-          this.leaderList=res.data
-        }
-      });
     },
     //工作人员列表
     getWorkerList(e,index){
