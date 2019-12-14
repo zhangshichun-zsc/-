@@ -191,17 +191,17 @@
               <span class="first-span">退款设置</span>
               <div class="refund">
                 <p>
-                  <i-switch v-model="oneRole.refund.refundRule" @on-change="refund" :falseValue='3' :trueValue='1 || 2' />
+                  <i-switch v-model="oneRole.actRefund.refundRule" @on-change="refund" :falseValue='3' :trueValue='1 || 2' />
                   支持退款
                 </p>
               </div>
             </li>
-            <li v-if="oneRole.refund.refundRule==1 || oneRole.refund.refundRule==2">
-              <RadioGroup v-model="oneRole.refund.refundRule" vertical>
+            <li v-if="oneRole.actRefund.refundRule==1 || oneRole.actRefund.refundRule==2">
+              <RadioGroup v-model="oneRole.actRefund.refundRule" vertical>
                 <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
                 <Radio label="2" :trueValue='2'>
                   活动开始前
-                  <Input v-model="oneRole.refund.refundDays" style="width: 80px" />天可退款
+                  <Input v-model="oneRole.actRefund.refundDays" style="width: 80px" />天可退款
                 </Radio>
               </RadioGroup>
             </li>
@@ -580,6 +580,7 @@ export default {
   computed: {},
 
   created() {
+    console.log(this.oneRole)
     this.userId = this.$store.state.userId;
     this.getSignType();
     this.getBatchItem();
@@ -665,7 +666,7 @@ export default {
       }
     },
     getRefund(){
-      console.log(this.oneRole.refund.refundRule)
+      console.log(this.oneRole.actRefund.refundRule)
     },
     getResources(e){
       this.oneRole.resourcesId = e.resourcesId
