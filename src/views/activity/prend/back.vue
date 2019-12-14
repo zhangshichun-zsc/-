@@ -14,30 +14,26 @@
       </div>
       <div class="select">
         <span class="select-template">反馈简介</span>
-        <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}" v-model="details[0].context"></Input>
+        <Input  style="margin-top:20px" type="textarea" :autosize="{minRows: 4,maxRows: 4}" v-model="details[0].context"/>
       </div>
       <div class="select">
         <span class="select-template">反馈内容</span>
         <div>
           <div v-for="(item,index) in feed" :key='index'>
             <div class="ls-item flex-between" v-if=' item.type === 1 '>
-              <span>请输入单文本标题</span>
               <i-input placeholder="请输入单文本标题" v-model="item.context"/>
               <Icon type="ios-trash"  @click="deleItem(index,null)"/>
             </div>
             <div class="ls-item flex-between" v-else-if=' item.type === 6 '>
-              <span>请输入多行文本标题</span>
               <i-input placeholder="请输入多行文本标题" v-model="item.context"/>
               <Icon type="ios-trash"  @click="deleItem(index,null)"/>
             </div>
             <div class="ls-item"  v-else-if='item.type === 3 '>
               <div class="flex-between">
-                <span>请输入单选标题</span>
                 <i-input placeholder="请输入单选标题" v-model="item.context"/>
                 <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
               <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
-                <span>单选{{i+1}}</span>
                 <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
                 <Icon type="ios-trash"  @click="deleItem(index,i)"/>
               </div>
@@ -45,25 +41,23 @@
             </div>
             <div class="ls-item" v-else>
               <div class="flex-between">
-                <span>请输入多选标题</span>
                 <i-input placeholder="请输入多选标题" v-model="item.context"/>
                 <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
               <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
-                <span>多选{{i+1}}</span>
                 <input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
                 <Icon type="ios-trash"  @click="deleItem(index,i)"/>
               </div>
               <Button type="primary" ghost  @click="addSignIput(index)">+</Button>
             </div>
           </div>
-          <div class="add">
+          <div class="add flex-center-start">
             <p>新增反馈项</p>
             <div class="flex-between">
               <i-button v-for="(item,index) in feedList" :key='index' class="add-item" @click="addItem(item.type)">{{ item.name }}</i-button>
             </div>
           </div>
-          </div>
+        </div>
       </div>
        <div class="select">
         <span class="select-template">上传图片</span>
@@ -235,8 +229,7 @@ export default {
 }
 .content {
   background: #f3f3f3;
-  border-top: #e4e4e4 solid 1px;
-  margin-top: 20px;
+  padding: 20px;
   .content-activity {
     height: 50px;
     line-height: 50px;
@@ -245,6 +238,7 @@ export default {
   .select {
     display: flex;
     background: #ffffff;
+    padding: 10px 0;
     // align-items: center;
     .select-template {
       margin: 20px 50px;
