@@ -61,9 +61,9 @@
           </ul>
         </div>
       </div>
-      <div class="btn">
-        <Button class="table-btn">拒绝</Button>
-        <Button class="table-btn active" @click="adopt">通过</Button>
+      <div class="btn" v-if='statusText=="待审核"'>
+        <Button class="table-btn" @click="adopt(3)">拒绝</Button>
+        <Button class="table-btn active" @click="adopt(2)">通过</Button>
       </div>
     </div>
   </div>
@@ -93,7 +93,8 @@ export default {
       list: [],
       datas: ['2019-08-21', '2019-10-1'],
       actlist: [],
-      reason:''
+      reason:'',
+      statusText:''
     }
   },
 
@@ -101,7 +102,9 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.statusText=this.$route.query.statusText
+  },
   mounted() {
     this.getapprovaldet()
   },
@@ -129,12 +132,12 @@ export default {
       })
     },
     //通过
-    adopt() {
-      console.log(this.datas)
+    adopt(e) {
+      console.log(e)
       programApproval({
         userId:this.$store.state.userId, 
-        auditId:this.list.auditId, 
-        type:2,
+        auditId:this.$route.query.auditId, 
+        type:e,
       }).then(res=>{
         console.log(res)
         if(res.code==200){
