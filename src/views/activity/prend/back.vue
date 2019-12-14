@@ -29,7 +29,7 @@
               <Icon type="ios-trash"  @click="deleItem(index,null)"/>
             </div>
             <div class="ls-item"  v-else-if='item.type === 3 '>
-              <div class="flex-between">
+              <div class="item flex-between">
                 <i-input placeholder="请输入单选标题" v-model="item.context"/>
                 <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
@@ -40,7 +40,7 @@
               <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
             <div class="ls-item" v-else>
-              <div class="flex-between">
+              <div class="item flex-between">
                 <i-input placeholder="请输入多选标题" v-model="item.context"/>
                 <Icon type="ios-trash"  @click="deleItem(index,null)"/>
               </div>
@@ -246,7 +246,7 @@ export default {
           width: 300px;
         }
         .btn{
-          margin-right: 100px;
+          margin-left: 100px;
         }
         .item{
            margin-bottom: 10px;
@@ -254,6 +254,10 @@ export default {
         margin-bottom: 10px;
       }
       .add{
+        .add-item{
+          margin-right: 20px;
+          margin-bottom: 15px;
+        }
         p{
           margin-right: 20px;
         }
@@ -322,9 +326,11 @@ export default {
   display: flex;
   justify-content: center;
   .btn{
+    padding: 10px 30px !important;
     background: #FF565A !important;
     color: #fff !important;
     border-color:none !important;
+    margin-right: 30px !important;
   }
   .btn:hover{
     border:1px solid #FF565A !important;
