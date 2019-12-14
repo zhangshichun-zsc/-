@@ -16,21 +16,14 @@
               type="text"
               v-model="formValidate.user"
               placeholder="请输入用户名称"
-              @keyup.enter="handleSubmit()"
             />
 
             <input
               type="password"
               v-model="formValidate.password"
               placeholder="请输入登陆密码"
-              @keyup.enter="handleSubmit()"
             />
-
-            <a
-              class="login-btn"
-              href="javascript:;"
-              @click="handleSubmit()"
-              @keyup.enter="handleSubmit()"
+            <a class="login-btn" href="javascript:;" @click="handleSubmit()"
               >登录</a
             >
           </form>
@@ -128,7 +121,9 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.util.keydowenter(this, this.getlogin);
+  },
   mounted() {},
   methods: {
     //     get(){
