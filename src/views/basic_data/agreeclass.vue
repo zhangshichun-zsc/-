@@ -11,14 +11,14 @@
           <span>数据列表</span>
         </div>
         <div class="flex-center-end">
-          <Button class="table-btn" @click="add">添加</Button>
+          <Button class="table-btns" @click="add">添加</Button>
         </div>
         <Modal v-model="modal1" title="添加分类">
           <Form :model="formItem" ref="formItem" :rules="ruleValidate" :label-width="120">
             <FormItem label="类型名称" prop="name">
               <Input v-model="formItem.name" />
             </FormItem>
-            <FormItem label="类型名称" prop="type">
+            <FormItem label="类型" prop="type">
               <Select v-model="formItem.type" style="width:200px">
                 <Option v-for="item in list" :value="item.value" :key="item.value">{{ item.name }}</Option>
               </Select>
@@ -57,7 +57,10 @@
           </div>
         </Modal>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+      <div class="min-height">
+         <Table border :columns="columns" :data="data"></Table>
+      </div>
+
       <!-- <div class="pages">
          <Page
           :total="dataCount"
@@ -108,14 +111,19 @@ export default {
         {
           type: "selection",
           width: 60,
-          align: "center"
+          align: "center",
+
         },
         {
           title: "协议名称",
-          key: "dicName"
+          key: "dicName",
+          align: "center",
+
         },
         {
           title: "类别",
+          align: "center",
+
           render: (h, params) => {
             let type = "";
             if (params.row.typeFlag == "16") {
@@ -129,7 +137,8 @@ export default {
         {
           title: "是否显示",
           key: "status",
-          algin: "center",
+           align: "center",
+
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -155,6 +164,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+
           render: (h, params) => {
             return h("div", [
               h(
@@ -319,49 +329,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
- .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
+@import "../../libs/basicdata.css";
 </style>

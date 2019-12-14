@@ -3,7 +3,7 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
@@ -13,16 +13,16 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button @click="query()">查询结果</Button>
+
         </div>
-      </div>
+      </div> -->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>组织</span>
+          <span>组织:</span>
           <Input size="large" placeholder="请输入" class="inpt" v-model="args.orgName" />
         </div>
         <div class="flex-center-start">
-          <span>创建时间</span>
+          <span>创建时间:</span>
           <Row>
             <DatePicker
               :open="open"
@@ -39,6 +39,7 @@
           </Row>
         </div>
         <div class="flex-center-end">
+          <Button class="table-btns" @click="query()">查询结果</Button>
           <Button class="table-btns" @click="modal1 = true">新增模板</Button>
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
@@ -81,13 +82,14 @@
             <span>数据列表</span>
           </div>
           <div class="flex-center-end">
-            <Select size="small" class="inpt" style="width:140px" placeholder="显示条数" @on-change="changeNum">
+            <Select  class="inpt" style="width:100px" placeholder="显示条数" @on-change="changeNum">
               <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
             </Select>
-            <Select size="small" class="inpt" style="width:140px" placeholder="排序方式" @on-change="changeSort">
+            <Select  class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
               <Option value="create_at desc">升序</Option>
               <Option value="create_at asc">降序</Option>
             </Select>
+
           </div>
         </div>
 
@@ -160,6 +162,7 @@ export default {
           title: "失效时间",
           key: "inEffectiveAt",
           width: 140,
+          align: "center",
 
         },
         {
@@ -231,6 +234,7 @@ export default {
       },
       volun: [],
       numList: [10, 15, 20],
+
       options: {
         disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;

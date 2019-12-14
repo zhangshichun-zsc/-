@@ -4,32 +4,35 @@
 
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-          <Button class="integral-rig" @click="set">志愿活动积分比例设置</Button>
-          <Button class="integral-rig" :to="{ name: 'vunintegral_set' }">积分规则设置</Button>
+
           <div class="integral-rig"  @click="Retractbtn">
             <Icon type="ios-arrow-down" v-if="Retract==true" />
               <Icon type="ios-arrow-up" v-if="Retract==false" />
               <span v-if="Retract==true">收起筛选</span>
               <span v-if="Retract==false">启用筛选</span>
           </div>
-          <Button class="integral-rig" @click="query">查询结果</Button>
+
         </div>
-      </div>
+      </div> -->
       <div class="flex-center-start integral-body" v-if="Retract==true">
-        <div class="flex-center-start">
-          <span>用户账户</span>
+        <div class="flex-center-start name">
+          <span>用户账户:</span>
           <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="userAccount" />
         </div>
-        <div class="flex-center-start">
-          <span>用户昵称</span>
+        <div class="flex-center-start name">
+          <span>用户昵称:</span>
           <Input size="large" placeholder="用户昵称" class="inpt" v-model="nickname" />
         </div>
+         <Button class="table-btns" @click="query">查询结果</Button>
+         <Button class="table-btns" @click="set">志愿活动积分比例设置</Button>
+          <Button class="table-btns" @click="sets">积分规则设置</Button>
+
       </div>
     </div>
     <div class="integral-table">
@@ -475,34 +478,37 @@ export default {
     },
     modalCancel2() {
       this.modal2 = false;
+    },
+
+     sets(){
+      this.$router.push({
+        name:'vunintegral_set'
+      })
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
-}
-.integral-header .integral-rig {
-  margin-left: 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
 
 
-@import "../../libs/basicdata.css"
+.integral-body{
+  padding: 30px 20px 20px 20px;
+
+  display: flex;
+  height: 80px;
+  background: #ffffff;
+  border: 0;
+
+}
+.name{
+  span{
+    display: block;
+    width: 120px;
+  };
+  .inpt{
+    margin-right: 30px;
+  }
+}
+
+@import "../../libs/basicdata.css";
 </style>

@@ -67,22 +67,25 @@ export default {
           title: "职业名称",
           key: "dicName",
           align: "center",
-          width: 260
+           width: 300
         },
         {
           title: "创建时间",
           key: "creatAt",
-          align: "center"
+          align: "center",
+          width: 140
         },
         {
           title: "创建人",
           key: "userName",
-          align: "center"
+          align: "center",
+           width: 300
         },
         {
           title: "有效状态",
           key: "status",
-          algin: "center",
+           align: "center",
+            width: 150,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -110,6 +113,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width:172,
           render: (h, params) => {
             return h("div", [
               h(

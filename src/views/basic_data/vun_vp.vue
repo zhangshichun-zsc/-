@@ -86,7 +86,7 @@ export default {
         {
           title: "有效状态",
           key: "status",
-          algin: "center",
+          align: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {

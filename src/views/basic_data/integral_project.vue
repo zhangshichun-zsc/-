@@ -8,7 +8,7 @@
       <div class="table-header flex-center-between">
         <div>
 
-          <span>已选择{{arr.length}}</span>
+          <!-- <span>已选择{{arr.length}}</span> -->
           <!-- <Button class="table-btn">批量删除</Button> -->
           <Button class="table-btns"  @click="added">新增项目</Button>
           <Modal v-model="modal1" :title="text" class="mol">
@@ -135,7 +135,7 @@ export default {
         {
           title: "有效状态",
           key: "status",
-          algin: "center",
+          align: "center",
            width: 100,
           render: (h, params) => {
             return h("div", [
@@ -243,7 +243,6 @@ export default {
         validFlag: this.validFlag
       };
       this.params = this.util.remove(params);
-
       projectsetlist(this.params).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
@@ -270,7 +269,8 @@ export default {
       projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
           this.$Message.info("新增成功");
-          this.modal1 = true;
+          this.getprojectsetlist();
+          this.modal1 = false;
         }
         console.log(res);
       });
