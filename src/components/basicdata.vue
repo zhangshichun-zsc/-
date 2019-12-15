@@ -27,13 +27,14 @@
         </div>
         <div class="flex-center-start">
           <span>有效状态:</span>
-          <Select v-model="search.validFlag" style="width: 160px;margin-left:20px">
+          <Select v-model="search.validFlag" class="inpt" >
             <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.name }}</Option>
           </Select>
         </div>
         <div class="flex-center-start">
           <span>创建时间/时间段:</span>
           <DatePicker
+           class="inpt"
             style="width: 180px"
             :options="set"
             type="date"
@@ -102,69 +103,51 @@ export default {
   methods: {
     startTimeChange(e) {
       this.search.createTimestamp[0] = e;
-      if(this.search.createTimestamp[1]==''){
-        return
-      }
-      this.end = {
-        disabledDate: date => {
-          let startTime =
-            this.search.createTimestamp[0] != ""
-              ? new Date(this.search.createTimestamp[0]).valueOf() -
-                1 * 24 * 60 * 60 * 1000
-              : "";
-          // console.log(startTime)
-          return date && date.valueOf() < startTime;
-        }
-      };
+      // if(this.search.createTimestamp[1]==''){
+      //   return
+      // }
+      // this.end = {
+      //   disabledDate: date => {
+      //     let startTime =
+      //       this.search.createTimestamp[0] != ""
+      //         ? new Date(this.search.createTimestamp[0]).valueOf() -
+      //           1 * 24 * 60 * 60 * 1000
+      //         : "";
+      //     // console.log(startTime)
+      //     return date && date.valueOf() < startTime;
+      //   }
+      // };
       console.log(e);
     },
 
     endTimeChange(e) {
       this.search.createTimestamp[1] = e;
-      let endTime =
-        this.search.createTimestamp[1] != ""
-          ? new Date(this.search.createTimestamp[1]).valueOf()
-          : "";
-      this.set = {
-        disabledDate(date) {
-          return date && date.valueOf() > endTime;
-        }
-      };
+      // let endTime =
+      //   this.search.createTimestamp[1] != ""
+      //     ? new Date(this.search.createTimestamp[1]).valueOf()
+      //     : "";
+      // this.set = {
+      //   disabledDate(date) {
+      //     return date && date.valueOf() > endTime;
+      //   }
+      // };
       console.log(e);
     },
 
-    // handleChange(e) {
-    //   let start = e[0];
-    //   let end = e[1];
-    //   if (start && end) {
-    //     if (start === end) {
-    //       start = start + " 00:00:00";
-    //       end = end + " 23:59:59";
-    //     } else {
-    //       start = start + " 00:00:00";
-    //       end = end + " 00:00:00";
-    //     }
-    //   }
-    //   this.search.createTimestamp[0] = start;
-    //   this.search.createTimestamp[1] = end;
-    // },
 
     //查询
     query() {
       if (this.search.createTimestamp[0] && this.search.createTimestamp[1]) {
-        if (this.search.createTimestamp[0] === this.search.createTimestamp[1]) {
+        if (this.search.createTimestamp[0] < this.search.createTimestamp[1]) {
           this.search.createTimestamp[0] =
             this.search.createTimestamp[0] + " 00:00:00";
           this.search.createTimestamp[1] =
             this.search.createTimestamp[1] + " 23:59:59";
         } else {
-          this.search.createTimestamp[0] =
-            this.search.createTimestamp[0] + " 00:00:00";
-          this.search.createTimestamp[1] =
-            this.search.createTimestamp[1] + " 00:00:00";
+          this.search.createTimestamp=["", ""]
+          this.$Message.error('时间选择错误请重新选择')
         }
       }
-
       console.log(this.search);
       this.$emit("query", this.search);
     }
@@ -200,7 +183,7 @@ export default {
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
-  margin-left: 15px;
+  margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;

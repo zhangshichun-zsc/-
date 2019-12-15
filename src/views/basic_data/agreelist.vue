@@ -2,18 +2,18 @@
 <template>
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
-     <div class="flex-center-start integral-body" >
+     <div class="flex-center-start integral-bodyss" >
         <div class="flex-center-start name">
           <span>甲乙方:</span>
           <Input size="large" placeholder="甲乙方名称" class="inpt" v-model="agreementObject" />
         </div>
         <div class="flex-center-start name">
           <span>协议分类:</span>
-           <Select v-model="agreementType" style="width: 160px;margin-left:20px" placeholder="协议类型">
+           <Select v-model="agreementType" class="inpt" style="width: 200px"  placeholder="协议类型">
             <Option v-for="item in typelist" :value="item.dataKey" :key="item.dataKey">{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <Button class="table-btns" @click="query">查询结果</Button>
+        <Button class="search" @click="query">查询</Button>
       </div>
     <div class="integral-table">
       <div class="table-header flex-between">
@@ -288,7 +288,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-body {
+.integral-bodyss {
   padding: 30px 20px 20px 20px;
 
   display: flex;
@@ -299,7 +299,7 @@ export default {
 .name {
   span {
     display: block;
-    width: 120px;
+    width: 100px;
   }
   .inpt {
     margin-right: 30px;

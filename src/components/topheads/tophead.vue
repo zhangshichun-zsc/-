@@ -4,7 +4,7 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <div class="con bk">
-        <div class="title bk-xia flex-center-start">
+        <!-- <div class="title bk-xia flex-center-start">
           <p>
             <Icon type="ios-search" />
             <span>筛选查询</span>
@@ -16,11 +16,10 @@
               <span v-if="Retract==true">收起筛选</span>
               <span v-if="Retract==false">启用筛选</span>
             </div>
-            <Button @click="query">查询结果</Button>
           </div>
-        </div>
-        <div class="con">
-          <Form inline class="flex-center-start" v-if="Retract==true">
+        </div> -->
+        <div>
+          <Form class="flexs" inline  v-if="Retract==true">
             <div v-for="(item,index) in top" :key="index">
               <FormItem :label=item.name prop="name" v-if="item.type=='input'">
                 <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"/>
@@ -33,6 +32,9 @@
               <FormItem :label=item.name prop="CreationTime" v-if="item.type=='date'">
                 <DatePicker type="date" placeholder="请选择日期" v-model="item.value" style="width: 150px" :transfer=true></DatePicker>
               </FormItem>
+            </div>
+            <div class="flex-center-start">
+                 <Button class="button-red mdown"  @click="query">查询</Button>
             </div>
           </Form>
         </div>
@@ -131,18 +133,15 @@ export default {
   margin-top: 10px;
   padding: 5px;
 }
-.bk {
-  border: 1px solid #e4e4e4;
+.flexs{
+  display: flex;
+  align-items: center;
 }
-.bk-xia {
-  border-bottom: 1px solid #e4e4e4;
-}
-.bk-zy {
-  border-left: 1px solid #e4e4e4;
-  border-right: 1px solid #e4e4e4;
+.mdown{
+  margin-bottom: 26px;
 }
 .title {
-  background-color: #f3f3f3;
+  background-color: #fff;
   justify-content: space-between;
   padding: 5px 20px;
 }

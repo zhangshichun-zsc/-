@@ -1,11 +1,50 @@
 <!-- 证书维护（志愿者） -->
 <template>
   <div class="integral">
+     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-      <Navigation :labels="navigation1"></Navigation>
+
       <div class="integral-left">
-        <div class="imgs"></div>
+        <div class="title">
+          <p>志愿服务证明</p>
+          <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
+          <p>
+            为融爱融乐的心智障碍者融合服务提供了珍贵的 小时的志愿支持。
+            感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
+            生命的多元，让我们的社会更平等、文明、融合。
+            期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
+          </p>
+          <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
+         <div class="head ">
+          <img class="head-left" src="../../assets/images/prend/1.png" alt=""/>
+           <img  class="head-right" src="../../assets/images/prend/2.png" alt=""/>
+        </div>
+        <div>
+          <span>北京市海淀区融爱融乐</span>
+          <span>心智障碍者家庭支持中心</span>
+          <span>年 月  日</span>
+        </div>
+
+        </div>
+
+
+
       </div>
+      <div class="integral-right">
+        <div class="top">
+          <p>更换LOGO</p>
+           <p>更换尾页</p>
+        </div>
+        <div class="bottom">
+          <div class="textimg">
+          </div>
+          <h5>图片最大为*</h5>
+          <p class="btn"><Button type="success">上传图片</Button></p>
+        </div>
+          <p class="btn"><Button type="success">保存图片</Button></p>
+
+
+    </div>
 
       <!-- <Row>
       <Col span="12">
@@ -77,7 +116,8 @@ export default {
       show: false,
       navigation1: {
         head: "积分查询(会员)"
-      }
+      },
+      value8: ""
     };
   },
   created() {
@@ -145,29 +185,96 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header{
-  position: relative;
+.integral-header {
+  width: 1000px;
   height: 1000px;
+  display: flex;
+   background: #ffffff;
+  justify-content: space-between;
+  padding-top: 30px;
 }
 .integral-left {
-  position: absolute;
-  z-index: 2;
-  width: 530px;
-  height: 830px;
-  left: 0;
-  top: 60px;
-  background: url(../../assets/images/prend/vun.png) no-repeat;
-  background-size: contain;
+  height: 900px;
+  width: 100%;
 
-  .imgs {
-    position: absolute;
-    top: 20px;
-    left: 23px;
-    z-index: 3;
-    width: 488px;
-    height: 230px;
-    background: url(../../assets/images/prend/4.png) no-repeat;
+
+
+  .title {
+    padding-top: 200px;
+    text-align: center;
+    padding-right: 33px;
+    width: 530px;
+    height: 830px;
+    left: 0;
+    top: 60px;
+    background: url(../../assets/images/prend/title.png) no-repeat;
     background-size: contain;
+
+    p {
+      width: 100%;
+      line-height: 36px;
+      font-size: 20px;
+      text-align: center;
+    }
+  }
+  .head {
+    display: flex;
+    margin-left: 50px;
+    .head-left {
+      height: 70px;
+      width: 70px;
+      background: url(../../assets/images/prend/1.png) no-repeat;
+      background-size: contain;
+    }
+    .head-right {
+       height: 70px;
+      width: 130px;
+      background: url(../../assets/images/prend/2.png) no-repeat;
+      background-size: contain;
+    }
   }
 }
+
+
+.integral-right{
+  width: 700px;
+  height: 500px;
+  .top{
+    height: 25px;
+
+    width: 100%;
+    display: flex;
+    p{
+      width: 50%;
+      font-size: 16px;
+      text-align: center;
+        line-height: 25px;
+      border: black 1px solid;
+    }
+
+  }
+
+  .bottom{
+    height: 100%;
+    width: 100%;
+    background: #eeee;
+    border: black 1px solid;
+    border-top: black 0 solid;
+    padding-top: 30px;
+    .textimg{
+      margin: 0px auto;
+      height: 300px;
+      width: 300px;
+      background: #ffffff;
+border:  black 1px solid;
+    }
+
+  }
+
+  .btn{
+      text-align: center;
+    }
+}
+
+
 </style>
