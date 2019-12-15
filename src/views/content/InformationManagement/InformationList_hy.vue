@@ -208,7 +208,8 @@ export default {
                       this.$router.push({
                         name: "InformationDetails_hy",
                         query: {
-                          informationId: this.data[params.index].informationId
+                          informationId: params.row.informationId,
+                          informationTypeText:params.row.informationTypeText
                         }
                       });
                     }

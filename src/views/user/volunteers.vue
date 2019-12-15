@@ -31,7 +31,8 @@
             v-model.number="startAt"
             style="width: 140px"
           />
-          <span>  ~  </span>
+          <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+          <DatePicker
           <Input
             placeholder="请选择"
             v-model.number="endAt"

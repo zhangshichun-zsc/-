@@ -13,7 +13,7 @@
       <div class="table-header flex-center-between">
             <Form :model="formItem" :label-width="80">
                <FormItem label="问卷简介" >
-                  <Input v-model="formItem.textarea"type="textarea" style="width: 500px" :autosize="{minRows: 5,maxRows: 5}"  ></Input>
+                  <Input v-model="formItem.textarea" type="textarea" style="width: 500px" :autosize="{minRows: 5,maxRows: 5}"  ></Input>
                </FormItem>
                 <FormItem label="问卷内容">
                    <span>1、最近半年，你是否有参与融融活动？</span><br>
@@ -45,7 +45,7 @@
                    <Button>保存</Button>
                    <Button>+添加内容</Button>
               </FormItem>
-            </Form> 
+            </Form>
       </div>
       <div class="pages">
         <Page :total="100" show-elevator show-total size="small" />
@@ -71,9 +71,9 @@ export default {
                 },
         navigation1: {
         head: "问卷调查(会员)"
-       },   
+       },
       data: [
-     
+
       ]
     };
   },

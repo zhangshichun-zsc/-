@@ -30,7 +30,7 @@
             placeholder="请选择开始时间"
             v-model="startAt"
           ></DatePicker>
-          <span>-</span>
+          <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
           <DatePicker
             style="width: 180px"
             type="date"
@@ -1225,7 +1225,7 @@ export default {
 }
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
+  background: #fff  ;
   border: 1px solid #eee;
   display: flex;
   justify-content: space-between;

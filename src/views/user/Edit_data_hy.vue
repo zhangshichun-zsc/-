@@ -1389,7 +1389,8 @@ export default {
     },
     //修改标签弹窗
     modifyLabel() {
-      this.modallable = true;
+      this.$Message.info("暂无此功能！")
+      // this.modallable = true;
     },
     // 隐藏 空值
     showBasic() {

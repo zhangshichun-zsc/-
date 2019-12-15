@@ -116,10 +116,10 @@ export default {
         { value: 20, label: 20 }
       ],
       sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
+        { value: "create_at asc", label: "正序" },
+        { value: "create_at desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "create_at desc",
       top: [
         { name: "消息标题", type: "input", value: "" },
         { name: "发布时间", type: "date", value: "" }
@@ -156,7 +156,7 @@ export default {
         content:this.content,
         channelFlag: this.channelFlag,
         createAt:this.createAt,
-        page: { page: this.page, size: this.size }
+        page: { page: this.page, size: this.size,sort:this.sort }
       }
       params=this.util.remove(params)
       console.log(params)

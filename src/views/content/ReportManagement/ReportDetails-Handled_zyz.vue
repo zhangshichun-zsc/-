@@ -1,4 +1,4 @@
-<!--举报详情-已处理(志愿者)-->
+<!--举报详情-已处理(会员)-->
 <template>
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
@@ -9,48 +9,48 @@
         </p>
       </div>
       <div class="con bk">
-        <table width="100%;" v-for="details in ReportData">
+        <table width="100%;">
           <tr>
             <td>举报理由</td>
-            <td>{{details.ReportReason}}</td>
+            <td>{{ReportData.reportReasonText}}</td>
           </tr>
           <tr>
             <td>举报人</td>
-            <td>{{details.Whistleblowers}}</td>
+            <td>{{ReportData.reportUserName}}</td>
           </tr>
           <tr>
             <td>举报时间</td>
-            <td>{{details.ReportTime}}</td>
+            <td>{{ReportData.reportTimestamp}}</td>
           </tr>
           <tr>
             <td>举报对象</td>
-            <td>{{details.ReportObject}}</td>
+            <td>{{ReportData.activityName}}</td>
           </tr>
           <tr>
             <td>举报状态</td>
-            <td>{{details.ReportStatus}}</td>
+            <td>{{ReportData.reportStatus}}</td>
           </tr>
           <tr>
             <td>举报内容</td>
-            <td>{{details.ReportContent}}</td>
+            <td>{{ReportData.reportReasonText}}</td>
           </tr>
         </table>
-        <table width="100%;" v-for="DealWith in DealWithData">
+        <table width="100%;">
           <tr>
             <td>处理人员</td>
-            <td>{{DealWith.DealWithPersonnel}}</td>
+            <td>{{ReportData.answerUserName}}</td>
           </tr>
           <tr>
             <td>处理时间</td>
-            <td>{{DealWith.ProcessingTime}}</td>
+            <td>{{ReportData.answerTimestamp}}</td>
           </tr>
           <tr>
             <td>处理结果</td>
-            <td>{{DealWith.ProcessingResults}}</td>
+            <td>{{ReportData.reportDealResultText}}</td>
           </tr>
           <tr>
             <td>处理备注</td>
-            <td>{{DealWith.ProcessingNote}}</td>
+            <td>{{ReportData.answerContent?ReportData.answerContent:''}}</td>
           </tr>
         </table>
       </div>
@@ -59,31 +59,36 @@
 </template>
 
 <script>
+import { formatDate } from '@/request/datatime'
+import { ReportDel } from '../../../request/api'
 export default {
   data() {
     return {
       navigation1: {
-        head: '举报详情-已处理(志愿者)'
+        head: '举报详情-已处理(会员)'
       },
-      ReportData: [
-        {
-          ReportReason: '存在不良信息',
-          Whistleblowers: '王',
-          ReportTime: '2019-03-22 11:05',
-          ReportObject: '5-12 行走在夏日',
-          ReportStatus: '已处理',
-          ReportContent: '暴露隐私'
-        }
-      ],
-      DealWithData: [
-        {
-          DealWithPersonnel: 'admin',
-          ProcessingTime: '2019-07-19 14:48:38',
-          ProcessingResults: '无效举报',
-          ProcessingNote: '无'
-        }
-      ]
+
+      ReportData: {}
     }
+  },
+  mounted() {
+    this.getReportDel()
+  },
+  methods: {
+    // 详情
+    getReportDel(){
+      ReportDel({
+        reportId:this.$route.query.reportId
+      }).then(res=>{
+        if(res.code==200){
+          this.ReportData=res.data
+          this.ReportData.reportTimestamp=formatDate(res.data.reportTimestamp)
+          this.ReportData.answerTimestamp=formatDate(res.data.answerTimestamp)
+        }
+        console.log(res)
+      })
+    },
+
   }
 }
 </script>

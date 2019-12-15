@@ -1395,7 +1395,8 @@ export default {
       });
     },
     modifyLabel() {
-      this.modallable = true;
+        this.$Message.info("暂无此功能！")
+      // this.modallable = true;
     },
     // 隐藏 空值
     showBasic() {

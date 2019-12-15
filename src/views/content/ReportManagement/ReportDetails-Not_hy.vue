@@ -41,10 +41,10 @@
             <td><Input size="small" style="width: 8rem"  v-model="ReportData.answerContent" /></td>
           </tr>
         </table>
-        <div class="but" v-if="ReportData.reportStatusText=='未处理'" >
-          <Button size="small" type="success">有效举报</Button>
-          <Button size="small" type="error">恶意举报</Button>
-          <Button size="small" type="error">无效报举</Button>
+        <div class="but"  >
+          <Button size="small" type="success" v-for="(item,index) in list" :key="index" @click="btns(item.dicId)">{{item.dicName}}</Button>
+          <!-- <Button size="small" type="error">恶意举报</Button>
+          <Button size="small" type="error">无效报举</Button> -->
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
 </template>
 <script>
 import { formatDate } from '@/request/datatime'
-import {ReportDel,Reporttext} from '@/request/api'
+import {ReportDel,Reporttext,Reportdeles} from '@/request/api'
 export default {
   data() {
     return {
@@ -60,14 +60,25 @@ export default {
         head: '举报详情-未处理(会员)'
       },
       ReportData: {},
-      text:''
+      text:'',
+      list:[],
+      params:{}
     }
   },
   mounted(){
+
+    if(this.$route.query.state==1){
+      this.navigation1.head='举报详情-未处理(会员)'
+
+    }else if(this.$route.query.state==2){
+       this.navigation1.head='举报详情-未处理(志愿者)'
+    }
     this.getReportDel()
-    this.getReporttext()
+     this.getReporttext()
+
   },
   methods:{
+    // 详情
     getReportDel(){
       ReportDel({
         reportId:this.$route.query.reportId
@@ -79,10 +90,40 @@ export default {
         console.log(res)
       })
     },
+
+     //批量操作
+    getReportdeles(id){
+      let params = {
+        reportIds:this.$route.query.reportId,
+        dealUserId:this.$store.state.userId,
+        reportDealResult:id,
+        remark:this.ReportData.answerContent,
+      }
+      this.params =this.util.remove(params)
+      Reportdeles(params).then(res=>{
+        if(res.code==200){
+          this.$Message.info('操作成功');
+          if(this.$route.query.state==1){
+            this.$route.push({path:'/ReportList_hy'})
+          }else{
+            this.$route.push({path:'/ReportList_zyz'})
+          }
+
+        }
+        console.log(res)
+      })
+    },
+
+    //按钮
+    btns(id){
+      this.getReportdeles(id)
+    },
+    //文本
     getReporttext(){
       Reporttext({
       }).then(res=>{
         if(res.code==200){
+          this.list=res.data
 
         }
         console.log(res)

@@ -28,7 +28,7 @@
             <div class="text1">
               <p>
                 <span>发送时间：{{item.createAt}}</span>
-                <span class="black">发送对象：{{item.title}}</span>
+                <span class="black">发送对象：{{item.userName}}</span>
               </p>
             </div>
           </div>
@@ -118,11 +118,13 @@ export default {
         { value: 15, label: 15 },
         { value: 20, label: 20 }
       ],
-      sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
+       sorting: [
+        { value: "create_at asc", label: "正序" },
+        { value: "create_at desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "create_at desc",
+
+
       top: [
         { name: "关键词", type: "input", value: "" },
         { name: "发布时间", type: "date", value: "" }
@@ -149,7 +151,7 @@ export default {
         content:this.content,
         channelFlag: this.channelFlag,
         createAt:this.createAt,
-        page: { page: this.page, size: this.size }
+        page: { page: this.page, size: this.size,sort:this.sort}
       }
       params=this.util.remove(params)
       console.log(params)
