@@ -85,7 +85,7 @@
                   <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                        <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -166,10 +166,10 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-pic" v-if='batch.actCoverShowPic == null'>
-                    <div class="" @click="()=>{ this.$refs.files.click()}">
-                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFmFile()" style="display:none" >
-                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
+                    <div class="" @click="()=>{ this.$refs.filefm.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -182,9 +182,9 @@
                 <span class="first-span">主题图片</span>
                 <div>
                   <div class="first-pic" v-if='batch.actShowPic == null'>
-                    <div class="" @click="()=>{ this.$refs.files.click()}">
-                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFile()" style="display:none" >
-                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                    <div class="" @click="()=>{ this.$refs.filezt.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -406,7 +406,7 @@
                   <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                        <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -493,9 +493,9 @@
                 <span class="first-span">图片</span>
                 <div style="margin-left: 30px;">
                   <div class="first-pic" v-if='partner.partPicShow == null'>
-                      <div class="" @click="()=>{ this.$refs.files.click()}">
+                      <div class="" @click="()=>{ this.$refs.file.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadPartnerFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                        <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -1109,7 +1109,7 @@ export default {
       });
     },
     uploadActFmFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filefm.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -1130,7 +1130,7 @@ export default {
       });
     },
     uploadActFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filezt.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -1138,8 +1138,8 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           console.log(e);
-          this.batch.actShowPic = e.target.result;
-          this.batch.actPic = res.data;
+          this.$set(this.batch, "actShowPic", e.target.result);
+          this.$set(this.batch, "actPic", res.data);
         };
       });
     },
@@ -1187,6 +1187,14 @@ export default {
 }
 .first-pic{
   width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px solid;
+  position: relative;
+}
+.first-picfm{
+  width: 200px;
   height: 200px;
   text-align: center;
   line-height: 200px;

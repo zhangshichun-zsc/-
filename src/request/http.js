@@ -20,7 +20,7 @@ const SERVICE_URL = {
     "http://192.168.0.5:8084/rhzg-web", // 王盛 6
     "https://rhzghyuat.co-inclusion.org/rhzg-web"  //
   ],
-  API_INDEX: 1
+  API_INDEX: 0
 }
 
 export const SERVER_URl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
