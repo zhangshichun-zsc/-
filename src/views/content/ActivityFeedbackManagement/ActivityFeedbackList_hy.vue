@@ -84,29 +84,33 @@ export default {
       columns: [
         {
           type: 'selection',
-          width: 60,
+          width: 80,
           align: 'center'
         },
         {
           title: '活动名称',
           key: 'activityName',
-          align: 'center'
+          align: 'center',
+          width: 500,
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: '项目名称',
           key: 'categoryName',
-          align: 'center'
+          align: 'center',
+          width: 300,
         },
         {
           title: '反馈人数',
           key: 'feedbackNum',
-          width: 100,
+          width: 180,
           align: 'center'
         },
         {
           title: '活动时间',
           key: 'activityTimestamp',
-          width: 180,
+          width: 250,
           align: 'center',
           render: (h, params) => {
             return h('div', [h('p', formatDate(params.row.activityTimestamp))])
@@ -115,8 +119,9 @@ export default {
         {
           title: '操作',
           key: 'action',
-          width: 150,
+          width: 300,
           align: 'center',
+          fixed: 'right',
           render: (h, params) => {
             return h('div', [
               h(
@@ -338,8 +343,8 @@ export default {
       border-color:none !important;
     }
     .btn:hover{
-      border:1px solid #dcdee2 !important;
-      color: #dcdee2 !important;
+      border:1px solid #FF565A !important;
+      color: #FF565A !important;
       background: #fff !important;
     }
   }

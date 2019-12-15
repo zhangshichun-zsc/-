@@ -1,4 +1,5 @@
 <!--活动参与列表(会员)-->
+
 <template>
   <div class="list">
     <Navigation :labels="navigation1"></Navigation>
@@ -12,33 +13,25 @@
         <a>{{item}}</a>
       </span>
     </div>
-    <div class="flex-center-between integral-top">
-      <div>
-        <Icon type="ios-search-outline" />
-        <span>筛选查询</span>
-      </div>
-      <div class="flex-center-end">
-        <Button @click="query">查询结果</Button>
-      </div>
-    </div>
     <div class="name">
       <span>活动名称:</span>
-      <i-input :value.sync="value" placeholder="活动名称" style="width: 180px" v-model="activityName"></i-input>
+      <i-input :value.sync="value" placeholder="活动名称" style="width: 120px" v-model="activityName"></i-input>
       <span>姓名:</span>
-      <i-input :value.sync="value" placeholder="姓名" style="width: 180px" v-model="userName"></i-input>
+      <i-input :value.sync="value" placeholder="姓名" style="width: 120px" v-model="userName"></i-input>
       <span>手机号:</span>
-      <i-input :value.sync="value" placeholder="手机号" style="width: 180px" v-model="userTel"></i-input>
+      <i-input :value.sync="value" placeholder="手机号" style="width: 120px" v-model="userTel"></i-input>
       <span>受益方:</span>
-      <Select v-model="types" style="width:200px">
+      <Select v-model="types" style="width:120px">
         <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
+       <Button class="button-red" @click="query">查询</Button>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between" style="display:flex">
-        <div>
+      <div class="table-header flex-between" style="display:flex">
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
+        <div class="flex-center-end">
           <Button class="table-btn" @click="exportData">导出</Button>
           <Dropdown style="margin-left: 10px">
             <Button>
@@ -51,15 +44,15 @@
               <DropdownItem>站内信</DropdownItem>
             </DropdownMenu>
           </Dropdown>
-        </div>
-        <div>
-          <Button class="table-btn" @click="add">添加活动</Button>
-         <Select v-model="size" style="width:120px" placeholder="显示条数">
+          <div class="flex-center-start">
+            <Button class="table-btn" @click="add">添加活动</Button>
+            <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+            <Select placeholder="排序方式" style="width: 100px;" v-model="sort">
               <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
+         </div>
         </div>
       </div>
       <Table
@@ -75,11 +68,12 @@
         show-elevator
         show-total
         size="small"
-        style="margin: auto"
+        class="pages"
         :page-size="size"
         @on-change="changepages"
       />
     </div>
+
   </div>
 </template>
 
@@ -106,21 +100,26 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          align: "center"
+          align: "center",
+          width:160,
         },
         {
           title: "活动名称",
           key: "activityName",
-          align: "center"
+          align: "center",
+          width:400,
         },
         {
           title: "项目名称",
           key: "categoryName",
-          align: "center"
+          align: "center",
+          width:200,
         },
         {
           title: "活动时间",
+          width:200,
           key: "startTimestamp",
+          align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.startTimestamp));
           }
@@ -128,26 +127,32 @@ export default {
         {
           title: "活动类型",
           key: "activityType",
-          align: "center"
+          align: "center",
+          width:200,
         },
         {
           title: "用户类型",
           key: "userType",
-          align: "center"
+          align: "center",
+          width:180
         },
         {
           title: "手机号码",
           key: "tel",
-          align: "center"
+          align: "center",
+          width:160
         },
         {
           title: "预约状态",
           key: "signUpStatusText",
-          align: "center"
+          align: "center",
+          width:160
         },
         {
           title: "报名时间",
           key: "signUpTimestamp",
+          width:200,
+          align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.signUpTimestamp));
           }
@@ -155,7 +160,8 @@ export default {
         {
           title: "匹配规则",
           key: "ruleName",
-          align: "center"
+          align: "center",
+          width:180
         }
       ],
        Article: [
@@ -202,24 +208,8 @@ export default {
       this.$router.push({ name: "approval" });
     },
     onall(index) {
-      console.log(index)
       this.num = index;
-      if(index==0){
-        this.userType = ''
-      }else if(index==1){
-        this.userType = 1
-      }else if(index==2){
-        this.userType = 2
-      }else if(index==3){
-        this.userType = 2
-      }else if(index==4){
-        this.userType = 9
-      }else if(index==5){
-        this.userType = 7
-      }
-      this.getactiveAddManager()
     },
-
 
     //参与列表接口
     getactiveAddManager() {
@@ -234,20 +224,20 @@ export default {
       }).then(res => {
         this.$refs.selection.selectAll(false);
         if (res.code == 200) {
-
+    
           this.dataCount = res.data.totalSize;
           this.datax = res.data.list;
         }
         console.log(res);
       });
     },
-
+    
     //查询结果
     query(){
       this.page=1
       this.getactiveAddManager()
     },
-
+    
     //导出数据
     exportData() {
       if(this.arr.length==0){
@@ -259,7 +249,7 @@ export default {
         data: this.arrs
       });
     },
-
+    
     //分页功能
     changepages(index) {
       this.page = index;
@@ -279,15 +269,17 @@ export default {
         this.status = false;
       }
     },
-
+    
     //全选按钮
     chackall() {
       this.status = !this.status;
       this.$refs.selection.selectAll(this.status);
     }
+
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .list {
   .all {
@@ -326,6 +318,8 @@ export default {
   }
 }
 .integral-table {
+  background-color: #fff;
+  padding:  10px;
   .table-header {
     height: 50px;
     .table-btn {
@@ -333,4 +327,10 @@ export default {
     }
   }
 }
+.pages{
+  padding: 16px;
+  text-align: center;
+}
 </style>
+
+
