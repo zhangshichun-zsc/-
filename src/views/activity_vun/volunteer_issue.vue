@@ -601,6 +601,7 @@ export default {
       let file = e.target.files[0]
       const dataForm = new FormData()
       dataForm.append('file', file)
+      console.log(dataForm)
       upload(dataForm).then(res => {
         if(res.code == 200){
           var reader = new FileReader()
