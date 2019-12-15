@@ -14,7 +14,7 @@
           </p>
           <p>
             <span>分类：</span>
-            <span>{{list.informationTypeText}}</span>
+            <span>{{this.$route.query.informationTypeText}}</span>
           </p>
           <p>
             <span>日期：</span>

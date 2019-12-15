@@ -9,7 +9,7 @@
         </p>
       </div>
       <div class="con bk">
-        <table width="100%;" v-for="details in ReportData">
+        <table width="100%;" >
           <tr>
             <td>举报理由</td>
             <td>{{details.ReportReason}}</td>

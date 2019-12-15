@@ -12,45 +12,45 @@
         <table width="100%;">
           <tr>
             <td>举报理由</td>
-            <td>{{details.reportReasonText}}</td>
+            <td>{{ReportData.reportReasonText}}</td>
           </tr>
           <tr>
             <td>举报人</td>
-            <td>{{details.reportUserName}}</td>
+            <td>{{ReportData.reportUserName}}</td>
           </tr>
           <tr>
             <td>举报时间</td>
-            <td>{{details.reportTimestamp}}</td>
+            <td>{{ReportData.reportTimestamp}}</td>
           </tr>
           <tr>
             <td>举报对象</td>
-            <td>{{details.activityName}}</td>
+            <td>{{ReportData.activityName}}</td>
           </tr>
           <tr>
             <td>举报状态</td>
-            <td>{{details.reportStatus}}</td>
+            <td>{{ReportData.reportStatus}}</td>
           </tr>
           <tr>
             <td>举报内容</td>
-            <td>{{details.reportReasonText}}</td>
+            <td>{{ReportData.reportReasonText}}</td>
           </tr>
         </table>
         <table width="100%;">
           <tr>
             <td>处理人员</td>
-            <td>{{DealWith.DealWithPersonnel}}</td>
+            <td>{{ReportData.answerUserName}}</td>
           </tr>
           <tr>
             <td>处理时间</td>
-            <td>{{DealWith.ProcessingTime}}</td>
+            <td>{{ReportData.answerTimestamp}}</td>
           </tr>
           <tr>
             <td>处理结果</td>
-            <td>{{DealWith.ProcessingResults}}</td>
+            <td>{{ReportData.reportDealResultText}}</td>
           </tr>
           <tr>
             <td>处理备注</td>
-            <td>{{DealWith.ProcessingNote}}</td>
+            <td>{{ReportData.answerContent?ReportData.answerContent:''}}</td>
           </tr>
         </table>
       </div>
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { formatDate } from '@/request/datatime'
 import { ReportDel } from '../../../request/api'
 export default {
   data() {
@@ -66,32 +67,33 @@ export default {
       navigation1: {
         head: '举报详情-已处理(会员)'
       },
-      details: {},
-      DealWithData: [
-        {
-          DealWithPersonnel: 'admin',
-          ProcessingTime: '2019-07-19 14:48:38',
-          ProcessingResults: '无效举报',
-          ProcessingNote: '无'
-        }
-      ],
-      DealWith: [{}]
+
+      ReportData: {}
     }
   },
   mounted() {
+    if(this.$route.query.state==1){
+      this.navigation1.head='举报详情-已处理(会员)'
+    }else if(this.$route.query.state==2){
+       this.navigation1.head='举报详情-已处理(志愿者)'
+    }
     this.getReportDel()
   },
   methods: {
-    getReportDel() {
+    // 详情
+    getReportDel(){
       ReportDel({
-        reportId: this.$route.query.reportId
-      }).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          this.ReportData = res.data
+        reportId:this.$route.query.reportId
+      }).then(res=>{
+        if(res.code==200){
+          this.ReportData=res.data
+          this.ReportData.reportTimestamp=formatDate(res.data.reportTimestamp)
+          this.ReportData.answerTimestamp=formatDate(res.data.answerTimestamp)
         }
+        console.log(res)
       })
-    }
+    },
+
   }
 }
 </script>

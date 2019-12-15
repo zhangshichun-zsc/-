@@ -118,7 +118,7 @@
                   type="textarea"
                   :autosize="{minRows: 4,maxRows: 4}"
                   placeholder="请输入内容..."
-                ></Input>
+                />
               </FormItem>
             </Form>
           </Modal>
@@ -144,7 +144,7 @@
                   type="textarea"
                   :autosize="{minRows: 4,maxRows: 4}"
                   placeholder="请输入内容..."
-                ></Input>
+                 />
               </FormItem>
             </Form>
           </Modal>

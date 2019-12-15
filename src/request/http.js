@@ -17,9 +17,10 @@ const SERVICE_URL = {
     "http://192.168.0.9:8084/rhzg-web", //张向阳 3
     "http://192.168.0.11:8084/rhzg-web", // 竺文聪 4
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
-    "http://192.168.0.5:8084/rhzg-web" // 王盛 6
+    "http://192.168.0.5:8084/rhzg-web", // 王盛 6
+    "https://rhzghyuat.co-inclusion.org/rhzg-web"  //
   ],
-  API_INDEX: 0
+  API_INDEX: 1
 }
 
 export const SERVER_URl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
@@ -87,9 +88,6 @@ axios.interceptors.response.use(
         });
     } else if (response.data.code == 1003) {
 
-    } else if (response.data.code == 500) {
-
-      $Message.error(response.data.msg)
     }
     return response;
   }

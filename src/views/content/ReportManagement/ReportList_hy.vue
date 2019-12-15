@@ -51,7 +51,7 @@
         <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       </div>
       <div class="pages flex-center-between">
-        <!-- <div>
+        <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
@@ -59,7 +59,7 @@
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button class="space">确定</Button>
-        </div> -->
+        </div>
         <Page :total="dataCount" show-elevator show-total  style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
@@ -69,7 +69,7 @@
 <script>
 import { formatDate } from '@/request/datatime'
 
-import { ReportList, Reportpage, ReportDel, Reportdelete } from '@/request/api'
+import { ReportList, Reportpage, ReportDel, Reportdelete,Reportdeles} from '@/request/api'
 export default {
   data() {
     return {
@@ -134,12 +134,13 @@ export default {
                       if (params.row.reportStatusText == '未处理') {
                         this.$router.push({
                           name: 'ReportDetails-Not_hy',
-                          query: { reportId: params.row.reportId }
+                          query: { reportId: params.row.reportId,states:1 }
                         }) //未处理
                       } else {
                         this.$router.push({
                           name: 'ReportDetails-Handled_hy',
-                          query: { reportId: params.row.reportId }
+                          query: { reportId: params.row.reportId,
+                          states:1 }
                         }) //已处理
                       }
                     }
@@ -190,15 +191,18 @@ export default {
         { value: 20, label: 20 }
       ],
       sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
+        { value: "create_at asc", label: "正序" },
+        { value: "create_at desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "create_at desc",
     }
   },
-  watch(){
-
+  //事件监听
+  watch: {
+    size: "getReportList",
+    sort: "getReportList"
   },
+
   mounted() {
     this.getReportList()
     this.getReportpage()
@@ -209,7 +213,12 @@ export default {
       ReportList({}).then(res => {
         console.log(res)
         if (res.code == 200) {
-          this.list = res.data
+          this.list = [
+            { dataKey: '',
+dataValue: "全部" },
+            ...res.data
+          ]
+          // this.list = res.data
           // let list = res.data
           // this.list = list.unshift( {dataKey: '', dataValue: "全部"})
           console.log(this.list)
@@ -219,7 +228,7 @@ export default {
     // 举报管理--获取举报分页
     getReportpage() {
       Reportpage({
-        page: { page: this.page, size: this.size },
+        page: { page: this.page, size: this.size,sort:this.sort },
         sysType: this.sysType,
         reportUserName: this.reportUserName,
         reportReason: this.reportReason,
@@ -237,6 +246,19 @@ export default {
     // 举报管理--获取举报详情
     getReportDel() {
       ReportDel({}).then(res => {
+        console.log(res)
+      })
+    },
+
+     //批量操作
+    getReportdeles(){
+      Reportdeles({
+        reportIds:this.arr,
+        dealUserId:this.$store.state.userId
+      }).then(res=>{
+        if(res.code==200){
+          // this.
+        }
         console.log(res)
       })
     },

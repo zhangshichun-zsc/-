@@ -115,11 +115,11 @@ export default {
         { value: 15, label: 15 },
         { value: 20, label: 20 }
       ],
-      sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
+       sorting: [
+        { value: "create_at asc", label: "正序" },
+        { value: "create_at desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "create_at desc",
       top: [
         { name: "消息标题", type: "input", value: "" },
         { name: "发布时间", type: "date", value: "" }
@@ -156,10 +156,10 @@ export default {
         content:this.content,
         channelFlag: this.channelFlag,
         createAt:this.createAt,
-        page: { page: this.page, size: this.size }
+        page: { page: this.page, size: this.size,sort:this.sort}
       }
       params=this.util.remove(params)
-      console.log(params)
+
       messageShort(params).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
@@ -176,9 +176,15 @@ export default {
     },
 
     query(e) {
+
+
        this.page=1
       this.content = e[0].value;
-      this.createAt = e[1].value;
+
+       if(e[1].value!=''){
+        this.createAt = e[1].value.getTime();
+        this.createAt=this.util.formatDate(this.createAt)
+      }
       this.getmessageShort()
     },
 

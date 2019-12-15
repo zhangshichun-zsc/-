@@ -280,7 +280,10 @@ export const Reportdelete = p => post('/report-manage/del-report', p) //举报�
 
 export const ReportList = p => get('/report-manage/get-report-reason-list', p) //获取举报原因列表
 
-export const Reporttext = p => get('/report-manage/getReportList', p) //举报管理--删除举报
+export const Reporttext = p => get('/report-manage/getReportList', p) //举报管理--列表
+
+export const Reportdeles = p => posts('/report-manage/deal-report', p) //举报管理--批量操作
+
 
 //用户
 

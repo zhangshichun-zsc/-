@@ -12,11 +12,11 @@
         </div>
         <div class="flex-center-end">
           <Button class="table-btn" @click="modal1 = true">添加</Button>
-        </div>  
+        </div>
           <Modal v-model="modal1" title="添加分类" @on-ok="ok" @on-cancel="cancel">
              <Form :model="formItem"  :rules="ruleValidate" :label-width="120">
                <FormItem label="类型名称" prop="TypeName">
-                   <Input v-model="formItem.input" ></Input>
+                   <Input v-model="formItem.input" />
                </FormItem>
                <FormItem label="分类图标" prop="ClassificationIcon">
                     <Upload action="//jsonplaceholder.typicode.com/posts/">
@@ -25,7 +25,7 @@
                     <p style="color: #666666;font-size: 14px">只能上传jpg/png格式文件，文件不能超过50kb</p>
                </FormItem>
                <FormItem label="是否显示">
-                   <i-switch v-model="switch1" /></i-switch>
+                   <i-switch v-model="switch1" />
                </FormItem>
             </Form>
           </Modal>
@@ -111,7 +111,7 @@ export default {
         },
         {
           agreename: "捐赠",
-         
+
         }
       ]
     };

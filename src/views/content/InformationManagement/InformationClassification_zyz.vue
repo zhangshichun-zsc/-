@@ -18,16 +18,16 @@
           <FormItem label="类型名称:" prop="name">
             <Input style="width: 10rem" v-model="AddData.name" />
           </FormItem>
-          <FormItem label="类型图标:" prop="image">
+          <FormItem label="类型图标:" prop="picPath">
             <div class="start-wap">
-              <div class="upload" v-if="AddData.image == null">
+              <div class="upload" v-if="AddData.picPath == null">
                 <div class="file" @click="()=>{ this.$refs.files.click()}">
                   <input style=" display:none;" type="file" accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP" ref="files" @change="uploadFile()" multiple />
                   <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
                 </div>
               </div>
-              <img class="imgs" style="height:50px;width:50px;"  v-if="AddData.image != null" :src="AddData.image" />
-              <Icon type="ios-trash" v-if="AddData.image != null" class="cancel" :size="26" @click="cancelImg()" />
+              <img class="imgs" style="height:50px;width:50px;"  v-if="AddData.picPath != null" :src="AddData.picPath" />
+              <Icon type="ios-trash" v-if="AddData.picPath != null" class="cancel" :size="26" @click="cancelImg()" />
             </div>
           </FormItem>
           <FormItem label="是否显示:" prop="WhetherShown">
@@ -193,11 +193,11 @@ export default {
       WhetherShown: true,
       AddData: {
         name: '',
-        image: null
+        picPath: null
       },
       ruleValidate: {
         name: [{ required: true, message: '', trigger: 'blur' }],
-        image: [{ required: true, message: '请选择分类图标', trigger: 'blur' }]
+        picPath: [{ required: true, message: '请选择分类图标', trigger: 'blur' }]
       },
       batchList: [
         {
@@ -328,9 +328,9 @@ export default {
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = e => {
-          this.AddData.image = e.target.result
+          this.AddData.picPath = e.target.result
           this.AddData.pic = res.data
-          console.log(this.AddData.image, this.AddData.pic)
+          console.log(this.AddData.picPath, this.AddData.pic)
         }
       })
     },
@@ -340,7 +340,7 @@ export default {
         if (res.code == 200) {
           this.$Message.success('删除成功')
           this.AddData.pic = null
-          this.AddData.image = null
+          this.AddData.picPath = null
         } else {
           this.$Message.success(res.msg)
         }
@@ -427,11 +427,11 @@ export default {
     //清楚
     clear() {
       ;(this.AddData.name = ''), (this.AddData.pic = ''), (this.WhetherShown = false)
-      this.AddData.image = null
+      this.AddData.picPath = null
     },
     //添加
     gets(e) {
-      if (this.AddData.name == '' || this.AddData.image == null) {
+      if (this.AddData.name == '' || this.AddData.picPath == null) {
         this.$Message.error('有必填项未填')
       } else {
         if (this.WhetherShown == true) {
