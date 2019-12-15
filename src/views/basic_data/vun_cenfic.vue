@@ -15,13 +15,32 @@
           </div>
 
         </div>
-      </div> -->
+      </div>-->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>组织:</span>
           <Input size="large" placeholder="请输入" class="inpt" v-model="args.orgName" />
         </div>
         <div class="flex-center-start">
+          <span>创建时间/时间段:</span>
+          <DatePicker
+            class="inpt"
+            style="width: 180px"
+            type="date"
+            @on-change="startTimeChange"
+            placeholder="请选择开始时间"
+            v-model="args.startAt"
+          ></DatePicker>
+          <span>~</span>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            @on-change="endTimeChange"
+            placeholder="请选择结束时间"
+            v-model="args.endAt"
+          ></DatePicker>
+        </div>
+        <!-- <div class="flex-center-start">
           <span>创建时间:</span>
           <Row>
             <DatePicker
@@ -37,9 +56,9 @@
               </a>
             </DatePicker>
           </Row>
-        </div>
+        </div>-->
         <div class="flex-center-end">
-          <Button class="table-btns" @click="query()">查询结果</Button>
+          <Button class="search" @click="query()">查询</Button>
           <Button class="table-btns" @click="modal1 = true">新增模板</Button>
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
@@ -53,7 +72,7 @@
                 </Select>
               </FormItem>
               <FormItem label="模板名称" prop="title">
-                <Input v-model="params.title"/>
+                <Input v-model="params.title" />
               </FormItem>
               <FormItem label="生效日期" prop="effectiveAt">
                 <Date-picker
@@ -76,25 +95,23 @@
     </div>
     <div class="integral-table">
       <div class="table-header flex-between">
-
-          <div class="flex-center-start">
-            <Icon type="ios-apps" />
-            <span>数据列表</span>
-          </div>
-          <div class="flex-center-end">
-            <Select  class="inpt" style="width:100px" placeholder="显示条数" @on-change="changeNum">
-              <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
-            </Select>
-            <Select  class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
-              <Option value="create_at desc">升序</Option>
-              <Option value="create_at asc">降序</Option>
-            </Select>
-
-          </div>
+        <div class="flex-center-start">
+          <Icon type="ios-apps" />
+          <span>数据列表</span>
         </div>
+        <div class="flex-center-end">
+          <Select class="inpt" style="width:100px" placeholder="显示条数" @on-change="changeNum">
+            <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
+          </Select>
+          <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
+            <Option value="create_at desc">升序</Option>
+            <Option value="create_at asc">降序</Option>
+          </Select>
+        </div>
+      </div>
 
-       <div class="min-height">
-    <Table border :columns="columns" :data="data"></Table>
+      <div class="min-height">
+        <Table border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
         <Page :total="sumSize" show-elevator @on-change="changePage" :page-size="size" />
@@ -144,32 +161,31 @@ export default {
           title: "组织",
           key: "orgName",
           width: 300,
-          align: "center",
+          align: "center"
         },
         {
           title: "证书名称",
           key: "title",
-           width: 300,
-           align: "center",
+          width: 300,
+          align: "center"
         },
         {
           title: "生效时间",
           key: "effectiveAt",
-           width: 140,
-           align: "center",
+          width: 140,
+          align: "center"
         },
         {
           title: "失效时间",
           key: "inEffectiveAt",
           width: 140,
-          align: "center",
-
+          align: "center"
         },
         {
           title: "创建时间",
           key: "createAt",
           width: 140,
-           align: "center",
+          align: "center"
         },
         {
           title: "操作",
@@ -279,32 +295,51 @@ export default {
     },
 
     query() {
+      if (this.args.startAt && this.args.endAt) {
+        if (this.args.startAt < this.args.endAt) {
+          this.args.startAt = this.args.startAt + " 00:00:00";
+          this.args.endAt = this.args.endAt + " 23:59:59";
+
+        } else {
+           this.args.startAt=''
+          this.args.endAt=''
+          this.$Message.error('时间选择错误请重新选择')
+        }
+
+      }
       this.page = 1;
       this.getList(this.args);
     },
 
-    successOk() {
-      if (!this.args.startAt && !this.args.endAt) {
-        this.time = "请选择时间段";
-      }
-      this.open = false;
+    // successOk() {
+    //   if (!this.args.startAt && !this.args.endAt) {
+    //     this.time = "请选择时间段";
+    //   }
+    //   this.open = false;
+    // },
+    startTimeChange(e) {
+      this.args.startAt = e;
     },
-    handleChange(e) {
-      let start = e[0];
-      let end = e[1];
-      this.time = e[0] + "-" + e[1];
-      if (start && end) {
-        if (start === end) {
-          start = start + " 00:00:00";
-          end = end + " 23:59:59";
-        } else {
-          start = start + " 00:00:00";
-          end = end + " 00:00:00";
-        }
-      }
-      this.args.startAt = start;
-      this.args.endAt = end;
+
+    endTimeChange(e) {
+      this.args.endAt = e;
     },
+    // handleChange(e) {
+    //   let start = e[0];
+    //   let end = e[1];
+    //   this.time = e[0] + "-" + e[1];
+    //   if (start && end) {
+    //     if (start === end) {
+    //       start = start + " 00:00:00";
+    //       end = end + " 23:59:59";
+    //     } else {
+    //       start = start + " 00:00:00";
+    //       end = end + " 00:00:00";
+    //     }
+    //   }
+    //   this.args.startAt = start;
+    //   this.args.endAt = end;
+    // },
 
     changePage(e) {
       this.page = e;
@@ -374,5 +409,5 @@ export default {
   margin-right: 20px;
 }
 
-@import "../../libs/basicdata.css"
+@import "../../libs/basicdata.css";
 </style>

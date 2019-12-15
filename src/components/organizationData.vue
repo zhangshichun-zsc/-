@@ -4,10 +4,7 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="basis">
       <div class="content">
-        <div class="title flex-between">
-          <p>
-            <span style="font-weight:bold">筛选查询</span>
-          </p>
+        <!-- <div class="title">
           <div class="flex-center-end">
             <div class="Pack space" @click="Retractbtn">
               <Icon type="ios-arrow-down" v-if="Retract==true" />
@@ -20,12 +17,12 @@
               </span>
             </div>
           </div>
-        </div>
+        </div> -->
         <Form ref="formInline" :model="formInline" inline class="forms" v-if="Retract==true" >
-          <FormItem label="组织名称:" :label-width="80">
+          <FormItem label="组织名称:" :label-width="100">
             <Input v-model="orgName" placeholder="组织名称" style="width: 120px" />
           </FormItem>
-          <FormItem label="组织地址:" :label-width="80">
+          <FormItem label="组织地址:" :label-width="100">
             <Input v-model="address" placeholder="组织地址" style="width: 120px" />
           </FormItem>
           <FormItem label="负责人:" :label-width="80">
@@ -41,7 +38,7 @@
             </Select>
           </FormItem>
           <ButtonGroup>
-            <Button class="search" @click="query">  <Icon type="ios-search" />查询结果</Button>
+            <Button class="search" @click="query">查询</Button>
 
           </ButtonGroup>
         </Form>
@@ -177,6 +174,7 @@ export default {
         {
           title: "组织分类",
           key: "orgType",
+          width:200,
           align: "center"
         },
         {
@@ -195,16 +193,19 @@ export default {
         {
           title: "负责人",
           key: "userName",
-          align: "center"
+          align: "center",
+          width:220,
         },
         {
           title: "人数",
           key: "num",
+          width:80,
           align: "center"
         },
         {
           title: "操作",
           key: "action",
+          width:140,
           align: "center",
           render: (h, params) => {
             let status = "";
@@ -463,7 +464,7 @@ body {
   background-color: #ffffff;
 }
 .padd {
-  padding: 10px 0 10px 50px;
+  padding: 10px 0 0 50px;
 }
 .basis {
   margin: 0.5rem;

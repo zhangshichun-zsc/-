@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { date1 } from "../../request/datatime";
+import { formatDate } from "@/request/datatime";
 import { actManager } from "../../request/api";
 export default {
   data() {
@@ -176,7 +176,7 @@ export default {
       modal3: false,
       fruit: ["苹果"],
       navigation1: {
-        head: "志愿者活动管理(会员)"
+        head: "志愿者活动管理(志愿者)"
       },
       columns: [
         {
@@ -297,10 +297,8 @@ export default {
         },
         {
           title: "活动时间",
-          key: "startTimestamp",
-          render: (h, params) => {
-            return h("div", date1("Y-m-d", params.row.startAt));
-          }
+          key: "startTime",
+
         },
         {
           title: "活动类型",
@@ -447,7 +445,7 @@ export default {
     },
 
     addaction() {
-      this.$router.push({ name: "approval" });
+      this.$router.push({ name: "volunteer_issue" });
     },
     draft() {
       this.$router.push({ name: "draft" });

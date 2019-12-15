@@ -87,6 +87,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
+           width: 140,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -112,7 +113,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:80,
+          // width:80,
           render: (h, params) => {
             return h("div", [
               h(
