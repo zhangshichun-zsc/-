@@ -134,7 +134,7 @@
               </li>
               <li class="ins">
                 <div>
-                  <p class="ins-p">{{itemsList.org.propagandaTitle}}</p>
+                  <p class="ins-p" v-html="itemsList.org.propagandaTitle"></p>
                   <p class="ins-b" v-html="itemsList.org.propagandaText"></p>
                 </div>
               </li>
@@ -922,7 +922,7 @@ export default {
     addRoles() {
       let r = {
         fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
-        refund: {},
+        actRefund: {},
         signRuleList: [],
         itemList: [],
         choiceRuleList: []
