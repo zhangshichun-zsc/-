@@ -979,8 +979,8 @@ export default {
     }
     .cancel{
       position: absolute;
-      top: 10px;
-      right: -30px;
+      top: 0px;
+      right: 0px;
       z-index: 10;
     }
     .upload .file{

@@ -156,9 +156,17 @@
 </template>
 
 <script>
-import { date1 } from "../../request/datatime";
-import { actManager } from "../../request/api";
+import { formatDate } from "../../request/datatime";
+import {
+  activeManager,
+  activeAddManager,
+  activecancel,
+  activeclose,
+  activeset,
+  activedown
+} from "../../request/api";
 export default {
+  inject: ['reload'],
   data() {
     return {
       status: false,
@@ -167,7 +175,7 @@ export default {
       modal3: false,
       fruit: ["苹果"],
       navigation1: {
-        head: "志愿者活动管理(会员)"
+        head: "活动管理(会员)"
       },
       columns: [
         {
@@ -178,8 +186,7 @@ export default {
         {
           width: 240,
           key: "action",
-          align: "center",
-           renderHeader:(h,params)=>{
+          renderHeader:(h,params)=>{
             return h('div',[
               h('span','操作'),
               h('Icon',{
@@ -197,7 +204,12 @@ export default {
               })
             ])
           },
+          align: "center",
           render: (h, params) => {
+            let signup = "关闭报名";
+            if (params.row.statusText == "13") {
+              signup = "开启报名";
+            }
             return h("div", [
               h(
                 "a",
@@ -209,12 +221,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.activityId)
-                      if(params.row.statusText==1 || params.row.statusText==2 ||params.row.statusText==3||params.row.statusText==4){
-                        this.$router.push({ name: 'volunteer_issue', query: { activityId:params.row.activityId,isEdit:1,status:params.row.statusText } })
-                      }else{
-                        this.$Message.warning('该活动状态不可编辑')
-                      }
+                      this.$router.push({
+                        path: "editing",
+                        query: { acitvityId: params.row.acitvityId }
+                      });
                     }
                   }
                 },
@@ -231,7 +241,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "volunteer_issue",query:{ activityId:params.row.activityId} });
+                      this.$router.push({
+                        path: "profile",
+                        query: { acitvityId: params.row.acitvityId }
+                      });
                     }
                   }
                 },
@@ -254,103 +267,201 @@ export default {
                 },
                 "分享"
               ),
-              // h(
-              //   "Dropdown",
-              //   {
-              //     props: {
-              //       transfer: true
-              //     }
-              //   },
-              //   [
-              //     h(
-              //       "a",
-              //       {
-              //         style: {
-              //           color: "green"
-              //         }
-              //       },
-              //       "更多操作"
-              //     ),
-              //     h(
-              //       "DropdownMenu",
-              //       {
-              //         slot: "list"
-              //       },
-              //       [
-              //         h(
-              //           "DropdownItem",
-              //           {
-              //             nativeOn: {
-              //               click: name => {
-              //                 this.show(params.index);
-              //               }
-              //             }
-              //           },
-              //           "取消"
-              //         ),
-              //         h("DropdownItem", "关闭报名"),
-              //         h("DropdownItem", "活动总结"),
-              //         h("DropdownItem", "设为新活动模板")
-              //       ]
-              //     )
-              //   ]
-              // )
+              h(
+                "Dropdown",
+                {
+                  props: {
+                    transfer: true
+                  }
+                },
+                [
+                  h(
+                    "a",
+                    {
+                      style: {
+                        color: "green"
+                      }
+                    },
+                    "更多操作"
+                  ),
+                  h(
+                    "DropdownMenu",
+                    {
+                      slot: "list"
+                    },
+                    [
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+                              this.modal5 = true;
+                              this.activityId = params.row.acitvityId;
+                            }
+                          }
+                        },
+                        "取消"
+                      ),
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+
+                              if (signup == "关闭报名") {
+                                this.types = 1;
+                                this.getactiveclose(params.row.acitvityId);
+                              } else {
+                                this.types = 2;
+                                this.getactiveclose(params.row.acitvityId);
+                              }
+                            }
+                          }
+                        },
+                        signup
+                      ),
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+                              let status = this.statelist[Number(params.row.statusText)-1].name
+                              if(status=="已结束"){
+                                this.$router.push({
+                                  name: "summarize",
+                                  query: { acitvityId: params.row.acitvityId,activityName:params.row.activityName }
+                                });
+                              }else{
+                                this.$Message.warning("只有已结束的活动才可进行活动总结");
+                              }
+                            }
+                          }
+                        },
+                        "活动总结"
+                      ),
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+                              this.getactiveset(params.row.acitvityId);
+                            }
+                          }
+                        },
+                        "设为新活动模板"
+                      )
+                    ]
+                  )
+                ]
+              )
             ]);
           }
         },
         {
           title: "活动名称",
-          key: "name",
+          key: "activityName",
           align: "center",
-          width:260
+          width:260,
+        },
+        {
+          title: "立项名称",
+          key: "batchName",
+          align: "center",
+          width:260,
+        },
+        {
+          title: "项目名称",
+          key: "categoryName",
+          align: "center",
+          width:300,
         },
         {
           title: "活动时间",
-          align: "center",
           key: "startTimestamp",
           width:260,
           render: (h, params) => {
-            return h("div", date1("Y-m-d", params.row.startAt));
+            return h("div", formatDate(params.row.startTimestamp));
           }
         },
         {
           title: "活动类型",
-          key: "typeName",
-          align: "center",
-          width:220
-        },
-        {
-          title: "状态",
-          key: "status",
-          width:100,
+          width:160,
+          key: "activityType",
           align: "center"
         },
         {
-          title: "是否显示主办方小站",
-          key: "isShowHolder",
+          title: "状态",
+          width:180,
+          key: "statusText",
           align: "center",
-          width:240
+          render: (h, params) => {
+            return h(
+              "div",
+              this.statelist[Number(params.row.statusText)-1].name
+            );
+          }
+        },
+        {
+          title: "活动分类",
+          width:200,
+          key: "activityClass",
+          align: "center"
+        },
+        {
+          title: "会员报名人数",
+          width:180,
+          key: "memberSignUpCount",
+          align: "center",
         },
         {
           title: "志愿者报名人数",
-          key: "num",
-          align: "center",
-          width:180
+          width:160,
+          key: "volunteerSignUpCount",
+          align: "center"
         },
         {
-          title: "上架/下架",
-          key: "statue",
+          title: "其他角色报名人数",
+          width:180,
+          key: "otherSignUpCount",
+          align: "center"
+        },
+        {
+          title: "群二维码",
+          width:180,
+          key: "activityQrCode",
+          align: "center",
+          render: (h, params) => {
+            return h("img", {
+              attrs: {
+                src: params.row.activityQrCode
+              },
+              style: {
+                width: "4rem",
+                height: "4rem"
+              }
+            });
+          }
+        },
+        {
+          title: "是否上架",
           width:140,
+          key: "statue",
           align: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.activityQrCode == 1
+                  value: params.row.statusText != "10",
+                   disabled: params.row.statusText!="10"?false:"disabled"
                 },
-                on: {
-                  input: e => {
+                'on':{
+                  'on-change': e => {
+                    if (params.row.statusText == "10") {
 
+                    } else {
+                      this.activityId=params.row.acitvityId
+                      this.addstate=true
+                    }
                   }
                 }
               })
@@ -378,9 +489,43 @@ export default {
       activityTimestampFrom: "",
       activityTimestampTo: "",
       arr: [],
-      status:"1,2,3,4,5,6,7,9,10,11,13"
-    };
+      activeList: [],
+      activityId: "",
+      text: "",
+      types: "",
+      statelist: [
+        { name: "待审核", value: 1 },
+        { name: "待招募", value: 2 },
+        { name: "招募中", value: 3 },
+        { name: "待开始", value: 4 },
+        { name: "进行中", value: 5 },
+        { name: "已结束", value: 6 },
+        { name: "已取消", value: 7 },
+        { name: "草稿箱", value: 8 },
+        { name: "审核不通过", value: 9 },
+        { name: "下架", value: 10 },
+        { name: "待发布", value: 11 },
+        { name: "模板", value: 12 },
+        { name: "关闭报名", value: 13 }
+      ],
+       statelists: [
+        { name: "待审核", value: 1 },
+        { name: "待招募", value: 2 },
+        { name: "招募中", value: 3 },
+        { name: "待开始", value: 4 },
+        { name: "进行中", value: 5 },
+        { name: "已结束", value: 6 },
+        { name: "已取消", value: 7 },
 
+        { name: "审核不通过", value: 9 },
+        { name: "下架", value: 10 },
+        { name: "待发布", value: 11 },
+
+        { name: "关闭报名", value: 13 }
+      ],
+      modal5: false,
+      addstate:false
+    };
   },
   components: {},
 
@@ -399,41 +544,119 @@ export default {
   methods: {
     //列表和分页
     getactiveManager() {
-      let From=''
-      let To
+      let Fromtime = "";
+      let Totime = "";
       if (this.activityTimestampFrom != "") {
-         From= this.activityTimestampFrom.getTime();
+        Fromtime = this.activityTimestampFrom.getTime();
       }
       if (this.activityTimestampTo != "") {
-        To = this.activityTimestampTo.getTime();
+        Totime = this.activityTimestampTo.getTime();
       }
-      actManager({
-        // page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort},
-        // name: this.name,
-        // sysType: this.sysType,
-        // activityStatus: this.activityStatus,
-        // activityTimestampFrom: From,
-        // activityTimestampTo: To
-        name:this.name,
-        status:this.status,
-        startT:this.From,
-        endT:this.To,
-        page:{
-          page:this.page,
-          size:this.size
-        }
-
+      activeManager({
+        page: {
+          page: this.page,
+          size: this.size,
+          sort: "createAt" + " " + this.sort
+        },
+        name: this.name,
+        sysType: this.sysType,
+        activityStatus: this.activityStatus,
+        activityTimestampFrom: Fromtime,
+        activityTimestampTo: Totime
       }).then(res => {
         this.$refs.selection.selectAll(false);
         console.log(res);
         if (res.code == 200) {
-    
           this.dataCount = res.data.totalSize;
           this.datax = res.data.list;
         }
       });
     },
-    
+
+    //取消
+    getactivecancel() {
+      activecancel({
+        userId: this.$store.state.userId,
+        activityId: this.activityId,
+        text: this.text,
+        channel: 2
+      }).then(res => {
+        if (res.code == 200) {
+          this.getactiveManager()
+          this.$Message.info("取消成功");
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+    //关闭
+    getactiveclose(ids) {
+      activeclose({
+        userId: this.$store.state.userId,
+        activityId: ids,
+        type: this.types,
+        channel: 2
+      }).then(res => {
+         if(res.code==200){
+          this.$Message.info('关闭成功')
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+    // 设置模板
+    getactiveset(ids) {
+      activeset({
+        activityId: ids
+      }).then(res => {
+        if(res.code==200){
+
+          this.$Message.info('设置成功')
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+    // 活动下架
+    getactivedown(ids) {
+      ids = Array.of(ids);
+      activedown({
+        activityId: ids
+      }).then(res => {
+         if(res.code==200){
+           this.addstate=false
+          this.getactiveManager()
+          this.$Message.info('下架成功')
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+
+    //拒绝理由
+    modalOk() {
+      this.getactivecancel();
+    },
+    cancel() {
+      this.modal5 = false;
+      this.$Message.info("已取消操作");
+    },
+
+    //取消
+    modalCancel(){
+      this.addstate=false
+       this.reload()
+    },
+
+    //确定
+    modalOkdel(){
+      this.getactivedown(this.activityId)
+    },
+
     //选择内容
     handleSelectionChange(val) {
       console.log(val);
@@ -447,51 +670,48 @@ export default {
         this.status = false;
       }
     },
-    
+
     //分页功能
     changepages(index) {
       this.page = index;
       console.log(index);
       this.getactiveManager();
     },
-    
+
     //查询
-    result(e) {
-      this.name=e[0].value,
-      // this
-    
+    result() {
+      // this.name=e[0].value,
       this.getactiveManager();
     },
-    
+
     addaction() {
       this.$router.push({ name: "approval" });
     },
     draft() {
       this.$router.push({ name: "draft" });
     },
-    
-    //导出数据
-    exportData() {
-      if(this.arr.length==0){
-        this.arr=this.data
-      }
-      this.$refs.selection.exportCsv({
-        filename:this.navigation1.head,
-        columns: this.columns.filter((col, index) => index > 0),
-        data: this.arr
-      });
-    },
-    
+    exportData() {},
+
+    // //导出数据
+    // exportData() {
+    //   if(this.arr.length==0){
+    //     this.arr=this.data
+    //   }
+    //   this.$refs.selection.exportCsv({
+    //     filename:this.navigation1.head,
+    //     columns: this.columns.filter((col, index) => index > 0),
+    //     data: this.arr
+    //   });
+    // },
+
     //全选按钮
     chackall() {
       this.status = !this.status;
       this.$refs.selection.selectAll(this.status);
     }
-
   }
 };
 </script>
-
 <style lang="scss" scoped>
 
 .integral-header .integral-top {
@@ -563,7 +783,6 @@ export default {
     }
   }
 }
-
 li {
   width: 160px;
   height: 30px;
@@ -578,5 +797,3 @@ li {
   background-color: white;
 }
 </style>
-
-
