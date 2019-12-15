@@ -32,7 +32,7 @@
                 v-model="activityTimestampFrom"
               ></Date-picker>
             </i-col>
-            <span>——</span>
+            <span>-</span>
             <i-col>
               <Date-picker
                 type="date"
@@ -223,7 +223,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "volunteer_issue",query:{ activityId:params.row.activityId} });
+                      this.$router.push({ name: "volunteer_general",query:{ activityId:params.row.activityId} });
                     }
                   }
                 },
@@ -407,12 +407,10 @@ export default {
         }
 
       }).then(res => {
-        this.$refs.selection.selectAll(false);
-        console.log(res);
+        this.$refs.selection.selectAll(false)
         if (res.code == 200) {
-
-          this.dataCount = res.data.totalSize;
-          this.datax = res.data.list;
+          this.dataCount = res.data.totalSize
+          this.datax = res.data.list
         }
       });
     },
@@ -434,7 +432,6 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getactiveManager();
     },
 

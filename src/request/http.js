@@ -22,6 +22,8 @@ const SERVICE_URL = {
   API_INDEX: 0
 }
 
+export const SERVER_URl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
+
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
 
 const token = localStorage.getItem("token");
@@ -218,6 +220,24 @@ export const upload = p => {
   return new Promise((resolve, reject) => {
     axios
       .post("/pic/upload", p, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data);
+      });
+  });
+};
+
+export const uploadWange = p => {
+  // p.token = token
+  return new Promise((resolve, reject) => {
+    axios
+      .post("/pic/uploadEditor", p, {
         headers: {
           "Content-Type": "multipart/form-data"
         }

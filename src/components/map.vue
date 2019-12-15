@@ -20,11 +20,12 @@ export default {
   data () {
     return {
       args:null,
-      models:false
+      models: this.value
     }
   },
   watch: {
     value(val){
+      console.log(val)
       this.models = val
     }
   },

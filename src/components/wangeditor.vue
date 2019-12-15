@@ -7,6 +7,8 @@
 <script>
 import E from 'wangeditor'
 import '../wangEditor/release/wangEditor.min.css'
+import { uploadWange } from '@/request/http'
+import store from "../store/index";
 // wangEditor配置按钮菜单
 const btnmenu = [
   'head', //标题
@@ -38,9 +40,12 @@ export default {
   watch: {
     labels(val){
        this.editor.txt.html(val)
+    },
+    disabled(val){
+      this.editor.$textElem.attr(this.id, val)
     }
   },
-  props: ['labels', 'id'],
+  props: ['labels', 'id', 'disabled'],
   mounted() {
     this.editor = new E('#' + this.id)
     // 自定义菜单配置
@@ -49,13 +54,17 @@ export default {
     // 配置上传图片为base64
     this.editor.customConfig.uploadImgShowBase64 = false
     // // 配置图片上传服务器
-    // this.editor.customConfig.uploadImgServer='http://localhost:8081/study/photo/wangEditorUpload';
+    // this.editor.customConfig.uploadImgServer= SERVER_URl + '/pic/uploadEditor?token'+store.state.token
+    // this.editor.customConfig.uploadImgHeaders = {
+    //   "Content-Type": "multipart/form-data"
+    // }
+    // this.editor.customConfig.uploadImgParamsWithUrl = true
     // 隐藏“网络图片”tab
     this.editor.customConfig.showLinkImg = false
     //使用 base64 编码直接将图片插入到内容中
-    this.editor.customConfig.uploadImgShowBase64 = true
+
     // withCredentials（跨域传递 cookie）
-    this.editor.customConfig.withCredentials = true
+    // this.editor.customConfig.withCredentials = true
     // 自定义header
     this.editor.customConfig.uploadHeader = {}
     // 后端接收上传文件的参数名
@@ -111,6 +120,9 @@ export default {
       },
       customInsert: (insertImg, result, editor) => {
         /**图片上传成功，插入图片回调 */
+         var url = result.url
+         console.log(url)
+        insertImg(url)
       }
     }
     // 上传图片的错误提示默认使用alert弹出，你也可以自定义用户体验更好的提示方式
@@ -124,7 +136,12 @@ export default {
       // insert 是获取图片 url 后，插入到编辑器的方法
 
       // 上传代码返回结果之后，将图片插入到编辑器中
-      insert(imgUrl)
+      const dataForm = new FormData()
+      dataForm.append('file', files)
+      uploadWange(dataForm).then(res => {
+        console.log(res)
+         insert(res.data)
+      })
     }
     this.editor.customConfig.onchange = html => {
       // html 即变化之后的内容

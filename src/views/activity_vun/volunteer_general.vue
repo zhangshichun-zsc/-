@@ -1,4 +1,4 @@
-<!--活动概况（志愿者）-->
+<!--活动概况(志愿者)-->
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
@@ -17,14 +17,14 @@
               <Icon type="md-paper" />
             </div>
             <span>总报名人数</span>
-            <span>10</span>
+            <span>{{lists.signUpNum}}</span>
           </div>
           <div class="sign">
             <div class="icon1">
               <Icon type="ios-people" />
             </div>
             <span>总签到人数</span>
-            <span>10</span>
+            <span>{{lists.signInNum}}</span>
           </div>
         </div>
       </div>
@@ -33,12 +33,15 @@
           <span>待办事项</span>
         </p>
         <div class="apply">
-          <div class="sign" @click="vunpend">
-            <span>报名待审批</span>
-            <span>2</span>
+          <div class="sign" @click="pend">
+            <Icon type="document-text"></Icon>
+            <span>报名待审核</span>
+            <span>{{lists.waitAuditNum}}</span>
           </div>
-          <div class="sign">
-
+          <div class="sign" @click="pend">
+            <Icon type="folder"></Icon>
+            <span>转移待审核</span>
+            <span>{{lists.waitTransferNum}}</span>
           </div>
         </div>
       </div>
@@ -89,7 +92,7 @@
           <span style="font-size: 14px;">已选择</span>
           <span style="font-size: 14px;">0</span>
         </p>
-        <Table border :columns="columns" :data="datax"></Table>
+        <Table border :columns="columns" :data="memberlist"></Table>
       </div>
     </div>
     <div class="pages">
@@ -100,6 +103,7 @@
 </template>
 
 <script>
+import {Activitysummary, actMemberlist} from "../../request/api"
 export default {
   data() {
     return {
@@ -141,7 +145,7 @@ export default {
         }
       ],
       model1: "Photography",
-      model2: "all",
+      model2: "loading",
       columns: [
         {
           type: "selection",
@@ -210,42 +214,45 @@ export default {
           }
         }
       ],
-      datax: [
-        {
-          name: "受益方",
-          designation: "帆帆",
-          project: 1800000000,
-          time: "受益方",
-          types: "帆帆",
-          userstype: "2019-10-01",
-          number: 100,
-          apply: "+800"
-        },
-        {
-          name: "受益方",
-          designation: "帆帆",
-          project: 1800000000,
-          time: "受益方",
-          types: "帆帆",
-          userstype: "2019-10-01",
-          number: 100,
-          apply: "+800"
-        }
-      ]
+      datax: [],
+      lists:[],
+      memberlist:[]
     };
   },
 
-  components: {  },
+  components: {},
 
   computed: {},
 
   created() {},
 
   methods: {
-    vunpend(){
-      this.$router.push({name:'volunteer_pending'})
+    pend(){
+      this.$router.push({name:'pending'})
+    },
+    //数据概况
+    getActivitysummary(){
+      Activitysummary({
+        activityId:this.$route.query.acitvityId
+      }).then(res => {
+        if(res.code == 200){
+          this.lists=res.data
+          console.log(res);
+        }
+      })
+    },
+    getMemberList(){
+      actMemberlist({
+        activityId:this.$route.query.acitvityId
+      }).then(res=>{
+        this.memberlist=res.data
+      })
     }
-  }
+  },
+  mounted() {
+    console.log(this.$route.query.acitvityId)
+    this.getActivitysummary()
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -294,7 +301,6 @@ export default {
   padding-left: 20px;
   span {
     margin: 0 10px;
-    font-size: 14px;
   }
 }
 .exports {
@@ -307,10 +313,12 @@ export default {
   }
 }
 .check {
-  height: 200px;
   p {
-    padding-left: 25px;
+    padding-left: 15px;
     margin-bottom: 10px;
+    span{
+      font-size: 14px;
+    }
   }
 }
 .pages {
@@ -319,20 +327,19 @@ export default {
   align-items: center;
   height: 50px;
   background: #ffffff;
-  margin-top: 50px;
   font-size: 14px;
   span{
     margin-right: 10px;
   }
 }
-.icon1{
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  border: 2px solid #e4e4e4;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-}
+  .icon1{
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid #e4e4e4;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
 </style>
