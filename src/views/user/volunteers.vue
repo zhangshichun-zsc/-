@@ -560,7 +560,7 @@
       </div>
     </Modal>
 
-    <Modal title="高级检索" v-model="modalSenior" :closable="false">
+    <Modal title="高级检索" v-model="modalSenior">
       <Form ref="formCustom" :model="paramsSeniorObj">
         <Row>
           <Col span="12">
@@ -641,7 +641,7 @@
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="hidd">重置</Button>
-        <Button type="primary" size="large" @click="setSenior">确定</Button>
+        <Button type="error" size="large" @click="setSenior">确定</Button>
       </div>
     </Modal>
   </div>

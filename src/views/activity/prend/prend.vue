@@ -3,18 +3,18 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <div class="select">
+      <div class="select flex-start">
         <span class="select-template">培训标题</span>
         <Input  style="width:300px" v-model="args.fkMouldName">
         </Input>
       </div>
-      <div class="select">
+      <div class="select flex-start">
         <span class="select-template">活动分类</span>
         <Input  style="width:300px" v-model="args.typeDicName">
         </Input>
       </div>
-      <div class="select">
-        <span>活动图片</span>
+      <div class="select flex-start">
+        <span class="select-template">活动图片</span>
         <div class="start-wap">
           <div class="upload" v-if='image == null'>
               <div class="file" @click="()=>{ this.$refs.files.click()}">
@@ -26,9 +26,9 @@
           <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg()"/>
         </div>
       </div>
-      <div class="select">
-        <span>培训图片</span>
-        <div> <wangeditor :labels="args.trainComments" id="eddl" @change='changeEditorTrain'></wangeditor></div>
+      <div class="select flex-start">
+        <span class="select-template">培训图片</span>
+        <div><wangeditor :labels="args.trainComments" id="eddl" @change='changeEditorTrain'></wangeditor></div>
       </div>
        <Modal v-model="addstate" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
@@ -43,8 +43,8 @@
                 </div>
               </Modal>
       <div class="button-food">
-        <i-button @click="template">保存</i-button>
-        <i-button @click="cencel(1)" v-if=zuo >作废</i-button>
+        <i-button @click="template" shape="circle" size='large' class="btn">保存</i-button>
+        <i-button @click="cencel(1)" v-if=zuo  shape="circle" size='large' class="btn">作废</i-button>
       </div>
     </div>
   </div>
@@ -180,8 +180,29 @@ export default {
 }
 .content {
   padding: 20px;
-  .select{
+  background: #fff;
+  .button-food {
+    padding: 50px 20px;
     display: flex;
+    justify-content: center;
+  .btn{
+    padding: 10px 30px !important;
+    background: #FF565A !important;
+    color: #fff !important;
+    border-color:none !important;
+    margin-right: 30px !important;
+  }
+  .btn:hover{
+    border:1px solid #FF565A !important;
+    color: #FF565A !important;
+    background: #fff !important;
+  }
+}
+  .select{
+    margin-bottom: 15px;
+    .select-template{
+      margin-right: 50px;
+    }
   }
 }
 .start-wap{

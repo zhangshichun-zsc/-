@@ -28,7 +28,11 @@
           </Select>
         </p>
         <p class="item">
-          <a href="javascript:;" class="getInfo" @click="getdepartmentmember">
+          <a
+            href="javascript:;"
+            class="getInfo"
+            @click="getdepartmentmember(1)"
+          >
             <Icon type="ios-search-outline" />查询</a
           >
         </p>
@@ -141,7 +145,7 @@ export default {
           title: "是否启用",
           key: "userEnable",
           align: "center",
-          width: 80,
+          width: 100,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -256,7 +260,6 @@ export default {
   },
   watch: {
     page() {
-      console.log(11);
       this.getdepartmentmember();
     }
   },
@@ -278,7 +281,8 @@ export default {
     },
 
     // 查询部门成员
-    getdepartmentmember() {
+    getdepartmentmember(page) {
+      this.page = page ? page : this.page;
       let obj = this.util.remove({
         page: { page: this.page, size: this.size },
         deptId: this.role == 0 ? "" : this.role,

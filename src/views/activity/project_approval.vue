@@ -166,7 +166,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "approval_details",
-                        query: { batchId: params.row.batchId }
+                        query: { batchId: params.row.batchId,auditId:params.row.auditId,statusText:params.row.statusText }
                       });
                     }
                   }
@@ -183,7 +183,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$Message.info("你点击了第" + params.index + "列");
+                      this.$router.push({
+                        name: "approval",
+                        query: { batchId: params.row.batchId,copy:1 }
+                      });
                     }
                   }
                 },

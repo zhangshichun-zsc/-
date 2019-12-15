@@ -92,7 +92,7 @@
           <span style="font-size: 14px;">已选择</span>
           <span style="font-size: 14px;">0</span>
         </p>
-        <Table border :columns="columns" :data="datax"></Table>
+        <Table border :columns="columns" :data="memberlist"></Table>
       </div>
     </div>
     <div class="pages">
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import {Activitysummary} from "../../request/api"
+import {Activitysummary, actMemberlist} from "../../request/api"
 export default {
   data() {
     return {
@@ -216,6 +216,7 @@ export default {
       ],
       datax: [],
       lists:[],
+      memberlist:[]
     };
   },
 
@@ -238,6 +239,13 @@ export default {
           this.lists=res.data
           console.log(res);
         }
+      })
+    },
+    getMemberList(){
+      actMemberlist({
+        activityId:this.$route.query.acitvityId
+      }).then(res=>{
+        this.memberlist=res.data
       })
     }
   },
@@ -305,7 +313,6 @@ export default {
   }
 }
 .check {
-  height: 200px;
   p {
     padding-left: 15px;
     margin-bottom: 10px;
@@ -320,7 +327,6 @@ export default {
   align-items: center;
   height: 50px;
   background: #ffffff;
-  margin-top: 50px;
   font-size: 14px;
   span{
     margin-right: 10px;

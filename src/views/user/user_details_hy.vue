@@ -327,7 +327,7 @@ export default {
           this.basicInfo = res.data.basicInfo;
 
           this.basicInfo.vipLastTime = formatDate(this.basicInfo.vipLastTime);
-          this.basicInfo.birthday = formatDate(this.basicInfo.birthday);
+          this.basicInfo.birthday = this.basicInfo.birthday
           this.basicInfo.createTime = formatDate(this.basicInfo.createTime);
 
           this.statisticsInfo = [res.data.statisticsInfo];

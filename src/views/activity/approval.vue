@@ -119,9 +119,9 @@
             <ul>
               <li class="first-li">合作方</li>
               <li class="first-li">
-                <Row v-for="(item,i) in projectMsg.partnerList" :key="i">
-                  <Col span="10">123</Col>
-                  <Col span="10" style="par-col">
+                <Row v-for="(item,i) in projectMsg.partnerList" :key="i" class="li-flex-between" style="width:100%">
+                  <Col span="10">{{item.partName}}</Col>
+                  <Col span="10" style="par-col" class="li-flex-between">
                     <div @click="addPartner(i)" style="margin-right:10px">详情</div>
                     <div @click="deletePartner(i)">
                       <Icon type="ios-close"></Icon>
@@ -129,8 +129,8 @@
                   </Col>
                 </Row>
               </li>
-              <li>
-                <a @click="addPartner()">+新增合作方</a>
+              <li class="lx-flex-center">
+                <Button @click="addPartner()">+新增合作方</Button>
               </li>
               <li class="ins">
                 <div>
@@ -537,15 +537,17 @@
           </ul>
         </div>
         <p class="add-deal">
-          <a @click="addAgrees">+新增协议</a>
+          <Button @click="addAgrees">+新增协议</Button>
         </p>
-        <div class="upload">
+        <!-- <div class="upload">
           <span>上传附件</span>
+        </div> -->
+        <div class="lx-flex-center" style="width:80%">
+          <div class="li-flex-around" style="width:40%">
+            <Button class="table-btn" @click="off()">取消</Button>
+            <Button class="table-btn active" @click="save()">保存</Button>
+          </div>
         </div>
-        <p class="table-btn-p">
-          <Button class="table-btn" @click="off()">取消</Button>
-          <Button class="table-btn active" @click="save()">保存</Button>
-        </p>
       </div>
       <div class="" v-if="isAddRole">
         <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
@@ -564,7 +566,7 @@ import {
   projectApproval,
   chooseTempalte,
   templateMsg,
-  orgimgdel
+  orgimgdel,draftsDetail
 } from "@/request/api";
 
 import role from "./compile_beneficiary.vue";
@@ -645,7 +647,7 @@ export default {
       roleI: 0, //招募角色下标
       adr: false,
       pcNum: 0,
-      templateList: []
+      templateList: [],
     };
   },
 
@@ -655,6 +657,12 @@ export default {
 
   created() {
     this.userId = this.$store.state.userId;
+    if(this.$route.query.batchId){
+      if (this.$route.query.copy != 1){
+        this.batchId= this.$route.query.batchId
+      }
+      this.getDraftsDetail(this.$route.query.batchId)
+    }
     this.getProjectItem();
     this.getPartner();
     this.getBatchItem();
@@ -664,6 +672,15 @@ export default {
   },
 
   methods: {
+    getDraftsDetail(e){
+      draftsDetail({
+        batchId:e, 
+        isTime:this.batchId?2:null
+      }).then(res=>{
+        console.log(res)
+        this.projectMsg = res.data
+      })
+    },
     //立项前置项查询
     getProjectItem() {
       projectItem({
@@ -726,7 +743,15 @@ export default {
       this.$router.push({ name: "volunteer_apply", params: { sysId: "1,3" } });
     },
     nextOne() {
-      (this.selects = false), (this.two = true), (this.current = 1);
+      this.selects = false
+      this.two = true
+      this.current = 1
+      let batch = {
+        userConfList: [],
+        actResList: [],
+        workerIdList: [{}]
+      }
+      this.batch = this.projectMsg.actInfoList[0]?this.projectMsg.actInfoList[0]:batch
     },
 
     //保存合作方
