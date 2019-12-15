@@ -43,7 +43,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.startT"
+                      value="projectMsg.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择开始时间"
@@ -56,7 +56,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.endT"
+                      value="projectMsg.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择结束时间"
@@ -172,8 +172,8 @@
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
-                    <img class="imgs" style="width:283px;height:188px" :src="batch.actCoverShowPic"/>
+                  <div class="first-picfm" v-else>
+                    <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
                     <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
                   </div>
                 </div>
@@ -203,7 +203,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="batch.startT"
+                      value="batch.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动开始时间"
@@ -216,7 +216,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="batch.endT"
+                      value="batch.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动结束时间"
@@ -326,7 +326,7 @@
                   <Radio label="0">活动开始前一个月自动发布</Radio>
                   <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
-                <Date-picker v-model="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
@@ -364,7 +364,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.startT"
+                      value="projectMsg.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择开始时间"
@@ -377,7 +377,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.endT"
+                      value="projectMsg.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择结束时间"
