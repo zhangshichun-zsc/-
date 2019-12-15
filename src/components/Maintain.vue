@@ -3,7 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="head">
-      <p>培训模板</p>
+      <!-- <p>培训模板</p> -->
       <p>
         <Button class="table-btn" @click="modal1 = true">新增模板</Button>
         <Button class="table-btn">作废模板</Button>
