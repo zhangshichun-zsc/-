@@ -15,7 +15,7 @@
               <ul>
                 <li>
                   <span>活动名称</span>
-                  <Input v-model="args.name" placeholder="请输入名称" style="width: 300px" />
+                  <Input v-model="args.name" placeholder="请输入名称" style="width: 300px" :disabled='isDisb'/>
                 </li>
                 <li class="start">
                   <span>封面图片</span>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <img class="imgss" v-else :src="cover"/>
-                    <Icon type="ios-trash" v-if='cover !== null' class="cancel" @click="cancelImg('cover')" color='#FF565A' size='28'/>
+                    <Icon type="ios-trash" v-if='cover !== null&&!isDisb' class="cancel" @click="cancelImg('cover')" color='#FF565A' size='28'/>
                   </div>
                 </li>
                 <li class="start">
@@ -40,12 +40,12 @@
                         </div>
                     </div>
                     <img class="imgs" v-else :src="image"/>
-                    <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg('image')" color='#FF565A' size='26'/>
+                    <Icon type="ios-trash" v-if='image !== null&&!isDisb' class="cancel" @click="cancelImg('image')" color='#FF565A' size='26'/>
                   </div>
                 </li>
                 <li>
                   <span>活动归属团队</span>
-                  <Select v-model="args.orgId" style="width:300px" placement='bottom'>
+                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))'>
                     <Option
                       v-for="(item,index) in orgList"
                       :value="item.orgId"
@@ -60,6 +60,7 @@
                    type="datetime"
                    :options="options" 
                    placeholder="开始时间"
+                  :disabled='isDisb'
                    confirm 
                    style="width: 150px"
                    @on-change="handleChange(0,'startAt',$event)"
@@ -69,7 +70,8 @@
                    <DatePicker
                    :value='args.endAt'
                    type="datetime"
-                   :options="options" 
+                   :options="options"
+                   :disabled='isDisb' 
                    placeholder="结束时间"
                    @on-change="handleChange(0,'endAt',$event)"
                    @on-ok="successOk(1)"  
@@ -82,7 +84,8 @@
                   <DatePicker
                    :value='zhaStart'
                    type="datetime"
-                   :options="options" 
+                   :options="options"
+                   :disabled='isDisb' 
                    placeholder="开始时间"
                    confirm 
                    style="width: 150px"
@@ -91,7 +94,8 @@
                    format="yyyy-MM-dd HH:mm"/>
                    <i>-</i>
                    <DatePicker
-                   :value='zhaEnd'  
+                   :value='zhaEnd'
+                   :disabled='isDisb'  
                    type="datetime"
                    :options="options" 
                    placeholder="结束时间"
@@ -116,7 +120,7 @@
                 <li>
                   <span>现场负责人</span>
                   <div class="juge">
-                    <Input v-model="judge" placeholder="请输入" @on-change='changeInput'/>
+                    <Input v-model="judge" placeholder="请输入" @on-change='changeInput' :disabled='isDisb'/>
                     <div class="juge-drap" v-if="showJudge">
                       <div class="drap-item" v-for="(item,index) in judgeList" :key='index' @click="getOwn(index)">
                         {{ item.result }}
@@ -136,39 +140,39 @@
                   </p>
                 </li>
                 <li>
-                  <Button @click="jump(-1)">+新增招募角色</Button>
+                  <Button @click="jump(-1)" v-if='!isDisb'>+新增招募角色</Button>
                 </li>
                 <li>
                   <span>是否交保险</span>
-                  <RadioGroup v-model="args.isInsurance">
+                  <RadioGroup v-model="args.isInsurance" :disabled='isDisb'>
                     <Radio label="1">是</Radio>
                     <Radio label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否允许空降</span>
-                  <RadioGroup v-model="args.flyFlag">
+                  <RadioGroup v-model="args.flyFlag" :disabled='isDisb'>
                     <Radio label="1">是</Radio>
                     <Radio label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否发放证书</span>
-                  <RadioGroup v-model="args.isNeedCertMould">
+                  <RadioGroup v-model="args.isNeedCertMould" :disabled='isDisb'>
                     <Radio label="1">是</Radio>
                     <Radio label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否显示主办方小站</span>
-                  <RadioGroup v-model="args.isShowHolder">
+                  <RadioGroup v-model="args.isShowHolder" :disabled='isDisb'>
                     <Radio label="1">是</Radio>
                     <Radio label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>活动分类</span>
-                  <Select v-model="args.coActCatTypeList[0].typeDicId" style="width:300px" :label-in-value='true'  @on-change='changeSelect'>
+                  <Select v-model="args.coActCatTypeList[0].typeDicId" style="width:300px" :label-in-value='true'  @on-change='changeSelect' :disabled='isDisb'>
                     <Option
                       v-for="(item,index) in array"
                       :value="item.dicId"
@@ -179,7 +183,7 @@
                 <li class="active-cost">
                   <span>活动费用</span>
                   <div class="cost">
-                    <Input v-model="args.pay" placeholder="请输入" style="width: 300px" type="number"/>
+                    <Input v-model="args.pay" placeholder="请输入" style="width: 300px" type="number" :disabled='isDisb'/>
                     <p>此活动费用仅供参考，无需缴费</p>
                   </div>
                 </li>
@@ -204,7 +208,7 @@
                 培训内容
               </i-col>
               <i-col span='3' push='2'>
-                <i-switch v-model="isTrain" :true-value='1' :false-value='0' />
+                <i-switch v-model="isTrain" :true-value='1' :false-value='0' :disabled='isDisb'/>
               </i-col>
             </Row>
             <Row v-if='isTrain === 1'>
@@ -217,7 +221,7 @@
                 反馈内容
               </i-col>
               <i-col span='3' push='2'>
-                <i-switch v-model="isFeedback" :true-value='1' :false-value='0' />
+                <i-switch v-model="isFeedback" :true-value='1' :false-value='0' :disabled='isDisb'/>
               </i-col>
             </Row>
             <Row v-if='isFeedback === 1'>
@@ -274,7 +278,7 @@
                   </Row>
                 </Row>
               </Row>
-              <Row>
+              <Row v-if='!isDisb'>
                 <i-col span='3'>新增反馈项</i-col>
                 <i-col span='19' push='2'>
                   <Button class="btn" v-for="(item,index) in feedList" :key='index' @click="addItem(item.type)">{{ item.name }}</Button>
@@ -287,7 +291,7 @@
             <Row v-if='add'>
               <i-col span='4'>受益群体人数</i-col>
               <i-col span='4' push='2'>
-                <Input v-model="args.memberGroupNum" placeholder="输入收益群体人数"/>
+                <Input v-model="args.memberGroupNum" placeholder="输入收益群体人数" :disabled="isDisb"/>
               </i-col>        
             </Row>
           </Row>
@@ -434,6 +438,7 @@ export default {
   },
   methods: {
     getAdr(){
+      if(this.isDisb)return
       this.adr = true
     },
     getRelse(){
