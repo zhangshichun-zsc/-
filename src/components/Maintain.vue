@@ -89,7 +89,6 @@ export default {
       }
     },
     getList() {
-      console.log(11);
       getActiveTypeItem({}).then(res => {
         this.arr = res.data;
         console.log(res);
