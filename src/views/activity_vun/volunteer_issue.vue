@@ -1,7 +1,7 @@
 <!--志愿者活动发布（志愿者）-->
 <template>
   <div>
-    <adress :value='adr' @change='getMap'/>
+    <adress v-model='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <p class="content-head">
@@ -23,7 +23,7 @@
                     <div class="upload shae" v-if='cover == null'>
                         <div class="file " @click="()=>{ this.$refs.filess.click()}">
                           <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('cover',$event)">
-                          <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+                          <Icon type="md-cloud-upload" :size='36' color="#dcdee2"/>
                         </div>
                     </div>
                     <img class="imgss" v-else :src="cover"/>
@@ -36,7 +36,7 @@
                     <div class="upload" v-if='image == null'>
                         <div class="file" @click="()=>{ this.$refs.files.click()}">
                           <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('image',$event)">
-                          <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+                          <Icon type="md-cloud-upload" :size='36' color="#dcdee2"/>
                         </div>
                     </div>
                     <img class="imgs" v-else :src="image"/>
@@ -243,7 +243,7 @@
                     <span>必填</span>
                   </i-col>
                   <i-col span='2'>
-                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28'/>
                   </i-col>
                 </Row>
                 <Row v-else-if='~~item.typeFlag === 3 || ~~item.typeFlag === 4 '>
@@ -256,7 +256,7 @@
                       <span>必填</span>
                     </i-col>
                     <i-col span='2'>
-                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28'/>
                     </i-col>
                   </Row>
                   <Row v-for="(val,i) in item.arr" :key='i' class-name="row10">
@@ -264,7 +264,7 @@
                         <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
                     </i-col>
                     <i-col span='2' push='2'>
-                      <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
+                      <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb' color='#FF565A' size='28'/>
                     </i-col>
                   </Row>
                   <Row>
@@ -322,10 +322,10 @@ import { stat, constants } from 'fs'
 export default {
   data() {
     return {
-       options: {
-          disabledDate (date) {
-              return date && date.valueOf() < Date.now() - 86400000;
-          }
+      options: {
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now()
+        }
       },
       add:false,
       navigation1: {
@@ -434,7 +434,6 @@ export default {
   },
   methods: {
     getAdr(){
-      console.log(this.adr)
       this.adr = true
     },
     getRelse(){
@@ -993,6 +992,9 @@ export default {
     .upload .file:hover{
       border: 1px dashed #FF565A;
     }
+    .upload .file:hover .ivu-icon{
+      color: #FF565A !important;
+    } 
     .upload .file input{
       display: none;
     }

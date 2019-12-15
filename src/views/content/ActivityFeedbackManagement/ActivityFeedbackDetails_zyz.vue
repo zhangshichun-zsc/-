@@ -168,7 +168,10 @@ export default {
           title: '反馈人',
           key: 'userName',
           width: '100px',
+          ellipsis: true,
+          tooltip: true,
           align: 'center',
+          width: 300,
           render: (h, params) => {
             return h('div',  {
                   on: {
@@ -181,12 +184,14 @@ export default {
         },
         {
           title: '手机号码',
+          width: 300,
           key: 'tel',
           align: 'center',
           width: '140px'
         },
         {
           title: '反馈时间',
+          width: 300,
           key: 'feedbackAt',
           align: 'center',
         },
@@ -194,7 +199,7 @@ export default {
           title: '参与活动岗位',
           key: 'positionName',
           align: 'center',
-          width: '160px'
+          width: 200
         }
       ]
     }

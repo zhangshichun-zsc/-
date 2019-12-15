@@ -59,7 +59,7 @@
                   <span>必填</span>
                 </i-col>
                  <i-col span='2'>
-                   <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb'/>
+                   <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb' color='#FF565A' size='28'/>
                  </i-col>
               </Row>
               <Row v-else-if=' ~~item.itemType  === 1 ' type="flex" justify="space-between" class-name="row10">
@@ -71,7 +71,7 @@
                   <span>必填</span>
                 </i-col>
                 <i-col span='2'>
-                  <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb'/>
+                  <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb' color='#FF565A' size='28'/>
                 </i-col>
               </Row>
               <Row  v-else-if=' ~~item.itemType  === 6 ' type="flex" justify="space-between" class-name="row10">
@@ -83,7 +83,7 @@
                   <span>必填</span>
                 </i-col>
                 <i-col span='2'>
-                  <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb'/>
+                  <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb' color='#FF565A' size='28'/>
                 </i-col>
               </Row>
               <Row v-else class-name="row10">
@@ -96,7 +96,7 @@
                     <span>必填</span>
                   </i-col>
                   <i-col span='2'>
-                    <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
+                    <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28'/>
                   </i-col>
                 </Row>
                 <Row v-else>
@@ -109,7 +109,7 @@
                       <span>必填</span>
                     </i-col>
                     <i-col span='2'>
-                      <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28'/>
                     </i-col>
                   </Row>
                   <Row v-for="(val,i) in item.arr" :key='i' type="flex" justify="space-between">
@@ -117,7 +117,7 @@
                        <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
                     </i-col>
                     <i-col span='2'>
-                       <Icon type="ios-trash" @click="deleItem(index,i)" v-if='!isDisb'/>
+                       <Icon type="ios-trash" @click="deleItem(index,i)" v-if='!isDisb' color='#FF565A' size='28'/>
                     </i-col>
                   </Row>
                   <Button type="primary" ghost  @click="addSignIput(index)" v-if='!isDisb'>+</Button>
@@ -158,12 +158,14 @@
           <Row v-for='(item,index) in limit' :key='index' type="flex" justify="space-between" class-name="row10">
             <i-col span='4'>{{ item.ruleName }}</i-col>
             <i-col span='9' v-if='item.ruleId == 3'>
-              <i-input v-model="item.data[0]" :disabled="isDisb"/>
-              <span>至</span>
-              <i-input v-model="item.data[1]" :disabled="isDisb"/>
+              <Row type="flex" justify="space-between" align='middle'>
+                <i-col span='10'><i-input v-model="item.data[0]" :disabled="isDisb"/></i-col>
+                <i-col span='4'>至</i-col>
+                <i-col span='10'><i-input v-model="item.data[1]" :disabled="isDisb"/></i-col>
+              </Row>
             </i-col>
-            <i-col span='9' v-else-if='item.ruleId == 4'>
-              <selsect @change="changeCity(index,$event)" :arr='item.data'/>
+            <i-col span='14' v-else-if='item.ruleId == 4'>
+              <selsect @change="changeCity(index,$event)" :arr='item.data' :styles="150"/>
             </i-col>
             <i-col span='9' v-else>
               <Select v-model="item.ruleValue" @on-change='selectDrap(index,limit,0,$event)'>
@@ -175,7 +177,7 @@
               </Select>
             </i-col>
             <i-col span='2'>
-              <Icon type="ios-trash"  @click="deleLimitItem(index,item.fors)" v-if='!isDisb'/>
+              <Icon type="ios-trash" color='#FF565A' size='28'  @click="deleLimitItem(index,item.fors)" v-if='!isDisb'/>
             </i-col>
           </Row>
           <Row v-if='!isDisb' class-name="row10">
@@ -213,10 +215,10 @@
             <i-col span='4'>
               <Row>
                 <i-col span='10'>
-                   <Icon type="md-arrow-up" color='red' @click="ranktab(index)" v-if='!isDisb'/>
+                   <Icon type="md-arrow-up" color='#FF565A' size='28' @click="ranktab(index)" v-if='!isDisb'/>
                 </i-col>
                 <i-col span='10' push='2'>
-                  <Icon type="ios-trash"  @click="deleGoodItem(index,item.fors)" v-if='!isDisb'/>
+                  <Icon type="ios-trash" color='#FF565A' size='28'  @click="deleGoodItem(index,item.fors)" v-if='!isDisb'/>
                 </i-col>
               </Row>
             </i-col>
@@ -232,7 +234,7 @@
       <Row class-name="row">
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
-           <DatePicker  size="small" placeholder="Select time" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"/>
+           <DatePicker  size="small" placeholder="请输入" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"  :options="options" />
         </i-col>
       </Row>
       <Row class-name="row">
@@ -261,6 +263,11 @@ export default {
     return {
       navigation1: {
         head: "志愿者编辑招募报名项(志愿者)"
+      },
+       options: {
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now()
+        }
       },
       adr:false,
       i:null,
@@ -376,7 +383,8 @@ export default {
       let itemType = isNewItem === 0?item.typeFlag:item.type
       let sort = itemList.length+1
       let args = { itemName, itemType, isMustWrite: 0, isNewItem, itemId, sort, sysId: 2 }
-      if (itemType == 3 || itemType == 4){
+      console.log(itemType)
+      if ((itemType == 3&& isNewItem == 1) || itemType == 4){
         args.arr = [{ value: null }, { value: null }, { value: null }]
       }
       itemList.push(args)
@@ -572,6 +580,7 @@ export default {
           }else if(item.arr){
             for(let val of item.arr){
               if(!val.value){
+                console.log(val.value)
                 this.$Message.warning('设置报名项的选项没填写')
                 return
               }

@@ -8,7 +8,7 @@
        </div>
       <div slot="footer">
         <Button type="error" size="large"   @click="ok()">确定</Button>
-        <Button type="error" size="large"  @click="()=> {this.models = false}">删除</Button>
+        <Button type="error" size="large"  @click="cancel()">删除</Button>
       </div>
   </Modal>
 </template>
@@ -73,11 +73,13 @@ export default {
          this.$Message.warning('没有点击地址')
          return
       }
-       console.log(this.args)
+      
       this.$emit('change',this.args)
+      this.cancel()
+    },
+    cancel(){
       this.models = false
-      console.log(this.args)
-     
+      this.$emit('input',this.models)
     }
   }
 }
