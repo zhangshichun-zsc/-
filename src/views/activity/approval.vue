@@ -493,8 +493,8 @@
                 <span class="first-span">图片</span>
                 <div style="margin-left: 30px;">
                   <div class="first-pic" v-if='partner.partPicShow == null'>
-                      <div class="" @click="()=>{ this.$refs.file.click()}">
-                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadPartnerFile()" style="display:none" >
+                      <div class="" @click="()=>{ this.$refs.filepar.click()}">
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filepar" @change="uploadPartnerFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
@@ -1088,7 +1088,7 @@ export default {
       });
     },
     uploadPartnerFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filepar.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
