@@ -3,19 +3,19 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="head">
-      <p>培训模板</p>
+      <!-- <p>培训模板</p> -->
       <p>
         <Button class="table-btn" @click="modal1 = true">新增模板</Button>
         <Button class="table-btn">作废模板</Button>
       </p>
-      <Modal v-model="modal1" title="新增培训模板">
-        <p>请选择活动分类</p>
+      <Modal v-model="modal1" title="新增模板">
+        <p>请选择分类</p>
         <div class="tabs">
           <Button
             class="btn"
             v-for="(item, index) in arr"
             :key="index"
-            @click="train(item.dicId, item.dicName, 0)"
+            @click="train()"
             >{{ item.dicName }}</Button
           >
         </div>
@@ -78,7 +78,7 @@ export default {
     train(id, name, ble) {
       this.$router.push({
         name: this.from,
-        query: { activityId: id, name, ble }
+        query: { id, name, ble }
       });
     },
     more() {
@@ -89,7 +89,6 @@ export default {
       }
     },
     getList() {
-      console.log(11);
       getActiveTypeItem({}).then(res => {
         this.arr = res.data;
         console.log(res);
@@ -118,6 +117,7 @@ export default {
 }
 .content {
   background: #ffffff;
+  min-height: 600px;
   ul {
     margin: 0 140px;
     padding: 20px 0;

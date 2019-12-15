@@ -17,6 +17,7 @@
               :src="basicInfo.avatarPath"
               alt=""
             />
+            <Avatar v-else icon="ios-person" size="large" />
             <div style="margin-left:15px">
               <p class="username">{{ basicInfo.userName }}</p>
               <p>

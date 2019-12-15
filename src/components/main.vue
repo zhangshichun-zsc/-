@@ -312,11 +312,7 @@
                   />
                 </span>
 
-                <Modal
-                  v-model="modal1"
-                  title="退出确认"
-                  class-name="out-modal"
-                >
+                <Modal v-model="modal1" title="退出确认" class-name="out-modal">
                   <h4>确定要退出登录吗？</h4>
                   <div slot="footer">
                     <Button type="text" size="large" @click="modalOk(0)"
@@ -441,11 +437,10 @@ export default {
     if (to.name === from.name) return;
     let toName = to.name;
     let menuList = this.$store.state.menuList;
-
     if (to.name === "login") {
       return next();
     }
-
+    console.log(JSON.stringify(menuList));
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {

@@ -9,7 +9,7 @@
       </div>
       <Row type="flex" justify="space-between" class-name="header">
         <i-col span='12'>
-          <Row align='middle'>
+          <Row align='middle' type="flex">
             <i-col span='2'>反馈人:</i-col>
             <i-col span='5'>
               <Input size="small" placeholder="活动名称"  v-model="querys.userName"/>
@@ -167,6 +167,7 @@ export default {
         {
           title: '反馈人',
           key: 'userName',
+          width: 300,
           align: 'center',
           render: (h, params) => {
             return h('div',  {
@@ -182,19 +183,19 @@ export default {
           title: '手机号码',
           key: 'tel',
           align: 'center',
-          width: 120,
+          width: 300,
         },
         {
           title: '反馈时间',
           key: 'feedbackAt',
           align: 'center',
-          width: 150,
+          width: 300,
         },
         {
           title: '参与活动岗位',
           key: 'positionName',
           align: 'center',
-          width: 150,
+          width: 200,
         }
       ]
     }
@@ -320,7 +321,8 @@ export default {
   padding: 20px;
   margin-bottom: 30px;
   .head{
-    padding: 10px;
+    padding: 10px 0;
+    color: #1b2331;
   }
   .header{
     margin-bottom: 30px;

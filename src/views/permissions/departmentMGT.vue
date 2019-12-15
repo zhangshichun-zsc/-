@@ -71,14 +71,7 @@
                 >
               </div>
             </Modal>
-            <Select v-model="size" style="width:120px" placeholder="显示条数">
-              <Option
-                v-for="item in Article"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
-            </Select>
+
             <a
               class="btn"
               href="javascript:;"
@@ -103,7 +96,20 @@
             <p>
               <span>成员列表</span>
             </p>
+
             <div class="but">
+              <Select
+                v-model="size"
+                style=" margin-right:15px;width:120px"
+                placeholder="显示条数"
+              >
+                <Option
+                  v-for="item in Article"
+                  :value="item.value"
+                  :key="item.value"
+                  >{{ item.label }}</Option
+                >
+              </Select>
               <a class="btn" href="javascript:;" @click="AddMembers()"
                 >添加成员</a
               >
@@ -477,6 +483,7 @@ export default {
   //事件监听
   watch: {
     size() {
+      console.log(this.size);
       this.$store.commit("updatePage", { page: this.page, size: this.size });
       this.getdepartmentmember();
     },

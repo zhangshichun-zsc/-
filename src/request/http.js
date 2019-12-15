@@ -213,11 +213,10 @@ export function postdel(url, params) {
   });
 }
 
-export const upload = p => {
-  // p.token = token
+export const upload = (p,url='/pic/upload') => {
   return new Promise((resolve, reject) => {
     axios
-      .post("/pic/upload", p, {
+      .post(url, p, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -231,20 +230,3 @@ export const upload = p => {
   });
 };
 
-export const uploadWange = p => {
-  // p.token = token
-  return new Promise((resolve, reject) => {
-    axios
-      .post("/pic/uploadEditor", p, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      })
-      .then(res => {
-        resolve(res.data);
-      })
-      .catch(err => {
-        reject(err.data);
-      });
-  });
-};

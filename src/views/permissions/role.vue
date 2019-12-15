@@ -83,6 +83,8 @@
                 width: '300px',
                 'min-width': '300px',
                 'max-width': '300px',
+                overflow: 'scroll',
+                'min-height': '50vh',
                 flex: '0 0 200px'
               }"
             >
@@ -112,7 +114,7 @@
 
               <Content
                 :style="{
-                  minHeight: '280px',
+                  minHeight: '50vh',
                   background: '#fff'
                 }"
               >

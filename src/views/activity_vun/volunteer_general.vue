@@ -17,14 +17,14 @@
               <Icon type="md-paper" />
             </div>
             <span>总报名人数</span>
-            <span>{{lists.signUpNum}}</span>
+            <span>{{ lists.signUpNum }}</span>
           </div>
           <div class="sign">
             <div class="icon1">
               <Icon type="ios-people" />
             </div>
             <span>总签到人数</span>
-            <span>{{lists.signInNum}}</span>
+            <span>{{ lists.signInNum }}</span>
           </div>
         </div>
       </div>
@@ -36,12 +36,12 @@
           <div class="sign" @click="pend">
             <Icon type="document-text"></Icon>
             <span>报名待审核</span>
-            <span>{{lists.waitAuditNum}}</span>
+            <span>{{ lists.waitAuditNum }}</span>
           </div>
           <div class="sign" @click="pend">
             <Icon type="folder"></Icon>
             <span>转移待审核</span>
-            <span>{{lists.waitTransferNum}}</span>
+            <span>{{ lists.waitTransferNum }}</span>
           </div>
         </div>
       </div>
@@ -51,14 +51,28 @@
           <span>筛选查询</span>
         </p>
         <div class="inquire">
-          <i-input :value.sync="value" placeholder="姓名,手机" style="width: 8rem;"></i-input>
+          <i-input
+            :value.sync="value"
+            placeholder="姓名,手机"
+            style="width: 8rem;"
+          ></i-input>
           <span>岗位:</span>
           <Select v-model="model1" style="width:5rem;">
-            <Option v-for="item in cityList1" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option
+              v-for="item in cityList1"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
           <span>报名状态:</span>
           <Select v-model="model2" style="width:5rem;">
-            <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option
+              v-for="item in cityList2"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
         </div>
       </div>
@@ -103,7 +117,7 @@
 </template>
 
 <script>
-import {Activitysummary, actMemberlist} from "../../request/api"
+import { Activitysummary, actMemberlist } from "../../request/api";
 export default {
   data() {
     return {
@@ -215,8 +229,8 @@ export default {
         }
       ],
       datax: [],
-      lists:[],
-      memberlist:[]
+      lists: [],
+      memberlist: []
     };
   },
 
@@ -227,32 +241,32 @@ export default {
   created() {},
 
   methods: {
-    pend(){
-      this.$router.push({name:'pending'})
+    pend() {
+      this.$router.push({ name: "pending" });
     },
     //数据概况
-    getActivitysummary(){
+    getActivitysummary() {
       Activitysummary({
-        activityId:this.$route.query.acitvityId
+        activityId: this.$route.query.acitvityId
       }).then(res => {
-        if(res.code == 200){
-          this.lists=res.data
+        if (res.code == 200) {
+          this.lists = res.data;
           console.log(res);
         }
-      })
+      });
     },
-    getMemberList(){
+    getMemberList() {
       actMemberlist({
-        activityId:this.$route.query.acitvityId
-      }).then(res=>{
-        this.memberlist=res.data
-      })
+        activityId: this.$route.query.acitvityId
+      }).then(res => {
+        this.memberlist = res.data;
+      });
     }
   },
   mounted() {
-    console.log(this.$route.query.acitvityId)
-    this.getActivitysummary()
-  },
+    console.log(this.$route.query.acitvityId);
+    this.getActivitysummary();
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -308,7 +322,8 @@ export default {
   justify-content: space-between;
   padding-right: 200px;
   margin: 20px 0;
-  .ivu-select-default,button {
+  .ivu-select-default,
+  button {
     margin-right: 10px;
   }
 }
@@ -316,7 +331,7 @@ export default {
   p {
     padding-left: 15px;
     margin-bottom: 10px;
-    span{
+    span {
       font-size: 14px;
     }
   }
@@ -328,18 +343,18 @@ export default {
   height: 50px;
   background: #ffffff;
   font-size: 14px;
-  span{
+  span {
     margin-right: 10px;
   }
 }
-  .icon1{
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-    border: 2px solid #e4e4e4;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-  }
+.icon1 {
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid #e4e4e4;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
 </style>

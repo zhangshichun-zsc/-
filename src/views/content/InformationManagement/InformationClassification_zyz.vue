@@ -1,6 +1,10 @@
 <!--资讯分类管理(会员)-->
 <template>
   <div class="main">
+    <Modal
+      v-model="modal1">
+      <img :src="showImg" alt="" class="showimg"/>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <div class="con-top bk-szy flex-center-start">
@@ -74,6 +78,8 @@ export default {
         head: '资讯分类管理(会员)'
       },
       datas: [],
+      modal1:false,
+      showImg: '',
       columns: [
         {
           type: 'selection',
@@ -84,14 +90,16 @@ export default {
           title: '分类图标',
           key: 'CategoryIcon',
           align: 'center',
-          render: (h, params) => {
-            return h('img', {
-              attrs: {
-                src: params.row.picPath
+          render: (h,params) => {
+            return h("Icon", {
+              props: {
+                type: 'md-images',
               },
-              style: {
-                width: '4rem',
-                height: '4rem'
+              on: {
+                click: () => {
+                  this.modal1 = true
+                  this.showImg = params.row.picPath
+                }
               }
             })
           }
@@ -446,6 +454,10 @@ export default {
 }
 </script>
 <style scoped>
+.showimg{
+  width: 100%;
+  height: auto;
+}
 html,
 body {
   margin: auto;

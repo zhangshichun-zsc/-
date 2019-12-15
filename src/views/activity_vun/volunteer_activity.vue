@@ -3,15 +3,6 @@
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <Button @click="result">查询结果</Button>
-        </div>
-      </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
@@ -19,39 +10,40 @@
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Input size="small" placeholder="活动状态" class="inpt" v-model="activityStatus" />
+          <Input size="small" placeholder="活动状态" style="width:120px;margin-left:10px" v-model="activityStatus" />
         </div>
         <div class="flex-center-start">
           <span>活动日期:</span>
-          <row class="flex-data inpt">
-            <i-col>
+          <Row>
+            <Col span="12">
               <Date-picker
                 type="date"
                 placeholder="选择日期"
-                style="width: 150px"
+                style="width: 150px;margin:0 20px 0 10px"
                 v-model="activityTimestampFrom"
               ></Date-picker>
-            </i-col>
-            <span>-</span>
-            <i-col>
+            </Col>
+            <Col span="12">
               <Date-picker
                 type="date"
                 placeholder="选择日期"
                 style="width: 150px"
                 v-model="activityTimestampTo"
               ></Date-picker>
-            </i-col>
-          </row>
+            </Col>
+          </Row>
+        </div>
+        <div class="flex-center-start">
+          <Button class="button-red" @click="result">查询</Button>
         </div>
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div>
+      <div class="table-header flex-between">
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
-
+          <div>
           <Button class="table-btn" @click="exportData">导出</Button>
           <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button>
           <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
@@ -92,15 +84,13 @@
           </Modal>
           <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button>
           <Button class="table-btn" @click="draft">草稿箱</Button>
-        </div>
-        <div class="flex-center-end">
-          <Button class="table-btn" @click="addaction">添加活动</Button>
-         <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            <Button class="table-btn" @click="addaction">添加活动</Button>
+          <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
       </div>
       <div class="table">
@@ -111,8 +101,6 @@
           :data="datax"
           @on-selection-change="handleSelectionChange"
         ></Table>
-        <div class="set">
-          <Icon type="ios-settings-outline" @click="modal3 = true" />
           <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
             <div class="popup">
               <p class="popup-head">
@@ -149,12 +137,12 @@
               </div>
             </div>
           </Modal>
-        </div>
       </div>
       <Page
         :total="dataCount"
         show-elevator
         show-total
+        class="pages"
         size="small"
         style="margin: auto"
         :page-size="size"
@@ -185,10 +173,27 @@ export default {
           align: "center"
         },
         {
-          width: 180,
-          title: "操作",
+          width: 260,
           key: "action",
           align: "center",
+          renderHeader:(h,params)=>{
+            return h('div',[
+              h('span','操作'),
+              h('Icon',{
+                props:{
+                  type:'ios-settings-outline'
+                },
+                style:{
+                  marginLeft:'5px'
+                },
+                on:{
+                  click:()=>{
+                    this.modal3=true
+                  }
+                }
+              })
+            ])
+          },
           render: (h, params) => {
             return h("div", [
               h(
@@ -201,11 +206,23 @@ export default {
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.activityId)
-                      if(params.row.statusText==1 || params.row.statusText==2 ||params.row.statusText==3||params.row.statusText==4){
-                        this.$router.push({ name: 'volunteer_issue', query: { activityId:params.row.activityId,isEdit:1,status:params.row.statusText } })
-                      }else{
-                        this.$Message.warning('该活动状态不可编辑')
+                      console.log(params.row.activityId);
+                      if (
+                        params.row.statusText == 1 ||
+                        params.row.statusText == 2 ||
+                        params.row.statusText == 3 ||
+                        params.row.statusText == 4
+                      ) {
+                        this.$router.push({
+                          name: "volunteer_issue",
+                          query: {
+                            activityId: params.row.activityId,
+                            isEdit: 1,
+                            status: params.row.statusText
+                          }
+                        });
+                      } else {
+                        this.$Message.warning("该活动状态不可编辑");
                       }
                     }
                   }
@@ -223,7 +240,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: "volunteer_general",query:{ activityId:params.row.activityId} });
+                      this.$router.push({
+                        name: "volunteer_general",
+                        query: { activityId: params.row.activityId }
+                      });
                     }
                   }
                 },
@@ -245,7 +265,7 @@ export default {
                   }
                 },
                 "分享"
-              ),
+              )
               // h(
               //   "Dropdown",
               //   {
@@ -293,37 +313,44 @@ export default {
         {
           title: "活动名称",
           key: "name",
-          align: "center"
+          align: "center",
+          width:300,
         },
         {
           title: "活动时间",
           key: "startTime",
-
+          align:'center',
+          width:240,
         },
         {
           title: "活动类型",
           key: "typeName",
-          align: "center"
+          align: "center",
+          width:200,
         },
         {
           title: "状态",
           key: "status",
-          align: "center"
+          align: "center",
+          width:200,
         },
         {
           title: "是否显示主办方小站",
           key: "isShowHolder",
-          align: "center"
+          align: "center",
+          width:300,
         },
         {
           title: "志愿者报名人数",
           key: "num",
-          align: "center"
+          align: "center",
+          width:260,
         },
         {
           title: "上架/下架",
           key: "statue",
           align: "center",
+          width:240,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -331,9 +358,7 @@ export default {
                   value: params.row.activityQrCode == 1
                 },
                 on: {
-                  input: e => {
-
-                  }
+                  input: e => {}
                 }
               })
             ]);
@@ -360,7 +385,7 @@ export default {
       activityTimestampFrom: "",
       activityTimestampTo: "",
       arr: [],
-      status:"1,2,3,4,5,6,7,9,10,11,13"
+      status: "1,2,3,4,5,6,7,9,10,11,13"
     };
   },
   components: {},
@@ -380,10 +405,10 @@ export default {
   methods: {
     //列表和分页
     getactiveManager() {
-      let From=''
-      let To
+      let From = "";
+      let To;
       if (this.activityTimestampFrom != "") {
-         From= this.activityTimestampFrom.getTime();
+        From = this.activityTimestampFrom.getTime();
       }
       if (this.activityTimestampTo != "") {
         To = this.activityTimestampTo.getTime();
@@ -395,20 +420,19 @@ export default {
         // activityStatus: this.activityStatus,
         // activityTimestampFrom: From,
         // activityTimestampTo: To
-        name:this.name,
-        status:this.status,
-        startT:this.From,
-        endT:this.To,
-        page:{
-          page:this.page,
-          size:this.size
+        name: this.name,
+        status: this.status,
+        startT: this.From,
+        endT: this.To,
+        page: {
+          page: this.page,
+          size: this.size
         }
-
       }).then(res => {
-        this.$refs.selection.selectAll(false)
+        this.$refs.selection.selectAll(false);
         if (res.code == 200) {
-          this.dataCount = res.data.totalSize
-          this.datax = res.data.list
+          this.dataCount = res.data.totalSize;
+          this.datax = res.data.list;
         }
       });
     },
@@ -435,10 +459,10 @@ export default {
 
     //查询
     result(e) {
-      this.name=e[0].value,
-      // this
+      (this.name = e[0].value),
+        // this
 
-      this.getactiveManager();
+        this.getactiveManager();
     },
 
     addaction() {
@@ -450,11 +474,11 @@ export default {
 
     //导出数据
     exportData() {
-      if(this.arr.length==0){
-        this.arr=this.data
+      if (this.arr.length == 0) {
+        this.arr = this.data;
       }
       this.$refs.selection.exportCsv({
-        filename:this.navigation1.head,
+        filename: this.navigation1.head,
         columns: this.columns.filter((col, index) => index > 0),
         data: this.arr
       });
@@ -469,14 +493,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-  margin-top: 20px;
-}
 .integral-header .integral-top {
   padding: 10px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
@@ -488,19 +507,17 @@ export default {
   height: 50px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
+  width: 160px;
   margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 40px;
 }
-// .integral-table {
-//   margin-top: 30px;
-// }
+
 .table-header {
-  padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  padding: 20px;
+  background: white;
+
 }
 .table-header .table-btn {
   margin-left: 15px;
@@ -508,8 +525,8 @@ export default {
 .flex-data {
   display: flex;
 }
-.integral-table {
-  position: relative;
+.pages {
+  text-align: center;
 }
 .popup {
   background: #ffffff;
@@ -546,21 +563,13 @@ export default {
     }
   }
 }
-ul {
-  margin: 10px 30%;
+.table{
+   position: relative;
 }
-li {
-  width: 160px;
-  height: 30px;
+
+.pages{
+  padding:10px 0 20px;
   text-align: center;
-  line-height: 30px;
-  border: 1px solid gray;
-  margin-top: -1px;
-}
-.set {
-  position: absolute;
-  left: 180px;
-  top: 70px;
-  cursor: pointer;
+  background-color: #fff;
 }
 </style>

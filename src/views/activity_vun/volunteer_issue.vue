@@ -1,7 +1,7 @@
 <!--志愿者活动发布（志愿者）-->
 <template>
   <div>
-    <adress :value='adr' @change='getMap'/>
+    <adress v-model='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <p class="content-head">
@@ -243,7 +243,7 @@
                     <span>必填</span>
                   </i-col>
                   <i-col span='2'>
-                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28'/>
                   </i-col>
                 </Row>
                 <Row v-else-if='~~item.typeFlag === 3 || ~~item.typeFlag === 4 '>
@@ -256,7 +256,7 @@
                       <span>必填</span>
                     </i-col>
                     <i-col span='2'>
-                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb'/>
+                      <Icon type="ios-trash"  @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28'/>
                     </i-col>
                   </Row>
                   <Row v-for="(val,i) in item.arr" :key='i' class-name="row10">
@@ -264,7 +264,7 @@
                         <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb"/>
                     </i-col>
                     <i-col span='2' push='2'>
-                      <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb'/>
+                      <Icon type="ios-trash"  @click="deleItem(index,i)" v-if='!isDisb' color='#FF565A' size='28'/>
                     </i-col>
                   </Row>
                   <Row>
@@ -322,10 +322,10 @@ import { stat, constants } from 'fs'
 export default {
   data() {
     return {
-       options: {
-          disabledDate (date) {
-              return date && date.valueOf() < Date.now() - 86400000;
-          }
+      options: {
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now()
+        }
       },
       add:false,
       navigation1: {
@@ -434,7 +434,6 @@ export default {
   },
   methods: {
     getAdr(){
-      console.log(this.adr)
       this.adr = true
     },
     getRelse(){
@@ -602,6 +601,7 @@ export default {
       let file = e.target.files[0]
       const dataForm = new FormData()
       dataForm.append('file', file)
+      console.log(dataForm)
       upload(dataForm).then(res => {
         if(res.code == 200){
           var reader = new FileReader()
@@ -979,20 +979,23 @@ export default {
     }
     .cancel{
       position: absolute;
-      top: 10px;
-      right: -30px;
+      top: 0px;
+      right: 0px;
       z-index: 10;
     }
     .upload .file{
       width: 100%;
       height: 100%;
-      border: 1px dashed #dcdee2;
+      border: 1px dashed #FF565A;
       text-align: center;
       padding: 20px 0;
     }
-    .upload .file:hover{
-      border: 1px dashed #FF565A;
-    }
+    // .upload .file:hover{
+    //   border: 1px dashed #FF565A;
+    // }
+    // .upload .file:hover .ivu-icon{
+    //   color: #FF565A !important;
+    // } 
     .upload .file input{
       display: none;
     }

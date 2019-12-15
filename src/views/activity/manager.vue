@@ -1,14 +1,9 @@
-<!--活动管理(会员)-->
+<!--志愿者活动管理(会员)-->
+
 <template>
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-      </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
@@ -16,44 +11,41 @@
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Select v-model="activityStatus" style="width:200px">
-            <Option v-for="item in statelists" :value="item.value" :key="item.value">{{ item.name }}</Option>
-          </Select>
+          <Input size="small" placeholder="活动状态" class="inpt" v-model="activityStatus" />
         </div>
+
         <div class="flex-center-start">
           <span>活动日期:</span>
-          <row class="flex-data inpt">
-            <i-col>
+           <Row>
+             <Col span="12">
               <Date-picker
                 type="date"
                 placeholder="选择日期"
-                style="width: 150px"
+                style="width: 150px;margin:0 20px 0 10px"
                 v-model="activityTimestampFrom"
               ></Date-picker>
-            </i-col>
-            <span>——</span>
-            <i-col>
+             </Col> 
+             <Col span="12">
               <Date-picker
                 type="date"
                 placeholder="选择日期"
                 style="width: 150px"
                 v-model="activityTimestampTo"
               ></Date-picker>
-            </i-col>
-          </row>
+              </Col>
+          </Row>
         </div>
-        <div class="flex-center-end">
-          <Button @click="result">查询结果</Button>
+        <div class="flex-center-start">
+         <Button class="button-red" @click="result">查询</Button>;
         </div>
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div>
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status">全选</Checkbox>
-          </Button>
-
+      <div class="table-header flex-between">
+        <Button @click="chackall()" style="border:0px;">
+          <Checkbox v-model="status">全选</Checkbox>
+        </Button>
+       <div>
           <Button class="table-btn" @click="exportData">导出</Button>
           <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button>
           <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
@@ -94,13 +86,11 @@
           </Modal>
           <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button>
           <Button class="table-btn" @click="draft">草稿箱</Button>
-        </div>
-        <div class="flex-center-end">
           <Button class="table-btn" @click="addaction">添加活动</Button>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:100px;margin:0 10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -113,23 +103,6 @@
           :data="datax"
           @on-selection-change="handleSelectionChange"
         ></Table>
-        <Modal v-model="addstate" width="360">
-                <p slot="header" style="color:#f60;text-align:center">
-                  <span>下架确定</span>
-                </p>
-                <div style="text-align:center">
-                  <p>请确认是否要下架该活动，下架之后无法上架</p>
-                </div>
-                <div slot="footer">
-                  <Button type="error" @click="modalCancel">取消</Button>
-                  <Button type="success" @click="modalOkdel">确定</Button>
-                </div>
-              </Modal>
-        <Modal v-model="modal5" title="取消原因" @on-ok="modalOk" @on-cancel="cancel">
-          <input type="text" v-model="text" />
-        </Modal>
-        <div class="set">
-          <!-- <Icon type="ios-settings-outline" @click="modal3 = true" /> -->
           <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
             <div class="popup">
               <p class="popup-head">
@@ -166,18 +139,19 @@
               </div>
             </div>
           </Modal>
-        </div>
+        
       </div>
       <Page
         :total="dataCount"
         show-elevator
         show-total
         size="small"
-        style="margin: auto"
+        class="pages"
         :page-size="size"
         @on-change="changepages"
       />
     </div>
+
   </div>
 </template>
 
@@ -210,9 +184,26 @@ export default {
           align: "center"
         },
         {
-          width: 180,
-          title: "操作",
+          width: 240,
           key: "action",
+          renderHeader:(h,params)=>{
+            return h('div',[
+              h('span','操作'),
+              h('Icon',{
+                props:{
+                  type:'ios-settings-outline'
+                },
+                style:{
+                  marginLeft:'5px'
+                },
+                on:{
+                  click:()=>{
+                    this.modal3=true
+                  }
+                }
+              })
+            ])
+          },
           align: "center",
           render: (h, params) => {
             let signup = "关闭报名";
@@ -369,32 +360,38 @@ export default {
         {
           title: "活动名称",
           key: "activityName",
-          align: "center"
+          align: "center",
+          width:260,
         },
         {
           title: "立项名称",
           key: "batchName",
-          align: "center"
+          align: "center",
+          width:260,
         },
         {
           title: "项目名称",
           key: "categoryName",
-          align: "center"
+          align: "center",
+          width:300,
         },
         {
           title: "活动时间",
           key: "startTimestamp",
+          width:260,
           render: (h, params) => {
             return h("div", formatDate(params.row.startTimestamp));
           }
         },
         {
           title: "活动类型",
+          width:160,
           key: "activityType",
           align: "center"
         },
         {
           title: "状态",
+          width:180,
           key: "statusText",
           align: "center",
           render: (h, params) => {
@@ -406,26 +403,31 @@ export default {
         },
         {
           title: "活动分类",
+          width:200,
           key: "activityClass",
           align: "center"
         },
         {
           title: "会员报名人数",
+          width:180,
           key: "memberSignUpCount",
           align: "center",
         },
         {
           title: "志愿者报名人数",
+          width:160,
           key: "volunteerSignUpCount",
           align: "center"
         },
         {
           title: "其他角色报名人数",
+          width:180,
           key: "otherSignUpCount",
           align: "center"
         },
         {
           title: "群二维码",
+          width:180,
           key: "activityQrCode",
           align: "center",
           render: (h, params) => {
@@ -442,6 +444,7 @@ export default {
         },
         {
           title: "是否上架",
+          width:140,
           key: "statue",
           align: "center",
           render: (h, params) => {
@@ -710,38 +713,31 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-  margin-top: 20px;
-}
+
 .integral-header .integral-top {
   padding: 10px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
 }
 .integral-header .integral-body {
-  padding: 0 20px;
+  padding:  20px;
   background: #fff;
   justify-content: flex-start;
   height: 50px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
+  width: 150px;
   margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 40px;
 }
-// .integral-table {
-//   margin-top: 30px;
-// }
+
 .table-header {
-  padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  padding: 20px;
+  background: white;
 }
 .table-header .table-btn {
   margin-left: 15px;
@@ -787,22 +783,17 @@ export default {
     }
   }
 }
-// ul {
-//   margin: 10px 30%;
-//   li {
-//   width: 160px;
-//   height: 30px;
-//   text-align: center;
-//   line-height: 30px;
-//   border: 1px solid gray;
-//   margin-top: -1px;
-// }
-// }
-
-.set {
-  position: absolute;
-  left: 180px;
-  top: 70px;
-  cursor: pointer;
+li {
+  width: 160px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border: 1px solid gray;
+  margin-top: -1px;
+}
+.pages{
+  text-align: center;
+  padding: 20px 0;
+  background-color: white;
 }
 </style>
