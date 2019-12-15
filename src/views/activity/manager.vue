@@ -167,7 +167,7 @@ export default {
       modal3: false,
       fruit: ["苹果"],
       navigation1: {
-        head: "志愿者活动管理(会员)"
+        head: "活动管理(会员)"
       },
       columns: [
         {

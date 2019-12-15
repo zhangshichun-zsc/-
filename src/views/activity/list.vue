@@ -89,7 +89,7 @@ export default {
       users: [],
       types: "quanbu",
       value: "",
-      list: ["全部", "待审核", "报名成功", "已参加", "已违约", "已取消"],
+      list: ["全部", "待审核", "报名成功", "已违约", "已取消"],
       num: 0,
       columns: [
         {
@@ -209,6 +209,18 @@ export default {
     },
     onall(index) {
       this.num = index;
+      if(index==0){
+        this.signUpStatus = ''
+      }else if(index==1){
+        this.signUpStatus = 1
+      }else if(index==2){
+        this.signUpStatus = 2
+      }else if(index==3){
+        this.signUpStatus = 9
+      }else if(index==4){
+        this.signUpStatus = 7
+      }
+      this.getactiveAddManager()
     },
 
     //参与列表接口

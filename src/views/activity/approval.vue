@@ -134,8 +134,8 @@
               </li>
               <li class="ins">
                 <div>
-                  <p class="ins-p">北京融爱融乐心智障碍者家庭支持中心</p>
-                  <p class="ins-b">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam harum, fuga autem repudiandae incidunt a omnis vero nulla quaerat quibusdam dolorum excepturi? Incidunt praesentium consectetur est, repudiandae molestiae suscipit natus.</p>
+                  <p class="ins-p">{{itemsList.org.propagandaTitle}}</p>
+                  <p class="ins-b" v-html="itemsList.org.propagandaText"></p>
                 </div>
               </li>
             </ul>
