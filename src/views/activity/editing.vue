@@ -27,13 +27,13 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-pic" v-if='batch.actCoverShowPic == null'>
+                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
                     <div class="" @click="()=>{ this.$refs.files.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFmFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-picfm" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="batch.actCoverShowPic"/>
                     <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
                   </div>
@@ -585,6 +585,14 @@ export default {
 }
 .first-pic{
   width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px solid;
+  position: relative;
+}
+.first-picfm{
+  width: 200px;
   height: 200px;
   text-align: center;
   line-height: 200px;
