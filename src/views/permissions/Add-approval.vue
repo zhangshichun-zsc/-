@@ -112,7 +112,7 @@ export default {
       },
       formValidate: {
         typeFlag: null,
-        applyRoles: "0",
+        applyRoles: 0,
         categoryId: null
       },
       ruleValidate: {
@@ -214,6 +214,14 @@ export default {
     },
     // -添加审批流程
     getpoweradd() {
+      let applyRoles = {};
+
+      if (this.formValidate.typeFlag === 1) {
+        applyRoles = {
+          applyRoles: this.formValidate.applyRoles
+        };
+      }
+
       poweradd({
         sysId: this.sysType,
         typeFlag: this.formValidate.typeFlag,
@@ -223,7 +231,7 @@ export default {
         audit1At: this.audit1At,
         audit2At: this.audit2At,
         enableFLag: this.enableFLag,
-        applyRoles: this.formValidate.applyRoles
+        ...applyRoles
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info(res.msg);

@@ -16,7 +16,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">选择模板</span>
-                <Select v-model="batch.actTypeName" style="width:300px">
+                <Select style="width:300px">
                   <Option v-for="item in templateList" :value="item.name" :key="item.name" @click.native="getTemplateDetail(item)">{{ item.name }}</Option>
                 </Select>
               </li>
@@ -314,7 +314,7 @@ export default {
     },
     getProjectDetail(){
        projectDetail({
-        activityId:this.$route.query.acitvityId
+        activityId:this.$route.query.id
       }).then(res => {
         console.log(res);
         this.batch = res.data

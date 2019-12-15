@@ -757,7 +757,7 @@ export default {
           title: "手机号",
           key: "tel",
           align: "center",
-          width: 120
+          width: 160
         },
         {
           title: "用户昵称",
