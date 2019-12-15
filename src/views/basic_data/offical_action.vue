@@ -15,7 +15,7 @@
           </div>
 
         </div>
-      </div> -->
+      </div>-->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start name">
           <span>名称:</span>
@@ -41,15 +41,14 @@
             </Col>
           </Row>
         </div>
-         <Button class="table-btns" @click="query">查询结果</Button>
+        <Button class="search" @click="query">查询</Button>
       </div>
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-
           <!-- <span>已选择{{arr.length}}人</span> -->
-          <Button class="table-btns"  @click="add">新增活动分类</Button>
+          <Button class="table-btns" @click="add">新增活动分类</Button>
           <Modal v-model="modal2" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicNamemod">
@@ -72,16 +71,9 @@
           </Modal>
         </div>
       </div>
-       <div class="min-height">
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data"
-
-      ></Table>
+      <div class="min-height">
+        <Table ref="selection" border :columns="columns" :data="data"></Table>
       </div>
-
 
       <div class="pages">
         <Page
@@ -141,19 +133,19 @@ export default {
         {
           title: "活动分类名称",
           key: "dicName",
-           width: 300,
+          width: 300,
           align: "center"
         },
         {
           title: "受益对象",
           key: "beneficiary",
-           width: 100,
+          width: 100,
           align: "center"
         },
         {
           title: "创建时间",
           key: "createTimestamp",
-           width: 140,
+          width: 140,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createTimestamp));
@@ -162,22 +154,22 @@ export default {
         {
           title: "创建人",
           key: "userName",
-           width: 300,
+          width: 300,
           align: "center"
         },
         {
           title: "有效状态",
-          key: "status",
-         align: "center",
+          align: "center",
+           width: 120,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
                 props: {
                   value: params.row.validFlag == 1
                 },
-               style:{
-                 text:'center'
-               },
+                style: {
+                  text: "center"
+                },
                 on: {
                   input: e => {
                     console.log(e);
@@ -190,9 +182,9 @@ export default {
         },
         {
           title: "操作",
-          key: "action",
-          align: "center",
 
+          align: "center",
+          width: 106,
           render: (h, params) => {
             return h("div", [
               h(
@@ -282,8 +274,8 @@ export default {
     getOffactivities() {
       if (this.createTimestamp != "") {
         this.statsdata = this.createTimestamp.getTime();
-      }else{
-        this.statsdata=''
+      } else {
+        this.statsdata = "";
       }
       Offactivities({
         page: { page: this.page, size: this.size },
@@ -356,7 +348,7 @@ export default {
     // 添加字典信息
     getOffactiviteadd() {
       Offactiviteadd({
-        userId:this.$store.state.userId,
+        userId: this.$store.state.userId,
         typeFlag: 8,
         dicName: this.formValidate.dicNamemod,
         oprUserId: this.$store.state.userId,
@@ -408,32 +400,28 @@ export default {
 
     // 查询结果按钮
     query() {
-      console.log(this.createTimestamp)
+      console.log(this.createTimestamp);
       this.page = 1;
       this.getOffactivities();
-    },
-
-
-
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-body{
+.integral-body {
   padding: 30px 20px 20px 20px;
 
   display: flex;
   height: 80px;
   background: #ffffff;
   border: 0;
-
 }
-.name{
+.name {
   margin-right: 20px;
-  span{
+  span {
     display: block;
     width: 80px;
   }
 }
-@import "../../libs/basicdata.css"
+@import "../../libs/basicdata.css";
 </style>

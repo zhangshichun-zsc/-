@@ -28,7 +28,7 @@
           <span>用户昵称:</span>
           <Input size="large" placeholder="用户昵称" class="inpt" v-model="nickname" />
         </div>
-        <Button class="table-btns" @click="query">查询结果</Button>
+        <Button class="search" @click="query">查询</Button>
         <Button class="table-btns" @click="set" >积分规则设置</Button>
       </div>
     </div>
@@ -190,7 +190,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-
+           width: 200,
           render: (h, params) => {
             return h("div", [
               h(

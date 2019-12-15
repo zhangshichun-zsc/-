@@ -15,8 +15,8 @@
               class="img-src"
               v-if="basicInfo.avatarPath"
               :src="basicInfo.avatarPath"
-              alt=""
             />
+            <Avatar v-else icon="ios-person" size="large" />
             <span class="username"> {{ basicInfo.userName }}</span>
           </div>
           <div>
@@ -327,7 +327,7 @@ export default {
           this.basicInfo = res.data.basicInfo;
 
           this.basicInfo.vipLastTime = formatDate(this.basicInfo.vipLastTime);
-          this.basicInfo.birthday = formatDate(this.basicInfo.birthday);
+          this.basicInfo.birthday = this.basicInfo.birthday;
           this.basicInfo.createTime = formatDate(this.basicInfo.createTime);
 
           this.statisticsInfo = [res.data.statisticsInfo];

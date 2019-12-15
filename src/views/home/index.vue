@@ -338,7 +338,7 @@ export default {
         },
         {
           name: "报表统计",
-          query: "/activity/approval",
+          query: "Activities-spread",
           icon: "shortcutEntry_4"
         },
         {

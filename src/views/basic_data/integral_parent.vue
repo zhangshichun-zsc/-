@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="min-height">
-        <Table ref="selection" border :columns="columns" :data="data1"></Table>
+        <Table ref="selection"  :columns="columns" :data="data1" border></Table>
       </div>
       <div class="pages">
         <Page
@@ -61,30 +61,35 @@ export default {
         {
           type: "selection",
           width: 60,
+           resizable: true,
           align: "center"
         },
         {
           title: "职业名称",
           key: "dicName",
           align: "center",
+           resizable: true,
            width: 300
         },
         {
           title: "创建时间",
           key: "creatAt",
           align: "center",
-          width: 140
+           resizable: true,
+          width: 180
         },
         {
           title: "创建人",
           key: "userName",
           align: "center",
+           resizable: true,
            width: 300
         },
         {
           title: "有效状态",
           key: "status",
            align: "center",
+            resizable: true,
             width: 150,
           render: (h, params) => {
             return h("div", [
@@ -113,6 +118,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+           resizable: true,
           width:172,
           render: (h, params) => {
             return h("div", [

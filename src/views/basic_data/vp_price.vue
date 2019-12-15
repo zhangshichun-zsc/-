@@ -11,7 +11,7 @@
           </Button> -->
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns"  @click="add('formValidate')">{{Newly}}</Button>
-          <Modal v-model="modal1" title="新增会费" draggable width="800">
+          <Modal v-model="modal1" title="新增会费" class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称:" prop="name">
                 <Input v-model="formValidate.name" style="width: 220px"/>
@@ -31,7 +31,7 @@
               </FormItem>
               <FormItem label="会费详情">
                 <wangeditor id="exccccc" :labels="editorContent" @change="btn"></wangeditor>
-                <!-- <div id="editorContent" style="text-align:left"></div> -->
+
               </FormItem>
             </Form>
             <div slot="footer">
@@ -168,18 +168,20 @@ export default {
         {
           title: "金额",
           key: "amount",
-          align: "center"
+          align: "center",
+           width:120,
         },
         {
           title: "会员包",
           key: "packageFlagText",
-          align: "center"
+          align: "center",
+           width:120,
         },
         {
           title: "创建时间",
           key: "createAt",
           align: "center",
-          width:160,
+          width:180,
         },
         {
           title: "有效状态",
@@ -213,7 +215,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:80,
+          width:116,
           render: (h, params) => {
             return h("div", [
               h(
@@ -451,5 +453,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.modals{
+  height: 500px;
+}
 @import "../../libs/basicdata.css"
 </style>

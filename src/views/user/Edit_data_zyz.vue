@@ -243,28 +243,41 @@
                 label-position="left"
               >
                 <FormItem label="VIP到期时间">
-                  <p>{{ parameOBJ.memInfo.userInfo.vipLastTime || "" }}</p>
+                  <p>{{ parameOBJ.memInfo.userInfo.vipLastTime || "暂无" }}</p>
                 </FormItem>
                 <FormItem label="障碍类型">
                   <p>
-                    {{ parameOBJ.memInfo.childsInfo[0].disorderType || "" }}
+                    {{
+                      parameOBJ.memInfo.childsInfo.length > 0
+                        ? parameOBJ.memInfo.childsInfo[0].disorderType
+                        : "暂无"
+                    }}
                   </p>
                 </FormItem>
                 <FormItem label="残疾证号">
                   <p>
-                    {{ parameOBJ.memInfo.childsInfo[0].disorderCard || "" }}
+                    {{
+                      parameOBJ.memInfo.childsInfo.length > 0
+                        ? parameOBJ.memInfo.childsInfo[0].disorderCard
+                        : "暂无"
+                    }}
                   </p>
                 </FormItem>
                 <FormItem label="家庭账号成员">
-                  <p>
+                  <p v-if="parameOBJ.memInfo.childsInfo.length > 0">
                     {{ parameOBJ.memInfo.homeMemberList[0].userName || ""
                     }}{{ parameOBJ.memInfo.homeMemberList[0].typeDicId }}
                     {{ parameOBJ.memInfo.homeMemberList[0].userPhone }}
                   </p>
+                  <p v-else>暂无</p>
                 </FormItem>
                 <FormItem label="衣服尺码">
                   <p>
-                    {{ parameOBJ.memInfo.childsInfo[0].clothingSize || "XL" }}
+                    {{
+                      parameOBJ.memInfo.childsInfo.length > 0
+                        ? parameOBJ.memInfo.childsInfo[0].clothingSize
+                        : "暂无"
+                    }}
                   </p>
                 </FormItem>
                 <div style="text-align: center;" @click="showBenefitModel">
@@ -355,54 +368,114 @@
                 </Select>
               </FormItem>
               <FormItem label="孩子姓名">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].childName }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].childName
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="孩子性别">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].childSex }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].childSex
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="孩子证件类型">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].idcardType }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].idcardType
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="孩子生日">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].childBirthday }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].childBirthday
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="孩子残疾证后两位">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].disorderCard }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].disorderCard
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="孩子尺码">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].clothingSize }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].clothingSize
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="孩子障碍类型">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].disorderType }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].disorderType
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="是否患有其他疾病">
                 <p
-                  style="padding:0; width:70%;"
-                  v-if="parameOBJ.memInfo.childsInfo[0].disorderType.length > 0"
-                  class="disorderTypelist-item "
-                  v-for="item in parameOBJ.memInfo.childsInfo[0].disorderType.split(
-                    ','
-                  )"
-                >
-                  {{ item }}
-                </p>
-                <p v-else class="disorderTypelist-item">无</p>
+                    style="padding:0; width:70%;"
+                    class="disorderTypelist-item "
+                    v-for="item in  parameOBJ.memInfo.childsInfo.length > 0 ? parameOBJ.memInfo.childsInfo[0].disorderType.split(
+                      ','
+                    ):['暂无']"
+                  >
+                    {{ item }}
+                  </p>
               </FormItem>
               <FormItem label="孩子爱好、注意事项">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].point }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].point
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
               <FormItem label="教育经历">
                 <p>
-                  {{ parameOBJ.memInfo.childsInfo[0].eduExperience || "暂无" }}
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].eduExperience
+                      : "暂无"
+                  }}
                 </p>
               </FormItem>
               <FormItem label="就业情况">
                 <p>
-                  {{ parameOBJ.memInfo.childsInfo[0].workExperience || "无业" }}
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].workExperience
+                      : "暂无"
+                  }}
                 </p>
               </FormItem>
               <FormItem label="孩子家庭身份">
-                <p>{{ parameOBJ.memInfo.childsInfo[0].typeDicId || "孩子" }}</p>
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].typeDicId
+                      : "暂无"
+                  }}
+                </p>
               </FormItem>
             </Form>
             <Button
@@ -443,6 +516,7 @@
                 </FormItem>
                 <div style="padding-left:0.5rem; padding-right:5rem">
                   <p>是否患有其他疾病</p>
+
                   <span
                     v-if="
                       parameOBJ.memInfo.childsInfo[index].disorderType.length >
@@ -454,9 +528,10 @@
                     ].disorderType.split(',')"
                     >{{ item }}</span
                   >
-                  <span v-else class="disorderTypelist-item">无</span>
+                  <span v-else class="disorderTypelist-item">暂无</span>
                 </div>
                 <FormItem label="孩子爱好、注意事项">
+
                   <p>{{ parameOBJ.memInfo.childsInfo[index].point }}</p>
                 </FormItem>
                 <FormItem label="教育经历">
@@ -471,7 +546,7 @@
                   <p>
                     {{
                       parameOBJ.memInfo.childsInfo[index].workExperience ||
-                        "无业"
+                        "暂无"
                     }}
                   </p>
                 </FormItem>

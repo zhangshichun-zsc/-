@@ -278,7 +278,7 @@ export default {
         },
         {
           name: "报表统计",
-          query: "/activity/approval",
+          query: "Activities-spread",
           icon: "shortcutEntry_4"
         },
         {
@@ -506,6 +506,8 @@ export default {
         border-radius: 50%;
         background: #fef4f5;
         margin: 0 auto;
+        width: 50px;
+        height: 50px;
       }
       .name-btn {
         text-align: center;

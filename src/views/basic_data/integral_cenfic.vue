@@ -15,7 +15,7 @@
           </div>
 
         </div>
-      </div> -->
+      </div>-->
       <!-- <div class="flex-center-start integral-body">
         <div class="flex-center-start name">
           <span>名称:</span>
@@ -46,32 +46,27 @@
           </Row>
         </div>
          <Button class="table-btns" @click="queryMet()">查询结果</Button>
-      </div> -->
-       <basicdata :navigation1="navigation1" @query="queryMet"></basicdata>
+      </div>-->
+      <basicdata :navigation1="navigation1" @query="queryMet"></basicdata>
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
           <!-- <Button class="table-btn" @click="modal1 = true">{{title}}</Button> -->
-          <Modal v-model="modal1" title="修改"  @on-cancel='cancel'>
+          <Modal v-model="modal1" title="修改" @on-cancel="cancel">
             <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
-                <Input v-model="args.name"/>
+                <Input v-model="args.name" />
               </FormItem>
             </Form>
-              <div slot="footer">
-                 <Button type="error" size="large" @click="update">确定</Button>
-               </div>
+            <div slot="footer">
+              <Button type="error" size="large" @click="update">确定</Button>
+            </div>
           </Modal>
         </div>
       </div>
-       <div class="min-height">
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data1"
-      ></Table>
+      <div class="min-height">
+        <Table ref="selection" border :columns="columns" :data="data1"></Table>
       </div>
 
       <div class="pages">
@@ -91,15 +86,15 @@
 
 <script>
 import basicdata from "@/components/basicdata";
-import {formatDate} from '../../request/datatime'
+import { formatDate } from "../../request/datatime";
 
-import { getCard,updateCard } from '@/request/api'
-import { filterNull } from '@/libs/utils'
+import { getCard, updateCard } from "@/request/api";
+import { filterNull } from "@/libs/utils";
 export default {
   data() {
     return {
       open: false,
-      time: '请选择时间段',
+      time: "请选择时间段",
       navigation1: {
         head: "证件管理"
       },
@@ -111,53 +106,57 @@ export default {
         {
           title: "名称",
           key: "name",
-           width: 300,
-          align: "center",
+          width: 330,
+          align: "center"
         },
         {
           title: "创建时间",
           key: "createAt",
-           width: 140,
-          align: "center",
+          width: 180,
+          align: "center"
         },
         {
           title: "创建人",
           key: "userName",
-           width: 300,
+          width: 330,
           align: "center",
-          render: (h,params) => {
-            return h("span",params.row.userName?params.row.userName:'系统管理员')
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.userName ? params.row.userName : "系统管理员"
+            );
           }
         },
         {
           title: "有效状态",
-          key: "validFlag",
-         align: "center",
+
+          align: "center",
+          width: 150,
           render: (h, params) => {
-            return h('div', [
-              h('i-switch',{
-                props:{
-                  trueValue:1,
-                  falseValue:0,
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  trueValue: 1,
+                  falseValue: 0,
                   value: ~~params.row.validFlag
                 },
                 on: {
-                  "on-change": (e) => {
-                    this.args.name = params.row.name
-                    this.args.dicId = params.row.dicId
-                    this.args.validFlag = e
-                    this.update()
+                  "on-change": e => {
+                    this.args.name = params.row.name;
+                    this.args.dicId = params.row.dicId;
+                    this.args.validFlag = e;
+                    this.update();
                   }
                 }
               })
-            ])
+            ]);
           }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-           width: 90,
+          width: 136,
 
           render: (h, params) => {
             return h("div", [
@@ -170,9 +169,9 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.args.name = params.row.name
-                      this.args.dicId = params.row.dicId
-                      this.args.validFlag = params.row.validFlag
+                      this.args.name = params.row.name;
+                      this.args.dicId = params.row.dicId;
+                      this.args.validFlag = params.row.validFlag;
                       this.modal1 = true;
                     }
                   }
@@ -183,29 +182,29 @@ export default {
           }
         }
       ],
-      query:{
-        name:null,
-        validFlag:null,
-        startAt:null,
-        endAt:null,
+      query: {
+        name: null,
+        validFlag: null,
+        startAt: null,
+        endAt: null
       },
-      params:{
-        name:null,
-        validFlag:null,
-        startAt:null,
-        endAt:null,
-        page:{
+      params: {
+        name: null,
+        validFlag: null,
+        startAt: null,
+        endAt: null,
+        page: {
           page: 1,
           size: 10
         }
       },
       data1: [],
       modal1: false,
-      sumSize:10,
-      args:{
-        name:null,
-        dicId:null,
-        validFlag:null
+      sumSize: 10,
+      args: {
+        name: null,
+        dicId: null,
+        validFlag: null
       }
     };
   },
@@ -215,77 +214,75 @@ export default {
   computed: {},
 
   created() {
-    this.getList()
+    this.getList();
   },
 
   methods: {
-    getList(){
+    getList() {
       getCard(filterNull(this.params)).then(res => {
-        if(res.code == 200){
-          this.data1 = res.data.list
-          this.sumSize = res.data.totalSize
-          this.sumPage = res.data.totalNum
-        }else{
-          this.$Message.error(res.msg)
+        if (res.code == 200) {
+          this.data1 = res.data.list;
+          this.sumSize = res.data.totalSize;
+          this.sumPage = res.data.totalNum;
+        } else {
+          this.$Message.error(res.msg);
         }
-      })
+      });
     },
-    update(){
-      if(!this.args.name){
-        this.$Message.warning('不能为空')
-        return
+    update() {
+      if (!this.args.name) {
+        this.$Message.warning("不能为空");
+        return;
       }
       updateCard(filterNull(this.args)).then(res => {
-        if(res.code == 200){
-          this.$set(this.params.page,'page',1)
-          this.modal1 = false
-          this.getList()
-          this.$Message.success('修改成功')
-          this.cancel()
-        }else{
-          this.$Message.error(res.msg)
+        if (res.code == 200) {
+          this.$set(this.params.page, "page", 1);
+          this.modal1 = false;
+          this.getList();
+          this.$Message.success("修改成功");
+          this.cancel();
+        } else {
+          this.$Message.error(res.msg);
         }
-      })
+      });
     },
-    cancel(){
-      this.args.name = null
-      this.args.dicId = null
-      this.args.validFlag = null
+    cancel() {
+      this.args.name = null;
+      this.args.dicId = null;
+      this.args.validFlag = null;
     },
 
-
-    changepages(e){
-      this.params.page = e
-      this.getList()
+    changepages(e) {
+      this.params.page = e;
+      this.getList();
     },
-    queryMet(e){
-      this.query.startAt=e.createTimestamp[0]
-      this.query.endAt=e.createTimestamp[1]
-      this.query.validFlag=e.validFlag
-      this.query.name=e.dicName
-      this.params = Object.assign(this.params,this.query)
-      this.$set(this.params.page,'page',1)
-      this.getList()
+    queryMet(e) {
+      this.query.startAt = e.createTimestamp[0];
+      this.query.endAt = e.createTimestamp[1];
+      this.query.validFlag = e.validFlag;
+      this.query.name = e.dicName;
+      this.params = Object.assign(this.params, this.query);
+      this.$set(this.params.page, "page", 1);
+      this.getList();
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-body{
+.integral-body {
   padding: 30px 20px 20px 20px;
 
   display: flex;
   height: 80px;
   background: #ffffff;
   border: 0;
-
 }
-.name{
-  span{
+.name {
+  span {
     display: block;
     width: 80px;
-  };
- margin-right: 20px;
+  }
+  margin-right: 20px;
 }
-@import "../../libs/basicdata.css"
+@import "../../libs/basicdata.css";
 </style>

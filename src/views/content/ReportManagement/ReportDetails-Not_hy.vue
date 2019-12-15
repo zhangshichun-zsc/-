@@ -9,39 +9,39 @@
         </p>
       </div>
       <div class="con bk">
-        <table width="100%;" v-for="details in ReportData">
+        <table width="100%;">
           <tr>
             <td>举报理由</td>
-            <td>{{details.ReportReason}}</td>
+            <td>{{ReportData.reportReasonText}}</td>
           </tr>
           <tr>
             <td>举报人</td>
-            <td>{{details.Whistleblowers}}</td>
+            <td>{{ReportData.reportUserName}}</td>
           </tr>
           <tr>
             <td>举报时间</td>
-            <td>{{details.ReportTime}}</td>
+            <td>{{ReportData.reportTimestamp}}</td>
           </tr>
           <tr>
             <td>举报对象</td>
-            <td>{{details.ReportObject}}</td>
+            <td>{{ReportData.activityName}}</td>
           </tr>
           <tr>
             <td>举报状态</td>
-            <td>{{details.ReportStatus}}</td>
+            <td>{{ReportData.reportStatusText}}</td>
           </tr>
           <tr>
             <td>举报内容</td>
-            <td>{{details.ReportContent}}</td>
+            <td>{{ReportData.reportContent}}</td>
           </tr>
         </table>
         <table width="100%;">
           <tr>
             <td>处理备注</td>
-            <td><Input size="small" style="width: 8rem" /></td>
+            <td><Input size="small" style="width: 8rem"  v-model="ReportData.answerContent" /></td>
           </tr>
         </table>
-        <div class="but">
+        <div class="but" v-if="ReportData.reportStatusText=='未处理'" >
           <Button size="small" type="success">有效举报</Button>
           <Button size="small" type="error">恶意举报</Button>
           <Button size="small" type="error">无效报举</Button>
@@ -51,24 +51,44 @@
   </div>
 </template>
 <script>
+import { formatDate } from '@/request/datatime'
+import {ReportDel,Reporttext} from '@/request/api'
 export default {
   data() {
     return {
       navigation1: {
         head: '举报详情-未处理(会员)'
       },
-      ReportData: [
-        {
-          ReportReason: '存在不良信息',
-          Whistleblowers: '王',
-          ReportTime: '2019-03-22 11:05',
-          ReportObject: '5-12 行走在夏日',
-          ReportStatus: '未处理',
-          ReportContent: '暴露隐私'
-        }
-      ]
+      ReportData: {},
+      text:''
     }
-  }
+  },
+  mounted(){
+    this.getReportDel()
+    this.getReporttext()
+  },
+  methods:{
+    getReportDel(){
+      ReportDel({
+        reportId:this.$route.query.reportId
+      }).then(res=>{
+        if(res.code==200){
+          this.ReportData=res.data
+          this.ReportData.reportTimestamp=formatDate(res.data.reportTimestamp)
+        }
+        console.log(res)
+      })
+    },
+    getReporttext(){
+      Reporttext({
+      }).then(res=>{
+        if(res.code==200){
+
+        }
+        console.log(res)
+      })
+    }
+  },
 }
 </script>
 <style scoped>

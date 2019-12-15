@@ -424,7 +424,8 @@
           <Select placeholder=" 批量操作" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Button style="margin-left: 10px" @click='batchOperation'>确定</Button>
+          <a href="javascript:;" class='btn'  @click='batchOperation'>确定</a>
+          <!-- <Button style="margin-left: 10px" @click='batchOperation'></Button> -->
         </div>
         <Page :total="totalSize" show-elevator show-total size='small' @on-change='setPage' />
       </div>
@@ -439,7 +440,7 @@
       </div>
     </Modal>
 
-    <Modal title="高级检索" v-model="modalSenior" :closable='false'>
+    <Modal title="高级检索" v-model="modalSenior" >
       <Form ref="formCustom" :model="paramsSeniorObj">
         <Row>
           <Col span="12">
@@ -486,7 +487,7 @@
       </Form>
       <div slot="footer">
         <Button type="text" size="large" @click="hidd">重置</Button>
-        <Button type="primary" size="large" @click="setSenior">开始检索</Button>
+        <Button type="error" size="large" @click="setSenior">开始检索</Button>
       </div>
 
     </Modal>

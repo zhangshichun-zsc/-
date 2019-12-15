@@ -97,7 +97,7 @@
             type="textarea"
             :autosize="{minRows: 5,maxRows: 5}"
             placeholder="请输入内容···"
-          ></Input>
+          />
         </FormItem>
         <FormItem>
           <Button type="success" @click="handleSubmit('formValidate')">提交</Button>

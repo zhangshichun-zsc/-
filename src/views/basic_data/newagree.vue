@@ -5,10 +5,10 @@
     <div class="xieyi">
       <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80">
         <FormItem label="甲方" prop="partA">
-          <Input v-model="formInline.partA" placeholder="广告名称" style="width:300px" />
+          <Input v-model="formInline.partA" placeholder="甲方名称" style="width:300px" />
         </FormItem>
         <FormItem label="乙方" prop="partB">
-          <Input v-model="formInline.partB" placeholder="广告名称" style="width:300px" />
+          <Input v-model="formInline.partB" placeholder="乙方名称" style="width:300px" />
         </FormItem>
         <FormItem label="协议分类" prop="typeDicId">
           <Select v-model="formInline.typeDicId" placeholder="Select your city" style="width:300px">
@@ -22,7 +22,7 @@
         <FormItem label="所属项目" prop="categoryId">
           <Select
             v-model="formInline.categoryId"
-            placeholder="Select your city"
+            placeholder="请选择项目类型"
             style="width:300px"
           >
             <Option
@@ -36,14 +36,16 @@
         <FormItem label="协议时间" prop="agTime">
           <DatePicker
             type="date"
+             placeholder="请选择协议时间"
             v-model="formInline.agTime"
             format="yyyy-MM-dd"
             @on-change="handleChange"
-            placeholder="Select date"
+
             style="width: 200px"
           ></DatePicker>
         </FormItem>
         <FormItem label="广告附件" prop="agFile">
+
           <div class="flex-wrap-center">
             <p class="imgs" v-if="formInline.nameA != null">
               <span>{{formInline.nameA}}</span>
@@ -429,4 +431,36 @@ export default {
     font-size: 18px;
   }
 }
+ .start-wap{
+    position: relative;
+    height: 150px;
+    width: 300px;
+    .upload{
+      width: 100%;
+      height: 100%;
+    }
+    .cancel{
+      position: absolute;
+      top: 10px;
+      right: -30px;
+      z-index: 10;
+    }
+    .upload .file{
+      width: 100%;
+      height: 100%;
+      border: 1px dashed #dcdee2;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .upload .file:hover{
+      border: 1px dashed #FF565A;
+    }
+    .upload .file input{
+      display: none;
+    }
+    .shae{
+      height: 150px;
+      width: 150px;
+    }
+  }
 </style>

@@ -10,7 +10,7 @@
           <Button class="table-btns" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem label="障碍类型" prop="dicName">
+              <FormItem label="障碍类型:" prop="dicName">
                 <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>

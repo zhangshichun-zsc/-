@@ -125,7 +125,7 @@ export default {
       ],
 
       navigation1: {
-        head: "广告列表(志愿者)"
+        head: "广告列表"
       },
       columns: [
         {

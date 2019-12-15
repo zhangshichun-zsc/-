@@ -7,25 +7,14 @@
         <Button type="text" size="large" @click="modalCancel">取消</Button>
         <Button type="primary" size="large" @click="modalOk">确定</Button>
       </div>
-    </Modal> -->
+    </Modal>-->
 
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-      <div class="flex-center-between integral-top">
-        <div><Icon type="ios-search-outline" /><span>筛选查询</span></div>
-        <div class="flex-center-end">
-          <Button @click="query">查询结果</Button>
-        </div>
-      </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>组织名称</span>
-          <Input
-            size="small"
-            placeholder="组织名称"
-            class="inpt"
-            v-model="orgName"
-          />
+          <Input size="small" placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
         <div class="flex-center-start" v-if="!navigation1.name === 'volunteer'">
           <span>审核状态</span>
@@ -39,24 +28,16 @@
         <div class="flex-center-start">
           <span>提交日期</span>
           <Row>
-            <Col span="10">
-              <DatePicker
-                type="date"
-                placeholder="请选择开始时间"
-                v-model="startAt"
-                style="width: 200px"
-              ></DatePicker>
+            <Col span="12">
+              <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 160px;margin:0 20px 0 10px"></DatePicker>
             </Col>
-            <Col span="4" class="line"> </Col>
-            <Col span="10">
-              <DatePicker
-                type="date"
-                placeholder="请选择结束时间"
-                v-model="endAt"
-                style="width: 200px"
-              ></DatePicker>
+            <Col span="12">
+              <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 160px"></DatePicker>
             </Col>
           </Row>
+        </div>
+        <div class="flex-center-start">
+          <Button class="search" @click="query">查询</Button>
         </div>
       </div>
     </div>
@@ -64,49 +45,23 @@
       <div class="table-header flex-center-between">
         <div>
           <!-- <Icon type="md-reorder" size='20' />
-          <span @click="handleSelectAll(true)">全选</span> -->
+          <span @click="handleSelectAll(true)">全选</span>-->
           <span v-if="!navigation1.name === 'volunteer'">
             <Button class="table-btn" @click="batchAdopt">通过</Button>
             <Button class="table-btn" @click="batchRefuse">拒绝</Button>
           </span>
-          <Button
-            type="info"
-            style="margin-left: 10px;"
-            ghost
-            v-if="jurisdiction"
-            @click="jump"
-          >
+          <Button type="info" style="margin-left: 10px;" ghost v-if="jurisdiction" @click="jump">
             {{
-              navigation1.name === "parent" ? "家长小组 " : "志愿者团队"
-            }}审批</Button
-          >
+            navigation1.name === "parent" ? "家长小组 " : "志愿者团队"
+            }}审批
+          </Button>
         </div>
-        <div>
-          <Select
-            v-model="size"
-            style="width:120px"
-            placeholder="显示条数"
-            class="space"
-          >
-            <Option
-              v-for="item in Article"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.label }}</Option
-            >
+        <div class="flex-center-end">
+          <Select v-model="size" style="width:120px;margin-right:10px" placeholder="显示条数" class="space">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select
-            placeholder="排序方式"
-            class="space"
-            style="width: 120px;"
-            v-model="sort"
-          >
-            <Option
-              v-for="item in sorting"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.label }}</Option
-            >
+          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
       </div>
@@ -122,6 +77,7 @@
         show-elevator
         show-total
         size="small"
+        class="pages"
         style="margin: auto"
         :page-size="size"
         @on-change="changepages"
@@ -159,6 +115,7 @@ export default {
         {
           title: "组织分类",
           key: "orgType",
+          width:140,
           align: "center",
           render: (h, params) => {
             let orgType = params.row.orgType;
@@ -191,16 +148,19 @@ export default {
         {
           title: "人数",
           key: "num",
+          width: 80,
           align: "center"
         },
         {
           title: "提交时间",
           key: "createAt",
+          width:180,
           align: "center"
         },
         {
           title: "状态",
           key: "status",
+          width:80,
           align: "center",
           render: (h, params) => {
             let validFlag = params.row.validFlag;
@@ -223,6 +183,7 @@ export default {
         {
           title: "操作",
           key: "action",
+          width:180,
           align: "center",
           render: (h, params) => {
             let validFlag = params.row.validFlag;
@@ -562,14 +523,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
+
 .integral-header .integral-top {
   margin-top: 15px;
   padding: 15px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
@@ -579,27 +537,18 @@ export default {
   background: #fff;
 }
 .integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
+  width: 120px;
+  margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.integral-table {
-  margin-top: 30px;
-}
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  background: #fff;
 }
 .table-header .table-btn {
   margin-left: 15px;
-}
-.line {
-  width: 20px;
-  border: 1px solid;
-  margin: 12px 5px 0 20px;
 }
 
 .rejbtn {
@@ -610,5 +559,10 @@ export default {
 .tips {
   text-align: center;
   color: red;
+}
+.integral-table .pages{
+  text-align:center;
+  padding: 20px 0;
+  background-color: white;
 }
 </style>

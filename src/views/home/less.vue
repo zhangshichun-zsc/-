@@ -30,23 +30,33 @@
                     @change="uploadFile()"
                     multiple
                   />
-                  <!-- <Button icon="ios-cloud-upload-outline">上传头像</Button> -->
-                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-                  <img
-                    v-show="imgUrl"
-                    :src="imgUrl || null"
-                    style="height:104px;width:104px;"
-                  />
-                  <div v-show="!imgUrl" class="file-text">
-                    <img src="@/assets/images/fix-img.png" />
+                  <div
+                    class="updataimg"
+                    :style="
+                      imgUrl
+                        ? 'height:104px;width:104px;'
+                        : 'height:104px;width:104px;border: 1px dashed #ff565a;'
+                    "
+                  >
+                    <Icon
+                      v-show="!imgUrl"
+                      type="md-cloud-upload"
+                      class="updataimg-icon"
+                      :size="20"
+                    />
+                    <img
+                      v-show="imgUrl"
+                      :src="imgUrl || null"
+                      style="height:104px;width:104px;"
+                    />
+                    <Icon
+                      type="ios-trash"
+                      v-show="imgUrl !== ''"
+                      class="cancel"
+                      :size="20"
+                      @click.stop.prevent="cancelImg()"
+                    />
                   </div>
-                  <Icon
-                    type="ios-trash"
-                    v-show="imgUrl !== ''"
-                    class="cancel"
-                    :size="26"
-                    @click.stop.prevent="cancelImg()"
-                  />
                 </div>
               </div>
             </div>
@@ -282,14 +292,15 @@ export default {
   }
 }
 .file {
-  height: 150px;
+  // height: 150px;
   position: relative;
 }
 .cancel {
   position: absolute;
-  bottom: 5px;
-  left: 5px;
+  top: 10px;
+  right: -35px;
   z-index: 2;
+  color: #ff565a;
 }
 .file-text {
   width: 150px;
@@ -330,5 +341,15 @@ input:-webkit-autofill {
   border-radius: 15px;
   font-size: 14px;
   color: #ffffff;
+}
+.updataimg {
+  position: relative;
+}
+.updataimg-icon {
+  color: #ff565a;
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
 }
 </style>

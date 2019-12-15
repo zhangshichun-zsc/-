@@ -14,7 +14,9 @@
             style="margin: 0 auto;"
             ref="AddDate"
             :model="AddDate"
-            :rules="ruleValidate"
+            :rules="
+              this.$route.query.states == 2 ? ruleValidate : ruleValidate_two
+            "
             :label-width="100"
           >
             <FormItem label="成员名称:" prop="userName">
@@ -184,6 +186,42 @@ export default {
         // ],
         comments: []
       },
+      ruleValidate_two: {
+        userName: [
+          { required: true, message: "成员名称不能为空", trigger: "blur" }
+        ],
+        tel: [{ required: true, validator: validatePhone, trigger: "blur" }],
+
+        email: [
+          { type: "email", message: "邮箱地址格式不正确", trigger: "blur" }
+        ],
+        deplNames: [
+          {
+            required: true,
+            message: "请选择部门类型",
+            trigger: "change",
+            type: "number"
+          }
+        ],
+        deptId: [
+          {
+            required: true,
+            message: "请选择部门类型",
+            trigger: "change",
+            type: "number"
+          }
+        ],
+        sysRoleNames: [
+          {
+            required: true,
+            message: "请选择角色类型",
+            trigger: "change",
+            type: "array"
+          }
+        ],
+        loginPwd: [],
+        comments: []
+      },
       deptId: "",
       page: 1,
       size: 10,
@@ -277,7 +315,7 @@ export default {
         sysRoleIds: this.AddDate.sysRoleNames.toString(),
         tel: this.AddDate.tel,
         userName: this.AddDate.userName,
-        deptIds: this.AddDate.deplNames.toString(),
+        deptIds: this.AddDate.deptId.toString(),
         email: this.AddDate.email,
         comments: this.AddDate.comments,
         loginPwd: this.AddDate.loginPwd
