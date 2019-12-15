@@ -7,7 +7,7 @@
 <script>
 import E from 'wangeditor'
 import '../wangEditor/release/wangEditor.min.css'
-import { uploadWange } from '@/request/http'
+import { upload } from '@/request/http'
 import store from "../store/index";
 // wangEditor配置按钮菜单
 const btnmenu = [
@@ -128,7 +128,7 @@ export default {
     // 上传图片的错误提示默认使用alert弹出，你也可以自定义用户体验更好的提示方式
     this.editor.customConfig.customAlert = function(info) {
       // info 是需要提示的内容
-      alert('自定义提示：' + info)
+      // alert('自定义提示：' + info)
       console.log(info)
     }
     this.editor.customConfig.customUploadImg = function(files, insert) {
@@ -136,11 +136,13 @@ export default {
       // insert 是获取图片 url 后，插入到编辑器的方法
 
       // 上传代码返回结果之后，将图片插入到编辑器中
+
       const dataForm = new FormData()
-      dataForm.append('file', files)
-      uploadWange(dataForm).then(res => {
+      dataForm.append('file', files[0])
+      console.log(dataForm)
+      upload(dataForm,'/pic/uploadEditor').then(res => {
         console.log(res)
-         insert(res.data)
+         insert(res.data.relPath)
       })
     }
     this.editor.customConfig.onchange = html => {

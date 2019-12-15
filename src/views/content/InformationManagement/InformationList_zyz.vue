@@ -86,13 +86,13 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 50,
+          width: 80,
           align: "center",
         },
         {
           title: "封面图片",
           key: "coverImg",
-          width: 80,
+          width: 120,
           align: "center",
           render: (h,params) => {
             return h("Icon", {
@@ -111,24 +111,27 @@ export default {
         {
           title: "标题",
           key: "title",
+          width: 600,
+          ellipsis: true,
+          tooltip: true,
           align: "center"
         },
         {
           title: "展示窗口",
           key: "showLocationText",
-            width: 150,
+           width: 300,
           align: "center"
         },
         {
           title: "分类",
           key: "informationTypeText",
-            width: 150,
+          width: 300,
           align: "center"
         },
         {
           title: "热门",
           key: "status",
-            width: 120,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -148,14 +151,14 @@ export default {
         },
         {
           title: "资讯所属",
-            width: 100,
+          width: 200,
           key: "informationOwner",
           align: "center"
         },
         {
           title: "发布时间",
           key: "releaseTimestamp",
-            width: 150,
+          width: 300,
           align: "center",
           render:(h,params)=>{
               return h("div",formatDate(params.row.releaseTimestamp))
@@ -163,22 +166,21 @@ export default {
         },
         {
           title: "相关",
-            width: 120,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", [
               h(
-                "p",
+                "span",
                  {
                   style: {
-                    marginBottom: "5px",
-                    marginTop: '5px'
+                    marginRight: "5px",
                   },
                 },
                 ("收藏:"+(params.row.collectionNum))
               ),
               h(
-                "p",
+                "span",
                 {
                   style: {
                     marginBottom: "5px",
@@ -193,7 +195,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-            width: 120,
+          width: 300,
           render: (h, params) => {
             return h("div", [
               h(
@@ -208,7 +210,8 @@ export default {
                       this.$router.push({
                         name: "InformationDetails_zyz",
                         query: {
-                          informationId: this.data[params.index].informationId
+                          informationId: params.row.informationId,
+                          informationTypeText:params.row.informationTypeText
                         }
                       });
                     }

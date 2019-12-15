@@ -30,7 +30,7 @@
                 </Select>
               </FormItem>
               <FormItem :label=item.name prop="CreationTime" v-if="item.type=='date'">
-                <DatePicker type="date" placeholder="请选择日期" v-model="item.value" style="width: 150px" :transfer=true></DatePicker>
+                <DatePicker type="date" placeholder="请选择日期" @change="databtn" v-model="item.value" style="width: 150px" :transfer=true></DatePicker>
               </FormItem>
             </div>
             <div class="flex-center-start">
@@ -110,6 +110,10 @@ export default {
   mounted() {},
 
   methods: {
+    databtn(e){
+      console.log(e)
+
+    },
     //查询
     query() {
       this.$emit('query', this.top)

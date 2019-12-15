@@ -23,7 +23,7 @@
                     <div class="upload shae" v-if='cover == null'>
                         <div class="file " @click="()=>{ this.$refs.filess.click()}">
                           <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('cover',$event)">
-                          <Icon type="md-cloud-upload" :size='36' color="#dcdee2"/>
+                          <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                         </div>
                     </div>
                     <img class="imgss" v-else :src="cover"/>
@@ -36,7 +36,7 @@
                     <div class="upload" v-if='image == null'>
                         <div class="file" @click="()=>{ this.$refs.files.click()}">
                           <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('image',$event)">
-                          <Icon type="md-cloud-upload" :size='36' color="#dcdee2"/>
+                          <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                         </div>
                     </div>
                     <img class="imgs" v-else :src="image"/>
@@ -601,6 +601,7 @@ export default {
       let file = e.target.files[0]
       const dataForm = new FormData()
       dataForm.append('file', file)
+      console.log(dataForm)
       upload(dataForm).then(res => {
         if(res.code == 200){
           var reader = new FileReader()
@@ -978,23 +979,23 @@ export default {
     }
     .cancel{
       position: absolute;
-      top: 10px;
-      right: -30px;
+      top: 0px;
+      right: 0px;
       z-index: 10;
     }
     .upload .file{
       width: 100%;
       height: 100%;
-      border: 1px dashed #dcdee2;
+      border: 1px dashed #FF565A;
       text-align: center;
       padding: 20px 0;
     }
-    .upload .file:hover{
-      border: 1px dashed #FF565A;
-    }
-    .upload .file:hover .ivu-icon{
-      color: #FF565A !important;
-    } 
+    // .upload .file:hover{
+    //   border: 1px dashed #FF565A;
+    // }
+    // .upload .file:hover .ivu-icon{
+    //   color: #FF565A !important;
+    // } 
     .upload .file input{
       display: none;
     }

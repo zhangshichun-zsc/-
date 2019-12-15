@@ -53,7 +53,7 @@
           全选
           <span>已选择{{list.length}}</span>
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
-          <Button class="table-btns" @click="showModal(null)">新增</Button>
+          <Button class="table-btns" @click="jump">新增</Button>
           <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
@@ -256,6 +256,12 @@ export default {
   },
 
   methods: {
+
+     //新建基金
+    jump() {
+      this.$router.push({ name: "addfund"});
+    },
+
     getList(){
       if(this.args.validFlag==-1){
         this.args.validFlag=''
@@ -294,6 +300,7 @@ export default {
       this.args.endAt = end
     },
     showModal(e){
+      console.log(11)
       if(e == null){
         this.cancel()
       }else{

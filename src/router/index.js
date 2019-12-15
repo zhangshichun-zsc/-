@@ -343,6 +343,15 @@ const router = new Router({
         component: () =>
           import('@/views/basic_data/price_manage.vue')
       },
+
+      //新建基金
+      {
+        path: 'addfund',
+        name: 'addfund',
+
+        component: () =>
+          import('@/views/basic_data/addfund.vue')
+      },
       {
         path: 'agreeclass',
         name: 'agreeclass',

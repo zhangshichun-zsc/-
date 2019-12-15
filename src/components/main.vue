@@ -247,7 +247,7 @@
                     </ul>
                   </div>
                 </Modal>
-                <!-- 
+                <!--
                 <Dropdown>
                   <span class="mess">
                     <div class="message">50</div>
@@ -468,7 +468,7 @@ export default {
         if (res.code == 200) {
           this.routelist = res.data;
 
-          //   将 当前用户的菜单保存到 vueX 中
+            // 将 当前用户的菜单保存到 vueX 中
           let arr = [];
           res.data.forEach(item => {
             item.list.map(key => {

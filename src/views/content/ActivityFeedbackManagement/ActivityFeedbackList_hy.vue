@@ -84,14 +84,15 @@ export default {
       columns: [
         {
           type: 'selection',
-          width: 80,
+          width: 100,
+           fixed: 'left',
           align: 'center'
         },
         {
           title: '活动名称',
           key: 'activityName',
           align: 'center',
-          width: 500,
+          width: 600,
           ellipsis: true,
           tooltip: true,
         },
@@ -110,7 +111,7 @@ export default {
         {
           title: '活动时间',
           key: 'activityTimestamp',
-          width: 250,
+          width: 280,
           align: 'center',
           render: (h, params) => {
             return h('div', [h('p', formatDate(params.row.activityTimestamp))])

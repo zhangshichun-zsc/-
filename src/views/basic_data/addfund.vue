@@ -162,9 +162,9 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "新建组织(会员)"
+        head: "新增基金"
       },
-      orgTypes: 1,
+      orgTypes: 9,
       defaultList: "",
       num: 0,
       formValidate: {
@@ -194,15 +194,15 @@ export default {
         contactUserName: [
           { required: true, message: "联系人不能为空", trigger: "blur" }
         ],
-          imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
         contactUserPhone: [
           { required: true, message: "联系电话不能为空", trigger: "blur" }
         ],
+        imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
         description: [
           { required: true, message: "详情不能为空", trigger: "blur" }
         ]
       },
-      list: [],
+      list: [{ dataKey: 448, dataValue: "基金", dicCode: 9 }],
       ownerUserId: "",
       value: "",
       provinceList: [],
@@ -221,17 +221,7 @@ export default {
   },
   components: { Selsect },
   methods: {
-    //获取组织类型列表
-    getorgtype() {
-      orgtype({
-        sysType: this.$route.query.sysId
-      }).then(res => {
-        if (res.code == 200) {
-          this.list = res.data;
-        }
-        console.log(res);
-      });
-    },
+
     //增加组织
     getorgadd() {
       orgadd({
@@ -325,24 +315,13 @@ export default {
         reader.onload = e => {
           this.formValidate.texturl = e.target.result;
           this.formValidate.text = res.data;
-          console.log(this.formValidate.texturl, this.formValidate.text);
+
         };
       });
     }
   },
   mounted() {
-    if (this.$route.query.sysId == "1") {
-      this.navigation1.head = "新建组织(会员)";
-      this.getorgtype();
-    } else if (this.$route.query.sysId == "2") {
-      this.navigation1.head = "新建组织(志愿者)";
-      this.list = [{ dataKey: 332, dataValue: "志愿者团队", dicCode: 3 }];
-      this.orgTypes = 3;
-    } else if (this.$route.query.sysId == "3") {
-      this.navigation1.head = "新增基金";
-      this.list = [{ dataKey: 448, dataValue: "基金", dicCode: 9 }];
-      this.orgTypes = 9;
-    }
+
   }
 };
 </script>
