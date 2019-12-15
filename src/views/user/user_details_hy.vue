@@ -207,7 +207,7 @@ export default {
           title: "活动时间",
           key: "startAt",
           render: (h, params) => {
-            return h("div", formatDate(params.row.startAt));
+            return h("div", this.util.formatDateYMD(params.row.startAt));
           }
         },
         {
@@ -326,9 +326,13 @@ export default {
         if (res.code == 200) {
           this.basicInfo = res.data.basicInfo;
 
-          this.basicInfo.vipLastTime = formatDate(this.basicInfo.vipLastTime);
+          this.basicInfo.vipLastTime = this.util.formatDateYMD(
+            this.basicInfo.vipLastTime
+          );
           this.basicInfo.birthday = this.basicInfo.birthday;
-          this.basicInfo.createTime = formatDate(this.basicInfo.createTime);
+          this.basicInfo.createTime = this.util.formatDateYMD(
+            this.basicInfo.createTime
+          );
 
           this.statisticsInfo = [res.data.statisticsInfo];
           this.activityRecord = res.data.activityRecord;

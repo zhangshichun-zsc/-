@@ -66,7 +66,7 @@
               <th>生日</th>
               <td>{{ basicInfo.birthday }}</td>
               <th>注册时间</th>
-              <td>{{ basicInfo.createTime }}</td>
+              <td>{{ this.util.formatDateYMD(basicInfo.createTime) }}</td>
             </tr>
             <tr>
               <th>城市</th>
