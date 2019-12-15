@@ -322,7 +322,7 @@
                     <Button type="text" size="large" @click="modalOk(0)"
                       >取消</Button
                     >
-                    <Button type="primary" size="large" @click="modalOk(1)"
+                    <Button type="error" size="large" @click="modalOk(1)"
                       >确定</Button
                     >
                   </div>

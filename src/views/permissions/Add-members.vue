@@ -277,7 +277,7 @@ export default {
         sysRoleIds: this.AddDate.sysRoleNames.toString(),
         tel: this.AddDate.tel,
         userName: this.AddDate.userName,
-        deptIds: this.AddDate.deplNames.toString(),
+        deptIds: this.AddDate.deptId.toString(),
         email: this.AddDate.email,
         comments: this.AddDate.comments,
         loginPwd: this.AddDate.loginPwd

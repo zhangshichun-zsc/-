@@ -41,6 +41,41 @@
       </header>
 
       <div class="main">
+        <div class="content-top flex-center-start">
+          <table>
+            <tr>
+              <th>姓名</th>
+              <td>{{ basicInfo.userName }}</td>
+              <th>身份证号</th>
+              <td>{{ basicInfo.idCard }}</td>
+            </tr>
+            <tr>
+              <th>昵称</th>
+              <td>{{ basicInfo.nickname }}</td>
+              <th>邮箱</th>
+              <td>{{ basicInfo.email }}</td>
+            </tr>
+            <tr>
+              <th>性别</th>
+              <td>{{ basicInfo.sex }}</td>
+              <th>活动关注型</th>
+              <td>{{ basicInfo.role }}</td>
+            </tr>
+            <tr>
+              <th>生日</th>
+              <td>{{ basicInfo.birthday }}</td>
+              <th>注册时间</th>
+              <td>{{ basicInfo.createTime }}</td>
+            </tr>
+            <tr>
+              <th>城市</th>
+              <td>{{ basicInfo.city }}</td>
+              <th>vip到期时间</th>
+              <td>{{ basicInfo.vipLastTime }}</td>
+            </tr>
+          </table>
+        </div>
+
         <div class="content ">
           <div class="content-item">
             <div class="item-title">
