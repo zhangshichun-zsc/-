@@ -281,8 +281,7 @@
                   </p>
                 </FormItem>
                 <div style="text-align: center;" @click="showBenefitModel">
-                  <span class="show-btn">显示更多</span
-                  ><Icon type="ios-arrow-forward" />
+                  <a class="show-btn">显示更多</a><Icon type="ios-arrow-forward" />
                 </div>
               </Form>
             </div>
@@ -382,7 +381,7 @@
                   {{
                     parameOBJ.memInfo.childsInfo.length > 0
                       ? parameOBJ.memInfo.childsInfo[0].childSex
-                      : ""
+                      : "暂无"
                   }}
                 </p>
               </FormItem>
@@ -391,7 +390,7 @@
                   {{
                     parameOBJ.memInfo.childsInfo.length > 0
                       ? parameOBJ.memInfo.childsInfo[0].idcardType
-                      : ""
+                      : "暂无"
                   }}
                 </p>
               </FormItem>
@@ -441,7 +440,6 @@
                 >
                   {{ item }}
                 </p>
-        
               </FormItem>
               <FormItem label="孩子爱好、注意事项">
                 <p>
@@ -612,11 +610,12 @@
               </FormItem>
               <FormItem label="成年心智障碍者婚姻状况">
                 <RadioGroup v-model="parameOBJ.memInfo.vipotherInfo.isMarried">
-                  <Radio label="1">
-                    <span>已婚</span>
-                  </Radio>
-                  <Radio label="0">
-                    <span>未婚</span>
+                  <Radio
+                    v-for="item in parameOBJ.memInfo.listMarryStatus"
+                    :key="item.dicId"
+                    :label="item.dicId+''"
+                  >
+                    <span>{{item.name}}</span>
                   </Radio>
                 </RadioGroup>
               </FormItem>
@@ -725,7 +724,7 @@
               style="padding: 0.5rem"
               label-position="left"
             >
-              <FormItem label="融合教育*" v-show="checkout.confluentType">
+              <FormItem label="教育支持情况*" v-show="checkout.confluentType">
                 <CheckboxGroup v-model="confluentType">
                   <Checkbox
                     v-if="item.name !== '其他'"
@@ -898,7 +897,7 @@
                 <CheckboxGroup v-model="interestType">
                   <Checkbox
                     v-if="item.name !== '其他'"
-                    v-for="item in parameOBJ.memInfo.listInterest"
+                    v-for="item in parameOBJ.memInfo.listGift"
                     :key="item.dicId"
                     :label="item.dicId + ''"
                     >{{ item.name }}

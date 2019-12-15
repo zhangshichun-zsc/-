@@ -437,7 +437,6 @@ export default {
     if (to.name === from.name) return;
     let toName = to.name;
     let menuList = this.$store.state.menuList;
-
     if (to.name === "login") {
       return next();
     }
