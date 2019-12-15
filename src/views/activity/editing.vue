@@ -314,7 +314,7 @@ export default {
     },
     getProjectDetail(){
        projectDetail({
-        activityId:this.$route.query.acitvityId
+        activityId:this.$route.query.id
       }).then(res => {
         console.log(res);
         this.batch = res.data

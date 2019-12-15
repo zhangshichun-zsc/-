@@ -78,7 +78,7 @@ export default {
     train(id, name, ble) {
       this.$router.push({
         name: this.from,
-        query: { activityId: id, name, ble }
+        query: { id, name, ble }
       });
     },
     more() {
