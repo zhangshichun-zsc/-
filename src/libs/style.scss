@@ -122,3 +122,19 @@ html ::-webkit-scrollbar-thumb {
     font-size: 16px;
   }
 }
+
+.QRcodemodal {
+  .ivu-modal {
+    top: 30vh;
+  }
+}
+
+// 编辑框内容不定数量的情况下
+
+.scrollModal {
+  .ivu-modal-body {
+    height: 50vh;
+    max-height: 70vh;
+    overflow-y: scroll;
+  }
+}

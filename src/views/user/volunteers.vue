@@ -108,7 +108,7 @@
             </Form>
           </Modal>
           <Dropdown trigger="click">
-            <Button @click="modal1 = true" style="margin: 0 10px;" disabled>
+            <Button @click="modal1 = true" style="margin: 0 5px;" disabled>
               群发短信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -154,7 +154,7 @@
             </Form>
           </Modal>
           <Dropdown @on-click="isALL">
-            <Button style="margin: 0 10px;" @click="ismodal2">
+            <Button style="margin: 0 5px;" @click="ismodal2">
               群发站内信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -399,13 +399,13 @@
             </CheckboxGroup>
           </Modal>
 
-          <Button style="margin: 0 10px;" disabled @click="onLabel">
+          <Button style="margin: 0 5px;" disabled @click="onLabel">
             设置标签
           </Button>
 
           <!--导出数据-->
           <Dropdown>
-            <Button style="margin: 0 10px;" @click="onExport">
+            <Button style="margin: 0 5px;" @click="onExport">
               导出数据
             </Button>
           </Dropdown>
@@ -414,7 +414,7 @@
           <Select
         
             v-model="size"
-            style="width:120px;margin: 0 10px;"
+            style="width:120px;margin: 0 5px;"
             placeholder="显示条数"
             class="space"
           >
@@ -426,7 +426,7 @@
             >
           </Select>
           <Select
-            style="margin: 0 10px; width: 120px;"
+            style="margin: 0 5px; width: 120px;"
             placeholder="排序方式"
             class="space"
             v-model="sort"
@@ -1240,8 +1240,10 @@ export default {
     },
     // 关闭 二维码
     modalCancel() {
-      this.QRCode = "";
       this.modal4 = false;
+           setTimeout(()=>{
+        this.QRCode = "";
+      },500)
     },
     // 显示站内信模态框
     ismodal2() {
@@ -1455,8 +1457,9 @@ export default {
   margin: 0 auto;
 }
 .bg img {
-  width: 100%;
-  height: 100%;
+  width: 10rem;
+  height: 10rem;
+  margin: 0 auto;
   vertical-align: middle;
 }
 

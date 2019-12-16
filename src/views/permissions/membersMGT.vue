@@ -405,6 +405,7 @@ body {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+  padding: 20px 0;
 }
 .layout {
   border: 1px solid #d7dde4;

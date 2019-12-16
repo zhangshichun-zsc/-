@@ -79,6 +79,7 @@
             v-model="modal2"
             title="群发站内信"
             @on-ok="ok"
+            class='QRcodemodal' 
             @on-cancel="cancel">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
               <FormItem label="发送对象：" prop="tag">
