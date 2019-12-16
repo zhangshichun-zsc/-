@@ -234,8 +234,8 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
+                    marginLeft: "10px",
                     color: "green",
                     cursor: "pointer"
                   },

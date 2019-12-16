@@ -68,21 +68,16 @@
         </div>
         <div class="con-right">
           <div class="figure">
-            <div class="tu">
-              <img :src="imgs" style="height:100px;width:100px;" />
-              <p>
-                <a @click="cancelImg">删除图片</a>
-              </p>
-            </div>
             <div class="Photo-But">
               <div class="start-wap">
-                <div class="upload">
-                  <div class="file" @click="()=>{ this.$refs.files.click()}">
-                    <input style=" display:none;" type="file" accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP" ref="files" @change="uploadFile()" multiple />
-                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-                    <Button>上传图片</Button>
-                  </div>
+                <div class="upload" v-if='imgs == null'>
+                    <div class="file" @click="()=>{ this.$refs.files.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()">
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+                    </div>
                 </div>
+                <img class="image" v-else :src="imgs"/>
+                <Icon type="ios-trash" v-if='imgs' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
               </div>
               <Button type="success" @click="modal1=true">从图库中选择</Button>
             </div>
@@ -142,13 +137,10 @@ export default {
           }
         ]
       },
-
       editorContent: '',
-
       sysId: 1,
       typelist: [],
       showlist: [],
-
       url: '',
       modal1: false,
       imgs: null
@@ -268,7 +260,43 @@ export default {
 
 }
 </script>
-<style scoped>
+<style scoped lang='scss'>
+  .start-wap{
+    position: relative;
+    height: 150px;
+    width: 150px;
+    margin-bottom: 20px;
+    .image{
+      width: 100%;
+      height: 100%;
+    }
+    .upload{
+      width: 100%;
+      height: 100%;
+    }
+    .cancel{
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      z-index: 10;
+    }
+    .upload .file{
+      width: 100%;
+      height: 100%;
+      border: 1px dashed #FF565A;
+      text-align: center;
+      padding: 20px 0;
+    }
+    // .upload .file:hover{
+    //   border: 1px dashed #FF565A;
+    // }
+    // .upload .file:hover .ivu-icon{
+    //   color: #FF565A !important;
+    // } 
+    .upload .file input{
+      display: none;
+    }
+  }
 html,
 body {
   margin: auto;
@@ -334,7 +362,6 @@ body {
 }
 .Photo-But {
   padding: 0.5rem 0;
-  display: flex;
 }
 .Photo-But button {
   margin-right: 0.5rem;

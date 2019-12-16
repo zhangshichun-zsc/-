@@ -13,11 +13,11 @@
     <div class="integral-header">
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>组织名称</span>
+          <span>组织名称:</span>
           <Input size="small" placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
         <div class="flex-center-start" v-if="!navigation1.name === 'volunteer'">
-          <span>审核状态</span>
+          <span>审核状态:</span>
           <Select size="small" v-model="orgStatus" class="inpt">
             <Option value="0">全部</Option>
             <Option value="1">待审核</Option>
@@ -26,14 +26,15 @@
           </Select>
         </div>
         <div class="flex-center-start">
-          <span>提交日期</span>
+          <span>提交日期:</span>
           <Row>
-            <Col span="12">
-              <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 160px;margin:0 20px 0 10px"></DatePicker>
-            </Col>
-            <Col span="12">
+
+              <DatePicker type="date" placeholder="请选择开始时间" v-model="startAt" style="width: 160px;"></DatePicker>
+
+              <span class="po">~</span>
+
               <DatePicker type="date" placeholder="请选择结束时间" v-model="endAt" style="width: 160px"></DatePicker>
-            </Col>
+
           </Row>
         </div>
         <div class="flex-center-start">
@@ -252,9 +253,9 @@ export default {
       ],
       data: [],
       Article: [
-        { value: 10, label: "显示10条" },
-        { value: 15, label: "显示15条" },
-        { value: 20, label: "显示20条" }
+        { value: 10, label: "10" },
+        { value: 15, label: "15" },
+        { value: 20, label: "20" }
       ],
       sorting: [
         { value: "create_at asc", label: "正序" },
@@ -566,5 +567,9 @@ export default {
   text-align:center;
   padding: 20px 0;
   background-color: white;
+}
+
+.po{
+  padding: 0 10px;
 }
 </style>

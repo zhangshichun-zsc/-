@@ -22,15 +22,16 @@
           <Form class="flexs" inline  v-if="Retract==true">
             <div v-for="(item,index) in top" :key="index">
               <FormItem :label=item.name prop="name" v-if="item.type=='input'">
+
                 <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"/>
               </FormItem>
               <FormItem :label=item.name prop="list" v-if="item.type=='select'">
                 <Select style="width:150px" v-model="item.value">
-                  <Option v-for="items in item.list" :value="items.dataKey" :key="items.dataKey" :transfer=true>{{ items.dataValue }}</Option>
+                  <Option v-for="items in item.list" :value="items.dataKey" :key="items.dataKey" >{{ items.dataValue }}</Option>
                 </Select>
               </FormItem>
               <FormItem :label=item.name prop="CreationTime" v-if="item.type=='date'">
-                <DatePicker type="date" placeholder="请选择日期" @change="databtn" v-model="item.value" style="width: 150px" :transfer=true></DatePicker>
+                <DatePicker type="date" placeholder="请选择日期" @change="databtn" v-model="item.value" style="width: 150px" ></DatePicker>
               </FormItem>
             </div>
             <div class="flex-center-start">

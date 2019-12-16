@@ -3,18 +3,7 @@
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <!-- <div class="con-top bk-szy flex-center-start">
-        <p>
-          <Icon type="ios-search" size="30" />
-          <span>筛选查询</span>
-        </p>
-        <div class="flex-center-end">
-          <div class="Pack">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-        </div>
-      </div> -->
+
        <div class="flex-center-start integral-body" >
         <div class="flex-center-start name">
           <span>举报人:</span>
@@ -31,13 +20,13 @@
       </div>
 
     </div>
-    <div class="content">
-      <div class="con-top bk-szy flex-center-start">
-        <p>
+    <div class="contents">
+      <div class="con-top bk-szy flex-center-end">
+        <!-- <p>
           <Icon type="ios-list" size="30" />
           <span>数据列表</span>
-        </p>
-        <div class="flex-center-end">
+        </p> -->
+
             <Select v-model="size" style="width:120px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -45,13 +34,12 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
 
-        </div>
+
       </div>
       <div class="con">
         <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       </div>
-      <div class="pages flex-center-between">
-        <div>
+      <!-- <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
@@ -59,7 +47,9 @@
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button class="space">确定</Button>
-        </div>
+        </div> -->
+      <div class="pages flex-center-between">
+
         <Page :total="dataCount" show-elevator show-total  style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
@@ -97,6 +87,7 @@ export default {
         {
           title: '举报时间',
           key: 'reportTimestamp',
+          align: "center",
           render: (h, params) => {
             return h('p', formatDate(params.row.reportTimestamp))
           }
@@ -319,12 +310,36 @@ dataValue: "全部" },
 </script>
 <style lang="scss" scoped>
 .integral-body {
-  padding: 30px 20px 20px 20px;
+  padding: 40px 20px 20px 20px;
 
   display: flex;
   height: 80px;
   background: #ffffff;
   border: 0;
+}
+.name {
+  span {
+    display: block;
+    width: 120px;
+  }
+  .inpt {
+    margin-right: 30px;
+  }
+}
+.contents{
+  background: #ffffff;
+  min-height: 700px;
+}
+//
+.con-top{
+  height: 50px;
+}
+
+
+.pages {
+    text-align: center;
+     padding: 20px 0;
+    background: #fff;
 }
 
 </style>
