@@ -40,7 +40,7 @@
           </Row>
         </div>
         <div class="flex-center-start">
-         <Button class="button-red" @click="result">查询</Button>;
+          <Button class="button-red" @click="result">查询</Button>
         </div>
       </div>
     </div>
@@ -204,7 +204,8 @@ export default {
                 },
                 on:{
                   click:()=>{
-                    this.modal3=true
+                    this.$Message.info("此功能暂未开放")
+                    // this.modal3=true
                   }
                 }
               })

@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { formatDate } from "../../request/datatime";
 import {date1} from '@/request/datatime.js'
 import { pendingApp, approvalpage } from "@/request/api";
 export default {
@@ -148,9 +149,8 @@ export default {
           title: "提交时间",
           key: "submitTimestamp",
           align: "center",
-          width: 300,
-          render:(h,params)=>{
-              return h("div",date1('Y-m-dH:i:s',params.row.submitTimestamp))
+          render: (h, params) => {
+            return h("div", formatDate(params.row.submitTimestamp));
           }
         },
         {
