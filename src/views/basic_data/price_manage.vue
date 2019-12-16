@@ -44,7 +44,7 @@
         <div>
           <!-- <span>已选择{{list.length}}</span> -->
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
-          <Button class="table-btns" @click="jump()">新增</Button>
+          <Button class="table-btns" @click="jump()">新增基金</Button>
           <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">

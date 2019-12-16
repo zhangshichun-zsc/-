@@ -2,6 +2,49 @@
 <template>
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
+     <div class="integral-header">
+
+      <div class="integral-left">
+        <div class="title">
+          <p>志愿服务证明</p>
+          <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
+          <p>
+            为融爱融乐的心智障碍者融合服务提供了珍贵的 小时的志愿支持。
+            感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
+            生命的多元，让我们的社会更平等、文明、融合。
+            期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
+          </p>
+          <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
+         <div class="head ">
+          <img class="head-left" src="../../assets/images/prend/1.png" alt=""/>
+           <img  class="head-right" src="../../assets/images/prend/2.png" alt=""/>
+        </div>
+        <div>
+          <span>北京市海淀区融爱融乐</span>
+          <span>心智障碍者家庭支持中心</span>
+          <span>年 月  日</span>
+        </div>
+
+        </div>
+
+
+
+      </div>
+      <div class="integral-right">
+        <div class="top">
+          <p>更换LOGO</p>
+           <p>更换尾页</p>
+        </div>
+        <div class="bottom">
+          <div class="textimg">
+          </div>
+          <h5>图片最大为*</h5>
+          <p class="btn"><Button type="success">上传图片</Button></p>
+        </div>
+          <p class="btn"><Button type="success">保存图片</Button></p>
+
+
+    </div>
     <!-- <Row class="row">
       <Col span="10">
         <button>选择志愿者团队</button>
@@ -13,7 +56,7 @@
       </Col>
     </Row> -->
 
-    <Row>
+    <!-- <Row>
       <Col span="12">
         <div class="show">
           <img :src="headimg" alt="" class="head">
@@ -57,8 +100,8 @@
         </div>
         <Button type="primary" icon="ios-cloud-saved-outline" @click="location" v-if='show'>保存图片</Button>
       </Col>
-    </Row>
-
+    </Row> -->
+</div>
   </div>
 </template>
 
@@ -83,9 +126,11 @@ export default {
   },
   created() {
      if(~~this.$route.params.show === 0){
+       this.show = false
       this.getList()
     }else{
       this.show = true
+      this.getList()
     }
   },
   methods: {
@@ -145,68 +190,94 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral {
-  text-align: center;
+.integral-header {
+  width: 1000px;
+  height: 1000px;
+  display: flex;
+   background: #ffffff;
+  justify-content: space-between;
+  padding-top: 30px;
 }
-a {
-  color: black;
-  font-size: 14px;
-}
-.box {
-  width: 80%;
-  border: 1px solid gray;
-  height: 20rem;
-  margin: 2rem auto;
-  background: #bfeef0;
-}
-.photo {
-  width: 60%;
-  height: 15rem;
-  border: 1px solid gray;
-  margin: 1rem auto;
-  background: #c3cbcb;
-}
-.integral-table {
-  margin-top: 30px;
-}
-button {
-    padding: 5px;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 5px;
-  border:1px solid gray;
-}
-.row{
-    margin: 1rem;
-}
-.show{
-  padding: 20px;
-}
-.show .head{
+.integral-left {
+  height: 900px;
   width: 100%;
-  height: 200px;
-  margin-bottom: 10px;
-}
-.fot{
-  width: 100%;
-  height: 100px;
-}
-.show .head p{
-  text-align: center;
-}
-.box{
-  .upload .file{
-    height: 150px;
-    width: 300px;
-    border: 1px dashed #dcdee2;
+
+
+
+  .title {
+    padding-top: 200px;
     text-align: center;
-    padding: 20px 0;
+    padding-right: 33px;
+    width: 530px;
+    height: 830px;
+    left: 0;
+    top: 60px;
+    background: url(../../assets/images/prend/title.png) no-repeat;
+    background-size: contain;
+
+    p {
+      width: 100%;
+      line-height: 36px;
+      font-size: 20px;
+      text-align: center;
+    }
   }
-  .upload .file:hover{
-    border: 1px dashed #2d8cf0;
+  .head {
+    display: flex;
+    margin-left: 50px;
+    .head-left {
+      height: 70px;
+      width: 70px;
+      background: url(../../assets/images/prend/1.png) no-repeat;
+      background-size: contain;
+    }
+    .head-right {
+       height: 70px;
+      width: 130px;
+      background: url(../../assets/images/prend/2.png) no-repeat;
+      background-size: contain;
+    }
   }
-  .upload .file input{
-    display: none;
+}
+
+
+.integral-right{
+  width: 700px;
+  height: 500px;
+  .top{
+    height: 25px;
+
+    width: 100%;
+    display: flex;
+    p{
+      width: 50%;
+      font-size: 16px;
+      text-align: center;
+        line-height: 25px;
+      border: black 1px solid;
+    }
+
   }
+
+  .bottom{
+    height: 100%;
+    width: 100%;
+    background: #eeee;
+    border: black 1px solid;
+    border-top: black 0 solid;
+    padding-top: 30px;
+    .textimg{
+      margin: 0px auto;
+      height: 300px;
+      width: 300px;
+      background: #ffffff;
+border:  black 1px solid;
+    }
+
+  }
+
+  .btn{
+      text-align: center;
+    }
 }
 </style>

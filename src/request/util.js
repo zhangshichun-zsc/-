@@ -115,8 +115,9 @@ export default {
       return Number(item)
     })
   },
-  keydowenter(vm, Callback) {
 
+  //  添加 enter 事件
+  keydowenter(vm, Callback) {
     if (!Callback) return console.error('请添加调用的事件处理函数')
     if (!vm) return console.error('请添当前的this 实例')
     let then = vm
@@ -129,7 +130,13 @@ export default {
         Callback && then.Callback()
       }
     };
+  },
+  //  解绑 enter 事件
+  removekeydow() {
+    document.onkeydown = null
+    return false
   }
+
 
 }
 
