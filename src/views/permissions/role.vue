@@ -62,7 +62,7 @@
                       >取消</Button
                     >
                     <Button
-                      type="primary"
+                      type="error"
                       size="large"
                       @click="modalOk('formValidate')"
                       >确定</Button
@@ -132,7 +132,7 @@
                 ></Transfer>
                 <div slot="footer">
                   <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
-                  <Button type="primary" size="large" @click="addmodalOk"
+                  <Button type="error" size="large" @click="addmodalOk"
                     >确定</Button
                   >
                 </div>
