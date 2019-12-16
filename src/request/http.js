@@ -11,7 +11,6 @@ import router from "../router/index";
  */
 const SERVICE_URL = {
   API_URL: [
-    "https://rhzghyuat.co-inclusion.org/rhzg-app-server", // UAT 环境
     "https://rhzgtest.co-inclusion.org/rhzg-web", // 测试服务器 0
     "http://192.168.0.6:8084/rhzg-web", // 余海 1  192.168.0.6
     "http://192.168.0.14:8084/rhzg-web", // 张飞飞 2
