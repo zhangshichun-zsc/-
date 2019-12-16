@@ -93,7 +93,7 @@ export default {
 }
 
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .set-header{
   padding: 20px;
   background: rgb(228, 228, 228);

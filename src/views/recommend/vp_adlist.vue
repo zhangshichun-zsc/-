@@ -3,7 +3,7 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
@@ -13,16 +13,20 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button @click="result">查询结果</Button>
+
         </div>
-      </div>
+      </div> -->
+      <Modal
+      v-model="modal1">
+      <img :src="showImg" alt="" class="showimg"/>
+    </Modal>
       <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span>广告名称</span>
+        <div class="flex-center-start name">
+          <span>广告名称:</span>
           <Input size="large" placeholder="广告名称" class="inpt" v-model="title" />
         </div>
-        <div class="flex-center-start">
-          <span>广告位置</span>
+        <div class="flex-center-start name">
+          <span>广告位置:</span>
           <Select style="width:200px" placeholder="全部" class="inpt" v-model="location">
             <Option
               v-for="item in locations"
@@ -31,29 +35,33 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <div class="flex-center-start">
-          <span>到期时间</span>
+        <div class="flex-center-start name">
+          <span>到期时间:</span>
           <Select style="width:200px" placeholder="全部" class="inpt" v-model="time">
             <Option v-for="item in timeLists" :value="item.time" :key="item.time">{{ item.label }}</Option>
           </Select>
         </div>
+        <Button class="search" @click="result">查询结果</Button>
       </div>
     </div>
 
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div class="flex-center-start">
+      <div class="table-header flex-between">
+        <!-- <div class="flex-center-start">
           <Icon type="md-list" />
           <span>数据列表</span>
-        </div>
-        <div class="flex-center-end">
-          <Button size="small" class="table-btn" @click="add">添加广告</Button>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+        </div> -->
+
+          <Button  class="table-btns" @click="add">添加广告</Button>
+          <div>
+             <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
         <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
             <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
               <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
+          </div>
+
         </div>
       </div>
       <Table
@@ -63,9 +71,7 @@
         :data="data"
         @on-selection-change="tablechange"
       ></Table>
-
-      <div class="pages flex-center-between">
-        <div class="batch">
+      <div class="batch">
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
@@ -74,6 +80,9 @@
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
+
+      <div class="pages flex-center-between">
+
         <Page
           :total="dataCount"
           show-elevator
@@ -136,34 +145,41 @@ export default {
         {
           title: "广告名称",
           key: "title",
-          align: "center"
+          align: "center",
+          width: 220,
+
         },
         {
           title: "广告位置",
           key: "locationText",
-          align: "center"
+          align: "center",
+           width: 220,
         },
         {
           title: "广告图片",
           key: "picUrl",
           align: "center",
+           width: 180,
           render: (h,params) => {
-            return h("img", {
-              attrs: {
-                src: params.row.picUrl
+             return h("Icon", {
+              props: {
+                type: 'md-images',
               },
-              style: {
-                width: "4rem",
-                height: "4rem"
+              on: {
+                click: () => {
+                  this.modal1 = true
+                  this.showImg = params.row.picUrl
+                }
               }
             });
+
           }
         },
         {
           title: "起止时间",
           key: "time",
           align: "center",
-          width:280,
+          width:320,
           render: (h, params) => {
             return h("div",
               formatDate(params.row.startAt)+'/'+formatDate(params.row.endAt),
@@ -175,6 +191,7 @@ export default {
           title: "上线",
           key: "online",
           align: "center",
+          width:200,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -197,12 +214,14 @@ export default {
         {
           title: "点击次数",
           key: "clickCount",
-          align: "center"
+          align: "center",
+          width:160
         },
         {
           title: "操作",
           key: "action",
           align: "center",
+           width:280,
           render: (h, params) => {
             let Roof='置顶'
             if(params.row.topFlag==1){
@@ -291,7 +310,9 @@ export default {
       time: 0,
       status: false,
       arr: [],
-      batch: null
+      batch: null,
+      modal1:false,
+      showImg:''
     };
   },
 
@@ -427,13 +448,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
+
 .integral-header .integral-top {
   padding: 15px 20px;
   background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+
 }
 .integral-header .integral-center {
   margin: 0 20px;
@@ -441,37 +460,55 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
-  margin-left: 15px;
+
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.integral-table {
-  margin-top: 30px;
-}
+
 .table-header {
+  height: 50px;
   padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  background: #ffffff;
+  border: 0px solid #eee;
 }
 .table-header .table-btn {
   margin-right: 15px;
 }
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
+ .pages {
+  padding: 30px 20px;
+
   background: #fff;
+    text-align: center;
 }
-.pages {
-  text-align: center;
-}
+
 .ipt {
   margin-left: 10px;
 }
 .sdate {
   margin-left: 15px;
+}
+.showimg{
+    width: 100%;
+    height: auto;
+}
+
+.name {
+  span {
+    display: block;
+    width: 100px;
+  }
+  .inpt {
+    margin-right: 30px;
+  }
+}
+
+.batch{
+  background: #ffff;
+    padding: 30px 0;
 }
 </style>

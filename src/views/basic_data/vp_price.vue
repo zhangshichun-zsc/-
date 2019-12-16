@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       editorContent: "",
-      Newly: "新增",
+      Newly: "新增会费",
       formValidate: {
         name: null,
         imonth: null,

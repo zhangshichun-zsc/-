@@ -31,7 +31,7 @@
             placeholder="请选择开始时间"
             v-model="args.startAt"
           ></DatePicker>
-          <span>~</span>
+          <span class="po">~</span>
           <DatePicker
             style="width: 180px"
             type="date"
@@ -128,7 +128,7 @@ export default {
       open: false,
       time: "请选择时间段",
       navigation1: {
-        head: "证书管理(会员)"
+        head: "证书管理(志愿者)"
       },
       ruleValidate: {
         orgId: [
@@ -151,8 +151,8 @@ export default {
         orgId: "",
         title: "",
         effectiveAt: "",
-        orgType: 1,
-        sysId: 1
+        orgType: 3,
+        sysId: 2
       },
       modal1: false,
       columns: [
@@ -189,7 +189,7 @@ export default {
         {
           title: "操作",
           key: "action",
-          width:120,
+          width:180,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -398,6 +398,9 @@ export default {
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
+}
+.po{
+  padding:0 10px;
 }
 
 @import "../../libs/basicdata.css";

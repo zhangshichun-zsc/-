@@ -42,7 +42,7 @@
             placeholder="请选择开始时间"
             v-model="search.createTimestamp[0]"
           ></DatePicker>
-          <span>~</span>
+          <span class="po">~</span>
           <DatePicker
             style="width: 180px"
             :options="end"
@@ -190,5 +190,8 @@ export default {
 }
 .sai {
   color: black;
+}
+.po{
+  padding:0 10px;
 }
 </style>
