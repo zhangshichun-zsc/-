@@ -15,7 +15,7 @@
             class="btn"
             v-for="(item, index) in arr"
             :key="index"
-            @click="train()"
+            @click="train(item.dicId,item.dicName,0)"
             >{{ item.dicName }}</Button
           >
         </div>

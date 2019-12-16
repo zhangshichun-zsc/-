@@ -5,11 +5,7 @@
 
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-start">
-          <Icon type="md-list" />
-          <span>数据列表</span>
-        </div>
-        <div class="flex-center-end" style="padding:0 10px">
+        <div class="flex-center-end" style="padding:10px">
           <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -159,7 +155,7 @@ export default {
         page: { page: this.page, size: this.size,sort:this.sort}
       }
       params=this.util.remove(params)
-
+      console.log(params)
       messageShort(params).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
@@ -176,15 +172,13 @@ export default {
     },
 
     query(e) {
-
-
        this.page=1
       this.content = e[0].value;
-
        if(e[1].value!=''){
         this.createAt = e[1].value.getTime();
         this.createAt=this.util.formatDate(this.createAt)
       }
+
       this.getmessageShort()
     },
 

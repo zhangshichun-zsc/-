@@ -69,20 +69,19 @@ export default {
           title: "特长名称",
           key: "dicName",
           align: "center",
-          width:320,
         },
         {
           title: "创建时间",
           key: "creatAt",
           align: "center",
-          width:247,
+          width:200,
         },
 
         {
           title: "有效状态",
           key: "status",
            align: "center",
-            width:247,
+            width:200,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -110,7 +109,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-           width:247,
+           width:150,
           render: (h, params) => {
             return h("div", [
               h(

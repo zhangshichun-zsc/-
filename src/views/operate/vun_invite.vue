@@ -5,10 +5,6 @@
 
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-start">
-           <Icon type="md-list" />
-          <span>数据列表</span>
-        </div>
         <div class="flex-center-end" style="padding:10px">
                   <Button  @click="exportData">导出数据</Button>
                   <Select v-model="size" style="width:120px;margin-right:10px" placeholder="显示条数" class="space">
@@ -54,24 +50,27 @@ export default {
         {
           title: "用户账号",
           key: "userAccount",
-          align: "center"
+          align: "center",
+          width:140,
 
         },
         {
           title: "用户昵称",
           key: "nickname",
-         align: "center"
+         align: "center",
+         width:200
         },
         {
           title: "用户分类",
           key: "userTypeText",
-          width:200,
+          width:260,
          align: "center"
         },
         {
           title: "邀请好友",
           key: "inviteUserNum",
-          align: "center"
+          align: "center",
+          width:160,
         },
         {
           title: "成功参与活动好友",
@@ -82,19 +81,20 @@ export default {
         {
           title: "成功邀请团队注册",
           key: "inviteOrgNum",
-          width:"160px",
+          width:160,
           align: "center"
         },
         {
           title: "积分奖励",
           key: "sumScore",
-          width:120,
+          width:160,
           align: "center"
         },
         {
           title: "操作",
           key: "action",
           align: "center",
+          width:180,
           render: (h, params) => {
             return h("div", [
               h(

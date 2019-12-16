@@ -110,12 +110,13 @@ export default {
         {
           title: "组织名称",
           key: "orgName",
-          align: "center"
+          align: "center",
+          width:300,
         },
         {
           title: "组织分类",
           key: "orgType",
-          width:140,
+          width:240,
           align: "center",
           render: (h, params) => {
             let orgType = params.row.orgType;
@@ -124,7 +125,6 @@ export default {
               2: "家长小组",
               3: "志愿者小组"
             };
-
             return h("span", type[orgType]);
           }
         },
@@ -132,6 +132,7 @@ export default {
           title: "组织地址",
           key: "address",
           align: "center",
+          width:300,
           render: (h, params) => {
             let address = params.row;
             return h(
@@ -143,24 +144,25 @@ export default {
         {
           title: "负责人",
           key: "userName",
+          width:200,
           align: "center"
         },
         {
           title: "人数",
           key: "num",
-          width: 80,
+          width: 140,
           align: "center"
         },
         {
           title: "提交时间",
           key: "createAt",
-          width:180,
+          width:240,
           align: "center"
         },
         {
           title: "状态",
           key: "status",
-          width:80,
+          width:140,
           align: "center",
           render: (h, params) => {
             let validFlag = params.row.validFlag;
@@ -183,7 +185,7 @@ export default {
         {
           title: "操作",
           key: "action",
-          width:180,
+          width:240,
           align: "center",
           render: (h, params) => {
             let validFlag = params.row.validFlag;
