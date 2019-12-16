@@ -689,8 +689,10 @@ export default {
           this.$Message.info("修改成功");
           this.getdepartmentlist();
         }
-        console.log(res);
-        this.AddFormFlag = true;
+
+        setTimeout(() => {
+          this.AddFormFlag = true;
+        }, 500);
       });
     },
     // 部门列表添加
@@ -709,8 +711,10 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
-        this.AddFormFlag = true;
+
+        setTimeout(() => {
+          this.AddFormFlag = true;
+        }, 500);
       });
     },
     // 部门成员-修改启用状态

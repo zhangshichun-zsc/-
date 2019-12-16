@@ -266,8 +266,9 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
-        this.EditFormFlag = true;
+        setTimeout(() => {
+          this.EditFormFlag = true;
+        }, 500);
       });
     },
     // 查询所有部门名称
@@ -332,7 +333,9 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        this.AddFormFlag = true;
+        setTimeout(() => {
+          this.AddFormFlag = true;
+        }, 500);
       });
     },
 

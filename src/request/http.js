@@ -18,9 +18,9 @@ const SERVICE_URL = {
     "http://192.168.0.11:8084/rhzg-web", // 竺文聪 4
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.5:8084/rhzg-web", // 王盛 6
-    "https://rhzghyuat.co-inclusion.org/rhzg-web"  //
+    "https://rhzghyuat.co-inclusion.org/rhzg-web"  //  UAT 环境
   ],
-  API_INDEX: 1
+  API_INDEX: 0
 }
 
 export const SERVER_URl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
@@ -213,7 +213,7 @@ export function postdel(url, params) {
   });
 }
 
-export const upload = (p,url='/pic/upload') => {
+export const upload = (p, url = '/pic/upload') => {
   return new Promise((resolve, reject) => {
     axios
       .post(url, p, {

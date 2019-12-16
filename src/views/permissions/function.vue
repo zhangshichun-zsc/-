@@ -28,7 +28,7 @@
                   ></chu-tree>
                 </Col>
               </Row>
-              <Button type="success" @click="save">保存</Button>
+              <Button type="error" @click="save">保存</Button>
             </TabPane>
           </Tabs>
         </div>
@@ -45,6 +45,7 @@ export default {
   components: { Table },
   data() {
     return {
+      formFlag: true,
       navigation1: {
         head: "功能权限设置(共用)"
       },
@@ -116,8 +117,9 @@ export default {
 
     // 角色权限设置
     getroleSetup() {
+      if (!this.formFlag) return;
+      this.formFlag = false;
       let list = this.list.toString();
-
       roleSetup({
         sysRoleId: this.sysRoleId,
         sysMenuIds: list
@@ -130,6 +132,9 @@ export default {
             name: this.$route.query.fromURL
           });
         }
+        setTimeout(() => {
+          this.formFlag = true;
+        }, 500);
       });
     },
 

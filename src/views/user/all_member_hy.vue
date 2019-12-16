@@ -1085,7 +1085,10 @@ export default {
 
           console.log(res.msg);
         }
+        setTimeout(()=> {
           this.stationFormFlag = true
+        })
+         
       });
     },
 

@@ -1204,7 +1204,10 @@ export default {
 
           console.log(res.msg);
         }
-        this.stationFormFlag = true
+        setTimeout(()=> {
+             this.stationFormFlag = true 
+        })
+     
       });
     },
     //  查询按钮

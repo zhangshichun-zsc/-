@@ -1389,7 +1389,10 @@ export default {
         } else {
           this.$Message.error("操作失败");
         }
-        this.stationFormFlag = true
+        setTimeout(()=> {
+          this.stationFormFlag = true
+        },500)
+      
       });
     },
     splitArr(str) {

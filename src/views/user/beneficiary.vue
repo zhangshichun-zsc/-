@@ -1025,7 +1025,10 @@ export default {
 
           console.log(res.msg)
         }
-        this.stationFormFlag = true
+        setTimeout(()=> {
+          this.stationFormFlag = true
+        },500)
+       
       })
     },
     // 用户状态的变更
