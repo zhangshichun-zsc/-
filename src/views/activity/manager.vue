@@ -36,7 +36,7 @@
           </Row>
         </div>
         <div class="flex-center-start">
-         <Button class="button-red" @click="result">查询</Button>;
+          <Button class="button-red" @click="result">查询</Button>
         </div>
       </div>
     </div>
@@ -379,6 +379,7 @@ export default {
           title: "活动时间",
           key: "startTimestamp",
           width:260,
+          align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.startTimestamp));
           }
