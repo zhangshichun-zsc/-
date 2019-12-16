@@ -8,12 +8,9 @@
           <p>
             <span>列表</span>
           </p>
+          <!--               class-name="vertical-center-modal" -->
           <div class="but">
-            <Modal
-              v-model="modal1"
-              :title="text"
-              class-name="vertical-center-modal"
-            >
+            <Modal v-model="modal1" :title="text" class="scrollModal">
               <Form
                 ref="AddDate"
                 :model="AddDate"
@@ -66,7 +63,7 @@
               </Form>
               <div slot="footer">
                 <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
-                <Button type="primary" size="large" @click="modalOk('AddDate')"
+                <Button type="error" size="large" @click="modalOk('AddDate')"
                   >确定</Button
                 >
               </div>
@@ -249,7 +246,7 @@ export default {
           title: "是否启用",
           key: "status",
           align: "center",
-          width: 80,
+          width: 110,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -324,7 +321,7 @@ export default {
           title: "联系方式",
           key: "tel",
           align: "center",
-          width: 110
+          width: 160
         },
         {
           title: "角色",
@@ -340,7 +337,7 @@ export default {
           title: "是否启用",
           key: "status",
           align: "center",
-          width: 80,
+          width: 120,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -361,7 +358,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 140,
+          width: 100,
           render: (h, params) => {
             return h(
               "div",

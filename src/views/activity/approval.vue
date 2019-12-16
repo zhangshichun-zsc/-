@@ -43,7 +43,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      value="projectMsg.startT"
+                      :value="projectMsg.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择开始时间"
@@ -56,7 +56,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      value="projectMsg.endT"
+                      :value="projectMsg.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择结束时间"
@@ -108,8 +108,8 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="1">整体招募</Radio>
                   <Radio label="2">批次招募</Radio>
+                  <Radio label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>
@@ -203,7 +203,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      value="batch.startT"
+                      :value="batch.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动开始时间"
@@ -216,7 +216,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      value="batch.endT"
+                      :value="batch.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动结束时间"
@@ -326,7 +326,7 @@
                   <Radio label="0">活动开始前一个月自动发布</Radio>
                   <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
-                <Date-picker value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker :value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
@@ -364,7 +364,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      value="projectMsg.startT"
+                      :value="projectMsg.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择开始时间"
@@ -377,7 +377,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      value="projectMsg.endT"
+                      :value="projectMsg.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择结束时间"
@@ -825,13 +825,13 @@ export default {
       this.getTemplate();
     },
     getTemplate() {
-      chooseTempalte(this.batch.actTypeId).then(res => {
+      chooseTempalte({actTypeDicId:this.batch.actTypeId}).then(res => {
         console.log(res);
         this.templateList = res.data;
       });
     },
     getTemplateDetail(e) {
-      templateMsg(e.activityId).then(res => {
+      templateMsg({activityId:e.activityId}).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.batch = res.data;
@@ -1052,6 +1052,7 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.$Message.success(res.msg);
+          this.$router.push({path: "manager"});
         } else {
           this.$Message.error(res.msg);
         }

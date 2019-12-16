@@ -38,16 +38,14 @@
           <div class="flex-center-start">
             <span>注册时间/时间段:</span>
             <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="startAt"></DatePicker>
-              <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-          <DatePicker
-            <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
+            <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+            <DatePicker <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
           </div>
           <div class="flex-center-start">
             <span>VIP缴费时间:</span>
             <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="memberPayStartTimestamp"></DatePicker>
-             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-          <DatePicker
-            <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="memberPayEndTimestamp"></DatePicker>
+            <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+            <DatePicker <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="memberPayEndTimestamp"></DatePicker>
           </div>
         </div>
       </div>
@@ -93,7 +91,7 @@
             </DropdownMenu> -->
           </Dropdown>
           <!--群发站内信-->
-          <Modal v-model="modal2" title="群发站内信" @on-ok="onStation" @on-cancel="onStation" :mask-closable="false">
+          <Modal v-model="modal2" title="群发站内信" class='QRcodemodal'   @on-ok="onStation" @on-cancel="onStation" :mask-closable="false">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
               <FormItem label="发送对象：" prop="tag">
                 <p>
@@ -112,7 +110,7 @@
             </Form>
           </Modal>
           <Dropdown @on-click='isALL'>
-            <Button style="margin: 0 10px;" @click="ismodal2">
+            <Button style="margin: 0 5px;" @click="ismodal2">
               群发站内信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -426,23 +424,23 @@
           <Select placeholder=" 批量操作" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <a href="javascript:;" class='btn'  @click='batchOperation'>确定</a>
+          <a href="javascript:;" class='btn' @click='batchOperation'>确定</a>
           <!-- <Button style="margin-left: 10px" @click='batchOperation'></Button> -->
         </div>
         <Page :total="totalSize" show-elevator show-total size='small' @on-change='setPage' />
       </div>
     </div>
-    <Modal title="二维码" v-model="modal4" style='text-align: center;' :closable='false'>
+    <Modal title="二维码" v-model="modal4" class='QRcodemodal' style='text-align: center;' >
       <div class='bg'>
         <img :src="QRCode" alt="二维码">
       </div>
       <div slot="footer">
         <Button type="text" size="large" @click="modalCancel">取消</Button>
-        <Button type="primary" size="large" @click="modalCancel">确定</Button>
+        <Button type="error" size="large" @click="modalCancel">确定</Button>
       </div>
     </Modal>
 
-    <Modal title="高级检索" v-model="modalSenior" >
+    <Modal title="高级检索" v-model="modalSenior" class='QRcodemodal'>
       <Form ref="formCustom" :model="paramsSeniorObj">
         <Row>
           <Col span="12">
@@ -459,14 +457,7 @@
           </Col>
         </Row>
         <Row>
-          <Col span="12">
-          <FormItem label="">
-            <p>用户标签：</p>
-            <Select style="width:200px" v-model="paramsSeniorObj.labelId">
-              <Option v-for="item in labelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-          </FormItem>
-          </Col>
+
           <Col span="12">
           <FormItem label="" class='formitem'>
             <p>注册时间/时间段</p>
@@ -475,15 +466,23 @@
             </Col>
           </FormItem>
           </Col>
-        </Row>
-        <Row>
-
           <Col span="12">
           <FormItem label="" class='formitem'>
             <p style='font-size: 0;'>000</p>
             <DatePicker type="date" placeholder="请选择结束时间" v-model="registrationEndTimeStamp" style="width: 200px"></DatePicker>
           </FormItem>
           </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+          <FormItem label="">
+            <p>用户标签：</p>
+            <Select disabled style="width:200px" v-model="paramsSeniorObj.labelId">
+              <Option v-for="item in labelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          </Col>
+
         </Row>
 
       </Form>
@@ -692,14 +691,13 @@ export default {
         {
           type: 'selection',
           width: 50,
-          align: 'center',
+          align: 'center'
         },
         {
           title: '姓名',
           key: 'userName',
           align: 'center',
-          width: 180,
-
+          width: 180
         },
         {
           title: '手机号',
@@ -1115,8 +1113,10 @@ export default {
     },
     // 关闭 二维码
     modalCancel() {
-      this.QRCode = ''
       this.modal4 = false
+      setTimeout(()=>{
+        this.QRCode = "";
+      },500)
     },
     // 设置标签按钮
     onLabel() {
@@ -1344,8 +1344,9 @@ export default {
   margin: 0 auto;
 }
 .bg img {
-  width: 100%;
-  height: 100%;
+  width: 10rem;
+  height: 10rem;
+  margin: 0 auto;
   vertical-align: middle;
 }
 .btn {
@@ -1360,5 +1361,4 @@ export default {
   text-align: center;
   margin: 0 15px;
 }
-
 </style>

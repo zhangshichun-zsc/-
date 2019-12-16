@@ -61,7 +61,7 @@
                 <Col span="11">
                   <Date-picker
                     type="datetime"
-                    value="oneRole.enrollStarttime"
+                    :value="oneRole.enrollStarttime"
                     format="yyyy-MM-dd HH:mm"
                     placement="bottom-end"
                     placeholder="选择报名开始时间"
@@ -74,7 +74,7 @@
                 <Col span="11">
                   <Date-picker
                     type="datetime"
-                    value="oneRole.enrollEndtime"
+                    :value="oneRole.enrollEndtime"
                     format="yyyy-MM-dd HH:mm"
                     placement="bottom-end"
                     placeholder="选择报名结束时间"
@@ -91,7 +91,7 @@
                 <Col span="11">
                   <Date-picker
                     type="datetime"
-                    value="oneRole.outrollStarttime"
+                    :value="oneRole.outrollStarttime"
                     format="yyyy-MM-dd HH:mm"
                     placement="bottom-end"
                     placeholder="选择报名取消开始时间"
@@ -104,7 +104,7 @@
                 <Col span="11">
                   <Date-picker
                     type="datetime"
-                    value="oneRole.outrollEndtime"
+                    :value="oneRole.outrollEndtime"
                     format="yyyy-MM-dd HH:mm"
                     placement="bottom-end"
                     placeholder="选择报名取消结束时间"
@@ -121,7 +121,7 @@
                 <Col span="12">
                   <Date-picker
                     type="date"
-                    value="oneRole.setTime"
+                    :value="oneRole.setTime"
                     format="yyyy-MM-dd HH:mm"
                     placement="bottom-end"
                     placeholder="选择集合日期"

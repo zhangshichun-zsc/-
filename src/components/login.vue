@@ -30,55 +30,6 @@
         </div>
       </div>
     </div>
-    <!-- <img class="banner" src="@/assets/images/login_bg.png" /> -->
-    <!-- <img class="banner" src="@/assets/images/banner.png" /> -->
-    <!-- <div class="login">
-      <div class="form">
-        <Form
-          ref="formValidate"
-          :model="formValidate"
-          :rules="ruleInline"
-          inline
-          :show-message="false"
-          :label-width="80"
-        >
-          <p class="text">后台管理系统</p>
-
-          <FormItem prop="user">
-            <Input
-              prefix="md-person"
-              type="text"
-              size="large"
-              style="width:240px;"
-              v-model="formValidate.user"
-              placeholder="请输入用户名称"
-              @on-enter="handleSubmit('formValidate')"
-            />
-          </FormItem>
-
-          <FormItem prop="password">
-            <Input
-              prefix="ios-unlock"
-              type="password"
-              size="large"
-              style="width:240px; "
-              v-model="formValidate.password"
-              placeholder="请输入登陆密码"
-              @on-enter="handleSubmit('formValidate')"
-            />
-          </FormItem>
-          <FormItem>
-            <Button
-              type="warning"
-              size="default"
-              @click="handleSubmit('formValidate')"
-              style="width:240px; height:40px"
-              >登录</Button
-            >
-          </FormItem>
-        </Form>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -123,6 +74,9 @@ export default {
 
   created() {
     this.util.keydowenter(this, this.getlogin);
+  },
+  beforeDestroy() {
+    this.util.removekeydow();
   },
   mounted() {},
   methods: {

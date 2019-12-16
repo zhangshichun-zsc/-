@@ -188,7 +188,8 @@ export default {
                 },
                 on:{
                   click:()=>{
-                    this.modal3=true
+                     this.$Message.info("此功能暂未开放")
+                    // this.modal3=true
                   }
                 }
               })
@@ -233,8 +234,8 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
+                    marginLeft: "10px",
                     color: "green",
                     cursor: "pointer"
                   },
@@ -353,7 +354,7 @@ export default {
           width:200,
         },
         {
-          title: "上架/下架",
+          title: "是否上架",
           key: "statue",
           align: "center",
           width:240,
