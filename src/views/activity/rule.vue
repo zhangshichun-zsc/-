@@ -14,7 +14,7 @@
           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -59,19 +59,22 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 80,
           align: "center"
         },
         {
           title: "限制名称",
           key: "name",
-          align: "center"
+          align: "center",
+          width: 500,
+          ellipsis: true,
+          tooltip: true,
         },
 
         {
           title: "新增时间",
           key: "createAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -80,7 +83,7 @@ export default {
         {
           title: "最后修改时间",
           key: "updateAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.updateAt));
@@ -89,12 +92,13 @@ export default {
         {
           title: "最后操作人",
           key: "userName",
+          width: 300,
           align: "center"
         },
 
         {
           title: "是否启用",
-          width: 120,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -116,18 +120,21 @@ export default {
       columns1: [
         {
           type: "selection",
-          width: 60,
+          width: 80,
           align: "center"
         },
         {
           title: "优先条件",
           key: "name",
-          align: "center"
+          width: 500,
+          align: "center",
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "新增时间",
           key: "createAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -136,7 +143,7 @@ export default {
         {
           title: "最后修改时间",
           key: "updateAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -145,12 +152,13 @@ export default {
         {
           title: "最后操作人",
           key: "userName",
+          width: 300,
           align: "center"
         },
 
         {
           title: "是否启用",
-          width: 120,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [

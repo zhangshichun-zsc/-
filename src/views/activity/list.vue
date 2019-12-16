@@ -101,23 +101,25 @@ export default {
           title: "姓名",
           key: "userName",
           align: "center",
-          width:160,
+          width:200,
         },
         {
           title: "活动名称",
           key: "activityName",
           align: "center",
-          width:400,
+          width: 500,
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "项目名称",
           key: "categoryName",
           align: "center",
-          width:200,
+          width:250,
         },
         {
           title: "活动时间",
-          width:200,
+          width:300,
           key: "startTimestamp",
           align: "center",
           render: (h, params) => {
@@ -128,30 +130,30 @@ export default {
           title: "活动类型",
           key: "activityType",
           align: "center",
-          width:200,
+          width:250,
         },
         {
           title: "用户类型",
           key: "userType",
           align: "center",
-          width:180
+          width:250
         },
         {
           title: "手机号码",
           key: "tel",
           align: "center",
-          width:160
+          width:200
         },
         {
           title: "预约状态",
           key: "signUpStatusText",
           align: "center",
-          width:160
+          width:200
         },
         {
           title: "报名时间",
           key: "signUpTimestamp",
-          width:200,
+          width:300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.signUpTimestamp));
