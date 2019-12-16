@@ -38,13 +38,15 @@
           <div class="flex-center-start">
             <span>注册时间/时间段:</span>
             <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="startAt"></DatePicker>
-            <span> ~ </span>
+              <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+          <DatePicker
             <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
           </div>
           <div class="flex-center-start">
             <span>VIP缴费时间:</span>
             <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="memberPayStartTimestamp"></DatePicker>
-            <span> ~ </span>
+             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+          <DatePicker
             <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="memberPayEndTimestamp"></DatePicker>
           </div>
         </div>

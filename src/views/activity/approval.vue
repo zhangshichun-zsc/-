@@ -43,7 +43,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.startT"
+                      value="projectMsg.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择开始时间"
@@ -56,7 +56,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.endT"
+                      value="projectMsg.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择结束时间"
@@ -85,7 +85,7 @@
                   <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                        <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -134,7 +134,7 @@
               </li>
               <li class="ins">
                 <div>
-                  <p class="ins-p">{{itemsList.org.propagandaTitle}}</p>
+                  <p class="ins-p" v-html="itemsList.org.propagandaTitle"></p>
                   <p class="ins-b" v-html="itemsList.org.propagandaText"></p>
                 </div>
               </li>
@@ -166,14 +166,14 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-pic" v-if='batch.actCoverShowPic == null'>
-                    <div class="" @click="()=>{ this.$refs.files.click()}">
-                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFmFile()" style="display:none" >
-                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
+                    <div class="" @click="()=>{ this.$refs.filefm.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
-                    <img class="imgs" style="width:283px;height:188px" :src="batch.actCoverShowPic"/>
+                  <div class="first-picfm" v-else>
+                    <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
                     <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
                   </div>
                 </div>
@@ -182,9 +182,9 @@
                 <span class="first-span">主题图片</span>
                 <div>
                   <div class="first-pic" v-if='batch.actShowPic == null'>
-                    <div class="" @click="()=>{ this.$refs.files.click()}">
-                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFile()" style="display:none" >
-                      <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                    <div class="" @click="()=>{ this.$refs.filezt.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -203,7 +203,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="batch.startT"
+                      value="batch.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动开始时间"
@@ -216,7 +216,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="batch.endT"
+                      value="batch.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动结束时间"
@@ -326,7 +326,7 @@
                   <Radio label="0">活动开始前一个月自动发布</Radio>
                   <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
-                <Date-picker v-model="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
@@ -364,7 +364,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.startT"
+                      value="projectMsg.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择开始时间"
@@ -377,7 +377,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="projectMsg.endT"
+                      value="projectMsg.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择结束时间"
@@ -406,7 +406,7 @@
                   <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                        <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -493,9 +493,9 @@
                 <span class="first-span">图片</span>
                 <div style="margin-left: 30px;">
                   <div class="first-pic" v-if='partner.partPicShow == null'>
-                      <div class="" @click="()=>{ this.$refs.files.click()}">
-                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadPartnerFile()" style="display:none" >
-                        <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                      <div class="" @click="()=>{ this.$refs.filepar.click()}">
+                        <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filepar" @change="uploadPartnerFile()" style="display:none" >
+                        <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -922,7 +922,7 @@ export default {
     addRoles() {
       let r = {
         fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
-        refund: {},
+        actRefund: {},
         signRuleList: [],
         itemList: [],
         choiceRuleList: []
@@ -1088,7 +1088,7 @@ export default {
       });
     },
     uploadPartnerFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filepar.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -1109,7 +1109,7 @@ export default {
       });
     },
     uploadActFmFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filefm.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -1130,7 +1130,7 @@ export default {
       });
     },
     uploadActFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filezt.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -1138,8 +1138,8 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           console.log(e);
-          this.batch.actShowPic = e.target.result;
-          this.batch.actPic = res.data;
+          this.$set(this.batch, "actShowPic", e.target.result);
+          this.$set(this.batch, "actPic", res.data);
         };
       });
     },
@@ -1187,6 +1187,14 @@ export default {
 }
 .first-pic{
   width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px solid;
+  position: relative;
+}
+.first-picfm{
+  width: 200px;
   height: 200px;
   text-align: center;
   line-height: 200px;

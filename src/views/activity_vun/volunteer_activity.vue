@@ -333,18 +333,24 @@ export default {
           key: "status",
           align: "center",
           width:200,
+          render: (h, params) => {
+            return h("div", params.row.status==1?"未付款":(params.row.status==2?"待招募":(params.row.status==3?"招募中":(params.row.status==4?"待开始":(params.row.status==5?"进行中":(params.row.status==6?"已结束":(params.row.status==7?"已取消":(params.row.status==8?"草稿箱":(params.row.status==9?"审核不通过":(params.row.status==10?"已下架":(params.row.status==11?"待发布":(params.row.status==12?"模板":"关闭报名"))))))))))) );
+          }
         },
         {
           title: "是否显示主办方小站",
           key: "isShowHolder",
           align: "center",
-          width:300,
+          width:200,
+          render: (h, params) => {
+            return h("div", params.row.isShowHolder==1?"是":"否");
+          }
         },
         {
           title: "志愿者报名人数",
           key: "num",
           align: "center",
-          width:260,
+          width:200,
         },
         {
           title: "上架/下架",

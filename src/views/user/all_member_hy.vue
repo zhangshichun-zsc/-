@@ -30,7 +30,7 @@
             placeholder="请选择开始时间"
             v-model="startAt"
           ></DatePicker>
-          <span>-</span>
+          <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
           <DatePicker
             style="width: 180px"
             type="date"
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-center-between" >
         <div>
           <Icon type="md-reorder" size="25" />
           <span>数据列表</span>
@@ -780,7 +780,7 @@ export default {
         {
           title: "参与活动数",
           key: "joinActivityNum",
-          width: 100,
+          width: 140,
           align: "center"
         },
         {
@@ -792,7 +792,7 @@ export default {
         {
           title: "账户启用状态",
           key: "userEnable",
-          width: 110,
+          width: 140,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -1225,7 +1225,7 @@ export default {
 }
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
+  background: #fff;
   border: 1px solid #eee;
   display: flex;
   justify-content: space-between;
