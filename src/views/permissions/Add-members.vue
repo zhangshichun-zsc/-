@@ -137,6 +137,8 @@ export default {
       navigation1: {
         head: "添加成员(共用)"
       },
+      AddFormFlag: true,
+      EditFormFlag: true,
       AddDate: {
         userName: "",
         tel: "",
@@ -265,6 +267,7 @@ export default {
           this.$Message.error(res.msg);
         }
         console.log(res);
+        this.EditFormFlag = true;
       });
     },
     // 查询所有部门名称
@@ -329,13 +332,10 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
+        this.AddFormFlag = true;
       });
     },
 
-    /**
-     *  TODO:  新增时获取所有部门
-     *
-     */
     getmemberlist() {
       memberlist({
         page: { page: this.page, size: this.size },
@@ -369,8 +369,12 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           if (this.$route.query.states == 2) {
+            if (!this.AddFormFlag) return;
+            this.AddFormFlag = false;
             this.getdepartaddDeptUser();
           } else {
+            if (!this.EditFormFlag) return;
+            this.EditFormFlag = false;
             this.getroleedit();
           }
         } else {
