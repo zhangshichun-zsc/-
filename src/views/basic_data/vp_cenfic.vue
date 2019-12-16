@@ -59,7 +59,6 @@
         </div>-->
         <div class="flex-center-start">
           <Button class="search" @click="query()">查询</Button>
-          <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
@@ -98,10 +97,10 @@
     <div class="integral-table">
       <div class="table-header flex-between">
         <div class="flex-center-start">
-          <span>数据列表</span>
+          <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
-          <Select class="inpt" style="width:100px" placeholder="显示条数" @on-change="changeNum">
+          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" @on-change="changeNum">
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
           <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
@@ -160,7 +159,7 @@ export default {
         {
           title: "组织",
           key: "orgName",
-          width: 300,
+          width: 400,
           align: "center"
         },
         {
@@ -173,23 +172,24 @@ export default {
           title: "生效时间",
           key: "effectiveAt",
           align: "center",
-          width: 140
+          width: 180
         },
         {
           title: "失效时间",
           key: "inEffectiveAt",
           align: "center",
-          width: 140
+          width: 180
         },
         {
           title: "创建时间",
           key: "createAt",
-          width: 140,
+          width: 180,
           align: "center"
         },
         {
           title: "操作",
           key: "action",
+          width:120,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -378,13 +378,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
+.table-header{
+  padding: 10px 0;
 }
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;

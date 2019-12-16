@@ -218,10 +218,7 @@ export default {
 dataValue: "全部" },
             ...res.data
           ]
-          // this.list = res.data
-          // let list = res.data
-          // this.list = list.unshift( {dataKey: '', dataValue: "全部"})
-          console.log(this.list)
+
         }
       })
     },
@@ -236,8 +233,6 @@ dataValue: "全部" },
       }).then(res => {
         if (res.code == 200) {
           this.data = res.data.list
-
-
           this.dataCount = res.data.totalSize
         }
         console.log(res)
@@ -296,6 +291,17 @@ dataValue: "全部" },
       } else {
         this.status = false
       }
+       let dataid = this.data.map(item => {
+        if (item.reportStatusText == "已处理") {
+          return item.reportId;
+        }
+      });
+      this.arr = val.map(item => {
+        return dataid.filter(key => {
+          return item.reportId.indexof(key) == -1;
+        });
+      });
+      console.log(dataid,this.arr)
     },
     //全选按钮
     chackall() {

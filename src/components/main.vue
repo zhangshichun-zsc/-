@@ -440,7 +440,7 @@ export default {
     if (to.name === "login") {
       return next();
     }
-    console.log(JSON.stringify(menuList));
+    // console.log(JSON.stringify(menuList));
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {

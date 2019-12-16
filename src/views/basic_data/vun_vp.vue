@@ -66,7 +66,6 @@ export default {
         {
           title: "特长名称",
           key: "dicName",
-           width: 330,
           align: "center"
         },
 
@@ -74,12 +73,12 @@ export default {
           title: "创建时间",
           key: "creatAt",
            align: "center",
-           width: 140,
+           width: 200,
         },
         {
           title: "创建人",
           key: "userName",
-           width: 300,
+           width: 140,
            align: "center",
         },
 
@@ -113,7 +112,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          // width:80,
+          width:120,
           render: (h, params) => {
             return h("div", [
               h(

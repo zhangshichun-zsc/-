@@ -44,11 +44,6 @@
         </Form>
       </div>
       <div>
-        <div class="title bk-szy flex-center-between">
-          <span>
-            <Icon type="ios-list" />数据列表
-          </span>
-        </div>
         <div>
           <div class="bk-szy sleft">
             <Button @click="chackall()" style="border:0px;">
@@ -163,13 +158,14 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 40,
+          width: 60,
           align: "center"
         },
         {
           title: "组织名称",
           key: "orgName",
-          align: "center"
+          align: "center",
+          width:400
         },
         {
           title: "组织分类",
@@ -181,6 +177,7 @@ export default {
           title: "组织地址",
           key: "address",
           align: "center",
+          width:400,
           render: (h, params) => {
             return h(
               "span",
@@ -199,13 +196,13 @@ export default {
         {
           title: "人数",
           key: "num",
-          width:80,
+          width:120,
           align: "center"
         },
         {
           title: "操作",
           key: "action",
-          width:140,
+          width:160,
           align: "center",
           render: (h, params) => {
             let status = "";

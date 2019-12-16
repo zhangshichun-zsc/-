@@ -11,7 +11,7 @@
           <Input v-model="formInline.partB" placeholder="乙方名称" style="width:300px" />
         </FormItem>
         <FormItem label="协议分类" prop="typeDicId">
-          <Select v-model="formInline.typeDicId" placeholder="Select your city" style="width:300px">
+          <Select v-model="formInline.typeDicId" placeholder="请选择分类" style="width:300px">
             <Option
               v-for="item in locations"
               :value="item.dataKey"
@@ -96,7 +96,7 @@
       </Form>
       <br />
       <div class="centers">
-        <Button align="center" type="success" @click="handleSubmit('formInline')">保存</Button>
+        <Button align="center" class="button-red" @click="handleSubmit('formInline')">保存</Button>
       </div>
     </div>
   </div>
@@ -417,7 +417,7 @@ export default {
   width: 900px;
 }
 .centers {
-  padding-left: 40px;
+  padding-left: 140px;
 }
 .start-wap {
   height: 200px;

@@ -29,24 +29,20 @@
           <Input size="large" placeholder="用户昵称" class="inpt" v-model="nickname" />
         </div>
         <Button class="search" @click="query">查询</Button>
-        <Button class="table-btns" @click="set" >积分规则设置</Button>
       </div>
     </div>
     <div class="integral-table">
       <div class="table-header flex-between">
-        <div>
-          <Icon type="md-reorder" size="20" />
-          <span>数据列表</span>
-        </div>
+        <Button class="table-btns" @click="set" >积分规则设置</Button>
         <div>
           <!-- <Button class="table-btns" @click="exportData">
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>-->
-          <Select v-model="size" style="width:120px" placeholder="显示条数">
+          <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" style="width: 100px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -160,37 +156,36 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width: 120
+          width: 200
         },
         {
           title: "用户昵称",
           key: "nickname",
           align: "center",
-          width: 350
         },
         {
           title: "用户类型",
           key: "userType",
           align: "center",
-          width: 150
+          width: 200
         },
         {
           title: "可用积分",
           key: "score",
           align: "center",
-          width: 90
+          width: 160
         },
         {
           title: "待审积分",
           key: "unAuditScore",
           align: "center",
-          width: 130
+          width: 160
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-           width: 200,
+           width: 260,
           render: (h, params) => {
             return h("div", [
               h(

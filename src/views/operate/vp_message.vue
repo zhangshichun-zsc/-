@@ -4,10 +4,6 @@
     <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-start">
-          <Icon type="md-list" />
-          <span>数据列表</span>
-        </div>
         <div class="flex-center-end" style="padding:0 10px">
           <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -17,7 +13,6 @@
           </Select>
         </div>
       </div>
-
       <div style="padding: 0.5rem 0;" v-for="(item,index) in list" :key="index">
         <div style="border: #E4E4E4 1px solid;  ">
           <div
@@ -75,7 +70,7 @@ export default {
         { value: 15, label: 15 },
         { value: 20, label: 20 }
       ],
-       sorting: [
+      sorting: [
         { value: "create_at asc", label: "正序" },
         { value: "create_at desc", label: "倒序" }
       ],
@@ -106,7 +101,7 @@ export default {
         content:this.content,
         channelFlag: this.channelFlag,
         createAt:this.createAt,
-        page: { page: this.page, size: this.size,sort:this.sort }
+        page: { page: this.page, size: this.size,sort:this.sort}
       }
       params=this.util.remove(params)
       // console.log(params)
