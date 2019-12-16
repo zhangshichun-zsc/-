@@ -5,10 +5,6 @@
 
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-start">
-          <Icon type="md-list" />
-          <span>数据列表</span>
-        </div>
         <div class="flex-center-end" style="padding:0 10px">
           <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -20,7 +16,7 @@
       </div>
 
       <div style="padding: 0.5rem 0;" v-for="(item,index) in list" :key="index">
-        <div style="border: #E4E4E4 1px solid;  ">
+        <div style="border: #E4E4E4 1px solid;margin:0 10px">
           <div
             class="flex-center-between"
             style="padding: 0.2rem 0.5rem;"
@@ -123,8 +119,6 @@ export default {
         { value: "create_at desc", label: "倒序" }
       ],
       sort: "create_at desc",
-
-
       top: [
         { name: "关键词", type: "input", value: "" },
         { name: "发布时间", type: "date", value: "" }
@@ -151,7 +145,7 @@ export default {
         content:this.content,
         channelFlag: this.channelFlag,
         createAt:this.createAt,
-        page: { page: this.page, size: this.size,sort:this.sort}
+        page: { page: this.page, size: this.size,sort:this.sort }
       }
       params=this.util.remove(params)
       console.log(params)

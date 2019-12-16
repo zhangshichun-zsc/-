@@ -27,7 +27,7 @@
           >广告名称只是作为辨别多个广告条目之用，并不显示在广告中</span>
         </FormItem>
         <FormItem label="广告位置" prop="location">
-          <Select v-model="formValidate.location" placeholder="Select your city" style="width:300px">
+          <Select v-model="formValidate.location"  style="width:300px">
                 <Option :value="item.dicCode" v-for="(item,index) in citys" :key="index">{{item.dataValue}}</Option>
             </Select>
         </FormItem>
@@ -89,6 +89,7 @@
 
         </FormItem>
         <FormItem label="广告链接" prop="linkUrl">
+
           <Input v-model="formValidate.linkUrl"/>
         </FormItem>
         <FormItem label="广告备注">

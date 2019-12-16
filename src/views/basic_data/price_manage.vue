@@ -1,29 +1,18 @@
 <!-- 基金管理(会员)-->
 <template>
   <div class="integral">
+     <basicdata :navigation1="navigation1" @query="getList"></basicdata>
     <div class="integral-header">
-      <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-          <Button @click="getList()">查询结果</Button>
-        </div>
-      </div>
+
+      <!-- <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>名称</span>
+          <span>名称:</span>
           <Input size="large" placeholder="基金名称" class="inpt" v-model="args.orgName" />
         </div>
         <div class="flex-center-start">
-          <span>有效状态</span>
-          <Select size="small" class="inpt" v-model="args.validFlag">
+          <span style="margin:0 5px">有效状态:</span>
+          <Select size="small" style="width:160px;" v-model="args.validFlag">
             <Option value="-1">全部</Option>
             <Option value="1">有效</Option>
             <Option value="0">无效</Option>
@@ -45,15 +34,17 @@
             </DatePicker>
           </Row>
         </div>
-      </div>
+        <div class="flex-center-start">
+          <Button class="button-red" @click="getList()">查询</Button>
+        </div>
+      </div> -->
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          全选
-          <span>已选择{{list.length}}</span>
+          <!-- <span>已选择{{list.length}}</span> -->
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
-          <Button class="table-btns" @click="jump">新增</Button>
+          <Button class="table-btns" @click="jump()">新增</Button>
           <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
@@ -87,6 +78,7 @@
 import { getfund,updateFun } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 import { parse } from 'path';
+import basicdata from "@/components/basicdata";
 export default {
   data() {
      const validatePhone = (rule, value, callback) => {
@@ -127,24 +119,32 @@ export default {
         // },
         {
           title: "基金名称",
-          key: "orgName"
+          key: "orgName",
+          align:'center',
         },
         {
           title: "联系人",
-          key: "contactUserName"
+          key: "contactUserName",
+          align:'center',
+          width:200,
         },
         {
           title: "联系电话",
           key: "contactUserPhone",
+          align:'center',
+          width:200,
         },
         {
           title: "创建时间",
           key: "createAt",
+          align:'center',
+          width:200,
         },
         {
           title: "有效状态",
           key: "validFlag",
-          algin: "center",
+          align: "center",
+          width:200,
           render: (h, params) => {
             return h('div', [
               h('i-switch',{
@@ -169,6 +169,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width:200,
           render: (h, params) => {
             return h("div", [
               h(
@@ -247,7 +248,7 @@ export default {
     };
   },
 
-  components: {},
+  components: {basicdata},
 
   computed: {},
 
@@ -262,10 +263,15 @@ export default {
       this.$router.push({ name: "addfund"});
     },
 
+    //查询
+    query(e){
+      this.args.orgName=e.dicName,
+      this.args.validFlag=e.validFlag
+      this.args.startAt=e.createTimestamp[0]
+      this.args.endAt=e.createTimestamp[0]
+      this.getList()
+    },
     getList(){
-      if(this.args.validFlag==-1){
-        this.args.validFlag=''
-      }
       let args = filterNull(this.args)
       getfund(args).then(res => {
         this.sumSize = res.data.totalSize
@@ -277,30 +283,29 @@ export default {
       this.$set(this.args.page,'page',e)
       this.getList()
     },
-    successOk(){
-      if(!this.args.startAt&&!this.args.endAt){
-        this.time='请选择时间段'
-      }
-      this.open = false
-    },
-    handleChange(e){
-      let start = e[0]
-      let end = e[1]
-      this.time = e[0] + '-' + e[1]
-      if(start&&end){
-        if(start === end){
-          start = start + ' 00:00:00'
-          end = end + ' 23:59:59'
-        }else{
-          start = start + ' 00:00:00'
-          end = end + ' 00:00:00'
-        }
-      }
-      this.args.startAt = start
-      this.args.endAt = end
-    },
+    // successOk(){
+    //   if(!this.args.startAt&&!this.args.endAt){
+    //     this.time='请选择时间段'
+    //   }
+    //   this.open = false
+    // },
+    // handleChange(e){
+    //   let start = e[0]
+    //   let end = e[1]
+    //   this.time = e[0] + '-' + e[1]
+    //   if(start&&end){
+    //     if(start === end){
+    //       start = start + ' 00:00:00'
+    //       end = end + ' 23:59:59'
+    //     }else{
+    //       start = start + ' 00:00:00'
+    //       end = end + ' 00:00:00'
+    //     }
+    //   }
+    //   this.args.startAt = start
+    //   this.args.endAt = end
+    // },
     showModal(e){
-      console.log(11)
       if(e == null){
         this.cancel()
       }else{
@@ -353,5 +358,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../libs/basicdata.css"
+@import "../../libs/basicdata.css";
+.flex-center-start span{
+   width:120px;
+   text-align: center;
+}
+.integral-body{
+  padding: 10px 0;
+  background-color: #fff;
+}
 </style>

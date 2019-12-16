@@ -133,19 +133,18 @@ export default {
         {
           title: "活动分类名称",
           key: "dicName",
-          width: 300,
           align: "center"
         },
         {
           title: "受益对象",
           key: "beneficiary",
-          width: 100,
+          width: 180,
           align: "center"
         },
         {
           title: "创建时间",
           key: "createTimestamp",
-          width: 140,
+          width: 240,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createTimestamp));
@@ -154,7 +153,7 @@ export default {
         {
           title: "创建人",
           key: "userName",
-          width: 300,
+          width: 180,
           align: "center"
         },
         {
@@ -184,7 +183,7 @@ export default {
           title: "操作",
 
           align: "center",
-          width: 106,
+          width: 140,
           render: (h, params) => {
             return h("div", [
               h(

@@ -6,7 +6,7 @@
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
-          <Button class="table-btns" @click="btn">{{title}}</Button>
+          <Button class="table-btns" @click="btn">新增类型</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="dicName">
@@ -61,36 +61,36 @@ export default {
         {
           type: "selection",
           width: 60,
-           resizable: true,
+          resizable: true,
           align: "center"
         },
         {
           title: "职业名称",
           key: "dicName",
           align: "center",
-           resizable: true,
-           width: 300
+          resizable: true,
+          width: 400
         },
         {
           title: "创建时间",
           key: "creatAt",
           align: "center",
-           resizable: true,
-          width: 180
+          resizable: true,
+          width: 240
         },
         {
           title: "创建人",
           key: "userName",
           align: "center",
-           resizable: true,
-           width: 300
+          resizable: true,
+          width: 300
         },
         {
           title: "有效状态",
           key: "status",
-           align: "center",
-            resizable: true,
-            width: 150,
+          align: "center",
+          resizable: true,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -118,8 +118,8 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-           resizable: true,
-          width:172,
+          resizable: true,
+          width:180,
           render: (h, params) => {
             return h("div", [
               h(

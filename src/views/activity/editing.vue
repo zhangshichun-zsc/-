@@ -27,13 +27,13 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-pic" v-if='batch.actCoverShowPic == null'>
+                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
                     <div class="" @click="()=>{ this.$refs.files.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadActFmFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-picfm" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="batch.actCoverShowPic"/>
                     <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
                   </div>
@@ -64,7 +64,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="batch.startT"
+                      value="batch.startT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动开始时间"
@@ -77,7 +77,7 @@
                   <Col span="11">
                     <Date-picker
                       type="datetime"
-                      v-model="batch.endT"
+                      value="batch.endT"
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动结束时间"
@@ -187,7 +187,7 @@
                   <Radio label="0">活动开始前一个月自动发布</Radio>
                   <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
-                <Date-picker v-model="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
@@ -585,6 +585,14 @@ export default {
 }
 .first-pic{
   width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px solid;
+  position: relative;
+}
+.first-picfm{
+  width: 200px;
   height: 200px;
   text-align: center;
   line-height: 200px;
