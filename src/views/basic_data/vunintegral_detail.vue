@@ -264,7 +264,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .inter-head {
   margin-bottom: 30px;
 }

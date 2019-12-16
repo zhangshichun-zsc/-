@@ -8,21 +8,21 @@
         <div class="title">
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
-          <p>
+          <div id="texts">
             为融爱融乐的心智障碍者融合服务提供了珍贵的 小时的志愿支持。
             感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
             生命的多元，让我们的社会更平等、文明、融合。
             期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
-          </p>
+          </div>
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
          <div class="head ">
           <img class="head-left" src="../../assets/images/prend/1.png" alt=""/>
            <img  class="head-right" src="../../assets/images/prend/2.png" alt=""/>
         </div>
-        <div>
-          <span>北京市海淀区融爱融乐</span>
-          <span>心智障碍者家庭支持中心</span>
-          <span>年 月  日</span>
+        <div class="dataname">
+          <p>北京市海淀区融爱融乐</p>
+          <p>心智障碍者家庭支持中心</p>
+          <p>年 月  日</p>
         </div>
 
         </div>
@@ -115,7 +115,7 @@ export default {
       certMouldId: this.$route.query.certMouldId,
       show: false,
       navigation1: {
-        head: "积分查询(会员)"
+        head: "积分查询(志愿者)"
       },
       value8: ""
     };
@@ -218,6 +218,7 @@ export default {
     }
   }
   .head {
+    margin: 30px 0;
     display: flex;
     margin-left: 50px;
     .head-left {
@@ -244,6 +245,7 @@ export default {
 
     width: 100%;
     display: flex;
+
     p{
       width: 50%;
       font-size: 16px;
@@ -275,6 +277,25 @@ border:  black 1px solid;
       text-align: center;
     }
 }
+  #texts{
+    text-indent: 2em;
+  padding: 0 30px;
+  font-size: 14px;
+  text-align: start;
+}
+
+.integral-left .dataname{
+ display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  p{
+    text-align: end;
+    font-size: 14px;
+    padding-right: 25px;
+  }
+}
+
+
 
 
 </style>

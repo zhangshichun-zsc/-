@@ -214,14 +214,12 @@
                     <td>年龄限制</td>
                     <td>
                       <Input
-                        v-model="value"
-                        placeholder="Enter something..."
+                        v-model="age1"
                         style="width: 70px"
                       />
                       <b>——</b>
                       <Input
-                        v-model="value"
-                        placeholder="Enter something..."
+                        v-model="age2"
                         style="width: 70px"
                       />
                     </td>
@@ -569,7 +567,9 @@ export default {
         { itemName: '多选问题', type: 4, answer: [{ answer: '' }, { answer: '' }, { answer: '' }], isNew: 1}
       ],
       signItemList:[],
-      firstItemList:[]
+      firstItemList:[],
+      age1:'',
+      age2:''
     };
   },
   mounted() {

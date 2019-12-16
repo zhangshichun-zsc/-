@@ -302,12 +302,13 @@ export default {
 }
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
+  background: #ffffff;
   border-bottom: 1px solid #eee;
 }
 
 .integral-table {
-  margin-top: 30px;
+  background: #ffffff;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;

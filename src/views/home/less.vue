@@ -82,12 +82,9 @@
               href="javascript:;"
               class="adduserbtn"
               @click="handleSubmit('formValidate')"
-              >提交</a
             >
-            <!-- <Button
-              type="success"
-              @click="handleSubmit('formValidate')"
-            ></Button> -->
+              提交
+            </a>
           </FormItem>
         </Form>
       </div>
@@ -149,7 +146,8 @@ export default {
       },
 
       picUrl: "",
-      imgUrl: ""
+      imgUrl: "",
+      formFlag: true
     };
   },
 
@@ -194,20 +192,15 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        this.formFlag = true;
       });
     },
 
     handleSubmit(name) {
+      if (!this.formFlag) return;
       this.$refs[name].validate(valid => {
         if (valid) {
-          console.log(this.picUrl);
-
-          // if(this.formValidate.oldPassword!=this.formValidate.confirm){
-          //   this.$Message.error('两次密码不一致!')
-          // }else{
-          //  this.getSetup();
-          // }
+          this.formFlag = false;
           this.getSetup();
         } else {
           this.$Message.error("必填项未填!");
@@ -221,7 +214,6 @@ export default {
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      console.log(file);
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -245,30 +237,6 @@ export default {
         }
       });
     }
-    // // handleSuccess(res, file) {
-    // //   this.picUrl = res.data;
-    // //   console.log(res, file);
-    // // },
-
-    // //图片上传
-    // handleBeforeUpload(file) {
-    //   console.log(file);
-    //   if (file.type == "image/jpeg") {
-    //     this.file = file;
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onload = () => {
-    //       const _base64 = reader.result;
-    //       this.imgUrl = _base64;
-    //       this.picUrl = file.name;
-    //       // console.log(_base64,file.name);
-    //     };
-    //     return false;
-    //   } else {
-    //     // this.file = "";
-    //     this.$Message.error("格式不正确！");
-    //   }
-    // }
   }
 };
 </script>

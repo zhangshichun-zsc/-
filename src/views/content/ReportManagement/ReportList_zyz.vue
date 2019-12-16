@@ -18,7 +18,7 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start name">
           <span>举报人:</span>
-          <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="reportUserName" />
+          <Input size="large" placeholder="用户名/账号" class="inpt" v-model="reportUserName" />
         </div>
         <div class="flex-center-start name">
           <span>举报理由:</span>
@@ -33,20 +33,20 @@
         <Button class="table-btns" @click="query">查询结果</Button>
       </div>
     </div>
-    <div class="content">
-      <div class="con-top bk-szy flex-center-start">
-        <p>
+    <div class="contents">
+      <div class="con-top bk-szy flex-center-end">
+        <!-- <p>
           <Icon type="ios-list" size="30" />
           <span>数据列表</span>
-        </p>
-        <div class="flex-center-end">
+        </p> -->
+
           <Select v-model="size" style="width:120px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-        </div>
+
       </div>
       <div class="con">
         <Table
@@ -57,8 +57,7 @@
           @on-selection-change="handleSelectionChange"
         ></Table>
       </div>
-      <div class="pages flex-center-between">
-        <div>
+      <!-- <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
@@ -66,7 +65,9 @@
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button class="space">确定</Button>
-        </div>
+        </div> -->
+      <div class="pages flex-center-between">
+
         <Page
           :total="dataCount"
           show-elevator
@@ -107,16 +108,20 @@ export default {
         {
           title: "举报理由",
           key: "reportReasonText",
-          align: "center"
+          align: "center",
+          width: 350
         },
         {
           title: "举报人",
           key: "reportUserName",
-          align: "center"
+          align: "center",
+           width: 400
         },
         {
           title: "举报时间",
           key: "reportTimestamp",
+          align: "center",
+           width: 240,
           render: (h, params) => {
             return h("p", formatDate(params.row.reportTimestamp));
           }
@@ -124,22 +129,26 @@ export default {
         {
           title: "举报对象",
           key: "activityName",
-          align: "center"
+          align: "center",
+          width: 350
         },
         {
           title: "举报状态",
           key: "reportStatusText",
-          align: "center"
+          align: "center",
+          width: 300
         },
         {
           title: "处理结果",
           key: "reportDealResultText",
-          align: "center"
+          align: "center",
+          width: 300
         },
         {
           title: "操作",
           key: "action",
           align: "center",
+           width:300,
           render: (h, params) => {
             return h("div", [
               h(
@@ -356,11 +365,35 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-body {
-  padding: 30px 20px 20px 20px;
+  padding: 40px 20px 20px 20px;
 
   display: flex;
   height: 80px;
   background: #ffffff;
   border: 0;
+}
+.name {
+  span {
+    display: block;
+    width: 120px;
+  }
+  .inpt {
+    margin-right: 30px;
+  }
+}
+.contents{
+  background: #ffffff;
+  min-height: 700px;
+}
+//
+.con-top{
+  height: 50px;
+}
+
+
+.pages {
+    text-align: center;
+     padding: 20px 0;
+    background: #fff;
 }
 </style>

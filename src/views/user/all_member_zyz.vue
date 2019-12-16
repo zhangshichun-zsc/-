@@ -921,7 +921,8 @@ export default {
       },
       QRCode: "",
       ALLINFO: false, // 是否全选
-      ALLLIST: [] // 选中的人员
+      ALLLIST: [], // 选中的人员
+      stationFormFlag: true
     };
   },
 
@@ -1088,6 +1089,8 @@ export default {
     },
     // 发送站内信
     onStation() {
+      if(!this.stationFormFlag) return
+      this.stationFormFlag = false
       let ids = this.ALLLIST;
       this.setsend({ ids, ...this.formValidate2 });
     },
@@ -1107,6 +1110,7 @@ export default {
 
           console.log(res.msg);
         }
+        this.stationFormFlag = true
       });
     },
 
