@@ -336,7 +336,7 @@
             </ButtonGroup>
           </Modal>
           <Dropdown @on-click="isALL">
-            <Button @click="ismodal2">
+            <Button @click="ismodal2" class='btns'>
               群发站内信
             </Button>
             <DropdownMenu slot="list">
@@ -365,7 +365,6 @@
           <Dropdown>
             <Button @click="exportData">
               导出数据
-              <Icon type="md-arrow-dropdown"></Icon>
             </Button>
           </Dropdown>
         </div>
@@ -476,13 +475,14 @@
           v-model="modaQR"
           style="text-align: center;"
           :closable="false"
+           class='QRcodemodal' 
         >
           <div class="bg">
             <img :src="QRCode" alt="二维码" />
           </div>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel">取消</Button>
-            <Button type="primary" size="large" @click="modalCancel"
+            <Button type="error" size="large" @click="modalCancel"
               >确定</Button
             >
           </div>
@@ -1142,15 +1142,20 @@ export default {
       this.batch = startid;
       this.getUserBatch(2);
     },
-
+    exportData(){
+      this.$Message.info('此功能暂未开放，敬请期待！')
+    },
     //查询
     result() {
       this.getUserPage();
     },
     // 关闭 二维码
     modalCancel() {
-      this.QRCode = "";
+
       this.modaQR = false;
+      setTimeout(()=>{
+        this.QRCode = "";
+      },500)
     },
     formatTime(time) {
       if (!time) return "";
@@ -1274,5 +1279,12 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 10px auto;
+}
+.bg {
+  img{
+    width: 10rem;
+    height: 10rem;
+    margin: 0 auto;
+  }
 }
 </style>

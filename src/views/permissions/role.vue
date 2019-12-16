@@ -216,7 +216,7 @@ export default {
         {
           title: "邮箱地址",
           key: "email",
-          width: "200",
+          width: "240",
           align: "center"
         },
         {

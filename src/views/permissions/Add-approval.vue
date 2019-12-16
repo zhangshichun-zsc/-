@@ -52,16 +52,20 @@
           </Select>
         </FormItem>
       </Form>
-      <div class="Select-level flex-start">
+      <div
+        class="Select-level flex-start"
+        style="width: 38rem;
+                margin: 0 auto;"
+      >
         <div class="Level-1">
           <h2>选择一级审批</h2>
           <ul>
             <li
-              class="flex-center-between"
-              v-for="item in prolist"
+              v-for="(item, index) in prolist"
+              :class="{ 'flex-center-between': true, active: item.active }"
               :key="item.userId"
               :value="item.userId"
-              @click="class1(item)"
+              @click="class1(item, index)"
             >
               <span>{{ item.userName }}</span>
               <Icon type="ios-arrow-forward" />
@@ -73,11 +77,11 @@
           <h2>选择二级审批</h2>
           <ul>
             <li
-              class="flex-center-between"
-              v-for="item in prolist"
+              :class="{ 'flex-center-between': true, active: item.active }"
+              v-for="(item, index) in prolisttwo"
               :key="item.userId"
               :value="item.userId"
-              @click="class2(item)"
+              @click="class2(item, index)"
             >
               <span>{{ item.userName }}</span>
               <Icon type="ios-arrow-forward" />
@@ -87,12 +91,17 @@
       </div>
       <div style="margin: 20px;">
         <span>您当前选择的审核流程是:</span>
-        <span style="color: red;"
-          >提交人->{{ userNamea }}->{{ userNameb }}</span
-        >
+
+        <span style="color: #ed4014;">
+          提交人:
+          <Icon v-show="userNamea" type="md-fastforward" />
+          &nbsp;{{ userNamea }}&nbsp;
+          <Icon v-show="userNameb" type="md-fastforward" />
+          &nbsp;{{ userNameb }}&nbsp;
+        </span>
       </div>
     </div>
-    <Button type="success" @click="det('formValidate')">保存</Button>
+    <Button type="error" @click="det('formValidate')">保存</Button>
   </div>
 </template>
 
@@ -144,6 +153,7 @@ export default {
       sysType: 1,
       typelist: [],
       prolist: [],
+      prolisttwo: [],
       rolelist: [],
       projectlist: [],
       auditUser1Id: null,
@@ -198,9 +208,15 @@ export default {
     getpowerPer() {
       powerPer({}).then(res => {
         if (res.code == 200) {
-          this.prolist = res.data;
+          let arr = res.data.map(item => {
+            return {
+              active: false,
+              ...item
+            };
+          });
+          this.prolist = arr;
+          this.prolisttwo = arr;
         }
-        console.log(res);
       });
     },
     // 获取可申请角色列表
@@ -243,14 +259,29 @@ export default {
       });
     },
     //一级审批
-    class1(e) {
+    class1(e, index) {
+      let arr = this.prolist.map(item => {
+        return {
+          ...item,
+          active: false
+        };
+      });
+      arr[index].active = true;
+      this.prolist = arr;
+
       this.auditUser1Id = e.userId;
       this.userNamea = e.userName;
     },
     //二级审批
-    class2(e) {
+    class2(e, index) {
       this.auditUser2Id = e.userId;
       this.userNameb = e.userName;
+      let arr = this.prolisttwo.map(item => {
+        return {
+          ...item,
+          active: false
+        };
+      });
       if (this.auditUser1Id == null) {
         this.$Message.info("请先选择一级审批");
         this.userNameb = "";
@@ -259,8 +290,10 @@ export default {
         this.auditUser2Id = null;
         this.userNameb = null;
         this.$Message.info("审批人不能相同");
+      } else {
+        arr[index].active = true;
       }
-      console.log(this.auditUser2Id, this.userNameb);
+      this.prolisttwo = arr;
     },
 
     //保存
@@ -331,11 +364,14 @@ body {
 .Level-1 li:hover,
 .Level-2 li:hover {
   background-color: #f2f2f2;
-  color: #23be9f;
+  color: #ed4014;
   transition: all 0.2s;
 }
 .main button {
   display: block;
   margin: auto;
+}
+.active {
+  color: #ed4014 !important;
 }
 </style>

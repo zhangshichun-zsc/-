@@ -164,15 +164,18 @@ export default {
       columns2: [
         {
           title: "组织名称",
-          key: "orgName"
+          key: "orgName",
+          align: "center"
         },
         {
           title: "省份",
-          key: "provinceName"
+          key: "provinceName",
+          align: "center"
         },
         {
           title: "地址",
-          key: "address"
+          key: "address",
+          align: "center"
         },
         {
           title: "单位职务",
@@ -183,7 +186,8 @@ export default {
       columns3: [
         {
           title: "姓名",
-          key: "consignee"
+          key: "consignee",
+          align: "center"
         },
         {
           title: "手机号码",
@@ -191,11 +195,13 @@ export default {
         },
         {
           title: "详细地址",
-          key: "address"
+          key: "address",
+          align: "center"
         },
         {
           title: "默认地址",
           key: "defaultAddress",
+          align: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -212,7 +218,8 @@ export default {
       columns4: [
         {
           title: "活动名称",
-          key: "name"
+          key: "name",
+          align: "center"
         },
         {
           title: "活动时间",
@@ -237,6 +244,7 @@ export default {
         {
           title: "操作",
           key: "operation",
+          align: "center",
           render: (h, params) => {
             return h("div", [
               h(
