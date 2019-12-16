@@ -107,38 +107,48 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 80,
           align: "center"
         },
         {
           title: "立项名称",
           key: "batchName",
-          align: "center"
+          align: "center",
+          width: 500,
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "项目名称",
           key: "categoryName",
+          width: 300,
           align: "center"
         },
         {
           title: "总预算",
           key: "budge",
+          width: 200,
           align: "center"
         },
         {
           title: "创建人",
           key: "createUserName",
-          align: "center"
+          width: 300,
+          align: "center",
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "身份",
           key: "roleName",
-          align: "center"
+          align: "center",
+          width: 400,
         },
         {
           title: "提交时间",
           key: "submitTimestamp",
           align: "center",
+          width: 300,
           render:(h,params)=>{
               return h("div",date1('Y-m-dH:i:s',params.row.submitTimestamp))
           }
@@ -146,12 +156,13 @@ export default {
         {
           title: "状态",
           key: "statusText",
+          width: 200,
           align: "center",
         },
         {
           title: "操作",
           key: "action",
-          width: 200,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -177,8 +188,7 @@ export default {
                 "span",
                 {
                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
+                    marginLeft: "20px",
                     color: "green"
                   },
                   on: {

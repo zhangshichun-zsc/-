@@ -11,11 +11,11 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
-          <Input size="small" placeholder="活动名称" class="inpt" v-model="name" />
+          <Input size="large" placeholder="活动名称" class="inpt" v-model="name" />
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Input size="small" placeholder="活动状态" class="inpt" v-model="activityStatus" />
+          <Input size="large" placeholder="活动状态" class="inpt" v-model="activityStatus" />
         </div>
 
         <div class="flex-center-start">
@@ -240,8 +240,8 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
+                    marginLeft: "10px",
                     color: "green",
                     cursor: "pointer"
                   },
@@ -260,8 +260,7 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
                     color: "green",
                     cursor: "pointer"
                   },
@@ -438,7 +437,7 @@ export default {
         },
         {
           title: "群二维码",
-          width:100,
+          width: 100,
           key: "activityQrCode",
           align: "center",
           render: (h,params) => {
