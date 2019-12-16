@@ -149,7 +149,7 @@ export default {
           title: "会费期限",
           key: "imonth",
           align: "center",
-          width:120,
+          width:200,
           render:(h,params)=>{
             // let imonths
             // if(params.row.imonth>12){
@@ -169,13 +169,13 @@ export default {
           title: "金额",
           key: "amount",
           align: "center",
-           width:120,
+           width:200,
         },
         {
           title: "会员包",
           key: "packageFlagText",
           align: "center",
-           width:120,
+           width:180,
         },
         {
           title: "创建时间",
@@ -187,7 +187,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
-          width:100,
+          width:120,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -215,7 +215,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:116,
+          width:140,
           render: (h, params) => {
             return h("div", [
               h(

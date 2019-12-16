@@ -68,18 +68,17 @@ export default {
           title: "活动分类名称",
           key: "dicName",
           align: "center",
-          width: 300
         },
         {
           title: "创建时间",
           key: "creatAt",
-          width: 140,
+          width: 240,
           align: "center"
         },
         {
           title: "创建人",
           key: "userName",
-          width: 240,
+          width: 140,
           align: "center"
         },
 
@@ -87,6 +86,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
+          width:140,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -114,7 +114,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 80,
+          width: 140,
           render: (h, params) => {
             return h("div", [
               h(

@@ -118,25 +118,25 @@ export default {
           title: "总预算",
           key: "allBudget",
            align: "center",
-           width: 130
+           width: 200
         },
         {
           title: "预算来源",
           key: "orgName",
           align: "center",
-            width: 350,
+            width: 400,
         },
         {
           title: "创建时间",
           key: "createAt",
           align: "center",
-          width: 130
+          width: 240
         },
         {
           title: "有效状态",
           key: "status",
           align: "center",
-           width: 100,
+           width: 140,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -165,7 +165,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-           width: 96,
+           width: 120,
           render: (h, params) => {
             return h("div", [
               h(

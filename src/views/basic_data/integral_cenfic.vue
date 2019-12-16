@@ -106,19 +106,18 @@ export default {
         {
           title: "名称",
           key: "name",
-          width: 330,
           align: "center"
         },
         {
           title: "创建时间",
           key: "createAt",
-          width: 180,
+          width: 240,
           align: "center"
         },
         {
           title: "创建人",
           key: "userName",
-          width: 330,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h(
@@ -156,7 +155,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 136,
+          width: 140,
 
           render: (h, params) => {
             return h("div", [

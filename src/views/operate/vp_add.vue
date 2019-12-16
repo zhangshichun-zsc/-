@@ -23,11 +23,11 @@
     <div class="integral-table">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
         <FormItem label="广告名称" prop="name" >
-          <Input v-model="formValidate.name" placeholder="广告名称" style="width:300px"></Input>
+          <Input v-model="formValidate.name" placeholder="广告名称" style="width:300px" />
           <span style="color: #9EA7B4;font-size: 12px;margin-left: 0.5rem;">广告名称只是作为辨别多个广告条目之用，并不显示在广告中</span>
         </FormItem>
         <FormItem label="广告位置" prop="position">
-          <Input icon="ios-clock-outline" v-model="formValidate.position" placeholder="首页轮播"style="width:300px" ></Input>
+          <Input icon="ios-clock-outline" v-model="formValidate.position" placeholder="首页轮播" style="width:300px" ></Input>
         </FormItem>
         <FormItem label="开始时间" prop="StartTime">
           <FormItem prop="date1">
@@ -52,7 +52,7 @@
           </Upload>
         </FormItem>
         <FormItem label="广告链接" prop="link">
-          <Input v-model="formValidate.link"></Input>
+          <Input v-model="formValidate.link" />
         </FormItem>
         <FormItem label="广告备注" prop="desc">
           <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 5,maxRows: 5}" placeholder="请输入内容···"></Input>

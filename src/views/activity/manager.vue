@@ -2,16 +2,20 @@
 
 <template>
   <div class="integral">
+     <Modal
+      v-model="modal4">
+      <img :src="showImg" alt="" class="showimg"/>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
-          <Input size="small" placeholder="活动名称" class="inpt" v-model="name" />
+          <Input size="large" placeholder="活动名称" class="inpt" v-model="name" />
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Input size="small" placeholder="活动状态" class="inpt" v-model="activityStatus" />
+          <Input size="large" placeholder="活动状态" class="inpt" v-model="activityStatus" />
         </div>
 
         <div class="flex-center-start">
@@ -36,7 +40,7 @@
           </Row>
         </div>
         <div class="flex-center-start">
-         <Button class="button-red" @click="result">查询</Button>;
+          <Button class="button-red" @click="result">查询</Button>
         </div>
       </div>
     </div>
@@ -173,6 +177,8 @@ export default {
       modal1: false,
       modal2: false,
       modal3: false,
+      modal4:false,
+      showImg:'',
       fruit: ["苹果"],
       navigation1: {
         head: "活动管理(会员)"
@@ -180,11 +186,11 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 80,
           align: "center"
         },
         {
-          width: 240,
+          width: 300,
           key: "action",
           renderHeader:(h,params)=>{
             return h('div',[
@@ -198,7 +204,8 @@ export default {
                 },
                 on:{
                   click:()=>{
-                    this.modal3=true
+                    this.$Message.info("此功能暂未开放")
+                    // this.modal3=true
                   }
                 }
               })
@@ -234,8 +241,8 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
+                    marginLeft: "10px",
                     color: "green",
                     cursor: "pointer"
                   },
@@ -254,8 +261,7 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
                     color: "green",
                     cursor: "pointer"
                   },
@@ -361,37 +367,42 @@ export default {
           title: "活动名称",
           key: "activityName",
           align: "center",
-          width:260,
+          width:500,
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "立项名称",
           key: "batchName",
           align: "center",
-          width:260,
+          width: 300,
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "项目名称",
           key: "categoryName",
           align: "center",
-          width:300,
+          width:250,
         },
         {
           title: "活动时间",
           key: "startTimestamp",
-          width:260,
+          align: "center",
+          width:300,
           render: (h, params) => {
             return h("div", formatDate(params.row.startTimestamp));
           }
         },
         {
           title: "活动类型",
-          width:160,
+          width:200,
           key: "activityType",
           align: "center"
         },
         {
           title: "状态",
-          width:180,
+          width:200,
           key: "statusText",
           align: "center",
           render: (h, params) => {
@@ -427,19 +438,21 @@ export default {
         },
         {
           title: "群二维码",
-          width:180,
+          width: 100,
           key: "activityQrCode",
           align: "center",
-          render: (h, params) => {
-            return h("img", {
-              attrs: {
-                src: params.row.activityQrCode
+          render: (h,params) => {
+            return h("Icon", {
+              props: {
+                type: 'md-images',
               },
-              style: {
-                width: "4rem",
-                height: "4rem"
+              on: {
+                click: () => {
+                  this.modal4 = true
+                  this.showImg = params.row.activityQrCode
+                }
               }
-            });
+            })
           }
         },
         {
@@ -713,7 +726,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
+.showimg{
+    width: 100%;
+    height: auto;
+}
 .integral-header .integral-top {
   padding: 10px;
   background: white;

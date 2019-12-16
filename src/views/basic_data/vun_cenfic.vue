@@ -59,7 +59,6 @@
         </div>-->
         <div class="flex-center-end">
           <Button class="search" @click="query()">查询</Button>
-          <Button class="table-btns" @click="modal1 = true">新增模板</Button>
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
               <FormItem label="组织" prop="orgId">
@@ -96,11 +95,10 @@
     <div class="integral-table">
       <div class="table-header flex-between">
         <div class="flex-center-start">
-          <Icon type="ios-apps" />
-          <span>数据列表</span>
+         <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
-          <Select class="inpt" style="width:100px" placeholder="显示条数" @on-change="changeNum">
+          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" @on-change="changeNum">
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
           <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
@@ -386,13 +384,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
+.table-header{
+  padding: 10px 0;
 }
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;

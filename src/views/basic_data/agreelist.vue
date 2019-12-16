@@ -18,16 +18,14 @@
     <div class="integral-table">
       <div class="table-header flex-between">
         <div class="flex-center-start paddings">
-          <Icon type="md-list" />
-          <span>数据列表</span>
+          <Button class="table-btns" @click="newagree">新建协议</Button>
         </div>
         <div class="flex-center-end">
-          <Button class="table-btns" @click="newagree">新建协议</Button>
           <Button class="table-btns" @click="newclass">分类管理</Button>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width:100px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -98,7 +96,7 @@ export default {
         {
           title: "协议时间",
           align: "center",
-           width:140,
+           width:240,
           render: (h, params) => {
             return h("div", formatDate(params.row.agreementTimestamp));
           }
@@ -106,7 +104,6 @@ export default {
         {
           title: "相关",
           key: "nameA",
-          // width: "240px",
           align: "center",
           width:240,
           render: (h, params) => {
@@ -117,7 +114,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:80,
+          width:120,
           render: (h, params) => {
             return h("div", [
               h(
