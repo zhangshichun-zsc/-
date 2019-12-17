@@ -582,6 +582,9 @@ export default {
   created() {
     console.log(this.oneRole)
     this.userId = this.$store.state.userId;
+    if(this.oneRole.roleId){
+      this.getType(this.oneRole)
+    }
     this.getSignType();
     this.getBatchItem();
   },
@@ -614,7 +617,7 @@ export default {
       this.oneRole.roleId = val.roleId;
       signPost({
         roleId: val.roleId,
-        name: val.name
+        name: this.oneRole.roleName
       }).then(res => {
         this.signPostList = res.data.voluJobs;
       });
