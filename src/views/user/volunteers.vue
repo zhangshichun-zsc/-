@@ -1204,6 +1204,10 @@ export default {
 
           console.log(res.msg);
         }
+        setTimeout(()=> {
+             this.stationFormFlag = true 
+        })
+     
       });
     },
     //  查询按钮
@@ -1303,6 +1307,8 @@ export default {
     },
     // 发送站内信
     onStation() {
+      if(!this.stationFormFlag) return
+      this.stationFormFlag = false
       let ids = this.ALLLIST.toString();
       this.setsend({ ids, ...this.formValidate2 });
     },

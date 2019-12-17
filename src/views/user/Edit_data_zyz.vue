@@ -1013,6 +1013,7 @@ export default {
   components: { Selsect },
   data() {
     return {
+      stationFormFlag: true,
       navigation1: {
         head: "编辑资料(志愿者)"
       },
@@ -1309,7 +1310,8 @@ export default {
     },
     setUpdata() {
       // 将多选题剔除保设置
-
+        if(!this.stationFormFlag) return
+        this.stationFormFlag = false
       let _basicInfo = this.parameOBJ.basicInfo.info;
       let _volInfo = this.parameOBJ.volInfo.info;
       let _memInfo = this.parameOBJ.memInfo.vipotherInfo;
@@ -1387,6 +1389,10 @@ export default {
         } else {
           this.$Message.error("操作失败");
         }
+        setTimeout(()=> {
+          this.stationFormFlag = true
+        },500)
+      
       });
     },
     splitArr(str) {

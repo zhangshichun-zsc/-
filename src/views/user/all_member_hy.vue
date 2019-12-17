@@ -107,7 +107,6 @@
             v-model="modal2"
             title="群发站内信"
             @on-ok="onStation"
-            @on-cancel="onStation"
             :mask-closable="false"
           >
             <Form
@@ -919,7 +918,8 @@ export default {
       },
       QRCode: "",
       ALLINFO: false, // 是否全选
-      ALLLIST: [] // 选中的人员
+      ALLLIST: [], // 选中的人员
+      stationFormFlag: true // 节流阀
     };
   },
 
@@ -1064,6 +1064,8 @@ export default {
     },
     // 发送站内信
     onStation() {
+      if(!this.stationFormFlag) return
+      this.stationFormFlag = false
       let ids = this.ALLLIST;
       this.setsend({ ids, ...this.formValidate2 });
     },
@@ -1083,6 +1085,10 @@ export default {
 
           console.log(res.msg);
         }
+        setTimeout(()=> {
+          this.stationFormFlag = true
+        })
+         
       });
     },
 

@@ -871,7 +871,8 @@ export default {
         labelId: ''
       },
       userId: '1',
-      ALLLIST: []
+      ALLLIST: [],
+      stationFormFlag: true
     }
   },
   watch: {
@@ -1024,6 +1025,10 @@ export default {
 
           console.log(res.msg)
         }
+        setTimeout(()=> {
+          this.stationFormFlag = true
+        },500)
+       
       })
     },
     // 用户状态的变更
@@ -1185,6 +1190,7 @@ export default {
     },
     // 发送站内信
     onStation() {
+      if(!this.stationFormFlag) return
       let ids = this.ALLLIST.toString()
       this.setsend({ ids, ...this.formValidate2 })
     },

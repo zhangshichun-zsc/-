@@ -43,7 +43,7 @@
                   >权限设置</a
                 >
                 <a href="javascript:;" class="btn" @click="newadd">添加人员</a>
-                <Modal v-model="modal1" title="新建角色">
+                <Modal v-model="modal1" title="新建角色" class="QRcodemodal">
                   <Form
                     ref="formValidate"
                     :model="formValidate"
@@ -62,7 +62,7 @@
                       >取消</Button
                     >
                     <Button
-                      type="primary"
+                      type="error"
                       size="large"
                       @click="modalOk('formValidate')"
                       >确定</Button
@@ -120,16 +120,19 @@
               >
                 <Table border :columns="columns" :data="data"></Table>
               </Content>
-              <Modal v-model="modal2" title="添加人员">
+              <Modal v-model="modal2" title="添加人员" class="QRcodemodal">
                 <Transfer
                   :data="data1"
                   :target-keys="targetKeys1"
                   :render-format="render1"
                   @on-change="handleChange1"
+                  style="display: flex;
+                         justify-content: center;
+                         align-items: center;"
                 ></Transfer>
                 <div slot="footer">
                   <!-- <Button type="text" size="large" @click="modalCancel">取消</Button> -->
-                  <Button type="primary" size="large" @click="addmodalOk"
+                  <Button type="error" size="large" @click="addmodalOk"
                     >确定</Button
                   >
                 </div>
@@ -321,6 +324,8 @@ export default {
       arrs: [],
       addUserIds: [],
       delUserIds: [],
+      FormFlag: true,
+      AddroleFormFlag: true,
       addstate: false
     };
   },
@@ -375,9 +380,7 @@ export default {
         this.delUserIds = this.delUserIds.concat(moveKeys);
       }
       console.log(this.addUserIds, this.delUserIds);
-      // console.log(newTargetKeys);
-      // console.log(direction);
-      // console.log(moveKeys);
+
       this.targetKeys1 = newTargetKeys;
     },
     //确定
@@ -385,7 +388,6 @@ export default {
       this.delUserIds = this.util.arrChange(this.delUserIds, this.arrs);
       this.addUserIds = this.util.arrChange(this.addUserIds, this.arr);
       this.getroleAddtos();
-      console.log(1);
     },
 
     // 多条件查询角色成员
@@ -429,6 +431,9 @@ export default {
           this.$Message.success(res.msg);
           this.modal1 = false;
           this.getrolequery();
+          setTimeout(() => {
+            this.FormFlag = true;
+          }, 500);
         } else {
           this.$Message.error(res.msg);
         }
@@ -476,8 +481,10 @@ export default {
       }
     },
 
-    //添加添加
+    //添加人员
     getroleAddtos() {
+      if (!this.AddroleFormFlag) return;
+      this.AddroleFormFlag = false;
       this.add = this.List.filter(item => item.sysRoleName == this.role);
       roleAddtos({
         delUserIds: this.delUserIds.toString(),
@@ -492,6 +499,9 @@ export default {
           this.$Message.info(res.msg);
         }
         console.log(res);
+        setTimeout(() => {
+          this.AddroleFormFlag = true;
+        }, 500);
       });
     },
 
@@ -531,6 +541,8 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          if (!this.FormFlag) return;
+          this.FormFlag = false;
           this.getrolenew();
         } else {
           this.$Message.error("Fail!");

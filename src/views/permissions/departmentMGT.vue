@@ -148,6 +148,8 @@ import {
 export default {
   data() {
     return {
+      AddFormFlag: true,
+      EditFormFlag: true,
       modal1: false,
       isdispabled: false, // 是否禁用当前部门
       navigation1: {
@@ -687,7 +689,10 @@ export default {
           this.$Message.info("修改成功");
           this.getdepartmentlist();
         }
-        console.log(res);
+
+        setTimeout(() => {
+          this.AddFormFlag = true;
+        }, 500);
       });
     },
     // 部门列表添加
@@ -706,7 +711,10 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+
+        setTimeout(() => {
+          this.AddFormFlag = true;
+        }, 500);
       });
     },
     // 部门成员-修改启用状态
@@ -787,9 +795,13 @@ export default {
         if (valid) {
           if (this.text == "编辑部门") {
             // 编辑
+            if (!this.EditFormFlag) return;
+            this.EditFormFlag = false;
             this.getdepartmentedit();
           } else {
             // 新增
+            if (!this.AddFormFlag) return;
+            this.AddFormFlag = false;
             this.getdepartmentadd();
           }
         } else {

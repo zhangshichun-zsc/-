@@ -116,6 +116,7 @@ import {
 export default {
   data() {
     return {
+      formFlag: true,
       navigation1: {
         head: "设置审批流程（共用）"
       },
@@ -230,8 +231,9 @@ export default {
     },
     // -添加审批流程
     getpoweradd() {
+      if (!this.formFlag) return;
+      this.formFlag = false;
       let applyRoles = {};
-
       if (this.formValidate.typeFlag === 1) {
         applyRoles = {
           applyRoles: this.formValidate.applyRoles
@@ -256,6 +258,9 @@ export default {
           this.$Message.error(res.msg);
         }
         console.log(res);
+        setTimeout(() => {
+          this.formFlag = true;
+        }, 500);
       });
     },
     //一级审批
