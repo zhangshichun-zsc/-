@@ -1,34 +1,29 @@
-<!-- 证书维护（志愿者） -->
+<!-- 证书维护（会员） -->
 <template>
   <div class="integral">
      <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-
       <div class="integral-left">
         <div class="title">
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
-          <div id="texts">
+          <p style="margin-top:10px">
             为融爱融乐的心智障碍者融合服务提供了珍贵的 小时的志愿支持。
             感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
             生命的多元，让我们的社会更平等、文明、融合。
             期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
-          </div>
+          </p>
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
          <div class="head ">
           <img class="head-left" src="../../assets/images/prend/1.png" alt=""/>
            <img  class="head-right" src="../../assets/images/prend/2.png" alt=""/>
         </div>
-        <div class="dataname">
+        <div style="margin-top:20px;line-height:20px;">
           <p>北京市海淀区融爱融乐</p>
           <p>心智障碍者家庭支持中心</p>
-          <p>年 月  日</p>
+          <div style="word-spacing: 20px">年 月 日</div>
         </div>
-
         </div>
-
-
-
       </div>
       <div class="integral-right">
         <div class="top">
@@ -39,9 +34,9 @@
           <div class="textimg">
           </div>
           <h5>图片最大为*</h5>
-          <p class="btn"><Button type="success">上传图片</Button></p>
+          <p class="btn"><Button type="primary">上传图片</Button></p>
         </div>
-          <p class="btn"><Button type="success">保存图片</Button></p>
+          <p class="btn"><Button type="primary">保存图片</Button></p>
 
 
     </div>
@@ -115,7 +110,7 @@ export default {
       certMouldId: this.$route.query.certMouldId,
       show: false,
       navigation1: {
-        head: "积分查询(志愿者)"
+        head: "积分查询(会员)"
       },
       value8: ""
     };
@@ -186,18 +181,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-header {
-  width: 1000px;
+  width: 100%;
   height: 1000px;
   display: flex;
-   background: #ffffff;
-  justify-content: space-between;
-  padding-top: 30px;
+  background: #ffffff;
+  padding-top: 30px 50px;
 }
 .integral-left {
   height: 900px;
-  width: 100%;
-
-
+  width: 600px;
 
   .title {
     padding-top: 200px;
@@ -211,16 +203,19 @@ export default {
     background-size: contain;
 
     p {
-      width: 100%;
+      width: 80%;
+      margin: 0 auto;
       line-height: 36px;
       font-size: 20px;
       text-align: center;
     }
   }
-  .head {
-    margin: 30px 0;
+   .head {
     display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
     margin-left: 50px;
+    width: 80%;
     .head-left {
       height: 70px;
       width: 70px;
@@ -228,7 +223,7 @@ export default {
       background-size: contain;
     }
     .head-right {
-       height: 70px;
+      height: 70px;
       width: 130px;
       background: url(../../assets/images/prend/2.png) no-repeat;
       background-size: contain;
@@ -238,24 +233,23 @@ export default {
 
 
 .integral-right{
-  width: 700px;
+  width: 500px;
   height: 500px;
   .top{
-    height: 25px;
-
+    height: 40px;
+    line-height: 40px;
     width: 100%;
     display: flex;
-
     p{
       width: 50%;
       font-size: 16px;
       text-align: center;
-        line-height: 25px;
       border: black 1px solid;
     }
-
   }
-
+h5{
+  margin: 20px 0  20px 100px
+ }
   .bottom{
     height: 100%;
     width: 100%;
@@ -273,29 +267,11 @@ border:  black 1px solid;
 
   }
 
-  .btn{
+   .btn{
       text-align: center;
+      margin-top: 30px;
     }
 }
-  #texts{
-    text-indent: 2em;
-  padding: 0 30px;
-  font-size: 14px;
-  text-align: start;
-}
-
-.integral-left .dataname{
- display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  p{
-    text-align: end;
-    font-size: 14px;
-    padding-right: 25px;
-  }
-}
-
-
 
 
 </style>

@@ -1,23 +1,19 @@
 <!-- 积分审核(会员) -->
 <template>
   <div class="audit">
-    <Tophead :navigation1="navigation1" :top=top @query="query"></Tophead>
+    <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
     <div class="audit-list">
-      <div class="table-header flex-center-between">
-        <div>
-          <Icon type="md-reorder" size="20" />
-          <span>数据列表</span>
-        </div>
-        <div>
+      <div class="table-header">
+        <div class="flex-center-end">
           <Button class="table-btn" @click="batch">批量审批</Button>
           <Button class="table-btn" @click="exportData">
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:100px;margin:0 10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -70,46 +66,66 @@ export default {
         },
         {
           title: "用户账号",
-          key: "userAccount"
+          key: "userAccount",
+          align: "center",
+          width:200,
         },
         {
           title: "用户昵称",
-          key: "nickname"
+          key: "nickname",
+          width:300,
+          align: "center"
         },
         {
           title: "用户类型",
-          key: "userType"
+          key: "userType",
+          width:200,
+          align: "center"
         },
         {
           title: "修改人",
-          key: "modifyName"
+          key: "modifyName",
+          width:300,
+          align: "center"
         },
         {
           title: "修改时间",
           key: "modifyTime",
+          width:300,
+          align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.modifyTime));
           }
         },
         {
           title: "原积分",
-          key: "sourceScore"
+          key: "sourceScore",
+          width:200,
+          align: "center"
         },
         {
           title: "现积分",
-          key: "currScore"
+          key: "currScore",
+          align: "center",
+          width:200,
         },
         {
           title: "积分调整值",
-          key: "addScore"
+          key: "addScore",
+          width:200,
+          align: "center"
         },
         {
           title: "状态",
-          key: "auditStatusTtext"
+          key: "auditStatusTtext",
+          align: "center",
+          width:200
         },
         {
           title: "操作",
           key: "action",
+          align: "center",
+          width:200,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -276,14 +292,10 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
+<style lang="scss">
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
@@ -299,20 +311,15 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.audit-list {
-  margin-top: 30px;
-}
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  background: white;
 }
 .table-header .table-btn {
   margin-left: 15px;
 }
 .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
+  padding: 20px;
   background: #fff;
 }
 .approval {

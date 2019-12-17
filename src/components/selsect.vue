@@ -6,6 +6,7 @@
       @on-change="changeProve(0, $event)"
       :label-in-value="true"
       :style="'width:' + styles + 'px'"
+      style="margin-bottom:5px"
     >
       <Option v-for="(item, i) in area" :value="i" :key="i">{{
         item.name
@@ -13,6 +14,7 @@
     </Select>
     <Select
       v-model="val[1]"
+      style="margin-bottom:5px"
       @on-change="changeProve(1, $event)"
       :label-in-value="true"
       :style="'width:' + styles + 'px'"

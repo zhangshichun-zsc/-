@@ -4,12 +4,12 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="flex-center-start integral-body">
       <div class="flex-center-start list">
-        <span>活动名称:</span>
-        <Input size="small" placeholder="活动名称" class="inpt" v-model="batchName" />
+        <span>立项名称:</span>
+        <Input size="small" placeholder="活动名称" class="inpt" v-model="query.batchName" />
       </div>
       <div class="flex-center-start list">
         <span class="span">审核状态:</span>
-        <Select v-model="statu" style="width:200px">
+        <Select v-model="query.statu" style="width:200px">
           <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
@@ -21,7 +21,7 @@
              type="date"
               placeholder="选择日期"
               style="width: 200px"
-              v-model="creataTimeTimeStampFrom"
+              @on-change="handleChange('rom',$event)"
             ></Date-picker>
           </i-col>
           <i-col style="padding-top:7px;">——</i-col>
@@ -30,7 +30,7 @@
              type="date"
               placeholder="选择日期"
               style="width: 200px"
-              v-model="creataTimeTimeStampTo"
+              @on-change="handleChange('tos',$event)"
             ></Date-picker>
           </i-col>
         </row>
@@ -55,7 +55,8 @@
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <Option :value="1">倒序</Option>
+              <Option :value="2">正序</Option>
             </Select>
         </div>
       </div>
@@ -85,6 +86,7 @@
 import { formatDate } from "../../request/datatime";
 import {date1} from '@/request/datatime.js'
 import { pendingApp, approvalpage } from "@/request/api";
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -213,9 +215,15 @@ export default {
       pageSize: 10,
       batchName: "",
       status:false,
-      statu:"",
-      creataTimeTimeStampFrom: "",
-      creataTimeTimeStampTo: "",
+      statu: "",
+      query:{
+        batchName:'',
+        statu:'',
+        rom:'',
+        tos:''
+      },
+      rom: "",
+      tos: "",
       datastat: "",
       dataend: "",
       arr: [],
@@ -228,7 +236,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: '',
     };
   },
    //事件监听
@@ -260,26 +268,19 @@ export default {
     },
     // 活动立项审批--活动立项审批分页
     getapprovalpage() {
-      if(this.creataTimeTimeStampFrom!=''){
-        this.datastat = this.creataTimeTimeStampFrom.getTime()
-        this.dataend = this.creataTimeTimeStampTo.getTime()
-      }else{
-        this.dataend=''
-        this.dataend=''
-      }
-      approvalpage({
-        page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort },
-        batchName: this.batchName,
-        status: this.statu,
-        creataTimeTimeStampFrom: this.datastat,
-        creataTimeTimeStampTo: this.dataend
-      }).then(res => {
+      approvalpage(filterNull({
+        page: { page: this.page, size: this.size },
+        name: this.batchName,
+        type: this.statu,
+        startT: this.datastat,
+        endT: this.dataend,
+        userId:this.$store.state.userId,
+        sort: this.sort
+      })).then(res => {
         if(res.code==200){
           this.datax = res.data.list;
-          this.page = res.data.pageNum;
           this.dataCount = res.data.totalSize;
         }
-        console.log(res);
       });
     },
 
@@ -292,12 +293,28 @@ export default {
 
     // 查询结果按钮
     query() {
+      if(!!this.query.rom&&!!this.query.tos){
+        if(new Date(this.query.rom).getTime()>new Date(this.query.tos).getTime()){
+          this.$Message.info('开始时间应该小于结束时间')
+          return
+        }else if(new Date(this.query.rom).getTime() == new Date(this.query.tos).getTime()){
+          this.rom = this.query.rom + " 00:00:00"
+          this.tos = this.query.tos + " 23:59:59"
+        }else{
+          this.rom = this.query.rom + " 00:00:00"
+          this.tos = this.query.tos + " 00:00:00"
+        }
+      }
+      this.batchName = this.query.batchName
+      this.statu = this.query.statu
       this.getapprovalpage();
+    },
+    handleChange(name,e){
+      this[name] = e
     },
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getapprovalpage();
     },
 

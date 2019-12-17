@@ -31,11 +31,11 @@
                 style="width: 220px"
               />
             </FormItem>
-            <FormItem label="地址:">
-              <Selsect :arr="[province,city,county,]" @change="selbtn"></Selsect>
-            </FormItem>
             <FormItem label="联系方式:" prop="contactUserPhone">
               <Input v-model="formValidate.contactUserPhone" style="width: 220px" />
+            </FormItem>
+            <FormItem label="地址:">
+              <Selsect :arr="[province,city,county,]" @change="selbtn"></Selsect>
             </FormItem>
             <FormItem label="微信公众号:" prop="wechatOfficeAccount">
               <Input
@@ -45,34 +45,25 @@
               />
             </FormItem>
             <FormItem label="图片:" prop="imgUrl">
-              <div class="start-wap">
-                <div
-                  class="upload"
-                  v-if="formValidate.imgUrl == null"
-                  @click="()=>{ this.$refs.files.click()}"
-                >
-                  <div class="file">
-                    <input
-                      style=" display:none;"
-                      type="file"
-                      accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                      ref="files"
-                      @change="uploadFile()"
-                      multiple
+              <div class="start-waps">
+                <div class="uploads" v-if="formValidate.imgUrl == null" @click="()=>{ this.$refs.files.click()}">
+                  <div class="fileimg">
+                    <input style=" display:none;" type="file" accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP" ref="files"
+                    @change="uploadFile()"
+                    multiple
                     />
-                    <Button icon="ios-cloud-upload-outline">上传图片</Button>
-                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
                   </div>
+                  <Icon class="scimg" type="md-cloud-upload" :size="60" color="#FF565A" />
                 </div>
-
-                <img :src="formValidate.imgUrl" style="height:150px;width:150px;margin-top:10px" />
-                <Icon
-                  type="ios-trash"
-                  v-if="formValidate.imgUrl!= null"
-                  class="cancel"
-                  :size="26"
-                  @click="cancelImg()"
-                />
+                  <img :src="formValidate.imgUrl" style="height:150px;width:150px;" />
+                  <Icon
+                    type="ios-trash"
+                    v-if="formValidate.imgUrl!= null"
+                    class="delimg"
+                    :size="26"
+                    color="#FF565A"
+                    @click="cancelImg()"
+                  />
               </div>
             </FormItem>
             <FormItem label="详情:" prop="orgName">
@@ -114,8 +105,8 @@
                     @change="uploadFiles()"
                     multiple
                   />
-                  <Button icon="ios-cloud-upload-outline">上传附件</Button>
-                  <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+                  <Icon type="md-cloud-upload" :size='40' color="#FF565A"/>
+                  <!-- <Button icon="ios-cloud-upload-outline">上传附件</Button> -->
                 </div>
               </div>
 
@@ -194,7 +185,7 @@ export default {
         contactUserName: [
           { required: true, message: "联系人不能为空", trigger: "blur" }
         ],
-          imgUrl:[{ required: true, message: "图片不能为空", trigger: "blur" }],
+        imgUrl: [{ required: true, message: "图片不能为空", trigger: "blur" }],
         contactUserPhone: [
           { required: true, message: "联系电话不能为空", trigger: "blur" }
         ],
@@ -368,6 +359,21 @@ export default {
 }
 .ivu-form-item {
   margin-bottom: 0.5rem;
+}
+.scimg {
+  position: absolute;
+  top: 50%;
+  left: 100px;
+  transform: translate(-50%, -50%);
+}
+.delimg {
+  position: absolute;
+  right: -70px;
+  top: 5px;
+}
+.start-waps {
+  position: relative;
+  width: 150px;
 }
 .file p {
   padding: 0.5rem;

@@ -60,7 +60,7 @@ export default {
         {
           title: "编号",
           key: "id",
-          width:100,
+          width:140,
           align: "center",
           render: (h, params) => {
             let num=(params.index+1)+(this.page-1)*(this.size)
@@ -76,13 +76,13 @@ export default {
           title: "发布时间",
           key: "createAt",
            align: "center",
-           width:160
+           width:260
         },
 
         {
           title: "操作",
           key: "action",
-          width:100,
+          width:200,
           align: "center",
           render: (h, params) => {
             return h(
@@ -191,6 +191,7 @@ export default {
 <style lang="scss">
 .integral-header .integral-top {
   padding: 15px 20px;
+  margin-top: 0;
   background: white;
 }
 .integral-header .integral-center {
@@ -210,7 +211,7 @@ export default {
 
 .table-header {
   padding: 5px 20px;
-  background: white;
+  background-color: #fff !important;
 }
 .table-header .table-btn {
   margin-left: 15px;
