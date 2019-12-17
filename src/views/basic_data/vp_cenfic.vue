@@ -128,7 +128,7 @@ export default {
       open: false,
       time: "请选择时间段",
       navigation1: {
-        head: "证书管理(志愿者)"
+        head: "证书管理(会员)"
       },
       ruleValidate: {
         orgId: [

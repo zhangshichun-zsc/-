@@ -4,7 +4,7 @@
     <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-end" style="padding:0 10px">
+        <div class="flex-center-end" style="padding:10px">
           <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>

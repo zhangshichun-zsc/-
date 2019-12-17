@@ -6,25 +6,6 @@
       <div class="inter-head">
         <Table border :columns="columns1" :data="data1"></Table>
       </div>
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center" @click="Retractbtn">
-            <Icon type="ios-arrow-down" v-if="Retract==true" />
-            <Icon type="ios-arrow-up" v-if="Retract==false" />
-            <span v-if="Retract==true">
-              <a class="sai">收起筛选</a>
-            </span>
-            <span v-if="Retract==false">
-              <a class="sai">启用筛选</a>
-            </span>
-          </div>
-          <Button @click="query">查询结果</Button>
-        </div>
-      </div>
       <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start">
           <span>积分来源</span>
@@ -42,28 +23,27 @@
             type="date"
             @change="time"
             format="yyyy/MM/dd"
-            placeholder="Select date"
-            style="width: 200px"
+            placeholder="请选择"
+            style="width: 200px;margin-left:10px"
             v-model="updateTimeStamp"
           ></DatePicker>
+        </div>
+        <div class="flex-center-start">
+          <Button class="search" @click="query">查询</Button> 
         </div>
       </div>
     </div>
     <div class="inter-list">
-      <div class="table-header flex-center-between">
-        <div>
-          <Icon type="md-reorder" size="20" />
-          <span>数据列表</span>
-        </div>
-        <div>
+      <div class="table-header">
+        <div class="flex-center-end">
           <Button class="table-btn" @click="exportData">
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:100px;margin:0 10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -104,41 +84,49 @@ export default {
       columns1: [
         {
           title: "用户账号",
-          key: "userAccount"
+          key: "userAccount",
+          align:'center'
         },
         {
           title: "用户昵称",
-          key: "nickname"
+          key: "nickname",
+          align:'center'
         },
         {
           title: "会员等级",
-          key: "level"
+          key: "level",
+          align:'center'
         },
         {
           title: "可用积分",
-          key: "score"
+          key: "score",
+          align:'center'
         }
       ],
       data1: [],
       columns2: [
         {
           title: "积分来源",
-          key: "scoreOrigin"
+          key: "scoreOrigin",
+          align:'center'
         },
         {
           title: "积分变化",
-          key: "scoreChange"
+          key: "scoreChange",
+          align:'center'
         },
         {
           title: "时间",
           key: "time",
+          align:'center',
           render: (h, params) => {
             return h("div", formatDate(params.row.time));
           }
         },
         {
           title: "备注",
-          key: "remark"
+          key: "remark",
+          align:'center'
         }
       ],
 
@@ -264,17 +252,11 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-.inter-head {
-  margin-bottom: 30px;
-}
-.integral-header {
-  border: 1px solid #eee;
-}
+<style lang="scss">
+
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
@@ -290,20 +272,18 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.inter-list {
-  margin-top: 30px;
-}
+
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
+  background:white;
   border: 1px solid #eee;
 }
 .table-header .table-btn {
   margin-left: 15px;
 }
 .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
+  padding: 20px;
   background: #fff;
+  text-align: center;
 }
 </style>
