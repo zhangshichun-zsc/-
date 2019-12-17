@@ -325,6 +325,7 @@ export default {
       }else if(e==1){ //新增
         this.list = [{
           validFlag: this.formValidate.validFlag,
+          sysId:1,
           name: this.formValidate.name,
           amount: this.formValidate.amount,
           imonth:this.formValidate.imonth,

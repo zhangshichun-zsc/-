@@ -86,7 +86,7 @@
                   @change="uploadFile()"
                   multiple
                 />
-                <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+                <Icon type="md-cloud-upload" :size="50" color="#FF565A" />
               </div>
             </div>
 

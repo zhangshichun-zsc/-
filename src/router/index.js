@@ -212,11 +212,21 @@ const router = new Router({
         path: 'vun_vp',
         name: 'vun_vp',
         meta: {
-          title: '志愿者特长管理（共用）',
+          title: '志愿者特长管理',
           icon: 'ios-navigate'
         },
         component: () =>
           import('@/views/basic_data/vun_vp.vue')
+      },
+      {
+        path: 'vp_vp',
+        name: 'vp_vp',
+        meta: {
+          title: '会员特长管理',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/basic_data/vp_vp.vue')
       },
       {
         path: 'vun_action',

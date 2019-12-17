@@ -127,7 +127,7 @@ export default {
       open: false,
       time: "请选择时间段",
       navigation1: {
-        head: "证书管理(会员)"
+        head: "证书管理(志愿者)"
       },
       params: {
         orgId: "",
@@ -170,26 +170,26 @@ export default {
         {
           title: "生效时间",
           key: "effectiveAt",
-          width: 140,
+          width: 200,
           align: "center"
         },
         {
           title: "失效时间",
           key: "inEffectiveAt",
-          width: 140,
+          width: 200,
           align: "center"
         },
         {
           title: "创建时间",
           key: "createAt",
-          width: 180,
+          width: 240,
           align: "center"
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:180,
+          width:220,
           render: (h, params) => {
             return h("div", [
               h(

@@ -2,7 +2,7 @@
 <template>
   <div class="set">
     <Navigation :labels="navigation1"></Navigation>
-    <div class="set-header flex-center-between"><span>积分设置</span><Button>积分兑换规则</Button></div>
+    <div class="set-header flex-center-between"><span>积分设置</span></div>
     <div class="content">
       <div class="content-tit">会员积分</div>
       <div class="content-list">
@@ -13,7 +13,7 @@
             <div class="right-input flex-center-start">
               <span><Icon type="ios-add-circle" size='25' v-if="item.typeChange==1"/><Icon type="md-remove" size='25' v-if="item.typeChange==2"/>积分:</span>
               <!-- <Input v-model="item.score"  οnblur="item.score=item.score.replace(/[^\d]/g,'')"   placeholder="只能输入数字" style="width: 120px" /> -->
-               <InputNumber v-model="item.score" :min="1" placeholder="只能输入数字" style="width: 120px"></InputNumber>
+               <InputNumber v-model="item.score" :min="1" placeholder="只能输入数字" style="width: 120px;margin-right:10px"></InputNumber>
               <span slot='append'>分</span>
             </div>
 
@@ -21,7 +21,7 @@
 
         </ul>
       </div>
-       <Button type='primary' size='large' class="content-btn" @click="Submission">提交</Button>
+       <Button style="margin-top:10px"  class="search" @click="Submission">提交</Button>
     </div>
     </div>
   </div>
@@ -93,7 +93,7 @@ export default {
 }
 
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .set-header{
   padding: 20px;
   background: rgb(228, 228, 228);

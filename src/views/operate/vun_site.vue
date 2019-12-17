@@ -60,7 +60,7 @@ export default {
         {
           title: "编号",
           key: "msgId",
-          width:100,
+          width:200,
           align: "center",
           render: (h, params) => {
             let num=(params.index+1)+(this.page-1)*(this.size)
@@ -75,13 +75,13 @@ export default {
         {
           title: "发布时间",
           key: "createAt",
-          width:160,
+          width:260,
           align: "center"
         },
 
         {
           title: "操作",
-          width:100,
+          width:200,
           key: "action",
           align: "center",
           render: (h, params) => {

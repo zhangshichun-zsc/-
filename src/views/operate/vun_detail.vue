@@ -7,15 +7,11 @@
     <Table border :columns="columns1" :data="data1"></Table>
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-start">
-          <Icon type="md-list" />
-          <span>数据列表</span>
-        </div>
         <div class="flex-center-end">
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -71,6 +67,7 @@ export default {
         {
           title: "注册时间",
           // key: "registerTimestamp",
+          align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.registerTimestamp));
           }
@@ -206,13 +203,9 @@ export default {
 };
 </script>
 <style lang="scss">
-.integral-header {
-  border: 1px solid #eee;
-}
 .integral-header .integral-top {
   padding: 15px 10px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
@@ -228,20 +221,15 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.integral-table {
-  margin-top: 30px;
-}
 .table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  padding:10px 20px;
+  background: white;
 }
 .table-header .table-btn {
   margin-right: 15px;
 }
 .integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
+  padding:20px;
   background: #fff;
 }
 .pages {

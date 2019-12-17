@@ -1,4 +1,4 @@
-<!-- 家长职业类型管理(会员) -->
+<!-- 会员特长管理 -->
 <template>
   <div>
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
@@ -6,22 +6,22 @@
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
-          <Button class="table-btns" @click="btn">新增类型</Button>
+          <Button class="table-btns" @click="btn">{{title}}</Button>
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-              <FormItem :label="title" prop="dicName">
-                <Input v-model="formValidate.dicName" width="200px"/>
+              <FormItem label="特长名称" prop="dicName">
+                <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
       </div>
       <div class="min-height">
-        <Table ref="selection"  :columns="columns" :data="data1" border></Table>
+      <Table ref="selection" border :columns="columns" :data="data1"></Table>
       </div>
       <div class="pages">
         <Page
@@ -46,51 +46,47 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "家长职业类型管理(会员)"
+        head: "会员特长管理"
       },
       formValidate: {
         dicName: ""
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "职业名称不能为空", trigger: "blur" }
+          { required: true, message: "特长名称不能为空", trigger: "blur" }
         ]
       },
-      title: "家长职业类型管理",
+      title: "新增类型",
       columns: [
         {
           type: "selection",
           width: 60,
-          resizable: true,
           align: "center"
         },
         {
-          title: "职业名称",
+          title: "特长名称",
           key: "dicName",
-          align: "center",
-          resizable: true,
-          width: 400
+          align: "center"
         },
+
         {
           title: "创建时间",
           key: "creatAt",
-          align: "center",
-          resizable: true,
-          width: 240
+           align: "center",
+           width: 200,
         },
         {
           title: "创建人",
           key: "userName",
-          align: "center",
-          resizable: true,
-          width: 300
+           width: 140,
+           align: "center",
         },
+
         {
           title: "有效状态",
           key: "status",
           align: "center",
-          resizable: true,
-          width: 180,
+           width: 140,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -100,11 +96,9 @@ export default {
                 on: {
                   input: e => {
                     if (e) {
-                      this.dicId = params.row.dicId;
                       this.states = 1;
                       this.getBasicbatch(2);
                     } else {
-                      this.dicId = params.row.dicId;
                       this.states = 0;
                       this.getBasicbatch(2);
                     }
@@ -118,8 +112,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          resizable: true,
-          width:180,
+          width:120,
           render: (h, params) => {
             return h("div", [
               h(
@@ -127,14 +120,13 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276",
-                    align: "center"
+                    color: "#097276"
                   },
                   on: {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "编辑新增家长职业类型管理";
+                      this.text = "修改障碍类型";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }
@@ -162,12 +154,29 @@ export default {
       ],
       data1: [],
       modal1: false,
+      top: [
+        {
+          name: "名称",
+          type: "input",
+          value: ""
+        },
+        {
+          name: "有效日期",
+          type: "select",
+          list: [
+            { dataKey: "", dataValue: "全部" },
+            { dataKey: "0", dataValue: "无效" },
+            { dataKey: "1", dataValue: "有效" }
+          ],
+          value: ""
+        }
+      ],
 
       page: 1,
       size: 10,
       dataCount: 0,
-      sysId: 1,
-      typeFlag: 1, //每个页面写死
+      sysId: 2,
+      typeFlag: 3, //每个页面写死
       startAt: "",
       endAt: "",
       validFlag: "",
@@ -175,7 +184,7 @@ export default {
       dicCode: 0,
 
       list: [],
-      text: "新增家长职业类型管理",
+      text: "添加特长",
       states: "",
       id: 0
     };
@@ -247,6 +256,8 @@ export default {
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
+          this.getBasicsearch();
+          this.modal1 = false;
           if (e == 0) {
             this.$Message.info("添加成功");
           } else if (e == 1) {
@@ -254,8 +265,6 @@ export default {
           } else if (e == 2) {
             this.$Message.info("操作成功");
           }
-          this.getBasicsearch();
-          this.modal1 = false;
         }
         console.log(res);
       });
@@ -268,7 +277,16 @@ export default {
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-
+      // if (e.createTimestamp == "") {
+      // this.startAt = '';
+      // this.endAt = '';
+      // } else if (new Date() > e.createTimestamp) {
+      //   this.startAt = e.createTimestamp;
+      //   this.endAt = new Date();
+      // } else {
+      //   this.startAt = new Date();
+      //   this.endAt = e.createTimestamp;
+      // }
       this.getBasicsearch();
     },
 
@@ -277,7 +295,6 @@ export default {
       this.modal1 = false;
       this.formValidate.dicName = "";
     },
-
     //确定
     modalOk(name) {
       this.$refs[name].validate(valid => {
@@ -288,15 +305,15 @@ export default {
             this.getBasicbatch(0);
           }
         } else {
-          this.$Message.error("名称不能为空!");
+          this.$Message.error("名称不能为空");
         }
       });
     },
 
     //弹出框
     btn() {
-      this.modal1 = true;
       this.id = 1;
+      this.modal1 = true;
       this.formValidate.dicName = "";
     },
 
@@ -309,7 +326,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../libs/basicdata.css";
-
-
+@import "../../libs/basicdata.css"
 </style>

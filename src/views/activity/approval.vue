@@ -229,7 +229,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动地址</span>
-                <span @click="()=>{this.adr = true}">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</span>
+                <span @click="getAdr()">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</span>
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
@@ -840,6 +840,9 @@ export default {
           }
         }
       });
+    },
+    getAdr(){
+      this.adr = !this.adr
     },
     //活动标签
     getActiveLabels(val) {
