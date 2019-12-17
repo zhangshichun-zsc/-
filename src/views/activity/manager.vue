@@ -438,7 +438,7 @@ export default {
         },
         {
           title: "群二维码",
-          width: 100,
+          width: 150,
           key: "activityQrCode",
           align: "center",
           render: (h,params) => {
