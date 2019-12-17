@@ -28,7 +28,7 @@
                 style="width: 150px;margin:0 20px 0 10px"
                 v-model="activityTimestampFrom"
               ></Date-picker>
-             </Col> 
+             </Col>
              <Col span="12">
               <Date-picker
                 type="date"
@@ -143,8 +143,20 @@
               </div>
             </div>
           </Modal>
-        
+
       </div>
+      <Modal v-model="addstate" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                  <span>下架确定</span>
+                </p>
+                <div style="text-align:center">
+                  <p>是否确认下架，下架后无法上架</p>
+                </div>
+                <div slot="footer">
+                  <Button type="error" @click="modalCancel">取消</Button>
+                  <Button type="success" @click="modalOkdel">确定</Button>
+                </div>
+              </Modal>
       <Page
         :total="dataCount"
         show-elevator
@@ -662,7 +674,7 @@ export default {
     //取消
     modalCancel(){
       this.addstate=false
-       this.reload()
+       this.getactiveManager()
     },
 
     //确定

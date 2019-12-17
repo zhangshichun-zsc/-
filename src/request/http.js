@@ -25,6 +25,10 @@ const SERVICE_URL = {
 
 export const SERVER_URl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
 
+
+//  const SERVER_URl = '/api'
+
+
 export const orgimg = (SERVICE_URL.API_URL[SERVICE_URL.API_INDEX] + '/pic/upload').slice(5) //组织管理-上传图片
 
 const token = localStorage.getItem("token");
@@ -44,6 +48,7 @@ axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded
 axios.interceptors.request.use(
   config => {
     if (router.currentRoute.fullPath.indexOf('/login') != -1) {
+
       //登录接口,不做token信息添加
     } else {
       // console.log(store.state.token)
