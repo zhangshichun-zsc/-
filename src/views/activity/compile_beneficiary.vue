@@ -235,7 +235,7 @@
                           v-for="(item,i) in  signLimitsList[0].data"
                           :value="item.name"
                           :key="i"
-                          @click.native="getLimitValue1(item,i)"
+                          @click.native="getLimitValue1(item,index)"
                         >{{ item.name }}</Option>
                       </Select>
                     </td>
@@ -251,7 +251,7 @@
                           v-for="(item,i) in  signLimitsList[1].data"
                           :value="item.name"
                           :key="i"
-                          @click.native="getLimitValue1(item,i)"
+                          @click.native="getLimitValue1(item,index)"
                         >{{ item.name }}</Option>
                       </Select>
                     </td>
@@ -288,7 +288,7 @@
                           v-for="(item,i) in  signLimitsList[0].data"
                           :value="item.name"
                           :key="i"
-                          @click.native="getLimitValue1(item,i)"
+                          @click.native="getLimitValue1(item,index)"
                         >{{ item.name }}</Option>
                       </Select>
                     </td>
@@ -304,7 +304,7 @@
                           v-for="(item,i) in  signLimitsList[0].data"
                           :value="item.name"
                           :key="i"
-                          @click.native="getLimitValue1(item,i)"
+                          @click.native="getLimitValue1(item,index)"
                         >{{ item.name }}</Option>
                       </Select>
                     </td>
@@ -422,8 +422,8 @@
           <ul>
             <li class="first-li">
               <span class="first-span">培训内容</span>
-              <i-switch v-model="oneRole.isTrain" :true-value='1' :false-value='2' />
               <Checkbox v-model="oneRole.isTrainMust" :true-value='1'>是否必须培训</Checkbox>
+              <i-switch v-model="oneRole.isTrain" :true-value='1' :false-value='2' />
             </li>
             <li class="first-li" v-if="oneRole.isTrain==1">
               <wangeditor :labels="oneRole.trainComments" id="ed1" @change="changeEditorTrain"></wangeditor>
@@ -613,32 +613,48 @@ export default {
     },
     //招募类型
     getType(val) {
+      // if (this.oneRole.roleName) {
+      //   this.$Message.warning('招募岗位，限制设置，报名项设置，优先设置已清空,请重新填写')
+      // }
       this.oneRole.roleName = val.name;
       this.oneRole.roleId = val.roleId;
+      // this.oneRole.userPosition = '';
+      // this.oneRole.positionName = ''
+      // this.oneRole.signRuleList = []
+      // this.oneRole.choiceRuleList = []
+      // this.oneRole.itemList = []
       signPost({
         roleId: val.roleId,
         name: this.oneRole.roleName
       }).then(res => {
-        this.signPostList = res.data.voluJobs;
+        if(res.code==200){
+          this.signPostList = res.data.voluJobs;
+        }
       });
       signLimits({
         userId:this.userId,
         roleId:val.roleId,
         sysId:1
       }).then(res=>{
-        this.signLimitsList = res.data
+        if(res.code==200){
+          this.signLimitsList = res.data
+        }
       })
       signItems({
         roleId:val.roleId
       }).then(res=>{
-        this.signItemList = res.data
+        if(res.code==200){
+          this.signItemList = res.data
+        }
       })
       firstList({
         userId:this.userId,
         sysId:1,
         roleId:val.roleId
       }).then(res=>{
-        this.firstItemList = res.data
+        if(res.code==200){
+          this.firstItemList = res.data
+        }
       })
     },
     //招募岗位
@@ -700,22 +716,72 @@ export default {
     },
     getLimits(e){
       console.log(e)
-      this.oneRole.signRuleList.push({ruleId:e.ruleId})
+      let isAdd = true
+      for(let i in this.oneRole.signRuleList){
+        if(e.ruleId==2||e.ruleId==5||e.ruleId==6||e.ruleId==7){
+          isAdd = true
+        }else if(e.ruleId==this.oneRole.signRuleList[i].ruleId){
+          isAdd = false
+        }
+      }
+      if(isAdd){
+        if(e.ruleId==4||e.ruleId==22){
+          //居住地区限制
+        }
+        this.oneRole.signRuleList.push({ruleId:e.ruleId})
+      }else{
+        this.$Message.warning("已有该限制项，请勿重复添加")
+      }
     },
     deleteLimits(e){
       this.oneRole.signRuleList.splice(e,1)
     },
     getLimitValue1(e,ei){
-      this.oneRole.signRuleList[ei].ruleValue = e.orgId
-      this.oneRole.signRuleList[ei].ruleName = e.name
+      let isAdd = true
+      for(let i in this.oneRole.signRuleList){
+        if(this.oneRole.signRuleList[i].ruleId==5||this.oneRole.signRuleList[i].ruleId==6){
+          if(this.oneRole.signRuleList[i].ruleValue == e.orgId){
+            isAdd = false
+          }
+        }else{
+          if(this.oneRole.signRuleList[i].ruleValue == e.dicId){
+            isAdd = false
+          }
+        }
+      }
+      if(isAdd){
+        if(this.oneRole.signRuleList[ei].ruleId==5||this.oneRole.signRuleList[ei].ruleId==6){
+          this.oneRole.signRuleList[ei].ruleValue = e.orgId
+          this.oneRole.signRuleList[ei].ruleName = e.name
+        }else{
+          this.oneRole.signRuleList[ei].ruleValue = e.dicId
+          this.oneRole.signRuleList[ei].ruleName = e.name
+        }
+      }else{
+        this.$Message.warning("已有该选项，请勿重复添加")
+        this.oneRole.signRuleList[ei].ruleValue = ''
+        this.oneRole.signRuleList[ei].ruleName = ''
+      }
     },
     getSign(e){
       console.log(e)
-      this.oneRole.itemList.push({
-        itemId : e.itemId,
-        itemName : e.name,
-        type : e.typeFlag
-      })
+      let m = {}
+      let n = this.oneRole.itemList ? this.oneRole.itemList : []
+      let isAdd = true
+      for (let i = 0; i < n.length; i++) {
+        if (n[i].itemId == e.itemId) {
+          isAdd = false
+        }
+      }
+      if (isAdd) {
+        m.itemId = e.itemId
+        m.itemName = e.name
+        m.type = e.typeFlag
+        n.push(m)
+        this.oneRole.itemList = n
+      } else {
+        this.$Message.warning('已有该设置项，请勿重复添加')
+      }
     },
     deleteItem(e){
       this.oneRole.itemList.splice(e,1)
