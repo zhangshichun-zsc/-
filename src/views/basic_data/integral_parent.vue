@@ -10,12 +10,12 @@
           <Modal v-model="modal1" :title="text">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="dicName">
-                <Input v-model="formValidate.dicName" />
+                <Input v-model="formValidate.dicName" width="200px"/>
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
