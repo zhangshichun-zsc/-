@@ -1,21 +1,28 @@
 <!--活动立项审批(会员)-->
 <template>
   <div>
+     <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
+        <i-input placeholder="请输入拒绝内容" v-model="reason" type="textarea" :row='4'/>
+        <div slot="footer">
+          <Button type="error" size="large" @click="success">确定</Button>
+        </div>
+      </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="flex-center-start integral-body">
       <div class="flex-center-start list">
         <span>立项名称:</span>
-        <Input size="small" placeholder="活动名称" class="inpt" v-model="query.batchName" />
+        <Input size="large" placeholder="活动名称" class="inpt" v-model="query.batchName" />
       </div>
       <div class="flex-center-start list">
         <span class="span">审核状态:</span>
         <Select v-model="query.statu" style="width:200px">
+          <Option :value="''">全部</Option>
           <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
       <div class="flex-center-start" style="margin-right:20px;">
         <span>提交日期:</span>
-        <row class="flex-data inpt">
+        <row class="flex-center-start inpt">
           <i-col>
             <Date-picker
              type="date"
@@ -37,7 +44,7 @@
       </div>
       <div class="flex-center-end">
         <Button @click="approval" style="margin-right:10px">新建立项</Button>
-        <Button @click="query">查询结果</Button>
+        <Button @click="querys">查询结果</Button>
       </div>
     </div>
     <div class="integral-table">
@@ -47,7 +54,7 @@
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
           <Button class="table-btn" @click="operation(2)">通过</Button>
-          <Button class="table-btn" @click="operation(3)">拒绝</Button>
+          <Button class="table-btn" @click="modal1 = true">拒绝</Button>
         </div>
         <div>
           <Button class="table-btn">导出</Button>
@@ -55,8 +62,8 @@
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-              <Option :value="1">倒序</Option>
-              <Option :value="2">正序</Option>
+              <Option :value="'create_at desc'">倒序</Option>
+              <Option :value="'create_at asc'">正序</Option>
             </Select>
         </div>
       </div>
@@ -90,21 +97,26 @@ import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
+      modal1:false,
       navigation1: {
         head: "活动立项审批(会员)"
       },
       cityList: [
         {
-          value: "1",
+          value: "0",
           label: "待审核"
         },
         {
-          value: "3",
-          label: "已拒绝"
+          value: "1",
+          label: "审核通过"
         },
         {
           value: "2",
-          label: "已审核"
+          label: "审核不通过"
+        },
+        {
+          value: "3",
+          label: "一级审核通过二级待审核"
         }
       ],
       columns: [
@@ -115,7 +127,7 @@ export default {
         },
         {
           title: "立项名称",
-          key: "batchName",
+          key: "name",
           align: "center",
           width: 500,
           ellipsis: true,
@@ -129,13 +141,13 @@ export default {
         },
         {
           title: "总预算",
-          key: "budge",
+          key: "budget",
           width: 200,
           align: "center"
         },
         {
           title: "创建人",
-          key: "createUserName",
+          key: "userName",
           width: 300,
           align: "center",
           ellipsis: true,
@@ -143,23 +155,25 @@ export default {
         },
         {
           title: "身份",
-          key: "roleName",
+          key: "userRole",
           align: "center",
           width: 400,
         },
         {
           title: "提交时间",
-          key: "submitTimestamp",
+          key: "createAt",
+          width: 300,
           align: "center",
-          render: (h, params) => {
-            return h("div", formatDate(params.row.submitTimestamp));
-          }
         },
         {
           title: "状态",
           key: "statusText",
           width: 200,
           align: "center",
+          render: (h,params) =>{
+            let state = params.row.status
+            return (<span>{["待审核","审核通过","审核不通过",'一级审核通过二级待审核'][~~state]}</span>)
+          }
         },
         {
           title: "操作",
@@ -226,6 +240,7 @@ export default {
       tos: "",
       datastat: "",
       dataend: "",
+      reason: '',
       arr: [],
       Article: [
         { value: 10, label: 10 },
@@ -236,7 +251,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: '',
+      sort: 'create_at desc',
     };
   },
    //事件监听
@@ -254,28 +269,37 @@ export default {
   },
 
   methods: {
+    success(){
+       this.modal1 = false
+       this.operation(3)
+    },
+    cancel(){
+      this.modal1 = false
+      this.reason = ''
+    },
     // 活动立项审批--批量审批
     getpendingApp(e) {
+      console.log(this.arr)
       pendingApp({
-        batchIds: this.arr,
-        status: e
+        userId: this.$store.state.userId,
+        auditId: this.arr,
+        type: e,
+        reason: this.reason
       }).then(res => {
         if(res.code==200){
           this.$Message.info("操作成功");
         }
-        console.log(res);
       });
     },
     // 活动立项审批--活动立项审批分页
     getapprovalpage() {
       approvalpage(filterNull({
-        page: { page: this.page, size: this.size },
+        page: { page: this.page, size: this.size, sort: this.sort },
         name: this.batchName,
         type: this.statu,
-        startT: this.datastat,
-        endT: this.dataend,
-        userId:this.$store.state.userId,
-        sort: this.sort
+        startT: this.rom,
+        endT: this.tos,
+        userId:this.$store.state.userId
       })).then(res => {
         if(res.code==200){
           this.datax = res.data.list;
@@ -292,7 +316,7 @@ export default {
     },
 
     // 查询结果按钮
-    query() {
+    querys() {
       if(!!this.query.rom&&!!this.query.tos){
         if(new Date(this.query.rom).getTime()>new Date(this.query.tos).getTime()){
           this.$Message.info('开始时间应该小于结束时间')
@@ -310,7 +334,7 @@ export default {
       this.getapprovalpage();
     },
     handleChange(name,e){
-      this[name] = e
+      this.query[name] = e
     },
     //分页功能
     changepages(index) {
@@ -321,7 +345,6 @@ export default {
     //每条数据单选框的状态
     handleSelectionChange(val) {
       this.arr = val;
-      console.log(this.arr);
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
@@ -332,8 +355,8 @@ export default {
       }
       //选择的数据id
         this.arr = val.map(item => {
-          return item.batchId;
-        }).toString();
+          return item.auditId;
+        })
     },
 
     //操作
@@ -378,9 +401,7 @@ export default {
     }
   }
 }
-.ivu-row {
-  display: flex;
-}
+
 .table-header {
   height: 50px;
   .table-btn {
@@ -388,9 +409,6 @@ export default {
   }
 }
 
-// .ivu-table-wrapper {
-//   height: 500px;
-// }
 .pages {
   height: 50px;
   display: flex;
