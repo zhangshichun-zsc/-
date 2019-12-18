@@ -32,7 +32,7 @@ export const AddressList = p => get('/information-manage/get-information-page', 
 
 export const AddressType = p => get('/information-manage/get-information-type-list', p) // 质询类型
 
-export const AddressDel = p => get('/information-manage/batch-opr-information', p) // 删除资讯
+export const AddressDel = p => posts('/information-manage/updateStatus', p) // 删除资讯
 
 export const AddressDetails = p => get('/information-manage/get-information-detail', p) // 获取资讯详情
 
@@ -53,7 +53,7 @@ export const inquiryReltype = p => get('/information-manage/getInforList', p) //
 export const inquiryRel = p => posts('/information-manage/createInformation', p) // 发布资讯
 
 
-// 推荐模块
+// 推荐模块 
 
 export const AdvertisingList = p => get('/adv-content/get-adcontent-location-list', p) // 广告管理--获取广告位值列表
 
@@ -118,9 +118,9 @@ export const pendingUncOperation = p => post('/activity-undeal/batch-upate-signu
 
 export const pendingSubsidy = p => post('/activity-undeal/grant-subsidy', p) //活动待处理--发放补助
 
-export const pendingApp = p => post('/activity-review/batch-review', p) //活动立项审批--批量审批
+export const pendingApp = p => posts('/activity-manage/batch/list/audit/do', p) //活动立项审批--批量审批
 
-export const approvalpage = p => get('/activity-review/get-activity-page', p) //活动立项审批--活动立项审批分页
+export const approvalpage = p => posts('/activity-manage/bg/batch/audit/list', p) //活动立项审批--活动立项审批分页
 
 export const approvaldet = p => get('/activity-review/get-activity-batch-detail', p) //活动立项审批--查看活动立项详情
 
@@ -205,10 +205,6 @@ export const integralrule = p => get('/score/get-score-rule-list', p) //-积分�
 
 export const OffSubmission = p => posts('/score/rule/set', p) //-积分管理--提交
 
-export const integralnum = p => get('/score/queryScoreRuleByTypeFlag', p) //-查询积分数值
-
-export const integralset = p => posts('/score/updateScoreRule', p) //-设置积分数值
-
 
 export const Integralaudit = p => post('/score/score-audit', p) //-积分管理--审核积分
 
@@ -280,11 +276,6 @@ export const Reportdelete = p => post('/report-manage/del-report', p) //举报�
 
 export const ReportList = p => get('/report-manage/get-report-reason-list', p) //获取举报原因列表
 
-export const Reporttext = p => get('/report-manage/getReportList', p) //举报管理--列表
-
-export const Reportdeles = p => posts('/report-manage/deal-report', p) //举报管理--批量操作
-
-
 //用户
 
 
@@ -343,13 +334,11 @@ export const Activitydetail = p => get('/activity-feedback/activity-feedback-lis
 
 export const Activitybatch = p => post('/activity-feedback/batch-opr-act-feedback', p) //-活动反馈管理--批量操作反馈
 
-export const Activitysummary = p => get('/activity-overview/get-act-overview-statistics', p) //-活动概述--统计活动概述信息
+export const Activitysummary = p => posts('/activity-manage/work/act/detail', p) //-活动概述--统计活动概述信息
 
 //公共模块
 
 export const Commonpage = p => get('/common/get-dic-page', p) //-公共模块--字典分页
-
-export const queryUserDetail = p => get('/volunteer-manager/queryUserDetail', p) //-当前账号的 头像和信息
 
 export const Commonadd = p => post('/common/add-dic-info', p) //-公共模块--添加字典信息
 
@@ -456,7 +445,7 @@ export const rolequery = p => get('/sysRole/findAllRole', p) //角色管理--查
 
 export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建角色
 
-export const roleSetup = p => posts('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
+export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
 export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
@@ -524,7 +513,7 @@ export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除�
 export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--
 
 
-export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称
+export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称 
 
 
 
@@ -563,9 +552,6 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
-export const programApproval = p => posts("/activity-manage/batch/audit/do", p) //立项审批
-export const draftsDetail = p => posts("/activity-manage/batch/param", p) //复制立项
-export const actMemberlist = p => posts("/activity-manage/member-work/getActUserList", p) //复制立项
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
@@ -621,6 +607,8 @@ export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p
 export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
 export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
-export const getFeedDetail = p => get("/activity-feedback/getDetail", p)
-export const getTypeFeed = p => get("/activity-feedback/getCategotyList", p)
-export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId", p)
+export const getFeedDetail = p => get("/activity-feedback/getDetail",p)
+export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
+export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId",p)
+export const actMemberlist = p => posts("/activity-manage/getActUserList",p)
+export const getActiveIdType = p => get("/activity-manage/getAllByActId",p)
