@@ -354,8 +354,8 @@
       <Table ref="volunteerSel" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
-          <!--  @click="chackall()" -->
-          <Button style="border:0px">
+       
+          <Button style="border:0px" >
             <Checkbox v-model="ALLINFO"></Checkbox>全选
           </Button>
           <Select placement="top" placeholder="批量操作" style="width: 150px" v-model="batch">
