@@ -5,52 +5,52 @@
     <div class="content">
       <div class="con-top bk-szy">
         <p>
-          <span>举报详情</span>
+          <span class="zt">举报详情</span>
         </p>
       </div>
       <div class="con bk">
         <table width="100%;">
           <tr>
-            <td>举报理由</td>
-            <td>{{ReportData.reportReasonText}}</td>
+            <td class="zt">举报理由</td>
+            <td class="zt">{{ReportData.reportReasonText}}</td>
           </tr>
           <tr>
-            <td>举报人</td>
-            <td>{{ReportData.reportUserName}}</td>
+            <td class="zt">举报人</td>
+            <td class="zt">{{ReportData.reportUserName}}</td>
           </tr>
           <tr>
-            <td>举报时间</td>
-            <td>{{ReportData.reportTimestamp}}</td>
+            <td class="zt">举报时间</td>
+            <td class="zt">{{ReportData.reportTimestamp}}</td>
           </tr>
           <tr>
-            <td>举报对象</td>
-            <td>{{ReportData.activityName}}</td>
+            <td class="zt">举报对象</td>
+            <td class="zt">{{ReportData.activityName}}</td>
           </tr>
           <tr>
-            <td>举报状态</td>
-            <td>{{ReportData.reportStatus}}</td>
+            <td class="zt">举报状态</td>
+            <td class="zt">{{ReportData.reportStatus}}</td>
           </tr>
           <tr>
-            <td>举报内容</td>
-            <td>{{ReportData.reportReasonText}}</td>
+            <td class="zt">举报内容</td>
+            <td class="zt">{{ReportData.reportReasonText}}</td>
           </tr>
         </table>
         <table width="100%;">
           <tr>
-            <td>处理人员</td>
-            <td>{{ReportData.answerUserName}}</td>
+            <td class="zt">处理人员</td>
+            <td class="zt">{{ReportData.answerUserName}}</td>
           </tr>
           <tr>
-            <td>处理时间</td>
-            <td>{{ReportData.answerTimestamp}}</td>
+            <td class="zt">处理时间</td>
+            <td class="zt">{{ReportData.answerTimestamp}}</td>
           </tr>
           <tr>
-            <td>处理结果</td>
-            <td>{{ReportData.reportDealResultText}}</td>
+            <td class="zt">处理结果</td>
+            <td class="zt">{{ReportData.reportDealResultText}}</td>
           </tr>
           <tr>
-            <td>处理备注</td>
-            <td>{{ReportData.answerContent?ReportData.answerContent:''}}</td>
+            <td class="zt">处理备注</td>
+            <td class="zt">{{ReportData.answerContent?ReportData.answerContent:''}}</td>
           </tr>
         </table>
       </div>
@@ -104,6 +104,8 @@ body {
 }
 .main {
   background-color: #ffffff;
+  font-size: 18px;
+  min-height: 875px
 }
 
 .bk,
@@ -139,5 +141,8 @@ body {
 }
 .con table {
   margin-bottom: 1rem;
+}
+.zt{
+  font-size: 16px;
 }
 </style>

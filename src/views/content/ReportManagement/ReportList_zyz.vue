@@ -15,13 +15,13 @@
           </div>
         </div>
       </div>-->
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start name">
-          <span>举报人:</span>
+      <div class="flex-center-start integral-body" style="border-radius: 10px;margin-bottom:20px;" >
+        <div class="flex-center-start" style="margin-right:20px;">
+          <span style="width:80px">举报人:</span>
           <Input size="large" placeholder="用户名/账号" class="inpt" v-model="reportUserName" />
         </div>
-        <div class="flex-center-start name">
-          <span>举报理由:</span>
+        <div class="flex-center-start">
+          <span style="width:80px">举报理由:</span>
           <Select placeholder="全部" style="width:200px" v-model="reportReason">
             <Option
               v-for="item in list"
@@ -30,22 +30,23 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <Button class="table-btns" @click="query">查询结果</Button>
+        <Button class="table-btns" @click="query">查询</Button>
       </div>
     </div>
-    <div class="contents">
-      <div class="con-top bk-szy flex-center-end">
-        <!-- <p>
+    <div class="contents" style="padding:20px;">
+      <div class="con-top bk-szy flex-wrap-between">
+        <p>
           <Icon type="ios-list" size="30" />
           <span>数据列表</span>
-        </p> -->
-
-          <Select v-model="size" style="width:120px" placeholder="显示条数">
+        </p>
+        <div>
+          <Select v-model="size" style="width:120px;margin-right:5px;" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
+        </div>
 
       </div>
       <div class="con">
@@ -72,6 +73,7 @@
           :total="dataCount"
           show-elevator
           show-total
+          size='small'
           style="margin: auto"
           :page-size="size"
           @on-change="changepages"
@@ -95,33 +97,25 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "举报列表(会员)"
+        head: "举报列表(志愿者)"
       },
       list: [],
       data: [],
       columns: [
         {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "举报理由",
           key: "reportReasonText",
-          align: "center",
-          width: 350
+          align: "center"
         },
         {
           title: "举报人",
           key: "reportUserName",
-          align: "center",
-           width: 400
+          align: "center"
         },
         {
           title: "举报时间",
           key: "reportTimestamp",
           align: "center",
-           width: 240,
           render: (h, params) => {
             return h("p", formatDate(params.row.reportTimestamp));
           }
@@ -129,26 +123,23 @@ export default {
         {
           title: "举报对象",
           key: "activityName",
-          align: "center",
-          width: 350
+          align: "center"
         },
         {
           title: "举报状态",
           key: "reportStatusText",
-          align: "center",
-          width: 300
+          align: "center"
         },
         {
           title: "处理结果",
           key: "reportDealResultText",
           align: "center",
-          width: 300
+          width:180
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-           width:300,
           render: (h, params) => {
             return h("div", [
               h(
@@ -365,7 +356,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-body {
-  padding: 40px 20px 20px 20px;
+  padding: 20px;
 
   display: flex;
   height: 80px;
@@ -384,6 +375,7 @@ export default {
 .contents{
   background: #ffffff;
   min-height: 700px;
+  border-radius: 10px;
 }
 //
 .con-top{

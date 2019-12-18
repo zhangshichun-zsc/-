@@ -5,40 +5,40 @@
     <div class="content">
       <div class="con-top bk-szy">
         <p>
-          <span>举报详情</span>
+          <span class="zt">举报详情</span>
         </p>
       </div>
       <div class="con bk">
         <table width="100%;">
           <tr>
-            <td>举报理由</td>
-            <td>{{ReportData.reportReasonText}}</td>
+            <td class="zt">举报理由</td>
+            <td class="zt">{{ReportData.reportReasonText}}</td>
           </tr>
           <tr>
-            <td>举报人</td>
-            <td>{{ReportData.reportUserName}}</td>
+            <td class="zt">举报人</td>
+            <td class="zt">{{ReportData.reportUserName}}</td>
           </tr>
           <tr>
-            <td>举报时间</td>
-            <td>{{ReportData.reportTimestamp}}</td>
+            <td class="zt">举报时间</td>
+            <td class="zt">{{ReportData.reportTimestamp}}</td>
           </tr>
           <tr>
-            <td>举报对象</td>
-            <td>{{ReportData.activityName}}</td>
+            <td class="zt">举报对象</td>
+            <td class="zt">{{ReportData.activityName}}</td>
           </tr>
           <tr>
-            <td>举报状态</td>
-            <td>{{ReportData.reportStatusText}}</td>
+            <td class="zt">举报状态</td>
+            <td class="zt">{{ReportData.reportStatusText}}</td>
           </tr>
           <tr>
-            <td>举报内容</td>
-            <td>{{ReportData.reportContent}}</td>
+            <td class="zt">举报内容</td>
+            <td class="zt">{{ReportData.reportContent}}</td>
           </tr>
         </table>
         <table width="100%;">
           <tr>
-            <td>处理备注</td>
-            <td><Input size="small" style="width: 8rem"  v-model="ReportData.answerContent" /></td>
+            <td class="zt">处理备注</td>
+            <td><Input class="zt" size="small" style="width: 8rem"  v-model="ReportData.answerContent" /></td>
           </tr>
         </table>
         <div class="but"  >
@@ -139,6 +139,11 @@ body {
 }
 .main {
   background-color: #ffffff;
+  min-height: 875px;
+  font-size: 18px;
+}
+.zt{
+  font-size: 16px;
 }
 
 .bk,
