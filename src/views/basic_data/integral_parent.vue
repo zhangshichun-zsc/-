@@ -7,10 +7,10 @@
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns" @click="btn">新增类型</Button>
-          <Modal v-model="modal1" :title="text">
+          <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="dicName">
-                <Input v-model="formValidate.dicName" width="200px"/>
+                <Input v-model="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
@@ -127,8 +127,9 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276",
-                    align: "center"
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "red"
                   },
                   on: {
                     click: () => {

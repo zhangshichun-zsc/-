@@ -36,21 +36,21 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel1">取消</Button>
-              <Button type="primary" size="large" @click="handleSubmit('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="handleSubmit('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
       </div>
-       <Modal v-model="addstate" width="360">
-                <p slot="header" style="color:#f60;text-align:center">
+       <Modal v-model="addstate" width="360" class-name="vertical-center-modal">
+                <p slot="header" class="flex-center-center" style="color:black">
                   <span>新增确定</span>
                 </p>
                 <div style="text-align:center">
                   <p>是否确认新增，新增后上一条有效数据将自动设为无效</p>
                 </div>
                 <div slot="footer">
-                  <Button type="error" @click="modalCancel2">取消</Button>
-                  <Button type="success" @click="modalOkdel2">确定</Button>
+                  <Button  @click="modalCancel2">取消</Button>
+                  <Button type="error" @click="modalOkdel2">确定</Button>
                 </div>
               </Modal>
        <div class="min-height">
@@ -223,7 +223,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: params.row.validFlag==1?"#097276":'#ccc'
+                    color: params.row.validFlag==1?"red":'#ccc'
                   },
                   on: {
                     click: () => {

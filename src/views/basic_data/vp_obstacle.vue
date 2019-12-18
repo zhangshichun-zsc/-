@@ -8,7 +8,7 @@
           <!-- <span>已选择{{arr.length}}</span> -->
 
           <Button class="table-btns" @click="btn">{{title}}</Button>
-          <Modal v-model="modal1" :title="text">
+          <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="障碍类型:" prop="dicName">
                 <Input v-model="formValidate.dicName" />
@@ -16,7 +16,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
@@ -116,8 +116,10 @@ export default {
                 "a",
                 {
                    clssName: "action",
-                  style: {
-                    color: "#097276"
+                   style: {
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "red"
                   },
                   on: {
                     click: () => {

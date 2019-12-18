@@ -7,7 +7,7 @@
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns" @click="btn">{{title}}</Button>
-          <Modal v-model="modal1" :title="text">
+          <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicName">
                 <Input v-model="formValidate.dicName" />
@@ -15,7 +15,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
@@ -68,6 +68,7 @@ export default {
           title: "活动分类名称",
           key: "dicName",
           align: "center",
+          width:400
         },
         {
           title: "创建时间",
@@ -122,7 +123,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "red"
                   },
                   on: {
                     click: () => {

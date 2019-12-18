@@ -122,13 +122,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-}
+
 .integral-header .integral-top {
   padding: 15px 20px;
   background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+
 }
 .integral-header .integral-center {
   margin: 0 20px;

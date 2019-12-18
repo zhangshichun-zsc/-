@@ -140,7 +140,7 @@ export default {
                 props: {
                   trueValue: 1,
                   falseValue: 0,
-                  value: ~~params.row.hotFlag 
+                  value: ~~params.row.hotFlag
                 },
                 on: {
                   input: e => {
@@ -212,15 +212,16 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "InformationDetails_zyz",
+                        name: "NewInformation_zyz",
                         query: {
-                          informationId: this.data[params.index].informationId
+                          informationId: params.row.informationId,
+
                         }
                       });
                     }
                   }
                 },
-                "查看"
+                "编辑"
               ),
               h(
                 "span",

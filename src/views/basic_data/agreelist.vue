@@ -121,9 +121,10 @@ export default {
                 "a",
                 {
                   clssName: "action",
-                  style: {
-                    color: "#097276",
-                    padding: "5px"
+                   style: {
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "red"
                   },
                   on: {
                     click: () => {
