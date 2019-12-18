@@ -59,7 +59,7 @@
         </div>-->
         <div class="flex-center-end">
           <Button class="search" @click="query()">查询</Button>
-          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
+          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
               <FormItem label="组织" prop="orgId">
                 <Select v-model="params.orgId">
@@ -86,6 +86,7 @@
               </FormItem>
             </Form>
             <div slot="footer">
+               <Button  size="large" @click="quxiao">取消</Button>
               <Button type="error" size="large" @click="success">确定</Button>
             </div>
           </Modal>
@@ -112,7 +113,16 @@
         <Table border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
-        <Page :total="sumSize" show-elevator @on-change="changePage" :page-size="size" />
+        <Page
+          :total="sumSize"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changePage"
+        />
+
       </div>
     </div>
   </div>
@@ -197,7 +207,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276",
+                    color: "red",
                     marginRight: "5px"
                   },
                   on: {
@@ -218,7 +228,7 @@ export default {
                     {
                       clssName: "action",
                       style: {
-                        color: "#097276"
+                        color: "red"
                       },
                       on: {
                         click: () => {
@@ -361,6 +371,9 @@ export default {
           this.$Message.error("没有填写完整");
         }
       });
+    },
+     quxiao(){
+      this.modal1=false
     },
     changeDate(e) {
       this.params.effectiveAt = e;

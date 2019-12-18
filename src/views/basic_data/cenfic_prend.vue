@@ -5,38 +5,60 @@
     <div class="integral-header">
       <div class="integral-left">
         <div class="title">
+          <img v-if='headimg!=null' style=" width: 366px;"  :src="headimg" alt="" >
+          <img v-if='headimg==null' style=" width: 366px;"   src="../../assets/images/prend/4.png"/>
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
-          <p style="margin-top:10px">
-            为融爱融乐的心智障碍者融合服务提供了珍贵的 小时的志愿支持。
-            感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
-            生命的多元，让我们的社会更平等、文明、融合。
-            期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
+          <p style="margin-top:20px;margin-bottom:20px;">
+             <Input v-model="value6" type="textarea" :rows="5" placeholder="" disabled/>
           </p>
+          <img v-if='footimg!=null' style=" width: 366px;"  :src="footimg" alt="" class="fot">
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
-         <div class="head ">
+         <div v-if='footimg==null' class="head ">
           <img class="head-left" src="../../assets/images/prend/1.png" alt=""/>
            <img  class="head-right" src="../../assets/images/prend/2.png" alt=""/>
+           <img class="head-left" src="../../assets/images/prend/3.png" />
         </div>
-        <div style="margin-top:20px;line-height:20px;">
+        <div v-if='footimg==null' class="bottom">
           <p>北京市海淀区融爱融乐</p>
           <p>心智障碍者家庭支持中心</p>
-          <div style="word-spacing: 20px">年 月 日</div>
+          <p>年 月 日</p>
         </div>
         </div>
       </div>
       <div class="integral-right">
         <div class="top">
-          <p>更换LOGO</p>
-           <p>更换尾页</p>
+          <p> <a href="javascript:;" @click="showUpload(1)">更换LOGO</a></p>
+           <p> <a href="javascript:;" @click="showUpload(2)">更换页尾</a></p>
         </div>
         <div class="bottom">
-          <div class="textimg">
+          <!-- <div class="textimg">
           </div>
-          <h5>图片最大为*</h5>
-          <p class="btn"><Button type="primary">上传图片</Button></p>
+          <h5>图片最大为*</h5> -->
+           <div class="box" v-show='i == 1'>
+            <div class="uploads" v-if='headimg == null'>
+                <div class="file" @click="()=>{ this.$refs.files.click()}">
+                  <input type="file" style=" display:none;"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('headimg','logoPic',$event)">
+                  <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                </div>
+            </div>
+            <img class="imgs" style="width:300px;margin:0 auto;" v-else :src="headimg"/>
+            <Icon type="ios-trash" v-if='!show && headimg !== null' class="cancel" @click="cancelImg('logoPic')"/>
         </div>
-          <p class="btn"><Button type="primary">保存图片</Button></p>
+        <div class="box" v-show='i == 2'>
+            <div class="upload" v-if='footimg == null'>
+                <div class="file" @click="()=>{ this.$refs.filess.click()}">
+                  <input type="file" style=" display:none;"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('footimg','officeSealPic',$event)" >
+                  <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                </div>
+            </div>
+            <img class="imgs" style="width:300px;margin:0 auto;"  v-else :src="footimg"/>
+            <Icon type="ios-trash" v-if='!show && footimg !== null' class="cancel" @click="cancelImg('officeSealPic')"/>
+        </div>
+
+        </div>
+
+          <p class="btn"><Button type="error" icon="ios-cloud-saved-outline" @click="location" v-if='show'>保存图片</Button></p>
 
 
     </div>
@@ -112,7 +134,8 @@ export default {
       navigation1: {
         head: "积分查询(会员)"
       },
-      value8: ""
+      value8: "",
+      value6:'为融爱融乐的心智障碍者融合服务提供了珍贵的小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福'
     };
   },
   created() {
@@ -188,20 +211,22 @@ export default {
   padding-top: 30px 50px;
 }
 .integral-left {
-  height: 900px;
+  height: 930px;
   width: 600px;
 
   .title {
-    padding-top: 200px;
+    // padding-top: 200px;
     text-align: center;
-    padding-right: 33px;
-    width: 530px;
-    height: 830px;
-    left: 0;
-    top: 60px;
-    background: url(../../assets/images/prend/title.png) no-repeat;
-    background-size: contain;
 
+    width: 530px;
+    height: 930px;
+    // left: 0;
+    // top: 60px;
+    background: url(../../assets/images/prend/vun.png) no-repeat;
+    background-size: contain;
+    .title-imgs{
+
+    }
     p {
       width: 80%;
       margin: 0 auto;
@@ -210,22 +235,30 @@ export default {
       text-align: center;
     }
   }
+  .bottom{
+    margin-top: 30px;
+      p{
+        text-align: end;
+      }
+
+    }
    .head {
     display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
+    // justify-content:;
+    margin-top: 30px;
     margin-left: 50px;
     width: 80%;
+
     .head-left {
       height: 70px;
       width: 70px;
-      background: url(../../assets/images/prend/1.png) no-repeat;
+
       background-size: contain;
     }
     .head-right {
       height: 70px;
       width: 130px;
-      background: url(../../assets/images/prend/2.png) no-repeat;
+
       background-size: contain;
     }
   }
@@ -273,5 +306,13 @@ border:  black 1px solid;
     }
 }
 
+.upload,.uploads .file{
+   margin: 0px auto;
+      height: 300px;
+      width: 300px;
+      border: 1px dashed #FF565A;
+      text-align: center;
+
+    }
 
 </style>

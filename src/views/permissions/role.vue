@@ -601,9 +601,7 @@ body {
   justify-content: flex-start;
   padding: 10px 30px;
 }
-.ivu-menu li {
-  color: white;
-}
+
 .pages {
   display: flex;
   justify-content: center;
@@ -658,9 +656,7 @@ body {
 .addperson div:nth-of-type(2n-1) {
   padding: 10px;
 }
-li {
-  height: 24px;
-}
+
 .addperson div:nth-of-type(2n) button {
   margin-top: 20px;
 }

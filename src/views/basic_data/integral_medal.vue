@@ -48,7 +48,7 @@
                   <Select size='small' class="inpt" placeholder="显示条数"></Select>
                   <Select size='small' class="inpt" placeholder="排序方式"></Select>
             </div>
-             <Modal v-model="modal1" title="新增勋章" class="img">
+             <Modal v-model="modal1" title="新增勋章" class="img" class-name="vertical-center-modal">
                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
                  <FormItem label="勋章图片" prop="img">
                      <Upload action="//jsonplaceholder.typicode.com/posts/">
@@ -63,7 +63,7 @@
                  </FormItem>
               </Form>
              </Modal>
-             <Modal v-model="modal2" title="新增勋章" class="img">
+             <Modal v-model="modal2" title="新增勋章" class="img" class-name="vertical-center-modal">
                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
                  <FormItem label="勋章图片" prop="img">
                      <Upload action="//jsonplaceholder.typicode.com/posts/">
@@ -78,7 +78,7 @@
                  </FormItem>
               </Form>
              </Modal>
-             <Modal v-model="modal3" title="所获人员" width="600">
+             <Modal v-model="modal3" title="所获人员" width="600" class-name="vertical-center-modal">
                <Table border :columns="columns1" :data="data1"></Table>
                <div class="pages">
                  <Page :total="100" show-elevator show-total size="small" />

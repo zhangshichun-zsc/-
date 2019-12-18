@@ -262,7 +262,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         path: "profile",
-                        query: { acitvityId: params.row.acitvityId }
+                        query: { acitvityId: params.row.acitvityId,activityName: params.row.activityName }
                       });
                     }
                   }

@@ -31,7 +31,7 @@
               @on-change="handleChange('rom',$event)"
             ></Date-picker>
           </i-col>
-          <i-col style="padding-top:7px;">——</i-col>
+          <i-col style="padding-top:7px;">~</i-col>
           <i-col>
             <Date-picker
              type="date"
@@ -44,7 +44,7 @@
       </div>
       <div class="flex-center-end">
         <Button @click="approval" style="margin-right:10px">新建立项</Button>
-        <Button @click="querys">查询结果</Button>
+        <Button @click="querys" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
       </div>
     </div>
     <div class="integral-table">
@@ -58,7 +58,7 @@
         </div>
         <div>
           <Button class="table-btn">导出</Button>
-            <Select v-model="size" style="width:120px" placeholder="显示条数">
+            <Select v-model="size" style="width:120px;marginRight:20px" placeholder="显示条数">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
@@ -157,7 +157,7 @@ export default {
           title: "身份",
           key: "userRole",
           align: "center",
-          width: 400,
+          width: 300,
         },
         {
           title: "提交时间",
@@ -192,7 +192,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "approval_details",
-                        query: { batchId: params.row.batchId,auditId:params.row.auditId,statusText:params.row.statusText }
+                        query: { batchId: params.row.batchId,auditId:params.row.auditId,statusText:params.row.status }
                       });
                     }
                   }
@@ -286,6 +286,7 @@ export default {
       }).then(res => {
         if(res.code==200){
           this.$Message.info("操作成功");
+          this.getapprovalpage()
         }
       });
     },
@@ -376,6 +377,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:none !important;
+}
+.btn:hover{
+  border:1px solid #FF565A !important;
+  color: #FF565A !important;
+  background: #fff !important;
+}
 .integral-top {
   border: 1px solid #e4e4e4;
   height: 50px;

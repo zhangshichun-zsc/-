@@ -45,7 +45,7 @@
           <!-- <span>已选择{{list.length}}</span> -->
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
           <Button class="table-btns" @click="jump()">新增基金</Button>
-          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
+          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
                    <Input v-model="pams.orgName" placeholder="请输入基金名称"/>
@@ -58,6 +58,7 @@
                   </FormItem>
               </Form>
               <div slot="footer">
+                 <Button  size="large" @click="quxiao">取消</Button>
                  <Button type="error" size="large" @click="ok">确定</Button>
               </div>
           </Modal>
@@ -68,7 +69,16 @@
 
       </div>
       <div class="pages">
-        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
+         <Page
+          :total="sumSize"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="args.size"
+          @on-change="changePage"
+        />
+
       </div>
     </div>
   </div>
@@ -176,8 +186,10 @@ export default {
                 "a",
                 {
                    clssName: "action",
-                  style: {
-                    color: "#097276"
+                   style: {
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "red"
                   },
                   on: {
                     click: () => {
@@ -326,6 +338,10 @@ export default {
             this.$Message.error('没有填写完整');
         }
       })
+    },
+
+      quxiao(){
+      this.modal1=false
     },
     update(list){
       updateFun(filterNull({list})).then(res => {

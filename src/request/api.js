@@ -36,6 +36,9 @@ export const AddressDel = p => posts('/information-manage/updateStatus', p) // �
 
 export const AddressDetails = p => get('/information-manage/get-information-detail', p) // 获取资讯详情
 
+export const Addressbatch = p => posts('/information-manage/updateInformationDetail', p) // 资讯编辑
+
+
 export const inquirytype = p => posts('/information-manage/getInformationList', p) // 资讯分类管理
 
 export const inquirybatch = p => posts('/information-manage/informationIsShow', p) // 资讯分类启用
@@ -102,13 +105,13 @@ export const pendingSignList = p => get('/activity-undeal/get-signup-status-list
 
 export const pendingTransfer = p => get('/activity-undeal/get-transfer-status-List', p) //获取获取转移状态列表
 
-export const pendingEnrollList = p => get('/activity-undeal/get-signup-page', p) //活动待处理 获取报名列表
+export const pendingEnrollList = p => posts('/activity-manage/work/act/sign/list', p) //活动待处理 获取报名列表
 
-export const pendingTransferList = p => get('/activity-undeal/get-transfer-user-page', p) //活动待处理 获取转移用户列表
+export const pendingTransferList = p => posts('/activity-manage/work/act/move/list', p) //活动待处理 获取转移用户列表
 
 export const pendingUnclaimedList = p => get('/activity-undeal/get-unreceive-resource-page', p) //活动待处理 获取待领取物资列表
 
-export const pendingSubsidyList = p => get('/activity-undeal/get-unreceive-subsidy-page', p) //活动待处理获取补助发放列表
+export const pendingSubsidyList = p => get('/activity-manage/work/act/sub/list', p) //活动待处理获取补助发放列表
 
 export const pendingUncDel = p => post('/activity-undeal/del-activity-resource', p) //活动待处理--删除活动物资
 
@@ -347,6 +350,8 @@ export const Commonmodify = p => post('/common/modify-dic-info', p) //-公共模
 export const Commonmodifystatus = p => post('/common/update-dic-status', p) //-公共模块--修改模块状态
 
 export const Commondelete = p => post('/common/del-dic', p) //-公共模块--删除字典信息
+
+export const queryUserDetail = p => get('/volunteer-manager/queryUserDetail', p) //-当前账号的 头像和信息
 
 //等级管理
 export const Gradepage = p => get('/level/get-level-list', p) //-等级管理--获取等级列表
@@ -612,3 +617,23 @@ export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
 export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId",p)
 export const actMemberlist = p => posts("/activity-manage/getActUserList",p)
 export const getActiveIdType = p => get("/activity-manage/getAllByActId",p)
+export const activeReson = p => posts("/activity-manage/work/act/worker/set",p)
+export const sendInfo = p => posts("/user-list/user/inner/msg",p)
+export const feendDetail = p => posts("/activity-manage/act/user/detail",p)
+
+
+
+
+//  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
+
+export const Reportdeles = p => posts('/report-manage/deal-report', p) //举报管理--批量操作
+
+export const Reporttext = p => get('/report-manage/getReportList', p) //举报管理--列表
+
+export const draftsDetail = p => posts("/activity-manage/batch/param", p) //复制立项
+
+export const integralnum = p => get('/score/queryScoreRuleByTypeFlag', p) //-查询积分数值
+
+export const integralset = p => posts('/score/updateScoreRule', p) //-设置积分数值
+
+export const programApproval = p => posts("/activity-manage/batch/audit/do", p) //立项审批

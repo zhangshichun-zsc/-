@@ -24,7 +24,7 @@
           />
         </div>
         <div class="flex-center-start">
-          <span>服务时长:</span>
+          <span>服务时长:&nbsp;&nbsp;</span>
 
           <Input
             placeholder="请选择"
@@ -108,7 +108,7 @@
             </Form>
           </Modal>
           <Dropdown trigger="click">
-            <Button @click="modal1 = true" style="margin: 0 5px;" disabled>
+            <Button @click="modal1 = true" style="margin-left: 10px;" disabled>
               群发短信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -154,7 +154,7 @@
             </Form>
           </Modal>
           <Dropdown @on-click="isALL">
-            <Button style="margin: 0 5px;" @click="ismodal2">
+            <Button style="margin-left: 10px;" @click="ismodal2">
               群发站内信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -378,7 +378,7 @@
             </ButtonGroup>
           </Modal>
           <Dropdown trigger="click">
-            <Button @click="modal3 = true" disabled>
+            <Button @click="modal3 = true" disabled style="margin-left: 10px;">
               微信推送
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -399,22 +399,21 @@
             </CheckboxGroup>
           </Modal>
 
-          <Button style="margin: 0 5px;" disabled @click="onLabel">
+          <Button style="margin-left: 10px;" disabled @click="onLabel">
             设置标签
           </Button>
 
           <!--导出数据-->
           <Dropdown>
-            <Button style="margin: 0 5px;" @click="onExport">
+            <Button style="margin-left: 10px;" @click="onExport">
               导出数据
             </Button>
           </Dropdown>
         </div>
         <div>
           <Select
-        
             v-model="size"
-            style="width:120px;margin: 0 5px;"
+            style="width:120px; margin-left: 10px;"
             placeholder="显示条数"
             class="space"
           >
@@ -426,7 +425,7 @@
             >
           </Select>
           <Select
-            style="margin: 0 5px; width: 120px;"
+            style="margin-left: 10px; width: 120px;"
             placeholder="排序方式"
             class="space"
             v-model="sort"
@@ -1424,14 +1423,14 @@ export default {
   margin-right: 10px;
 }
 .integral-table {
-  margin-top: 30px;
+  margin-top: 20px;
   box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
   border-radius: 12px;
   background: #fff;
+  padding: 0 5px;
 }
 .table-header {
   padding: 10px 20px;
-  background: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1441,7 +1440,6 @@ export default {
 }
 .integral-table .pages {
   padding: 15px 20px;
-  background: #fff;
 }
 .drap button {
   margin-right: 0.2rem;

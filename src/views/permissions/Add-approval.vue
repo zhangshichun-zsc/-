@@ -243,14 +243,13 @@ export default {
       let applyRoles = {};
       if (this.formValidate.typeFlag === 1) {
         applyRoles = {
-          applyRoles: this.formValidate.applyRoles
+          applyRoles: this.formValidate.applyRoles,
+          categoryId: this.formValidate.categoryId
         };
       }
 
       poweradd({
-        sysId: this.sysType,
         typeFlag: this.formValidate.typeFlag,
-        categoryId: this.formValidate.categoryId,
         auditUser1Id: this.auditUser1Id,
         auditUser2Id: this.auditUser2Id,
         audit1At: this.audit1At,

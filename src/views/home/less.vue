@@ -164,10 +164,11 @@ export default {
     // 获取当前账号的 头像姓名
     getUserInfo() {
       let userId = this.$store.state.userId;
+
       if (!userId) {
         this.$router.push({ name: "login" });
       }
-      queryUserDetail({ userId }).then(res => {
+      queryUserDetail({ userId: userId }).then(res => {
         this.formValidate.name = res.data.userName;
       });
     },

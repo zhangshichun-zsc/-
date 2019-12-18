@@ -207,16 +207,16 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "InformationDetails_hy",
+                        name: "NewInformation_zyz",
                         query: {
                           informationId: params.row.informationId,
-                          informationTypeText:params.row.informationTypeText
+
                         }
                       });
                     }
                   }
                 },
-                "查看"
+                "编辑"
               ),
               h(
                 "span",

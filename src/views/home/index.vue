@@ -8,7 +8,7 @@
         <li>
           <div class="jj">
             <p>今日立项总数</p>
-            <span>{{ activity.activityBatchCount }}</span>
+            <span>{{ activity.todayBacthCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity1.png" />
@@ -17,7 +17,7 @@
         <li>
           <div class="jj">
             <p>今日活动总数</p>
-            <span>{{ activity.todayActivityCount }}</span>
+            <span>{{ activity.todayActivityCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity2.png" />
@@ -26,7 +26,7 @@
         <li>
           <div class="jj">
             <p>昨日活动总数</p>
-            <span>{{ activity.yesterdayActivityCount }}</span>
+            <span>{{ activity.yesterdayActivityCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity3.png" />
@@ -35,7 +35,7 @@
         <li>
           <div class="jj">
             <p>近7天总数</p>
-            <span>{{ activity.latest7dayActivityCount }}</span>
+            <span>{{ activity.sevenDaysActivityCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity4.png" />
@@ -137,36 +137,36 @@
           <li>
             <span>已下架</span>
             <span class="hd-shu">{{
-              activityOverview.offShelfActivityCount
+              activityOverview.shelvesActivityCount
             }}</span>
           </li>
           <li>
             <span>已发布</span>
             <span class="hd-shu">{{
-              activityOverview.publishActivityCount
+              activityOverview.releaseActivityCount
             }}</span>
           </li>
           <li>
             <span>进行中</span>
             <span class="hd-shu">{{
-              activityOverview.beginningActivityCount
+              activityOverview.ongoingActivityCount
             }}</span>
           </li>
           <li>
             <span>已结束</span>
-            <span class="hd-shu">{{
-              activityOverview.endingActivityCount
-            }}</span>
+            <span class="hd-shu">{{ activityOverview.endActivityCount }}</span>
           </li>
           <li>
             <span>已取消</span>
             <span class="hd-shu">{{
-              activityOverview.cancelActivityCount
+              activityOverview.cancleActivityCount
             }}</span>
           </li>
           <li>
             <span>全部活动</span>
-            <span class="hd-shu">{{ activityOverview.allActivityCount }}</span>
+            <span class="hd-shu">{{
+              activityOverview.totalActivityCount
+            }}</span>
           </li>
         </ul>
       </div>
@@ -175,21 +175,19 @@
         <ul>
           <li>
             <span>今日新增</span>
-            <span class="hd-shu">{{ userOverview.todayNewUserCount }}</span>
+            <span class="hd-shu">{{ userOverview.todayUserCount }}</span>
           </li>
           <li>
             <span>昨日新增</span>
-            <span class="hd-shu">{{ userOverview.yesterdayNewUserCount }}</span>
+            <span class="hd-shu">{{ userOverview.yesterdayUserCount }}</span>
           </li>
           <li>
             <span>本月新增</span>
-            <span class="hd-shu">{{
-              userOverview.currentMonthNewUserCount
-            }}</span>
+            <span class="hd-shu">{{ userOverview.monthUserCount }}</span>
           </li>
           <li>
             <span>会员总数</span>
-            <span class="hd-shu">{{ userOverview.memberTatolCount }}</span>
+            <span class="hd-shu">{{ userOverview.totalUserCount }}</span>
           </li>
         </ul>
       </div>
