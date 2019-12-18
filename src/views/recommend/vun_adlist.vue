@@ -1,6 +1,7 @@
 <!-- 广告列表(志愿者) -->
 <template>
   <div class="integral">
+    <div>
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <!-- <div class="flex-center-between integral-top">
@@ -20,13 +21,13 @@
       v-model="modal1">
       <img :src="showImg" alt="" class="showimg"/>
     </Modal>
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start name">
-          <span>广告名称:</span>
+      <div class="flex-center-start integral-body cnm cnmd">
+        <div class="flex-center-start">
+          <span style="width:80px">广告名称:</span>
           <Input size="large" placeholder="广告名称" class="inpt" v-model="title" />
         </div>
-        <div class="flex-center-start name">
-          <span>广告位置:</span>
+        <div class="flex-center-start">
+          <span style="width:80px">广告位置:</span>
           <Select style="width:200px" placeholder="全部" class="inpt" v-model="location">
             <Option
               v-for="item in locations"
@@ -35,28 +36,28 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <div class="flex-center-start name">
-          <span>到期时间:</span>
+        <div class="flex-center-start">
+          <span style="width:80px">到期时间:</span>
           <Select style="width:200px" placeholder="全部" class="inpt" v-model="time">
             <Option v-for="item in timeLists" :value="item.time" :key="item.time">{{ item.label }}</Option>
           </Select>
         </div>
-        <Button class="search" @click="result">查询结果</Button>
+        <Button class="search" @click="result">查询</Button>
+        <Button  class="table-btns" @click="add">添加广告</Button>
       </div>
     </div>
 
     <div class="integral-table">
       <div class="table-header flex-between">
-        <!-- <div class="flex-center-start">
+        <div class="flex-center-start">
           <Icon type="md-list" />
           <span>数据列表</span>
-        </div> -->
+        </div>
 
-          <Button  class="table-btns" @click="add">添加广告</Button>
           <div>
-             <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-        <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-    </Select>
+             <Select v-model="size" style="width:120px;margin-right:5px" placeholder="显示条数" class="space">
+              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
             <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
               <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -72,14 +73,14 @@
         @on-selection-change="tablechange"
       ></Table>
       <div class="batch">
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status">全选</Checkbox>
-          </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Button style="margin-left: 10px" @click="batches()">确定</Button>
-        </div>
+        <Button @click="chackall()" style="border:0px;">
+          <Checkbox v-model="status">全选</Checkbox>
+        </Button>
+        <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+          <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+        <Button style="margin-left: 10px" @click="batches()">确定</Button>
+      </div>
 
       <div class="pages flex-center-between">
 
@@ -93,6 +94,7 @@
           @on-change="changepages"
         />
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -191,7 +193,7 @@ export default {
           title: "上线",
           key: "online",
           align: "center",
-          width:200,
+          width:175,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -233,7 +235,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -254,7 +256,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "blue"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -274,7 +276,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "red"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -448,7 +450,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .integral-header .integral-top {
   padding: 15px 20px;
   background: rgb(228, 228, 228);
@@ -475,12 +476,16 @@ export default {
   padding: 5px 20px;
   background: #ffffff;
   border: 0px solid #eee;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .table-header .table-btn {
   margin-right: 15px;
 }
  .pages {
   padding: 30px 20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   background: #fff;
     text-align: center;
@@ -510,5 +515,11 @@ export default {
 .batch{
   background: #ffff;
     padding: 30px 0;
+}
+.cnmd{
+  margin-bottom: 20px;
+}
+.cnm{
+  border-radius: 10px;
 }
 </style>

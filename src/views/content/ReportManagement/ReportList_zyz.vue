@@ -30,7 +30,7 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <Button class="table-btns" @click="query">查询结果</Button>
+        <Button class="table-btns" @click="query">查询</Button>
       </div>
     </div>
     <div class="contents">
@@ -40,7 +40,7 @@
           <span>数据列表</span>
         </p> -->
 
-          <Select v-model="size" style="width:120px" placeholder="显示条数">
+          <Select v-model="size" style="width:120px;margin-right:5px;" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">

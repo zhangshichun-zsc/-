@@ -5,17 +5,17 @@
     <div class="content">
 
        <div class="flex-center-start integral-body" >
-        <div class="flex-center-start name">
-          <span>举报人:</span>
+        <div class="flex-center-start" style="margin-right:20px">
+          <div style="width:80px">举报人:</div>
           <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="reportUserName" />
         </div>
-        <div class="flex-center-start name">
-          <span>举报理由:</span>
+        <div class="flex-center-start">
+          <div style="width:80px">举报理由:</div>
           <Select  placeholder="全部" style="width:200px"  v-model="reportReason">
             <Option v-for="item in list" :value="item.dataKey" :key="item.dataKey">{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <Button class="table-btns" @click="query">查询结果</Button>
+        <Button class="table-btns" @click="query">查询</Button>
 
       </div>
 
@@ -27,7 +27,7 @@
           <span>数据列表</span>
         </p> -->
 
-            <Select v-model="size" style="width:120px" placeholder="显示条数">
+          <Select v-model="size" style="width:120px;margin-right:5px;" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
@@ -50,7 +50,7 @@
         </div> -->
       <div class="pages flex-center-between">
 
-        <Page :total="dataCount" show-elevator show-total  style="margin: auto" :page-size="size" @on-change="changepages" />
+        <Page :total="dataCount" size="small" show-elevator show-total  style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>
@@ -118,7 +118,7 @@ export default {
                 {
                   clssName: 'action',
                   style: {
-                    color: 'green'
+                    color: '#FF566A'
                   },
                   on: {
                     click: () => {
@@ -145,7 +145,7 @@ export default {
                   style: {
                     marginRight: '5px',
                     marginLeft: '5px',
-                    color: 'green'
+                    color: '#FF566A'
                   },
                   on: {
                     click: () => {
