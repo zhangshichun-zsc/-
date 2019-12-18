@@ -118,7 +118,7 @@ export const pendingUncOperation = p => post('/activity-undeal/batch-upate-signu
 
 export const pendingSubsidy = p => post('/activity-undeal/grant-subsidy', p) //活动待处理--发放补助
 
-export const pendingApp = p => post('/activity-review/batch-review', p) //活动立项审批--批量审批
+export const pendingApp = p => posts('/activity-manage/batch/list/audit/do', p) //活动立项审批--批量审批
 
 export const approvalpage = p => posts('/activity-manage/bg/batch/audit/list', p) //活动立项审批--活动立项审批分页
 

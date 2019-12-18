@@ -167,7 +167,6 @@ export default {
         },
         {
           title: "状态",
-          key: "statusText",
           width: 200,
           align: "center",
           render: (h,params) =>{
@@ -279,7 +278,6 @@ export default {
     },
     // 活动立项审批--批量审批
     getpendingApp(e) {
-      console.log(this.arr)
       pendingApp({
         userId: this.$store.state.userId,
         auditId: this.arr,
@@ -311,7 +309,6 @@ export default {
     //全选按钮
     chackall() {
       this.status = !this.status;
-      console.log(this.status);
       this.$refs.selection.selectAll(this.status);
     },
 
@@ -355,7 +352,11 @@ export default {
       }
       //选择的数据id
         this.arr = val.map(item => {
-          return item.auditId;
+          if(item.status == 0 || item.status == 3){
+             return item.auditId
+          }else{
+            this.$Message.info("审核通过和审核不通过不可以选")
+          }
         })
     },
 
