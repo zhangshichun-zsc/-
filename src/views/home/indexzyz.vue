@@ -48,11 +48,7 @@
               }}</a>
               <span v-show="Pending[item.data] > 0" class="dot"></span>
             </p>
-            <span>
-              (
-              <b>{{ Pending[item.data] }}</b
-              >)
-            </span>
+            <span> ( {{ Pending[item.data] }} ) </span>
           </li>
         </div>
       </div>

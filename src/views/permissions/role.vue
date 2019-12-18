@@ -588,10 +588,12 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
+  padding: 0;
 }
 .content {
-  margin: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 
 .Members-search {

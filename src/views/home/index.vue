@@ -58,11 +58,7 @@
               }}</a>
               <span v-show="Pending[item.data] > 0" class="dot"></span>
             </p>
-            <span>
-              (
-              <b>{{ Pending[item.data] }}</b
-              >)
-            </span>
+            <span> ( {{ Pending[item.data] }} ) </span>
           </li>
         </div>
       </div>
@@ -299,7 +295,7 @@ export default {
     };
     return {
       navigation1: {
-        head: "系统首页（会员）"
+        head: "系统首页（会员)"
       },
       value1: "2016-01-01",
       value2: ["2016-01-01", "2016-02-15"],
