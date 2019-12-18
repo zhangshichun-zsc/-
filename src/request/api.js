@@ -102,13 +102,13 @@ export const pendingSignList = p => get('/activity-undeal/get-signup-status-list
 
 export const pendingTransfer = p => get('/activity-undeal/get-transfer-status-List', p) //获取获取转移状态列表
 
-export const pendingEnrollList = p => get('/activity-undeal/get-signup-page', p) //活动待处理 获取报名列表
+export const pendingEnrollList = p => posts('/activity-manage/work/act/sign/list', p) //活动待处理 获取报名列表
 
-export const pendingTransferList = p => get('/activity-undeal/get-transfer-user-page', p) //活动待处理 获取转移用户列表
+export const pendingTransferList = p => posts('/activity-manage/work/act/move/list', p) //活动待处理 获取转移用户列表
 
 export const pendingUnclaimedList = p => get('/activity-undeal/get-unreceive-resource-page', p) //活动待处理 获取待领取物资列表
 
-export const pendingSubsidyList = p => get('/activity-undeal/get-unreceive-subsidy-page', p) //活动待处理获取补助发放列表
+export const pendingSubsidyList = p => get('/activity-manage/work/act/sub/list', p) //活动待处理获取补助发放列表
 
 export const pendingUncDel = p => post('/activity-undeal/del-activity-resource', p) //活动待处理--删除活动物资
 
@@ -612,3 +612,6 @@ export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
 export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId",p)
 export const actMemberlist = p => posts("/activity-manage/getActUserList",p)
 export const getActiveIdType = p => get("/activity-manage/getAllByActId",p)
+export const activeReson = p => posts("/activity-manage/work/act/worker/set",p)
+export const sendInfo = p => posts("/user-list/user/inner/msg",p)
+export const feendDetail = p => posts("/activity-manage/act/user/detail",p)

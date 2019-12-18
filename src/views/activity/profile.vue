@@ -1,10 +1,17 @@
 <!--活动概况(会员)-->
 <template>
   <div>
+    <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
+      <i-input placeholder="请输入内容" v-model="title" style="marginBottom:1rem;"/>
+      <i-input placeholder="请输入内容" v-model="msg" type="textarea" :row='4'/>
+      <div slot="footer">
+        <Button type="error" size="large" @click="success">确定</Button>
+      </div>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <p class="words">
-        5.12"行走在夏日"游园活动
+        {{activityName}}
         <span>
           <a>关联活动反馈表</a>
         </span>
@@ -17,14 +24,14 @@
               <Icon type="md-paper" />
             </div>
             <span>总报名人数</span>
-            <span>{{lists.signUpNum}}</span>
+            <span>{{lists.totalApprNum }}</span>
           </div>
           <div class="sign">
             <div class="icon1">
               <Icon type="ios-people" />
             </div>
             <span>总签到人数</span>
-            <span>{{lists.signInNum}}</span>
+            <span>{{lists.totalSignNum}}</span>
           </div>
         </div>
       </div>
@@ -36,12 +43,12 @@
           <div class="sign" @click="pend">
             <Icon type="document-text"></Icon>
             <span>报名待审核</span>
-            <span>{{lists.waitAuditNum}}</span>
+            <span>{{lists.apprAuditNum }}</span>
           </div>
           <div class="sign" @click="pend">
             <Icon type="folder"></Icon>
             <span>转移待审核</span>
-            <span>{{lists.waitTransferNum}}</span>
+            <span>{{lists.moveActNum}}</span>
           </div>
         </div>
       </div>
@@ -76,14 +83,7 @@
               <DropdownItem>导入参与人员</DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Dropdown style="margin-left:0.2rem;width:5rem;">
-            <Button><Icon type="md-cloud-upload" />发送信息</Button>
-            <DropdownMenu slot="list">
-              <DropdownItem>发送短信</DropdownItem>
-              <DropdownItem>发送微信</DropdownItem>
-              <DropdownItem>发送站内信</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Button @click="sendInfos">发送站内信</Button>
         </div>
 
         <Button class="table-btn" @click="querys">搜索</Button>
@@ -94,7 +94,7 @@
           <span style="font-size: 14px;">已选择</span>
           <span style="font-size: 14px;">0</span>
         </p>
-        <Table border :columns="columns" :data="memberlist"></Table>
+        <Table border :columns="columns" :data="memberlist"  @on-selection-change="handleSelectionChange"></Table>
       </div>
     </div>
     <div class="pages">
@@ -105,12 +105,13 @@
 </template>
 
 <script>
-import { Activitysummary, actMemberlist,getActiveIdType } from "../../request/api"
+import { Activitysummary, actMemberlist,getActiveIdType,activeReson,sendInfo } from "../../request/api"
 import { filterNull } from '@/libs/utils'
 import { constants } from 'fs';
 export default {
   data() {
     return {
+      arr: [],
       value: "",
       xuan: false,
       navigation1: {
@@ -177,6 +178,7 @@ export default {
       ],
       model1: "Photography",
       model2: "loading",
+      modal1:false,
       columns: [
         {
           type: "selection",
@@ -243,7 +245,23 @@ export default {
           width: 200,
           align: "center",
           render: (h,params) =>{
-            return (<span>详情</span>)
+            return   h(
+                "span",
+                {
+                  style: {
+                    color: "green"
+                  },
+                  on: {
+                    click: () => {
+                       this.$router.push({
+                        name: "personnel_details",
+                        query: { actUserId: params.row.actUserId, activityName:this.activityName}
+                      });
+                    }
+                  }
+                },
+                "详情"
+              )
           }
         },
         {
@@ -257,13 +275,18 @@ export default {
                 "span",
                 {
                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
+
                     color: "green"
                   },
                   on: {
                     click: () => {
-                      this.$Message.info("你点击了第" + params.index + "列");
+                      activeReson({actUserId:params.row.actUserId,userId:params.row.userId}).then(res => {
+                        if(res.code == 200){
+                          this.$Message.success("授权成功")
+                        }else{
+                          this.$Message.error(res.msg)
+                        }
+                      })
                     }
                   }
                 },
@@ -286,7 +309,10 @@ export default {
         roleId: null,
         enrollStatus: null,
       },
-      memberlist:[]
+      memberlist:[],
+      activityName: this.$route.query.activityName,
+      title:'',
+      msg: ''
     }
   },
 
@@ -301,6 +327,51 @@ export default {
   },
 
   methods: {
+    sendInfos(){
+      if(this.arr.length == 0){
+        this.$Message.info("请选择")
+        return
+      }
+      this.modal1 = true
+    },
+    success(){
+      if(!this.title){
+        this.$Message.error("标题没有填写")
+        return
+      }else if(!this.msg){
+        this.$Message.error("内容没有填写")
+        return
+      }
+      sendInfo({ids:this.arr,msg:this.msg,title:this.title,sysId:1}).then(res => {
+        if(res.code == 200){
+          this.modal1 = false
+          this.$Message.success("发送成功")
+        }else{
+          this.$Message.error(res.msg)
+        }
+      })
+    },
+    cancel(){
+      this.model1 = false
+      this.title = ''
+      this.msg = ''
+    },
+        //每条数据单选框的状态
+    handleSelectionChange(val) {
+      this.arr = val;
+      if (
+        (this.arr.length == this.dataCount && this.dataCount != 0) ||
+        this.arr.length == this.size
+      ) {
+        this.status = true;
+      } else {
+        this.status = false;
+      }
+      //选择的数据id
+        this.arr = val.map(item => {
+          return item.userId
+        })
+    },
     pend(){
       this.$router.push({name:'pending'})
     },
