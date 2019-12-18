@@ -49,7 +49,7 @@
         <div>
           <!-- <span>已选择{{arr.length}}人</span> -->
           <Button class="table-btns" @click="add">新增活动分类</Button>
-          <Modal v-model="modal2" :title="text">
+          <Modal v-model="modal2" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicNamemod">
                 <Input v-model="formValidate.dicNamemod" placeholder="环保" />
@@ -66,7 +66,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="canceltwo">取消</Button>
-              <Button type="primary" size="large" @click="oktwo('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="oktwo('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
@@ -190,8 +190,10 @@ export default {
                 "a",
                 {
                   clssName: "action",
-                  style: {
-                    color: "#097276"
+                   style: {
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "red"
                   },
                   on: {
                     click: () => {
@@ -204,22 +206,22 @@ export default {
                 },
                 "编辑"
               ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.getOffactivitedel(params.row.dicId);
-                    }
-                  }
-                },
-                "删除"
-              )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "red"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.getOffactivitedel(params.row.dicId);
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
             ]);
           }
         }

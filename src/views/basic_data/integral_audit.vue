@@ -6,7 +6,7 @@
       <div class="table-header">
         <div class="flex-center-end">
           <Button class="table-btn" @click="batch">批量审批</Button>
-          <Button class="table-btn" @click="exportData">
+          <Button class="table-btn" @click="exportData" disabled>
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
@@ -18,7 +18,7 @@
           </Select>
         </div>
         <Modal v-model="modal1" @on-ok="ok"
-        @on-cancel="cancel">
+        @on-cancel="cancel" class-name="vertical-center-modal">
           <div class="approval">
             <h3>是否确认审批？</h3>
           </div>
@@ -134,7 +134,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: params.row.auditStatusTtext=='待审核'?"green":'gray'
+                    color: params.row.auditStatusTtext=='待审核'?"red":'gray'
                   },
                   on: {
                     click: () => {
@@ -152,7 +152,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: params.row.auditStatusTtext=='待审核'?"green":'gray'
+                    color: params.row.auditStatusTtext=='待审核'?"red":'gray'
                   },
                   on: {
                     click: () => {

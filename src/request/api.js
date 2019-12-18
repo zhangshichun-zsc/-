@@ -36,6 +36,9 @@ export const AddressDel = p => get('/information-manage/batch-opr-information', 
 
 export const AddressDetails = p => get('/information-manage/get-information-detail', p) // 获取资讯详情
 
+export const Addressbatch = p => posts('/information-manage/updateInformationDetail', p) // 资讯编辑
+
+
 export const inquirytype = p => posts('/information-manage/getInformationList', p) // 资讯分类管理
 
 export const inquirybatch = p => posts('/information-manage/informationIsShow', p) // 资讯分类启用

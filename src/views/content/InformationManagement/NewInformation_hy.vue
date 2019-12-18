@@ -30,8 +30,12 @@
             </FormItem>
             <FormItem label="资讯分类:" prop="informationType">
 
-              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true>
-                <Option v-for="item in typelist" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
+              <Select v-model="ContentData.informationType" style="width:200px" :transfer=true >
+                <Option
+                  v-for="item in typelist"
+                  :value="item.dicId"
+                  :key="item.dicId"
+                >{{ item.dicName }}</Option>
               </Select>
 
             </FormItem>
@@ -51,7 +55,7 @@
           </div>
         </div>
         <div class="con-right">
-           <wangeditor id="exccccc2" :labels=editorContent  @change="btn"></wangeditor>
+           <wangeditor id="exccccc3" :labels=editorContent  @change="btn"></wangeditor>
         </div>
       </div>
       <div class="con flex-start">
@@ -79,14 +83,14 @@
                 <img class="image" v-else :src="imgs"/>
                 <Icon type="ios-trash" v-if='imgs' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
               </div>
-              <Button type="success" @click="modal1=true">从图库中选择</Button>
+              <!-- <Button type="success" @click="modal1=true">从图库中选择</Button> -->
             </div>
           </div>
-          <Modal v-model="modal1" title="从图库选择">
+          <!-- <Modal v-model="modal1" title="从图库选择">
             <p>商品图库>全部图库</p>
-          </Modal>
+          </Modal> -->
           <div class="tj">
-            <Button type="success" @click="Submission('ContentData')">提交</Button>
+            <Button type="error" @click="Submission('ContentData')">提交</Button>
           </div>
         </div>
       </div>
@@ -96,20 +100,21 @@
 
 <script>
 import wangeditor from '@/components/wangeditor';
-
 import { upload } from "@/request/http";
 import {
   inquiryReltype,
   inquiryRelext,
   inquiryRel,
-  orgimgdel
+  orgimgdel,
+  AddressDetails,
+  Addressbatch
 } from "@/request/api";
 export default {
   data() {
     return {
       name: 'editor',
       navigation1: {
-        head: '发布资讯(会员)'
+        head: "发布资讯(会员)"
       },
       ContentData: {
         title: '',
@@ -137,16 +142,19 @@ export default {
           }
         ]
       },
+
       editorContent: '',
+
       sysId: 1,
       typelist: [],
       showlist: [],
+
       url: '',
       modal1: false,
       imgs: null
     }
   },
-  components: {  wangeditor },
+   components: {  wangeditor},
   methods: {
     //资讯类型下拉
     getinquiryReltype() {
@@ -166,6 +174,50 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.showlist = res.data
+
+        }
+        console.log(res)
+      })
+    },
+
+     //详情数据
+    getAddressDetails() {
+
+
+      AddressDetails({
+        informationId: this.$route.query.informationId
+      }).then(res => {
+        console.log(res);
+        if(res.code==200){
+          let lists= res.data
+          this.ContentData.title = lists.title
+           this.ContentData.showLocation=Number(lists.showLocation)
+           this.ContentData.informationType=lists.informationType
+           this.ContentData.resume=lists.resume
+           this.url=lists.coverImg
+          this.imgs=lists.coverImgPath
+          this.editorContent=lists.content
+
+        }
+      });
+    },
+    //质询编辑
+    getAddressbatch(){
+      Addressbatch({
+         informationId:this.$route.query.informationId,
+          userId: this.$store.state.userId,
+         title: this.ContentData.title,
+        showLocation: this.ContentData.showLocation,
+        resume: this.ContentData.resume,
+        content: this.editorContent,
+        informationType: this.ContentData.informationType,
+        url: this.url,
+      }).then(res=>{
+        if(res.code==200){
+           this.$router.push({ name: 'InformationList_hy' })
+            this.$Message.info('编辑成功')
+        }else{
+          this.$Message.info(res.msg)
         }
         console.log(res)
       })
@@ -226,8 +278,7 @@ export default {
 
     //富文本
     btn(e){
-      console.log(e)
-      this.editorContent = e
+      this.editorContent=e
     },
 
 
@@ -241,7 +292,12 @@ export default {
           } else if (this.editorContent == '') {
             this.$Message.error('专题正文未填')
           } else {
-            this.getinquiryRel()
+            if(this.$route.query.informationId){
+              this.getAddressbatch()
+            }else{
+               this.getinquiryRel()
+            }
+
           }
         } else {
           this.$Message.error('必填项未填!')
@@ -250,8 +306,9 @@ export default {
     }
   },
   mounted() {
-
-
+    if(this.$route.query.informationId){
+      this.getAddressDetails()
+    }
 
     this.getinquiryReltype();
     this.getinquiryRelext();
@@ -260,7 +317,7 @@ export default {
 
 }
 </script>
-<style scoped lang='scss'>
+<style  lang='scss' scoped>
   .start-wap{
     position: relative;
     height: 150px;
@@ -292,7 +349,7 @@ export default {
     // }
     // .upload .file:hover .ivu-icon{
     //   color: #FF565A !important;
-    // } 
+    // }
     .upload .file input{
       display: none;
     }
@@ -362,6 +419,7 @@ body {
 }
 .Photo-But {
   padding: 0.5rem 0;
+  display: flex;
 }
 .Photo-But button {
   margin-right: 0.5rem;
