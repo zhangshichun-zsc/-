@@ -53,13 +53,14 @@
       <div class="table-header flex-center-between">
         <div>
           <!-- <Button class="table-btn" @click="modal1 = true">{{title}}</Button> -->
-          <Modal v-model="modal1" title="修改" @on-cancel="cancel">
+          <Modal v-model="modal1" title="修改" @on-cancel="cancel" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
                 <Input v-model="args.name" />
               </FormItem>
             </Form>
             <div slot="footer">
+              <Button  size="large" @click="modalCancel">取消</Button>
               <Button type="error" size="large" @click="update">确定</Button>
             </div>
           </Modal>
@@ -106,7 +107,8 @@ export default {
         {
           title: "名称",
           key: "name",
-          align: "center"
+          align: "center",
+          width:400,
         },
         {
           title: "创建时间",
@@ -164,7 +166,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "red"
                   },
                   on: {
                     click: () => {
@@ -244,6 +246,9 @@ export default {
           this.$Message.error(res.msg);
         }
       });
+    },
+      modalCancel() {
+      this.modal1 = false;
     },
     cancel() {
       this.args.name = null;

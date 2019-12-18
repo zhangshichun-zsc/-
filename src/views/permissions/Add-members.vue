@@ -55,7 +55,7 @@
                   >{{ item.deptName }}</Option
                 >
               </Select>
-              <a href="javascript:;">查看部门详情</a>
+              <!-- <a href="javascript:;">查看部门详情</a> -->
               <p>
                 选择所属部门后默认继承部门数据权限，可在成员列表中单独设置权限
               </p>
@@ -74,7 +74,7 @@
                   >{{ item.sysRoleName }}</Option
                 >
               </Select>
-              <a>查看角色详情</a>
+              <!-- <a>查看角色详情</a> -->
               <p>
                 选择所属部门后默认继承角色功能权限，可在成员列表中单独设置权限
               </p>
@@ -412,11 +412,13 @@ body {
   line-height: 24px !important;
 }
 .main {
-  background-color: #ffffff;
+  padding: 10px;
 }
 
 .content {
-  margin: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 .bk-szy {
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);

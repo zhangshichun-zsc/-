@@ -11,7 +11,7 @@
           <!-- <span>已选择{{arr.length}}</span> -->
           <!-- <Button class="table-btn">批量删除</Button> -->
           <Button class="table-btns"  @click="added">新增项目</Button>
-          <Modal v-model="modal1" :title="text" class="mol">
+          <Modal v-model="modal1" :title="text" class="mol" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
                 <Input v-model="formValidate.name" />
@@ -31,7 +31,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="cancel">取消</Button>
-              <Button type="primary" size="large" @click="ok">确定</Button>
+              <Button type="error" size="large" @click="ok">确定</Button>
             </div>
           </Modal>
         </div>
@@ -172,8 +172,10 @@ export default {
                 "a",
                 {
                   clssName: "action",
-                  style: {
-                    color: "#097276"
+                   style: {
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "red"
                   },
                   on: {
                     click: () => {
@@ -353,7 +355,7 @@ export default {
     },
     cancel() {
       this.modal1 = false;
-      this.$Message.info("取消成功");
+
     }
   }
 };

@@ -50,7 +50,7 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
-        <Modal v-model="modal1" title="修改积分">
+        <Modal v-model="modal1" title="修改积分" class-name="vertical-center-modal">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
               <RadioGroup v-model="formItem.addType">
@@ -66,7 +66,7 @@
             </FormItem>
              <FormItem label="数值：" prop="addScore">
                <InputNumber :min="1" v-model="formItem.addScore" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
-                  <Button style="background:#ccc">分</Button>
+                   <Button type="error" >分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
               <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
@@ -74,22 +74,22 @@
           </Form>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel">取消</Button>
-            <Button type="primary" size="large" @click="modalOk('formItem')">确定</Button>
+            <Button type="error" size="large" @click="modalOk('formItem')">确定</Button>
           </div>
         </Modal>
 
-        <Modal v-model="modal2" title="志愿者活动积分比例设置">
+        <Modal v-model="modal2" title="志愿者活动积分比例设置" class-name="vertical-center-modal">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
             <FormItem label="1小时服务时长：" prop="serve">
               <InputNumber :max="100" :min="0" placeholder="请输入大于0的整数" v-model="formValidate.serve" style="width:200px"></InputNumber>
 
               <!-- // <Input v-model="formValidate.serve" placeholder="请输入大于0的整数" style="width:250px"/> -->
-              <Button style="background:#ccc">分</Button>
+              <Button type="error" >分</Button>
             </FormItem>
           </Form>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel2">取消</Button>
-            <Button type="primary" size="large" @click="modalOk2('formValidate')">确定</Button>
+            <Button type="error" size="large" @click="modalOk2('formValidate')">确定</Button>
           </div>
         </Modal>
       </div>
@@ -212,7 +212,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "red"
                   },
                   on: {
                     click: () => {
@@ -231,7 +231,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "green"
+                    color: "red"
                   },
                   on: {
                     click: () => {
@@ -246,7 +246,7 @@ export default {
                 "a",
                 {
                   style: {
-                    color: "green"
+                    color: "red"
                   },
                   on: {
                     click: () => {

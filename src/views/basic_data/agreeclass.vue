@@ -13,17 +13,17 @@
         <div class="flex-center-end">
           <Button class="table-btns" @click="add">添加</Button>
         </div>
-        <Modal v-model="modal1" title="添加分类">
+        <Modal v-model="modal1" title="添加分类" class-name="vertical-center-modal">
           <Form :model="formItem" ref="formItem" :rules="ruleValidate" :label-width="120">
-            <FormItem label="类型名称" prop="name">
+            <FormItem label="类型名称:" prop="name">
               <Input v-model="formItem.name" />
             </FormItem>
-            <FormItem label="类型" prop="type">
+            <FormItem label="类型:" prop="type">
               <Select v-model="formItem.type" style="width:200px">
                 <Option v-for="item in list" :value="item.value" :key="item.value">{{ item.name }}</Option>
               </Select>
             </FormItem>
-            <FormItem label="分类图标" prop="imgs">
+            <FormItem label="分类图标:" prop="imgs">
               <div class="start-wap">
                 <div class="upload" v-if="formItem.imgs == null">
                   <div class="file" @click="()=>{ this.$refs.files.click()}">
@@ -35,7 +35,7 @@
                       @change="uploadFile()"
                       multiple
                     />
-                    <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+                    <Icon type="md-cloud-upload" :size="36" color='#FF565A' />
                   </div>
                 </div>
                 <img class="imgs" v-else :src="formItem.imgs" style="width:100px;height:100px"/>
@@ -43,17 +43,19 @@
                   type="ios-trash"
                   v-if="formItem.imgs !== null"
                   class="cancel"
+                  color='#FF565A'
+                  :size="26"
                   @click="cancelImg()"
                 />
               </div>
             </FormItem>
-            <FormItem label="是否显示">
+            <FormItem label="是否显示:">
               <i-switch v-model="formItem.validadd" />
             </FormItem>
           </Form>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel">取消</Button>
-            <Button type="primary" size="large" @click="modalOk('formItem')">确定</Button>
+            <Button type="error" size="large" @click="modalOk('formItem')">确定</Button>
           </div>
         </Modal>
       </div>
@@ -329,5 +331,40 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+ .start-wap{
+    position: relative;
+    height: 150px;
+    width: 300px;
+    .upload{
+      width: 100%;
+      height: 100%;
+    }
+    .cancel{
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      z-index: 10;
+    }
+    .upload .file{
+      width: 100%;
+      height: 100%;
+      border: 1px dashed #FF565A;
+      text-align: center;
+      padding: 20px 0;
+    }
+    // .upload .file:hover{
+    //   border: 1px dashed #FF565A;
+    // }
+    // .upload .file:hover .ivu-icon{
+    //   color: #FF565A !important;
+    // }
+    .upload .file input{
+      display: none;
+    }
+    .shae{
+      height: 150px;
+      width: 150px;
+    }
+  }
 @import "../../libs/basicdata.css";
 </style>

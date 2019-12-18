@@ -16,7 +16,7 @@
 
               <Select
                 v-model="size"
-                style="width:120px"
+                style="width:120px; margin:5px"
                 placeholder="显示条数"
                 class="space"
               >
@@ -194,10 +194,13 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
+  padding: 10px;
 }
 .content {
-  margin: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 10px 10px;
 }
 .bk-szy {
   border-left: 1px solid #e4e4e4;
@@ -205,7 +208,7 @@ body {
   border-top: 1px solid #e4e4e4;
 }
 .title {
-  background-color: #f3f3f3;
+  background-color: #fff;
   justify-content: space-between;
   padding: 5px 20px;
 }
@@ -220,7 +223,6 @@ body {
 }
 .btn {
   display: inline-block;
-  width: 110px;
   height: 32px;
   line-height: 32px;
   margin: 0 15px;
@@ -229,5 +231,6 @@ body {
   font-size: 16px;
   color: #ffffff;
   text-align: center;
+  padding: 0 15px;
 }
 </style>

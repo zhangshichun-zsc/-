@@ -10,15 +10,15 @@
           </Button>
           <span>已选择{{arr.length}}</span>
           <Button class="table-btn" @click="modal1 = true">{{title}}</Button>
-          <Modal v-model="modal1" :title="'新增'+title">
+          <Modal v-model="modal1" :title="'新增'+title" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
-                <Input v-model="formValidate.name"></Input>
+                <Input v-model="formValidate.name" />
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="primary" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
             </div>
           </Modal>
         </div>
