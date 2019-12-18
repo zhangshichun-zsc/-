@@ -6,7 +6,7 @@
       <div class="con">
         <div class="title bk-szy flex-center-start">
           <p>
-            <span>列表</span>
+            <span>数据列表</span>
           </p>
           <!--               class-name="vertical-center-modal" -->
           <div class="but">
@@ -292,11 +292,16 @@ export default {
                         this.modal1 = true;
                         this.text = "编辑部门";
                         this.isdispabled = true;
-                        this.getdepartmentSup();
-                        this.getName(params.row.deptId);
+
                         this.AddDate = params.row;
                         this.deptId = params.row.deptId;
+
+                        console.log(params.row.parentId);
+
                         this.AddDate.parentId = params.row.parentId;
+
+                        this.getdepartmentSup();
+                        this.getName(params.row.deptId);
                       }
                     }
                   },
@@ -827,10 +832,13 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
+  padding: 10px;
 }
 .content {
-  margin: 10px;
+  padding: 10px;
+  padding-top: 30px;
+  background: #ffffff;
+  border-radius: 12px;
 }
 .bk-szy {
   border-left: 1px solid #e4e4e4;
@@ -838,7 +846,7 @@ body {
   border-top: 1px solid #e4e4e4;
 }
 .title {
-  background-color: #f3f3f3;
+  background-color: #fff;
   justify-content: space-between;
   padding: 5px 20px;
 }
@@ -870,7 +878,7 @@ td.ivu-table-expanded-cell {
   text-align: center;
 }
 /* .block {
-  
+
 } */
 
 .depart-item {

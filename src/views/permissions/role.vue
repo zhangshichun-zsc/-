@@ -588,10 +588,12 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
+  padding: 0;
 }
 .content {
-  margin: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 
 .Members-search {
@@ -599,9 +601,7 @@ body {
   justify-content: flex-start;
   padding: 10px 30px;
 }
-.ivu-menu li {
-  color: white;
-}
+
 .pages {
   display: flex;
   justify-content: center;
@@ -656,9 +656,7 @@ body {
 .addperson div:nth-of-type(2n-1) {
   padding: 10px;
 }
-li {
-  height: 24px;
-}
+
 .addperson div:nth-of-type(2n) button {
   margin-top: 20px;
 }

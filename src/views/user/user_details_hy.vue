@@ -121,35 +121,43 @@ export default {
       columns1: [
         {
           title: "立项数量",
-          key: "establishNum"
+          key: "establishNum",
+          align: "center"
         },
         {
           title: "活动报名数量",
-          key: "signUpNum"
+          key: "signUpNum",
+          align: "center"
         },
         {
           title: "积分",
-          key: "score"
+          key: "score",
+          align: "center"
         },
         {
           title: "收藏类型(个)",
-          key: "collectNum"
+          key: "collectNum",
+          align: "center"
         },
         {
           title: "活动评价",
-          key: "activityEvaluateNum"
+          key: "activityEvaluateNum",
+          align: "center"
         },
         {
           title: "活动反馈",
-          key: "activityFeedbackNum"
+          key: "activityFeedbackNum",
+          align: "center"
         },
         {
           title: "邀请好友",
-          key: "inviteNum"
+          key: "inviteNum",
+          align: "center"
         },
         {
           title: "活动时长（小时）",
-          key: "joinActLength"
+          key: "joinActLength",
+          align: "center"
         }
       ],
       columns2: [
@@ -170,7 +178,8 @@ export default {
         },
         {
           title: "单位职务",
-          key: "userType"
+          key: "userType",
+          align: "center"
         }
       ],
       columns3: [
@@ -181,7 +190,8 @@ export default {
         },
         {
           title: "手机号码",
-          key: "tel"
+          key: "tel",
+          align: "center"
         },
         {
           title: "详细地址",
@@ -212,6 +222,7 @@ export default {
         },
         {
           title: "活动时间",
+          align: "center",
           key: "startAt",
           render: (h, params) => {
             return h("div", this.util.formatDateYMD(params.row.startAt));
@@ -219,19 +230,23 @@ export default {
         },
         {
           title: "用户账号",
-          key: "account"
+          key: "account",
+          align: "center"
         },
         {
           title: "参与类型",
-          key: "joinType"
+          key: "joinType",
+          align: "center"
         },
         {
           title: "活动类型",
-          key: "categoryName"
+          key: "categoryName",
+          align: "center"
         },
         {
           title: "状态",
-          key: "joinStatus"
+          key: "joinStatus",
+          align: "center"
         },
         {
           title: "操作",

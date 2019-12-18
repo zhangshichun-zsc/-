@@ -51,13 +51,15 @@
           <span>筛选查询</span>
         </p>
         <div class="inquire">
-          <i-input :value.sync="value" placeholder="姓名,手机" style="width: 8rem;"></i-input>
-          <span>岗位:</span>
-          <Select v-model="model1" style="width:5rem;">
-            <Option v-for="item in cityList1" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <span>姓名：</span>
+          <i-input v-model="query.userName" style="width: 8rem;"></i-input>
+          <span>报名类型:</span>
+          <Select v-model="query.roleId" style="width:5rem;">
+            <Option :value="''">全部</Option>
+            <Option v-for="item in cityList1" :value="item.roleId" :key="item.value">{{ item.roleName }}</Option>
           </Select>
           <span>报名状态:</span>
-          <Select v-model="model2" style="width:5rem;">
+          <Select v-model="query.enrollStatus" style="width:5rem;">
             <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -84,7 +86,7 @@
           </Dropdown>
         </div>
 
-        <Button class="table-btn">搜索</Button>
+        <Button class="table-btn" @click="querys">搜索</Button>
       </div>
       <div class="check">
         <p>
@@ -96,14 +98,16 @@
       </div>
     </div>
     <div class="pages">
-      <span>共10页/100条数据</span>
-      <Page :total="100" show-elevator></Page>
+      <!-- <span>共10页/100条数据</span> -->
+      <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
     </div>
   </div>
 </template>
 
 <script>
-import {Activitysummary, actMemberlist} from "../../request/api"
+import { Activitysummary, actMemberlist,getActiveIdType } from "../../request/api"
+import { filterNull } from '@/libs/utils'
+import { constants } from 'fs';
 export default {
   data() {
     return {
@@ -112,36 +116,63 @@ export default {
       navigation1: {
         head: "活动概况(会员)"
       },
-      cityList1: [
-        {
-          value: "Photography",
-          label: "摄影岗位"
-        },
-        {
-          value: "Presided",
-          label: "主持岗位"
-        },
-        {
-          value: "company",
-          label: "陪伴岗位"
-        }
-      ],
+      cityList1: [],
       cityList2: [
         {
-          value: "all",
+          value: "",
           label: "全部"
         },
         {
-          value: "loading",
+          value: 1,
           label: "待审核"
         },
         {
-          value: "down",
-          label: "已拒绝"
+          value: 2,
+          label: "报名成功"
         },
         {
-          value: "audit",
-          label: "已审核"
+          value: 3,
+          label: "报名被拒绝"
+        },
+          {
+          value: 4,
+          label: "资格转移审核中，转移方"
+        },
+        {
+          value: 5,
+          label: "资格转移审核中，接收方"
+        },
+        {
+          value: 6,
+          label: "转移成功"
+        },
+        {
+          value: 7,
+          label: "用户自主取消--已取消"
+        },
+            {
+          value: 8,
+          label: "活动已取消--活动"
+        },
+        {
+          value: 9,
+          label: "已违约"
+        },
+          {
+          value: 10,
+          label: "排队中"
+        },
+        {
+          value: 11,
+          label: "请假中"
+        },
+        {
+          value: 12,
+          label: "待付款"
+        },
+        {
+          value: 13,
+          label: "拒绝转移"
         }
       ],
       model1: "Photography",
@@ -149,48 +180,76 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 80,
           align: "center"
         },
         {
           title: "姓名",
-          key: "name",
+          key: "userName",
+          width: 300,
           align: "center"
         },
         {
           title: "手机号",
-          key: "designation",
+          key: "userPhone",
+          width: 300,
           align: "center"
         },
         {
-          title: "岗位",
-          key: "project",
+          title: "报名类型",
+          key: "roleName",
+          width: 300,
           align: "center"
         },
         {
           title: "报名状态",
           key: "types",
-          align: "center"
+          width: 400,
+          align: "center",
+          render: (h,params) =>{
+            let state = params.row.userActType
+            let name = ''
+            for(let item of this.cityList2){
+              if(item.value == state){
+                name = item.label
+                break;
+              }
+            }
+            return (<span>{name}</span>)
+          }
         },
         {
           title: "签到状态",
+          width: 300,
           key: "userstype",
-          align: "center"
+          align: "center",
+          render: (h,params) =>{
+            let state = params.row.signStatus
+            return (<span>{["未签到","已签到","迟到"][~~state]}</span>)
+          }
         },
         {
           title: "反馈状态",
           key: "number",
-          align: "center"
+          width: 300,
+          align: "center",
+          render: (h,params) =>{
+            return (<span>{~~params.row.feedbackStatus === 1?'已反馈':'未反馈'}</span>)
+          }
         },
         {
           title: "详情",
           key: "apply",
-          align: "center"
+          width: 200,
+          align: "center",
+          render: (h,params) =>{
+            return (<span>详情</span>)
+          }
         },
         {
           title: "操作",
           key: "action",
-
+          width: 300, 
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -215,45 +274,87 @@ export default {
         }
       ],
       datax: [],
+      userName: null,
+      roleId: null,
+      enrollStatus: null,
+      page: 1,
+      size: 10,
+      sumSize: 10,
       lists:[],
+      query:{
+        userName: null,
+        roleId: null,
+        enrollStatus: null,
+      },
       memberlist:[]
-    };
+    }
   },
 
   components: {},
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getActivitysummary()
+    this.getMemberList()
+    this.typeList()
+  },
 
   methods: {
     pend(){
       this.$router.push({name:'pending'})
     },
+    querys(){
+      this.roleId = this.query.roleId
+      this.userName = this.query.userName
+      this.enrollStatus = this.query.enrollStatus
+      this.getMemberList()
+    },
     //数据概况
     getActivitysummary(){
       Activitysummary({
-        activityId:this.$route.query.acitvityId
+        activityId:this.$route.query.acitvityId,
+        userId:this.$store.state.userId
       }).then(res => {
         if(res.code == 200){
           this.lists=res.data
-          console.log(res);
         }
       })
     },
     getMemberList(){
-      actMemberlist({
-        activityId:this.$route.query.acitvityId
-      }).then(res=>{
-        this.memberlist=res.data
+      actMemberlist(filterNull({
+        userName: this.userName,
+        roleId: this.roleId,
+        activityId:this.$route.query.acitvityId,
+        enrollStatus: this.enrollStatus,
+        page:{
+          page:this.page,
+          size: this.size
+        }
+      })).then(res=>{
+        if(res.code == 200){
+          this.sumSize = res.data.totalSize
+          this.memberlist = res.data.list
+        }else{
+          this.$Message.error(res.msg)
+        } 
       })
+    },
+    typeList(){
+      getActiveIdType({activityId:this.$route.query.acitvityId}).then(res => {
+        if(res.code == 200){
+          this.cityList1 = res.data
+        }else{
+          this.$Message.error(res.msg)
+        }
+      })
+    },
+    changePage(e){
+      this.page = index;
+      this.getMemberList();
     }
-  },
-  mounted() {
-    console.log(this.$route.query.acitvityId)
-    this.getActivitysummary()
-  },
-};
+  }
+}
 </script>
 <style lang="scss" scoped>
 .content {

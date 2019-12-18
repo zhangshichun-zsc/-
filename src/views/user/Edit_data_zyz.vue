@@ -1855,5 +1855,6 @@ export default {
 }
 p {
   font-size: 14px;
+    height: 1.5rem;
 }
 </style>

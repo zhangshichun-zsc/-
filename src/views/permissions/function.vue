@@ -163,25 +163,25 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
+  padding: 10px;
 }
 
-.choose {
-  border: 1px solid #e4e4e4;
-}
 .content {
-  margin: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
-.bk,
 caption {
   border-left: 1px solid #e4e4e4;
   border-right: 1px solid #e4e4e4;
   border-top: 1px solid #e4e4e4;
 }
 .title {
-  background-color: #f3f3f3;
+  padding: 15px 15px;
+  border-radius: 12px;
+  background-color: #fff;
   justify-content: space-between;
-  padding: 10px 20px;
+  box-sizing: border-box;
 }
 .choose {
   padding: 0 10px 50px 10px;

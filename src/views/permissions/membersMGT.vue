@@ -117,7 +117,8 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          align: "center"
+          align: "center",
+          width: 240
         },
         {
           title: "邮箱地址",
@@ -128,24 +129,25 @@ export default {
           title: "联系方式",
           key: "tel",
           align: "center",
-          width: 110
+          width: 160
         },
         {
           title: "角色",
           key: "sysRoleNames",
-
-          align: "center"
+          align: "center",
+          width: 240
         },
         {
           title: "部门",
           key: "deptName",
-          align: "center"
+          align: "center",
+          width: 200
         },
         {
           title: "是否启用",
           key: "userEnable",
           align: "center",
-          width: 100,
+          width: 120,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -170,7 +172,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 80,
+          width: 120,
           render: (h, params) => {
             return h("div", [
               // h(
@@ -383,10 +385,13 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
+  padding: 10px;
 }
 .content {
-  margin: 10px;
+  padding: 0 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 
 .Members-search {

@@ -44,8 +44,8 @@
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
           <div>
-          <Button class="table-btn" @click="exportData">导出</Button>
-          <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button>
+          <Button class="table-btn" @click="exportData" disabled>导出</Button>
+          <!-- <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button> -->
           <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
             <div class="popup">
               <p class="popup-head">
@@ -82,7 +82,7 @@
               </div>
             </div>
           </Modal>
-          <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button>
+          <!-- <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button> -->
           <Button class="table-btn" @click="draft">草稿箱</Button>
             <Button class="table-btn" @click="addaction">添加活动</Button>
           <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">

@@ -86,8 +86,9 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 80,
+          width: 100,
           align: "center",
+          fixed: 'left',
         },
         {
           title: "封面图片",
@@ -137,7 +138,9 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.hotFlag == 1
+                  trueValue: 1,
+                  falseValue: 0,
+                  value: ~~params.row.hotFlag
                 },
                 on: {
                   input: e => {
@@ -195,6 +198,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          fixed: 'right',
           width: 300,
           render: (h, params) => {
             return h("div", [
@@ -251,10 +255,10 @@ export default {
       sort: "asc",
 
       batchList: [
-        { value: "2", label: "设为推荐" },
-        { value: "3", label: "取消推荐" },
-        { value: "4", label: "设为隐藏" },
-        { value: "5", label: "设为显示" },
+        { value: "5", label: "取消上线" },
+        { value: "4", label: "设置上线" },
+        { value: "3", label: "取消热门" },
+        { value: "2", label: "设置热门" },
         { value: "1", label: "删除" }
       ],
       page: 1,
@@ -364,14 +368,14 @@ export default {
     //是否热门
     getAddressDel(index, del) {
       if (del == false) {
-        this.batch = 6;
+        this.batch = 3;
       } else {
-        this.batch = 7;
+        this.batch = 2;
       }
       console.log(index, del, this.batch);
       AddressDel({
         informationIds: index,
-        informationOprType: this.batch
+        type: this.batch
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info("操作成功");
@@ -385,7 +389,7 @@ export default {
       console.log(id);
       AddressDel({
         informationIds: id,
-        informationOprType: 5
+        type: 1
       }).then(res => {
         if (res.code == 200) {
           this.getAddressList();
@@ -403,7 +407,7 @@ export default {
         //操作接口
         AddressDel({
           informationIds: this.arr,
-          informationOprType: this.batch
+          type: this.batch
         }).then(res => {
           if (res.code == 200) {
             console.log(this.arr);

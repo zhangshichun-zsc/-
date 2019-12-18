@@ -7,12 +7,14 @@
         ref="formValidate"
         :model="formValidate"
         :rules="ruleValidate"
-        :label-width="150"
+        :label-width="120"
+        style="width: 360px; margin:0 auto;"
+        label-position="left"
       >
         <FormItem label="审批类型:" prop="typeFlag">
           <Select
-            placeholder="立项审批、家长小组成立审批、志愿者团队成立审批、积分修改审批、VIP修改审批"
-            style="width: 20rem"
+            placeholder="请选择审批类型"
+            style="width: 15rem"
             v-model="formValidate.typeFlag"
             :transfer="true"
           >
@@ -26,7 +28,7 @@
           </Select>
         </FormItem>
         <FormItem v-show="flag_show" label="谁可以发起申请:" prop="applyRoles">
-          <Select v-model="formValidate.applyRoles" style="width:200px">
+          <Select v-model="formValidate.applyRoles" style="width: 10rem">
             <Option
               v-for="item in rolelist"
               :value="item.roleId"
@@ -54,7 +56,7 @@
       </Form>
       <div
         class="Select-level flex-start"
-        style="width: 38rem;
+        style="width: 26rem;
                 margin: 0 auto;"
       >
         <div class="Level-1">
@@ -89,7 +91,7 @@
           </ul>
         </div>
       </div>
-      <div style="margin: 20px;">
+      <div style="margin: 20px; text-align: center;">
         <span>您当前选择的审核流程是:</span>
 
         <span style="color: #ed4014;">
@@ -100,8 +102,13 @@
           &nbsp;{{ userNameb }}&nbsp;
         </span>
       </div>
+      <Button
+        style="margin-bottom:30px;"
+        type="error"
+        @click="det('formValidate')"
+        >保存</Button
+      >
     </div>
-    <Button type="error" @click="det('formValidate')">保存</Button>
   </div>
 </template>
 
@@ -336,13 +343,13 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
-
-  padding-bottom: 2rem;
+  padding: 10px;
 }
 .content {
-  margin: 10px;
-  padding: 0 20%;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 30px 0;
 }
 .Level-1,
 .Level-2 {
