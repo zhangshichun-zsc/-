@@ -13,7 +13,7 @@
           <Input size="large" placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
         <div class="flex-center-start">
-          <span>注册时间/时间段:</span>
+          <span>注册时间/时间段:&nbsp;&nbsp;</span>
           <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="startAt"></DatePicker>
           <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
           <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
@@ -1034,8 +1034,10 @@ export default {
 }
 .integral-header .integral-body {
   padding: 20px;
-  background: #fff;
   font-size: 14px;
+  background: #FFFFFF;
+  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  border-radius: 12px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 150px;
@@ -1045,13 +1047,14 @@ export default {
   margin-right: 20px;
 }
 .integral-table {
-  margin-top: 30px;
-  background: #fff;
+  margin-top: 20px;
+  padding: 0 5px;
+  background: #FFFFFF;
+  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  border-radius: 12px;
 }
 .table-header {
   padding: 10px 20px;
-  background: #fff;
-  border: 1px solid #eee;
   display: flex;
   justify-content: space-between;
   align-content: center;
@@ -1061,7 +1064,7 @@ export default {
 }
 .integral-table .pages {
   padding: 15px 20px;
-  background: #fff;
+
 }
 .model .model-port {
   display: inline-block;
@@ -1099,5 +1102,8 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 10px auto;
+}
+.space {
+  margin-left: 10px;
 }
 </style>

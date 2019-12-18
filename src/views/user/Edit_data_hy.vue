@@ -134,7 +134,7 @@
                 </FormItem>
 
                 <FormItem label="创建时间" v-show="basic.createAt">
-                  <p class="tel">{{ parameOBJ.basicInfo.info.createAt }}</p>
+                  <p class="tel">{{ parameOBJ.basicInfo.info.createAt ||'' }}</p>
                 </FormItem>
               </Form>
             </div>
@@ -1772,5 +1772,6 @@ export default {
 }
 p {
   font-size: 14px;
+  height: 1.5rem;
 }
 </style>

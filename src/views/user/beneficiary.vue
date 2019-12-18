@@ -19,7 +19,7 @@
             <Input v-model="paramsObj.labelName" size="large" disabled placeholder="标签" class="inpt" />
           </div>
           <div class="flex-center-start">
-            <span>会员类型</span>
+            <span>会员类型:</span>
             <Select v-model="paramsObj.memberType" size='large' class="inpt">
               <Option value="0">普通会员</Option>
               <Option value="1">VIP</Option>
@@ -36,13 +36,13 @@
         </div>
         <div class="flex-center-start">
           <div class="flex-center-start">
-            <span>注册时间/时间段:</span>
+            <span>注册时间/时间段:&nbsp;&nbsp;</span>
             <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="startAt"></DatePicker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
             <DatePicker <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
           </div>
           <div class="flex-center-start">
-            <span>VIP缴费时间:</span>
+            <span>VIP缴费时间:&nbsp;&nbsp;</span>
             <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="memberPayStartTimestamp"></DatePicker>
             <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
             <DatePicker <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="memberPayEndTimestamp"></DatePicker>
@@ -81,7 +81,7 @@
             </Form>
           </Modal>
           <Dropdown>
-            <Button style="margin: 0 5px;" disabled @click="modal1 = true">
+            <Button style="margin-left:10px;" disabled @click="modal1 = true">
               群发短信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -110,7 +110,7 @@
             </Form>
           </Modal>
           <Dropdown @on-click='isALL'>
-            <Button style="margin: 0 5px;" @click="ismodal2">
+            <Button style="margin-left:10px;" @click="ismodal2">
               群发站内信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -261,7 +261,7 @@
             </ButtonGroup>
           </Modal>
           <Dropdown>
-            <Button disabled @click="modal3 = true">
+            <Button style="margin-left:10px;"  disabled @click="modal3 = true">
               微信推送
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -276,7 +276,7 @@
               <Checkbox v-for="item in labelList_c" :key='item.labelId' :label="item.labelId">{{item.labelName}}</Checkbox>
             </CheckboxGroup>
           </Modal>
-          <Button style="margin: 0 5px;" disabled @click="onLabel">
+          <Button style="margin-left:10px;"  disabled @click="onLabel">
             设置标签
           </Button>
 
@@ -292,7 +292,7 @@
           <!-- </Dropdown> -->
           <!--导出数据-->
           <Dropdown>
-            <Button style="margin: 0 5px;" @click="onExport">
+            <Button style="margin-left:10px;"  @click="onExport">
               导出数据
             </Button>
           </Dropdown>
@@ -331,7 +331,7 @@
             </div>
           </Modal>
           <Dropdown @on-click='isALL2'>
-            <Button style="margin: 0 5px;" @click="isModal5">
+            <Button style="margin-left:10px;"  @click="isModal5">
               修改vip时间
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -342,17 +342,17 @@
           </Dropdown>
           <!--审核vip时间-->
           <Dropdown>
-            <Button style="margin: 0 10px;" @click="jump3()">
+            <Button style="margin-left:10px;"  @click="jump3()">
               审核vip时间
             </Button>
           </Dropdown>
-          <Button style="margin: 0 10px;" class="integral-rig" @click="setup">会费设置</Button>
+          <Button style="margin-left:10px;"  class="integral-rig" @click="setup">会费设置</Button>
         </div>
         <div>
-          <Select v-model="size" style="width:120px; margin: 0 5px;" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:120px; margin-left:10px;" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width: 120px;  margin-left:10px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <!-- <Icon type="ios-cog-outline" size='30' class="table-btn" @click="()=>{ this.isShow = true }" /> -->
@@ -460,7 +460,7 @@
 
           <Col span="12">
           <FormItem label="" class='formitem'>
-            <p>注册时间/时间段</p>
+            <p>注册时间/时间段：</p>
             <Col span="12">
             <DatePicker type="date" placeholder="请选择开始时间" v-model="registrationStartTimeStamp" style="width: 200px;"></DatePicker>
             </Col>
@@ -1313,10 +1313,12 @@ export default {
 }
 .integral-header .integral-body {
   padding: 20px;
-  background: #fff;
+  background: #FFFFFF;
+  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  border-radius: 12px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
-  width: 160px;
+  width: 180px;
   margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
@@ -1324,20 +1326,19 @@ export default {
 }
 .integral-table {
   margin-top: 30px;
+  padding: 0 5px;
   background: #ffffff;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .table-header {
   padding: 20px 20px;
-  background: #fff;
   display: flex;
   justify-content: space-between;
   align-content: center;
 }
 .integral-table .pages {
   padding: 20px 20px;
-  background: #fff;
 }
 .pages {
   display: flex;

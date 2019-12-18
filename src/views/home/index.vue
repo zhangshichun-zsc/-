@@ -8,7 +8,7 @@
         <li>
           <div class="jj">
             <p>今日立项总数</p>
-            <span>{{ activity.activityBatchCount }}</span>
+            <span>{{ activity.todayBacthCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity1.png" />
@@ -17,7 +17,7 @@
         <li>
           <div class="jj">
             <p>今日活动总数</p>
-            <span>{{ activity.todayActivityCount }}</span>
+            <span>{{ activity.todayActivityCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity2.png" />
@@ -26,7 +26,7 @@
         <li>
           <div class="jj">
             <p>昨日活动总数</p>
-            <span>{{ activity.yesterdayActivityCount }}</span>
+            <span>{{ activity.yesterdayActivityCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity3.png" />
@@ -35,7 +35,7 @@
         <li>
           <div class="jj">
             <p>近7天总数</p>
-            <span>{{ activity.latest7dayActivityCount }}</span>
+            <span>{{ activity.sevenDaysActivityCount || 0 }}</span>
           </div>
           <div>
             <img class="icon-img" src="@/assets/images/activity4.png" />
