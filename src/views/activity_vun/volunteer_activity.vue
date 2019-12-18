@@ -155,6 +155,7 @@
 <script>
 import { formatDate } from "@/request/datatime";
 import { actManager } from "../../request/api";
+import { SERVER_URl } from '@/request/http.js'
 export default {
   data() {
     return {
@@ -481,14 +482,10 @@ export default {
 
     //导出数据
     exportData() {
-      if (this.arr.length == 0) {
-        this.arr = this.data;
+      for(let item of this.arr){
+        window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=1&activityName=
+        ${item.activityName}`)
       }
-      this.$refs.selection.exportCsv({
-        filename: this.navigation1.head,
-        columns: this.columns.filter((col, index) => index > 0),
-        data: this.arr
-      });
     },
 
     //全选按钮
