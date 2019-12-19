@@ -111,7 +111,7 @@ export const pendingTransferList = p => posts('/activity-manage/work/act/move/li
 
 export const pendingUnclaimedList = p => get('/activity-undeal/get-unreceive-resource-page', p) //活动待处理 获取待领取物资列表
 
-export const pendingSubsidyList = p => get('/activity-manage/work/act/sub/list', p) //活动待处理获取补助发放列表
+export const pendingSubsidyList = p => posts('/activity-manage/work/act/sub/list', p) //活动待处理获取补助发放列表
 
 export const pendingUncDel = p => post('/activity-undeal/del-activity-resource', p) //活动待处理--删除活动物资
 
