@@ -21,10 +21,11 @@
           :data=data
         ></Table>
       <Modal v-model="modal2" title="查看消息">
-        <h1 style="text-align: center;">{{obj.title}}</h1>
-        <p style="text-align: center;color: #9EA7B4;">{{obj.createAt}}</p>
+        <h1 style="text-align: center;font-size:16px">{{obj.title}}</h1>
+        <p style="text-align: center;color: #9EA7B4;font-size:14px">{{obj.createAt}}</p>
         <Divider style="margin: 0.5rem 0;" />
-        <p>{{obj.content}}</p>
+        <p style="font-size:12px">{{obj.content}}</p>
+        <div slot="footer"></div>
       </Modal>
       <div class="pages">
         <Page
@@ -90,7 +91,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -205,9 +206,13 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
+.integral-table{
+  border-radius: 10px;
+}
 .table-header {
   padding: 5px 20px;
   background: white;
+  border-radius:  10px 10px 0 0;
 }
 .table-header .table-btn {
   margin-left: 15px;
@@ -215,6 +220,7 @@ export default {
 .integral-table .pages {
   padding: 20px;
   background: #fff;
+  border-radius: 0 0 10px 10px;
 }
 .pages {
   text-align: center;

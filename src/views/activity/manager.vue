@@ -477,16 +477,17 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.statusText != "10",
-                   disabled: params.row.statusText!="10"?false:"disabled"
+                  value: ~~params.row.statusText !== 10,
+                  disabled: params.row.statusText!="10"?false:"disabled"
                 },
                 'on':{
                   'on-change': e => {
                     if (params.row.statusText == "10") {
 
                     } else {
-                      this.activityId=params.row.acitvityId
-                      this.addstate=true
+                      this.activityId = params.row.acitvityId
+                      this.addstate = true
+                      this.index = params.index
                     }
                   }
                 }
@@ -550,7 +551,8 @@ export default {
         { name: "关闭报名", value: 13 }
       ],
       modal5: false,
-      addstate:false
+      addstate:false,
+      index: -1
     };
   },
   components: {},
@@ -674,8 +676,8 @@ export default {
 
     //取消
     modalCancel(){
+      this.$set(this.datax[this.index],"statusText",1)
       this.addstate=false
-       this.getactiveManager()
     },
 
     //确定

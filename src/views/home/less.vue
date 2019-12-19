@@ -66,7 +66,7 @@
             <Input v-model="formValidate.name" disabled />
           </FormItem>
           <FormItem label="手机号" prop="number">
-            <Input v-model="formValidate.number || ''" disabled />
+            <Input v-model="formValidate.number" disabled />
           </FormItem>
           <FormItem label="旧密码" prop="oldPassword">
             <Input type="password" v-model="formValidate.oldPassword" />

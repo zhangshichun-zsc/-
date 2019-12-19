@@ -131,12 +131,12 @@ export default {
 <style lang="scss" scoped>
 
 
-.main {
-  background-color: #ffffff;
-}
 .content {
-  margin-top: 10px;
+  border-radius: 10px;
   padding: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+
 }
 .flexs{
   display: flex;

@@ -232,14 +232,14 @@ export default {
           align: "center",
           width: 400,
           render: (h, params) => {
-            return h(
-              "span",
-              params.row.provinceName
-                ? params.row.provinceName +
-                    params.row.cityName +
-                    params.row.districtName
-                : ""
-            );
+            let provinceName = params.row.provinceName
+              ? params.row.provinceName
+              : "";
+            let cityName = params.row.cityName ? params.row.cityName : "";
+            let districtName = params.row.districtName
+              ? params.row.districtName
+              : "";
+            return h("span", provinceName + cityName + districtName);
           }
         },
         {
@@ -308,7 +308,13 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "detailshy",
-                        query: { orgId: params.row.orgId }
+                        query: {
+                          orgId: params.row.orgId,
+                          status:
+                            this.navigation1.head === "组织列表(志愿者)"
+                              ? "1"
+                              : "0"
+                        }
                       });
                     }
                   }
