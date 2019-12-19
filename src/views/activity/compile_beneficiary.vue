@@ -712,6 +712,9 @@ export default {
       console.log(e)
       this.oneRole.xx = e.xx
       this.oneRole.yy = e.yy
+      this.oneRole.province = e.province
+      this.oneRole.city = e.city
+      this.oneRole.district = e.district
       this.$set(this.oneRole,'setAddr',e.address)
     },
     getLimits(e){

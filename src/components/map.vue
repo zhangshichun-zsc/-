@@ -59,7 +59,10 @@ export default {
               args.districtId = arr[2]
               args.address = loc.poiaddress
               args.xx = loc.latlng.lat 
-              args.yy = loc.latlng.lng 
+              args.yy = loc.latlng.lng
+              args.province = obj.province
+              args.city = obj.city
+              args.district = obj.district
               this.args = args
             }
         })

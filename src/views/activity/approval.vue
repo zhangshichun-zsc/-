@@ -1158,11 +1158,13 @@ export default {
       this.batch.detail = e;
     },
     getMap(e) {
+      console.log(e);
       this.batch.actXx = e.xx;
       this.batch.actYy = e.yy;
-      // this.batch.actAddress = e.address
+      this.batch.provinceName = e.province;
+      this.batch.cityName = e.city;
+      this.batch.districtName = e.district;
       this.$set(this.batch, "actAddress", e.address);
-      console.log(e);
     }
   }
 };
