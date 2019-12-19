@@ -1,9 +1,16 @@
 <!--活动待处理(会员)-->
 <template>
   <div>
+     <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
+      <i-input placeholder="请输入内容" v-model="title" style="marginBottom:1rem;"/>
+      <i-input placeholder="请输入内容" v-model="msg" type="textarea" :row='4'/>
+      <div slot="footer">
+        <Button type="error" size="large" @click="success">确定</Button>
+      </div>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="head">
-      <p>5.12 "行走在夏日" 游园活动</p>
+      <p>{{activityName}}</p>
     </div>
     <div class="content">
       <p>
@@ -26,21 +33,17 @@
             <a>转移人员</a>
           </li>
           <li @click="btn(3)">
-            <a>物资领取</a>
-          </li>
-          <li @click="btn(4)">
             <a>补助发放</a>
           </li>
         </ul>
-        <ul class="list" v-if="show==1||show==2">
+        <ul class="list" v-if="show==1">
           <li class="active" @click="btns('')">
             <a>全部</a>
           </li>
           <li
-            @click="btns(item.dataKey)"
-            v-for="item in Statuslist"
-            :value="item.dataKey"
-            :key="item.dataKey"
+            @click="btns(item.id)"
+            v-for="(item,index) in Statuslist"
+            :key="index"
           >
             <a>{{item.dataValue}}</a>
           </li>
@@ -67,12 +70,10 @@
                 <Checkbox v-model="status">全选</Checkbox>
               </Button>
               <span>已选择{{this.arr.length}}人</span>
-              <Button class="table-btn" @click="pass(2)" v-if="show==1||show==2">通过</Button>
+              <Button class="table-btn" @click="pass" v-if="show==1||show==2">通过</Button>
               <Button class="table-btn" @click="refuse" v-if="show==1||show==2">拒绝</Button>
-              <Button class="table-btn" v-if="show==1||show==2">群发信息</Button>
-              <Button class="table-btn" @click="rmove()" v-if="show==3">删除</Button>
-              <Button class="table-btn" @click="pass(2)" v-if="show==4">批量发送</Button>
-              <Button class="table-btn" @click="refuse" v-if="show==4">群发消息</Button>
+              <Button class="table-btn" @click="sendInfos" v-if="show==1||show==2">群发信息</Button>
+              <Button class="table-btn" @click="pass(2)" v-if="show==3">批量发送</Button>
             </div>
           </div>
 
@@ -89,15 +90,6 @@
             </p>
           </div>
         </div>
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="pageSize"
-          @on-change="changepages"
-        />
       </div>
     </div>
     <Modal v-model="isshow" @on-ok="ok" @on-cancel="cancel">
@@ -136,7 +128,7 @@
 </template>
 
 <script>
-import { date1 } from "../../request/datatime";
+import { date1, getTransrList } from "../../request/datatime";
 import {
   pendingBatchList,
   pendingSignList,
@@ -148,7 +140,10 @@ import {
   pendingUncDel,
   pendingUncModify,
   pendingUncOperation,
-  pendingSubsidy
+  pendingSubsidy,
+  signUpStatus,
+  moveStatus,
+  sendInfo
 } from "../../request/api";
 export default {
   data() {
@@ -159,7 +154,9 @@ export default {
       info: "",
       status: false,
       List: [],
-      Statuslist: [],
+      Statuslist: [
+        {name:"待审核",id:1},{name:"已通过",id:2},{name:"已拒绝",id:3},{name:"已违约",id:9}
+      ],
       Scene: "所有场次",
       columns: [],
       columns1: [
@@ -248,7 +245,6 @@ export default {
           }
         }
       ],
-
       columns2: [
         {
           type: "selection",
@@ -413,7 +409,6 @@ export default {
           }
         }
       ],
-
       columns4: [
         {
           type: "selection",
@@ -470,7 +465,6 @@ export default {
           }
         }
       ],
-
       datax: [],
       activityBatchId: 1, //活动场次
       batchNum: 1, //批次
@@ -499,7 +493,13 @@ export default {
       modifyList: [{ name: "1", index: "2" }],
       resourceNum: "",
       remark: "",
-      batchNums: ""
+      batchNums: "",
+      activityName: this.$route.query.activityName,
+      status: '',
+      name: '',
+      title: '',
+      msg: '',
+      modal1: false
     };
   },
 
@@ -508,123 +508,76 @@ export default {
   created() {},
   mounted() {
     this.getpendingEnrollList();
-    this.getpendingBatchList();
-    this.getpendingSignList();
   },
 
   methods: {
-    // 获取活动批次列表
-    getpendingBatchList() {
-      pendingBatchList({
-        activityBatchId: this.activityBatchId
+    sendInfos(){
+      if(this.arr.length == 0){
+        this.$Message.info("请选择")
+        return
+      }
+      this.modal1 = true
+    },
+    //报名审核
+    getPass(type){
+      signUpStatus({
+        ids: this.ids,
+        remark: this.remark,
+        type
       }).then(res => {
-        console.log(res);
-        if (res.code == 200) {
-          this.status = false;
-          this.List = res.data;
-        }
-      });
+      
+      })
     },
-    // 获取报名状态列表
-    getpendingSignList() {
-      pendingSignList().then(res => {
-        console.log(res);
-        this.status = false;
-        if (res.code == 200) {
-          this.Statuslist = res.data;
-        }
-      });
-    },
-    // 获取获取转移状态列表
-    getpendingTransfer() {
-      pendingTransfer().then(res => {
-        console.log(res);
-        this.status = false;
-        if (res.code == 200) {
-          this.Statuslist = res.data;
-          console.log();
-        }
-      });
-    },
+    //转移审核
+    auditTran(type){
+      moveStatus({
+        ids: this.ids,
+        remark: this.remark,
+        type
+      }).then(res => {
 
+      })
+    },
     // 获取报名列表
     getpendingEnrollList() {
       pendingEnrollList({
-        page: { page: this.page, size: this.size },
-        activityBatchId: this.activityBatchId,
-        batchNum: this.batchNum,
-        receiveStatus: this.receiveStatus,
-        info: this.info
+      activityId:this.$route.query.activityId,
+      status: this.status,
+      name:this.name
       }).then(res => {
         this.status = false;
         if (res.code == 200) {
-          // this.size=res.data.pageSize
           this.columns = this.columns1;
-          this.datax = res.data.list;
-          this.page = res.data.pageNum;
-          this.dataCount = res.data.totalSize; //总条数
+          this.datax = res.data
         }
-        console.log(res);
       });
     },
 
     // 获取转移用户列表
     getpendingTransferList() {
       pendingTransferList({
-        page: { page: this.page, size: this.size },
-        activityBatchId: this.activityBatchId,
-        batchNum: this.batchNum,
-        signUpStatus: this.signUpStatus,
-        info: this.info
+        activityId:this.$route.query.activityId
       }).then(res => {
         if (res.code == 200) {
           // this.size=res.data.pageSize
           this.columns = this.columns2;
-          this.datax = res.data.list;
-          this.page = res.data.pageNum;
-          this.dataCount = res.data.totalSize; //总条数
+          this.datax = res.data
         }
-        console.log(res);
       });
     },
-
-    // 获取待领取物资列表
-    getpendingUnclaimedList() {
-      pendingUnclaimedList({
-        page: { page: this.page, size: this.size },
-        activityBatchId: this.activityBatchId,
-        batchNum: this.batchNum
-      }).then(res => {
-        this.status = false;
-        if (res.code == 200) {
-          // this.size=res.data.pageSize
-          this.columns = this.columns3;
-          this.datax = res.data.list;
-          this.page = res.data.pageNum;
-          this.dataCount = res.data.totalSize; //总条数
-        }
-        console.log(res);
-      });
-    },
-
     // 获取补助发放列表
     getpendingSubsidyList() {
       pendingSubsidyList({
-        page: { page: this.page, size: this.size },
-        activityBatchId: this.activityBatchId,
-        batchNum: this.batchNum,
-        receiveStatus: this.receiveStatus,
-        info: this.info
+        activityId:this.$route.query.activityId,
+        status: this.status,
+        name:this.name
       }).then(res => {
         this.status = false;
         if (res.code == 200) {
           // this.size=res.data.pageSize
           this.columns = this.columns4;
-          this.datax = res.data.list;
-          this.page = res.data.pageNum;
-          this.dataCount = res.data.totalSize; //总条数
+          this.datax = res.data
         }
-        console.log(res);
       });
     },
 
@@ -678,22 +631,6 @@ export default {
       });
     },
 
-    //删除
-    rmove(ids) {
-      if (ids) {
-        this.activityResourceIds = ids;
-        this.getpendingUncDel();
-        this.show = 3;
-        this.getpendingUnclaimedList();
-      } else if (this.arr.length > 0) {
-        let arr = [];
-        for (let i = 0; i < this.arr.length; i++) {
-          arr.push(this.arr[i].activityResourcesId);
-        }
-        this.activityResourceIds = arr.toString();
-        this.getpendingUncDel();
-      }
-    },
     //弹出框取消按钮
     cancel() {
       this.refuseReasonComments = "";
@@ -773,12 +710,9 @@ export default {
         this.getpendingSignList();
         this.getpendingEnrollList();
       } else if (this.show == 2) {
-        // this.show = 1;
         this.getpendingTransferList();
         this.getpendingTransfer();
       } else if (this.show == 3) {
-        this.getpendingUnclaimedList();
-      } else if (this.show == 4) {
         this.getpendingSubsidyList();
       }
     },
@@ -797,46 +731,53 @@ export default {
       this.page = index;
       console.log(index);
       if (this.show == 1) {
-        this.getpendingSignList();
         this.getpendingEnrollList();
       } else if (this.show == 2) {
-        // this.show = 1;
         this.getpendingTransferList();
         this.getpendingTransfer();
       } else if (this.show == 3) {
-        this.getpendingUnclaimedList();
-      } else if (this.show == 4) {
         this.getpendingSubsidyList();
       }
     },
     //通过
-    pass(id, e) {
-      this.oprType = id;
-      if (e) {
-        this.activityUserId = e;
-        this.getpendingUncOperation();
-        console.log(e);
-      } else {
-        let arr = [];
-        for (let i = 0; i < this.arr.length; i++) {
-          arr.push(this.arr[i].activityUserId);
-        }
-        this.activityUserId = arr.toString();
-        this.getpendingUncOperation();
-        console.log(this.arr);
-      }
-    },
-    //拒绝
-    refuse(id, e) {
-      this.activityUserId = e;
-      this.oprType = id;
-      console.log(this.arr);
-      if (this.arr.length != 0 || e) {
-        this.isshow = true;
-      } else {
+    pass() {
+      if(this.show == 1){
+        this.getPass(2)
+      }else if(this.show == 2){
+        this.auditTran(2)
       }
     },
 
+    //拒绝
+    refuse(i) {
+      if(this.show == 1){
+        this.getPass(3)
+      }else if(this.show == 2){
+        this.auditTran(3)
+      }
+    },
+    success(){
+      if(!this.title){
+        this.$Message.error("标题没有填写")
+        return
+      }else if(!this.msg){
+        this.$Message.error("内容没有填写")
+        return
+      }
+      sendInfo({ids:this.arr,msg:this.msg,title:this.title,sysId:1}).then(res => {
+        if(res.code == 200){
+          this.modal1 = false
+          this.$Message.success("发送成功")
+        }else{
+          this.$Message.error(res.msg)
+        }
+      })
+    },
+    cancel(){
+      this.model1 = false
+      this.title = ''
+      this.msg = ''
+    },
     // 发放
     grantmat(e) {
       this.activityUserId = e;

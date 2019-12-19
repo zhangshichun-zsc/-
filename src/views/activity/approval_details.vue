@@ -103,7 +103,7 @@ export default {
   computed: {},
 
   created() {
-    this.statusText=this.$route.query.statusText
+    this.statusText = this.$route.query.statusText
   },
   mounted() {
     this.getapprovaldet()
@@ -133,13 +133,11 @@ export default {
     },
     //通过
     adopt(e) {
-      console.log(e)
       programApproval({
         userId:this.$store.state.userId, 
         auditId:this.$route.query.auditId, 
         type:e,
       }).then(res=>{
-        console.log(res)
         if(res.code==200){
           this.$Message.success(res.msg);
         }else{

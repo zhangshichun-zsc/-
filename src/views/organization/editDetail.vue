@@ -43,21 +43,10 @@
 
     <div class='box'>
       <div class='item-left' style='line-height: 40px;'>图片</div>
-      <img class='item-img' :src="list.orgPicPath" alt="组织图片">
-    </div>
-    <div class='btn' v-if="btnFlag">
-      <i-button type="error" @click="batchRefuse">拒绝</i-button>
-      <i-button type="success" @click='batchAdopt'>通过</i-button>
+      <img class='item-img' v-if="list.orgPicPath" :src="list.orgPicPath" alt="组织图片">
+      <div v-else class="no-img">暂无图片</div>
     </div>
 
-    <Modal title="拒绝理由" v-model="modal8" :mask-closable="false">
-      <input class='rejbtn' type="textarea" v-model="value" placeholder='请输入原因'>
-      <p v-show="isModel" class='tips'>请输入拒绝理由</p>
-      <div slot="footer">
-        <Button type="text" size="large" @click="modalCancel">取消</Button>
-        <Button type="primary" size="large" @click="modalOk">确定</Button>
-      </div>
-    </Modal>
 
   </div>
 </template>
@@ -213,6 +202,12 @@ export default {
   height: 400px;
   background-size: contain;
   vertical-align: middle;
+}
+.no-img {
+  width: 400px;
+  height: 400px;
+  text-align: center;
+  line-height: 40px;
 }
 .textarea {
   height: 100px;

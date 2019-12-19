@@ -3,7 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="head">
-      <p>5.12"行走在夏日"游园活动</p>
+      <p>{{activityName}}</p>
       <span>未开始</span>
     </div>
     <div class="content">
@@ -17,14 +17,12 @@
               <th>报名类型</th>
               <th>报名时间</th>
               <th>报名状态</th>
-              <th>几人陪同</th>
             </tr>
             <tr>
               <td>{{msg.userName}}</td>
               <td>{{msg.phone}}</td>
               <td>{{msg.roleName}}</td>
               <td>{{msg.createAt}}</td>
-              <td>{{msg.userActType}}</td>
               <td v-if='msg.userActType==1'>审核中</td>
               <td v-else-if='msg.userActType==2'>报名成功</td>
               <td v-else-if='msg.userActType==3'>报名被拒绝</td>
@@ -39,7 +37,6 @@
               <td v-else-if='msg.userActType==12'>待付款</td>
               <td v-else-if='msg.userActType==13'>拒绝转移</td>
               <td v-else-if='msg.userActType==14'>工作人员</td>
-              <td>{{msg.parentCount}}</td>
             </tr>
           </table>
         </li>
@@ -113,7 +110,7 @@
 </template>
 
 <script>
-import {userDetail} from '@/request/api'
+import { userDetail ,feendDetail } from '@/request/api'
 
 export default {
   data() {
@@ -122,7 +119,8 @@ export default {
         head: "活动人员明细(会员)"
       },
       actUserId:1,
-      msg:{}
+      msg:{},
+      activityName: this.$route.query.activityName,
     };
   },
 
@@ -131,16 +129,13 @@ export default {
   computed: {},
 
   created() {
-    // this.actUserId = this.$route.query("actUserId")
+    this.actUserId = this.$route.query.actUserId
     this.getUserDetail()
   },
 
   methods: {
     getUserDetail(){
-      userDetail({
-        actUserId:this.actUserId
-      }).then(res=>{
-        console.log(res)
+      feendDetail({actUserId:this.actUserId}).then(res => {
         this.msg = res.data
       })
     }

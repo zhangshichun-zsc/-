@@ -16,25 +16,14 @@
 
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-      <div class="flex-center-between integral-top">
-        <div><Icon type="ios-search-outline" /><span>筛选查询</span></div>
-        <div class="flex-center-end">
-          <Button @click="query">查询结果</Button>
-        </div>
-      </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>组织名称</span>
-          <Input
-            size="small"
-            placeholder="组织名称"
-            class="inpt"
-            v-model="orgName"
-          />
+          <span>组织名称:</span>
+          <Input placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
         <div class="flex-center-start">
-          <span>审核状态</span>
-          <Select size="small" v-model="orgStatus" class="inpt">
+          <span>审核状态:</span>
+          <Select v-model="orgStatus" class="inpt">
             <Option value="0,1,2">全部</Option>
             <Option value="0">待审核</Option>
             <Option value="1">已通过</Option>
@@ -42,47 +31,35 @@
           </Select>
         </div>
         <div class="flex-center-start">
-          <span>提交日期</span>
-          <Row>
-            <Col span="10">
-              <DatePicker
-                type="date"
-                placeholder="请选择开始时间"
-                v-model="startAt"
-                style="width: 200px"
-              ></DatePicker>
-            </Col>
-            <Col span="4" class="line"> </Col>
-            <Col span="10">
-              <DatePicker
-                type="date"
-                placeholder="请选择结束时间"
-                v-model="endAt"
-                style="width: 200px"
-              ></DatePicker>
-            </Col>
-          </Row>
+          <span>提交日期:&nbsp;&nbsp;</span>
+          <DatePicker
+            type="date"
+            placeholder="请选择开始时间"
+            v-model="startAt"
+            style="width: 200px"
+          ></DatePicker>
+          <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+          <DatePicker
+            type="date"
+            placeholder="请选择结束时间"
+            v-model="endAt"
+            style="width: 200px"
+          ></DatePicker>
+        </div>
+        <div class="flex-center-start">
+          <a href="javascript:;" class="queryBtn" @click="query">查询</a>
         </div>
       </div>
     </div>
+
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header table-flex">
         <div>
-          <span @click="chackall">
-            <Checkbox v-model="isALL">全选</Checkbox>
-          </span>
-          <span>
-            <Button class="table-btn" @click="batchAdopt">通过</Button>
-            <Button class="table-btn" @click="showBatch">拒绝</Button></span
-          >
+          <Icon type="md-reorder" size="25" />
+          <span>数据列表</span>
         </div>
         <div>
-          <Select
-            v-model="size"
-            style="width:120px"
-            placeholder="显示条数"
-            class="space"
-          >
+          <Select v-model="size" style="width:120px" placeholder="显示条数">
             <Option
               v-for="item in Article"
               :value="item.value"
@@ -92,8 +69,7 @@
           </Select>
           <Select
             placeholder="排序方式"
-            class="space"
-            style="width: 120px;"
+            style=" margin-left:10px;width: 120px;"
             v-model="sort"
           >
             <Option
@@ -112,15 +88,36 @@
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
-      <Page
-        :total="dataCount"
-        show-elevator
-        show-total
-        size="small"
-        style="margin: auto"
-        :page-size="size"
-        @on-change="changepages"
-      />
+
+      <div class="pages">
+        <div class="batch">
+          <span @click="chackall">
+            <Checkbox v-model="isALL">全选</Checkbox>
+          </span>
+          <a
+            href="javascript:;"
+            style="margin-left:10px;"
+            class="queryBtn"
+            @click="batchAdopt"
+            >通过</a
+          >
+          <a
+            href="javascript:;"
+            style="margin-left:10px;"
+            class="queryBtn"
+            @click="showBatch"
+            >拒绝</a
+          >
+        </div>
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          :page-size="size"
+          @on-change="changepages"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -154,7 +151,7 @@ export default {
               "span",
               {
                 style: {
-                  color: "blue",
+                  color: "#FF565A",
                   cursor: "pointer"
                 },
                 on: {
@@ -249,7 +246,7 @@ export default {
                 "span",
                 {
                   style: {
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   }
                 },
@@ -280,7 +277,7 @@ export default {
                   {
                     clssName: "action",
                     style: {
-                      color: params.row.status == 0 ? "green" : "#ccc",
+                      color: params.row.status == 0 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
@@ -303,7 +300,7 @@ export default {
                     style: {
                       marginRight: "5px",
                       marginLeft: "5px",
-                      color: params.row.status == 0 ? "red" : "#ccc",
+                      color: params.row.status == 0 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
@@ -327,7 +324,7 @@ export default {
                   {
                     clssName: "action",
                     style: {
-                      color: params.row.status == 1 ? "green" : "#ccc",
+                      color: params.row.status == 1 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
@@ -349,7 +346,7 @@ export default {
                     style: {
                       marginRight: "5px",
                       marginLeft: "5px",
-                      color: params.row.status == 1 ? "red" : "#ccc",
+                      color: params.row.status == 1 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
@@ -371,9 +368,9 @@ export default {
       ],
       data: [],
       Article: [
-        { value: 10, label: "显示10条" },
-        { value: 15, label: "显示15条" },
-        { value: 20, label: "显示20条" }
+        { value: 10, label: "10" },
+        { value: 15, label: "15" },
+        { value: 20, label: "20" }
       ],
       sorting: [
         { value: "asc", label: "正序" },
@@ -730,6 +727,8 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
@@ -739,12 +738,14 @@ export default {
   margin-right: 20px;
 }
 .integral-table {
-  margin-top: 30px;
+  margin-top: 20px;
+  background: #ffffff;
+  padding: 0 5px;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
 }
 .table-header .table-btn {
   margin-left: 15px;
@@ -763,5 +764,16 @@ export default {
 .tips {
   text-align: center;
   color: red;
+}
+.table-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pages {
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
 }
 </style>

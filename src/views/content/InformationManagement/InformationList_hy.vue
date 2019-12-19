@@ -26,7 +26,7 @@
           </p>
 
         </div>
-         <Button @click="query()" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
+         <Button @click="query()" shape="circle" size='large' icon="ios-search" class="btn">查询</Button>
       </div>
       <div class="con">
         <div class="title bk-szy flex-center-start">
@@ -89,7 +89,6 @@ export default {
           type: "selection",
           width: 100,
           align: "center",
-          fixed: 'left',
         },
         {
           title: "封面图",
@@ -194,7 +193,6 @@ export default {
           key: "action",
           align: "center",
           width:250,
-          fixed: 'right',
           render: (h, params) => {
             return h("div", [
               h(
