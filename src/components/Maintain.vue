@@ -78,7 +78,8 @@ export default {
     train(id, name, ble) {
      if(this.from == 'editing'){
       this.$router.push({
-        name: this.from
+        name: this.from,
+        query: { dicId:id,name}
       })
      }else{
       this.$router.push({
