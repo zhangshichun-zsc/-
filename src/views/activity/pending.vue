@@ -19,11 +19,6 @@
           <Option v-for="item in List" :value="item.batchNum" :key="item.batchNum">{{item.batchNum}}</Option>
         </Select>
       </p>
-      <!-- <Tabs value="name1">
-        <TabPane label="标签一" name="name1">标签一的内容</TabPane>
-        <TabPane label="标签二" name="name2">标签二的内容</TabPane>
-        <TabPane label="标签三" name="name3">标签三的内容</TabPane>
-      </Tabs>-->
       <div class="content-details">
         <ul class="list-one">
           <li @click="btn(1)">
@@ -37,18 +32,15 @@
           </li>
         </ul>
         <ul class="list" v-if="show==1">
-          <li class="active" @click="btns('')">
-            <a>全部</a>
-          </li>
           <li
             @click="btns(item.id)"
             v-for="(item,index) in Statuslist"
             :key="index"
           >
-            <a>{{item.dataValue}}</a>
+            <Button>{{item.name}}</Button>
           </li>
         </ul>
-        <ul class="list" v-if="show==4">
+        <ul class="list" v-if="show==3">
           <li class="active" @click="grantbtn('')">
             <a>全部</a>
           </li>
@@ -59,8 +51,8 @@
             <a>已发放</a>
           </li>
         </ul>
-        <div class="search" v-if="show!=3">
-          <Input v-model="info" placeholder="报名人/手机号" style="width: 150px" />
+        <div class="searchs flex-start" v-if="show!=3">
+          <i-input v-model="info" placeholder="报名人/手机号" style="width:150px" />
           <Button class="table-btn" @click="search">搜索</Button>
         </div>
         <div class="integral-table">
@@ -73,7 +65,7 @@
               <Button class="table-btn" @click="pass" v-if="show==1||show==2">通过</Button>
               <Button class="table-btn" @click="refuse" v-if="show==1||show==2">拒绝</Button>
               <Button class="table-btn" @click="sendInfos" v-if="show==1||show==2">群发信息</Button>
-              <Button class="table-btn" @click="pass(2)" v-if="show==3">批量发送</Button>
+              <Button class="table-btn" @click="moreSend" v-if="show==3">批量发送</Button>
             </div>
           </div>
 
@@ -143,7 +135,8 @@ import {
   pendingSubsidy,
   signUpStatus,
   moveStatus,
-  sendInfo
+  sendInfo,
+  subDo
 } from "../../request/api";
 export default {
   data() {
@@ -155,7 +148,7 @@ export default {
       status: false,
       List: [],
       Statuslist: [
-        {name:"待审核",id:1},{name:"已通过",id:2},{name:"已拒绝",id:3},{name:"已违约",id:9}
+        {name:"全部",id: ''},{name:"待审核",id:1},{name:"已通过",id:2},{name:"已拒绝",id:3},{name:"已违约",id:9}
       ],
       Scene: "所有场次",
       columns: [],
@@ -177,28 +170,28 @@ export default {
         },
         {
           title: "用户类型",
-          key: "userType",
+          key: "roleName",
           align: "center"
-        },
-        {
-          title: "场次",
-          // key: "batchNum",
-          align: "center",
-          render: (h, params) => {
-            return h("div", "第" + params.row.batchNum + "场");
-          }
         },
         {
           title: "预约时间",
+          key: 'createAt',
           align: "center",
-          render: (h, params) => {
-            return h("div", date1("Y-m-dH:i:s", params.row.apptTimestamp));
-          }
         },
         {
           title: "报名状态",
-          key: "signUpStatusText",
-          align: "center"
+          align: "center",
+          render: (h,params) =>{
+            let state = params.row.status
+            let name = ''
+            for(let item of this.cityList2){
+              if(item.value == state){
+                name = item.label
+                break;
+              }
+            }
+            return (<span>{name}</span>)
+          }
         },
         {
           title: "操作",
@@ -216,8 +209,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.activityUserId);
-                      this.pass(2, params.row.activityUserId);
+                      this.ids = [params.row.actUserId]
+                      this.pass();
                     }
                   }
                 },
@@ -234,8 +227,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.refuse(3, params.row.activityUserId);
-                      // this.$Message.info("你点击了第" + params.index + "列");
+                      this.ids = [params.row.actUserId]
+                      this.refuse(3);
                     }
                   }
                 },
@@ -495,11 +488,69 @@ export default {
       remark: "",
       batchNums: "",
       activityName: this.$route.query.activityName,
-      status: '',
+      state: 0,
       name: '',
       title: '',
       msg: '',
-      modal1: false
+      modal1: false,
+      cityList2: [
+        {
+          value: "",
+          label: "全部"
+        },
+        {
+          value: 1,
+          label: "待审核"
+        },
+        {
+          value: 2,
+          label: "报名成功"
+        },
+        {
+          value: 3,
+          label: "报名被拒绝"
+        },
+          {
+          value: 4,
+          label: "资格转移审核中，转移方"
+        },
+        {
+          value: 5,
+          label: "资格转移审核中，接收方"
+        },
+        {
+          value: 6,
+          label: "转移成功"
+        },
+        {
+          value: 7,
+          label: "用户自主取消--已取消"
+        },
+            {
+          value: 8,
+          label: "活动已取消--活动"
+        },
+        {
+          value: 9,
+          label: "已违约"
+        },
+          {
+          value: 10,
+          label: "排队中"
+        },
+        {
+          value: 11,
+          label: "请假中"
+        },
+        {
+          value: 12,
+          label: "待付款"
+        },
+        {
+          value: 13,
+          label: "拒绝转移"
+        }
+      ],
     };
   },
 
@@ -542,7 +593,7 @@ export default {
     getpendingEnrollList() {
       pendingEnrollList({
       activityId:this.$route.query.activityId,
-      status: this.status,
+      status: this.state,
       name:this.name
       }).then(res => {
         this.status = false;
@@ -569,7 +620,7 @@ export default {
     getpendingSubsidyList() {
       pendingSubsidyList({
         activityId:this.$route.query.activityId,
-        status: this.status,
+        status: this.state,
         name:this.name
       }).then(res => {
         this.status = false;
@@ -604,16 +655,12 @@ export default {
 
     //搜索
     search() {
+      this.name = this.info
       if (this.show == 1) {
-        this.getpendingSignList();
         this.getpendingEnrollList();
       } else if (this.show == 2) {
         this.getpendingTransferList();
-        this.getpendingTransfer();
       } else if (this.show == 3) {
-        this.getpendingUnclaimedList();
-      } else if (this.show == 4) {
-        console.log(show);
         this.getpendingSubsidyList();
       }
     },
@@ -686,8 +733,6 @@ export default {
 
     //每条数据单选框的状态
     handleSelectionChange(val) {
-      this.arr = val;
-      console.log(this.arr);
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
@@ -696,6 +741,11 @@ export default {
       } else {
         this.status = false;
       }
+      if(this.show == 1){
+        this.ids = val.map(v => {
+          return v.actUserId
+        })
+      }
     },
     //全选按钮
     chackall() {
@@ -703,7 +753,7 @@ export default {
       this.$refs.selection.selectAll(this.status);
     },
 
-    //报名 转移人员  物资领取 补助发放
+    //报名 转移人员  补助发放
     btn(id) {
       this.show = id;
       if (this.show == 1) {
@@ -717,28 +767,14 @@ export default {
       }
     },
     btns(val) {
-      this.receiveStatus = val;
-      if (val == 1 || val == 2 || val == 3 || val == 7) {
-        this.getpendingEnrollList();
-      } else {
-        this.getpendingTransferList();
+      this.state = val
+      if(this.show == 1){
+        this.getpendingEnrollList()
+      }else{
+
       }
-      console.log(val);
     },
 
-    //分页功能
-    changepages(index) {
-      this.page = index;
-      console.log(index);
-      if (this.show == 1) {
-        this.getpendingEnrollList();
-      } else if (this.show == 2) {
-        this.getpendingTransferList();
-        this.getpendingTransfer();
-      } else if (this.show == 3) {
-        this.getpendingSubsidyList();
-      }
-    },
     //通过
     pass() {
       if(this.show == 1){
@@ -777,6 +813,11 @@ export default {
       this.model1 = false
       this.title = ''
       this.msg = ''
+    },
+    moreSend(){
+      subDo({ids:this.ids}).then(res => {
+
+      })
     },
     // 发放
     grantmat(e) {
@@ -876,11 +917,9 @@ export default {
     margin: 0 10px;
   }
 }
-.search {
+.searchs {
   height: 40px;
-  padding-left: 20px;
-  display: flex;
-  align-items: center;
+  padding: 10px 20px;
   background: #ffffff;
   .table-btn {
     margin-left: 20px;

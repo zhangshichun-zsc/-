@@ -76,13 +76,13 @@
           <Button class="table-btn">
             <Icon type="md-cloud-upload" />导出
           </Button>
-          <Dropdown style="margin-left: 0.2rem;width:5rem;">
+          <!-- <Dropdown style="margin-left: 0.2rem;width:5rem;">
             <Button><Icon type="md-cloud-upload" />更多操作</Button>
             <DropdownMenu slot="list">
               <DropdownItem>添加参与人员</DropdownItem>
               <DropdownItem>导入参与人员</DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> -->
           <Button @click="sendInfos">发送站内信</Button>
         </div>
 
@@ -373,7 +373,10 @@ export default {
         })
     },
     pend(){
-      this.$router.push({name:'pending'})
+      this.$router.push({
+        name: "pending",
+        query: { activityId: this.$route.query.acitvityId, activityName:this.activityName}
+      })
     },
     querys(){
       this.roleId = this.query.roleId
