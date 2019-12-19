@@ -76,10 +76,16 @@ export default {
 
   methods: {
     train(id, name, ble) {
+     if(this.from == 'editing'){
+      this.$router.push({
+        name: this.from
+      })
+     }else{
       this.$router.push({
         name: this.from,
         query: { id, name, ble }
       });
+     }
     },
     more() {
       if (this.show === false) {
