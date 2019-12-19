@@ -6,30 +6,31 @@
       <img :src="showImg" alt="" class="showimg"/>
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="content">
-      <div class="con top flex-between">
-        <div class="con inp flex-center-start">
-          <p>
-            <span>资讯标题:</span>&nbsp;
-            <Input size="large" placeholder="标题关键字" style="width: 200px" v-model="querys.title" />
-          </p>
-          <p>
-            <span>资讯分类:</span>&nbsp;
-            <Select style="width:200px" placeholder="全部" v-model="querys.infomationType">
-              <Option :value="''">全部</Option>
-              <Option
-                v-for="item in type"
-                :value="item.dataKey"
-                :key="item.dataValue"
-              >{{ item.dataValue }}</Option>
-            </Select>
-          </p>
+    <div class=" top flex-center-start">
+      <div class="flex-center-start">
+        <p style="margin-right:20px;">
+          <span>资讯标题:</span>&nbsp;
+          <Input size="large" placeholder="标题关键字" style="width: 200px" v-model="querys.title" />
+        </p>
+        <p>
+          <span>资讯分类:</span>&nbsp;
+          <Select style="width:200px" placeholder="全部" v-model="querys.infomationType">
+            <Option :value="''">全部</Option>
+            <Option
+              v-for="item in type"
+              :value="item.dataKey"
+              :key="item.dataValue"
+            >{{ item.dataValue }}</Option>
+          </Select>
+        </p>
 
-        </div>
-         <Button @click="query()" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
       </div>
+        <Button @click="query()" shape="circle" size='large' class="table-btns">查询结果</Button>
+    </div>
+
+    <div class="content">
       <div class="con">
-        <div class="title bk-szy flex-center-start">
+        <div class="title flex-center-start">
           <p>
             <Icon type="ios-list" />
             <span>数据列表</span>
@@ -37,7 +38,7 @@
           <div class="but">
             <Button @click="addBut()">新增</Button>
             <Button @click="MgtBut()">分类管理</Button>
-           <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+           <Select v-model="size" style="width:120px;margin-right:5px;" placeholder="显示条数" class="space">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
@@ -45,9 +46,9 @@
             </Select>
           </div>
         </div>
-        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       </div>
-      <div class="pages">
+      <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+      <!-- <div class="pages">
         <div class="batch">
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
@@ -66,7 +67,28 @@
           :page-size="size"
           @on-change="changepages"
         />
-      </div>
+      </div> -->
+      <Row class="row">
+        <Col span="8">
+          <Button @click="chackall()" style="border:0px;">
+            <Checkbox v-model="status"></Checkbox>全选
+          </Button>
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Button style="margin-left: 10px" @click="batches()">确定</Button>
+        </Col>
+        <Col span="8"><Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        /></Col>
+        <Col span="8"></Col>
+      </Row>
     </div>
   </div>
 </template>
@@ -87,8 +109,7 @@ export default {
         {
           type: "selection",
           width: 100,
-          align: "center",
-          fixed: 'left',
+          align: "center"
         },
         {
           title: "封面图片",
@@ -198,7 +219,6 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          fixed: 'right',
           width: 300,
           render: (h, params) => {
             return h("div", [
@@ -207,7 +227,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -229,7 +249,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "green"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -453,14 +473,17 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
-  border: 1px solid #e4e4e4;
 }
 .content {
-  margin: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
 }
 .top {
   margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
 }
 .bk {
   border: 1px solid #e4e4e4;
@@ -474,9 +497,8 @@ body {
   border-top: 1px solid #e4e4e4;
 }
 .title {
-  background-color: #f3f3f3;
   justify-content: space-between;
-  padding: 5px 20px;
+  margin-bottom: 20px;
 }
 .con p {
   margin-right: 1rem;
@@ -494,5 +516,10 @@ body {
   display: flex;
   justify-content: center;
   margin: 10px auto;
+}
+.row{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 </style>

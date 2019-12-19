@@ -7,9 +7,9 @@
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <div class="con-top bk-szy flex-center-start">
+      <div class="con-top flex-center-start">
         <p>
-          <Icon type="ios-list" size="50" />
+          <Icon type="ios-list" />
           <span>数据列表</span>
         </p>
         <div class="but">
@@ -45,7 +45,7 @@
           <Button type="primary" size="large" @click="modalOk('AddData')">确定</Button>
         </div>
       </Modal>
-      <div class="pages">
+      <!-- <div class="pages">
         <div class="batch">
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
@@ -56,7 +56,28 @@
           <Button style="margin-left: 10px" @click="batch">确定</Button>
         </div>
         <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
-      </div>
+      </div> -->
+      <Row class="row">
+        <Col span="8">
+          <Button @click="chackall()" style="border:0px;">
+            <Checkbox v-model="status"></Checkbox>全选
+          </Button>
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Button style="margin-left: 10px" @click="batches()">确定</Button>
+        </Col>
+        <Col span="8"><Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        /></Col>
+        <Col span="8"></Col>
+      </Row>
     </div>
   </div>
 </template>
@@ -160,7 +181,7 @@ export default {
                   {
                     clssName: 'action',
                     style: {
-                      color: '#1ABD9D'
+                      color: '#FF565A'
                     },
                     on: {
                       click: () => {
@@ -181,7 +202,7 @@ export default {
                   'a',
                   {
                     style: {
-                      color: '#1ABD9D'
+                      color: '#FF565A'
                     },
                     on: {
                       click: () => {
@@ -463,15 +484,21 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
 }
 .content {
-  margin: 1rem;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
 }
 .con-top {
-  background-color: #f3f3f3;
+  background-color: #fff;
   justify-content: space-between;
-  padding: 0 1rem;
+  margin-bottom: 20px;
+}
+.row{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 .bk-szy {
   border-left: 1px solid #e4e4e4;
