@@ -318,7 +318,9 @@ export default {
       sysType: 1,
       activity: [],
       Pending: [],
-      activityOverview: [],
+      activityOverview: {
+        shelvesActivityCount: 0
+      },
       userOverview: [],
       Jumplist: [
         {
@@ -436,8 +438,8 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.userOverview = res.data.userOverview;
-          this.activityOverview = res.data.activityOverview;
+          this.userOverview = res.data;
+          this.activityOverview = res.data;
         } else {
           this.$Message.error(res.msg);
         }

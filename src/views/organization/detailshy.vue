@@ -213,9 +213,9 @@
                   <div class="file">
                     <p>
                       <span>{{ item.fileName }}</span>
-                      <!-- <span>
+                      <span>
                         <a @click="download(item.fileUrlShow)">下载</a>
-                      </span> -->
+                      </span>
                     </p>
                     <Progress :percent="percent" style="width: 15rem" />
                   </div>
@@ -281,7 +281,8 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "组织详情(会员)"
+        head:
+          this.$route.query.status == 1 ? "组织详情(志愿者)" : "组织详情(会员)"
       },
       citysData: [],
       columns1: [
@@ -434,8 +435,9 @@ export default {
       console.log(e);
     },
     onall(e) {
+      let str = this.$route.query.status === 1 ? "(志愿者)" : "(会员)";
       this.num = e;
-      this.navigation1.head = this.list[e] + "(会员)";
+      this.navigation1.head = this.list[e] + str;
       console.log(e);
       if (e == 1) {
         this.getorgedit();
@@ -618,6 +620,7 @@ export default {
 
     //下载
     download(e) {
+      console.log(e);
       window.open(e, "_blank");
     },
 
