@@ -1,12 +1,27 @@
 <!-- 积分审核(志愿者) -->
 <template>
   <div class="audit">
-    <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
+    <div class="integral-header">
+      <Navigation :labels="navigation1"></Navigation>
+      <div class="flex-center-start integral-body" >
+        <div class="flex-center-start name">
+          <span>用户账号:</span>
+          <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="userAccount" />
+        </div>
+        <div class="flex-center-start name">
+          <span>修改人:</span>
+          <Input size="large" placeholder="修改人昵称" class="inpt" v-model="modifyName" />
+        </div>
+
+        <Button class="search" @click="query">查询</Button>
+      </div>
+    </div>
+    <!-- <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead> -->
     <div class="audit-list">
       <div class="table-header">
         <div class="flex-center-end">
-          <Button class="table-btn" @click="batch">批量审批</Button>
-          <Button class="table-btn" @click="exportData" disabled>
+          <Button class="table-btns" @click="batch">批量审批</Button>
+          <Button class="table-btn"  disabled>
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
@@ -24,14 +39,17 @@
           </div>
         </Modal>
       </div>
-
-      <Table
+      <div class="min-height">
+        <Table
         ref="selection"
         border
         :columns="columns"
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
+
+      </div>
+
       <div class="pages">
         <Page
           :total="dataCount"
@@ -49,7 +67,7 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { date1 } from "../../request/datatime";
+import { formatDate } from "../../request/datatime";
 import { integralExa, Integralaudit } from "../../request/api";
 export default {
   data() {
@@ -93,9 +111,7 @@ export default {
           key: "modifyTime",
           width:300,
           align: "center",
-          render: (h, params) => {
-            return h("div", date1("Y-m-dH:i:s", params.row.modifyTime));
-          }
+
         },
         {
           title: "原积分",
@@ -106,8 +122,8 @@ export default {
         {
           title: "现积分",
           key: "currScore",
+          align: "center",
           width:200,
-          align: "center"
         },
         {
           title: "积分调整值",
@@ -118,8 +134,8 @@ export default {
         {
           title: "状态",
           key: "auditStatusTtext",
-          width:200,
-          align: "center"
+          align: "center",
+          width:200
         },
         {
           title: "操作",
@@ -134,7 +150,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: params.row.auditStatusTtext=='待审核'?"green":'gray'
+                    color: params.row.auditStatusTtext=='待审核'?"red":'gray'
                   },
                   on: {
                     click: () => {
@@ -152,11 +168,11 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: params.row.auditStatusTtext=='待审核'?"green":'gray'
+                    color: params.row.auditStatusTtext=='待审核'?"red":'gray'
                   },
                   on: {
                     click: () => {
-                      if(params.row.auditStatusTtext=='待审核'){
+                       if(params.row.auditStatusTtext=='待审核'){
                         this.refuse(params.row.scoreHisId,2)
                       }
                     }
@@ -178,10 +194,7 @@ export default {
       dataCount: 0,
       operationUserId:13,
       auditStatus:'',
-       top: [
-        { name: "用户账号", type: "input", value: "" },
-        { name: "修改人", type: "input", value: "" }
-      ],
+
       Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
@@ -199,7 +212,7 @@ export default {
   components: {},
 
   computed: {},
-  mixins: [tablepage],
+
   created() {},
   mounted() {
     this.getintegralExa();
@@ -228,35 +241,38 @@ export default {
 
     //积分管理--审核积分
     getIntegralaudit() {
-      // let
+
       Integralaudit({
         scoreHisIds: this.arr,
         sysType: this.sysType,
-        // auditStatus: this.auditStatus,
-        // operationUserId: this.operationUserId
+        auditStatus: this.auditStatus,
+        operationUserId: this.operationUserId
       }).then(res => {
         if(res.code==200){
           this.$refs.selection.selectAll(false);
            this.$Message.info("操作成功");
            this.getintegralExa()
         }else{
-          this.$Message.info("网络错误");
+          this.$Message.info(res.msg);
         }
         console.log(res);
       });
     },
-    cancel(){
-
-
-    },
-    batch(){
+    //批量修改
+     batch(){
       if(this.arr==''){
         this.$Message.error("请先选择")
       }else{
         this.modal1=true
       }
     },
+    cancel(){
+
+    },
     ok(){
+       this.arr = val.map(item => {
+        return item.scoreHisId;
+      }).toString();
       this.auditStatus=1
       this.getIntegralaudit()
     },
@@ -264,7 +280,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
+
       this.getintegralExa();
     },
     //选择内容
@@ -283,50 +299,32 @@ export default {
     },
 
     // 搜索
-    query(e) {
-      this.userAccount=e[0].value
-      this.modifyName=e[1].value
+    query() {
+
       this.getintegralExa();
     }
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.integral-body{
+margin-bottom: 20px;
+    padding-left: 20px;
+    border-radius: 10px;
+  display: flex;
+  height: 90px;
+  background: #ffffff;
+  border: 0;
+}
+.name {
+  span {
+    display: block;
+    width: 120px;
+  }
+  .inpt {
+    margin-right: 30px;
+  }
+}
 
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: white;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
 
-.table-header {
-  padding: 10px 20px;
-  background: white;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.pages {
-  padding: 20px;
-  background: #fff;
-}
-.approval {
-  text-align: center;
-}
-.ivu-modal-footer {
-  text-align: center;
-}
 </style>

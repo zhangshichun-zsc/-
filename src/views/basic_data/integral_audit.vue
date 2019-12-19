@@ -1,12 +1,27 @@
 <!-- 积分审核(会员) -->
 <template>
   <div class="audit">
-    <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
+    <div class="integral-header">
+      <Navigation :labels="navigation1"></Navigation>
+      <div class="flex-center-start integral-body" >
+        <div class="flex-center-start name">
+          <span>用户账号:</span>
+          <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="userAccount" />
+        </div>
+        <div class="flex-center-start name">
+          <span>修改人:</span>
+          <Input size="large" placeholder="修改人昵称" class="inpt" v-model="modifyName" />
+        </div>
+
+        <Button class="search" @click="query">查询</Button>
+      </div>
+    </div>
+    <!-- <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead> -->
     <div class="audit-list">
       <div class="table-header">
         <div class="flex-center-end">
-          <Button class="table-btn" @click="batch">批量审批</Button>
-          <Button class="table-btn" @click="exportData" disabled>
+          <Button class="table-btns" @click="batch">批量审批</Button>
+          <Button class="table-btn" disabled>
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
@@ -24,14 +39,17 @@
           </div>
         </Modal>
       </div>
-
-      <Table
+      <div class="min-height">
+        <Table
         ref="selection"
         border
         :columns="columns"
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
+
+      </div>
+
       <div class="pages">
         <Page
           :total="dataCount"
@@ -93,9 +111,7 @@ export default {
           key: "modifyTime",
           width:300,
           align: "center",
-          render: (h, params) => {
-            return h("div", formatDate(params.row.modifyTime));
-          }
+
         },
         {
           title: "原积分",
@@ -178,11 +194,7 @@ export default {
       dataCount: 0,
       operationUserId:13,
       auditStatus:'',
-       top: [
-        { name: "用户账号", type: "input", value: "" },
-        { name: "修改人", type: "input", value: "" },
-        {name:"用户类型",type:"select",list:[],value:""}
-      ],
+
       Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
@@ -200,7 +212,7 @@ export default {
   components: {},
 
   computed: {},
-  mixins: [tablepage],
+
   created() {},
   mounted() {
     this.getintegralExa();
@@ -258,6 +270,9 @@ export default {
 
     },
     ok(){
+       this.arr = val.map(item => {
+        return item.scoreHisId;
+      }).toString();
       this.auditStatus=1
       this.getIntegralaudit()
     },
@@ -265,7 +280,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
+
       this.getintegralExa();
     },
     //选择内容
@@ -284,48 +299,32 @@ export default {
     },
 
     // 搜索
-    query(e) {
-      this.userAccount=e[0].value
-      this.modifyName=e[1].value
+    query() {
+
       this.getintegralExa();
     }
   }
 };
 </script>
-<style lang="scss">
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: white;
+<style lang="scss" scoped>
+.integral-body{
+margin-bottom: 20px;
+    padding-left: 20px;
+    border-radius: 10px;
+  display: flex;
+  height: 90px;
+  background: #ffffff;
+  border: 0;
 }
-.integral-header .integral-center {
-  margin: 0 20px;
+.name {
+  span {
+    display: block;
+    width: 120px;
+  }
+  .inpt {
+    margin-right: 30px;
+  }
 }
-.integral-header .integral-body {
-  padding: 20px;
-  background: #fff;
-}
-.integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
-  margin-left: 15px;
-}
-.integral-header .integral-body .flex-center-start {
-  margin-right: 20px;
-}
-.table-header {
-  padding: 10px 20px;
-  background: white;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.pages {
-  padding: 20px;
-  background: #fff;
-}
-.approval {
-  text-align: center;
-}
-.ivu-modal-footer {
-  text-align: center;
-}
+
+
 </style>

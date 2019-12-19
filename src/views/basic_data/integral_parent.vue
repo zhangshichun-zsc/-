@@ -3,6 +3,7 @@
   <div>
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
     <div class="integral-table">
+      <div class="yuan">
       <div class="table-header flex-center-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
@@ -34,6 +35,7 @@
           @on-change="changepages"
         />
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -310,7 +312,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../libs/basicdata.css";
+
 
 
 </style>

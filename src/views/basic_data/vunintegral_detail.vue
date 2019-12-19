@@ -1,4 +1,4 @@
-<!-- 积分明细(志愿者) -->
+<!-- 积分明细(会员) -->
 <template>
   <div class="integral-header">
     <Navigation :labels="navigation1"></Navigation>
@@ -8,7 +8,7 @@
       </div>
       <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start">
-          <span>积分来源</span>
+          <span>积分来源:</span>
           <Select size="large" class="inpt" v-model="scoreRuleId">
             <Option
               v-for="item in list"
@@ -18,7 +18,7 @@
           </Select>
         </div>
         <div class="flex-center-start">
-          <span>操作时间</span>
+          <span>操作时间:</span>
           <DatePicker
             type="date"
             @change="time"
@@ -34,16 +34,16 @@
       </div>
     </div>
     <div class="inter-list">
-      <div class="table-header">
+      <div class="table-header flex-center-between">
         <div class="flex-center-end">
           <Button class="table-btn" @click="exportData" disabled>
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>
-          <Select v-model="size" style="width:100px;margin:0 10px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:120px;margin:0 10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
+          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "积分明细(志愿者)"
+        head: "积分明细(会员)"
       },
       columns1: [
         {
@@ -252,8 +252,11 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
+.integral-header {
+  border: 1px solid #eee;
+}
 .integral-header .integral-top {
   padding: 15px 20px;
   background: white;
@@ -264,6 +267,7 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+  padding-top: 40px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
@@ -272,11 +276,9 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-
 .table-header {
   padding: 10px 20px;
-  background:white;
-  border: 1px solid #eee;
+  background: white;
 }
 .table-header .table-btn {
   margin-left: 15px;

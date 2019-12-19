@@ -53,6 +53,7 @@
                 type="ios-trash"
                 class="cancel"
                 size="24"
+                color="#FF565A"
                 @click="cancelImg(formInline.agPicA,formInline.nameA)"
               />
             </p>
@@ -62,6 +63,7 @@
                 type="ios-trash"
                 class="cancel"
                 size="24"
+                color="#FF565A"
                 @click="cancelImg(formInline.agPicB,formInline.nameB)"
               />
             </p>
@@ -71,6 +73,7 @@
                 type="ios-trash"
                 class="cancel"
                 size="24"
+                color="#FF565A"
                 @click="cancelImg(formInline.agPicC,formInline.nameC)"
               />
             </p>
@@ -93,11 +96,12 @@
             <!-- <img class="imgs" v-else :src="texturl" style="width:100px;height:100px"/> -->
           </div>
         </FormItem>
-      </Form>
-      <br />
-      <div class="centers">
+          <div class="centers">
         <Button align="center" class="button-red" @click="handleSubmit('formInline')">保存</Button>
       </div>
+      </Form>
+      <br />
+
     </div>
   </div>
 </template>
@@ -414,9 +418,13 @@ export default {
   padding-left: 50px;
   background: #ffffff;
   min-height: 800px;
-  width: 900px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
 }
 .centers {
+  margin-top: 30px;
   padding-left: 140px;
 }
 .start-wap {
