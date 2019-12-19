@@ -221,8 +221,10 @@ export default {
 .table-header .table-btn {
   margin-right: 15px;
 }
+
 .integral-table{
   margin-top: 10px;
+  padding: 0 10px;
 }
 .integral-table .pages {
   padding: 20px;

@@ -13,10 +13,10 @@
               <div class="item-head">{{ item.postName }}反馈简介</div>
               <div class="item-wap">{{ item.detailText }}</div>
             </div>
-            <view class="ls-item flex-between" v-else-if="~~item.typeFlag == 9">
-              <text>是否上传图片</text>
-              <span>{{ ~~item.detailText == 1 ? "是" : "否" }}</span>
-            </view>
+            <div class="ls-item flex-between" v-else-if="~~item.typeFlag == 9">
+              <span>是否上传图片</span>
+              <span>{{ tem.detailText == 1 ? "是" : "否" }}</span>
+            </div>
             <div
               class="ls-item"
               v-else-if="~~item.typeFlag === 1 || ~~item.typeFlag === 6"

@@ -223,6 +223,10 @@ this.getInvitationList()
 .table-header .table-btn {
   margin-left: 15px;
 }
+.integral-table{
+  border-radius: 10px;
+  padding: 0 10px;
+}
 .integral-table .pages {
   padding: 20px;
   background: #fff;
