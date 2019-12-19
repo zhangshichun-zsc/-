@@ -215,7 +215,7 @@ export default {
                       let ob = params.row;
                       this.$router.push({
                         name: "vun_prend.vue",
-                        query: { certMouldId: ob.certMouldId, show: false }
+                        query: { certMouldId: ob.certMouldId, show: 0 }
                       });
                     }
                   }
@@ -235,7 +235,7 @@ export default {
                           let ob = params.row;
                           this.$router.push({
                             name: "vun_prend.vue",
-                            query: { certMouldId: ob.certMouldId, show: true }
+                            query: { certMouldId: ob.certMouldId, show: 1 }
                           });
                         }
                       }
@@ -411,6 +411,8 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+    margin-bottom: 20px;
+    border-radius: 10px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;

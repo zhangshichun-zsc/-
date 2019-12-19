@@ -177,9 +177,11 @@ export default {
   margin: 0 20px;
 }
 .integral-header .integral-body {
-  padding: 20px;
+  padding: 30px;
   background: #fff;
-  padding-top: 40px;
+  // padding-top: 40px;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;

@@ -4,91 +4,164 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="basis">
       <div class="content">
-        <!-- <div class="title">
-          <div class="flex-center-end">
-            <div class="Pack space" @click="Retractbtn">
-              <Icon type="ios-arrow-down" v-if="Retract==true" />
-              <Icon type="ios-arrow-up" v-if="Retract==false" />
-              <span v-if="Retract==true">
-                <a class="sai">收起筛选</a>
-              </span>
-              <span v-if="Retract==false">
-                <a class="sai">启用筛选</a>
-              </span>
-            </div>
-          </div>
-        </div> -->
-        <Form ref="formInline" :model="formInline" inline class="forms" v-if="Retract==true" >
-          <FormItem label="组织名称:" :label-width="100">
-            <Input v-model="orgName" placeholder="组织名称" style="width: 120px" />
+        <Form
+          ref="formInline"
+          :model="formInline"
+          inline
+          class="forms"
+          :label-width="80"
+          v-if="Retract == true"
+        >
+          <FormItem label="组织名称:">
+            <Input
+              v-model="orgName"
+              placeholder="组织名称"
+              style="width: 120px"
+            />
           </FormItem>
-          <FormItem label="组织地址:" :label-width="100">
-            <Input v-model="address" placeholder="组织地址" style="width: 120px" />
+          <FormItem label="组织地址:">
+            <Input
+              v-model="address"
+              placeholder="组织地址"
+              style="width: 120px"
+            />
           </FormItem>
-          <FormItem label="负责人:" :label-width="80">
-            <Input v-model="ownerUserName" placeholder="请选择负责人" style="width: 120px" />
+          <FormItem label="负责人:">
+            <Input
+              v-model="ownerUserName"
+              placeholder="请选择负责人"
+              style="width: 120px"
+            />
           </FormItem>
-          <FormItem label="分类:"  class="types" v-if="this.navigation1.id==100 " :label-width="60">
-            <Select v-model="orgType" style="width:120px" :transfer="true">
+          <FormItem
+            label="分类:"
+            class="types"
+            v-if="this.navigation1.id == 100"
+            :label-width="60"
+          >
+            <Select v-model="orgType" style="width:140px" :transfer="true">
               <Option
                 v-for="item in typelist"
                 :value="item.dicCode"
                 :key="item.dicCode"
-              >{{ item.dataValue }}</Option>
+                >{{ item.dataValue }}</Option
+              >
             </Select>
           </FormItem>
-          <ButtonGroup>
-            <Button class="search" @click="query">查询</Button>
-
-          </ButtonGroup>
+          <a
+            href="javascript:;"
+            style="margin-left:10px"
+            class="queryBtn"
+            @click="query"
+            >查询</a
+          >
         </Form>
       </div>
-      <div>
+      <div class="tableHerber">
         <div>
           <div class="bk-szy sleft">
-            <Button @click="chackall()" style="border:0px;">
-              <Checkbox v-model="status"></Checkbox>全选
-            </Button>
+            <div class="flex-start">
+              <div>
+                <Icon type="md-reorder" size="25" /> <span>数据列表</span>
+              </div>
+              <a
+                href="javascript:;"
+                class="queryBtn"
+                style="margin-left:15px;"
+                @click="jump()"
+              >
+                新建组织</a
+              >
+            </div>
             <div class="flex-start">
               <div class="flex-center-end">
-                <Dropdown class="space">
-                  <Button @click="exportData">导出数据</Button>
-                </Dropdown>
+                <Button class="space" @click="exportData">导入组织</Button>
+                <div class="flex-center-end">
+                  <Dropdown class="space">
+                    <Button @click="exportData">导出数据</Button>
+                  </Dropdown>
+                </div>
               </div>
+            </div>
+            <div class="flex-start">
               <div class="flex-center-end">
-                <Button class="space" @click="jump()">
-                  <Icon type="md-person-add" />新建组织
-                </Button>
-                <Button class="space">导入组织</Button>
-              </div>
-              <div class="flex-center-end">
-                <Select v-model="size" style="width:80px;margin:0 20px 0 10px;" placeholder="显示条数">
+                <Select
+                  v-model="size"
+                  style="width:80px;margin-right:10px"
+                  placeholder="显示条数"
+                >
                   <Option
                     v-for="item in Article"
                     :value="item.value"
                     :key="item.value"
-                  >{{ item.label }}</Option>
+                    >{{ item.label }}</Option
+                  >
                 </Select>
-                <Select placeholder="排序方式" style="width: 80px;" v-model="sort">
+                <Select
+                  placeholder="排序方式"
+                  style="width: 80px;"
+                  v-model="sort"
+                >
                   <Option
                     v-for="item in sorting"
                     :value="item.value"
                     :key="item.value"
-                  >{{ item.label }}</Option>
+                    >{{ item.label }}</Option
+                  >
                 </Select>
               </div>
             </div>
           </div>
-          <Table
-            ref="selection"
-            border
-            :columns="columns"
-            :data="data"
-            @on-selection-change="handleSelectionChange"
-          ></Table>
         </div>
-        <div class="flex-center-end">
-          <Modal v-model="modal1" title="自定义展示字段" @on-ok="ok" @on-cancel="cancel">
+        <div class="flex-center-end"></div>
+
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="data"
+          style=" padding: 0 5px;"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
+        <div class="pages">
+          <div class="batch">
+            <Button @click="chackall()" style="border:0px;">
+              <Checkbox v-model="status"></Checkbox>全选
+            </Button>
+            <Select placeholder="批量操作" style="width: 120px" v-model="type">
+              <Option
+                v-for="item in batchList"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.label }}</Option
+              >
+            </Select>
+            <a
+              class="queryBtn"
+              style="margin-left:10px;"
+              href="javascript:;"
+              @click="batch"
+              >确定</a
+            >
+          </div>
+          <Page
+            :total="dataCount"
+            show-elevator
+            show-total
+            size="small"
+            :page-size="size"
+            @on-change="changepages"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- <Modal
+            v-model="modal1"
+            title="自定义展示字段"
+            @on-ok="ok"
+            @on-cancel="cancel"
+          >
             <div class="con">
               <p>目前显示字段顺序</p>
               <p>拖拽调整列显示顺序</p>
@@ -116,27 +189,7 @@
                 <Icon type="ios-settings-outline" />自定义扩展字段
               </a>
             </div>
-          </Modal>
-        </div>
-      </div>
-      <div class="padd">
-        <Select placeholder="批量操作" style="width: 120px" v-model="type">
-          <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-        <Button class="space" @click="batch">确定</Button>
-      </div>
-      <div class="pages flex-center">
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changepages"
-        />
-      </div>
-    </div>
+          </Modal> -->
   </div>
 </template>
 
@@ -165,25 +218,27 @@ export default {
           title: "组织名称",
           key: "orgName",
           align: "center",
-          width:400
+          width: 400
         },
         {
           title: "组织分类",
           key: "orgType",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "组织地址",
           key: "address",
           align: "center",
-          width:400,
+          width: 400,
           render: (h, params) => {
             return h(
               "span",
-              params.row.provinceName +
-                params.row.cityName +
-                params.row.districtName
+              params.row.provinceName
+                ? params.row.provinceName +
+                    params.row.cityName +
+                    params.row.districtName
+                : ""
             );
           }
         },
@@ -191,18 +246,48 @@ export default {
           title: "负责人",
           key: "userName",
           align: "center",
-          width:220,
+          width: 220
         },
         {
           title: "人数",
           key: "num",
-          width:120,
+          width: 120,
           align: "center"
+        },
+        {
+          title: "是否启用",
+          key: "validFlag",
+          align: "center",
+          width: 120,
+          render: (h, params) => {
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  value: params.row.validFlag == 1
+                },
+                style: {
+                  margin: "0 auto",
+                  "text-align": "center"
+                },
+                on: {
+                  input: e => {
+                    if (params.row.validFlag == "1") {
+                      this.types = 2;
+                    } else {
+                      this.types = 1;
+                    }
+                    this.arr = Array.of(params.row.orgId);
+                    this.getorgbatch();
+                  }
+                }
+              })
+            ]);
+          }
         },
         {
           title: "操作",
           key: "action",
-          width:160,
+          width: 160,
           align: "center",
           render: (h, params) => {
             let status = "";
@@ -217,7 +302,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "#FF565A "
                   },
                   on: {
                     click: () => {
@@ -229,29 +314,29 @@ export default {
                   }
                 },
                 "查看"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "green"
-                  },
-                  on: {
-                    click: () => {
-                      if (params.row.validFlag == "1") {
-                        this.types = 2;
-                      } else {
-                        this.types = 1;
-                      }
-                      this.arr = Array.of(params.row.orgId);
-                      this.getorgbatch();
-                    }
-                  }
-                },
-                status
               )
+              // h(
+              //   "a",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "#FF565A "
+              //     },
+              //     on: {
+              //       click: () => {
+              //         if (params.row.validFlag == "1") {
+              //           this.types = 2;
+              //         } else {
+              //           this.types = 1;
+              //         }
+              //         this.arr = Array.of(params.row.orgId);
+              //         this.getorgbatch();
+              //       }
+              //     }
+              //   },
+              //   status
+              // )
             ]);
           }
         }
@@ -268,8 +353,8 @@ export default {
       sort: "create_at desc",
       batchList: [
         { value: "1", label: "启用" },
-        { value: "2", label: "停用" },
-        { value: "3", label: "删除" }
+        { value: "2", label: "停用" }
+        // { value: "3", label: "删除" }
       ],
       options: ["options1", "options2", "options8"],
       sysType: "1",
@@ -405,6 +490,7 @@ export default {
 
     //导出数据
     exportData() {
+      this.$Message.error("此功能暂未开放！");
       // if (this.arrs.length == 0) {
       //   this.arrs = this.data
       // }
@@ -457,18 +543,16 @@ html,
 body {
   margin: auto;
 }
-.main {
-  background-color: #ffffff;
-}
+
 .padd {
   padding: 10px 0 0 50px;
 }
-.basis {
-  margin: 0.5rem;
-  padding: 10px 0;
-}
+
 .content {
-  margin-bottom: 0.5rem;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 0 5px;
 }
 .sleft {
   margin-left: 5px;
@@ -476,7 +560,7 @@ body {
 .bk-szy {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 15px 30px;
   justify-content: space-between;
 }
 .title {
@@ -490,8 +574,11 @@ body {
 }
 
 .pages {
-  margin: 20px auto;
+  padding: 20px 30px;
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .ivu-form-item {
   margin-bottom: 0;
@@ -513,7 +600,7 @@ body {
   padding: 0.2rem;
 }
 .forms {
-  margin: 20px 0;
+  padding: 15px;
   display: flex;
 }
 
@@ -524,15 +611,20 @@ body {
   color: black;
 }
 
-.search{
-    width: 110px;
-    height: 32px;
-    background: #FF565A;
-    border-radius: 15px;
-    text-align: center;
-    line-height: 16px !important;
-    font-size: 16px;
-    color: white;
-  }
-
+.search {
+  width: 110px;
+  height: 32px;
+  background: #ff565a;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 16px !important;
+  font-size: 16px;
+  color: white;
+}
+.tableHerber {
+  margin-top: 20px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
 </style>

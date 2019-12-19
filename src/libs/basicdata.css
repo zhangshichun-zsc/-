@@ -4,11 +4,19 @@
     padding: 20px 0px;
   
   } */
+.integral-table{
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
 
 .table-header {
     background: #ffffff;
     border: 0;
     padding: 20px 10px;
+   
 }
 
 .table-header .table-btn {

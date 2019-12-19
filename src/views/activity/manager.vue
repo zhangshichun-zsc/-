@@ -181,6 +181,7 @@ import {
   activeset,
   activedown
 } from "../../request/api";
+import { SERVER_URl } from '@/request/http.js'
 export default {
   inject: ['reload'],
   data() {
@@ -684,8 +685,6 @@ export default {
 
     //选择内容
     handleSelectionChange(val) {
-      console.log(val);
-      this.arr = val;
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
@@ -694,12 +693,14 @@ export default {
       } else {
         this.status = false;
       }
+      this.arr = val.map(v=> {
+        return {activityId:v.acitvityId,activityName:v.activityName}
+      })
     },
 
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getactiveManager();
     },
 
@@ -715,20 +716,12 @@ export default {
     draft() {
       this.$router.push({ name: "draft" });
     },
-    exportData() {},
-
-    // //导出数据
-    // exportData() {
-    //   if(this.arr.length==0){
-    //     this.arr=this.data
-    //   }
-    //   this.$refs.selection.exportCsv({
-    //     filename:this.navigation1.head,
-    //     columns: this.columns.filter((col, index) => index > 0),
-    //     data: this.arr
-    //   });
-    // },
-
+    exportData() {
+      for(let item of this.arr){
+         window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=1&activityName=
+         ${item.activityName}`)
+      }
+    },
     //全选按钮
     chackall() {
       this.status = !this.status;
