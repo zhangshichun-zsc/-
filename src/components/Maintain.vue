@@ -6,7 +6,7 @@
       <!-- <p>培训模板</p> -->
       <p>
         <Button class="table-btn" @click="modal1 = true">新增模板</Button>
-        <Button class="table-btn">作废模板</Button>
+        <!-- <Button class="table-btn">作废模板</Button> -->
       </p>
       <Modal v-model="modal1" title="新增模板">
         <p>请选择分类</p>
