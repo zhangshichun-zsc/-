@@ -137,35 +137,39 @@
           <li>
             <span>已下架</span>
             <span class="hd-shu">{{
-              activityOverview.shelvesActivityCount
+              !activityOverview.shelvesActivityCount
+                ? "0"
+                : activityOverview.shelvesActivityCount
             }}</span>
           </li>
           <li>
             <span>已发布</span>
             <span class="hd-shu">{{
-              activityOverview.releaseActivityCount
+              activityOverview.releaseActivityCount || 0
             }}</span>
           </li>
           <li>
             <span>进行中</span>
             <span class="hd-shu">{{
-              activityOverview.ongoingActivityCount
+              activityOverview.ongoingActivityCount || 0
             }}</span>
           </li>
           <li>
             <span>已结束</span>
-            <span class="hd-shu">{{ activityOverview.endActivityCount }}</span>
+            <span class="hd-shu">{{
+              activityOverview.endActivityCount || 0
+            }}</span>
           </li>
           <li>
             <span>已取消</span>
             <span class="hd-shu">{{
-              activityOverview.cancleActivityCount
+              activityOverview.cancleActivityCount || 0
             }}</span>
           </li>
           <li>
             <span>全部活动</span>
             <span class="hd-shu">{{
-              activityOverview.totalActivityCount
+              activityOverview.totalActivityCount || 0
             }}</span>
           </li>
         </ul>
@@ -175,19 +179,21 @@
         <ul>
           <li>
             <span>今日新增</span>
-            <span class="hd-shu">{{ userOverview.todayUserCount }}</span>
+            <span class="hd-shu">{{ userOverview.todayUserCount || 0 }}</span>
           </li>
           <li>
             <span>昨日新增</span>
-            <span class="hd-shu">{{ userOverview.yesterdayUserCount }}</span>
+            <span class="hd-shu">{{
+              userOverview.yesterdayUserCount || 0
+            }}</span>
           </li>
           <li>
             <span>本月新增</span>
-            <span class="hd-shu">{{ userOverview.monthUserCount }}</span>
+            <span class="hd-shu">{{ userOverview.monthUserCount || 0 }}</span>
           </li>
           <li>
             <span>会员总数</span>
-            <span class="hd-shu">{{ userOverview.totalUserCount }}</span>
+            <span class="hd-shu">{{ userOverview.totalUserCount || 0 }}</span>
           </li>
         </ul>
       </div>
@@ -312,7 +318,9 @@ export default {
       sysType: 1,
       activity: [],
       Pending: [],
-      activityOverview: [],
+      activityOverview: {
+        shelvesActivityCount: 0
+      },
       userOverview: [],
       Jumplist: [
         {
@@ -430,8 +438,8 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-          this.userOverview = res.data.userOverview;
-          this.activityOverview = res.data.activityOverview;
+          this.userOverview = res.data;
+          this.activityOverview = res.data;
         } else {
           this.$Message.error(res.msg);
         }

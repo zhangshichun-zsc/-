@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "志愿者特长管理(共用)"
+        head: "志愿者特长管理"
       },
       formValidate: {
         dicName: ""
@@ -74,12 +74,12 @@ export default {
           title: "创建时间",
           key: "creatAt",
            align: "center",
-           width: 200,
+           width: 240,
         },
         {
           title: "创建人",
           key: "userName",
-           width: 140,
+           width: 300,
            align: "center",
         },
 
@@ -87,7 +87,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
-           width: 140,
+           width: 180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -113,7 +113,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:120,
+          width:180,
           render: (h, params) => {
             return h("div", [
               h(

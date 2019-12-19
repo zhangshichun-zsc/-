@@ -8,7 +8,7 @@
       </div>
       <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start">
-          <span>积分来源</span>
+          <span>积分来源:</span>
           <Select size="large" class="inpt" v-model="scoreRuleId">
             <Option
               v-for="item in list"
@@ -18,7 +18,7 @@
           </Select>
         </div>
         <div class="flex-center-start">
-          <span>操作时间</span>
+          <span>操作时间:</span>
           <DatePicker
             type="date"
             @change="time"
@@ -252,7 +252,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
 .integral-header {
   border: 1px solid #eee;
@@ -267,6 +267,7 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+  padding-top: 40px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;

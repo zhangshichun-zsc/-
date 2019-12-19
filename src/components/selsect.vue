@@ -80,7 +80,9 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    console.log(this.$props.arr);
+  },
 
   methods: {
     changeProve(i, e) {

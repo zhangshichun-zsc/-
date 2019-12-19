@@ -97,14 +97,14 @@
     </div>
     <div class="integral-table">
       <div class="table-header flex-between">
-        <div class="flex-center-start">
+        <div class="table-header flex-center-start">
           <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
-          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" @on-change="changeNum">
+          <Select class="inpt" style="width:100px;margin-right:10px"  v-model="size" @on-change="changeNum">
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
-          <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
+          <Select class="inpt" style="width:100px"  v-model="sort" @on-change="changeSort">
             <Option value="create_at desc">升序</Option>
             <Option value="create_at asc">降序</Option>
           </Select>
@@ -161,15 +161,15 @@ export default {
         orgId: "",
         title: "",
         effectiveAt: "",
-        orgType: 3,
-        sysId: 2
+       orgType: 1,
+        sysId: 1,
       },
       modal1: false,
       columns: [
         {
           title: "组织",
           key: "orgName",
-          width: 400,
+          width: 500,
           align: "center"
         },
         {
@@ -379,14 +379,14 @@ export default {
       this.params.effectiveAt = "";
     },
     changeNum(e) {
-      this.size = e;
+
       this.page = 1;
-      this.getList();
+      this.getList(this.args);
     },
     changeSort(e) {
-      this.sort = e;
+
       this.page = 1;
-      this.getList({});
+       this.getList(this.args);
     }
   }
 };
@@ -407,6 +407,7 @@ export default {
   background: #fff;
       margin-bottom: 20px;
     border-radius: 10px;
+    height: 90px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
@@ -419,5 +420,5 @@ export default {
   padding:0 10px;
 }
 
-@import "../../libs/basicdata.css";
+
 </style>

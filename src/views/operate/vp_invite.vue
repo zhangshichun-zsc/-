@@ -4,9 +4,13 @@
     <Tophead :navigation1=navigation1 :top=top @query="query"></Tophead>
 
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div class="flex-center-end" style="padding:10px;">
-                  <Button  @click="exportData">导出数据</Button>
+      <div class="table-header flex-between" style="padding:10px;">
+         <div>
+          <Icon type="ios-list" size="30" />
+          <span>数据列表</span>
+        </div>
+        <div class="flex-center-end" >
+                  <Button  @click="exportData" disabled>导出数据</Button>
                   <Select v-model="size" style="width:120px;margin-right:10px" placeholder="显示条数" class="space">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
@@ -101,7 +105,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -217,13 +221,19 @@ this.getInvitationList()
 .table-header {
   padding: 5px 20px;
   background: white;
+  border-radius:  10px 10px 0 0;
 }
 .table-header .table-btn {
   margin-left: 15px;
 }
+.integral-table{
+  border-radius: 10px;
+  padding: 0 10px;
+}
 .integral-table .pages {
   padding: 20px;
   background: #fff;
+  border-radius: 0 0 10px 10px;
 }
 .pages {
   text-align: center;

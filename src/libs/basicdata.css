@@ -5,31 +5,31 @@
   
   } */
 .integral-table{
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
+   
 }
-
+.yuan{
+    border-radius: 10px;
+   min-height: 600px;
+ 
+}
 .table-header {
     background: #ffffff;
     border: 0;
     padding: 20px 10px;
-   
+    border-radius: 10px 10px 0 0;
+  
 }
 
 .table-header .table-btn {
     margin-left: 15px;
 }
 
-.integral-table .pages {
-    padding: 20px 0;
-    background: #fff;
-}
+
 
 .pages {
     text-align: center;
+    padding: 20px 0;
+    background: #fff;
 }
 
 .ipt {

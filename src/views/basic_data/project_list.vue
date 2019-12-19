@@ -222,7 +222,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .integral-header {
   border: 1px solid #eee;
 }

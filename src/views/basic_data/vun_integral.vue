@@ -35,8 +35,9 @@
     <div class="integral-table">
       <div class="table-header flex-between">
         <div>
-         <Button class="table-btns" @click="set">志愿活动积分比例设置</Button>
-         <Button class="table-btns" @click="sets">积分规则设置</Button>
+         <Button class="table-btns" @click="set(1)">志愿活动积分比例设置</Button>
+         <Button class="table-btns" @click="set(2)">积分规则设置</Button>
+          <Button class="table-btns" @click="set(3)">积分审核</Button>
         </div>
         <div>
           <!-- <Button class="table-btns" @click="exportData">
@@ -175,36 +176,37 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width: 180,
+          width: 300,
         },
         {
           title: "用户昵称",
-          key: "nickname",
+          key: "nickName",
           align: "center",
+          width:400
         },
         {
           title: "用户类型",
           key: "userType",
           align: "center",
-          width:150,
+          width:230,
         },
         {
           title: "可用积分",
           key: "score",
           align: "center",
-          width:140,
+          width:180,
         },
         {
-          title: "待审积分",
-          key: "unAuditScore",
+          title: "是否有待审核积分",
+          key: "isAuditScore",
           align: "center",
-          width:140,
+          width:260,
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-           width: 240,
+           width: 300,
           render: (h, params) => {
             return h("div", [
               h(
@@ -242,20 +244,7 @@ export default {
                 },
                 "修改数值"
               ),
-              h(
-                "a",
-                {
-                  style: {
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({ name: "vunintegral_audit" });
-                    }
-                  }
-                },
-                "积分审核"
-              )
+
             ]);
           }
         }
@@ -376,9 +365,18 @@ export default {
         console.log(res)
       })
     },
-    set(){
-      this.modal2=true
+    set(e){
+      if(e==1){
+        this.modal2=true
       this.getintegralnum()
+      }else if(e==2){
+        this.$router.push({
+        name:'vunintegral_set'
+      })
+      }else if(e==3){
+         this.$router.push({ name: "vunintegral_audit" });
+      }
+
     },
 
     //分页功能
@@ -476,16 +474,11 @@ export default {
       this.modal2 = false;
     },
 
-     sets(){
-      this.$router.push({
-        name:'vunintegral_set'
-      })
-    }
+
   }
 };
 </script>
 <style lang="scss" scoped>
-
 .table-header{
   padding: 10px 0;
 }
@@ -499,16 +492,20 @@ margin-bottom: 20px;
   border: 0;
 
 }
-
-.name{
-  span{
+.name {
+  span {
     display: block;
     width: 120px;
-  };
-  .inpt{
+  }
+  .inpt {
     margin-right: 30px;
   }
 }
+.table-header {
+  background: #ffffff;
+  border: 0;
+  padding: 20px 10px;
+}
 
-@import "../../libs/basicdata.css";
+
 </style>
