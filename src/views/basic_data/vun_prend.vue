@@ -39,7 +39,7 @@
             <div class="uploads" v-if='headimg == null'>
                 <div class="file" @click="()=>{ this.$refs.files.click()}">
                   <input type="file" style=" display:none;"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('headimg','logoPic',$event)">
-                  <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+                  <Icon type="md-cloud-upload" :size='50' color="#FF565A"/>
                 </div>
             </div>
             <img class="imgs" style="width:300px;margin:0 auto;" v-else :src="headimg"/>
@@ -49,7 +49,7 @@
             <div class="upload" v-if='footimg == null'>
                 <div class="file" @click="()=>{ this.$refs.filess.click()}">
                   <input type="file" style=" display:none;"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('footimg','officeSealPic',$event)" >
-                  <Icon type="md-cloud-upload" color="#FF565A" :size='36' />
+                  <Icon type="md-cloud-upload" color="#FF565A" :size='50' />
                 </div>
             </div>
             <img class="imgs" style="width:300px;margin:0 auto;"  v-else :src="footimg"/>
@@ -132,7 +132,7 @@ export default {
       certMouldId: this.$route.query.certMouldId,
       show: false,
       navigation1: {
-        head: "积分查询(志愿者)"
+        head: "积分查询(会员)"
       },
       value8: "",
       value6:'为融爱融乐的心智障碍者融合服务提供了珍贵的小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福'
@@ -313,6 +313,7 @@ border:  black 1px solid;
       width: 300px;
       border: 1px dashed #FF565A;
       text-align: center;
+      line-height: 300px;
 
     }
 

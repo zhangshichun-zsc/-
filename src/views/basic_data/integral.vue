@@ -33,7 +33,11 @@
     </div>
     <div class="integral-table">
       <div class="table-header flex-between">
-        <Button class="table-btns" @click="set" >积分规则设置</Button>
+        <div>
+           <Button class="table-btns" @click="set" >积分规则设置</Button>
+          <Button class="table-btns" @click="sets" >积分审核</Button>
+        </div>
+
         <div>
           <!-- <Button class="table-btns" @click="exportData">
             导出数据
@@ -99,7 +103,7 @@
 </template>
 
 <script>
-import { tablepage } from "@/request/mixin";
+
 import { integralpage, integralmodify } from "../../request/api";
 export default {
   data() {
@@ -147,7 +151,7 @@ export default {
         head: "积分查询(会员)"
       },
       columns: [
-        {
+         {
           type: "selection",
           width: 60,
           align: "center"
@@ -156,30 +160,31 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width: 200
+          width: 300,
         },
         {
           title: "用户昵称",
-          key: "nickname",
+          key: "nickName",
           align: "center",
+          width:400
         },
         {
           title: "用户类型",
           key: "userType",
           align: "center",
-          width: 200
+          width:230,
         },
         {
           title: "可用积分",
           key: "score",
           align: "center",
-          width: 160
+          width:180,
         },
         {
-          title: "待审积分",
-          key: "unAuditScore",
+          title: "是否有待审核积分",
+          key: "isAuditScore",
           align: "center",
-          width: 160
+          width:260,
         },
         {
           title: "操作",
@@ -225,20 +230,6 @@ export default {
                 },
                 "修改数值"
               ),
-              h(
-                "a",
-                {
-                  style: {
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({ name: "integral_audit" });
-                    }
-                  }
-                },
-                "积分审核"
-              )
             ]);
           }
         }
@@ -280,7 +271,7 @@ export default {
     this.getintegralpage();
   },
 
-  mixins: [tablepage],
+
 
   created() {},
 
@@ -426,6 +417,11 @@ export default {
       this.$router.push({
         name:'integral_set'
       })
+    },
+    sets(){
+       this.$router.push({
+        name:'integral_audit'
+      })
     }
   }
 };
@@ -459,5 +455,5 @@ margin-bottom: 20px;
   padding: 20px 10px;
 }
 
-@import "../../libs/basicdata.css";
+
 </style>

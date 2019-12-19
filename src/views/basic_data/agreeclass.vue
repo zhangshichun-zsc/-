@@ -6,17 +6,17 @@
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
-        <div class="flex-center-start">
+        <!-- <div class="flex-center-start">
           <Icon type="md-list" />
           <span>数据列表</span>
-        </div>
+        </div> -->
         <div class="flex-center-end">
           <Button class="table-btns" @click="add">添加</Button>
         </div>
         <Modal v-model="modal1" title="添加分类" class-name="vertical-center-modal">
           <Form :model="formItem" ref="formItem" :rules="ruleValidate" :label-width="120">
-            <FormItem label="类型名称:" prop="name">
-              <Input v-model="formItem.name" />
+            <FormItem label="类型名称:" prop="name" >
+              <Input v-model="formItem.name"  style="width:200px"/>
             </FormItem>
             <FormItem label="类型:" prop="type">
               <Select v-model="formItem.type" style="width:200px">
@@ -366,5 +366,13 @@ export default {
       width: 150px;
     }
   }
-@import "../../libs/basicdata.css";
+  .integral-table{
+    min-height: 500px;
+    background: #fff;
+     border-radius: 0 0 10px 10px;
+  }
+  .table-header{
+    border-radius: 10px 10px 0 0;
+  }
+
 </style>

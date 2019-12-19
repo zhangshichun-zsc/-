@@ -119,7 +119,7 @@ export default {
         {
           title: "创建人",
           key: "userName",
-          width: 200,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h(
@@ -132,7 +132,7 @@ export default {
           title: "有效状态",
 
           align: "center",
-          width: 150,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -157,7 +157,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 140,
+          width: 180,
 
           render: (h, params) => {
             return h("div", [
@@ -288,5 +288,5 @@ export default {
   }
   margin-right: 20px;
 }
-@import "../../libs/basicdata.css";
+
 </style>

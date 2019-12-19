@@ -79,7 +79,7 @@ export default {
         {
           title: "创建人",
           key: "userName",
-          width: 140,
+          width: 300,
           align: "center"
         },
 
@@ -87,7 +87,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
-          width:140,
+          width:180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -115,7 +115,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 140,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h(
@@ -331,5 +331,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../libs/basicdata.css";
+
 </style>
