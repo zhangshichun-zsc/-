@@ -405,6 +405,8 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
+      margin-bottom: 20px;
+    border-radius: 10px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;

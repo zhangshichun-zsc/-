@@ -28,8 +28,8 @@
       </div>
       <div class="integral-right">
         <div class="top">
-          <p> <a href="javascript:;" @click="showUpload(1)">更换LOGO</a></p>
-           <p> <a href="javascript:;" @click="showUpload(2)">更换页尾</a></p>
+          <p  :class="i===1?'active':'default'"> <a href="javascript:;" @click="showUpload(1)">更换LOGO</a></p>
+           <p :class="i===2?'active':'default'"> <a href="javascript:;" @click="showUpload(2)">更换页尾</a></p>
         </div>
         <div class="bottom">
           <!-- <div class="textimg">
@@ -39,26 +39,26 @@
             <div class="uploads" v-if='headimg == null'>
                 <div class="file" @click="()=>{ this.$refs.files.click()}">
                   <input type="file" style=" display:none;"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('headimg','logoPic',$event)">
-                  <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                  <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                 </div>
             </div>
             <img class="imgs" style="width:300px;margin:0 auto;" v-else :src="headimg"/>
-            <Icon type="ios-trash" v-if='!show && headimg !== null' class="cancel" @click="cancelImg('logoPic')"/>
+            <Icon type="ios-trash" color="#FF565A" v-if='!show && headimg != null' size='24'  class="cancel" @click="cancelImg('logoPic')"/>
         </div>
         <div class="box" v-show='i == 2'>
             <div class="upload" v-if='footimg == null'>
                 <div class="file" @click="()=>{ this.$refs.filess.click()}">
                   <input type="file" style=" display:none;"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('footimg','officeSealPic',$event)" >
-                  <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                  <Icon type="md-cloud-upload"  color="#FF565A" :size='36' />
                 </div>
             </div>
             <img class="imgs" style="width:300px;margin:0 auto;"  v-else :src="footimg"/>
-            <Icon type="ios-trash" v-if='!show && footimg !== null' class="cancel" @click="cancelImg('officeSealPic')"/>
+            <Icon type="ios-trash" color="#FF565A" v-if='!show && footimg != null' size='24' class="cancel" @click="cancelImg('officeSealPic')"/>
         </div>
 
         </div>
 
-          <p class="btn"><Button type="error" icon="ios-cloud-saved-outline" @click="location" v-if='show'>保存图片</Button></p>
+          <p class="btn"><Button type="error" icon="ios-cloud-saved-outline" @click="location" v-if='!show'>保存图片</Button></p>
 
 
     </div>
@@ -128,7 +128,7 @@ export default {
       logoPic: null,
       footimg: null,
       officeSealPic: null,
-      i: 0,
+      i: 1,
       certMouldId: this.$route.query.certMouldId,
       show: false,
       navigation1: {
@@ -140,10 +140,11 @@ export default {
   },
   created() {
     if (~~this.$route.query.show === 0) {
-      this.show = false;
+       this.show = true;
       this.getList();
     } else {
-      this.show = true;
+      this.show = false;
+
       this.getList();
     }
   },
@@ -307,7 +308,7 @@ border:  black 1px solid;
 }
 
 .upload,.uploads .file{
-   margin: 0px auto;
+  //  margin: 0px auto;
       height: 300px;
       width: 300px;
       border: 1px dashed #FF565A;
@@ -315,4 +316,21 @@ border:  black 1px solid;
 
     }
 
+.box{
+  display: flex;
+  justify-content: center;
+}
+.active{
+  background: #FF565A;
+  a{
+     color: #ffffff;
+  }
+
+}
+
+.default{
+  a{
+    color: black;
+  }
+}
 </style>

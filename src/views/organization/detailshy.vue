@@ -1,44 +1,69 @@
 <!-- 组织详情会员 -->
 <template>
-  <div style="background:white;">
-    <Navigation :labels="navigation1"></Navigation>
+  <div style="padding-top: 20px">
+    <!-- <Navigation :labels="navigation1"></Navigation> -->
     <div class="details-zhu">
       <span
-        v-for="(item,index) in list"
+        v-for="(item, index) in list"
         :key="index"
-        :class="{active:num==index}"
+        :class="{ active: num == index }"
         @click="onall(index)"
       >
-        <a>{{item}}</a>
+        <a>{{ item }}</a>
       </span>
     </div>
-    <div v-if="num==0">
+    <div class="details-info">
+      <p class="title">{{ navigation1.head }}</p>
+      <div class="header" v-show="num == 0">
+        <img
+          :src="arr.orgPicPath"
+          style="height:80px;width:80px; margin-top: 5px;"
+        />
+        <p>
+          组织名称：
+          <span class="name">{{ arr.orgName }}</span>
+        </p>
+        <p>
+          分类：
+          <span class="type">{{ arr.orgTypeText }}</span>
+        </p>
+      </div>
+      <div v-show="num == 1" class="header"></div>
+    </div>
+    <div v-if="num == 0">
       <div class="details-td">
-        <div class="details-wz">
-          <img :src="arr.orgPicPath" style="height:100px;width:100px;margin-right:10px;" />
-          <div>
-          <div>{{arr.orgName}}</div>
-          <div class="fenlei">分类：{{arr.orgTypeText}}</div>
-          </div>
-        </div>
+        <!-- <div class="details-wz"> -->
+        <!-- <img
+            :src="arr.orgPicPath"
+            style="height:100px;width:100px;margin-right:10px;"
+          /> -->
+        <!-- <div>
+            <div>{{ arr.orgName }}</div>
+            <div class="fenlei">分类：{{ arr.orgTypeText }}</div>
+          </div> -->
+        <!-- </div> -->
+        <p class="details-tj">
+          <Icon type="md-bookmark" />
+          <span>组织信息</span>
+        </p>
         <table>
           <tr>
             <th>名称</th>
-            <td>{{arr.orgName}}</td>
+            <td>{{ arr.orgName }}</td>
             <th>微信公众号</th>
-            <td>{{arr.wechatOfficeAccount}}</td>
+            <td>{{ arr.wechatOfficeAccount }}</td>
           </tr>
           <tr>
             <th>负责人</th>
-            <td>{{arr.ownerUserName}}</td>
+            <td>{{ arr.ownerUserName }}</td>
             <th>城市</th>
-            <td>{{arr.cityName}}</td>
+            <td>{{ arr.cityName }}</td>
           </tr>
           <tr>
             <th>联系方式</th>
-            <td>{{arr.ownerUserPhone}}</td>
+            <td>{{ arr.ownerUserPhone }}</td>
             <th>成立时间</th>
-            <td>{{arr.createTimestamp}}</td>
+            <td>{{ arr.createTimestamp }}</td>
           </tr>
         </table>
       </div>
@@ -55,32 +80,37 @@
             <th>成员数量</th>
           </tr>
           <tr>
-            <td>{{statistics.batchCount}}</td>
-            <td>{{statistics.actChildCount}}</td>
-            <td>{{statistics.actMemCount}}</td>
-            <td>{{statistics.orgUserCount}}</td>
+            <td>{{ statistics.batchCount }}</td>
+            <td>{{ statistics.actChildCount }}</td>
+            <td>{{ statistics.actMemCount }}</td>
+            <td>{{ statistics.orgUserCount }}</td>
           </tr>
         </table>
       </div>
-      <p class="details-tj">
-        <Icon type="md-bookmark" />
-        <span>组织成员</span>
-      </p>
-      <i-table border :columns="columns1" :data="data1"></i-table>
-      <div class="pages">
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changepages"
-        />
+      <div class="tableList">
+        <p class="details-tj" style="margin-bottom:10px;">
+          <Icon type="md-bookmark" />
+          <span>组织成员</span>
+        </p>
+        <i-table border :columns="columns1" :data="data1"></i-table>
+        <div class="pages">
+          <Page
+            :total="dataCount"
+            show-elevator
+            show-total
+            size="small"
+            style="margin: auto"
+            :page-size="size"
+            @on-change="changepages"
+          />
+        </div>
       </div>
     </div>
 
-    <div v-if="num==1">
+    <div
+      v-if="num == 1"
+      style="background:#fff;margin-top: 20px;box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21); border-radius: 12px;"
+    >
       <div class="group flex-center-start">
         <span>丰台家长小区</span>
         <span>分类</span>
@@ -102,23 +132,41 @@
               <Input v-model="BasicDate.orgName" style="width: 220px" />
             </FormItem>
             <FormItem label="联系人:" prop="orgName">
-              <Input v-model="BasicDate.contactUserName" placeholder="自动带出" style="width: 220px" />
+              <Input
+                v-model="BasicDate.contactUserName"
+                placeholder="自动带出"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="地址:" prop="citys">
-              <Selsect :arr="[province,city,county,]" @change="selbtn"></Selsect>
+              <Selsect
+                :arr="[province, city, county]"
+                @change="selbtn"
+              ></Selsect>
             </FormItem>
             <FormItem label="联系方式:" prop="orgName">
-              <Input v-model="BasicDate.contactUserPhone" style="width: 220px" />
+              <Input
+                v-model="BasicDate.contactUserPhone"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="微信公众号:">
-              <Input v-model="BasicDate.wx" placeholder="点 击 输 入" style="width: 220px" />
+              <Input
+                v-model="BasicDate.wx"
+                placeholder="点 击 输 入"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="图片:" prop="orgPicShow">
               <div class="start-wap">
                 <div
                   class="upload"
                   v-if="BasicDate.orgPicShow == null"
-                  @click="()=>{ this.$refs.files.click()}"
+                  @click="
+                    () => {
+                      this.$refs.files.click();
+                    }
+                  "
                 >
                   <div class="file">
                     <input
@@ -129,12 +177,19 @@
                       @change="uploadFile()"
                       multiple
                     />
-                    <Button icon="ios-cloud-upload-outline" style="margin-bottom:10px">上传图片</Button>
+                    <Button
+                      icon="ios-cloud-upload-outline"
+                      style="margin-bottom:10px"
+                      >上传图片</Button
+                    >
                     <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
                   </div>
                 </div>
 
-                <img :src="BasicDate.orgPicShow" style="height:150px;width:150px;" />
+                <img
+                  :src="BasicDate.orgPicShow"
+                  style="height:150px;width:150px;"
+                />
                 <Icon
                   type="ios-trash"
                   v-if="BasicDate.orgPicShow != null"
@@ -148,7 +203,7 @@
               <Input
                 v-model="BasicDate.description"
                 type="textarea"
-                :autosize="{minRows: 5,maxRows: 8}"
+                :autosize="{ minRows: 5, maxRows: 8 }"
               />
             </FormItem>
           </Form>
@@ -157,11 +212,15 @@
       <div class="basic">
         <p class="title">文件</p>
         <div class="content">
-          <div class="middle" v-for="(item,index) in BasicDate.fileList" :key="index">
+          <div
+            class="middle"
+            v-for="(item, index) in BasicDate.fileList"
+            :key="index"
+          >
             <Icon type="ios-paper-outline" size="100" />
             <div class="file">
               <p>
-                <span>{{item.fileName}}</span>
+                <span>{{ item.fileName }}</span>
                 <span>
                   <a @click="download(item.fileUrlShow)">下载</a>
                 </span>
@@ -191,7 +250,11 @@
       <div class="basic">
         <p class="title">备注</p>
         <div class="content">
-          <Input v-model="BasicDate.remark" type="textarea" :autosize="{minRows: 5,maxRows: 8}" />
+          <Input
+            v-model="BasicDate.remark"
+            type="textarea"
+            :autosize="{ minRows: 5, maxRows: 8 }"
+          />
         </div>
       </div>
       <div class="middle">
@@ -202,8 +265,7 @@
 </template>
 
 <script>
-
-import { upload,orgimg } from "../../request/http";
+import { upload, orgimg } from "../../request/http";
 import Selsect from "@/components/selsect";
 import { formatDate } from "@/request/datatime";
 import {
@@ -213,8 +275,7 @@ import {
   orgdetestat,
   orgedit,
   orgemod,
-  orgimgdel,
-
+  orgimgdel
 } from "@/request/api";
 export default {
   data() {
@@ -227,25 +288,25 @@ export default {
         {
           title: "姓名",
           key: "userName",
-          align:'center',
-          size:40
+          align: "center",
+          size: 40
         },
         {
           title: "手机号",
           key: "tel",
-          align:'center',
-          width:140
+          align: "center",
+          width: 140
         },
         {
           title: "职位",
           key: "roleNames",
-          align:'center'
+          align: "center"
         },
         {
           title: "人员分类",
           key: "userType",
-          align:'center',
-          width:140,
+          align: "center",
+          width: 140,
           render: (h, params) => {
             let typelist = [
               { name: "负责人", type: "1" },
@@ -259,11 +320,11 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:80,
+          width: 80,
           render: (h, params) => {
-            let del
-            if(params.row.userType!=1){
-              del='删除'
+            let del;
+            if (params.row.userType != 1) {
+              del = "删除";
             }
             return h("div", [
               h(
@@ -271,8 +332,8 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
-                    cursor: "pointer",
+                    color: "#FF565A",
+                    cursor: "pointer"
                   },
                   on: {
                     click: () => {
@@ -291,8 +352,8 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "green",
-                    cursor: "pointer",
+                    color: "#FF565A",
+                    cursor: "pointer"
                   },
                   on: {
                     click: () => {
@@ -365,7 +426,7 @@ export default {
 
       province: "",
       county: "",
-      city:""
+      city: ""
     };
   },
   computed: {},
@@ -397,7 +458,9 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.arr = res.data;
-          this.arr.createTimestamp = formatDate(res.data.createTimestamp);
+          this.arr.createTimestamp = this.util.formatDateYMD(
+            res.data.createTimestamp
+          );
         }
         console.log(res.data);
       });
@@ -501,7 +564,6 @@ export default {
       });
     },
 
-
     city() {
       this.getorgcity();
     },
@@ -534,23 +596,19 @@ export default {
       });
     },
 
-
-
     //上传附件
     handleSuccesstext(res, file) {
       if (res.code == 200) {
         let obj = [{ fileUrl: res.data, fileName: file.name }];
         this.BasicDate.fileList = this.BasicDate.fileList.concat(obj);
         this.$Message.success("上传成功");
-        console.log(obj)
+        console.log(obj);
       } else {
         this.percent = 0;
         this.$Message.error(res.msg);
       }
       console.log(res, file.name);
     },
-
-
 
     //删除附件
     removetext(e) {
@@ -587,29 +645,26 @@ export default {
 .details-zhu {
   span {
     display: inline-block;
-    height: 50px;
-    width: 160px;
-    background: #ffffff;
     text-align: center;
-    line-height: 50px;
-    border: 1px solid #e4e4e4;
-    margin-left: -1rpx;
+    color: #8e9192;
+
+    padding: 0 20px;
+    box-sizing: border-box;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 5px;
     a {
       color: black;
       font-size: 16px;
     }
   }
   .active {
-    background: #FD585E ;
-
-    a {
-      color: #ffffff;
-    }
+    background: #ffffff;
+    border-radius: 20px;
+    color: #1b2331;
   }
 }
 .details-tj {
-  height: 70px;
-  line-height: 70px;
   font-size: 16px;
   padding-left: 20px;
 }
@@ -622,8 +677,14 @@ export default {
 }
 .details-tjxx,
 .details-td {
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 20px 0;
+  margin-bottom: 20px;
   table {
     border: 1px solid #e4e4e4;
+    margin: 0 auto;
     td,
     th {
       height: 40px;
@@ -644,9 +705,8 @@ export default {
 
 .details-td {
   margin-top: 20px;
-  display: flex;
 }
-.fenlei{
+.fenlei {
   margin: 10rpx 0;
 }
 .details-wz {
@@ -661,8 +721,7 @@ export default {
 .pages {
   display: flex;
   justify-content: center;
-  margin: 10px auto;
-  padding: 20px 0;
+  margin: 0 auto;
 }
 
 .group {
@@ -672,24 +731,23 @@ export default {
     font-size: 12px;
   }
 }
-.btns{
+.btns {
   width: 140px;
   height: 40px;
   line-height: 40px;
   text-align: center;
   border-radius: 30px;
   color: white;
-  background-color: #FD585E;
+  background-color: #fd585e;
 }
 .main {
   width: 36rem;
 }
 .basic {
-  margin: 0.5rem;
+  margin: 0 auto;
+  width: 500px;
 }
-.title {
-  padding: 0.5rem 1rem
-}
+
 .middle {
   display: flex;
   justify-content: center;
@@ -703,5 +761,42 @@ export default {
 .file p {
   padding: 0.5rem;
 }
-
+.details-info {
+  margin-top: 20px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  height: 162px;
+  padding: 20px 30px;
+  .title {
+    padding: 0;
+    font-weight: 800;
+    font-size: 18px;
+    color: #1b2331;
+  }
+  .header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .name {
+      font-size: 18px;
+      color: #1b2331;
+      font-weight: 800;
+    }
+    .type {
+      background: #fef4f5;
+      border-radius: 15px;
+      line-height: 40px;
+      padding: 0 19px;
+      font-size: 14px;
+      color: #fd585e;
+    }
+  }
+}
+.tableList {
+  padding: 20px 5px;
+  background: #fff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
 </style>

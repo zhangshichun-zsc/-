@@ -88,7 +88,7 @@ export default {
       if(this.stateinput.length==0){
         this.getOffSubmission()
       }else{
-        this.$Message.error("必填项未填,请仔细检查哟!");
+        this.$Message.error("必填项未填!");
       }
 
     }

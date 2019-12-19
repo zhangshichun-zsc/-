@@ -228,11 +228,12 @@ export default {
 
     //积分管理--审核积分
     getIntegralaudit() {
+      // let
       Integralaudit({
         scoreHisIds: this.arr,
         sysType: this.sysType,
-        auditStatus: this.auditStatus,
-        operationUserId: this.operationUserId
+        // auditStatus: this.auditStatus,
+        // operationUserId: this.operationUserId
       }).then(res => {
         if(res.code==200){
           this.$refs.selection.selectAll(false);

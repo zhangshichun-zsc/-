@@ -287,10 +287,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-bodyss {
-  padding: 30px 20px 20px 20px;
-
+ margin-bottom: 20px;
+    padding-left: 20px;
+    border-radius: 10px;
   display: flex;
-  height: 80px;
+  height: 90px;
   background: #ffffff;
   border: 0;
 }

@@ -343,9 +343,9 @@ export default {
         startAt: this.startAt ? this.startAt.getTime() : "",
         endAt: endAt ? new Date(endAt).getTime() : ""
       });
-      console.log(fromobj);
+
       if (this.$props.navigation1.name === "parent") {
-        orgpages(fromobj).then(res => {
+        orgpages({ ...fromobj, status: "1" }).then(res => {
           if (res.code == 200) {
             this.dataCount = res.data.totalSize;
             this.data = res.data.list;

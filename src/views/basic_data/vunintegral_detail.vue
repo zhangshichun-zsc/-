@@ -29,14 +29,14 @@
           ></DatePicker>
         </div>
         <div class="flex-center-start">
-          <Button class="search" @click="query">查询</Button> 
+          <Button class="table-btns" @click="query">查询</Button>
         </div>
       </div>
     </div>
     <div class="inter-list">
       <div class="table-header">
         <div class="flex-center-end">
-          <Button class="table-btn" @click="exportData">
+          <Button class="table-btn" @click="exportData" disabled>
             导出数据
             <Icon type="md-arrow-dropdown" />
           </Button>

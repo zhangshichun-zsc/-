@@ -416,6 +416,7 @@ export default {
     getActiveTypeId(val){
       this.batch.actTypeName = val.name
       this.batch.actTypeId = val.dicId
+      this.getTemplate()
     },
     //活动标签
     getActiveLabels(val){
