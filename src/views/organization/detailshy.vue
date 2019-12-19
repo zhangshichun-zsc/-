@@ -14,7 +14,7 @@
     </div>
     <div class="details-info">
       <p class="title">{{ navigation1.head }}</p>
-      <div class="header" v-show="num == 0">
+      <div class="header">
         <img
           :src="arr.orgPicPath"
           style="height:80px;width:80px; margin-top: 5px;"
@@ -28,22 +28,11 @@
           <span class="type">{{ arr.orgTypeText }}</span>
         </p>
       </div>
-      <div v-show="num == 1" class="header"></div>
     </div>
     <div v-if="num == 0">
       <div class="details-td">
-        <!-- <div class="details-wz"> -->
-        <!-- <img
-            :src="arr.orgPicPath"
-            style="height:100px;width:100px;margin-right:10px;"
-          /> -->
-        <!-- <div>
-            <div>{{ arr.orgName }}</div>
-            <div class="fenlei">分类：{{ arr.orgTypeText }}</div>
-          </div> -->
-        <!-- </div> -->
         <p class="details-tj">
-          <Icon type="md-bookmark" />
+          <Icon style="color:#FF565A;" type="md-bookmark" />
           <span>组织信息</span>
         </p>
         <table>
@@ -69,7 +58,7 @@
       </div>
       <div class="details-tjxx">
         <p class="details-tj">
-          <Icon type="md-bookmark" />
+          <Icon style="color:#FF565A;" type="md-bookmark" />
           <span>统计信息</span>
         </p>
         <table>
@@ -89,7 +78,7 @@
       </div>
       <div class="tableList">
         <p class="details-tj" style="margin-bottom:10px;">
-          <Icon type="md-bookmark" />
+          <Icon style="color:#FF565A;" type="md-bookmark" />
           <span>组织成员</span>
         </p>
         <i-table border :columns="columns1" :data="data1"></i-table>
@@ -111,15 +100,15 @@
       v-if="num == 1"
       style="background:#fff;margin-top: 20px;box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21); border-radius: 12px;"
     >
-      <div class="group flex-center-start">
-        <span>丰台家长小区</span>
-        <span>分类</span>
-        <div class="btns">
-          <span>家长小区</span>
-        </div>
-      </div>
       <div class="basic">
-        <p class="title">基本信息</p>
+        <p
+          class="title"
+          style="padding-top:20px;
+                 text-align: center;
+                 font-weight: 800;"
+        >
+          基本信息
+        </p>
         <div class="content middle">
           <Form
             ref="BasicDate"
@@ -138,10 +127,10 @@
                 style="width: 220px"
               />
             </FormItem>
-            <FormItem label="地址:" prop="citys">
+            <FormItem label="地址:">
               <Selsect
                 :arr="[province, city, county]"
-                @change="selbtn"
+                @change="idsactive"
               ></Selsect>
             </FormItem>
             <FormItem label="联系方式:" prop="orgName">
@@ -158,45 +147,52 @@
               />
             </FormItem>
             <FormItem label="图片:" prop="orgPicShow">
-              <div class="start-wap">
-                <div
-                  class="upload"
-                  v-if="BasicDate.orgPicShow == null"
-                  @click="
-                    () => {
+              <div
+                class="file"
+                style="height:150px;"
+                @click="
+                  () => {
+                    if (!BasicDate.orgPicShow) {
                       this.$refs.files.click();
                     }
+                  }
+                "
+              >
+                <input
+                  style="display:none; width:0; hidht:0;"
+                  type="file"
+                  accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
+                  ref="files"
+                  @change="uploadFile()"
+                  multiple
+                />
+                <div
+                  class="fileContent"
+                  :style="
+                    BasicDate.orgPicShow
+                      ? 'height:150px;width:150px;'
+                      : 'height:150px;width:150px;border: 1px dashed #ff565a;'
                   "
                 >
-                  <div class="file">
-                    <input
-                      style=" display:none;"
-                      type="file"
-                      accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                      ref="files"
-                      @change="uploadFile()"
-                      multiple
-                    />
-                    <Button
-                      icon="ios-cloud-upload-outline"
-                      style="margin-bottom:10px"
-                      >上传图片</Button
-                    >
-                    <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
-                  </div>
+                  <Icon
+                    v-show="!BasicDate.orgPicShow"
+                    type="md-cloud-upload"
+                    class="updataimg-icon"
+                    :size="20"
+                  />
+                  <img
+                    v-show="BasicDate.orgPicShow"
+                    :src="BasicDate.orgPicShow"
+                    style="height:150px;width:150px;"
+                  />
+                  <Icon
+                    type="ios-trash"
+                    v-if="BasicDate.orgPicShow != null"
+                    class="cancel"
+                    :size="20"
+                    @click="cancelImg()"
+                  />
                 </div>
-
-                <img
-                  :src="BasicDate.orgPicShow"
-                  style="height:150px;width:150px;"
-                />
-                <Icon
-                  type="ios-trash"
-                  v-if="BasicDate.orgPicShow != null"
-                  class="cancel"
-                  :size="26"
-                  @click="cancelImg()"
-                />
               </div>
             </FormItem>
             <FormItem label="详情:" prop="orgName">
@@ -206,59 +202,63 @@
                 :autosize="{ minRows: 5, maxRows: 8 }"
               />
             </FormItem>
+            <FormItem label="附件:">
+              <div class="content">
+                <div
+                  class="middle"
+                  v-for="(item, index) in BasicDate.fileList"
+                  :key="index"
+                >
+                  <Icon type="ios-paper-outline" size="100" />
+                  <div class="file">
+                    <p>
+                      <span>{{ item.fileName }}</span>
+                      <!-- <span>
+                        <a @click="download(item.fileUrlShow)">下载</a>
+                      </span> -->
+                    </p>
+                    <Progress :percent="percent" style="width: 15rem" />
+                  </div>
+                  <Button
+                    shape="circle"
+                    icon="md-close"
+                    style="margin-top: 0.5rem;"
+                    @click="removetext(index)"
+                  ></Button>
+                </div>
+                <div class="middle">
+                  <Upload
+                    multiple
+                    :action="orgimg"
+                    :on-success="handleSuccesstext"
+                    :default-file-list="BasicDate.fileList"
+                    :show-upload-list="false"
+                  >
+                    <Button icon="ios-cloud-upload-outline">添加附件</Button>
+                  </Upload>
+                </div>
+              </div>
+            </FormItem>
+            <FormItem label="备注:">
+              <div class="content">
+                <Input
+                  v-model="BasicDate.remark"
+                  type="textarea"
+                  :autosize="{ minRows: 5, maxRows: 8 }"
+                />
+              </div>
+            </FormItem>
           </Form>
         </div>
       </div>
-      <div class="basic">
-        <p class="title">文件</p>
-        <div class="content">
-          <div
-            class="middle"
-            v-for="(item, index) in BasicDate.fileList"
-            :key="index"
-          >
-            <Icon type="ios-paper-outline" size="100" />
-            <div class="file">
-              <p>
-                <span>{{ item.fileName }}</span>
-                <span>
-                  <a @click="download(item.fileUrlShow)">下载</a>
-                </span>
-              </p>
-              <Progress :percent="percent" style="width: 15rem" />
-            </div>
-            <Button
-              shape="circle"
-              icon="md-close"
-              style="margin-top: 0.5rem;"
-              @click="removetext(index)"
-            ></Button>
-          </div>
-          <div class="middle">
-            <Upload
-              multiple
-              :action="orgimg"
-              :on-success="handleSuccesstext"
-              :default-file-list="BasicDate.fileList"
-              :show-upload-list="false"
-            >
-              <Button icon="ios-cloud-upload-outline">添加附件</Button>
-            </Upload>
-          </div>
-        </div>
-      </div>
-      <div class="basic">
-        <p class="title">备注</p>
-        <div class="content">
-          <Input
-            v-model="BasicDate.remark"
-            type="textarea"
-            :autosize="{ minRows: 5, maxRows: 8 }"
-          />
-        </div>
-      </div>
       <div class="middle">
-        <Button @click="handleSubmit('BasicDate')">保存</Button>
+        <a
+          href="javascript:;"
+          class="queryBtn"
+          @click="handleSubmit('BasicDate')"
+          >保存</a
+        >
+        <!-- <Button @click="handleSubmit('BasicDate')">保存</Button> -->
       </div>
     </div>
   </div>
@@ -320,7 +320,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 80,
+          width: 140,
           render: (h, params) => {
             let del;
             if (params.row.userType != 1) {
@@ -384,14 +384,6 @@ export default {
             trigger: "blur"
           }
         ],
-        citys: [
-          {
-            required: true,
-            message: "请选择地址",
-            trigger: "blur"
-            // type:
-          }
-        ],
         orgPicShow: [
           {
             required: true,
@@ -423,7 +415,6 @@ export default {
       orgimg: "",
       percent: 0, // 文件上传进度条
       statistics: [],
-
       province: "",
       county: "",
       city: ""
@@ -458,6 +449,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.arr = res.data;
+
           this.arr.createTimestamp = this.util.formatDateYMD(
             res.data.createTimestamp
           );
@@ -510,7 +502,9 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.BasicDate = res.data;
-          console.log(this.BasicDate.fileList);
+          this.province = res.data.provinceId;
+          this.city = res.data.cityId;
+          this.county = res.data.districtId;
         } else {
         }
         console.log(res);
@@ -530,9 +524,9 @@ export default {
         description: this.BasicDate.description,
         wx: this.BasicDate.wx,
         fileList: this.BasicDate.fileList,
-        provinceId: this.BasicDate.provinceId,
-        cityId: this.BasicDate.cityId,
-        districtId: this.BasicDate.districtId
+        provinceId: this.province,
+        cityId: this.city,
+        districtId: this.county
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功");
@@ -544,8 +538,17 @@ export default {
     },
 
     //省市区
-    selbtn(e) {
-      console.log(e);
+    idsactive(res) {
+      console.log(res);
+      if (res[0]) {
+        this.province = res[0];
+      }
+      if (res[1]) {
+        this.city = res[1];
+      }
+      if (res[2]) {
+        this.county = res[2];
+      }
     },
 
     //删除附件
@@ -562,10 +565,6 @@ export default {
         }
         console.log(res);
       });
-    },
-
-    city() {
-      this.getorgcity();
     },
 
     //图片上传
@@ -602,7 +601,7 @@ export default {
         let obj = [{ fileUrl: res.data, fileName: file.name }];
         this.BasicDate.fileList = this.BasicDate.fileList.concat(obj);
         this.$Message.success("上传成功");
-        console.log(obj);
+        this.percent = 100;
       } else {
         this.percent = 0;
         this.$Message.error(res.msg);
@@ -619,13 +618,15 @@ export default {
 
     //下载
     download(e) {
-      location.href = e;
+      window.open(e, "_blank");
     },
 
     // 表单提交
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          if (!this.province || !this.city || !this.county)
+            return this.$Message.error("请选择地址");
           this.getorgemod();
         } else {
           this.$Message.error("必填项未填!");
@@ -751,6 +752,7 @@ export default {
 .middle {
   display: flex;
   justify-content: center;
+  padding-bottom: 20px;
 }
 .content {
   padding: 0.5rem 0;
@@ -787,7 +789,7 @@ export default {
       background: #fef4f5;
       border-radius: 15px;
       line-height: 40px;
-      padding: 0 19px;
+      padding: 10px 19px;
       font-size: 14px;
       color: #fd585e;
     }
@@ -798,5 +800,29 @@ export default {
   background: #fff;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
+}
+.fileContent {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+}
+.updataimg-icon {
+  color: #ff565a;
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+}
+.cancel {
+  position: absolute;
+  top: 10px;
+  right: -35px;
+  z-index: 2;
+  color: #ff565a;
+}
+.upload {
+  position: relative;
+  height: 150px;
 }
 </style>
