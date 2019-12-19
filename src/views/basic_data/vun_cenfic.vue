@@ -181,13 +181,13 @@ export default {
         {
           title: "生效时间",
           key: "effectiveAt",
-          width: 200,
+          width: 240,
           align: "center"
         },
         {
           title: "失效时间",
           key: "inEffectiveAt",
-          width: 200,
+          width: 240,
           align: "center"
         },
         {
@@ -200,7 +200,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:220,
+          width:240,
           render: (h, params) => {
             return h("div", [
               h(
