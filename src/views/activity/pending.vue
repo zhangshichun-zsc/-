@@ -593,7 +593,7 @@ export default {
     getpendingEnrollList() {
       pendingEnrollList({
       activityId:this.$route.query.activityId,
-      status: this.status,
+      status: this.state,
       name:this.name
       }).then(res => {
         this.status = false;
@@ -620,7 +620,7 @@ export default {
     getpendingSubsidyList() {
       pendingSubsidyList({
         activityId:this.$route.query.activityId,
-        status: this.status,
+        status: this.state,
         name:this.name
       }).then(res => {
         this.status = false;
@@ -919,7 +919,7 @@ export default {
 }
 .searchs {
   height: 40px;
-  padding-left: 20px;
+  padding: 10px 20px;
   background: #ffffff;
   .table-btn {
     margin-left: 20px;
