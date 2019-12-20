@@ -2,212 +2,183 @@
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="wapper">
-      <div class="head">
+    <div class="content-box">
+      <p class="head">
         <span>{{ this.$route.query.name }}</span>
         <span>（{{ this.$route.query.num }}条反馈）</span>
-      </div>
-      <Row type="flex" justify="space-between" class-name="header">
-        <i-col span="12">
-          <Row align="middle" type="flex">
-            <i-col span="2">反馈人:</i-col>
-            <i-col span="5">
-              <Input
-                size="small"
-                placeholder="活动名称"
-                v-model="querys.userName"
-              />
-            </i-col>
-            <i-col span="3" push="1">提交时间:</i-col>
-            <i-col span="12" push="1">
-              <DatePicker
-                v-model="querys.startAt"
-                type="date"
-                style="width:180px"
-                placeholder="开始时间"
-                @on-change="handleChange('startAt', $event)"
-              />
-              <i>-</i>
-              <DatePicker
-                v-model="querys.endAt"
-                style="width:180px"
-                type="date"
-                placeholder="结束时间"
-                @on-change="handleChange('endAt', $event)"
-              />
-            </i-col>
-          </Row>
-        </i-col>
-
+      </p>
+      <div class="flex-center-start">
+        <div class="flex-center-start" style=" margin-right: 10px;">
+          <span class="lab" style="width:80px">反馈人:</span>
+          <Input placeholder="活动名称" v-model="querys.userName" />
+        </div>
+        <div class="flex-center-start" style=" margin-right: 10px;">
+          <span class="lab">开始时间:</span>
+          <DatePicker
+            v-model="querys.startAt"
+            type="date"
+            style="width:180px"
+            placeholder="开始时间"
+            @on-change="handleChange('startAt', $event)"
+          />
+          <i>&nbsp;&nbsp;~&nbsp;&nbsp;</i>
+          <DatePicker
+            v-model="querys.endAt"
+            style="width:180px"
+            type="date"
+            placeholder="结束时间"
+            @on-change="handleChange('endAt', $event)"
+          />
+        </div>
         <a class="queryBtn" @click="query()">查询</a>
-        <!-- <Button
-          @click="query()"
-          shape="circle"
-          size="large"
-          icon="ios-search"
-          class="btn"
-          >查询结果</Button
-        > -->
-      </Row>
-      <Row>
-        <i-col span="14">
-          <Row type="flex" justify="space-between" class-name="rowH">
-            <i-col span="3">
-              <Icon type="ios-list" size="30" />
-              <span>数据列表</span>
-            </i-col>
-            <i-col span="6">
-              <div class="flex-center-end">
-                <Select
-                  size="small"
-                  placeholder="显示条数"
-                  @on-change="changeNum"
-                  placement="top"
-                >
-                  <Option
-                    :value="item"
-                    v-for="(item, index) in numList"
-                    :key="index"
-                    >{{ item }}</Option
-                  >
-                </Select>
-                <Select
-                  size="small"
-                  placeholder="排序方式"
-                  @on-change="changeSort"
-                  placement="top"
-                >
-                  <Option value="create_at desc">升序</Option>
-                  <Option value="create_at asc">降序</Option>
-                </Select>
-              </div>
-            </i-col>
-          </Row>
-          <Row>
-            <Table border :columns="columns" :data="data"></Table>
-          </Row>
-          <Row>
-            <div class="pages">
-              <Page
-                :total="dataCount"
-                show-elevator
-                show-total
-                size="small"
-                :page-size="size"
-                @on-change="changepages"
-              />
-            </div>
-          </Row>
-        </i-col>
-        <i-col span="8" push="2">
-          <Row class-name="con-top">
-            反馈详情
-          </Row>
-          <Row>
-            <div v-for="(item, index) in msg.detailList" :key="index + 'd'">
-              <div v-if="index == 0" class="item">
-                <p class="title">
-                  反馈简介:
-                </p>
-                <p class="des">
-                  {{ item.detailText }}
-                </p>
-              </div>
-              <div
-                class="item"
-                v-else-if="index == 1 && msg.feedbackPicList.length !== 0"
-              >
-                <p class="title">反馈图片</p>
-                <div class="flex-wrap-start">
-                  <img
-                    :src="val.picPath"
-                    alt=""
-                    v-for="(val, i) in msg.feedbackPicList"
-                    :key="i"
-                    class="img"
-                  />
-                </div>
-              </div>
-              <div
-                class="item"
-                v-else-if="~~item.typeFlag === 1 || ~~item.typeFlag === 6"
-              >
-                <p class="title">{{ item.detailText }}</p>
-                <p>{{ item.value }}</p>
-              </div>
-              <div class="item" v-else-if="~~item.typeFlag === 3">
-                <div class="title">
-                  {{ item.detailText }}
-                </div>
-                <div>
-                  <RadioGroup vertical size="large" v-model="item.value">
-                    <Radio
-                      :label="substrs(i)"
-                      v-for="(val, i) in item"
-                      :key="i"
-                      v-if="sign(val, i)"
-                      disabled
-                    >
-                      {{ val }}</Radio
-                    >
-                  </RadioGroup>
-                </div>
-              </div>
-              <div class="item" v-else-if="~~item.typeFlag === 4">
-                <div class="title">
-                  {{ item.detailText }}
-                </div>
-                <div>
-                  <CheckboxGroup v-model="item.value">
-                    <p
-                      v-for="(val, n) in item"
-                      :key="n"
-                      v-if="sign(val, n)"
-                      class="box"
-                    >
-                      <Checkbox :label="substrs(n)" disabled>{{
-                        val
-                      }}</Checkbox>
-                    </p>
-                  </CheckboxGroup>
-                </div>
-              </div>
-            </div>
-            <Row
-              v-for="(item, m) in msg.evaluateList"
-              :key="m"
-              class-name="bott"
-            >
-              <p class="item flex-between">
-                <span>评价对象:</span
-                ><span>{{ item.typeFlag == 5 ? "会员" : "现场负责人" }}</span>
-              </p>
-              <p class="item flex-between">
-                <span>姓名:</span><span>{{ item.userName }}</span>
-              </p>
-              <p class="item flex-between">
-                <span>我的评价</span><Rate v-model="item.level" disabled />
-              </p>
-              <div class="item">
-                <p class="title">评价内容</p>
-                <div class="des">{{ item.comments }}</div>
-              </div>
-              <div class="item flex-between">
-                <span>是否匿名</span>
-                <i-switch
-                  true-color="#13ce66"
-                  false-color="#ff4949"
-                  disabled
-                  v-model="item.isAnonymous"
-                  :true-value="1"
-                  :false-value="0"
-                />
-              </div>
-            </Row>
-          </Row>
-        </i-col>
-      </Row>
+      </div>
     </div>
+    <div class="integral-table">
+      <div class="table-header">
+        <div class="table_item">
+          <Icon type="md-reorder" size="25" />
+          <span style="font-size: 14px;">数据列表</span>
+        </div>
+        <div class="table_item">
+          <Select
+            style="width:120px;margin-right:10px;"
+            placeholder="显示条数"
+            @on-change="changeNum"
+          >
+            <Option
+              :value="item"
+              v-for="(item, index) in numList"
+              :key="index"
+              >{{ item }}</Option
+            >
+          </Select>
+          <Select
+            style="width:120px;"
+            placeholder="排序方式"
+            @on-change="changeSort"
+          >
+            <Option value="create_at desc">升序</Option>
+            <Option value="create_at asc">降序</Option>
+          </Select>
+        </div>
+      </div>
+      <Table border :columns="columns" :data="data"></Table>
+      <div class="pages">
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          :page-size="size"
+          @on-change="changepages"
+        />
+      </div>
+    </div>
+    <Modal
+      title="反馈详情"
+      v-model="seeModal"
+      style="text-align: left;"
+      class="scrollModal"
+    >
+      <div v-for="(item, index) in msg.detailList" :key="index + 'd'">
+        <div v-if="index == 0" class="item">
+          <p class="title">
+            反馈简介:
+          </p>
+          <p class="des">
+            {{ item.detailText }}
+          </p>
+        </div>
+        <div
+          class="item"
+          v-else-if="index == 1 && msg.feedbackPicList.length !== 0"
+        >
+          <p class="title">反馈图片</p>
+          <div class="flex-wrap-start">
+            <img
+              :src="val.picPath"
+              alt=""
+              v-for="(val, i) in msg.feedbackPicList"
+              :key="i"
+              class="img"
+            />
+          </div>
+        </div>
+        <div
+          class="item"
+          v-else-if="~~item.typeFlag === 1 || ~~item.typeFlag === 6"
+        >
+          <p class="title">{{ item.detailText }}</p>
+          <p>{{ item.value }}</p>
+        </div>
+        <div class="item" v-else-if="~~item.typeFlag === 3">
+          <div class="title">
+            {{ item.detailText }}
+          </div>
+          <div>
+            <RadioGroup vertical size="large" v-model="item.value">
+              <Radio
+                :label="substrs(i)"
+                v-for="(val, i) in item"
+                :key="i"
+                v-if="sign(val, i)"
+                disabled
+              >
+                {{ val }}</Radio
+              >
+            </RadioGroup>
+          </div>
+        </div>
+        <div class="item" v-else-if="~~item.typeFlag === 4">
+          <div class="title">
+            {{ item.detailText }}
+          </div>
+          <div>
+            <CheckboxGroup v-model="item.value">
+              <p
+                v-for="(val, n) in item"
+                :key="n"
+                v-if="sign(val, n)"
+                class="box"
+              >
+                <Checkbox :label="substrs(n)" disabled>{{ val }}</Checkbox>
+              </p>
+            </CheckboxGroup>
+          </div>
+        </div>
+      </div>
+      <div v-for="(item, m) in msg.evaluateList" :key="m" class-name="bott">
+        <p class="item flex-between">
+          <span>评价对象:</span
+          ><span>{{ item.typeFlag == 5 ? "会员" : "现场负责人" }}</span>
+        </p>
+        <p class="item flex-between">
+          <span>姓名:</span><span>{{ item.userName }}</span>
+        </p>
+        <p class="item flex-between">
+          <span>我的评价</span><Rate v-model="item.level" disabled />
+        </p>
+        <div class="item">
+          <p class="title">评价内容</p>
+          <div class="des">{{ item.comments }}</div>
+        </div>
+        <div class="item flex-between">
+          <span>是否匿名</span>
+          <i-switch
+            true-color="#13ce66"
+            false-color="#ff4949"
+            disabled
+            v-model="item.isAnonymous"
+            :true-value="1"
+            :false-value="0"
+          />
+        </div>
+      </div>
+      <div slot="footer">
+        <Button type="text" size="large" @click="onSetLabel">取消</Button>
+        <Button type="error" size="large" @click="onSetLabel">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -223,6 +194,7 @@ export default {
       navigation1: {
         head: "活动反馈详情(会员)"
       },
+      seeModal: false,
       time: "请选择时间段",
       open: false,
       data: [],
@@ -247,18 +219,12 @@ export default {
         {
           title: "反馈人",
           key: "userName",
-          width: 300,
+
           align: "center",
           render: (h, params) => {
             return h(
               "div",
-              {
-                on: {
-                  click: () => {
-                    this.getActivitydetail(params.row.activityUserId);
-                  }
-                }
-              },
+
               params.row.userName
             );
           }
@@ -266,20 +232,42 @@ export default {
         {
           title: "手机号码",
           key: "tel",
-          align: "center",
-          width: 300
+          align: "center"
         },
         {
           title: "反馈时间",
           key: "feedbackAt",
-          align: "center",
-          width: 300
+          align: "center"
         },
         {
           title: "参与活动岗位",
           key: "positionName",
+          align: "center"
+        },
+        {
+          title: "操作",
+          key: "ck",
           align: "center",
-          width: 200
+          render: (h, params) => {
+            return h(
+              "a",
+
+              {
+                style: {
+                  color: "#FF565A"
+                },
+                on: {
+                  click: () => {
+                    this.getActivitydetail(params.row.activityUserId);
+                    setTimeout(() => {
+                      this.seeModal = true;
+                    }, 100);
+                  }
+                }
+              },
+              "查看"
+            );
+          }
         }
       ]
     };
@@ -320,7 +308,6 @@ export default {
       this.startAt = startAt;
       this.endAt = endAt;
       this.userName = this.querys.userName;
-      this.$Message.success("查询成功");
       this.getActivityuserpage();
     },
     getActivityuserpage() {
@@ -338,7 +325,9 @@ export default {
         if (res.code == 200) {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
-          this.getActivitydetail(res.data.list[0].activityUserId);
+          if (res.data.list.length > 0) {
+            this.getActivitydetail(res.data.list[0].activityUserId);
+          }
         } else {
           this.$Message.error(res.msg);
         }
@@ -383,6 +372,9 @@ export default {
       this.page = 1;
       this.getActivityuserpage();
     },
+    onSetLabel() {
+      this.seeModal = false;
+    },
     handleChange(name, e) {
       let time = e;
       if (time) {
@@ -415,49 +407,13 @@ export default {
   border-radius: 20px;
   padding: 20px;
   margin-bottom: 30px;
-  .head {
-    padding: 10px 0;
-    color: #1b2331;
-  }
+
   .header {
     margin-bottom: 30px;
   }
   .rowH {
     background-color: #f3f3f3;
     padding: 5px 0;
-  }
-  .btn {
-    background: #ff565a !important;
-    color: #fff !important;
-    border-color: none !important;
-  }
-  .btn:hover {
-    border: 1px solid #ff565a !important;
-    color: #ff565a !important;
-    background: #fff !important;
-  }
-  .item {
-    margin-bottom: 10px;
-    .box {
-      padding: 10px 0;
-    }
-    .title {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 10px;
-      padding: 5px 10px;
-      background: #eee;
-    }
-    .des {
-      padding: 10px;
-      border: 1px solid #eee;
-      height: 100px;
-    }
-    .img {
-      width: 50px;
-      height: 50px;
-      margin-right: 10px;
-    }
   }
 }
 .con-top {
@@ -469,6 +425,71 @@ export default {
 .pages {
   display: flex;
   justify-content: center;
-  margin: 10px auto;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.content-box {
+  padding: 15px;
+  font-size: 15px 20px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+}
+.lab {
+  display: block;
+  padding-right: 15px;
+}
+.head {
+  padding: 10px 0;
+  color: #1b2331;
+  font-size: 16px;
+  font-weight: 800;
+  padding-bottom: 10px;
+}
+.integral-table {
+  margin-top: 20px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
+  padding: 0 5px;
+}
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ivu-modal-body {
+  img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+}
+
+.item {
+  margin-bottom: 15px;
+  font-size: 14px;
+  .box {
+    padding: 10px 0;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background: #eee;
+  }
+  .des {
+    padding: 10px;
+    border: 1px solid #eee;
+    height: 100px;
+  }
+  .img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
 }
 </style>
