@@ -436,10 +436,16 @@ export default {
   beforeRouteLeave(to, from, next) {
     if (to.name === from.name) return;
     let toName = to.name;
+    // 三级菜单 白名单
+    let whiteList = ["login", "profile", "user_details_hy"];
+
+    // 总菜单
     let menuList = this.$store.state.menuList;
-    if (to.name === "login") {
+
+    if (whiteList.includes(to.name, 0)) {
       return next();
     }
+
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {

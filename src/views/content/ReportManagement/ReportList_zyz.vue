@@ -147,7 +147,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {
@@ -173,7 +173,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "green"
+                    color: "#FF566A"
                   },
                   on: {
                     click: () => {

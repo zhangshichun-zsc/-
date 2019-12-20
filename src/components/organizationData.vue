@@ -9,7 +9,7 @@
           :model="formInline"
           inline
           class="forms"
-          :label-width="80"
+          :label-width="100"
           v-if="Retract == true"
         >
           <FormItem label="组织名称:">
@@ -128,7 +128,12 @@
             <Button @click="chackall()" style="border:0px;">
               <Checkbox v-model="status"></Checkbox>全选
             </Button>
-            <Select placeholder="批量操作" style="width: 120px" v-model="type">
+            <Select
+              placeholder="批量操作"
+              placement="top"
+              style="width: 120px"
+              v-model="type"
+            >
               <Option
                 v-for="item in batchList"
                 :value="item.value"

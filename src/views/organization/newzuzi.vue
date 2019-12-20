@@ -16,23 +16,41 @@
         <div class="content middle">
           <Form ref="AddDate" :model="AddDate" :label-width="120">
             <FormItem label="名称:" prop="Name">
-              <Input v-model="value" placeholder="点 击 输 入" style="width: 220px" />
+              <Input
+                v-model="value"
+                placeholder="点 击 输 入"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="联系人:" prop="Name">
-              <Input v-model="value" placeholder="自动带出" style="width: 220px" />
+              <Input
+                v-model="value"
+                placeholder="自动带出"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="地址:" prop="Name">
-              <Input v-model="value" placeholder="点 击 输 入" style="width: 220px" />
+              <Input
+                v-model="value"
+                placeholder="点 击 输 入"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="联系方式:" prop="Name">
               <Input v-model="value" style="width: 220px" />
             </FormItem>
             <FormItem label="微信公众号:">
-              <Input v-model="value" placeholder="点 击 输 入" style="width: 220px" />
+              <Input
+                v-model="value"
+                placeholder="点 击 输 入"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="图片:">
               <div class="flex-start">
-                <div style="background-color: #5cb85c;width: 9rem;height: 5rem;"></div>
+                <div
+                  style="background-color: #5cb85c;width: 9rem;height: 5rem;"
+                ></div>
                 <div style="padding-top: 2.5rem;margin-left: 0.5rem;">
                   <Upload action="//jsonplaceholder.typicode.com/posts/">
                     <Button icon="ios-cloud-upload-outline">上传图片</Button>
@@ -41,7 +59,11 @@
               </div>
             </FormItem>
             <FormItem label="详情:" prop="Name">
-              <Input v-model="value" type="textarea" :autosize="{minRows: 5,maxRows: 8}" />
+              <Input
+                v-model="value"
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 8 }"
+              />
             </FormItem>
           </Form>
         </div>
@@ -57,7 +79,11 @@
               </p>
               <Progress :percent="percent" style="width: 15rem" />
             </div>
-            <Button shape="circle" icon="md-close" style="margin-top: 0.5rem;"></Button>
+            <Button
+              shape="circle"
+              icon="md-close"
+              style="margin-top: 0.5rem;"
+            ></Button>
           </div>
           <div class="middle">
             <Upload action="//jsonplaceholder.typicode.com/posts/">
@@ -69,7 +95,11 @@
       <div class="basic">
         <p class="title">备注</p>
         <div class="content">
-          <Input v-model="value" type="textarea" :autosize="{minRows: 5,maxRows: 8}" />
+          <Input
+            v-model="value"
+            type="textarea"
+            :autosize="{ minRows: 5, maxRows: 8 }"
+          />
         </div>
       </div>
       <div class="middle">

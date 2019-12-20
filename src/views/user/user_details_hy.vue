@@ -266,7 +266,8 @@ export default {
                       this.$router.push({
                         name: "profile",
                         query: {
-                          userId: params.row.activityId
+                          acitvityId: params.row.activityId,
+                          activityName: params.row.name
                         }
                       });
                     }
