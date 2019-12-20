@@ -429,8 +429,8 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="1">整体招募</Radio>
                   <Radio label="2">批次招募</Radio>
+                  <Radio label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>
