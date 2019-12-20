@@ -40,7 +40,7 @@
       <div class="content-details">
         <ul class="list-one">
           <li @click="btnTab(index+1)" v-for='(item,index) in head' :key='index'>
-            <Button :class="{active:show == index+1}">{{ item.name }}</Button>
+            <a :class="{active:show == index+1}">{{ item.name }}</a>
           </li>
         </ul>
         <ul class="list" v-if="show==1">
@@ -57,9 +57,10 @@
             <Button :class="{active:state[1] == item.id}">{{ item.name }}</Button>
           </li>
         </ul>
-        <div class="searchs flex-start" v-if="show!=4">
+        <div class="searchs flex-center-start" v-if="show!=4">
+          <span>报名人：</span>
           <i-input v-model="info" placeholder="报名人/手机号" style="width:150px" />
-          <Button class="table-btn" @click="search">搜索</Button>
+          <Button shape="circle" size='large' icon="ios-search" class="btn" @click="search">搜索</Button>
         </div>
         <div class="integral-table">
           <div class="table-header flex-center-between"  v-if='show !== 4'>
@@ -881,33 +882,28 @@ export default {
   }
   .list-one {
     display: flex;
-    height: 40px;
-    line-height: 40px;
+    padding: 20px; 
     background: #ffffff;
     margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
     li {
       margin: 0 20px;
-      // color: green;
-      a {
-        color: green;
+      a{
+        color: #515a6e;
       }
     }
   }
   .list {
     display: flex;
-    height: 40px;
-    line-height: 40px;
+    padding: 10px 20px;
     background: #ffffff;
-    border: #e3e3e3 solid 1px;
     li {
-      margin: 0 20px;
-      width: 50px;
+      padding: 0 20px;
       text-align: center;
       a {
         color: black;
       }
     }
-   
   }
 } 
 .active {
@@ -915,9 +911,8 @@ export default {
   color: #FF565A !important;
 }
 .table-header {
-  height: 50px;
+  padding: 10px 20px;
   background: #ffffff;
-  padding-left: 10px;
   span {
     font-size: 14px;
   }
@@ -929,9 +924,17 @@ export default {
   height: 40px;
   padding: 10px 20px;
   background: #ffffff;
-  .table-btn {
-    margin-left: 20px;
-  }
+  .btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:none !important;
+  margin-left: 20px;
+}
+.btn:hover{
+  border:1px solid #FF565A !important;
+  color: #FF565A !important;
+  background: #fff !important;
+}
 }
 .content-details {
   background: #ffffff;
