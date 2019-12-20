@@ -601,7 +601,7 @@ export default {
           title: '参与活动数',
           key: 'joinActivityNum',
           align: 'center',
-          width: 100
+          width: 140
         },
         {
           title: '积分',
@@ -613,7 +613,7 @@ export default {
           title: '账户启用状态',
           key: 'userEnable',
           align: 'center',
-          width: 130,
+          width: 140,
           render: (h, params) => {
             return h('div', [
               h('i-switch', {

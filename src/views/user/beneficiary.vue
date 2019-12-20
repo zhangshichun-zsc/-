@@ -703,7 +703,7 @@ export default {
           title: '手机号',
           key: 'tel',
           align: 'center',
-          width: 120
+          width: 140
         },
         {
           title: '用户昵称',
@@ -727,13 +727,13 @@ export default {
           title: 'vip缴费时间',
           key: 'resentPayTimestamp',
           align: 'center',
-          width: 110
+          width: 160
         },
         {
           title: 'vip到期时间',
           key: 'vipLastTimestamp',
           align: 'center',
-          width: 110
+          width: 180
         },
         {
           title: '标签',
@@ -745,7 +745,7 @@ export default {
           title: '参与活动数',
           key: 'joinActivityNum',
           align: 'center',
-          width: 110
+          width: 120
         },
         {
           title: '积分',

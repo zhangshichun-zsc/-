@@ -112,17 +112,20 @@
             <FormItem label="文件:">
               <div class="content">
                 <div class="middle">
-                  <Icon type="ios-paper-outline" size="30" />
                   <div class="file">
                     <p>
                       <span>文件名称</span>
                     </p>
+                    <Progress :percent="num" style="width: 15rem" />
                   </div>
-                  <Button
-                    shape="circle"
-                    icon="md-close"
+
+                  <Icon
+                    v-if="formValidate.texturl != null"
                     style="margin-top: 0.5rem;"
-                  ></Button>
+                    @click="circle"
+                    size="20"
+                    type="ios-close-circle-outline"
+                  />
                 </div>
                 <div class="middle">
                   <div class="start-wap">
@@ -163,13 +166,11 @@
               </div>
             </FormItem>
             <FormItem label="备注:">
-              <div class="content">
-                <Input
-                  v-model="value"
-                  type="textarea"
-                  :autosize="{ minRows: 5, maxRows: 8 }"
-                />
-              </div>
+              <Input
+                v-model="value"
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 8 }"
+              />
             </FormItem>
 
             <FormItem label="">
@@ -262,6 +263,7 @@ export default {
       },
       orgTypes: 1,
       defaultList: "",
+      percentNum: 0,
       num: 0,
       formValidate: {
         address: "",
