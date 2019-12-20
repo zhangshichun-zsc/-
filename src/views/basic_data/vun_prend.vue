@@ -5,14 +5,14 @@
     <div class="integral-header">
       <div class="integral-left">
         <div class="title">
-          <img v-if='headimg!=null' style=" width: 366px;"  :src="headimg" alt="" >
-          <img v-if='headimg==null' style=" width: 366px;"   src="../../assets/images/prend/4.png"/>
+          <img v-if='headimg!=null' style=" width: 488px;"  :src="headimg" alt="" >
+          <img v-if='headimg==null' style=" width: 488px;"   src="../../assets/images/prend/4.png"/>
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
           <p style="margin-top:20px;margin-bottom:20px;">
              <Input v-model="value6" type="textarea" :rows="5" placeholder="" disabled/>
           </p>
-          <img v-if='footimg!=null' style=" width: 366px;"  :src="footimg" alt="" class="fot">
+          <img v-if='footimg!=null' style=" width: 488px;"  :src="footimg" alt="" class="fot">
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
          <div v-if='footimg==null' class="head ">
           <img class="head-left" src="../../assets/images/prend/1.png" alt=""/>

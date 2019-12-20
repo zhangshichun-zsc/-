@@ -37,7 +37,7 @@
         <div>
          <Button class="table-btns" @click="set(1)">志愿活动积分比例设置</Button>
          <Button class="table-btns" @click="set(2)">积分规则设置</Button>
-          <Button class="table-btns" @click="set(3)">积分审核</Button>
+          <Button class="table-btns" @click="set(3)" v-if="power==1">积分审核</Button>
         </div>
         <div>
           <!-- <Button class="table-btns" @click="exportData">
@@ -80,7 +80,7 @@
         </Modal>
 
         <Modal v-model="modal2" title="志愿者活动积分比例设置" class-name="vertical-center-modal">
-          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
             <FormItem label="1小时服务时长：" prop="serve">
               <InputNumber :max="100" :min="0" placeholder="请输入大于0的整数" v-model="formValidate.serve" style="width:200px"></InputNumber>
 
@@ -121,7 +121,7 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
-import { integralpage, integralmodify,integralnum,integralset} from "../../request/api";
+import { integralpage, integralmodify,integralnum,integralset,approvalAuditScorePower} from "../../request/api";
 export default {
   data() {
     return {
@@ -277,7 +277,9 @@ export default {
       Retract:true,
       num:'',
       typeFlag:13,
-      scoreRuleId:''
+      scoreRuleId:'',
+       sysId:'1,3',
+      power:'',
     };
   },
 
@@ -286,6 +288,7 @@ export default {
   computed: {},
   mounted() {
     this.getintegralpage();
+    this.getapprovalAuditScorePower()
 
   },
 
@@ -318,6 +321,16 @@ export default {
         }
         console.log(res);
       });
+    },
+     //审核权限
+    getapprovalAuditScorePower(){
+      approvalAuditScorePower({
+        userId:this.$store.state.userId,
+        sysId:this.sysId,
+      }).then(res=>{
+        this.power=res.data.power
+        console.log(res)
+      })
     },
 
     //修改积分
@@ -416,8 +429,8 @@ export default {
 
     clearinput() {
       this.formItem.remark = "";
-      this.formItem.addScore1 = 0;
-      this.formItem.addScore2 = 0;
+      this.formItem.addScore = 0;
+
       this.modal1 = true;
     },
 
@@ -431,19 +444,8 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          console.log(this.formItem.addScore1,this.formItem.addScore2 )
-           if (this.formItem.addType == 1 && this.formItem.addScore1 !=null) {
-            this.num = this.formItem.addScore1;
-            this.getintegralmodify();
-          } else if (
-            this.formItem.addType == 2 &&
-            this.formItem.addScore2 != null
-          ) {
-            this.num = this.formItem.addScore2;
-            this.getintegralmodify();
-          } else {
-            this.$Message.error("数值不能为空");
-          }
+        this.getintegralmodify();
+
         } else {
           this.$Message.error("必填项未填");
         }
@@ -452,8 +454,7 @@ export default {
 
     modalCancel() {
       this.formItem.remark = "";
-      // this.formItem.addScore1 = 0;
-      // this.formItem.addScore2 = 0;
+      this.formItem.addScore = 0;
       this.modal1 = false;
     },
 
@@ -463,7 +464,7 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getintegralset()
-          // this.modal2 = false;
+
 
         } else {
           this.$Message.error("必填项未填");

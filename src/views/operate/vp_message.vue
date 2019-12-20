@@ -18,10 +18,10 @@
         </div>
       </div>
       <div style="padding: 0.5rem 0;" v-for="(item,index) in list" :key="index">
-        <div style="border: #E4E4E4 1px solid;  ">
+        <div style="border: #E4E4E4 1px solid; margin:0 10px ">
           <div
             class="flex-center-between"
-            style="padding: 0.2rem 0.5rem;"
+            style="padding: 0.2rem 0"
           >
             <div class="text1">
               <p>
@@ -196,6 +196,7 @@ export default {
 }
 .black {
   margin-right: 20px;
+  padding-left: 15px;
   color: black;
 }
 .text2 {

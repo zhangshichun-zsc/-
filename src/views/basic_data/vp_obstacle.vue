@@ -11,7 +11,7 @@
           <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="障碍类型:" prop="dicName">
-                <Input v-model="formValidate.dicName" />
+                <Input v-model.trim="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
@@ -69,12 +69,13 @@ export default {
           title: "特长名称",
           key: "dicName",
           align: "center",
+           width:460,
         },
         {
           title: "创建时间",
           key: "creatAt",
           align: "center",
-          width:200,
+          width:240,
         },
 
         {
@@ -109,7 +110,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-           width:150,
+           width:180,
           render: (h, params) => {
             return h("div", [
               h(

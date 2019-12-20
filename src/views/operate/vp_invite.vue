@@ -19,7 +19,9 @@
             </Select>
             </div>
       </div>
+      <div style="padding:0 10px;background:white">
        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+       </div>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -46,11 +48,6 @@ export default {
         head: "邀请好友查询(会员)",
        },
       columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
         {
           title: "用户账号",
           key: "userAccount",
@@ -225,6 +222,9 @@ this.getInvitationList()
 }
 .table-header .table-btn {
   margin-left: 15px;
+}
+.integral-table{
+  border-radius: 10px 10px 0 0;
 }
 .integral-table .pages {
   padding: 20px;

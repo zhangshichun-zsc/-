@@ -70,6 +70,11 @@ export default {
       list: [],
       data: [],
       columns: [
+         {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
         {
           title: '举报理由',
           key: 'reportReasonText',
@@ -263,7 +268,7 @@ dataValue: "全部" },
     changepages(index) {
       this.page = index
       console.log(index)
-      // this.getAddressList();
+      this.getReportpage();
     },
 
     //每条数据单选框的状态
@@ -279,10 +284,11 @@ dataValue: "全部" },
         this.status = false
       }
        let dataid = this.data.map(item => {
-        if (item.reportStatusText == "已处理") {
+        if (item.reportStatusText == "未处理") {
           return item.reportId;
         }
       });
+      console.log(dataid)
       this.arr = val.map(item => {
         return dataid.filter(key => {
           return item.reportId.indexof(key) == -1;

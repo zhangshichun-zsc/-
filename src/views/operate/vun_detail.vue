@@ -16,6 +16,7 @@
           </Select>
         </div>
       </div>
+      <div style="padding:0 10px;background:white">
       <Table
         ref="selection"
         border
@@ -23,6 +24,7 @@
         :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
+      </div>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -49,11 +51,6 @@ export default {
         head: "邀请好友明细(志愿者)"
       },
       columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
         {
           title: "用户账号",
           key: "userAccount",
@@ -227,6 +224,10 @@ export default {
 }
 .table-header .table-btn {
   margin-right: 15px;
+}
+.integral-table{
+  border-radius: 10px 10px 0 0;
+  margin-top: 10px;
 }
 .integral-table .pages {
   padding:20px;

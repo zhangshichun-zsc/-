@@ -3,12 +3,12 @@
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
     <div class="xieyi">
-      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80">
+      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="120">
         <FormItem label="甲方" prop="partA">
-          <Input v-model="formInline.partA" placeholder="甲方名称" style="width:300px" />
+          <Input v-model.trim="formInline.partA" placeholder="甲方名称" style="width:300px" />
         </FormItem>
         <FormItem label="乙方" prop="partB">
-          <Input v-model="formInline.partB" placeholder="乙方名称" style="width:300px" />
+          <Input v-model.trim="formInline.partB" placeholder="乙方名称" style="width:300px" />
         </FormItem>
         <FormItem label="协议分类" prop="typeDicId">
           <Select v-model="formInline.typeDicId" placeholder="请选择分类" style="width:300px">
@@ -329,14 +329,15 @@ export default {
     handleChange(e) {
       if (e != "") {
         let datas = e;
-        datas = datas + " 00:00:00";
+        datas = datas.split('')[0] + " 00:00:00";
         this.Times = datas;
-        console.log(e, datas, this.Times);
+
       }
     },
 
     //图片上传
     uploadFile() {
+
       let file = this.$refs.files.files[0];
       if (this.formInline.nameA == null) {
         this.formInline.nameA = file.name;
@@ -352,14 +353,14 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           this.texturl = e.target.result;
-          // this.formInline.agPicA = res.data;
-          if (this.formInline.agPicA == null) {
+
+          if (this.formInline.agPicA == null||this.formInline.agPicA =='') {
             this.formInline.agPicA = res.data;
             return;
-          } else if (this.formInline.agPicB == null) {
+          } else if (this.formInline.agPicB == null||this.formInline.agPicB == '') {
             this.formInline.agPicB = res.data;
             return;
-          } else if (this.formInline.agPicC == null) {
+          } else if (this.formInline.agPicC == null||this.formInline.agPicC == '') {
             this.formInline.agPicC = res.data;
             return;
           } else {
@@ -414,6 +415,7 @@ export default {
   border: 1px solid #eee;
 }
 .xieyi {
+      border-radius: 10px;
   padding-top: 50px;
   padding-left: 50px;
   background: #ffffff;

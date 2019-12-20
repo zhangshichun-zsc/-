@@ -32,11 +32,14 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
-        <Modal v-model="modal1" @on-ok="ok"
-        @on-cancel="cancel" class-name="vertical-center-modal">
+        <Modal v-model="modal1" class-name="vertical-center-modal">
           <div class="approval">
             <h3>是否确认审批？</h3>
           </div>
+           <div slot="footer">
+              <Button type="text" size="large" @click="cancel">取消</Button>
+              <Button type="error" size="large" @click="ok">确定</Button>
+            </div>
         </Modal>
       </div>
       <div class="min-height">
@@ -86,12 +89,12 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width:200,
+          width:300,
         },
         {
           title: "用户昵称",
-          key: "nickname",
-          width:300,
+          key: "nickName",
+          width:400,
           align: "center"
         },
         {
@@ -135,13 +138,19 @@ export default {
           title: "状态",
           key: "auditStatusTtext",
           align: "center",
-          width:200
+          width:300,
+           render: (h, params) => {
+             let statess=['待审核','审核通过','审核不通过','一级审核通过二级待审核']
+
+            //  0待审核,1审核通过,2审核不通过,3一级审核通过二级待审核'
+             return h("p",statess[params.row.auditStatus])
+           }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:200,
+          width:240,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -150,12 +159,12 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: params.row.auditStatusTtext=='待审核'?"red":'gray'
+                    color: params.row.auditStatus==0||params.row.auditStatus==3?"red":'gray'
                   },
                   on: {
                     click: () => {
-                      if(params.row.auditStatusTtext=='待审核'){
-                        this.refuse(params.row.scoreHisId,1)
+                      if(params.row.auditStatus==0||params.row.auditStatus==3){
+                        this.refuse(params.row.auditId,1)
                       }
                     }
                   }
@@ -168,12 +177,12 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: params.row.auditStatusTtext=='待审核'?"red":'gray'
+                    color: (params.row.auditStatus==0||params.row.auditStatus==3)?"red":'gray'
                   },
                   on: {
                     click: () => {
-                       if(params.row.auditStatusTtext=='待审核'){
-                        this.refuse(params.row.scoreHisId,2)
+                       if(params.row.auditStatus==0||params.row.auditStatus==3){
+                        this.refuse(params.row.auditId,2)
                       }
                     }
                   }
@@ -192,7 +201,7 @@ export default {
       size: 10,
 
       dataCount: 0,
-      operationUserId:13,
+
       auditStatus:'',
 
       Article: [
@@ -205,7 +214,9 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-      arr:''
+      arr:'',
+      arrs:[],
+      sysTypes:'2,3'
     };
   },
 
@@ -243,13 +254,13 @@ export default {
     getIntegralaudit() {
 
       Integralaudit({
-        scoreHisIds: this.arr,
+        auditIds: this.arr,
         sysType: this.sysType,
         auditStatus: this.auditStatus,
-        operationUserId: this.operationUserId
+        operationUserId: this.$store.state.userId
       }).then(res => {
         if(res.code==200){
-          this.$refs.selection.selectAll(false);
+
            this.$Message.info("操作成功");
            this.getintegralExa()
         }else{
@@ -260,19 +271,21 @@ export default {
     },
     //批量修改
      batch(){
-      if(this.arr==''){
+      if(this.arrs.length==0){
         this.$Message.error("请先选择")
       }else{
         this.modal1=true
       }
     },
     cancel(){
-
+      this.modal1=false
     },
     ok(){
-       this.arr = val.map(item => {
-        return item.scoreHisId;
-      }).toString();
+      let dataaa=this.data.map(item=> {
+          return item.auditId
+})
+ console.log(dataaa)
+      this.arr=this.arrs
       this.auditStatus=1
       this.getIntegralaudit()
     },
@@ -285,9 +298,9 @@ export default {
     },
     //选择内容
     handleSelectionChange(val) {
-      this.arr = val.map(item => {
-        return item.scoreHisId;
-      }).toString();
+      this.arrs = val.map(item => {
+        return item.auditId;
+      }).toString()
         console.log(this.arr)
 
     },
@@ -300,7 +313,7 @@ export default {
 
     // 搜索
     query() {
-
+ this.page=1
       this.getintegralExa();
     }
   }

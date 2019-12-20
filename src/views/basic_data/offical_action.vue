@@ -52,7 +52,7 @@
           <Modal v-model="modal2" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicNamemod">
-                <Input v-model="formValidate.dicNamemod" style="width:200px" />
+                <Input v-model.trim="formValidate.dicNamemod" style="width:200px" />
               </FormItem>
               <FormItem label="收益对象" prop="actTypeFlag">
                 <Select v-model="formValidate.actTypeFlag" style="width: 150px;margin-right:10px">

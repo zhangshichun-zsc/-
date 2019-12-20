@@ -241,6 +241,7 @@ export default {
 .black {
   margin-right: 20px;
   color: black;
+  padding-left: 15px;
 }
 .text2 {
   padding: 0.5rem 1rem;

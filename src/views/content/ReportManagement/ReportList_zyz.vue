@@ -102,6 +102,11 @@ export default {
       list: [],
       data: [],
       columns: [
+          {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
         {
           title: "举报理由",
           key: "reportReasonText",
@@ -317,7 +322,6 @@ export default {
     //每条数据单选框的状态
     handleSelectionChange(val) {
       this.arr = val;
-      console.log(this.arr);
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size

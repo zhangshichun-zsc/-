@@ -56,7 +56,7 @@ export const inquiryReltype = p => get('/information-manage/getInforList', p) //
 export const inquiryRel = p => posts('/information-manage/createInformation', p) // 发布资讯
 
 
-// 推荐模块 
+// 推荐模块
 
 export const AdvertisingList = p => get('/adv-content/get-adcontent-location-list', p) // 广告管理--获取广告位值列表
 
@@ -194,7 +194,11 @@ export const Retardeddel = p => posts('/base-material/dic/delete', p)  //智障�
 
 
 //积分
+export const approvalAuditScorePower = p => get('/score/queryAuditScorePower', p) //-审核积分权限
+
 export const integralmodify = p => posts('/score/add-score-history', p) //-修改积分数值
+
+// export const integralHistory = p => get('/score/get-scoreHis-page', p) //-积分明细-积分历史记录分页
 
 export const integralHistory = p => get('/score/get-scoreHis-page', p) //-积分明细-积分历史记录分页
 
@@ -518,7 +522,7 @@ export const Journaldel = p => post('web/log/dellLog', p) //日志信息-删除�
 export const Permissionset = p => posts('/sysRole/findAllMenu', p) //功能权限设置--
 
 
-export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称 
+export const getParentIdName = p => get('web/dept/findUpDeptNameOne', p) //获取 上级部门的名称
 
 
 

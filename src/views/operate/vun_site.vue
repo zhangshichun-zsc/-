@@ -4,25 +4,32 @@
     <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
 
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div class="flex-center-end" style="padding:10px">
+      <div class="table-header flex-between" style="padding:10px">
+          <div>
+          <Icon type="ios-list" size="30" />
+          <span>数据列表</span>
+          </div>
+          <div class="flex-center-end">
           <Select v-model="size" style="width:120px;margin-right:10px" placeholder="显示条数">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-        </div>
+          </div>
+          </div>
       </div>
+      <div style="padding:0 10px;background:white">
       <Table
           ref="selection"
           border
           :columns="columns"
           :data=data
         ></Table>
-      <Modal v-model="modal2" title="查看消息">
+        </div>
+      <Modal class="QRcodemodal" v-model="modal2" title="查看消息">
         <h1 style="text-align: center;font-size:16px">{{obj.title}}</h1>
-        <p style="text-align: center;color: #9EA7B4;font-size:14px">{{obj.createAt}}</p>
+        <p style="text-align: center;color: #9EA7B4;font-size:12px">{{obj.createAt}}</p>
         <Divider style="margin: 0.5rem 0;" />
         <p style="font-size:12px">{{obj.content}}</p>
         <div slot="footer"></div>
@@ -53,11 +60,6 @@ export default {
         head: "站内信消息(志愿者)"
       },
       columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
         {
           title: "编号",
           key: "msgId",
@@ -207,7 +209,7 @@ export default {
   margin-right: 20px;
 }
 .integral-table{
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
 }
 .table-header {
   padding: 5px 20px;
@@ -224,6 +226,9 @@ export default {
 }
 .pages {
   text-align: center;
+  background: #fff;
+  padding: 20px;
+  border-radius: 0 0 10px 10px;
 }
 .ipt {
   margin-left: 10px;

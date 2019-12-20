@@ -56,7 +56,7 @@
           <Modal v-model="modal1" title="修改" @on-cancel="cancel" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="args" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
-                <Input v-model="args.name" />
+                <Input v-model.trim="args.name" />
               </FormItem>
             </Form>
             <div slot="footer">

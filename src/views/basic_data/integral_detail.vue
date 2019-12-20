@@ -9,7 +9,7 @@
       <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start">
           <span>积分来源:</span>
-          <Select size="large" class="inpt" v-model="scoreRuleId">
+          <Select size="large" class="inpt" v-model="scoreRuleType">
             <Option
               v-for="item in list"
               :value="item.scoreRuleId"
@@ -17,7 +17,26 @@
             >{{item.comments}}</Option>
           </Select>
         </div>
-        <div class="flex-center-start">
+         <div class="flex-center-start">
+          <span>操作时间/时间段:</span>
+          <DatePicker
+            class="inpt"
+            style="width: 180px"
+            type="date"
+            @on-change="startTimeChange"
+            placeholder="请选择开始时间"
+            v-model="startAt"
+          ></DatePicker>
+          <span class="po">~</span>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            @on-change="endTimeChange"
+            placeholder="请选择结束时间"
+            v-model="endAt"
+          ></DatePicker>
+        </div>
+        <!-- <div class="flex-center-start">
           <span>操作时间:</span>
           <DatePicker
             type="date"
@@ -27,7 +46,7 @@
             style="width: 200px;margin-left:10px"
             v-model="updateTimeStamp"
           ></DatePicker>
-        </div>
+        </div> -->
         <div class="flex-center-start">
           <Button class="table-btns" @click="query">查询</Button>
         </div>
@@ -89,18 +108,21 @@ export default {
         },
         {
           title: "用户昵称",
-          key: "nickname",
-          align:'center'
+          key: "nickName",
+          align:'center',
+          width:300,
         },
         {
           title: "会员等级",
           key: "level",
-          align:'center'
+          align:'center',
+          width:300,
         },
         {
           title: "可用积分",
-          key: "score",
-          align:'center'
+          key: "sourceScore",
+          align:'center',
+          width:300,
         }
       ],
       data1: [],
@@ -108,25 +130,27 @@ export default {
         {
           title: "积分来源",
           key: "scoreOrigin",
-          align:'center'
+          align:'center',
+          width:300,
         },
         {
           title: "积分变化",
-          key: "scoreChange",
-          align:'center'
+          key: "score",
+          align:'center',
+          width:240,
         },
         {
           title: "时间",
-          key: "time",
+          key: "updateAt",
           align:'center',
-          render: (h, params) => {
-            return h("div", formatDate(params.row.time));
-          }
+          width:240,
+
         },
         {
           title: "备注",
-          key: "remark",
-          align:'center'
+          key: "comments",
+          align:'center',
+          width:500,
         }
       ],
 
@@ -142,16 +166,19 @@ export default {
       sort: "asc",
 
       data2: [],
-      sysType: 1,
+      sysType:1,
+      sysTypes:'1,3',
       page: 1,
       size: 10,
       dataCount: 0,
       updateTimeStamp: "",
-      scoreRuleId: "",
+      scoreRuleType: "",
       arrs: [],
       datas: "",
       list: [],
-      Retract: true
+      Retract: true,
+      startAt:'',
+      endAt:''
     };
   },
 
@@ -188,33 +215,35 @@ export default {
     getintegralDet() {
       integralDet({
         sysType: this.sysType,
-        userId: this.$route.query.userId
+        userId: this.$route.query.userId,
+
       }).then(res => {
         if (res.code == 200) {
-          this.data1 = res.data;
+          this.data1 = Array.of(res.data);
         }
         console.log(res);
       });
     },
     // 积分历史记录分页
     getintegralHistory() {
-      if (this.updateTimeStamp != "") {
-        this.datas = this.updateTimeStamp.getTime();
-        console.log(this.datas);
-      } else {
-        this.datas = "";
-      }
-      integralHistory({
-        sysType: this.sysType,
+      let params = {
+         sysType: this.sysTypes,
         userId: this.$route.query.userId,
-        scoreRuleId: this.scoreRuleId,
-        updateTimeStamp: this.datas,
+
+         scoreRuleType:this.scoreRuleType,
+        startAt:this.startAt,
+        endAt:this.endAt,
         page: {
           page: this.page,
           size: this.size,
-          sort: "createAt" + " " + this.sort
+          sort: "updateAt" + " " + this.sort
         }
-      }).then(res => {
+
+      }
+      params = this.util.remove(params)
+      integralHistory(
+        params
+      ).then(res => {
         if (res.code == 200) {
           this.data2 = res.data.list;
           this.dataCount = res.data.totalSize;
@@ -236,7 +265,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
+
       this.getintegralHistory();
     },
     //选择内容
@@ -244,10 +273,47 @@ export default {
       console.log(val);
       this.arrs = val;
     },
+    startTimeChange(e) {
+      this.startAt = e;
+    },
+
+    endTimeChange(e) {
+      this.endAt = e;
+    },
     //查询
     query() {
-      this.page=1
+       if (this.startAt && this.endAt) {
+        if (this.startAt <= this.endAt) {
+          this.startAt = this.startAt.split('')[0] + " 00:00:00";
+          this.endAt = this.endAt.split('')[0] + " 23:59:59";
+           this.page = 1;
+            this.getintegralHistory();
+        } else {
+           this.startAt=''
+          this.endAt=''
+          this.$Message.error('时间选择错误请重新选择')
+        }
+
+      }else{
+         this.page = 1;
       this.getintegralHistory();
+      }
+      // if (this.args.startAt && this.args.endAt) {
+      //   if (this.args.startAt <= this.args.endAt) {
+      //     this.args.startAt = this.args.startAt + " 00:00:00";
+      //     this.args.endAt = this.args.endAt + " 23:59:59";
+
+      //   } else {
+      //      this.args.startAt=''
+      //     this.args.endAt=''
+      //     this.$Message.error('时间选择错误请重新选择')
+      //   }
+
+      // }else{
+      //    this.page=1
+      // this.getintegralHistory();
+      // }
+
     }
   }
 };
@@ -283,9 +349,8 @@ export default {
 .table-header .table-btn {
   margin-left: 15px;
 }
-.pages {
-  padding: 20px;
-  background: #fff;
-  text-align: center;
+
+.po{
+  padding:0 10px;
 }
 </style>
