@@ -54,6 +54,7 @@
               v-for="item in sorting"
               :value="item.value"
               :key="item.value"
+              @click.native="getSort()"
               >{{ item.label }}</Option
             >
           </Select>
@@ -242,7 +243,9 @@ export default {
   methods: {
     //获取举报原因列表
     getReportList() {
-      ReportList({}).then(res => {
+      ReportList({
+        sysType:1
+      }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.list = [{ dataKey: "", dataValue: "全部" }, ...res.data];
@@ -270,6 +273,10 @@ export default {
       ReportDel({}).then(res => {
         console.log(res);
       });
+    },
+    getSort(){
+      this.page = 1
+      this.getReportpage()
     },
 
     //批量操作
