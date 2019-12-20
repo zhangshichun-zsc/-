@@ -1067,7 +1067,12 @@ export default {
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
       projectApproval(this.projectMsg).then(res => {
-        console.log(res);
+        if (res.code == 200) {
+          this.$Message.success(res.msg);
+          this.$router.push({path: "manager"});
+        } else {
+          this.$Message.error(res.msg);
+        }
       });
     },
     uploadFile() {

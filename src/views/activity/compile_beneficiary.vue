@@ -585,7 +585,7 @@ export default {
     console.log(this.oneRole)
     this.userId = this.$store.state.userId;
     if(this.oneRole.roleId){
-      this.getType(this.oneRole)
+      this.getTypes(this.oneRole)
     }
     this.getSignType();
     this.getBatchItem();
@@ -628,6 +628,41 @@ export default {
       signPost({
         roleId: val.roleId,
         name: this.oneRole.roleName
+      }).then(res => {
+        if(res.code==200){
+          this.signPostList = res.data.voluJobs;
+        }
+      });
+      signLimits({
+        userId:this.userId,
+        roleId:val.roleId,
+        sysId:1
+      }).then(res=>{
+        if(res.code==200){
+          this.signLimitsList = res.data
+        }
+      })
+      signItems({
+        roleId:val.roleId
+      }).then(res=>{
+        if(res.code==200){
+          this.signItemList = res.data
+        }
+      })
+      firstList({
+        userId:this.userId,
+        sysId:1,
+        roleId:val.roleId
+      }).then(res=>{
+        if(res.code==200){
+          this.firstItemList = res.data
+        }
+      })
+    },
+    getTypes(val) {
+      signPost({
+        roleId: val.roleId,
+        name: val.name
       }).then(res => {
         if(res.code==200){
           this.signPostList = res.data.voluJobs;
