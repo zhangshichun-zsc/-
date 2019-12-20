@@ -16,7 +16,7 @@
           <p>
             <span>所属项目:</span>&nbsp;
             <Select
-              style="width:6rem;"
+              style="width:8rem;"
               v-model="querys.categoryId"
               placement="top"
             >
@@ -40,7 +40,7 @@
           </p>
           <div class="flex-center-end">
             <Select
-              style="width:120px"
+              style="width:120px; margin-right:10px"
               placeholder="显示条数"
               @on-change="changeNum"
               v-model="size"
@@ -203,7 +203,8 @@ export default {
                       this.$router.push({
                         name: "ActivityFeedback",
                         query: {
-                          activityId: params.row.activityId
+                          activityId: params.row.activityId,
+                          formURL: this.$route.name
                         }
                       });
                     }
@@ -384,16 +385,6 @@ export default {
     margin-bottom: 20px;
     box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
     border-radius: 12px;
-    .btn {
-      background: #ff565a !important;
-      color: #fff !important;
-      border-color: none !important;
-    }
-    .btn:hover {
-      border: 1px solid #ff565a !important;
-      color: #ff565a !important;
-      background: #fff !important;
-    }
   }
 }
 .con-top {

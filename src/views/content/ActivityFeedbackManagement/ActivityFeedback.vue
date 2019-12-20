@@ -2,6 +2,7 @@
 <template>
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
+
     <div class="content">
       <div class="con">
         <div class="title">
@@ -37,7 +38,7 @@
           </div>
         </div>
         <div style="display: flex;justify-content: center;">
-          <Button @click="this.$router.back()">确定</Button>
+          <a href="javascript:;" class="queryBtn" @click="returnUrl">确定</a>
         </div>
       </div>
     </div>
@@ -86,6 +87,14 @@ export default {
           this.$Message.error(res.msg);
         }
       });
+    },
+    returnUrl() {
+      this.$router.push(
+        {
+          name: this.$route.query.formURL
+        },
+        1000
+      );
     }
   }
 };
