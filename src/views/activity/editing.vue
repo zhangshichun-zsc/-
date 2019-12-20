@@ -151,11 +151,7 @@
               <li class="first-li">
                 <span class="first-span">活动地址</span>
                 <span
-                  @click="
-                    () => {
-                      this.adr = true;
-                    }
-                  "
+                  @click="getAdr()"
                   >{{
                     batch.actAddress == null ? "选择活动地址" : batch.actAddress
                   }}</span
@@ -435,11 +431,17 @@ export default {
     getBatchEndDate(e) {
       this.batch.endT = e;
     },
+    getAdr(){
+      this.adr = !this.adr
+    },
     getMap(e) {
+      console.log(e);
       this.batch.actXx = e.xx;
       this.batch.actYy = e.yy;
-      this.batch.actAddress = e.address;
-      console.log(e);
+      this.batch.provinceName = e.province;
+      this.batch.cityName = e.city;
+      this.batch.districtName = e.district;
+      this.$set(this.batch, "actAddress", e.address);
     },
     cancelRole(e) {
       console.log(e);
