@@ -624,6 +624,11 @@ export const signUpStatus = p => posts("/activity-manage/work/act/sign/do",p)
 export const moveStatus = p => posts("/activity-manage/work/act/move/do",p)
 export const subDo = p => posts("/activity-manage/work/act/sub/do",p)
 export const getfeendDetail = p => get("/activity-manage/activity-feedback-list",p)
+export const getMatchingList = p =>posts("/activity-manage/work/act/match/list",p)
+export const getMatchingMeList = p =>posts("/activity-manage/work/act/match/mem/list",p)
+export const getMatchingVoList = p =>posts("/activity-manage/work/act/match/volu/list",p)
+export const Matchingupdate = p =>posts("/activity-manage/work/act/match/update",p)
+export const matchAdd = p => posts("/activity-manage/work/act/match/add",p)
 
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 

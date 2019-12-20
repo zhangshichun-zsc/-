@@ -66,7 +66,7 @@
                    @on-change="handleChange(0,'startAt',$event)"
                    @on-ok="successOk(0)"  
                    format="yyyy-MM-dd HH:mm"/>
-                   <i>-</i>
+                   <i>&nbsp;~&nbsp;</i>
                    <DatePicker
                    :value='args.endAt'
                    type="datetime"
@@ -92,7 +92,7 @@
                    @on-change="handleChange(1,'zhaStart',$event)"
                    @on-ok="successOk(2)"    
                    format="yyyy-MM-dd HH:mm"/>
-                   <i>-</i>
+                   <i>&nbsp;~&nbsp;</i>
                    <DatePicker
                    :value='zhaEnd'
                    :disabled='isDisb'  
@@ -135,7 +135,7 @@
                     <span>{{ item.recruitNum }}人</span>
                     <span>
                       详情
-                      <Icon type="ios-trash" @click.stop="deletUserPost(index)"/>
+                      <Icon type="ios-trash" @click.stop="deletUserPost(index)" v-if="!isDisb"/>
                     </span>
                   </p>
                 </li>
@@ -344,14 +344,14 @@ export default {
         typeFlag: 1,
         targetType: 3,
         detailText: null,
-        isMust:1,
+        isMust: 2,
         sort: 1
       }, {
         sysId: 2,
         typeFlag: 9,
         targetType: 3,
         detailText: 0,
-        isMust:1,
+        isMust: 2,
         sort: 2
       }],
       train: null,
@@ -439,7 +439,7 @@ export default {
   methods: {
     getAdr(){
       if(this.isDisb)return
-      this.adr = true
+      this.adr = !this.adr
     },
     getRelse(){
       if(!this.activityId)return

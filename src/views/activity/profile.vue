@@ -12,9 +12,6 @@
     <div class="content">
       <p class="words">
         {{activityName}}
-        <span>
-          <a>关联活动反馈表</a>
-        </span>
       </p>
       <div>
         <p class="color"></p>
@@ -57,23 +54,26 @@
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
         </p>
-        <div class="inquire">
-          <span>姓名：</span>
-          <i-input v-model="query.userName" style="width: 8rem;"></i-input>
-          <span>报名类型:</span>
-          <Select v-model="query.roleId" style="width:5rem;">
-            <Option :value="''">全部</Option>
-            <Option v-for="item in cityList1" :value="item.roleId" :key="item.value">{{ item.roleName }}</Option>
-          </Select>
-          <span>报名状态:</span>
-          <Select v-model="query.enrollStatus" style="width:5rem;">
-            <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+        <div class="inquire flex-between">
+          <div class="flex-center-start">
+            <span>姓名：</span>
+            <i-input v-model="query.userName" size='large' class="input"></i-input>
+            <span>报名类型:</span>
+            <Select v-model="query.roleId" size='large' class="input">
+              <Option :value="''">全部</Option>
+              <Option v-for="item in cityList1" :value="item.roleId" :key="item.value">{{ item.roleName }}</Option>
+            </Select>
+            <span>报名状态:</span>
+            <Select v-model="query.enrollStatus" size='large' class="input">
+              <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </div>
+          <Button shape="circle" size='large' icon="ios-search" @click="querys" class="btn">搜索</Button>
         </div>
       </div>
       <div class="exports">
         <div>
-          <Button class="table-btn">
+          <Button class="table-btn" disabled>
             <Icon type="md-cloud-upload" />导出
           </Button>
           <!-- <Dropdown style="margin-left: 0.2rem;width:5rem;">
@@ -85,14 +85,12 @@
           </Dropdown> -->
           <Button @click="sendInfos">发送站内信</Button>
         </div>
-
-        <Button class="table-btn" @click="querys">搜索</Button>
       </div>
       <div class="check">
         <p>
           <Checkbox :checked.sync="xuan">全选</Checkbox>
           <span style="font-size: 14px;">已选择</span>
-          <span style="font-size: 14px;">0</span>
+          <span style="font-size: 14px;">{{arr.length}}</span>
         </p>
         <Table border :columns="columns" :data="memberlist"  @on-selection-change="handleSelectionChange"></Table>
       </div>
@@ -374,11 +372,14 @@ export default {
     },
     pend(){
       this.$router.push({
-        name: "pending",
+        name: "volunteer_pending",
         query: { activityId: this.$route.query.acitvityId, activityName:this.activityName}
       })
     },
     querys(){
+        this.$router.push({
+          name: "personnel_details",
+        });
       this.roleId = this.query.roleId
       this.userName = this.query.userName
       this.enrollStatus = this.query.enrollStatus
@@ -431,6 +432,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:none !important;
+}
+.btn:hover{
+  border:1px solid #FF565A !important;
+  color: #FF565A !important;
+  background: #fff !important;
+}
 .content {
   padding: 0 40px;
   background: #ffffff;
@@ -459,6 +470,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     span {
       margin: 5px 0;
     }
@@ -469,11 +481,10 @@ export default {
   line-height: 40px;
 }
 .inquire {
-  display: flex;
-  align-items: center;
-  height: 50px;
-  border: #e3e3e3 1px solid;
-  padding-left: 20px;
+  padding: 20px;
+  .input{
+    width: 250px;
+  }
   span {
     margin: 0 10px;
   }
