@@ -48,13 +48,13 @@
           <Modal v-model="modal1" title="新增基金" @on-cancel="cancel" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
-                   <Input v-model="pams.orgName" placeholder="请输入基金名称"/>
+                   <Input v-model.trim="pams.orgName" placeholder="请输入基金名称"/>
                   </FormItem>
                    <FormItem label="联系人员" prop="contactUserName">
-                     <Input v-model="pams.contactUserName"/>
+                     <Input v-model.trim="pams.contactUserName"/>
                   </FormItem>
                    <FormItem label="联系方式" prop='contactUserPhone' >
-                     <Input v-model="pams.contactUserPhone"/>
+                     <Input v-model.trim="pams.contactUserPhone"/>
                   </FormItem>
               </Form>
               <div slot="footer">

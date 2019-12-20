@@ -9,9 +9,9 @@
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns" @click="btn">新增类型</Button>
           <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="150">
               <FormItem :label="title" prop="dicName">
-                <Input v-model="formValidate.dicName" />
+                <Input v-model.trim="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
@@ -58,7 +58,7 @@ export default {
           { required: true, message: "职业名称不能为空", trigger: "blur" }
         ]
       },
-      title: "家长职业类型管理",
+      title: "家长职业类型",
       columns: [
         {
           type: "selection",
@@ -137,7 +137,7 @@ export default {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "编辑新增家长职业类型管理";
+                      this.text = "编辑新增家长职业类型";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }

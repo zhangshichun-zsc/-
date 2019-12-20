@@ -26,9 +26,9 @@
           :data='data'
         ></Table>
         </div>
-      <Modal class="QRcodemodal" v-model="modal2"  title="查看消息">
-        <h1 style="text-align: center;font-size:20px">{{obj.title}}</h1>
-        <p style="text-align: center;color: #9EA7B4;font-size:16px">{{obj.createAt}}</p>
+      <Modal class="QRcodemodal" v-model="modal2" title="查看消息">
+        <h1 style="text-align: center;font-size:16px">{{obj.title}}</h1>
+        <p style="text-align: center;color: #9EA7B4;font-size:12px">{{obj.createAt}}</p>
         <Divider style="margin: 0.5rem 0;" />
         <p style="font-size:16px;">{{obj.content}}</p>
         <div slot="footer"></div>

@@ -5,7 +5,7 @@
      <div class="flex-center-start integral-bodyss" >
         <div class="flex-center-start name">
           <span>甲乙方:</span>
-          <Input size="large" placeholder="甲乙方名称" class="inpt" v-model="agreementObject" />
+          <Input size="large" placeholder="甲乙方名称" class="inpt" v-model.trim="agreementObject" />
         </div>
         <div class="flex-center-start name">
           <span>协议分类:</span>
@@ -73,25 +73,25 @@ export default {
           title: "甲方",
           key: "partA",
           align: "center",
-          width:270,
+          width:360,
         },
         {
           title: "乙方",
           key: "partB",
           align: "center",
-          width:270,
+          width:360,
         },
         {
           title: "协议分类",
           key: "agreementTypeText",
           align: "center",
-           width:170,
+           width:280,
         },
         {
           title: "所属项目",
           key: "categoryName",
           align: "center",
-           width:170,
+           width:280,
         },
         {
           title: "协议时间",
@@ -105,16 +105,16 @@ export default {
           title: "相关",
           key: "nameA",
           align: "center",
-          width:240,
+          width:600,
           render: (h, params) => {
-            return h("div", params.row.nameA);
+            return h("div", params.row.nameA!=null? params.row.nameA:''+'  '+params.row.nameB!=null? params.row.nameB:''+'  '+params.row.nameC!=null? params.row.nameC:'');
           }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:120,
+          width:180,
           render: (h, params) => {
             return h("div", [
               h(

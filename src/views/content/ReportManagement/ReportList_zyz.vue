@@ -44,7 +44,7 @@
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option v-for="item in sorting" :value="item.value" :key="item.value" @click.native="getSort()">{{ item.label }}</Option>
           </Select>
         </div>
 
@@ -102,6 +102,11 @@ export default {
       list: [],
       data: [],
       columns: [
+          {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
         {
           title: "举报理由",
           key: "reportReasonText",
@@ -229,7 +234,9 @@ export default {
   methods: {
     //获取举报原因列表
     getReportList() {
-      ReportList({}).then(res => {
+      ReportList({
+        sysType:2
+      }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.list = [{ dataKey: "", dataValue: "全部" }, ...res.data];
@@ -254,6 +261,10 @@ export default {
         }
         console.log(res);
       });
+    },
+    getSort(e){
+      this.page = 1
+      this.getReportpage()
     },
     // // 举报管理--获取举报详情
     // getReportDel() {
@@ -317,7 +328,6 @@ export default {
     //每条数据单选框的状态
     handleSelectionChange(val) {
       this.arr = val;
-      console.log(this.arr);
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size

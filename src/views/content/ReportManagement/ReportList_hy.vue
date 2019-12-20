@@ -54,6 +54,7 @@
               v-for="item in sorting"
               :value="item.value"
               :key="item.value"
+              @click.native="getSort()"
               >{{ item.label }}</Option
             >
           </Select>
@@ -111,6 +112,11 @@ export default {
       list: [],
       data: [],
       columns: [
+         {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
         {
           title: "举报理由",
           key: "reportReasonText",
@@ -237,7 +243,9 @@ export default {
   methods: {
     //获取举报原因列表
     getReportList() {
-      ReportList({}).then(res => {
+      ReportList({
+        sysType:1
+      }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.list = [{ dataKey: "", dataValue: "全部" }, ...res.data];
@@ -265,6 +273,10 @@ export default {
       ReportDel({}).then(res => {
         console.log(res);
       });
+    },
+    getSort(){
+      this.page = 1
+      this.getReportpage()
     },
 
     //批量操作
@@ -296,9 +308,9 @@ export default {
     },
     //分页功能
     changepages(index) {
-      this.page = index;
-      console.log(index);
-      // this.getAddressList();
+      this.page = index
+      console.log(index)
+      this.getReportpage();
     },
 
     //每条数据单选框的状态
@@ -313,11 +325,12 @@ export default {
       } else {
         this.status = false;
       }
-      let dataid = this.data.map(item => {
-        if (item.reportStatusText == "已处理") {
+       let dataid = this.data.map(item => {
+        if (item.reportStatusText == "未处理") {
           return item.reportId;
         }
       });
+      console.log(dataid)
       this.arr = val.map(item => {
         return dataid.filter(key => {
           return item.reportId.indexof(key) == -1;

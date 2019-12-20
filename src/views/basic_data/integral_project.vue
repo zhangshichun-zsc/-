@@ -14,10 +14,10 @@
           <Modal v-model="modal1" :title="text" class="mol" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
-                <Input v-model="formValidate.name" />
+                <Input v-model.trim="formValidate.name" />
               </FormItem>
               <FormItem label="总计预算" prop="allBudget">
-                <Input v-model="formValidate.allBudget" />
+                <Input v-model.trim="formValidate.allBudget" />
               </FormItem>
               <FormItem label="预算来源" prop="orgId">
                 <Select v-model="formValidate.orgId" style="width:200px">
@@ -112,13 +112,13 @@ export default {
           title: "项目名称",
           key: "name",
           align: "center",
-          width: 260
+          width: 300
         },
         {
           title: "总预算",
           key: "allBudget",
            align: "center",
-           width: 200
+           width: 240
         },
         {
           title: "预算来源",
@@ -136,7 +136,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
-           width: 140,
+           width: 180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -165,7 +165,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-           width: 120,
+           width: 180,
           render: (h, params) => {
             return h("div", [
               h(

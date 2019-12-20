@@ -10,7 +10,7 @@
           <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="特长名称" prop="dicName">
-                <Input v-model="formValidate.dicName" />
+                <Input v-model.trim="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
@@ -96,6 +96,7 @@ export default {
                 },
                 on: {
                   input: e => {
+                    this.dicId=params.row.dicId
                     if (e) {
                       this.states = 1;
                       this.getBasicbatch(2);

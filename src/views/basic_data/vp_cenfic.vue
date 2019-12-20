@@ -73,7 +73,7 @@
                 </Select>
               </FormItem>
               <FormItem label="模板名称:" prop="title">
-                <Input v-model="params.title" />
+                <Input v-model.trim="params.title" />
               </FormItem>
               <FormItem label="生效日期:" prop="effectiveAt">
                 <Date-picker
@@ -169,7 +169,7 @@ export default {
         {
           title: "组织",
           key: "orgName",
-          width: 500,
+          width: 600,
           align: "center"
         },
         {
@@ -299,9 +299,11 @@ export default {
     query() {
 
       if (this.args.startAt && this.args.endAt) {
-        if (this.args.startAt < this.args.endAt) {
-          this.args.startAt = this.args.startAt + " 00:00:00";
-          this.args.endAt = this.args.endAt + " 23:59:59";
+        if (this.args.startAt <= this.args.endAt) {
+          this.args.startAt = this.args.startAt.split('')[0] + " 00:00:00";
+          this.args.endAt = this.args.endAt.split('')[0] + " 23:59:59";
+           this.page = 1;
+      this.getList(this.args);
 
         } else {
            this.args.startAt=''
@@ -309,9 +311,11 @@ export default {
           this.$Message.error('时间选择错误请重新选择')
         }
 
-      }
-      this.page = 1;
+      }else{
+         this.page = 1;
       this.getList(this.args);
+      }
+
     },
 
     startTimeChange(e) {

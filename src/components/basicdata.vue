@@ -138,11 +138,11 @@ export default {
     //查询
     query() {
       if (this.search.createTimestamp[0] && this.search.createTimestamp[1]) {
-        if (this.search.createTimestamp[0] < this.search.createTimestamp[1]) {
+        if (this.search.createTimestamp[0] <= this.search.createTimestamp[1]) {
           this.search.createTimestamp[0] =
-            this.search.createTimestamp[0] + " 00:00:00";
+            this.search.createTimestamp[0].split(" ")[0] + " 00:00:00";
           this.search.createTimestamp[1] =
-            this.search.createTimestamp[1] + " 23:59:59";
+            this.search.createTimestamp[1].split(" ")[0] + " 23:59:59";
         } else {
           this.search.createTimestamp=["", ""]
           this.$Message.error('时间选择错误请重新选择')

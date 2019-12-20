@@ -48,7 +48,7 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width:200,
+          width:140,
         },
         {
           title: "用户昵称",
@@ -71,13 +71,13 @@ export default {
         {
           title: "成功参与活动好友",
           key: "actJoinedNum",
-          width:200,
+          width:180,
           align: "center"
         },
         {
           title: "成功邀请团队注册",
           key: "inviteOrgNum",
-          width:200,
+          width:180,
           align: "center"
         },
         {

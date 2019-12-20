@@ -13,7 +13,7 @@
           <Modal v-model="modal1" :title="'新增'+title" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem :label="title" prop="name">
-                <Input v-model="formValidate.name"></Input>
+                <Input v-model.trim="formValidate.name"/>
               </FormItem>
             </Form>
             <div slot="footer">

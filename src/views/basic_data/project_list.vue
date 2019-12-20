@@ -76,30 +76,7 @@ export default {
         head: "项目预算列表(会员)"
       },
       project: [
-        {
-          value: "快乐活动营",
-          label: "快乐活动营"
-        },
-        {
-          value: "家长赋能",
-          label: "家长赋能"
-        },
-        {
-          value: "支持性就业",
-          label: "支持性就业"
-        },
-        {
-          value: "老友计划",
-          label: "老友计划"
-        },
-        {
-          value: "志友爱校园行",
-          label: "志友爱校园行"
-        },
-        {
-          value: "智行",
-          label: "智行"
-        }
+
       ],
       columns: [
         {
