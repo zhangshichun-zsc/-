@@ -161,7 +161,7 @@
                 <FormItem label="特长">
                   <Select
                     multiple
-                    v-model="parameOBJ.volInfo.info.speciality"
+                    v-model="speciality"
                     style="width: 224px;"
                     placeholder="请选择"
                   >
@@ -176,7 +176,7 @@
                 <FormItem label="志愿者特长">
                   <Select
                     multiple
-                    v-model="parameOBJ.volInfo.info.voluSpeciality"
+                    v-model="voluSpeciality"
                     style="width: 224px;"
                     placeholder="请选择"
                   >
@@ -191,7 +191,7 @@
                 <FormItem label="期待参加的活动种类">
                   <Select
                     multiple
-                    v-model="parameOBJ.volInfo.info.actTypeLike"
+                    v-model="actTypeLike"
                     style="width: 224px;"
                     placeholder="请选择"
                   >
@@ -1071,6 +1071,10 @@ export default {
       msgSendType: [],
       specialType: [],
       interestType: [],
+      actTypeLike:[],
+      speciality:[],
+      voluSpeciality:[],
+      // end
       province: "",
       city: "",
       county: "",
@@ -1290,6 +1294,10 @@ export default {
           this.insuranceType = this.splitArr(data.insuranceType);
           this.interestType = this.splitArr(data.interestType);
           this.specialType = this.splitArr(data.specialType);
+          this.actTypeLike= this.splitArr(res.data.volInfo.info.actTypeLike);
+          this.speciality= this.splitArr(res.data.volInfo.info.speciality);
+           this.voluSpeciality= this.splitArr(res.data.volInfo.info.voluSpeciality);
+
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
@@ -1317,6 +1325,15 @@ export default {
       let _memInfo = this.parameOBJ.memInfo.vipotherInfo;
       let _userInfo = this.parameOBJ.memInfo.userInfo;
 
+        /**
+         * actTypeLike
+
+volSpeciality
+
+voluSpeciality
+         * 
+         */
+
       let obj = {
         userId: this.$route.query.userId,
         basicInfo: {
@@ -1334,9 +1351,9 @@ export default {
         volInfo: {
           // 志愿者信息
           eduStatus: _volInfo.eduStatus,
-          actTypeLike: _volInfo.actTypeLike.toString(),
-          voluSpeciality: _volInfo.voluSpeciality.toString(),
-          speciality: _volInfo.speciality.toString(),
+          actTypeLike: this.actTypeLike.toString(),
+          voluSpeciality: this.voluSpeciality.toString(),
+          speciality: this.speciality.toString(),
           email: _volInfo.email
         },
         memInfo: {

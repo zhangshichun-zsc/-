@@ -30,12 +30,16 @@
           </div>
           <div>
             <span class="itemizes">分类 </span>
-            <span class="itemize" v-for="item in role">{{ item }}</span>
+            <span class="itemize" v-for="item in role" :key="item">{{
+              item
+            }}</span>
             <span class="noitemize" v-if="role.length == 0">暂无分类</span>
           </div>
           <div style="flex:2">
             <span class="itemizes">标签 </span>
-            <span class="itemize" v-for="item in userLabel">{{ item }}</span>
+            <span class="itemize" v-for="item in userLabel" :key="item">{{
+              item
+            }}</span>
             <span class="noitemize" v-if="userLabel.length == 0">暂无标签</span>
           </div>
         </div>
@@ -71,8 +75,6 @@
             <tr>
               <th>城市</th>
               <td>{{ basicInfo.city }}</td>
-              <th>vip到期时间</th>
-              <td>{{ basicInfo.vipLastTime }}</td>
             </tr>
           </table>
         </div>
@@ -235,7 +237,10 @@ export default {
         {
           title: "活动时间",
           key: "startAt",
-          align: "center"
+          align: "center",
+          render: (h, params) => {
+            return h("div", this.util.formatDate(params.row.startAt));
+          }
         },
         {
           title: "用户账号",

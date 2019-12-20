@@ -440,7 +440,6 @@ export default {
     if (to.name === "login") {
       return next();
     }
-    // console.log(JSON.stringify(menuList));
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {
@@ -468,7 +467,7 @@ export default {
         if (res.code == 200) {
           this.routelist = res.data;
 
-            // 将 当前用户的菜单保存到 vueX 中
+          // 将 当前用户的菜单保存到 vueX 中
           let arr = [];
           res.data.forEach(item => {
             item.list.map(key => {
