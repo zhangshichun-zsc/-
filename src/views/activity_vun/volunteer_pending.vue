@@ -57,10 +57,10 @@
             <Button :class="{active:state[1] == item.id}">{{ item.name }}</Button>
           </li>
         </ul>
-        <div class="searchs flex-start" v-if="show!=4">
+        <div class="searchs flex-center-start" v-if="show!=4">
           <span>报名人：</span>
           <i-input v-model="info" placeholder="报名人/手机号" style="width:150px" />
-          <Button class="table-btn" @click="search">搜索</Button>
+          <Button shape="circle" size='large' icon="ios-search" class="btn" @click="search">搜索</Button>
         </div>
         <div class="integral-table">
           <div class="table-header flex-center-between"  v-if='show !== 4'>
@@ -924,9 +924,17 @@ export default {
   height: 40px;
   padding: 10px 20px;
   background: #ffffff;
-  .table-btn {
-    margin-left: 20px;
-  }
+  .btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:none !important;
+  margin-left: 20px;
+}
+.btn:hover{
+  border:1px solid #FF565A !important;
+  color: #FF565A !important;
+  background: #fff !important;
+}
 }
 .content-details {
   background: #ffffff;

@@ -30,7 +30,7 @@
         <h1 style="text-align: center;font-size:16px">{{obj.title}}</h1>
         <p style="text-align: center;color: #9EA7B4;font-size:12px">{{obj.createAt}}</p>
         <Divider style="margin: 0.5rem 0;" />
-        <p style="font-size:12px;">{{obj.content}}</p>
+        <p style="font-size:16px;">{{obj.content}}</p>
         <div slot="footer"></div>
       </Modal>
       <div class="pages">
@@ -224,9 +224,6 @@ export default {
   text-align: center;
   background: #fff;
 }
-.integral-table{
-  padding: 0 10px;
-}
 .integral-table .pages{
   padding: 20px;
   border-radius: 0 0 10px 10px;
@@ -239,5 +236,17 @@ export default {
 }
 button {
   margin-right: 0.5rem;
+}
+.ivu-modal-header p, .ivu-modal-header-inner {
+    display: inline-block;
+    width: 100%;
+    height: 1rem;
+    line-height: 1rem;
+    font-size: 18px;
+    color: #17233d;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 </style>

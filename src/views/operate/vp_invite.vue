@@ -11,7 +11,7 @@
         </div>
         <div class="flex-center-end" >
                   <Button  @click="exportData" disabled>导出数据</Button>
-                  <Select v-model="size" style="width:120px;margin-right:10px" placeholder="显示条数" class="space">
+                  <Select v-model="size" style="width:120px;margin:0 10px" placeholder="显示条数" class="space">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
@@ -52,48 +52,48 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width:160
+          width:200
         },
         {
           title: "用户昵称",
           key: "nickname",
          align: "center",
-         width:200,
+         width:300,
         },
         {
           title: "用户分类",
           key: "userTypeText",
-          width:200,
+          width:300,
          align: "center"
         },
         {
           title: "邀请好友",
           key: "inviteUserNum",
-          width:120,
+          width:200,
           align: "center"
         },
         {
           title: "成功参与活动好友",
           key: "actJoinedNum",
-          width:180,
+          width:200,
           align: "center"
         },
         {
           title: "成功邀请团队注册",
           key: "inviteOrgNum",
-          width:180,
+          width:200,
           align: "center"
         },
         {
           title: "积分奖励",
           key: "sumScore",
           align: "center",
-          width:120,
+          width:200,
         },
         {
           title: "操作",
           key: "action",
-          width:180,
+          width:200,
           align: "center",
           render: (h, params) => {
             return h("div", [
