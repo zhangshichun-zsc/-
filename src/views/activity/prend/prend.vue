@@ -18,7 +18,7 @@
         <div class="start-wap">
           <div class="upload" v-if='image == null'>
               <div class="file" @click="()=>{ this.$refs.files.click()}">
-                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" multiple>
+                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()">
                 <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
               </div>
           </div>
@@ -44,7 +44,7 @@
               </Modal>
       <div class="button-food">
         <i-button @click="template" shape="circle" size='large' class="btn">保存</i-button>
-        <i-button @click="cencel(1)" v-if=zuo  shape="circle" size='large' class="btn">作废</i-button>
+        <i-button @click="cencel(1)"  shape="circle" size='large' class="btn">作废</i-button>
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@ export default {
     template(){
       let args = this.args
       if(!args.fkMouldName || !args.trainComments || !args.typeDicName || !args.picUrl){
-        this.$Message.console.warning('不完整')
+        this.$Message.warning('不完整')
         return
       }
       addTranList(filterNull(args)).then(res => {
@@ -148,7 +148,6 @@ export default {
         }else{
            this.$Message.error(res.msg)
         }
-
       })
     },
     cencel(e){

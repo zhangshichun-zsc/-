@@ -961,6 +961,12 @@ const router = new Router({
       },
       component: Main,
       children: [{
+        path: 'feedDetail',
+        name: 'feedDetail',
+        meta: {},
+        component: () =>
+          import('@/views/activity/feedDetail.vue')
+      },{
         path: 'profile',
         name: 'profile',
         meta: {},

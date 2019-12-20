@@ -890,7 +890,7 @@ export default {
           title: "参与活动数",
           key: "joinActivityNum",
           align: "center",
-          width: 110
+          width: 130
         },
         {
           title: "积分",
@@ -901,7 +901,7 @@ export default {
         {
           title: "账户启用状态",
           key: "state",
-          width: 110,
+          width: 140,
        align: "center",
           render: (h, params) => {
             return h("div", [

@@ -224,6 +224,9 @@ export default {
   text-align: center;
   background: #fff;
 }
+.integral-table{
+  padding: 0 10px;
+}
 .integral-table .pages{
   padding: 20px;
   border-radius: 0 0 10px 10px;

@@ -133,7 +133,7 @@
             </li>
             <li class="first-li">
               <span class="first-span">集合地址</span>
-              <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
+              <span @click="getAdr()">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
             </li>
             <li class="first-li">
               <span class="first-span">模式</span>
@@ -275,7 +275,9 @@
                   </tr>
                   <tr v-if="item.ruleId==22 || item.ruleId==4" class="role-tr">
                     <td>居住地区限制</td>
-                    <td></td>
+                    <td>
+                      <selects style="display:flex" @change='getSsq'></selects>
+                    </td>
                     <td>
                       <Button @click.native="deleteLimits(index)">删除</Button>
                     </td>
@@ -708,14 +710,21 @@ export default {
     getDates(e) {
       this.oneRole.setTime = e
     },
+    getAdr(){
+      this.adr = !this.adr
+    },
     getMap(e){
       console.log(e)
       this.oneRole.xx = e.xx
       this.oneRole.yy = e.yy
+      this.oneRole.provinceName = e.province
+      this.oneRole.cityName = e.city
+      this.oneRole.districtName = e.district
       this.$set(this.oneRole,'setAddr',e.address)
     },
     getLimits(e){
       console.log(e)
+      debugger
       let isAdd = true
       for(let i in this.oneRole.signRuleList){
         if(e.ruleId==2||e.ruleId==5||e.ruleId==6||e.ruleId==7){
@@ -724,13 +733,25 @@ export default {
           isAdd = false
         }
       }
+      let m = {}
       if(isAdd){
         if(e.ruleId==4||e.ruleId==22){
           //居住地区限制
+          m.ruleValue="1,1,1"
         }
-        this.oneRole.signRuleList.push({ruleId:e.ruleId})
+        m.ruleId = e.ruleId
+        this.oneRole.signRuleList[this.oneRole.signRuleList.length] = m
+        console.log(this.oneRole.signRuleList)
       }else{
         this.$Message.warning("已有该限制项，请勿重复添加")
+      }
+    },
+    getSsq(e){
+      console.log(e)
+      for(let i in this.oneRole.signRuleList){
+        if(this.oneRole.signRuleList[i].ruleId==4||this.oneRole.signRuleList[i].ruleId==22){
+          this.oneRole.signRuleList[i].ruleValue = e[0]+',' + e[1] + ',' + e[2]
+        }
       }
     },
     deleteLimits(e){

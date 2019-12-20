@@ -2,11 +2,11 @@
   <div style="background:white;padding-bottom:20px">
     <Navigation :labels="navigation"></Navigation>
     <div class='box box_'>
-      <div class='item-left'>家长小组名称</div>
+      <div class='item-left'>{{this.$route.query.head == 'parent'?"家长小组": "志愿者团队"}}名称</div>
       <div class='item-right'>{{list.orgName}}</div>
     </div>
     <div class='box box_'>
-      <div class='item-left'>家长负责人</div>
+      <div class='item-left'>{{this.$route.query.head == 'parent'?"家长小组":'志愿者团队' }}负责人</div>
       <div class='item-right'>{{list.ownerUserName}}</div>
     </div>
     <div class='box box_'>
@@ -186,11 +186,13 @@ export default {
   font-size: 14px;
 }
 .item-left {
-  width: 100px;
+  font-size: 14px;
+  width: 120px;
   margin-right: 10px;
 }
 
 .item-right {
+  font-size: 14px;
   width: 400px;
   height: 40px;
   line-height: 40px;

@@ -22,7 +22,6 @@
           <Form class="flexs" inline  v-if="Retract==true">
             <div v-for="(item,index) in top" :key="index">
               <FormItem :label=item.name prop="name" v-if="item.type=='input'">
-
                 <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"/>
               </FormItem>
               <FormItem :label=item.name prop="list" v-if="item.type=='select'">
@@ -35,7 +34,7 @@
               </FormItem>
             </div>
             <div class="flex-center-start">
-                 <Button class="button-red mdown"  @click="query">查询</Button>
+                 <a class="mdown queryBtn"  @click="query">查询</a>
             </div>
           </Form>
         </div>

@@ -3,54 +3,65 @@
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <div class="con-top bk-szy">
+      <div class="con-top">
         <p>
           <span class="zt">举报详情</span>
         </p>
       </div>
-      <div class="con bk">
+      <div class="con">
         <table width="100%;">
           <tr>
             <td class="zt">举报理由</td>
-            <td class="zt">{{ReportData.reportReasonText}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportReasonText}}</td>
           </tr>
           <tr>
             <td class="zt">举报人</td>
-            <td class="zt">{{ReportData.reportUserName}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportUserName}}</td>
           </tr>
           <tr>
             <td class="zt">举报时间</td>
-            <td class="zt">{{ReportData.reportTimestamp}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportTimestamp}}</td>
           </tr>
           <tr>
             <td class="zt">举报对象</td>
-            <td class="zt">{{ReportData.activityName}}</td>
+            <td class="zt">{{ReportData.reportDetail.activityName}}</td>
           </tr>
           <tr>
             <td class="zt">举报状态</td>
-            <td class="zt">{{ReportData.reportStatus}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportStatusText}}</td>
           </tr>
           <tr>
             <td class="zt">举报内容</td>
-            <td class="zt">{{ReportData.reportReasonText}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportContent}}</td>
+          </tr>
+          <tr>
+            <td class="zt" style="position:relative">
+              <div style="position:absolute;right:27px;">举报图片</div>
+            </td>
+            <td class="tp">
+              <img class="oneTp" v-for='item in ReportData.picList' :src="item.picPath"></img>
+            </td>
           </tr>
         </table>
+
         <table width="100%;">
           <tr>
             <td class="zt">处理人员</td>
-            <td class="zt">{{ReportData.answerUserName}}</td>
+            <td class="zt">{{ ReportData.reportDetail.answerUserName }}</td>
           </tr>
           <tr>
             <td class="zt">处理时间</td>
-            <td class="zt">{{ReportData.answerTimestamp}}</td>
+            <td class="zt">{{ ReportData.reportDetail.answerTimestamp }}</td>
           </tr>
           <tr>
             <td class="zt">处理结果</td>
-            <td class="zt">{{ReportData.reportDealResultText}}</td>
+            <td class="zt">{{ ReportData.reportDetail.reportDealResultText }}</td>
           </tr>
           <tr>
             <td class="zt">处理备注</td>
-            <td class="zt">{{ReportData.answerContent?ReportData.answerContent:''}}</td>
+            <td class="zt">
+              {{ ReportData.reportDetail.answerContent ? ReportData.reportDetail.answerContent : "" }}
+            </td>
           </tr>
         </table>
       </div>
@@ -59,43 +70,45 @@
 </template>
 
 <script>
-import { formatDate } from '@/request/datatime'
-import { ReportDel } from '../../../request/api'
+import { formatDate } from "@/request/datatime";
+import { ReportDel } from "../../../request/api";
 export default {
   data() {
     return {
       navigation1: {
-        head: '举报详情-已处理(会员)'
+        head: "举报详情-已处理(会员)"
       },
 
       ReportData: {}
-    }
+    };
   },
   mounted() {
-    if(this.$route.query.state==1){
-      this.navigation1.head='举报详情-已处理(会员)'
-    }else if(this.$route.query.state==2){
-       this.navigation1.head='举报详情-已处理(志愿者)'
+    if (this.$route.query.state == 1) {
+      this.navigation1.head = "举报详情-已处理(会员)";
+    } else if (this.$route.query.state == 2) {
+      this.navigation1.head = "举报详情-已处理(志愿者)";
     }
-    this.getReportDel()
+    this.getReportDel();
   },
   methods: {
     // 详情
-    getReportDel(){
+    getReportDel() {
       ReportDel({
-        reportId:this.$route.query.reportId
-      }).then(res=>{
-        if(res.code==200){
-          this.ReportData=res.data
-          this.ReportData.reportTimestamp=formatDate(res.data.reportTimestamp)
-          this.ReportData.answerTimestamp=formatDate(res.data.answerTimestamp)
+        reportId: this.$route.query.reportId
+      }).then(res => {
+        if (res.code == 200) {
+          this.ReportData = res.data;
+          this.ReportData.reportDetail.reportTimestamp = formatDate(
+            res.data.reportDetail.reportTimestamp
+          );
+          this.ReportData.reportDetail.answerTimestamp = formatDate(
+            res.data.reportDetail.answerTimestamp
+          );
         }
-        console.log(res)
-      })
-    },
-
+      });
+    }
   }
-}
+};
 </script>
 <style scoped>
 html,
@@ -103,9 +116,7 @@ body {
   margin: auto;
 }
 .main {
-  background-color: #ffffff;
   font-size: 18px;
-  min-height: 875px
 }
 
 .bk,
@@ -113,10 +124,11 @@ body {
   border: 1px solid #e4e4e4;
 }
 .content {
-  margin: 1rem;
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
+  border-radius: 12px;
 }
 .con-top {
-  background-color: #f3f3f3;
   justify-content: space-between;
   padding: 0.5rem 1rem;
 }
@@ -133,7 +145,7 @@ body {
   padding: 1rem 8rem;
 }
 .con td:nth-child(1) {
-  text-align: right;
+  text-align: center;
   width: 6rem;
 }
 .con td {
@@ -142,7 +154,16 @@ body {
 .con table {
   margin-bottom: 1rem;
 }
-.zt{
+.zt {
   font-size: 16px;
+}
+.tp{
+  display: flex;
+  align-items: center;
+}
+.oneTp{
+  width: 200px;
+  height: 200px;
+  padding: 5px;
 }
 </style>
