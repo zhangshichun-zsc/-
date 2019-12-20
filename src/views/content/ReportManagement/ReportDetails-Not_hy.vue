@@ -12,27 +12,35 @@
         <table width="100%;">
           <tr>
             <td class="zt">举报理由</td>
-            <td class="zt">{{ReportData.reportReasonText}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportReasonText}}</td>
           </tr>
           <tr>
             <td class="zt">举报人</td>
-            <td class="zt">{{ReportData.reportUserName}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportUserName}}</td>
           </tr>
           <tr>
             <td class="zt">举报时间</td>
-            <td class="zt">{{ReportData.reportTimestamp}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportTimestamp}}</td>
           </tr>
           <tr>
             <td class="zt">举报对象</td>
-            <td class="zt">{{ReportData.activityName}}</td>
+            <td class="zt">{{ReportData.reportDetail.activityName}}</td>
           </tr>
           <tr>
             <td class="zt">举报状态</td>
-            <td class="zt">{{ReportData.reportStatusText}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportStatusText}}</td>
           </tr>
           <tr>
             <td class="zt">举报内容</td>
-            <td class="zt">{{ReportData.reportContent}}</td>
+            <td class="zt">{{ReportData.reportDetail.reportContent}}</td>
+          </tr>
+          <tr>
+            <td class="zt" style="position:relative">
+              <div style="position:absolute;right:27px;">举报图片</div>
+            </td>
+            <td class="tp">
+              <img class="oneTp" v-for='item in ReportData.picList' :src="item.picPath"></img>
+            </td>
           </tr>
         </table>
         <table width="100%;">
@@ -85,7 +93,9 @@ export default {
       }).then(res=>{
         if(res.code==200){
           this.ReportData=res.data
-          this.ReportData.reportTimestamp=formatDate(res.data.reportTimestamp)
+          this.ReportData.reportDetail.reportTimestamp = formatDate(
+            res.data.reportDetail.reportTimestamp
+          )
         }
         console.log(res)
       })
@@ -103,11 +113,12 @@ export default {
       Reportdeles(params).then(res=>{
         if(res.code==200){
           this.$Message.info('操作成功');
-          if(this.$route.query.state==1){
-            this.$route.push({path:'/ReportList_hy'})
-          }else{
-            this.$route.push({path:'/ReportList_zyz'})
-          }
+          // if(this.$route.query.state==1){
+          //   this.$router.push({path:'/ReportList_hy'})
+          // }else{
+          //   this.$router.push({path:'/ReportList_zyz'})
+          // }
+          this.$router.back()
 
         }
         console.log(res)
@@ -186,5 +197,14 @@ body {
 }
 .but button {
   margin-right: 1rem;
+}
+.tp{
+  display: flex;
+  align-items: center;
+}
+.oneTp{
+  width: 200px;
+  height: 200px;
+  padding: 5px;
 }
 </style>

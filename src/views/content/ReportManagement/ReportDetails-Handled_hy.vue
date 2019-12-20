@@ -12,47 +12,55 @@
         <table width="100%;">
           <tr>
             <td class="zt">举报理由</td>
-            <td class="zt">{{ ReportData.reportReasonText }}</td>
+            <td class="zt">{{ReportData.reportDetail.reportReasonText}}</td>
           </tr>
           <tr>
             <td class="zt">举报人</td>
-            <td class="zt">{{ ReportData.reportUserName }}</td>
+            <td class="zt">{{ReportData.reportDetail.reportUserName}}</td>
           </tr>
           <tr>
             <td class="zt">举报时间</td>
-            <td class="zt">{{ ReportData.reportTimestamp }}</td>
+            <td class="zt">{{ReportData.reportDetail.reportTimestamp}}</td>
           </tr>
           <tr>
             <td class="zt">举报对象</td>
-            <td class="zt">{{ ReportData.activityName }}</td>
+            <td class="zt">{{ReportData.reportDetail.activityName}}</td>
           </tr>
           <tr>
             <td class="zt">举报状态</td>
-            <td class="zt">{{ ReportData.reportStatus }}</td>
+            <td class="zt">{{ReportData.reportDetail.reportStatusText}}</td>
           </tr>
           <tr>
             <td class="zt">举报内容</td>
-            <td class="zt">{{ ReportData.reportReasonText }}</td>
+            <td class="zt">{{ReportData.reportDetail.reportContent}}</td>
+          </tr>
+          <tr>
+            <td class="zt" style="position:relative">
+              <div style="position:absolute;right:27px;">举报图片</div>
+            </td>
+            <td class="tp">
+              <img class="oneTp" v-for='item in ReportData.picList' :src="item.picPath"></img>
+            </td>
           </tr>
         </table>
 
         <table width="100%;">
           <tr>
             <td class="zt">处理人员</td>
-            <td class="zt">{{ ReportData.answerUserName }}</td>
+            <td class="zt">{{ ReportData.reportDetail.answerUserName }}</td>
           </tr>
           <tr>
             <td class="zt">处理时间</td>
-            <td class="zt">{{ ReportData.answerTimestamp }}</td>
+            <td class="zt">{{ ReportData.reportDetail.answerTimestamp }}</td>
           </tr>
           <tr>
             <td class="zt">处理结果</td>
-            <td class="zt">{{ ReportData.reportDealResultText }}</td>
+            <td class="zt">{{ ReportData.reportDetail.reportDealResultText }}</td>
           </tr>
           <tr>
             <td class="zt">处理备注</td>
             <td class="zt">
-              {{ ReportData.answerContent ? ReportData.answerContent : "" }}
+              {{ ReportData.reportDetail.answerContent ? ReportData.reportDetail.answerContent : "" }}
             </td>
           </tr>
         </table>
@@ -90,14 +98,13 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.ReportData = res.data;
-          this.ReportData.reportTimestamp = formatDate(
-            res.data.reportTimestamp
+          this.ReportData.reportDetail.reportTimestamp = formatDate(
+            res.data.reportDetail.reportTimestamp
           );
-          this.ReportData.answerTimestamp = formatDate(
-            res.data.answerTimestamp
+          this.ReportData.reportDetail.answerTimestamp = formatDate(
+            res.data.reportDetail.answerTimestamp
           );
         }
-        console.log(res);
       });
     }
   }
@@ -138,7 +145,7 @@ body {
   padding: 1rem 8rem;
 }
 .con td:nth-child(1) {
-  text-align: right;
+  text-align: center;
   width: 6rem;
 }
 .con td {
@@ -149,5 +156,14 @@ body {
 }
 .zt {
   font-size: 16px;
+}
+.tp{
+  display: flex;
+  align-items: center;
+}
+.oneTp{
+  width: 200px;
+  height: 200px;
+  padding: 5px;
 }
 </style>
