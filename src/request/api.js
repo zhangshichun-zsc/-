@@ -111,7 +111,7 @@ export const pendingTransferList = p => posts('/activity-manage/work/act/move/li
 
 export const pendingUnclaimedList = p => get('/activity-undeal/get-unreceive-resource-page', p) //活动待处理 获取待领取物资列表
 
-export const pendingSubsidyList = p => get('/activity-manage/work/act/sub/list', p) //活动待处理获取补助发放列表
+export const pendingSubsidyList = p => posts('/activity-manage/work/act/sub/list', p) //活动待处理获取补助发放列表
 
 export const pendingUncDel = p => post('/activity-undeal/del-activity-resource', p) //活动待处理--删除活动物资
 
@@ -623,7 +623,7 @@ export const feendDetail = p => posts("/activity-manage/act/user/detail",p)
 export const signUpStatus = p => posts("/activity-manage/work/act/sign/do",p)
 export const moveStatus = p => posts("/activity-manage/work/act/move/do",p)
 export const subDo = p => posts("/activity-manage/work/act/sub/do",p)
-
+export const getfeendDetail = p => get("/activity-manage/activity-feedback-list",p)
 
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 

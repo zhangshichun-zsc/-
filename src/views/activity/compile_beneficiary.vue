@@ -133,7 +133,7 @@
             </li>
             <li class="first-li">
               <span class="first-span">集合地址</span>
-              <span @click="()=>{this.adr = true}">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
+              <span @click="getAdr()">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
             </li>
             <li class="first-li">
               <span class="first-span">模式</span>
@@ -708,10 +708,16 @@ export default {
     getDates(e) {
       this.oneRole.setTime = e
     },
+    getAdr(){
+      this.adr = !this.adr
+    },
     getMap(e){
       console.log(e)
       this.oneRole.xx = e.xx
       this.oneRole.yy = e.yy
+      this.oneRole.provinceName = e.province
+      this.oneRole.cityName = e.city
+      this.oneRole.districtName = e.district
       this.$set(this.oneRole,'setAddr',e.address)
     },
     getLimits(e){

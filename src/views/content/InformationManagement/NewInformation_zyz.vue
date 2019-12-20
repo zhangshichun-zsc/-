@@ -23,11 +23,11 @@
             <FormItem label="资讯描述:" prop="resume">
               <Input style="width: 15rem" v-model="ContentData.resume" />
             </FormItem>
-            <FormItem label="展示窗口:" prop="showLocation">
+            <!-- <FormItem label="展示窗口:" prop="showLocation">
               <Select v-model="ContentData.showLocation" style="width:200px" :transfer=true>
                 <Option v-for="item in showlist" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
               </Select>
-            </FormItem>
+            </FormItem> -->
             <FormItem label="资讯分类:" prop="informationType">
 
               <Select v-model="ContentData.informationType" style="width:200px" :transfer=true >
@@ -119,7 +119,7 @@ export default {
       ContentData: {
         title: '',
         resume: '',
-        showLocation: '',
+        showLocation: 336,
         informationType: ''
       },
       RuleDate: {

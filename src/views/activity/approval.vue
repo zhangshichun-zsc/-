@@ -429,8 +429,8 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="1">整体招募</Radio>
                   <Radio label="2">批次招募</Radio>
+                  <Radio label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>
@@ -1158,11 +1158,13 @@ export default {
       this.batch.detail = e;
     },
     getMap(e) {
+      console.log(e);
       this.batch.actXx = e.xx;
       this.batch.actYy = e.yy;
-      // this.batch.actAddress = e.address
+      this.batch.provinceName = e.province;
+      this.batch.cityName = e.city;
+      this.batch.districtName = e.district;
       this.$set(this.batch, "actAddress", e.address);
-      console.log(e);
     }
   }
 };

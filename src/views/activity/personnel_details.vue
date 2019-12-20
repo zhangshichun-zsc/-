@@ -65,9 +65,9 @@
               <th>签到地点</th>
             </tr>
             <tr>
-              <td v-if='msg.trainStatus==0'>未签到</td>
-              <td v-else-if='msg.trainStatus==1'>已签到</td>
-              <td v-else-if='msg.trainStatus==2'>迟到</td>
+              <td v-if='msg.signStatus==0'>未签到</td>
+              <td v-else-if='msg.signStatus==1'>已签到</td>
+              <td v-else-if='msg.signStatus==2'>迟到</td>
               <td>{{msg.signAt}}</td>
               <td>{{msg.signAddress}}</td>
             </tr>
@@ -85,22 +85,7 @@
               <td v-if='msg.feedStatus==1'>已反馈</td>
               <td v-else-if='msg.feedStatus==2'>未反馈</td>
               <td>{{msg.feedAt}}</td>
-              <!-- <td>详情</td> -->
-            </tr>
-          </table>
-        </li>
-        <li>
-          <p>匹配关系</p>
-          <table>
-            <tr>
-              <th>匹配人员</th>
-              <th>手机号码</th>
-              <th>操作</th>
-            </tr>
-            <tr>
-              <td>100</td>
-              <td>7</td>
-              <td>50</td>
+              <td @click="jump">详情</td>
             </tr>
           </table>
         </li>
@@ -137,6 +122,14 @@ export default {
     getUserDetail(){
       feendDetail({actUserId:this.actUserId}).then(res => {
         this.msg = res.data
+      })
+    },
+    jump(){
+      this.$router.push({
+        name: 'feedDetail',
+        query: {
+          activityUserId: this.actUserId
+        }
       })
     }
   }
