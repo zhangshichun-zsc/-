@@ -58,19 +58,22 @@ export default {
       columns: [
         {
           type: "selection",
-          width: 60,
+          width: 80,
           align: "center"
         },
         {
           title: "限制名称",
           key: "name",
-          align: "center"
+          width: 500,
+          align: "center",
+          ellipsis: true,
+          tooltip: true,
         },
 
         {
           title: "新增时间",
           key: "createAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -79,7 +82,7 @@ export default {
         {
           title: "最后修改时间",
           key: "updateAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.updateAt));
@@ -88,11 +91,12 @@ export default {
         {
           title: "最后操作人",
           key: "userName",
+          width: 300,
           align: "center"
         },
         {
           title: "是否启用",
-          width: 120,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -229,9 +233,9 @@ export default {
     stater(id, e) {
       this.ruleIds = id;
       if (e) {
-        this.ruleOprType = 2;
+        this.ruleOprType = 1;
       } else {
-        this.ruleOprType = 3;
+        this.ruleOprType = 0;
       }
       this.getActiverule();
     },

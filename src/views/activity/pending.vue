@@ -2,13 +2,31 @@
 <template>
   <div>
      <Modal v-model="modal1"  @on-cancel='cancel'>
-      <i-input placeholder="请输入内容" v-model="title" style="marginBottom:1rem;"/>
-      <i-input placeholder="请输入内容" v-model="msg" type="textarea" :row='4'/>
+       <div>
+         <i-input placeholder="请输入内容" v-model="title" style="marginBottom:1rem;"/>
+         <i-input placeholder="请输入内容" v-model="msg" type="textarea" :row='4'/>
+       </div>
       <div slot="footer">
         <Button type="success" size="large" @click="success">确定</Button>
       </div>
     </Modal>
-      <Modal v-model="modal2" title="拒绝理由"  @on-cancel='showCancel'>
+    <Modal v-model="modal3" title="拒绝理由"  @on-cancel='matchCancel'>
+      <div>
+        <Select v-model="mUserId" style="marginBottom:1rem;" :disabled='type == 0' @on-change='changeSele(0,$event)'>
+          <Option :value="mUserId" v-if="type==0">{{ vName }}</Option>
+          <Option v-for="(item,index) in listM"  :key="index" :value="item.userId" v-else>{{ item.name }}</Option>
+        </Select>
+        <i-input v-model="mTel"  style="marginBottom:1rem;" disabled/>
+        <Select v-model="vUserId" style="marginBottom:1rem;" @on-change='changeSele(1,$event)'>
+          <Option v-for="(item,index) in listV" :key="index" :value="item.userId">{{ item.name }}</Option>
+        </Select>
+        <i-input  v-model="vTel" disabled />
+      </div> 
+      <div slot="footer">
+        <Button type="error" size="large" @click="matching">确定</Button>
+      </div>
+    </Modal>
+    <Modal v-model="modal2" title="拒绝理由"  @on-cancel='showCancel'> 
         <i-input placeholder="请输入拒绝内容" v-model="remark" type="textarea" :row='4'/>
         <div slot="footer">
           <Button type="error" size="large" @click="refuse">确定</Button>
@@ -21,14 +39,8 @@
     <div class="content">
       <div class="content-details">
         <ul class="list-one">
-          <li @click="btn(1)">
-            <Button :class="{active:show == 1}">报名</Button>
-          </li>
-          <li @click="btn(2)">
-            <Button :class="{active:show == 2}">转移人员</Button>
-          </li>
-          <li @click="btn(3)">
-            <Button :class="{active:show == 3}">补助发放</Button>
+          <li @click="btnTab(index+1)" v-for='(item,index) in head' :key='index'>
+            <Button :class="{active:show == index+1}">{{ item.name }}</Button>
           </li>
         </ul>
         <ul class="list" v-if="show==1">
@@ -45,12 +57,12 @@
             <Button :class="{active:state[1] == item.id}">{{ item.name }}</Button>
           </li>
         </ul>
-        <div class="searchs flex-start" v-if="show!=3">
+        <div class="searchs flex-start" v-if="show!=4">
           <i-input v-model="info" placeholder="报名人/手机号" style="width:150px" />
           <Button class="table-btn" @click="search">搜索</Button>
         </div>
         <div class="integral-table">
-          <div class="table-header flex-center-between">
+          <div class="table-header flex-center-between"  v-if='show !== 4'>
             <div>
               <Button @click="chackall()" style="border:0px;">
                 <Checkbox v-model="status">全选</Checkbox>
@@ -93,7 +105,12 @@ import {
   signUpStatus,
   moveStatus,
   sendInfo,
-  subDo
+  subDo,
+  getMatchingList,
+  getMatchingMeList,
+  getMatchingVoList,
+  Matchingupdate,
+  matchAdd
 } from "../../request/api";
 export default {
   data() {
@@ -104,6 +121,11 @@ export default {
       info: "",
       status: false,
       modal2: false,
+      modal3: false,
+      mTel:'',
+      mUserId:'',
+      vTel:'',
+      vUserId: '',
       List: [],
       Statuslist: [
         {name:"全部",id: 0},{name:"待审核",id:1},{name:"已通过",id:2},{name:"已拒绝",id:3},{name:"已违约",id:9}
@@ -111,7 +133,6 @@ export default {
       arrsList: [
         {name: "全部",id: -1},{name:"未领取",id:0},{name:"已领取",id:1}
       ],
-      Scene: "所有场次",
       columns: [],
       columns1: [
         {
@@ -173,6 +194,7 @@ export default {
                       let state = params.row.status
                       if(state !== 0){
                         this.$Message.error("不能操作")
+                        return
                       }
                       this.ids = [params.row.actUserId]
                       this.pass();
@@ -195,6 +217,7 @@ export default {
                       let state = params.row.status
                       if(state !== 0){
                         this.$Message.error("不能操作")
+                         return
                       }
                       this.ids = [params.row.actUserId]
                       this.refuse(3);
@@ -267,6 +290,11 @@ export default {
                   },
                   on: {
                     click: () => {
+                      let state = params.row.status
+                      if(state !== 0 && state !== 3){
+                        this.$Message.error("不能操作")
+                         return
+                      }
                       this.ids = [params.row.auditId]
                       this.pass();
                     }
@@ -285,6 +313,11 @@ export default {
                   },
                   on: {
                     click: () => {
+                       let state = params.row.status
+                      if(state !== 0 && state !== 3){
+                        this.$Message.error("不能操作")
+                         return
+                      }
                       this.ids = [params.row.auditId]
                       this.refuse(3);
                     }
@@ -344,6 +377,7 @@ export default {
                     let state = params.row.status
                     if(state !== 0){
                       this.$Message.error("不能操作")
+                      return
                     }
                     this.ids = [params.row.actUserId]
                     this.moreSend();
@@ -353,6 +387,92 @@ export default {
           }
         }
       ],
+      columns4:[
+        
+        {
+          title: "受益方",
+          align: "center",
+          render: (h,params) =>{
+            return (<span>受益方</span>)
+          }
+        },
+        {
+          title: "姓名",
+          key: "memUserName",
+          align: "center"
+        },
+        {
+          title: "手机号",
+          key: "memUserTel",
+          align: "center"
+        },
+        {
+          title: "志愿者",
+          align: "center",
+          render: (h,params) =>{
+            return (<span>志愿者</span>)
+          }
+        },
+        {
+          title: "姓名",
+          align: "center",
+          key: "voluUserName",
+        },
+        {
+          title: "手机号",
+          key: "voluUserTel",
+          align: "center",
+        },
+        {
+          title: "操作",
+          key: "action",
+          align: "center",
+           render: (h, params) => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  clssName: "action",
+                  style: {
+                    color: "green",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.modal3 = true
+                      this.mTel = params.row.memUserTel
+                      this.mUserId = params.row.memUserId
+                      this.vName = params.row.memUserName
+                      this.actMatchId = params.row.actMatchId
+                      this.type = 0
+                    }
+                  }
+                },
+                "修改"
+              ),
+              h(
+                "span",
+                {
+                  style: {
+                    marginRight: "5px",
+                    marginLeft: "5px",
+                    color: "green",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.type = 1
+                      this.modal3 = true
+                    }
+                  }
+                },
+                "新增"
+              )
+            ]);
+          }
+        }
+      ],
+      type: 0,
       datax: [],
       arr: [],
       show: 1,
@@ -421,7 +541,12 @@ export default {
           label: "拒绝转移"
         }
       ],
-      ids:[]
+      ids:[],
+      head:[{name:"报名"},{name:"转移人员"},{name:"补助发放"},{name:"匹配"}],
+      listM:[],
+      listV:[],
+      vName:'',
+      actMatchId: null
     };
   },
 
@@ -430,9 +555,62 @@ export default {
   created() {},
   mounted() {
     this.getpendingEnrollList();
+    this.initData()
   },
 
   methods: {
+    changeSele(i,e){
+      if(i == 0){
+        for(let item of this.listM){
+          if(item.userId == e) this.mTel = item.tel
+        }
+      }else{
+        for(let item of this.listV){
+          if(item.userId == e) this.vTel = item.tel
+        }
+      }
+    },
+    initData(){
+      getMatchingMeList({activityId:this.$route.query.activityId}).then(res => {
+        this.listM = res.data
+      })
+      getMatchingVoList({activityId:this.$route.query.activityId}).then(res => {
+        this.listV = res.data
+      })
+    },
+    matching(){
+      if(this.type == 0){
+        Matchingupdate({actMatchId:this.actMatchId,userId:this.vUserId}).then(res => {
+          if(res.code == 200){
+            this.modal3 = false
+            this.$Message.success('修改成功')
+            this.getMatchList()
+          }else{
+            this.$Message.error(res.msg)
+          }
+        })
+      }else{
+        matchAdd({
+          memUserId: this.mUserId,
+          voluUserId:this.vUserId,
+          activityId:this.$route.query.activityId
+        }).then(res => {
+          if(res.code == 200){
+            this.modal3 = false
+            this.$Message.success('添加成功')
+            this.getMatchList()
+          }else{
+            this.$Message.error(res.msg)
+          }
+        })
+      }
+    },
+    matchCancel(){
+      this.vUserId = ''
+      this.vTel = ''
+      this.mUserId = ''
+      this.mTel = ''
+    },
     sendInfos(){
       if(this.arr.length == 0){
         this.$Message.info("请选择")
@@ -488,7 +666,11 @@ export default {
         this.status = false;
         if (res.code == 200) {
           this.columns = this.columns1;
-          this.datax = res.data
+          let data = res.data
+          for(let item of data){
+            if(~~item.status !== 0)item._disabled = true
+          }
+          this.datax = data
         }
       });
     },
@@ -501,7 +683,11 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.columns = this.columns2;
-          this.datax = res.data
+          let data = res.data
+          for(let item of data){
+            if(~~item.status !== 0 && ~~item.status !== 3)item._disabled = true
+          }
+          this.datax = data
         }
       })
     },
@@ -515,11 +701,22 @@ export default {
         this.status = false;
         if (res.code == 200) {
           this.columns = this.columns3;
-          this.datax = res.data
+          let data = res.data
+          for(let item of data){
+            if(~~item.status !== 0)item._disabled = true
+          }
+          this.datax = data
         }
       });
     },
-
+    getMatchList(){
+      getMatchingList({activityId:this.$route.query.activityId}).then(res => {
+        if (res.code == 200) {
+          this.columns = this.columns4;
+          this.datax = res.data
+        }
+      })
+    },
     //发放列表
     grantbtn(e) {
       this.$set(this.state,1,e)
@@ -547,38 +744,19 @@ export default {
       } else {
         this.status = false;
       }
-      if(this.show == 1){
+      if(this.show == 1 || this.show == 3){
         this.ids = val.map(v => {
-          if(~~v.status === 0){
-            return v.actUserId
-          }else{
-            this.$Message.error("只能选择待审核")
-          }
+          return v.actUserId
         })
         this.arr = val.map( v=> {
           return v.userId
         })
       }else if(this.show == 2){
         this.ids = val.map(v => {
-          if(~~v.status == 0 || ~~v.status == 3){
-             return v.auditId
-          }else{
-            this.$Message.error("只能选择待审核二级待审核")
-          }
+          return v.auditId
         })
         this.arr = val.map( v=> {
           return v.targetUserId
-        })
-      }else{
-         this.ids = val.map(v => {
-           if(~~v.status === 0){
-              return v.actUserId
-           }else{
-             this.$Message.error("已发放不能发放")
-           }
-        })
-        this.arr = val.map( v=> {
-          return v.userId
         })
       }
     },
@@ -590,7 +768,7 @@ export default {
     },
 
     //报名 转移人员  补助发放
-    btn(id) {
+    btnTab(id) {
       this.show = id;
       if (this.show == 1) {
         this.$set(this.state,0,0)
@@ -600,6 +778,8 @@ export default {
       } else if (this.show == 3) {
         this.$set(this.state,1,-1)
         this.getpendingSubsidyList();
+      }else{
+        this.getMatchList()
       }
     },
     btns(val) {
