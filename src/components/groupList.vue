@@ -326,12 +326,8 @@ export default {
     getorgpage() {
       let endAt = null;
       if (this.endAt) {
-        endAt =
-          this.util.formatDate(this.endAt.getTime()).split(" ")[0] +
-          " 23:59:59";
+        endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
       }
-      console.log(endAt);
-
       let fromobj = this.util.remove({
         page: {
           page: this.page,
