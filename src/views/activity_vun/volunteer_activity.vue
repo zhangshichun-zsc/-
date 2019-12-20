@@ -244,7 +244,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "volunteer_general",
-                        query: { activityId: params.row.activityId }
+                        query: { acitvityId: params.row.activityId,activityName: params.row.name }
                       });
                     }
                   }
@@ -457,6 +457,9 @@ export default {
       } else {
         this.status = false;
       }
+      this.arr = val.map(v=> {
+        return {activityId:v.acitvityId,activityName:v.activityName}
+      })
     },
 
     //分页功能
@@ -483,7 +486,7 @@ export default {
     //导出数据
     exportData() {
       for(let item of this.arr){
-        window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=1&activityName=
+        window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=2&activityName=
         ${item.activityName}`)
       }
     },
