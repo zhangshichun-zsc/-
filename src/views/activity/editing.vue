@@ -68,12 +68,7 @@
                       style="width:200px;height:200px"
                       :src="batch.actCoverShowPic"
                     />
-                    <span
-                      v-if="batch.actCoverShowPic"
-                      class="cancel"
-                      @click="cancelActFmImg()"
-                      >X</span
-                    >
+                    <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -105,12 +100,7 @@
                       style="width:283px;height:188px"
                       :src="batch.actShowPic"
                     />
-                    <span
-                      v-if="batch.actShowPic"
-                      class="cancel"
-                      @click="cancelActImg()"
-                      >X</span
-                    >
+                    <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -758,8 +748,8 @@ export default {
 }
 .cancel {
   position: absolute;
-  top: -82px;
-  right: 8px;
+  top: 0;
+  right: -30px;
 }
 .par-col {
   display: flex;
