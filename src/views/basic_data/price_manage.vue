@@ -1,18 +1,29 @@
 <!-- 基金管理(会员)-->
 <template>
   <div class="integral">
-     <basicdata :navigation1="navigation1" @query="getList"></basicdata>
     <div class="integral-header">
-
-      <!-- <Navigation :labels="navigation1"></Navigation>
+      <Navigation :labels="navigation1"></Navigation>
+      <div class="flex-center-between integral-top">
+        <div>
+          <Icon type="ios-search-outline" />
+          <span>筛选查询</span>
+        </div>
+        <div class="flex-center-end">
+          <div class="integral-center">
+            <Icon type="ios-arrow-down" />
+            <span>收起筛选</span>
+          </div>
+          <Button @click="getList()">查询结果</Button>
+        </div>
+      </div>
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>名称:</span>
+          <span>名称</span>
           <Input size="large" placeholder="基金名称" class="inpt" v-model="args.orgName" />
         </div>
         <div class="flex-center-start">
-          <span style="margin:0 5px">有效状态:</span>
-          <Select size="small" style="width:160px;" v-model="args.validFlag">
+          <span>有效状态</span>
+          <Select size="small" class="inpt" v-model="args.validFlag">
             <Option value="-1">全部</Option>
             <Option value="1">有效</Option>
             <Option value="0">无效</Option>
@@ -34,18 +45,16 @@
             </DatePicker>
           </Row>
         </div>
-        <div class="flex-center-start">
-          <Button class="button-red" @click="getList()">查询</Button>
-        </div>
-      </div> -->
+      </div>
     </div>
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-          <!-- <span>已选择{{list.length}}</span> -->
+          全选
+          <span>已选择{{list.length}}</span>
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
-          <Button class="table-btns" @click="jump()">新增基金</Button>
-          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel" class-name="vertical-center-modal">
+          <Button class="table-btn" @click="showModal(null)">新增</Button>
+          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
                    <Input v-model="pams.orgName" placeholder="请输入基金名称"/>
@@ -58,27 +67,14 @@
                   </FormItem>
               </Form>
               <div slot="footer">
-                 <Button  size="large" @click="quxiao">取消</Button>
                  <Button type="error" size="large" @click="ok">确定</Button>
               </div>
           </Modal>
         </div>
       </div>
-      <div class="min-height">
       <Table border :columns="columns" :data="data" @on-select='select' @on-select-cancel='select' @on-select-all='select' @on-select-all-cancel='select'></Table>
-
-      </div>
       <div class="pages">
-         <Page
-          :total="sumSize"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="args.size"
-          @on-change="changePage"
-        />
-
+        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
       </div>
     </div>
   </div>
@@ -88,7 +84,6 @@
 import { getfund,updateFun } from '@/request/api'
 import { filterNull } from '@/libs/utils'
 import { parse } from 'path';
-import basicdata from "@/components/basicdata";
 export default {
   data() {
      const validatePhone = (rule, value, callback) => {
@@ -99,7 +94,7 @@ export default {
         }else{
             callback();
         }
-      };
+      }
     return {
       time:'请选择时间段',
       open:false,
@@ -129,33 +124,24 @@ export default {
         // },
         {
           title: "基金名称",
-          key: "orgName",
-          align:'center',
-          width:300,
+          key: "orgName"
         },
         {
           title: "联系人",
-          key: "contactUserName",
-          align:'center',
-          width:240,
+          key: "contactUserName"
         },
         {
           title: "联系电话",
           key: "contactUserPhone",
-          align:'center',
-          width:240,
         },
         {
           title: "创建时间",
           key: "createAt",
-          align:'center',
-          width:230,
         },
         {
           title: "有效状态",
           key: "validFlag",
-          align: "center",
-          width:200,
+          algin: "center",
           render: (h, params) => {
             return h('div', [
               h('i-switch',{
@@ -180,17 +166,13 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:200,
           render: (h, params) => {
             return h("div", [
               h(
-                "a",
+                "Button",
                 {
-                   clssName: "action",
-                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
+                  props:{
+                    type:'primary'
                   },
                   on: {
                     click: () => {
@@ -261,7 +243,7 @@ export default {
     };
   },
 
-  components: {basicdata},
+  components: {},
 
   computed: {},
 
@@ -270,21 +252,10 @@ export default {
   },
 
   methods: {
-
-     //新建基金
-    jump() {
-      this.$router.push({ name: "addfund"});
-    },
-
-    //查询
-    query(e){
-      this.args.orgName=e.dicName,
-      this.args.validFlag=e.validFlag
-      this.args.startAt=e.createTimestamp[0]
-      this.args.endAt=e.createTimestamp[0]
-      this.getList()
-    },
     getList(){
+      if(this.args.validFlag==-1){
+        this.args.validFlag=''
+      }
       let args = filterNull(this.args)
       getfund(args).then(res => {
         this.sumSize = res.data.totalSize
@@ -296,28 +267,28 @@ export default {
       this.$set(this.args.page,'page',e)
       this.getList()
     },
-    // successOk(){
-    //   if(!this.args.startAt&&!this.args.endAt){
-    //     this.time='请选择时间段'
-    //   }
-    //   this.open = false
-    // },
-    // handleChange(e){
-    //   let start = e[0]
-    //   let end = e[1]
-    //   this.time = e[0] + '-' + e[1]
-    //   if(start&&end){
-    //     if(start === end){
-    //       start = start + ' 00:00:00'
-    //       end = end + ' 23:59:59'
-    //     }else{
-    //       start = start + ' 00:00:00'
-    //       end = end + ' 00:00:00'
-    //     }
-    //   }
-    //   this.args.startAt = start
-    //   this.args.endAt = end
-    // },
+    successOk(){
+      if(!this.args.startAt&&!this.args.endAt){
+        this.time='请选择时间段'
+      }
+      this.open = false
+    },
+    handleChange(e){
+      let start = e[0]
+      let end = e[1]
+      this.time = e[0] + '-' + e[1]
+      if(start&&end){
+        if(start === end){
+          start = start + ' 00:00:00'
+          end = end + ' 23:59:59'
+        }else{
+          start = start + ' 00:00:00'
+          end = end + ' 00:00:00'
+        }
+      }
+      this.args.startAt = start
+      this.args.endAt = end
+    },
     showModal(e){
       if(e == null){
         this.cancel()
@@ -339,10 +310,6 @@ export default {
             this.$Message.error('没有填写完整');
         }
       })
-    },
-
-      quxiao(){
-      this.modal1=false
     },
     update(list){
       updateFun(filterNull({list})).then(res => {
@@ -374,14 +341,52 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-
-.flex-center-start span{
-   width:120px;
-   text-align: center;
+<style lang="scss">
+.integral-header {
+  border: 1px solid #eee;
 }
-.integral-body{
-  padding: 10px 0;
-  background-color: #fff;
+.integral-header .integral-top {
+  padding: 15px 20px;
+  background: rgb(228, 228, 228);
+  border-bottom: 1px solid #eee;
+}
+.integral-header .integral-center {
+  margin: 0 20px;
+}
+.integral-header .integral-body {
+  padding: 20px;
+  background: #fff;
+}
+.integral-header .integral-body .flex-center-start .inpt {
+  width: 200px;
+  margin-left: 15px;
+}
+.integral-header .integral-body .flex-center-start {
+  margin-right: 20px;
+}
+.integral-table {
+  margin-top: 30px;
+}
+.table-header {
+  padding: 5px 20px;
+  background: rgb(228, 228, 228);
+  border: 1px solid #eee;
+}
+.table-header .table-btn {
+  margin-left: 15px;
+}
+.integral-table .pages {
+  padding: 5px 20px;
+  margin-top: 50px;
+  background: #fff;
+}
+.pages {
+  text-align: center;
+}
+.ipt {
+  margin-left: 10px;
+}
+.sdate {
+  margin-left: 15px;
 }
 </style>

@@ -240,7 +240,7 @@
       <Row class-name="row">
         <i-col span='3'><span>集合地址</span></i-col>
         <i-col span='4'>
-           <span @click="()=>{this.adr = true}">{{ args.setAddr?args.setAddr:"点击选中地址"}}</span>
+           <span @click="getAdr">{{ args.setAddr?args.setAddr:"点击选中地址"}}</span>
         </i-col>
       </Row>
       <Row>
@@ -306,6 +306,10 @@ export default {
   },
 
   methods: {
+    getAdr(){
+      if(this.isDisb)return
+      this.adr = true
+    },
     changeAudit(e){
       if (~~this.args.zmType === 2 && ~~this.good.length !== 0) {
         this.$Message.warning('您已设置优先条件，无法再次设置为报名需审核')
@@ -640,6 +644,16 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:none !important;
+}
+.btn:hover{
+  border:1px solid #FF565A !important;
+  color: #FF565A !important;
+  background: #fff !important;
+}
 .post {
   padding: 20px 50px;
   border-radius: 20px;

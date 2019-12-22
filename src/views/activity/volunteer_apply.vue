@@ -1,6 +1,10 @@
 <!--常用报名项管理(志愿者)-->
 <template>
   <div class="integral">
+     <Modal
+      v-model="modal1">
+      <img :src="showImg" alt="" class="showimg"/>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
       <div class="flex-center-between integral-top">
