@@ -368,6 +368,13 @@
                   >
                 </Select>
               </FormItem>
+                <FormItem label="家庭账号成员*">
+                <p v-for="item in parameOBJ.memInfo.homeMemberList" :key="item.typeDicId">
+                  {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
+                </p>
+              </FormItem>
+
+
               <FormItem label="孩子姓名">
                 <p>
                   {{
@@ -395,6 +402,17 @@
                   }}
                 </p>
               </FormItem>
+
+          <FormItem label="孩子证件号">
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].childIdcard
+                      : "暂无"
+                  }}
+                </p>
+              </FormItem>
+
               <FormItem label="孩子生日">
                 <p>
                   {{
@@ -502,6 +520,9 @@
                 </FormItem>
                 <FormItem label="孩子证件类型">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].idcardType }}</p>
+                </FormItem>
+                <FormItem label="孩子证件号">
+                  <p>{{ parameOBJ.memInfo.childsInfo[index].childIdcard }}</p>
                 </FormItem>
                 <FormItem label="孩子生日">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].childBirthday }}</p>
@@ -979,11 +1000,7 @@
                   </Checkbox>
                 </CheckboxGroup>
               </FormItem>
-              <FormItem label="家庭账号成员*">
-                <p v-for="item in parameOBJ.memInfo.homeMemberList">
-                  {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
-                </p>
-              </FormItem>
+
             </Form>
           </Col>
         </Row>
