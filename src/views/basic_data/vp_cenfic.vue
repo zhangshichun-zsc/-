@@ -161,7 +161,7 @@ export default {
         orgId: "",
         title: "",
         effectiveAt: "",
-       orgType: 1,
+       orgType: 3,
         sysId: 1,
       },
       modal1: false,

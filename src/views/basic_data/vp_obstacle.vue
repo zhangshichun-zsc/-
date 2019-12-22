@@ -66,7 +66,7 @@ export default {
           align: "center"
         },
         {
-          title: "特长名称",
+          title: "智障类型",
           key: "dicName",
           align: "center",
            width:460,
@@ -184,7 +184,7 @@ export default {
       dicCode: 0,
 
       list: [],
-      text: "添加智障类型",
+      text: "添加障碍类型",
       states: "",
       id: 0
     };

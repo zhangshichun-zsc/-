@@ -281,10 +281,7 @@ export default {
       this.modal1=false
     },
     ok(){
-      let dataaa=this.data.map(item=> {
-          return item.auditId
-})
- console.log(dataaa)
+
       this.arr=this.arrs
       this.auditStatus=1
       this.getIntegralaudit()
@@ -298,8 +295,11 @@ export default {
     },
     //选择内容
     handleSelectionChange(val) {
-      this.arrs = val.map(item => {
-        return item.auditId;
+      let a = val.filter(
+        item => item.auditStatus == 0
+      );
+      this.arrs=a.map(item=>{
+        return item.auditStatus
       }).toString()
         console.log(this.arr)
 

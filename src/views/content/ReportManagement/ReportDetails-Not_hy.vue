@@ -39,7 +39,7 @@
               <div style="position:absolute;right:27px;">举报图片</div>
             </td>
             <td class="tp">
-              <img class="oneTp" v-for='item in ReportData.picList' :src="item.picPath"></img>
+              <img class="oneTp" v-for='(item,index) in ReportData.picList' :key="index" :src="item.picPath" />
             </td>
           </tr>
         </table>
@@ -70,15 +70,17 @@ export default {
       ReportData: {},
       text:'',
       list:[],
-      params:{}
+      params:{},
+      reportId:this.$route.query.reportId,
+      state:this.$route.query.state
     }
   },
   mounted(){
 
-    if(this.$route.query.state==1){
+    if(this.state==1){
       this.navigation1.head='举报详情-未处理(会员)'
 
-    }else if(this.$route.query.state==2){
+    }else if(this.state==2){
        this.navigation1.head='举报详情-未处理(志愿者)'
     }
     this.getReportDel()
@@ -89,7 +91,7 @@ export default {
     // 详情
     getReportDel(){
       ReportDel({
-        reportId:this.$route.query.reportId
+        reportId:this.reportId
       }).then(res=>{
         if(res.code==200){
           this.ReportData=res.data
@@ -104,22 +106,17 @@ export default {
      //批量操作
     getReportdeles(id){
       let params = {
-        reportIds:this.$route.query.reportId,
+        reportIds:this.reportId,
         dealUserId:this.$store.state.userId,
         reportDealResult:id,
+        type:1,
         remark:this.ReportData.answerContent,
       }
       this.params =this.util.remove(params)
       Reportdeles(params).then(res=>{
         if(res.code==200){
           this.$Message.info('操作成功');
-          // if(this.$route.query.state==1){
-          //   this.$router.push({path:'/ReportList_hy'})
-          // }else{
-          //   this.$router.push({path:'/ReportList_zyz'})
-          // }
           this.$router.back()
-
         }
         console.log(res)
       })
@@ -135,7 +132,6 @@ export default {
       }).then(res=>{
         if(res.code==200){
           this.list=res.data
-
         }
         console.log(res)
       })

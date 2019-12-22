@@ -141,7 +141,7 @@ export default {
                 props: {
                   trueValue: 1,
                   falseValue: 0,
-                  value: ~~params.row.hotFlag 
+                  value: ~~params.row.hotFlag
                 },
                 on: {
                   "on-change": e => {
@@ -228,10 +228,9 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "NewInformation_zyz",
+                        name: "NewInformation_hy",
                         query: {
                           informationId: params.row.informationId,
-
                         }
                       });
                     }

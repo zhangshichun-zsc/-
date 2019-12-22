@@ -3,7 +3,7 @@
   <div class="audit">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-start integral-body" >
+      <div class="flex-center-start integral-body">
         <div class="flex-center-start name">
           <span>用户账号:</span>
           <Input size="large" placeholder="用户ID/账号" class="inpt" v-model.trim="userAccount" />
@@ -36,21 +36,20 @@
           <div class="approval">
             <h3>是否确认审批？</h3>
           </div>
-            <div slot="footer">
-              <Button type="text" size="large" @click="cancel">取消</Button>
-              <Button type="error" size="large" @click="ok">确定</Button>
-            </div>
+          <div slot="footer">
+            <Button type="text" size="large" @click="cancel">取消</Button>
+            <Button type="error" size="large" @click="ok">确定</Button>
+          </div>
         </Modal>
       </div>
       <div class="min-height">
         <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="data"
-        @on-selection-change="handleSelectionChange"
-      ></Table>
-
+          ref="selection"
+          border
+          :columns="columns"
+          :data="data"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
       </div>
 
       <div class="pages">
@@ -89,68 +88,72 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width:200,
+          width: 200
         },
         {
           title: "用户昵称",
           key: "nickName",
-          width:300,
+          width: 300,
           align: "center"
         },
         {
           title: "用户类型",
           key: "userType",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "修改人",
           key: "modifyName",
-          width:300,
+          width: 300,
           align: "center"
         },
         {
           title: "修改时间",
           key: "modifyTime",
-          width:300,
-          align: "center",
-
+          width: 300,
+          align: "center"
         },
         {
           title: "原积分",
           key: "sourceScore",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "现积分",
           key: "currScore",
           align: "center",
-          width:200,
+          width: 200
         },
         {
           title: "积分调整值",
           key: "addScore",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "状态",
           key: "auditStatus",
           align: "center",
-          width:200,
-           render: (h, params) => {
-             let statess=['待审核','审核通过','审核不通过','一级审核通过二级待审核']
+          width: 200,
+          render: (h, params) => {
+            let statess = [
+              "待审核",
+              "审核通过",
+              "审核不通过",
+              "一级审核通过二级待审核"
+            ];
 
             //  0待审核,1审核通过,2审核不通过,3一级审核通过二级待审核'
-             return h("p",statess[params.row.auditStatus])
-           }
+            return h("p", statess[params.row.auditStatus]);
+          }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:200,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -159,12 +162,18 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: params.row.auditStatus==0||params.row.auditStatus==3?"red":'gray'
+                    color:
+                      params.row.auditStatus == 0 || params.row.auditStatus == 3
+                        ? "red"
+                        : "gray"
                   },
                   on: {
                     click: () => {
-                      if(params.row.auditStatus==0||params.row.auditStatus==3){
-                        this.refuse(params.row.auditId,1)
+                      if (
+                        params.row.auditStatus == 0 ||
+                        params.row.auditStatus == 3
+                      ) {
+                        this.refuse(params.row.auditId, 1);
                       }
                     }
                   }
@@ -177,12 +186,18 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: params.row.auditStatus==0||params.row.auditStatus==3?"red":'gray'
+                    color:
+                      params.row.auditStatus == 0 || params.row.auditStatus == 3
+                        ? "red"
+                        : "gray"
                   },
                   on: {
                     click: () => {
-                       if(params.row.auditStatus==0||params.row.auditStatus==3){
-                        this.refuse(params.row.auditId,2)
+                      if (
+                        params.row.auditStatus == 0 ||
+                        params.row.auditStatus == 3
+                      ) {
+                        this.refuse(params.row.auditId, 2);
                       }
                     }
                   }
@@ -202,7 +217,7 @@ export default {
 
       dataCount: 0,
 
-      auditStatus:'',
+      auditStatus: "",
 
       Article: [
         { value: 10, label: 10 },
@@ -214,8 +229,9 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-      arr:'',
-      arrs:[]
+      arr: "",
+      arrs: [],
+      select:[],
     };
   },
 
@@ -227,7 +243,7 @@ export default {
   mounted() {
     this.getintegralExa();
   },
-    //事件监听
+  //事件监听
   watch: {
     size: "getintegralExa",
     sort: "getintegralExa"
@@ -236,7 +252,11 @@ export default {
     // 积分审核分页
     getintegralExa() {
       integralExa({
-        page: { page: this.page, size: this.size,sort: `createAt ${this.sort}` },
+        page: {
+          page: this.page,
+          size: this.size,
+          sort: `createAt ${this.sort}`
+        },
         sysType: this.sysType,
         userAccount: this.userAccount,
         modifyName: this.modifyName
@@ -251,38 +271,39 @@ export default {
 
     //积分管理--审核积分
     getIntegralaudit() {
-
       Integralaudit({
         auditIds: this.arr,
         sysType: this.sysType,
         auditStatus: this.auditStatus,
         operationUserId: this.$store.state.userId
       }).then(res => {
-        if(res.code==200){
+        if (res.code == 200) {
           this.$refs.selection.selectAll(false);
-           this.$Message.info("操作成功");
-           this.getintegralExa()
-        }else{
+          this.$Message.info("操作成功");
+          this.getintegralExa();
+        } else {
           this.$Message.info(res.msg);
         }
         console.log(res);
       });
     },
     //批量修改
-     batch(){
-      if(this.arrs.length==0){
-        this.$Message.error("请先选择")
+    batch() {
+      if (this.arrs.length == 0) {
+        this.$Message.error("请先选择");
+      } else if(this.select.length!=0){
+       this.$Message.error("暂无权限审批");
       }else{
-        this.modal1=true
+         this.modal1 = true;
       }
     },
-    cancel(){
-      this.modal1=false
+    cancel() {
+      this.modal1 = false;
     },
-    ok(){
-      this.arr=this.arrs
-      this.auditStatus=1
-      this.getIntegralaudit()
+    ok() {
+      this.arr = this.arrs;
+      this.auditStatus = 1;
+      this.getIntegralaudit();
     },
 
     //分页功能
@@ -290,33 +311,37 @@ export default {
       this.page = index;
       this.getintegralExa();
     },
+
     //选择内容
     handleSelectionChange(val) {
-      this.arrs = val.map(item => {
-        return item.auditId;
-      }).toString();
-
+      this.select=val
+      let a = val.filter(
+        item => item.auditStatus == 0
+      );
+      this.arrs=a.map(item=>{
+        return item.auditStatus
+      }).toString()
     },
     //拒绝和通过
-    refuse(id,e){
-      this.arr=id
-      this.auditStatus=e
-      this.getIntegralaudit()
+    refuse(id, e) {
+      this.arr = id;
+      this.auditStatus = e;
+      this.getIntegralaudit();
     },
 
     // 搜索
     query() {
-      this.page=1
+      this.page = 1;
       this.getintegralExa();
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-body{
-margin-bottom: 20px;
-    padding-left: 20px;
-    border-radius: 10px;
+.integral-body {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-radius: 10px;
   display: flex;
   height: 90px;
   background: #ffffff;
@@ -331,6 +356,4 @@ margin-bottom: 20px;
     margin-right: 30px;
   }
 }
-
-
 </style>
