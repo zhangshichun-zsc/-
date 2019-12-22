@@ -2,6 +2,8 @@
 <template>
   <div>
     <adress v-model='adr' @change='getMap'/>
+     <Modal v-model="rule" title="发布规则" width='50'>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <p class="content-head">
@@ -298,7 +300,7 @@
           <Row class-name="row20">
             <Radio v-model="single">
               我同意
-              <a>《活动发布规则》</a>
+              <a @click="showRule">《活动发布规则》</a>
             </Radio>
           </Row>
         </i-col>
@@ -331,6 +333,7 @@ export default {
           return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      rule: false,
       add:false,
       navigation1: {
           head: "志愿者活动发布(志愿者)"
@@ -341,7 +344,7 @@ export default {
       isDisb:false,
       feed: [{
         sysId: 2,
-        typeFlag: 1,
+        typeFlag: 0,
         targetType: 3,
         detailText: null,
         isMust: 2,
@@ -437,6 +440,9 @@ export default {
     console.log(111)
   },
   methods: {
+    showRule(){
+      this.rule = true
+    },
     getAdr(){
       if(this.isDisb)return
       this.adr = !this.adr

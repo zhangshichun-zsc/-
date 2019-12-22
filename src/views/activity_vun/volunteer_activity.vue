@@ -355,7 +355,7 @@ export default {
           width:200,
         },
         {
-          title: "是否上架",
+          title: "是否下架",
           key: "statue",
           align: "center",
           width:240,

@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "活动待处理(会员)"
+        head: "活动待处理(志愿者)"
       },
       info: "",
       status: false,

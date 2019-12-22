@@ -377,9 +377,6 @@ export default {
       })
     },
     querys(){
-        this.$router.push({
-          name: "personnel_details",
-        });
       this.roleId = this.query.roleId
       this.userName = this.query.userName
       this.enrollStatus = this.query.enrollStatus
