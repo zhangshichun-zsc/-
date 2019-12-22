@@ -71,7 +71,7 @@
         :data="data"
         @on-selection-change="tablechange"
       ></Table>
-      <div class="batch">
+      <!-- <div class="batch">
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
@@ -92,7 +92,28 @@
           :page-size="size"
           @on-change="changepages"
         />
-      </div>
+      </div> --> 
+      <Row class="row">
+        <Col span="8">
+          <Button @click="chackall()" style="border:0px;">
+            <Checkbox v-model="status">全选</Checkbox>
+          </Button>
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Button style="margin-left: 10px" @click="batches()">确定</Button>
+        </Col>
+        <Col span="8"><Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        /></Col>
+        <Col span="8"></Col>
+      </Row>
     </div>
   </div>
 </template>
@@ -520,5 +541,16 @@ export default {
 }
 .cnm{
   border-radius: 10px;
+}
+.row{
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.space{
+  margin-left: 10px
 }
 </style>

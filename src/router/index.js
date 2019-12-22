@@ -78,8 +78,6 @@ const router = new Router({
       }
       ]
     },
-
-
     {
       path: '/basic_data',
       name: 'basic_data',
