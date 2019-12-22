@@ -373,7 +373,6 @@ export default {
       batch: {
         userConfList: [],
         actResList: [],
-        actShowPic: "",
         workerIdList: [{}]
       },
       batchItemList: [],
@@ -402,9 +401,17 @@ export default {
   computed: {},
 
   created() {
+    console.log(this.$route.query)
     this.userId = this.$store.state.userId;
     this.getBatchItem();
-    this.getProjectDetail();
+    if(this.$route.query.dicId){
+      console.log(this.batch)
+      this.batch.actTypeName = this.$route.query.name
+      this.batch.actTypeId = this.$route.query.dicId
+      this.getTemplate();
+    }else if(this.$route.query.id){
+      this.getProjectDetail();
+    }
   },
 
   mounted() {
@@ -630,7 +637,7 @@ export default {
     addRoles() {
       let r = {
         fdList: [{ name: "反馈简介", type: 0 }],
-        refund: {},
+        actRefund: {},
         signRuleList: [],
         itemList: [],
         choiceRuleList: []
