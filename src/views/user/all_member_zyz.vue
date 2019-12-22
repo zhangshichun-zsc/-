@@ -982,6 +982,7 @@ export default {
 
     //查询
     result() {
+      this.page = 1
       this.getUserPage()
     },
     // 关闭 二维码
