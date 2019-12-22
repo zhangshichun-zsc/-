@@ -255,7 +255,7 @@
               <li>
                 <p
                   v-for="(item, i) in batch.userConfList"
-                  class="li-flex-aroundi lx-resource"
+                  class="li-flex-around lx-resource"
                   :key="i"
                 >
                   <span>{{ item.roleName }}</span>
