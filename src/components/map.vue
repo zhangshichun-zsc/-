@@ -7,8 +7,8 @@
           </iframe>
        </div>
       <div slot="footer">
-        <Button type="error" size="large"   @click="ok()">确定</Button>
-        <Button type="error" size="large"  @click="cancel()">删除</Button>
+        <Button type="success" size="large"   @click="ok()">确定</Button>
+        <Button size="large"  @click="cancel()">关闭</Button>
       </div>
   </Modal>
 </template>
