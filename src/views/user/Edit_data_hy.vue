@@ -362,7 +362,7 @@
                 >
                   <Option
                     v-for="item in parameOBJ.memInfo.clothingSize"
-                    :value="item.dicId"
+                    :value="item.dicId+''"
                     :key="item.dicId"
                     >{{ item.dicName }}</Option
                   >
@@ -620,7 +620,7 @@
                   </Radio>
                 </RadioGroup>
               </FormItem>
-              <FormItem label="年收入范围">
+              <!-- <FormItem label="年收入范围">
                 <Select
                   v-model="parameOBJ.memInfo.vipotherInfo.annualIncome"
                   style="width:180px"
@@ -633,7 +633,7 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-              </FormItem>
+              </FormItem> -->
               <FormItem label="所在家长小组" v-show="userInfo.orgName">
                 <p>{{ parameOBJ.memInfo.userInfo.orgName }}</p>
               </FormItem>
@@ -1273,14 +1273,13 @@ export default {
           this.insuranceType = this.splitArr(data.insuranceType);
           this.interestType = this.splitArr(data.interestType);
           this.specialType = this.splitArr(data.specialType);
-
-
-
-          console.log(res.data.volInfo.info.voluSpeciality);
-          
           this.voluSpeciality = this.splitArr(res.data.volInfo.info.voluSpeciality)
-          // this.speciality = this.splitArr(res.data.volInfo.info.speciality)
-          // this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
+          this.speciality = this.splitArr(res.data.volInfo.info.speciality)
+          this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
+          this.rehabilitationType = this.splitArr(res.data.memInfo.vipotherInfo.rehabilitationType)
+          this.clothingSize = res.data.memInfo.userInfo.clothingSize
+
+          
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
@@ -1333,7 +1332,8 @@ export default {
         },
         memInfo: {
           // 会员信息
-          annualIncome: _memInfo.annualIncome,
+          // annualIncome: _memInfo.annualIncome,
+          annualIncome: '',
           msgOtherSendType: _memInfo.msgOtherSendType,
           msgSendType: this.msgSendType.toString(),
           hopeOtherOrg: _memInfo.hopeOtherOrg,
