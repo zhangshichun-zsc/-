@@ -658,6 +658,7 @@ export default {
   padding: 20px 50px;
   border-radius: 20px;
   background: #fff;
+  font-size: 18px;
   .row{
     margin-bottom: 20px;
     .row10{
