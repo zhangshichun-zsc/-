@@ -35,7 +35,7 @@
       <div class="table-header flex-between">
         <div>
            <Button class="table-btns" @click="set" >积分规则设置</Button>
-          <Button class="table-btns" @click="sets" >积分审核</Button>
+          <Button class="table-btns" @click="sets" v-if="power==1">积分审核</Button>
         </div>
 
         <div>
@@ -104,7 +104,7 @@
 
 <script>
 
-import { integralpage, integralmodify } from "../../request/api";
+import { integralpage, integralmodify,approvalAuditScorePower } from "../../request/api";
 export default {
   data() {
     return {
@@ -260,7 +260,9 @@ export default {
       operationUserId: 8,
       userIds: "",
       Retract: true,
-      num: ""
+      num: "",
+      sysId:'1,3',
+      power:''
     };
   },
 
@@ -269,6 +271,7 @@ export default {
   computed: {},
   mounted() {
     this.getintegralpage();
+    this.getapprovalAuditScorePower()
   },
 
 
@@ -299,8 +302,18 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
       });
+    },
+
+    //审核权限
+    getapprovalAuditScorePower(){
+      approvalAuditScorePower({
+        userId:this.$store.state.userId,
+        sysId:this.sysId,
+      }).then(res=>{
+        this.power=res.data.power
+        console.log(res)
+      })
     },
 
     //修改积分
@@ -368,6 +381,7 @@ export default {
 
     //搜索结果
     query() {
+      this.page=1
       this.getintegralpage();
     },
 
@@ -375,18 +389,9 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          // if (this.formItem.addType == 1 && this.formItem.addScore1 !=null) {
-          //   this.num = this.formItem.addScore1;
-          //   this.getintegralmodify();
-          // } else if (
-          //   this.formItem.addType == 2 &&
-          //   this.formItem.addScore2 != null
-          // ) {
-          //   this.num = this.formItem.addScore2;
+
           this.getintegralmodify();
-          // } else {
-          //   this.$Message.error("数值不能为空");
-          // }
+
         } else {
           this.$Message.error("必填项未填");
         }
@@ -397,21 +402,21 @@ export default {
       this.modal1 = false;
     },
 
-    //模态框
-    modalOk2(name) {
-      console.log(11);
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          this.modal2 = false;
-          this.$Message.success("修改成功");
-        } else {
-          this.$Message.error("必填项未填");
-        }
-      });
-    },
-    modalCancel2() {
-      this.modal2 = false;
-    },
+    // //模态框
+    // modalOk2(name) {
+    //   console.log(11);
+    //   this.$refs[name].validate(valid => {
+    //     if (valid) {
+    //       this.modal2 = false;
+    //       this.$Message.success("修改成功");
+    //     } else {
+    //       this.$Message.error("必填项未填");
+    //     }
+    //   });
+    // },
+    // modalCancel2() {
+    //   this.modal2 = false;
+    // },
 
     set(){
       this.$router.push({

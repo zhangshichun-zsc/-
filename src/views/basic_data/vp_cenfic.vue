@@ -41,31 +41,36 @@
            <Button @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
-           <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
-             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
-                 <FormItem label="组织" prop="orgId">
-                     <Select v-model="params.orgId">
-                         <Option :value="item.orgId" v-for='(item,index) in volun' :key="index">{{ item.orgName }}</Option>
-                     </Select>
-                 </FormItem>
-                 <FormItem label="模板名称" prop="title">
-                     <Input v-model="params.title"></Input>
-                 </FormItem>
-                 <FormItem label="生效日期" prop="effectiveAt">
-                    <Date-picker
-                    placement="bottom-end"
-                    placeholder="选择日期"
-                    style="width: 200px"
-                    type="datetime"
-                    v-model="params.effectiveAt"
-                    @on-change='changeDate'
-                    :options="options"
-                  ></Date-picker>
-                 </FormItem>
-              </Form>
-               <div slot="footer">
-                 <Button type="error" size="large" @click="success">确定</Button>
-               </div>
+          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel" class-name="vertical-center-modal">
+            <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
+              <FormItem label="组织:" prop="orgId">
+                <Select v-model="params.orgId">
+                  <Option
+                    :value="item.orgId"
+                    v-for="(item,index) in volun"
+                    :key="index"
+                  >{{ item.orgName }}</Option>
+                </Select>
+              </FormItem>
+              <FormItem label="模板名称:" prop="title">
+                <Input v-model.trim="params.title" />
+              </FormItem>
+              <FormItem label="生效日期:" prop="effectiveAt">
+                <Date-picker
+                  placement="bottom-end"
+                  placeholder="选择日期:"
+                  style="width: 200px"
+                  type="datetime"
+                  v-model="params.effectiveAt"
+                  @on-change="changeDate"
+                  :options="options"
+                ></Date-picker>
+              </FormItem>
+            </Form>
+            <div slot="footer">
+               <Button  size="large" @click="quxiao">取消</Button>
+              <Button type="error" size="large" @click="success">确定</Button>
+            </div>
           </Modal>
         </div>
       </div>
@@ -117,18 +122,20 @@ export default {
             { required: true, message: '有效日期不能为空', trigger: 'blur' }
             ],
       },
-      params:{
-        orgId:'',
-        title:'',
-        effectiveAt:'',
-        orgType:1,
-        sysId:1
+      params: {
+        orgId: "",
+        title: "",
+        effectiveAt: "",
+       orgType: 3,
+        sysId: 1,
       },
       modal1: false,
       columns: [
         {
           title: "组织",
-          key: "orgName"
+          key: "orgName",
+          width: 600,
+          align: "center"
         },
         {
           title: "证书名称",
@@ -229,9 +236,26 @@ export default {
         }
       })
     },
-    query(){
-      this.page = 1
-      this.getList(this.args)
+    query() {
+
+      if (this.args.startAt && this.args.endAt) {
+        if (this.args.startAt <= this.args.endAt) {
+          this.args.startAt = this.args.startAt.split('')[0] + " 00:00:00";
+          this.args.endAt = this.args.endAt.split('')[0] + " 23:59:59";
+           this.page = 1;
+      this.getList(this.args);
+
+        } else {
+           this.args.startAt=''
+          this.args.endAt=''
+          this.$Message.error('时间选择错误请重新选择')
+        }
+
+      }else{
+         this.page = 1;
+      this.getList(this.args);
+      }
+
     },
     successOk(){
       if(!this.args.startAt&&!this.args.endAt){

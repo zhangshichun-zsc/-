@@ -15,7 +15,9 @@
             </Select>
             </div>
       </div>
+      <div style="padding:0 10px;background:white">
        <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+       </div>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -43,58 +45,52 @@ export default {
        },
       columns: [
         {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "用户账号",
           key: "userAccount",
           align: "center",
           width:140,
-
         },
         {
           title: "用户昵称",
           key: "nickname",
          align: "center",
-         width:200
+         width:300
         },
         {
           title: "用户分类",
           key: "userTypeText",
-          width:260,
+          width:300,
          align: "center"
         },
         {
           title: "邀请好友",
           key: "inviteUserNum",
           align: "center",
-          width:160,
+          width:200,
         },
         {
           title: "成功参与活动好友",
           key: "actJoinedNum",
-          width:160,
+          width:180,
           align: "center"
         },
         {
           title: "成功邀请团队注册",
           key: "inviteOrgNum",
-          width:160,
+          width:180,
           align: "center"
         },
         {
           title: "积分奖励",
           key: "sumScore",
-          width:160,
+          width:200,
           align: "center"
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:180,
+          width:200,
           render: (h, params) => {
             return h("div", [
               h(
@@ -225,7 +221,6 @@ this.getInvitationList()
 }
 .integral-table{
   border-radius: 10px;
-  padding: 0 10px;
 }
 .integral-table .pages {
   padding: 20px;

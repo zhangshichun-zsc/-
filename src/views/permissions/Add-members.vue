@@ -17,7 +17,7 @@
             :rules="
               this.$route.query.states == 2 ? ruleValidate : ruleValidate_two
             "
-            :label-width="100"
+            :label-width="130"
           >
             <FormItem label="成员名称:" prop="userName">
               <Input

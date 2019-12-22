@@ -215,7 +215,7 @@ export default {
               "a",
               {
                 style: {
-                  color: "#000"
+                  color: "#FD585E"
                 },
                 on: {
                   click: () => {
@@ -237,7 +237,7 @@ export default {
           title: "成员数量",
           key: "sum",
           align: "center",
-          width: 100
+          width: 140
         },
         {
           title: "负责人",
@@ -248,7 +248,7 @@ export default {
           title: "是否启用",
           key: "status",
           align: "center",
-          width: 110,
+          width: 140,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -268,7 +268,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width: 80,
+          width: 100,
           render: (h, params) => {
             return h(
               "div",

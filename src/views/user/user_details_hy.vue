@@ -51,7 +51,7 @@
               <th>性别</th>
               <td>{{ basicInfo.sex }}</td>
               <th>活动关注型</th>
-              <td>{{ basicInfo.role }}</td>
+              <td>{{ basicInfo.collectDicType }}</td>
             </tr>
             <tr>
               <th>生日</th>

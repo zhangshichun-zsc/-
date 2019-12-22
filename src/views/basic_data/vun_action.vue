@@ -10,7 +10,7 @@
           <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicName">
-                <Input v-model="formValidate.dicName" />
+                <Input v-model.trim="formValidate.dicName" />
               </FormItem>
             </Form>
             <div slot="footer">
@@ -92,6 +92,7 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
+                  // trueValue:params.row.validFlag == 1
                   value: params.row.validFlag == 1
                 },
                 on: {
@@ -259,11 +260,13 @@ export default {
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
-          this.getBasicsearch();
+
           this.modal1 = false;
           if (e == 0) {
+             this.getBasicsearch();
             this.$Message.info("添加成功");
           } else if (e == 1) {
+             this.getBasicsearch();
             this.$Message.info("编辑成功");
           } else if (e == 2) {
             this.$Message.info("操作成功");

@@ -151,7 +151,8 @@ export default {
 
       url: '',
       modal1: false,
-      imgs: null
+      imgs: null,
+      informationId:this.$route.query.informationId,
     }
   },
    components: {  wangeditor},
@@ -185,7 +186,7 @@ export default {
 
 
       AddressDetails({
-        informationId: this.$route.query.informationId
+        informationId: this.informationId
       }).then(res => {
         console.log(res);
         if(res.code==200){
@@ -204,7 +205,7 @@ export default {
     //质询编辑
     getAddressbatch(){
       Addressbatch({
-         informationId:this.$route.query.informationId,
+         informationId:this.informationId,
           userId: this.$store.state.userId,
          title: this.ContentData.title,
         showLocation: this.ContentData.showLocation,
@@ -292,7 +293,7 @@ export default {
           } else if (this.editorContent == '') {
             this.$Message.error('专题正文未填')
           } else {
-            if(this.$route.query.informationId){
+            if(this.informationId!=null){
               this.getAddressbatch()
             }else{
                this.getinquiryRel()
@@ -306,7 +307,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$route.query.informationId){
+    if(this.informationId!=null){
       this.getAddressDetails()
     }
 

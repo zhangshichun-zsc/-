@@ -14,7 +14,7 @@
           <Modal v-model="modal1" title="新增会费" class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称:" prop="name">
-                <Input v-model="formValidate.name" style="width: 220px"/>
+                <Input v-model.trim="formValidate.name" style="width: 220px"/>
               </FormItem>
               <FormItem label="金额:" prop="amount">
                 <InputNumber :min="0" v-model="formValidate.amount"  style="width: 220px"></InputNumber>
@@ -296,7 +296,7 @@ export default {
           size: this.size
         },
         name: this.name,
-        validFlag: this.validFlag,
+        validFlag: this.statues,
         startAt: this.startAt,
         endAt: this.endAt
       };
@@ -406,6 +406,7 @@ export default {
 
     //查询
     query(e) {
+      console.log(e)
       this.page = 1;
        this.statues = e.validFlag;
       this.name = e.dicName;

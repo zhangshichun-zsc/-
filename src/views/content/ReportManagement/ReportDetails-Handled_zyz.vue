@@ -12,34 +12,34 @@
         <table width="100%;">
           <tr>
             <td class="zt">举报理由</td>
-            <td class="zt">{{ReportData.reportDetail.reportReasonText}}</td>
+            <td class="zt">{{ReportData.reportReasonText}}</td>
           </tr>
           <tr>
             <td class="zt">举报人</td>
-            <td class="zt">{{ReportData.reportDetail.reportUserName}}</td>
+            <td class="zt">{{ReportData.reportUserName}}</td>
           </tr>
           <tr>
             <td class="zt">举报时间</td>
-            <td class="zt">{{ReportData.reportDetail.reportTimestamp}}</td>
+            <td class="zt">{{ReportData.reportTimestamp}}</td>
           </tr>
           <tr>
             <td class="zt">举报对象</td>
-            <td class="zt">{{ReportData.reportDetail.activityName}}</td>
+            <td class="zt">{{ReportData.activityName}}</td>
           </tr>
           <tr>
             <td class="zt">举报状态</td>
-            <td class="zt">{{ReportData.reportDetail.reportStatusText}}</td>
+            <td class="zt">{{ReportData.reportStatusText}}</td>
           </tr>
           <tr>
             <td class="zt">举报内容</td>
-            <td class="zt">{{ReportData.reportDetail.reportContent}}</td>
+            <td class="zt">{{ReportData.reportContent}}</td>
           </tr>
           <tr>
             <td class="zt" style="position:relative">
               <div style="position:absolute;right:27px;">举报图片</div>
             </td>
             <td class="tp">
-              <img class="oneTp" v-for='item in ReportData.picList' :src="item.picPath"></img>
+              <img class="oneTp" v-for='(item,index) in picList' :key="index" :src="item.picPath"></img>
             </td>
           </tr>
         </table>
@@ -47,20 +47,20 @@
         <table width="100%;">
           <tr>
             <td class="zt">处理人员</td>
-            <td class="zt">{{ ReportData.reportDetail.answerUserName }}</td>
+            <td class="zt">{{ ReportData.answerUserName }}</td>
           </tr>
           <tr>
             <td class="zt">处理时间</td>
-            <td class="zt">{{ ReportData.reportDetail.answerTimestamp }}</td>
+            <td class="zt">{{ ReportData.answerTimestamp }}</td>
           </tr>
           <tr>
             <td class="zt">处理结果</td>
-            <td class="zt">{{ ReportData.reportDetail.reportDealResultText }}</td>
+            <td class="zt">{{ ReportData.reportDealResultText }}</td>
           </tr>
           <tr>
             <td class="zt">处理备注</td>
             <td class="zt">
-              {{ ReportData.reportDetail.answerContent ? ReportData.reportDetail.answerContent : "" }}
+              {{ ReportData.answerContent}}
             </td>
           </tr>
         </table>
@@ -79,24 +79,28 @@ export default {
         head: "举报详情-已处理(会员)"
       },
 
-      ReportData: {}
+      ReportData: {},
+        reportId: this.$route.query.reportId,
+        picList:[]
     };
   },
-  mounted() {
+  created() {
     this.getReportDel();
   },
+
   methods: {
     // 详情
     getReportDel() {
       ReportDel({
-        reportId: this.$route.query.reportId
+        reportId: this.reportId
       }).then(res => {
         if (res.code == 200) {
-          this.ReportData = res.data;
-          this.ReportData.reportDetail.reportTimestamp = formatDate(
-            res.data.reportDetail.reportTimestamp
+          this.ReportData = res.data.reportDetail;
+          this.picList=res.data.picList
+          this.ReportData.reportTimestamp = formatDate(
+           res.data.reportDetail.reportTimestamp
           );
-          this.ReportData.reportDetail.answerTimestamp = formatDate(
+          this.ReportData.answerTimestamp = formatDate(
             res.data.reportDetail.answerTimestamp
           );
         }

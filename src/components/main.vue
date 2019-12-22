@@ -437,7 +437,13 @@ export default {
     if (to.name === from.name) return;
     let toName = to.name;
     // 三级菜单 白名单
-    let whiteList = ["login", "profile", "user_details_hy"];
+    let whiteList = [
+      "login",
+      "profile",
+      "user_details_hy",
+      "grouplisthy",
+      "detailshy"
+    ];
 
     // 总菜单
     let menuList = this.$store.state.menuList;
