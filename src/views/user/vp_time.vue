@@ -200,12 +200,24 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#FF565A"
+                    color:
+                      params.row.status == "审核通过" ||
+                      params.row.status == "审核不通过"
+                        ? "#ccc"
+                        : "#FF565A"
                   },
                   on: {
                     click: () => {
+                      if (
+                        params.row.status == "审核通过" ||
+                        params.row.status == "审核不通过"
+                      ) {
+                        return false;
+                      } else {
+                        this.examine("1", params.row.auditId);
+                      }
+
                       // this.$router.push({ name: 'integral_detail' })
-                      this.examine("1", params.row.auditId);
                     }
                   }
                 },
@@ -217,11 +229,22 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "#FF565A"
+                    color:
+                      params.row.status == "审核通过" ||
+                      params.row.status == "审核不通过"
+                        ? "#ccc"
+                        : "#FF565A"
                   },
                   on: {
                     click: () => {
-                      this.refuse(params.row.auditId);
+                      if (
+                        params.row.status == "审核通过" ||
+                        params.row.status == "审核不通过"
+                      ) {
+                        return false;
+                      } else {
+                        this.refuse(params.row.auditId);
+                      }
                     }
                   }
                 },
