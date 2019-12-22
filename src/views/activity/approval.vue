@@ -90,7 +90,7 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
-                    <span v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()">X</span>
+                    <Icon type="ios-trash" v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -174,7 +174,7 @@
                   </div>
                   <div class="first-picfm" v-else>
                     <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
-                    <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
+                    <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -189,7 +189,7 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
-                    <span v-if='batch.actShowPic' class="cancel" @click="cancelActImg()">X</span>
+                    <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -411,7 +411,7 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
-                    <span v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()">X</span>
+                    <Icon type="ios-trash" v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -1214,8 +1214,8 @@ export default {
 }
 .cancel{
   position: absolute;
-  top: -82px;
-  right: 8px;
+  top: 0;
+  right: -30px;
 }
 .par-col{
   display: flex;

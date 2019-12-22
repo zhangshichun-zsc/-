@@ -317,12 +317,7 @@
               </table>
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
-              <div class="first-span">常用限制项</div>
-            </li>
-            <li class="lx-flex-around" style="padding:8px 0">
-              <div v-for="item in signLimitsList">
-                <Button @click.native="getLimits(item)">{{item.name}}</Button>
-              </div>
+              <Button @click="addxzx">添加限制项</Button>
             </li>
             <li class="first-li">
               <span>报名项设置</span>
@@ -375,20 +370,7 @@
               </div>
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
-              <div class="first-span">常用报名项</div>
-            </li>
-            <li class="lx-flex-around" style="padding:8px 0">
-              <div v-for="item in signItemList">
-                <Button @click.native="getSign(item)">{{item.name}}</Button>
-              </div>
-            </li>
-            <li class="lx-flex-center" style="padding:8px 0">
-              <div class="first-span">自定义报名项</div>
-            </li>
-            <li class="lx-flex-around" style="padding:8px 0">
-              <div v-for="item in signList">
-                <Button @click.native="addSign(item)">{{item.itemName}}</Button>
-              </div>
+              <Button @click="addbmx">添加报名项</Button>
             </li>
             <li class="first-li">
               <span>优先设置</span>
@@ -409,12 +391,7 @@
               </table>
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
-              <div class="first-span">优先规则</div>
-            </li>
-            <li class="lx-flex-around" style="padding:8px 0">
-              <div v-for="item in firstItemList">
-                <Button @click.native="getFirst(item)">{{item.name}}</Button>
-              </div>
+              <Button @click="addyx">添加优先规则</Button>
             </li>
           </ul>
         </Col>
@@ -436,7 +413,7 @@
             </li>
             <li v-if="oneRole.isFeedback === 1">
               <div v-for="(item,index) in oneRole.fdList" :key="index" class="role-table">
-                <div class="role-tr" v-if=" item.type ==0 ">
+                <div class="role-tr" v-if=" item.type ==0 " style="width:90%">
                   <div>反馈简介</div>
                   <Input
                     placeholder="请输入反馈简介"
@@ -447,16 +424,16 @@
                     :disabled="isDisb"
                   />
                 </div>
-                <div class="role-tr" v-else-if="item.type == 9 ">
+                <div class="role-tr" v-else-if="item.type == 9 " style="width:90%">
                   <span class="first-span">上传图片</span>
                   <i-switch v-model="item.context" :true-value="1" :false-value="2" />
                 </div>
-                <div class="role-tr" v-else-if=" item.type === 1 ">
+                <div class="role-tr" v-else-if=" item.type === 1 " style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="role-tr" v-else-if=" item.type === 6 ">
+                <div class="role-tr" v-else-if=" item.type === 6 " style="width:90%">
                   <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
@@ -492,16 +469,65 @@
               </div>
             </li>
             <li class="lx-flex-center" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
-              <div class="first-span">新增反馈项</div>
-            </li>
-            <li class="lx-flex-around" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
-              <div v-for="(item,index) in feedList">
-                <Button @click.native="addItem(item)">{{item.name}}</Button>
-              </div>
+              <Button @click="addfk">新增反馈项</Button>
             </li>
           </ul>
         </Col>
       </Row>
+
+      <Modal v-model="xzx">
+        <ul>
+          <li class="lx-flex-center" style="padding:8px 0">
+            <div class="first-span">常用限制项</div>
+          </li>
+          <li class="lx-flex-around" style="padding:8px 0">
+            <div v-for="item in signLimitsList">
+              <Button @click.native="getLimits(item)">{{item.name}}</Button>
+            </div>
+          </li>
+        </ul>
+      </Modal>
+      <Modal v-model="bmx">
+        <ul>
+          <li class="lx-flex-center" style="padding:8px 0">
+            <div class="first-span">常用报名项</div>
+          </li>
+          <li class="lx-flex-around" style="padding:8px 0">
+            <div v-for="item in signItemList">
+              <Button @click.native="getSign(item)">{{item.name}}</Button>
+            </div>
+          </li>
+          <li class="lx-flex-center" style="padding:8px 0">
+            <div class="first-span">自定义报名项</div>
+          </li>
+          <li class="lx-flex-around" style="padding:8px 0">
+            <div v-for="item in signList">
+              <Button @click.native="addSign(item)">{{item.itemName}}</Button>
+            </div>
+          </li>
+        </ul>
+      </Modal>
+      <Modal v-model="yx">
+        <ul>
+          <li class="lx-flex-center" style="padding:8px 0">
+            <div class="first-span">优先规则</div>
+          </li>
+          <li class="lx-flex-around" style="padding:8px 0">
+            <div v-for="item in firstItemList">
+              <Button @click.native="getFirst(item)">{{item.name}}</Button>
+            </div>
+          </li>
+        </ul>
+      </Modal>
+      <Modal v-model="fk">
+        <ul>
+          <li class="lx-flex-around" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
+            <div v-for="(item,index) in feedList">
+              <Button @click.native="addItem(item)">{{item.name}}</Button>
+            </div>
+          </li>
+        </ul>
+      </Modal>
 
       <div class="role-row" style="margin-top:80px">
         <div class="lx-flex-around" style="width:40%">
@@ -571,7 +597,11 @@ export default {
       signItemList:[],
       firstItemList:[],
       age1:'',
-      age2:''
+      age2:'',
+      bmx:false,
+      xzx:false,
+      yx:false,
+      fk:false
     };
   },
   mounted() {
@@ -702,6 +732,7 @@ export default {
     },
     addItem(e){
       this.oneRole.fdList.push(e)
+      this.fk = false
     },
     deleItem(e,ei){
       if(ei>=0){
@@ -777,6 +808,7 @@ export default {
         m.ruleId = e.ruleId
         this.oneRole.signRuleList[this.oneRole.signRuleList.length] = m
         console.log(this.oneRole.signRuleList)
+        this.xzx = false
       }else{
         this.$Message.warning("已有该限制项，请勿重复添加")
       }
@@ -835,6 +867,7 @@ export default {
         m.type = e.typeFlag
         n.push(m)
         this.oneRole.itemList = n
+        this.bmx = false
       } else {
         this.$Message.warning('已有该设置项，请勿重复添加')
       }
@@ -855,6 +888,7 @@ export default {
     },
     addSign(e){
       this.oneRole.itemList.push(e)
+      this.bmx = false
     },
     addItemIput(e){
       if(this.oneRole.itemList[e].answer.length<6){
@@ -881,6 +915,7 @@ export default {
           m.ruleId = e.ruleId
           m.firstName = e.name
           n.push(m)
+          this.yx = false
         } else {
           this.$Message.warning("已有该设置项，请勿重复添加")
         }
@@ -938,6 +973,18 @@ export default {
         this.$Message.success('删除成功')
       })
     },
+    addbmx(){
+      this.bmx = true
+    },
+    addxzx(){
+      this.xzx = true
+    },
+    addyx(){
+      this.yx = true
+    },
+    addfk(){
+      this.fk = true
+    }
   }
 };
 </script>
