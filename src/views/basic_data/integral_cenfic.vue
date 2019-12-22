@@ -239,7 +239,7 @@ export default {
         if (res.code == 200) {
           this.$set(this.params.page, "page", 1);
           this.modal1 = false;
-          this.getList();
+          // this.getList();
           this.$Message.success("修改成功");
           this.cancel();
         } else {

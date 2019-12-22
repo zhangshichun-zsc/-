@@ -184,7 +184,8 @@ export default {
       texturl: null,
 
       params: "",
-      Times: ""
+      Times: "",
+      agreementId:this.$route.query.agreementId,
     };
   },
 
@@ -192,9 +193,10 @@ export default {
 
   computed: {},
   mounted() {
+
     this.getAgreementNewList();
     this.getAgreementList();
-    if (this.$route.query.agreementId) {
+    if (this.agreementId!=null) {
       this.navigation1.head = "编辑协议";
       this.getAgreementdet();
     }
@@ -210,7 +212,7 @@ export default {
           if (this.formInline.agPicA == null) {
             this.$Message.error("请上传附件");
           } else {
-            if (this.$route.query.agreementId) {
+            if (this.agreementId!=null) {
               this.getAgreementmodify();
             } else {
               this.getAgreementadd();
@@ -283,12 +285,12 @@ export default {
     //详情接口
     getAgreementdet() {
       Agreementdet({
-        agreementId: this.$route.query.agreementId
+        agreementId: this.agreementId
       }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.formInline = res.data;
-          this.formInline.agTime = date1("Y-m-d", res.data.agreementTimestamp);
+          this.formInline.agTime = this.util.formatDate(res.data.agreementTimestamp);
         }
       });
     },
