@@ -75,17 +75,18 @@ export default {
 
   methods: {
     train(id, name, ble) {
-     if(ble== 0&& this.from == 'editing'){
-      this.$router.push({
-        name: this.from,
-        query: { dicId:id,name}
-      })
-     }else{
-      this.$router.push({
-        name: this.from,
-        query: { id, name, ble }
-      });
-     }
+      this.modal1 = false
+      if(ble== 0&& this.from == 'editing'){
+        this.$router.push({
+          name: this.from,
+          query: { dicId:id,name}
+        })
+      }else{
+        this.$router.push({
+          name: this.from,
+          query: { id, name, ble }
+        });
+      }
     },
     more() {
       if (this.show === false) {
