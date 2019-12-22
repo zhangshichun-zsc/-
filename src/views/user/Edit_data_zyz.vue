@@ -295,13 +295,13 @@
     </div>
     <!-- 弹窗 -->
     <Modal
-      title="收益方详情"
+      title="受益方详情"
       v-model="showBenefitModelFlag"
       :mask-closable="false"
       width="1000"
     >
       <p slot="header" class="modelheader">
-        <span>收益方详情</span>
+        <span>受益方详情</span>
         <span style="text-align:right; margin-right: 30px">
           <a href="javascript:;" @click="showUserInfo">
             显示/隐藏空值
