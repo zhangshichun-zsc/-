@@ -1296,7 +1296,7 @@ export default {
           this.specialType = this.splitArr(data.specialType);
           this.actTypeLike= this.splitArr(res.data.volInfo.info.actTypeLike);
           this.speciality= this.splitArr(res.data.volInfo.info.speciality);
-           this.voluSpeciality= this.splitArr(res.data.volInfo.info.voluSpeciality);
+          this.voluSpeciality= this.splitArr(res.data.volInfo.info.voluSpeciality);
 
           // end
 
@@ -1413,6 +1413,7 @@ voluSpeciality
       });
     },
     splitArr(str) {
+      if(!str) return []
       return str.split(",").filter(function(el) {
         return el != "";
       });

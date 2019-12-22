@@ -1273,9 +1273,14 @@ export default {
           this.insuranceType = this.splitArr(data.insuranceType);
           this.interestType = this.splitArr(data.interestType);
           this.specialType = this.splitArr(data.specialType);
+
+
+
+          console.log(res.data.volInfo.info.voluSpeciality);
+          
           this.voluSpeciality = this.splitArr(res.data.volInfo.info.voluSpeciality)
-          this.speciality = this.splitArr(res.data.volInfo.info.speciality)
-          this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
+          // this.speciality = this.splitArr(res.data.volInfo.info.speciality)
+          // this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
@@ -1385,6 +1390,7 @@ export default {
       });
     },
     splitArr(str) {
+      if(!str) return []
       return str.split(",").filter(function(el) {
         return el != "";
       });
