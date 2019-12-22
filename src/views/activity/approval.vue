@@ -207,7 +207,7 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动开始时间"
-                      style="width: 140px"
+                      style="width: 200px"
                       :editable="false"
                       @on-change="getBatchStartDate"
                     ></Date-picker>
@@ -220,7 +220,7 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动结束时间"
-                      style="width: 140px"
+                      style="width: 200px"
                       :editable="false"
                       @on-change="getBatchEndDate"
                     ></Date-picker>
@@ -249,7 +249,7 @@
                 <span class="first-span">联系方式</span>
                 <Input v-model="batch.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
               </li>
-              <li v-if='addLeader'>
+              <li v-if='addLeader' class="padd">
                 <Select style="width:300px" placeholder="请选择现场联系人">
                   <Option
                     v-for="(item,idx) in leaderList"
@@ -270,7 +270,7 @@
                 <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
                 <span @click="deleteWorker(index)">删除</span>
               </li>
-              <li v-if='addWorker'>
+              <li v-if='addWorker' class="padd">
                 <Select style="width:300px" placeholder="请选择工作人员">
                   <Option
                     v-for="(i,idx) in workerList"
@@ -1175,6 +1175,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.padd{
+  padding-left: 100px;
+}
 .lx-content {
   background-color: #fff;
 }
@@ -1185,9 +1188,12 @@ export default {
   display: flex;
   align-items: center;
   padding: 8px 0;
+  .ivu-radio-wrapper{
+    font-size: 16px !important;
+  }
 }
 .first-span{
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .wave{
   display: flex;
@@ -1201,7 +1207,7 @@ export default {
   height: 200px;
   text-align: center;
   line-height: 200px;
-  border: 1px solid;
+  border: 1px solid #FF565A;
   position: relative;
 }
 .first-picfm{
@@ -1209,7 +1215,7 @@ export default {
   height: 200px;
   text-align: center;
   line-height: 200px;
-  border: 1px solid;
+  border: 1px solid #FF565A;
   position: relative;
 }
 .cancel{

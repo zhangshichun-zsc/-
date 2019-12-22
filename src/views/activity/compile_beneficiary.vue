@@ -133,7 +133,7 @@
             </li>
             <li class="first-li">
               <span class="first-span">集合地址</span>
-              <span @click="getAdr()">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</span>
+              <Button @click="getAdr()">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</Button>
             </li>
             <li class="first-li">
               <span class="first-span">模式</span>
@@ -482,7 +482,7 @@
           </li>
           <li class="lx-flex-around" style="padding:8px 0">
             <div v-for="item in signLimitsList">
-              <Button @click.native="getLimits(item)">{{item.name}}</Button>
+              <Button @click.native="getLimits(item)" class="btn">{{item.name}}</Button>
             </div>
           </li>
         </ul>
@@ -494,7 +494,7 @@
           </li>
           <li class="lx-flex-around" style="padding:8px 0">
             <div v-for="item in signItemList">
-              <Button @click.native="getSign(item)">{{item.name}}</Button>
+              <Button @click.native="getSign(item)" class="btn">{{item.name}}</Button>
             </div>
           </li>
           <li class="lx-flex-center" style="padding:8px 0">
@@ -502,7 +502,7 @@
           </li>
           <li class="lx-flex-around" style="padding:8px 0">
             <div v-for="item in signList">
-              <Button @click.native="addSign(item)">{{item.itemName}}</Button>
+              <Button @click.native="addSign(item)" class="btn">{{item.itemName}}</Button>
             </div>
           </li>
         </ul>
@@ -514,7 +514,7 @@
           </li>
           <li class="lx-flex-around" style="padding:8px 0">
             <div v-for="item in firstItemList">
-              <Button @click.native="getFirst(item)">{{item.name}}</Button>
+              <Button @click.native="getFirst(item)" class="btn">{{item.name}}</Button>
             </div>
           </li>
         </ul>
@@ -523,7 +523,7 @@
         <ul>
           <li class="lx-flex-around" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
             <div v-for="(item,index) in feedList">
-              <Button @click.native="addItem(item)">{{item.name}}</Button>
+              <Button @click.native="addItem(item)" class="btn">{{item.name}}</Button>
             </div>
           </li>
         </ul>
@@ -989,6 +989,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.btn{
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+}
 .compole {
   .compole-head {
     height: 50px;
@@ -1013,6 +1017,9 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 8px 0;
+  .ivu-radio-wrapper{
+    font-size: 16px !important;
+  }
 }
 .first-span{
   margin-right: 10px;
