@@ -30,7 +30,7 @@
                       display: flex;
                       justify-content: flex-end;'>
             <a href="javascript:;" class='btn' @click="getInfo">查询</a>
-            <a href="javascript:;" class='btn' @click='getSenior'>高级检索</a>
+            <!-- <a href="javascript:;" class='btn' @click='getSenior'>高级检索</a> -->
           </div>
 
         </div>
@@ -333,12 +333,12 @@
           <Dropdown @on-click='isALL2'>
             <Button style="margin-left:10px;"  @click="isModal5">
               修改vip时间
-              <Icon type="md-arrow-dropdown"></Icon>
+
             </Button>
-            <DropdownMenu slot="list" v-model="letters_modal5">
+            <!-- <DropdownMenu slot="list" v-model="letters_modal5">
               <DropdownItem name="ON" ref="ON" :selected="Sele.ON">选中用户</DropdownItem>
               <DropdownItem name="ALL" :selected="Sele.ALL"> 全部用户</DropdownItem>
-            </DropdownMenu>
+            </DropdownMenu> -->
           </Dropdown>
           <!--审核vip时间-->
           <Dropdown>
@@ -419,9 +419,9 @@
       <Table border ref="volunteerSel" :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
-          <Checkbox @click="setALL">全选</Checkbox>
-          <!-- <Checkbox @click="setALL" v-model="ALLINFO">全选</Checkbox> -->
-          <Select placeholder=" 批量操作" style="width: 150px" v-model="batchState">
+          <!-- <Checkbox @click="setALL">全选</Checkbox> -->
+          <Checkbox @click="setALL" v-model="ALLINFO">全选</Checkbox>
+          <Select placeholder="批量操作" placement="top" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <a href="javascript:;" class='btn' @click='batchOperation'>确定</a>
@@ -889,20 +889,22 @@ export default {
       this.ALLINFO = false
       if (newVlaue === oldValue) return
       this.getUsetList(this.paramsObj)
+    },
+    ALLINFO(newVlaue, oldValue) {
+      //  全选 and 全不选
+      console.log(newVlaue);
+      
+      if (newVlaue === true) {
+        this.$refs.volunteerSel.selectAll(true)
+        let arr = this.data.map(item => {
+          return item.userId
+        })
+        this.ALLLIST = arr
+      } else {
+        this.$refs.volunteerSel.selectAll(false)
+        this.ALLLIST = []
+      }
     }
-    // ALLINFO(newVlaue, oldValue) {
-    //   //  全选 and 全不选
-    //   if (newVlaue === true) {
-    //     this.$refs.volunteerSel.selectAll(true)
-    //     let arr = this.data.map(item => {
-    //       return item.userId
-    //     })
-    //     this.ALLLIST = arr
-    //   } else {
-    //     this.$refs.volunteerSel.selectAll(false)
-    //     this.ALLLIST = []
-    //   }
-    // }
   },
   created() {
     // this.userId = localStorage.getItem('userId' | '')
@@ -1000,13 +1002,14 @@ export default {
       Public.optTime({ ...obj }).then(res => {
         if (res.code === 200) {
           this.$Message.info('修改vip时间成功')
+
         } else {
-          // this.$Message.info(res.mes)
           this.$Message.error({
             background: true,
             content: res.msg
           })
         }
+        this.modal5 = false
       })
     },
     // 站内信
@@ -1068,6 +1071,7 @@ export default {
           }
         } else {
           this.ALLINFO = true
+          
           this.modal2 = true
         }
       } else {
@@ -1080,26 +1084,37 @@ export default {
 
     //  修改vip 时间弹窗
     isModal5() {
-      if (this.letters_modal5) {
-        if (this.letters_modal5 === 'ON') {
-          if (this.ALLLIST.length > 0) {
+         if (this.ALLLIST.length > 0) {
             this.modal5 = true
-          } else {
+          } else {           
             this.$Message.error({
               background: true,
-              content: '请选择要修改的人员'
+              content: '请选择一条记录'
             })
           }
-        } else {
-          this.ALLINFO = true
-          this.modal5 = true
-        }
-      } else {
-        this.$Message.error({
-          background: true,
-          content: '请选择全部用户or选中用户'
-        })
-      }
+  
+
+  
+
+      //   if (this.letters_modal5 === 'ON') {
+      //     if (this.ALLLIST.length > 0) {
+      //       this.modal5 = true
+      //     } else {           
+      //       this.$Message.error({
+      //         background: true,
+      //         content: '请选择一条记录'
+      //       })
+      //     }
+      //   } else {
+      //     this.ALLINFO = true
+      //     this.modal5 = true
+      //   }
+      // } else {
+      //   // this.$Message.error({
+      //   //   background: true,
+      //   //   content: '请选择全部用户or选中用户'
+      //   // })
+      // }
     },
     ismodal3() {
       if (this.letters) {
@@ -1294,7 +1309,7 @@ export default {
       this.$router.push({ name: 'vp_time' })
     },
     setup() {
-      this.$router.push({ name: 'member_hy' })
+      this.$router.push({ name: 'vp_price' })
     }
   }
 }
