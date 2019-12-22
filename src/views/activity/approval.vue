@@ -315,10 +315,10 @@
                 </p>
               </li>
               <li class="lx-flex-center">
-                <Button @click="addResources">+新增物质</Button>
+                <Button @click="addResources" style="marginBottom:20px">+新增物质</Button>
               </li>
               <li v-if="adds">
-                <Button v-for="item in batchItemList.resources" @click="chooseResource(item)">{{item.name}}</Button>
+                <Button v-for="item in batchItemList.resources" @click="chooseResource(item)" class="btn">{{item.name}}</Button>
               </li>
               <li class="first-li">
                 <span class="first-span">发布时间</span>
@@ -1175,8 +1175,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.padd{
-  padding-left: 100px;
+.btn{
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
 }
 .lx-content {
   background-color: #fff;
