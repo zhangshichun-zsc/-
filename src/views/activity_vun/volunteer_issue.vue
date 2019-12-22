@@ -115,7 +115,7 @@
               <ul>
                 <li class="flex-start">
                   <span>活动地址</span>
-                  <div @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</div>
+                  <Button @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</Button>
                 </li>
                 <li>
                   <span>现场负责人</span>
@@ -328,7 +328,7 @@ export default {
     return {
       options: {
         disabledDate (date) {
-          return date && date.valueOf() < Date.now()
+          return  date && date.valueOf() < Date.now() - 86400000
         }
       },
       add:false,
@@ -985,7 +985,7 @@ export default {
     .cancel{
       position: absolute;
       top: 0px;
-      right: 0px;
+      right: -30px;
       z-index: 10;
     }
     .upload .file{
@@ -995,12 +995,6 @@ export default {
       text-align: center;
       padding: 20px 0;
     }
-    // .upload .file:hover{
-    //   border: 1px dashed #FF565A;
-    // }
-    // .upload .file:hover .ivu-icon{
-    //   color: #FF565A !important;
-    // } 
     .upload .file input{
       display: none;
     }

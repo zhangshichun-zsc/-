@@ -1,7 +1,7 @@
 <!--志愿者编辑招募报名项（志愿者）-->
 <template>
   <div>
-    <Modal v-model="modal" title="选择项目">
+    <Modal v-model="modal" title="选择项目" width='700'>
       <div class="wap">
         <Row v-if='state===1'>
           <Row class-name="row10"><span>新增报名项</span></Row>
@@ -157,7 +157,7 @@
               </Row>
           </Row>
           <Row v-if='!isDisb' type="flex" justify="center">
-             <Button @click="showModal(1)">+添加报名项</Button>
+             <Button @click="showModal(1)" class="add">+添加报名项</Button>
           </Row>
         </i-col>
       </Row>
@@ -201,7 +201,7 @@
             </i-col>
           </Row>
           <Row v-if='!isDisb' class-name="row10" type="flex" justify="center">
-             <Button @click="showModal(1)">+添加限制项</Button>
+             <Button @click="showModal(1)" class="add">+添加限制项</Button>
           </Row>
         </i-col>
       </Row>
@@ -241,7 +241,7 @@
             </i-col>
           </Row>
           <Row v-if='!isDisb' class-name="row10" type="flex" justify="center">
-             <Button @click="showModal(1)">+添加优先项</Button>
+             <Button @click="showModal(1)" class="add">+添加优先项</Button>
           </Row>
         </i-col>
       </Row>
@@ -280,7 +280,7 @@ export default {
       },
        options: {
         disabledDate (date) {
-          return date && date.valueOf() < Date.now()
+          return  date && date.valueOf() < Date.now() - 86400000
         }
       },
       state: 1,
@@ -685,6 +685,9 @@ export default {
   }
   .row{
     margin-bottom: 20px;
+    .add{
+      margin-top: 30px;
+    }
     .row10{
       margin-bottom: 10px;     
     }
