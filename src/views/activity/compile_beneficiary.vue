@@ -413,7 +413,7 @@
             </li>
             <li v-if="oneRole.isFeedback === 1">
               <div v-for="(item,index) in oneRole.fdList" :key="index" class="role-table">
-                <div class="role-tr" v-if=" item.type ==0 ">
+                <div class="role-tr" v-if=" item.type ==0 " style="width:90%">
                   <div>反馈简介</div>
                   <Input
                     placeholder="请输入反馈简介"
@@ -424,16 +424,16 @@
                     :disabled="isDisb"
                   />
                 </div>
-                <div class="role-tr" v-else-if="item.type == 9 ">
+                <div class="role-tr" v-else-if="item.type == 9 " style="width:90%">
                   <span class="first-span">上传图片</span>
                   <i-switch v-model="item.context" :true-value="1" :false-value="2" />
                 </div>
-                <div class="role-tr" v-else-if=" item.type === 1 ">
+                <div class="role-tr" v-else-if=" item.type === 1 " style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="role-tr" v-else-if=" item.type === 6 ">
+                <div class="role-tr" v-else-if=" item.type === 6 " style="width:90%">
                   <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
