@@ -1,6 +1,18 @@
 <!--志愿者活动管理(会员)-->
 <template>
   <div class="integral">
+     <Modal v-model="addstate" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+          <span>下架确定</span>
+        </p>
+        <div style="text-align:center">
+          <p>是否确认下架，下架后无法上架</p>
+        </div>
+        <div slot="footer">
+          <Button type="error" @click="modalCancel">取消</Button>
+          <Button type="success" @click="modalOkdel">确定</Button>
+        </div>
+      </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
       <div class="flex-center-start integral-body">
@@ -153,12 +165,13 @@
 
 <script>
 import { formatDate } from "@/request/datatime";
-import { actManager } from "../../request/api";
+import { actManager,activedown } from "../../request/api";
 import { SERVER_URl } from '@/request/http.js'
 import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
+      addstate: false,
       status: false,
       modal1: false,
       modal2: false,
@@ -363,10 +376,19 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.activityQrCode == 1
+                  value: ~~params.row.statusText !== 10,
+                  disabled: params.row.statusText!="10"?false: true
                 },
-                on: {
-                  input: e => {}
+                'on':{
+                  'on-change': e => {
+                    if (params.row.statusText == "10") {
+
+                    } else {
+                      this.activityId = params.row.acitvityId
+                      this.addstate = true
+                      this.index = params.index
+                    }
+                  }
                 }
               })
             ]);
@@ -417,6 +439,33 @@ export default {
   },
 
   methods: {
+        // 活动下架
+    getactivedown(ids) {
+      ids = Array.of(ids);
+      activedown({
+        activityId: ids
+      }).then(res => {
+         if(res.code==200){
+          this.addstate=false
+          this.getactiveManager()
+          this.$Message.info('下架成功')
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+        //取消
+    modalCancel(){
+
+      this.$set(this.datax[this.index],"statusText",1)
+      this.addstate=false
+    },
+
+    //确定
+    modalOkdel(){
+      this.getactivedown(this.activityId)
+    },
     handleChange(name,e){
       this.query[name] = e
     },
