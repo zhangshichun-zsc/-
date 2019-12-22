@@ -598,7 +598,7 @@ export default {
       getOrgTeam({}).then(res => {
         this.orgList = res.data
       })
-      getActiveType({typeFlag:40}).then(res => {
+      getActiveType({typeFlag:7}).then(res => {
         this.array = res.data
       })
     },
@@ -792,7 +792,7 @@ export default {
       saveActive(obj).then(res => {
         this.once = false
         if(res.code == 200){
-          this.$router.replace({name:'manager'})
+          this.$router.replace({name:'volunteer_activity'})
           sessionStorage.removeItem("data")
           this.$Message.success('发布成功')
         }else{

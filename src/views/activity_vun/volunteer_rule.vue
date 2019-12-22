@@ -162,7 +162,6 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
                     this.stater(params.row.ruleId, e);
                   }
                 }
