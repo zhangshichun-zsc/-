@@ -10,7 +10,13 @@
           </p>
           <!--               class-name="vertical-center-modal" -->
           <div class="but">
-            <Modal v-model="modal1" :title="text" class="scrollModal">
+            <Modal
+              v-model="modal1"
+              :title="text"
+              class="scrollModal"
+              :mask-closable="false"
+              @on-cancel="onCancel"
+            >
               <Form
                 ref="AddDate"
                 :model="AddDate"
@@ -691,6 +697,7 @@ export default {
         dicIds: this.AddDate.ssproject.toString()
       }).then(res => {
         if (res.code == 200) {
+          this.modal1 = false;
           this.$Message.info("修改成功");
           this.getdepartmentlist();
         }
@@ -710,8 +717,8 @@ export default {
         dicIds: this.AddDate.ssproject.toString()
       }).then(res => {
         if (res.code == 200) {
-          this.getdepartmentlist();
           this.modal1 = false;
+          this.getdepartmentlist();
           this.$Message.info("添加成功");
         } else {
           this.$Message.error(res.msg);
@@ -781,6 +788,16 @@ export default {
         (this.AddDate.parentId = ""),
         (this.AddDate.leader = "");
     },
+    onCancel() {
+      this.AddDate = {
+        getName: [],
+        deptName: "",
+        description: "",
+        parentId: "",
+        leader: "",
+        ssproject: ""
+      };
+    },
     //分页功能
     changepages(index) {
       this.page = index;
@@ -791,7 +808,7 @@ export default {
       this.text = "添加部门";
       this.modal1 = true;
       this.isdispabled = false;
-      this.clear();
+
       this.getdepartmentall();
     },
     //modalOk
