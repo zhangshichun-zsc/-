@@ -767,13 +767,10 @@ export default {
   methods: {
     //用户列表
     getUserPage() {
-      let startAt = this.startAt
-      let endAt = this.endAt
-
-      let dueation = this.sameday({
-        star: this.formatTime(this.startAt),
-        end: this.formatTime(this.endAt)
-      })
+      let endAt = null;
+      if (this.endAt) {
+        endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
+      }
 
       //获取用户分页
       Userpage({
@@ -783,8 +780,8 @@ export default {
         info: this.info,
         nickname: this.nickname,
         orgName: this.orgName,
-        registrationStartTimeStamp: dueation.star,
-        registrationEndTimeStamp: dueation.end,
+        registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : "",
+        registrationEndTimeStamp:  endAt ? new Date(endAt).getTime() : "",
         labelName: this.labelName,
         account: this.account,
         levelId: this.levelId,

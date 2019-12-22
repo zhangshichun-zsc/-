@@ -230,7 +230,9 @@ export default {
     },
     //获取举报原因列表
     getReportList() {
-      ReportList({}).then(res => {
+      ReportList({
+        sysType:1
+      }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.list = [{ dataKey: "", dataValue: "全部" }, ...res.data];
@@ -258,6 +260,10 @@ export default {
       ReportDel({}).then(res => {
         console.log(res);
       });
+    },
+    getSort(){
+      this.page = 1
+      this.getReportpage()
     },
 
     //  //批量操作

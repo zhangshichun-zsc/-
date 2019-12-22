@@ -32,7 +32,7 @@
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option v-for="item in sorting" :value="item.value" :key="item.value" @click.native="getSort()">{{ item.label }}</Option>
           </Select>
         </div>
       </div>
@@ -230,7 +230,9 @@ export default {
     },
     //获取举报原因列表
     getReportList() {
-      ReportList({}).then(res => {
+      ReportList({
+        sysType:2
+      }).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.list = [{ dataKey: "", dataValue: "全部" }, ...res.data];

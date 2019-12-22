@@ -164,9 +164,31 @@ export default {
                   value: ~~params.row.hotFlag
                 },
                 on: {
-                  input: e => {
+                  "on-change": e => {
                     console.log(e)
                     this.getAddressDel(params.row.informationId, e);
+                  }
+                }
+              })
+            ]);
+          }
+        },
+        {
+          title: "上线",
+          key: "status",
+          width: 200,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  trueValue: 1,
+                  falseValue: 0,
+                  value: ~~params.row.isOnline
+                },
+                on: {
+                  "on-change": e => {
+                    this.getHot(params.row.informationId, e);
                   }
                 }
               })
@@ -402,6 +424,22 @@ export default {
         }
         console.log(res);
       });
+    },
+    //是否热门
+    getHot(index, del) {
+      if (del == false) {
+        this.batch = 5;
+      } else {
+        this.batch = 4;
+      }
+      AddressDel({
+        informationIds: index,
+        type: this.batch
+      }).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("操作成功");
+        }
+      })
     },
 
     // 删除按钮

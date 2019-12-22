@@ -953,13 +953,10 @@ export default {
     //用户列表
     getUserPage() {
       //获取用户分页
-      let startAt = this.startAt;
-      let endAt = this.endAt;
-
-      let dueation = this.sameday({
-        star: this.formatTime(this.startAt),
-        end: this.formatTime(this.endAt)
-      });
+      let endAt = null;
+      if (this.endAt) {
+        endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
+      }
 
       Userpage({
         page: this.page,
@@ -975,8 +972,8 @@ export default {
         memberType: this.memberType,
         memberPayTimestamp: this.memberPayTimestamp,
         roleId: this.roleId,
-        registrationStartTimeStamp: dueation.star,
-        registrationEndTimeStamp: dueation.end
+        registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : "",
+        registrationEndTimeStamp:  endAt ? new Date(endAt).getTime() : ""
       }).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
