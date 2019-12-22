@@ -178,7 +178,8 @@ export default {
       list: [],
       Retract: true,
       startAt:'',
-      endAt:''
+      endAt:'',
+      userId:this.$route.query.userId,
     };
   },
 
@@ -215,7 +216,7 @@ export default {
     getintegralDet() {
       integralDet({
         sysType: this.sysType,
-        userId: this.$route.query.userId,
+        userId: this.userId,
 
       }).then(res => {
         if (res.code == 200) {
@@ -228,7 +229,7 @@ export default {
     getintegralHistory() {
       let params = {
          sysType: this.sysTypes,
-        userId: this.$route.query.userId,
+        userId: this.userId,
 
          scoreRuleType:this.scoreRuleType,
         startAt:this.startAt,

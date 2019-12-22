@@ -3,18 +3,10 @@
   <div class="main">
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
-      <div
-        class="flex-center-start integral-body"
-        style="border-radius: 10px;margin-bottom:20px;"
-      >
+      <div class="flex-center-start integral-body" style="border-radius: 10px;margin-bottom:20px;">
         <div class="flex-center-start" style="margin-right:20px;">
           <div style="width:80px">举报人:</div>
-          <Input
-            size="large"
-            placeholder="用户ID/账号"
-            class="inpt"
-            v-model="reportUserName"
-          />
+          <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="reportUserName" />
         </div>
         <div class="flex-center-start">
           <div style="width:80px">举报理由:</div>
@@ -23,8 +15,7 @@
               v-for="item in list"
               :value="item.dataKey"
               :key="item.dataKey"
-              >{{ item.dataValue }}</Option
-            >
+            >{{ item.dataValue }}</Option>
           </Select>
         </div>
         <Button class="table-btns" @click="query">查询</Button>
@@ -37,26 +28,11 @@
           <span>数据列表</span>
         </p>
         <div>
-          <Select
-            v-model="size"
-            style="width:120px;margin-right:5px;"
-            placeholder="显示条数"
-          >
-            <Option
-              v-for="item in Article"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.label }}</Option
-            >
+          <Select v-model="size" style="width:120px;margin-right:5px;" placeholder="显示条数">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-            <Option
-              v-for="item in sorting"
-              :value="item.value"
-              :key="item.value"
-              @click.native="getSort()"
-              >{{ item.label }}</Option
-            >
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
       </div>
@@ -69,15 +45,15 @@
           @on-selection-change="handleSelectionChange"
         ></Table>
       </div>
-      <!-- <div>
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <Select placeholder="批量操作" style="width: 150px">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Button class="space">确定</Button>
-        </div> -->
+      <div>
+        <Button @click="chackall()" style="border:0px;">
+          <Checkbox v-model="status"></Checkbox>全选
+        </Button>
+        <Select placeholder="批量操作" style="width: 150px" v-model="type">
+          <Option v-for="item in batchList" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
+        </Select>
+        <Button class="space" @click="space">确定</Button>
+      </div>
       <div class="pages flex-center-between">
         <Page
           :total="dataCount"
@@ -101,7 +77,8 @@ import {
   Reportpage,
   ReportDel,
   Reportdelete,
-  Reportdeles
+  Reportdeles,
+  Reporttext
 } from "@/request/api";
 export default {
   data() {
@@ -201,12 +178,7 @@ export default {
           }
         }
       ],
-      batchList: [
-        { value: "2", label: "有效举报" },
-        { value: "1", label: "无效举报" },
-        { value: "3", label: "恶意举报" },
-        { value: "0", label: "删除" }
-      ],
+      batchList: [],
       reportReason: "",
       reportUserName: "",
       page: 1,
@@ -227,7 +199,10 @@ export default {
         { value: "create_at asc", label: "正序" },
         { value: "create_at desc", label: "倒序" }
       ],
-      sort: "create_at desc"
+      sort: "create_at desc",
+      arrs:[],
+      type:'',
+      types:'',
     };
   },
   //事件监听
@@ -239,8 +214,20 @@ export default {
   mounted() {
     this.getReportList();
     this.getReportpage();
+    this.getReporttext()
   },
   methods: {
+
+     //文本
+    getReporttext(){
+      Reporttext({
+      }).then(res=>{
+        if(res.code==200){
+          this.batchList=[{dicId:0,dicName:'删除举报'},...res.data]
+        }
+        console.log(res)
+      })
+    },
     //获取举报原因列表
     getReportList() {
       ReportList({
@@ -279,16 +266,46 @@ export default {
       this.getReportpage()
     },
 
+    //  //批量操作
+    // getReportdeles(id){
+    //   let params = {
+    //     reportIds:this.reportId,
+    //     dealUserId:this.$store.state.userId,
+    //     reportDealResult:id,
+    //     type:1,
+    //     remark:this.ReportData.answerContent,
+    //   }
+    //   this.params =this.util.remove(params)
+    //   Reportdeles(params).then(res=>{
+    //     if(res.code==200){
+    //       this.$Message.info('操作成功');
+    //       this.$router.back()
+    //     }
+    //     console.log(res)
+    //   })
+    // },
+
     //批量操作
     getReportdeles() {
-      Reportdeles({
-        reportIds: this.arr,
-        dealUserId: this.$store.state.userId
-      }).then(res => {
+      if(this.type==0){
+        this.types=0
+      }else{
+        this.types=1
+      }
+       let params = {
+        reportIds:this.arr,
+        dealUserId:this.$store.state.userId,
+        reportDealResult:this.type,
+        type:this.types,
+
+      }
+      this.params =this.util.remove(params)
+      Reportdeles(params).then(res => {
         if (res.code == 200) {
-          // this.
+          this.getReportpage()
+          this.$Message.info('操作成功');
         }
-        console.log(res);
+
       });
     },
     // 举报管理--删除举报
@@ -302,6 +319,24 @@ export default {
         console.log(res);
       });
     },
+    space(){
+      if(this.arr.length==0||this.arrs.length==0){
+         this.$Message.error('暂无可操作数据');
+      }else if(this.arrs.length==0){
+         this.$Message.error('暂无可操作数据');
+      }else if(this.type==0){
+           this.arr=this.arr.map(item=>{
+             return item.reportId
+           }).toString()
+          this.getReportdeles()
+        }else if(this.type!=0){
+           this.arr=this.arrs
+          this.getReportdeles()
+        }
+
+      },
+
+
     delete(e) {
       this.reportId = e;
       this.getReportdelete();
@@ -309,7 +344,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index
-      console.log(index)
+
       this.getReportpage();
     },
 
@@ -325,23 +360,17 @@ export default {
       } else {
         this.status = false;
       }
-       let dataid = this.data.map(item => {
-        if (item.reportStatusText == "未处理") {
-          return item.reportId;
-        }
-      });
-      console.log(dataid)
-      this.arr = val.map(item => {
-        return dataid.filter(key => {
-          return item.reportId.indexof(key) == -1;
-        });
-      });
-      console.log(dataid, this.arr);
+      let a = val.filter(
+        item => item.reportStatusText == '未处理'
+      );
+      this.arrs=a.map(item=>{
+        return item.reportId
+      }).toString()
+      console.log(this.arrs)
     },
     //全选按钮
     chackall() {
       this.status = !this.status;
-      console.log(this.status);
       this.$refs.selection.selectAll(this.status);
     },
 

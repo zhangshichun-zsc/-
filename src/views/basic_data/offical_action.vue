@@ -307,7 +307,7 @@ export default {
         validFlag: this.validFlags
       }).then(res => {
         if (res.code == 200) {
-          this.getOffactivities();
+          // this.getOffactivities();
           this.$Message.info("操作成功");
         } else {
           this.$Message.error(res.msg);

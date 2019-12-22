@@ -141,11 +141,33 @@ export default {
                 props: {
                   trueValue: 1,
                   falseValue: 0,
-                  value: ~~params.row.hotFlag 
+                  value: ~~params.row.hotFlag
                 },
                 on: {
                   "on-change": e => {
                     this.getAddressDel(params.row.informationId, e);
+                  }
+                }
+              })
+            ]);
+          }
+        },
+        {
+          title: "上线",
+          key: "status",
+          align: "center",
+          width: 200,
+          render: (h, params) => {
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  trueValue: 1,
+                  falseValue: 0,
+                  value: ~~params.row.isOnline 
+                },
+                on: {
+                  "on-change": e => {
+                    this.getHot(params.row.informationId, e);
                   }
                 }
               })
@@ -206,10 +228,9 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "NewInformation_zyz",
+                        name: "NewInformation_hy",
                         query: {
                           informationId: params.row.informationId,
-
                         }
                       });
                     }
@@ -360,6 +381,22 @@ export default {
         this.batch = 3;
       } else {
         this.batch = 2;
+      }
+      AddressDel({
+        informationIds: index,
+        type: this.batch
+      }).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("操作成功");
+        }
+      })
+    },
+    //是否热门
+    getHot(index, del) {
+      if (del == false) {
+        this.batch = 5;
+      } else {
+        this.batch = 4;
       }
       AddressDel({
         informationIds: index,
