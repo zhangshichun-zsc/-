@@ -65,7 +65,7 @@
                   <div class="first-picfm" v-else>
                     <img
                       class="imgs"
-                      style="width:283px;height:188px"
+                      style="width:200px;height:200px"
                       :src="batch.actCoverShowPic"
                     />
                     <span
@@ -255,7 +255,7 @@
               <li>
                 <p
                   v-for="(item, i) in batch.userConfList"
-                  class="li-flex-aroundi lx-resource"
+                  class="li-flex-around lx-resource"
                   :key="i"
                 >
                   <span>{{ item.roleName }}</span>

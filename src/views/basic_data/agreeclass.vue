@@ -162,33 +162,33 @@ export default {
             ]);
           }
         },
-        {
-          title: "操作",
-          key: "action",
-          align: "center",
+        // {
+        //   title: "操作",
+        //   key: "action",
+        //   align: "center",
 
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.valids = 3;
-                      this.getAgreementclassstats(params.row.dicId);
-                    }
-                  }
-                },
-                "删除"
-              )
-            ]);
-          }
-        }
+        //   render: (h, params) => {
+        //     return h("div", [
+        //       h(
+        //         "a",
+        //         {
+        //           style: {
+        //             marginRight: "5px",
+        //             marginLeft: "5px",
+        //             color: "red"
+        //           },
+        //           on: {
+        //             click: () => {
+        //               this.valids = 3;
+        //               this.getAgreementclassstats(params.row.dicId);
+        //             }
+        //           }
+        //         },
+        //         "删除"
+        //       )
+        //     ]);
+        //   }
+        // }
       ],
       data: [],
       // dataCount:0,
@@ -211,7 +211,7 @@ export default {
 
   created() {},
   mounted() {
-    this.orgimg = orgimg;
+
     this.getAgreementclasslist();
   },
 
@@ -372,7 +372,7 @@ export default {
      border-radius: 0 0 10px 10px;
   }
   .table-header{
-    border-radius: 10px 10px 0 0;
+    border-radius: 10px;
   }
 
 </style>

@@ -295,13 +295,13 @@
     </div>
     <!-- 弹窗 -->
     <Modal
-      title="收益方详情"
+      title="受益方详情"
       v-model="showBenefitModelFlag"
       :mask-closable="false"
       width="1000"
     >
       <p slot="header" class="modelheader">
-        <span>收益方详情</span>
+        <span>受益方详情</span>
         <span style="text-align:right; margin-right: 30px">
           <a href="javascript:;" @click="showUserInfo">
             显示/隐藏空值
@@ -620,7 +620,7 @@
                   </Radio>
                 </RadioGroup>
               </FormItem>
-              <FormItem label="年收入范围">
+              <!-- <FormItem label="年收入范围">
                 <Select
                   v-model="parameOBJ.memInfo.vipotherInfo.annualIncome"
                   style="width:180px"
@@ -633,7 +633,7 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-              </FormItem>
+              </FormItem> -->
               <FormItem label="所在家长小组" v-show="userInfo.orgName">
                 <p>{{ parameOBJ.memInfo.userInfo.orgName }}</p>
               </FormItem>
@@ -1296,8 +1296,9 @@ export default {
           this.specialType = this.splitArr(data.specialType);
           this.actTypeLike= this.splitArr(res.data.volInfo.info.actTypeLike);
           this.speciality= this.splitArr(res.data.volInfo.info.speciality);
-           this.voluSpeciality= this.splitArr(res.data.volInfo.info.voluSpeciality);
-
+          this.voluSpeciality= this.splitArr(res.data.volInfo.info.voluSpeciality);
+          this.rehabilitationType = this.splitArr(res.data.memInfo.vipotherInfo.rehabilitationType)
+          this.clothingSize = res.data.memInfo.userInfo.clothingSize
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
@@ -1358,7 +1359,8 @@ voluSpeciality
         },
         memInfo: {
           // 会员信息
-          annualIncome: _memInfo.annualIncome,
+          // annualIncome: _memInfo.annualIncome,
+          annualIncome: '',
           msgOtherSendType: _memInfo.msgOtherSendType,
           msgSendType: this.msgSendType.toString(),
           hopeOtherOrg: _memInfo.hopeOtherOrg,
@@ -1413,6 +1415,7 @@ voluSpeciality
       });
     },
     splitArr(str) {
+      if(!str) return []
       return str.split(",").filter(function(el) {
         return el != "";
       });
