@@ -6,32 +6,31 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
-          <Input size="small" placeholder="活动名称" class="inpt" v-model="name" />
+          <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Input size="small" placeholder="活动状态" style="width:120px;margin-left:10px" v-model="activityStatus" />
+          <Select v-model="query.status" size='large' class="inpt">
+            <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
         </div>
         <div class="flex-center-start">
           <span>活动日期:</span>
-          <Row>
-            <Col span="12">
-              <Date-picker
-                type="date"
-                placeholder="选择日期"
-                style="width: 150px;margin:0 20px 0 10px"
-                v-model="activityTimestampFrom"
-              ></Date-picker>
-            </Col>
-            <Col span="12">
-              <Date-picker
-                type="date"
-                placeholder="选择日期"
-                style="width: 150px"
-                v-model="activityTimestampTo"
-              ></Date-picker>
-            </Col>
-          </Row>
+          <div>
+             <Date-picker
+             type="date"
+              placeholder="选择日期"
+              style="width: 200px"
+              @on-change="handleChange('startT',$event)"
+            ></Date-picker>
+            <span>~</span>
+            <Date-picker
+             type="date"
+              placeholder="选择日期"
+              style="width: 200px"
+              @on-change="handleChange('endT',$event)"
+            ></Date-picker>
+          </div>
         </div>
         <div class="flex-center-start">
           <Button class="button-red" @click="result">查询</Button>
@@ -156,6 +155,7 @@
 import { formatDate } from "@/request/datatime";
 import { actManager } from "../../request/api";
 import { SERVER_URl } from '@/request/http.js'
+import { filterNull } from '@/libs/utils'
 export default {
   data() {
     return {
@@ -336,7 +336,7 @@ export default {
           align: "center",
           width:200,
           render: (h, params) => {
-            return h("div", params.row.status==1?"未付款":(params.row.status==2?"待招募":(params.row.status==3?"招募中":(params.row.status==4?"待开始":(params.row.status==5?"进行中":(params.row.status==6?"已结束":(params.row.status==7?"已取消":(params.row.status==8?"草稿箱":(params.row.status==9?"审核不通过":(params.row.status==10?"已下架":(params.row.status==11?"待发布":(params.row.status==12?"模板":"关闭报名"))))))))))) );
+            return h("div", this.activeState[~~params.row.status].name)
           }
         },
         {
@@ -389,11 +389,17 @@ export default {
       size: 10,
       dataCount: 0,
       name: "",
-      activityStatus: "",
-      activityTimestampFrom: "",
-      activityTimestampTo: "",
       arr: [],
-      status: "1,2,3,4,5,6,7,9,10,11,13"
+      status: "1,2,3,4,5,6,7,9,10,11,13",
+      startT: '',
+      endT:'',
+      query:{
+        status:'',
+        name:'',
+        startT:'',
+        endT:''
+      },
+      activeState: this.$store.state.activeState
     };
   },
   components: {},
@@ -411,43 +417,33 @@ export default {
   },
 
   methods: {
+    handleChange(name,e){
+      this.query[name] = e
+    },
     //列表和分页
     getactiveManager() {
-      let From = "";
-      let To;
-      if (this.activityTimestampFrom != "") {
-        From = this.activityTimestampFrom.getTime();
-      }
-      if (this.activityTimestampTo != "") {
-        To = this.activityTimestampTo.getTime();
-      }
-      actManager({
-        // page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort},
-        // name: this.name,
-        // sysType: this.sysType,
-        // activityStatus: this.activityStatus,
-        // activityTimestampFrom: From,
-        // activityTimestampTo: To
+      actManager(filterNull({
         name: this.name,
         status: this.status,
-        startT: this.From,
-        endT: this.To,
+        startT: this.startT,
+        endT: this.endT,
+        sysType: 2,
         page: {
           page: this.page,
-          size: this.size
+          size: this.size,
+          sort: "createAt" + " " + this.sort
         }
-      }).then(res => {
+      })).then(res => {
         this.$refs.selection.selectAll(false);
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
           this.datax = res.data.list;
         }
-      });
+      })
     },
 
     //选择内容
     handleSelectionChange(val) {
-      console.log(val);
       this.arr = val;
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
@@ -470,10 +466,27 @@ export default {
 
     //查询
     result(e) {
-      (this.name = e[0].value),
-        // this
-
-        this.getactiveManager();
+      if(!!this.query.startT&&!!this.query.endT){
+        if(new Date(this.query.startT).getTime()>new Date(this.query.endT).getTime()){
+          this.$Message.info('开始时间应该小于结束时间')
+          return
+        }else if(new Date(this.query.startT).getTime() == new Date(this.query.endT).getTime()){
+          this.startT = new Date(this.query.startT + " 00:00:00").getTime()
+          this.endT = new Date(this.query.endT + " 23:59:59").getTime()
+        }else{
+          this.startT = new Date(this.query.startT).getTime()
+          this.endT = new Date(this.query.endT).getTime()
+        }
+      }else if((!!this.query.startT&&!this.query.endT)||(!!this.query.endT&&!this.query.startT)){
+        this.$Message.warning("时间段缺少")
+        return
+      }else{
+        this.startT = ''
+        this.endT = ''
+      }
+      this.name = this.query.name
+      this.status = this.query.status
+      this.getactiveManager();
     },
 
     addaction() {
