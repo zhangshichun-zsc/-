@@ -25,7 +25,7 @@
           <span>审核状态:</span>
           <Select v-model="orgStatus" class="inpt">
             <Option value="0,1,2">全部</Option>
-            <Option value="0">待审核</Option>
+            <Option value="0,3">待审核</Option>
             <Option value="1">已通过</Option>
             <Option value="2">已拒绝</Option>
           </Select>
@@ -382,7 +382,7 @@ export default {
       dataCount: 0,
       arr: [],
       orgId: [],
-      orgStatus: "0,1,2",
+      orgStatus: "0,1,2,3",
       isBatch: false,
       orgName: "",
       address: "",
@@ -428,12 +428,18 @@ export default {
         },
         userId: this.userId,
         orgName: this.orgName,
-        status: this.orgStatus === "0,1,2" ? "" : this.orgStatus,
         startAt: this.startAt ? this.startAt.getTime() : "",
         endAt: this.endAt ? this.endAt.getTime() : ""
       });
       if (this.navigation1.name === "parent") {
-        orgpages(fromobj).then(res => {
+        let status = "";
+        if (this.orgStatus === "0,1,2,3") {
+          status = "";
+        } else if (this.orgStatus === "0,3") {
+          status = "0";
+        }
+
+        orgpages(this.util.remove({ ...fromobj, status: status })).then(res => {
           if (res.code == 200) {
             this.dataCount = res.data.totalSize;
             this.data = res.data.list;
@@ -441,10 +447,12 @@ export default {
         });
       } else {
         //  志愿者审批
-        queryAuditList({
-          ...fromobj,
-          status: this.orgStatus
-        }).then(res => {
+        queryAuditList(
+          this.util.remove({
+            ...fromobj,
+            status: this.orgStatus
+          })
+        ).then(res => {
           if (res.code === 200) {
             this.data = res.data.list;
             this.dataCount = res.data.totalSize;

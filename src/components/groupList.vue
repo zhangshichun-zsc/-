@@ -47,9 +47,9 @@
           <div>
             <Icon type="md-reorder" size="25" />
             <span>数据列表</span>
+            <!--  v-if="jurisdiction" -->
             <a
               href="javascript:;"
-              v-if="jurisdiction"
               class="queryBtn"
               style="margin-left: 10px;"
               @click="jump"
@@ -295,15 +295,15 @@ export default {
       endAt: "",
       auditId: "",
       userId: "",
-      isModel: false,
-      jurisdiction: false
+      isModel: false
+      // jurisdiction: false
     };
   },
   props: ["index", "navigation1"],
   created() {
     let userId = localStorage.getItem("userId") || "";
     this.userId = userId;
-    this.isJurisdiction();
+    // this.isJurisdiction();
     this.getorgpage();
   },
   watch: {
@@ -313,15 +313,15 @@ export default {
   },
   methods: {
     // 是否有权限显示审批按钮
-    isJurisdiction() {
-      queryCoAuditConfig({
-        userId: this.userId,
-        typeFlag: this.navigation1.name === "parent" ? "5" : "6",
-        sysId: this.navigation1.name === "parent" ? "1,3" : "2,3"
-      }).then(res => {
-        this.jurisdiction = res.data.isAudit;
-      });
-    },
+    // isJurisdiction() {
+    //   queryCoAuditConfig({
+    //     userId: this.userId,
+    //     typeFlag: this.navigation1.name === "parent" ? "5" : "6",
+    //     sysId: this.navigation1.name === "parent" ? "1,3" : "2,3"
+    //   }).then(res => {
+    //     this.jurisdiction = res.data.isAudit;
+    //   });
+    // },
     //标签分页
     getorgpage() {
       let endAt = null;

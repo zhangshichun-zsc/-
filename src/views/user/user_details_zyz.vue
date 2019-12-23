@@ -278,9 +278,10 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "volunteer_general",
+                        name: "profile",
                         query: {
-                          userId: params.row.activityId
+                          acitvityId: params.row.activityId,
+                          activityName: params.row.name
                         }
                       });
                     }
