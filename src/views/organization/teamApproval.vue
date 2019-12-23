@@ -10,7 +10,7 @@
       <p v-show="isModel" class="tips">请输入拒绝理由</p>
       <div slot="footer">
         <Button type="text" size="large" @click="modalCancel">取消</Button>
-        <Button type="primary" size="large" @click="modalOk">确定</Button>
+        <Button type="error" size="large" @click="modalOk">确定</Button>
       </div>
     </Modal>
 
@@ -324,12 +324,12 @@ export default {
                   {
                     clssName: "action",
                     style: {
-                      color: params.row.status == 1 ? "#FF565A" : "#ccc",
+                      color: params.row.status == 0 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
                       click: () => {
-                        if (params.row.status == 1) {
+                        if (params.row.status == 0) {
                           this.singlePass("parent", {
                             ids: params.row.auditId,
                             status: 2
@@ -346,12 +346,12 @@ export default {
                     style: {
                       marginRight: "5px",
                       marginLeft: "5px",
-                      color: params.row.status == 1 ? "#FF565A" : "#ccc",
+                      color: params.row.status == 0 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
                       click: () => {
-                        if (params.row.status == 1) {
+                        if (params.row.status == 0) {
                           this.showModal("parent", {
                             auditIdStr: params.row.auditId
                           });
@@ -489,7 +489,7 @@ export default {
             this.getorgpage();
             this.$Message.info("通过成功");
           } else {
-            his.$Message.error({
+            this.$Message.error({
               background: true,
               content: "审批失败"
             });

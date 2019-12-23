@@ -23,7 +23,7 @@
           />
         </div>
         <div class="flex-center-start">
-          <span>注册时间/时间段:&nbsp;&nbsp;</span>
+          <span>注册时间段:&nbsp;&nbsp;</span>
           <DatePicker
             style="width: 180px"
             type="date"
@@ -55,14 +55,18 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between" >
+      <div class="table-header flex-center-between">
         <div>
           <Icon type="md-reorder" size="25" />
           <span>数据列表</span>
         </div>
         <div>
           <!--群发短信-->
-          <Modal v-model="modal1" title="群发短信" class='vertical-center-modal'>
+          <Modal
+            v-model="modal1"
+            title="群发短信"
+            class="vertical-center-modal"
+          >
             <Form
               ref="formValidate1"
               :model="formValidate1"
@@ -103,32 +107,31 @@
             <Icon type="md-arrow-dropdown"></Icon>
           </Button>
           <!--群发站内信-->
-          <Modal
-            v-model="modal2"
-            title="群发站内信"
-            @on-ok="onStation"
-            :mask-closable="false"
-          >
+          <Modal v-model="modal2" title="群发站内信" :mask-closable="false">
             <Form
               ref="formValidate2"
               :model="formValidate2"
               :rules="ruleValidate2"
               :label-width="120"
             >
-              <FormItem label="发送对象：" prop="tag">
-                <p>
+              <FormItem label="发送对象：">
+                <p class="pitchOn">
                   <span>共</span>
                   <span class="red">{{ this.ALLLIST.length }}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
-              <FormItem label="标题" prop="title">
-                <Input v-model="formValidate2.title"></Input>
+              <FormItem label="标题：" prop="title">
+                <Input
+                  style="font-size: 14px;"
+                  v-model="formValidate2.title"
+                ></Input>
               </FormItem>
-              <FormItem label="内容：" prop="content">
+              <FormItem label="内容：" prop="msg">
                 <Input
                   v-model="formValidate2.msg"
                   type="textarea"
+                  style="font-size: 14px;"
                   :autosize="{ minRows: 5, maxRows: 8 }"
                 ></Input>
                 <p style="font-size: 12px;">
@@ -136,6 +139,15 @@
                 </p>
               </FormItem>
             </Form>
+            <div slot="footer">
+              <Button
+                type="error"
+                style="font-size:14px"
+                size="large"
+                @click="onStation"
+                >确定</Button
+              >
+            </div>
           </Modal>
 
           <!--微信推送-->
@@ -334,11 +346,11 @@
               </Modal>
             </ButtonGroup>
           </Modal>
-          <Dropdown @on-click="isALL">
-            <Button @click="ismodal2" class='btns'>
-              群发站内信
-            </Button>
-            <DropdownMenu slot="list">
+          <!-- <Dropdown @on-click="isALL"> -->
+          <Button @click="ismodal2" class="btns">
+            群发站内信
+          </Button>
+          <!-- <DropdownMenu slot="list">
               <DropdownItem name="ON" ref="ON" :selected="Sele2.ON"
                 >选中用户</DropdownItem
               >
@@ -346,7 +358,7 @@
                 全部用户</DropdownItem
               >
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> -->
           <!--设置标签-->
           <Modal v-model="modal4" title="设置标签">
             <Checkbox
@@ -362,7 +374,7 @@
           </Button>
           <!--导出数据-->
           <Dropdown>
-            <Button @click="exportData">
+            <Button @click="exportData" class="btns">
               导出数据
             </Button>
           </Dropdown>
@@ -474,16 +486,14 @@
           v-model="modaQR"
           style="text-align: center;"
           :closable="false"
-           class='QRcodemodal' 
+          class="QRcodemodal"
         >
           <div class="bg">
             <img :src="QRCode" alt="二维码" />
           </div>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel">取消</Button>
-            <Button type="error" size="large" @click="modalCancel"
-              >确定</Button
-            >
+            <Button type="error" size="large" @click="modalCancel">确定</Button>
           </div>
         </Modal>
       </div>
@@ -556,13 +566,12 @@ export default {
       modal2: false, //群发站内信
       formValidate2: {
         // 群发 站内信
-        msg: "",
-        title: ""
+        title: "",
+          msg: "",
       },
       ruleValidate2: {
-        tag: [{ required: true, trigger: "blur" }],
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
-        content: [{ required: true, message: "内容不能为空", trigger: "blur" }]
+        msg: [{ required: true, message: "内容不能为空", trigger: "blur" }]
       },
       modal3: false, //微信推送
       modal3_1: false, //APP推送(链接)
@@ -756,25 +765,25 @@ export default {
           title: "手机号",
           key: "tel",
           align: "center",
-          width: 160,
+          width: 160
         },
         {
           title: "用户昵称",
           key: "nickname",
           align: "center",
-           width: 180
+          width: 180
         },
         {
           title: "分类",
           key: "roles",
           align: "center",
-          width: 140,
+          width: 140
         },
         {
           title: "标签",
           key: "labels",
           align: "center",
-           width: 180
+          width: 180
         },
         {
           title: "参与活动数",
@@ -973,7 +982,7 @@ export default {
         memberPayTimestamp: this.memberPayTimestamp,
         roleId: this.roleId,
         registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : "",
-        registrationEndTimeStamp:  endAt ? new Date(endAt).getTime() : ""
+        registrationEndTimeStamp: endAt ? new Date(endAt).getTime() : ""
       }).then(res => {
         if (res.code == 200) {
           this.data = res.data.list;
@@ -1029,26 +1038,34 @@ export default {
     },
     // 显示站内信模态框
     ismodal2() {
-      if (this.letters) {
-        if (this.letters === "ON") {
-          if (this.ALLLIST.length > 0) {
-            this.modal2 = true;
-          } else {
-            this.$Message.error({
-              background: true,
-              content: "请选择要修改的人员"
-            });
-          }
-        } else {
-          this.ALLINFO = true;
-          this.modal2 = true;
-        }
+      if (this.ALLLIST.length > 0) {
+        this.modal2 = true;
       } else {
         this.$Message.error({
           background: true,
-          content: "请选择全部用户or选中用户"
+          content: "请选择要修改的人员"
         });
       }
+      // if (this.letters) {
+      //   if (this.letters === "ON") {
+      //     if (this.ALLLIST.length > 0) {
+      //       this.modal2 = true;
+      //     } else {
+      //       this.$Message.error({
+      //         background: true,
+      //         content: "请选择要修改的人员"
+      //       });
+      //     }
+      //   } else {
+      //     this.ALLINFO = true;
+      //     this.modal2 = true;
+      //   }
+      // } else {
+      //   this.$Message.error({
+      //     background: true,
+      //     content: "请选择全部用户or选中用户"
+      //   });
+      // }
     },
     // 选中站内信菜单
     isALL(name) {
@@ -1061,10 +1078,17 @@ export default {
     },
     // 发送站内信
     onStation() {
-      if(!this.stationFormFlag) return
-      this.stationFormFlag = false
-      let ids = this.ALLLIST;
-      this.setsend({ ids, ...this.formValidate2 });
+      if (!this.stationFormFlag) return;
+
+      this.$refs.formValidate2.validate(valid => {
+        if (valid) {
+          this.stationFormFlag = false;
+          let ids = this.ALLLIST.toString();
+          this.setsend({ ids, ...this.formValidate2 });
+        } else {
+          this.$Message.error("必填项未填!");
+        }
+      });
     },
     // 站内信
     setsend(params) {
@@ -1073,19 +1097,25 @@ export default {
         ...params
       }).then(res => {
         if (res.code === 200) {
+          this.modal2 = false
+          this.formValidate2 = {
+            msg:'',
+            title:''
+          }
           this.$Message.info("站内信发送成功~");
         } else {
+          this.modal2 = false
+          let str = res.msg
           this.$Message.error({
             background: true,
-            content: "发送失败，请联系负责人"
+            content: str
           });
 
-          console.log(res.msg);
+          
         }
-        setTimeout(()=> {
-          this.stationFormFlag = true
-        })
-         
+        setTimeout(() => {
+          this.stationFormFlag = true;
+        });
       });
     },
 
@@ -1145,21 +1175,20 @@ export default {
       this.batch = startid;
       this.getUserBatch(2);
     },
-    exportData(){
-      this.$Message.info('此功能暂未开放，敬请期待！')
+    exportData() {
+      this.$Message.info("此功能暂未开放，敬请期待！");
     },
     //查询
     result() {
-      this.page = 1
+      this.page = 1;
       this.getUserPage();
     },
     // 关闭 二维码
     modalCancel() {
-
       this.modaQR = false;
-      setTimeout(()=>{
+      setTimeout(() => {
         this.QRCode = "";
-      },500)
+      }, 500);
     },
     formatTime(time) {
       if (!time) return "";
@@ -1220,8 +1249,8 @@ export default {
   padding: 20px;
   background: #fff;
   font-size: 14px;
-  background: #FFFFFF;
-  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
@@ -1234,8 +1263,8 @@ export default {
 .integral-table {
   margin-top: 20px;
   padding: 0 5px;
-  background: #FFFFFF;
-  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .table-header {
@@ -1281,6 +1310,7 @@ export default {
 }
 .btns {
   margin-right: 10px;
+  font-size: 15px;
 }
 .pages {
   display: flex;
@@ -1288,13 +1318,16 @@ export default {
   margin: 10px auto;
 }
 .space {
-  margin-left: 10px ;
+  margin-left: 10px;
 }
 .bg {
-  img{
+  img {
     width: 10rem;
     height: 10rem;
     margin: 0 auto;
   }
+}
+.pitchOn {
+  font-size: 16px;
 }
 </style>

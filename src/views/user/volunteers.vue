@@ -15,10 +15,9 @@
         </div>
         <div class="flex-center-start">
           <span>服务时长:&nbsp;&nbsp;</span>
-
           <Input placeholder="请选择" v-model.number="startAt" style="width: 140px" />
           <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-          <DatePicker <Input placeholder="请选择" v-model.number="endAt" style="width: 140px" />
+          <Input placeholder="请选择" v-model.number="endAt" style="width: 140px" />
         </div>
         <div class="flex-center-start">
           <span>标签:</span>
@@ -64,7 +63,7 @@
             </Form>
           </Modal>
           <Dropdown trigger="click">
-            <Button @click="modal1 = true" style="margin-left: 10px;" disabled>
+            <Button @click="modal1 = true" class="btns" style="margin-left: 10px;" disabled>
               群发短信
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -74,37 +73,40 @@
             </DropdownMenu>
           </Dropdown>
           <!--群发站内信-->
-          <Modal v-model="modal2" title="群发站内信" @on-ok="onStation" @on-cancel="onStation" :mask-closable="false">
+          <Modal v-model="modal2" title="群发站内信"   :mask-closable="false">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
-              <FormItem label="发送对象：" prop="tag">
+              <FormItem label="发送对象：">
                 <p>
                   <span>共</span>
                   <span class="red">{{ this.ALLLIST.length }}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
-              <FormItem label="标题" prop="title">
+              <FormItem label="标题：" prop="title">
                 <Input v-model="formValidate2.title"></Input>
               </FormItem>
-              <FormItem label="内容：" prop="content">
+              <FormItem label="内容：" prop="msg">
                 <Input v-model="formValidate2.msg" type="textarea" :autosize="{ minRows: 5, maxRows: 8 }"></Input>
                 <p style="font-size: 12px;">
                   站内信标题不能超过20个字，内容不能超过100个字。
                 </p>
               </FormItem>
             </Form>
+            <div slot="footer">
+              <Button type="error" style="font-size:14px" size="large" @click="onStation">确定</Button>
+            </div>
+
           </Modal>
-          <Dropdown @on-click="isALL">
-            <Button style="margin-left: 10px;" @click="ismodal2">
+          <!-- <Dropdown @on-click="isALL"> -->
+            <Button style="margin-left: 10px;" class="btns"  @click="ismodal2">
               群发站内信
-              <Icon type="md-arrow-dropdown"></Icon>
             </Button>
-            <DropdownMenu slot="list">
+            <!-- <DropdownMenu slot="list">
               <DropdownItem name="ON" ref="ON" :selected="Sele2.ON">选中用户</DropdownItem>
               <DropdownItem name="ALL" :selected="Sele2.ALL">
                 全部用户</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+            </DropdownMenu> -->
+          <!-- </Dropdown> -->
           <!--微信推送-->
           <Modal width="250" v-model="modal3" footer-hide>
             <ButtonGroup vertical>
@@ -255,7 +257,7 @@
             </ButtonGroup>
           </Modal>
           <Dropdown trigger="click">
-            <Button @click="modal3 = true" disabled style="margin-left: 10px;">
+            <Button @click="modal3 = true" class="btns" disabled style="margin-left: 10px;">
               微信推送
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -271,13 +273,13 @@
             </CheckboxGroup>
           </Modal>
 
-          <Button style="margin-left: 10px;" disabled @click="onLabel">
+          <Button style="margin-left: 10px;" class="btns" disabled @click="onLabel">
             设置标签
           </Button>
 
           <!--导出数据-->
           <Dropdown>
-            <Button style="margin-left: 10px;" @click="onExport">
+            <Button style="margin-left: 10px;" class="btns" @click="onExport">
               导出数据
             </Button>
           </Dropdown>
@@ -468,9 +470,8 @@ export default {
         title: ''
       },
       ruleValidate2: {
-        tag: [{ required: true, trigger: 'blur' }],
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
+        msg: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
       },
       modal3: false, //微信推送
       modal3_1: false, //APP推送(链接)
@@ -953,14 +954,21 @@ export default {
         ...params
       }).then(res => {
         if (res.code === 200) {
+           this.modal2 = false
+          this.formValidate2 = {
+            msg: '',
+            title: ''
+          }
           this.$Message.info('站内信发送成功~')
         } else {
-          this.$Message.error({
+          this.modal2 = false
+          let str = res.msg
+      this.$Message.error({
             background: true,
-            content: '发送失败，请联系负责人'
+            content: str
           })
 
-          console.log(res.msg)
+   
         }
         setTimeout(() => {
           this.stationFormFlag = true
@@ -1008,26 +1016,37 @@ export default {
     },
     // 显示站内信模态框
     ismodal2() {
-      if (this.letters) {
-        if (this.letters === 'ON') {
-          if (this.ALLLIST.length > 0) {
-            this.modal2 = true
-          } else {
-            this.$Message.error({
-              background: true,
-              content: '请选择要修改的人员'
-            })
-          }
-        } else {
-          this.ALLINFO = true
-          this.modal2 = true
-        }
+
+      if (this.ALLLIST.length > 0) {
+        this.modal2 = true
       } else {
         this.$Message.error({
           background: true,
-          content: '请选择全部用户or选中用户'
+          content: '请选择要修改的人员'
         })
       }
+
+
+      // if (this.letters) {
+      //   if (this.letters === 'ON') {
+      //     if (this.ALLLIST.length > 0) {
+      //       this.modal2 = true
+      //     } else {
+      //       this.$Message.error({
+      //         background: true,
+      //         content: '请选择要修改的人员'
+      //       })
+      //     }
+      //   } else {
+      //     this.ALLINFO = true
+      //     this.modal2 = true
+      //   }
+      // } else {
+      //   this.$Message.error({
+      //     background: true,
+      //     content: '请选择全部用户or选中用户'
+      //   })
+      // }
     },
     // 点击页码
     onPage(page) {
@@ -1060,10 +1079,19 @@ export default {
     },
     // 发送站内信
     onStation() {
-      if (!this.stationFormFlag) return
-      this.stationFormFlag = false
-      let ids = this.ALLLIST.toString()
-      this.setsend({ ids, ...this.formValidate2 })
+      this.$refs.formValidate2.validate(valid => {
+        if (valid) {
+          let ids = this.ALLLIST.toString()
+          this.setsend({ ids, ...this.formValidate2 })
+        } else {
+          this.$Message.error('必填项未填!')
+        }
+      })
+
+      // if (!this.stationFormFlag) return
+      // this.stationFormFlag = false
+      // let ids = this.ALLLIST.toString()
+      // this.setsend({ ids, ...this.formValidate2 })
     },
     // 选中站内信菜单
     isALL(name) {
@@ -1239,5 +1267,8 @@ export default {
   color: #ffffff;
   text-align: center;
   margin: 0 15px;
+}
+.btns{
+  font-size: 15px;
 }
 </style>

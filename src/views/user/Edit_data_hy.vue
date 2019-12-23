@@ -1801,7 +1801,7 @@ export default {
   vertical-align: center;
 }
 p {
-  font-size: 14px;
+  font-size: 16px;
   height: 1.5rem;
 }
 </style>
