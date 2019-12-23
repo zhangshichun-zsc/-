@@ -477,18 +477,20 @@ export default {
       buttonProps: {
         type: "default",
         size: "small"
-      }
+      },
+      datalistCount: "",
+      datalist: []
     };
   },
   computed: {
-    datalist() {
-      console.log(this.$store.state.MGTlist.list);
-      return this.$store.state.MGTlist.list;
-    },
-    datalistCount() {
-      console.log(this.$store.state.MGTlist.count);
-      return this.$store.state.MGTlist.count;
-    }
+    // datalist() {
+    //   console.log(this.$store.state.MGTlist.list);
+    //   return this.$store.state.MGTlist.list;
+    // },
+    // datalistCount() {
+    //   console.log(this.$store.state.MGTlist.count);
+    //   return this.$store.state.MGTlist.count;
+    // }
   },
   //事件监听
   watch: {
@@ -675,11 +677,12 @@ export default {
         sort: ""
       }).then(res => {
         if (res.code == 200) {
-          console.log(res.data);
-          this.$store.commit("updateList", {
-            list: res.data.list,
-            count: res.data.totalSize
-          });
+          this.datalistCount = res.data.totalSize;
+          this.datalist = res.data.list;
+          // this.$store.commit("updateList", {
+          //   list: res.data.list,
+          //   count: res.data.totalSize
+          // });
         } else {
           this.$Message.error(res.msg);
         }
