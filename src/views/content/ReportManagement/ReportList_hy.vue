@@ -21,8 +21,8 @@
         <Button class="table-btns" @click="query">查询</Button>
       </div>
     </div>
-    <div class="contents" style="padding:0 5px; padding-top:20px;">
-      <div class="con-top bk-szy flex-wrap-between">
+    <div class="contents">
+      <div class="con-top flex-wrap-between">
         <p>
           <Icon type="ios-list" size="30" />
           <span>数据列表</span>
@@ -45,7 +45,7 @@
           @on-selection-change="handleSelectionChange"
         ></Table>
       </div>
-      <div>
+      <!-- <div>
         <Button @click="chackall()" style="border:0px;">
           <Checkbox v-model="status"></Checkbox>全选
         </Button>
@@ -64,7 +64,28 @@
           :page-size="size"
           @on-change="changepages"
         />
-      </div>
+      </div> -->
+      <Row class="row">
+        <Col span="8">
+          <Button @click="chackall()" style="border:0px;">
+            <Checkbox v-model="status"></Checkbox>全选
+          </Button>
+          <Select placeholder="批量操作" style="width: 150px" v-model="type">
+            <Option v-for="item in batchList" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
+          </Select>
+          <Button class="space" @click="space">确定</Button>
+        </Col>
+        <Col span="8"><Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        /></Col>
+        <Col span="8"></Col>
+      </Row>
     </div>
   </div>
 </template>
@@ -402,16 +423,24 @@ export default {
 .contents {
   background: #ffffff;
   border-radius: 10px;
+  padding:20px;
 }
 //
 .con-top {
-  height: 50px;
-  padding: 0 15px;
+  margin-bottom: 10px;
 }
 
 .pages {
   text-align: center;
   padding: 20px 0;
   background: #fff;
+}
+.row{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.space{
+  margin-left: 10px
 }
 </style>

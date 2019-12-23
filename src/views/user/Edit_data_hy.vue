@@ -297,13 +297,13 @@
 
     <!-- 弹窗 -->
     <Modal
-      title="收益方详情"
+      title="受益方详情"
       v-model="showBenefitModelFlag"
       :mask-closable="false"
       width="1000"
     >
       <p slot="header" class="modelheader">
-        <span>收益方详情</span>
+        <span>受益方详情</span>
         <span style="text-align:right; margin-right: 30px">
           <a href="javascript:;" @click="showUserInfo">
             显示/隐藏空值
@@ -362,12 +362,19 @@
                 >
                   <Option
                     v-for="item in parameOBJ.memInfo.clothingSize"
-                    :value="item.dicId"
+                    :value="item.dicId+''"
                     :key="item.dicId"
                     >{{ item.dicName }}</Option
                   >
                 </Select>
               </FormItem>
+                <FormItem label="家庭账号成员*">
+                <p v-for="item in parameOBJ.memInfo.homeMemberList" :key="item.typeDicId">
+                  {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
+                </p>
+              </FormItem>
+
+
               <FormItem label="孩子姓名">
                 <p>
                   {{
@@ -395,6 +402,17 @@
                   }}
                 </p>
               </FormItem>
+
+          <FormItem label="孩子证件号">
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].childIdcard
+                      : "暂无"
+                  }}
+                </p>
+              </FormItem>
+
               <FormItem label="孩子生日">
                 <p>
                   {{
@@ -502,6 +520,9 @@
                 </FormItem>
                 <FormItem label="孩子证件类型">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].idcardType }}</p>
+                </FormItem>
+                <FormItem label="孩子证件号">
+                  <p>{{ parameOBJ.memInfo.childsInfo[index].childIdcard }}</p>
                 </FormItem>
                 <FormItem label="孩子生日">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].childBirthday }}</p>
@@ -620,7 +641,7 @@
                   </Radio>
                 </RadioGroup>
               </FormItem>
-              <FormItem label="年收入范围">
+              <!-- <FormItem label="年收入范围">
                 <Select
                   v-model="parameOBJ.memInfo.vipotherInfo.annualIncome"
                   style="width:180px"
@@ -633,7 +654,7 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-              </FormItem>
+              </FormItem> -->
               <FormItem label="所在家长小组" v-show="userInfo.orgName">
                 <p>{{ parameOBJ.memInfo.userInfo.orgName }}</p>
               </FormItem>
@@ -979,11 +1000,7 @@
                   </Checkbox>
                 </CheckboxGroup>
               </FormItem>
-              <FormItem label="家庭账号成员*">
-                <p v-for="item in parameOBJ.memInfo.homeMemberList">
-                  {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
-                </p>
-              </FormItem>
+
             </Form>
           </Col>
         </Row>
@@ -1276,6 +1293,10 @@ export default {
           this.voluSpeciality = this.splitArr(res.data.volInfo.info.voluSpeciality)
           this.speciality = this.splitArr(res.data.volInfo.info.speciality)
           this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
+          this.rehabilitationType = this.splitArr(res.data.memInfo.vipotherInfo.rehabilitationType)
+          this.clothingSize = res.data.memInfo.userInfo.clothingSize
+
+          
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
@@ -1328,7 +1349,8 @@ export default {
         },
         memInfo: {
           // 会员信息
-          annualIncome: _memInfo.annualIncome,
+          // annualIncome: _memInfo.annualIncome,
+          annualIncome: '',
           msgOtherSendType: _memInfo.msgOtherSendType,
           msgSendType: this.msgSendType.toString(),
           hopeOtherOrg: _memInfo.hopeOtherOrg,
@@ -1385,6 +1407,7 @@ export default {
       });
     },
     splitArr(str) {
+      if(!str) return []
       return str.split(",").filter(function(el) {
         return el != "";
       });

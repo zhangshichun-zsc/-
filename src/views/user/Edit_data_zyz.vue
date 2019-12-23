@@ -281,7 +281,8 @@
                   </p>
                 </FormItem>
                 <div style="text-align: center;" @click="showBenefitModel">
-                  <a class="show-btn">显示更多</a><Icon type="ios-arrow-forward" />
+                  <a class="show-btn">显示更多</a
+                  ><Icon type="ios-arrow-forward" />
                 </div>
               </Form>
             </div>
@@ -295,13 +296,13 @@
     </div>
     <!-- 弹窗 -->
     <Modal
-      title="收益方详情"
+      title="受益方详情"
       v-model="showBenefitModelFlag"
       :mask-closable="false"
       width="1000"
     >
       <p slot="header" class="modelheader">
-        <span>收益方详情</span>
+        <span>受益方详情</span>
         <span style="text-align:right; margin-right: 30px">
           <a href="javascript:;" @click="showUserInfo">
             显示/隐藏空值
@@ -366,6 +367,15 @@
                   >
                 </Select>
               </FormItem>
+              <FormItem label="家庭账号成员*">
+                <p
+                  v-for="item in parameOBJ.memInfo.homeMemberList"
+                  :key="item.typeDicId"
+                >
+                  {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
+                </p>
+              </FormItem>
+
               <FormItem label="孩子姓名">
                 <p>
                   {{
@@ -389,6 +399,15 @@
                   {{
                     parameOBJ.memInfo.childsInfo.length > 0
                       ? parameOBJ.memInfo.childsInfo[0].idcardType
+                      : "暂无"
+                  }}
+                </p>
+              </FormItem>
+              <FormItem label="孩子证件号">
+                <p>
+                  {{
+                    parameOBJ.memInfo.childsInfo.length > 0
+                      ? parameOBJ.memInfo.childsInfo[0].childIdcard
                       : "暂无"
                   }}
                 </p>
@@ -431,14 +450,14 @@
               </FormItem>
               <FormItem label="是否患有其他疾病">
                 <p
-                    style="padding:0; width:70%;"
-                    class="disorderTypelist-item "
-                    v-for="item in  parameOBJ.memInfo.childsInfo.length > 0 ? parameOBJ.memInfo.childsInfo[0].disorderType.split(
-                      ','
-                    ):['暂无']"
-                  >
-                    {{ item }}
-                  </p>
+                  style="padding:0; width:70%;"
+                  class="disorderTypelist-item "
+                  v-for="item in parameOBJ.memInfo.childsInfo.length > 0
+                    ? parameOBJ.memInfo.childsInfo[0].disorderType.split(',')
+                    : ['暂无']"
+                >
+                  {{ item }}
+                </p>
               </FormItem>
               <FormItem label="孩子爱好、注意事项">
                 <p>
@@ -491,6 +510,7 @@
                 style="padding: 0.5rem"
                 label-position="left"
                 v-if="index > 0"
+                :key="index"
               >
                 <FormItem label="孩子姓名">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].childName }}</p>
@@ -500,6 +520,15 @@
                 </FormItem>
                 <FormItem label="孩子证件类型">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].idcardType }}</p>
+                </FormItem>
+                <FormItem label="孩子证件号">
+                  <p>
+                    {{
+                      parameOBJ.memInfo.childsInfo.length > 0
+                        ? parameOBJ.memInfo.childsInfo[0].childIdcard
+                        : "暂无"
+                    }}
+                  </p>
                 </FormItem>
                 <FormItem label="孩子生日">
                   <p>{{ parameOBJ.memInfo.childsInfo[index].childBirthday }}</p>
@@ -530,7 +559,6 @@
                   <span v-else class="disorderTypelist-item">暂无</span>
                 </div>
                 <FormItem label="孩子爱好、注意事项">
-
                   <p>{{ parameOBJ.memInfo.childsInfo[index].point }}</p>
                 </FormItem>
                 <FormItem label="教育经历">
@@ -610,17 +638,17 @@
                 </Select>
               </FormItem>
               <FormItem label="成年心智障碍者婚姻状况">
-                 <RadioGroup v-model="parameOBJ.memInfo.vipotherInfo.isMarried">
+                <RadioGroup v-model="parameOBJ.memInfo.vipotherInfo.isMarried">
                   <Radio
                     v-for="item in parameOBJ.memInfo.listMarryStatus"
                     :key="item.dicId"
-                    :label="item.dicId+''"
+                    :label="item.dicId + ''"
                   >
-                    <span>{{item.name}}</span>
+                    <span>{{ item.name }}</span>
                   </Radio>
                 </RadioGroup>
               </FormItem>
-              <FormItem label="年收入范围">
+              <!-- <FormItem label="年收入范围">
                 <Select
                   v-model="parameOBJ.memInfo.vipotherInfo.annualIncome"
                   style="width:180px"
@@ -633,7 +661,7 @@
                     >{{ item.name }}</Option
                   >
                 </Select>
-              </FormItem>
+              </FormItem> -->
               <FormItem label="所在家长小组" v-show="userInfo.orgName">
                 <p>{{ parameOBJ.memInfo.userInfo.orgName }}</p>
               </FormItem>
@@ -979,11 +1007,6 @@
                   </Checkbox>
                 </CheckboxGroup>
               </FormItem>
-              <FormItem label="家庭账号成员*">
-                <p v-for="item in parameOBJ.memInfo.homeMemberList">
-                  {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
-                </p>
-              </FormItem>
             </Form>
           </Col>
         </Row>
@@ -1071,9 +1094,9 @@ export default {
       msgSendType: [],
       specialType: [],
       interestType: [],
-      actTypeLike:[],
-      speciality:[],
-      voluSpeciality:[],
+      actTypeLike: [],
+      speciality: [],
+      voluSpeciality: [],
       // end
       province: "",
       city: "",
@@ -1294,10 +1317,15 @@ export default {
           this.insuranceType = this.splitArr(data.insuranceType);
           this.interestType = this.splitArr(data.interestType);
           this.specialType = this.splitArr(data.specialType);
-          this.actTypeLike= this.splitArr(res.data.volInfo.info.actTypeLike);
-          this.speciality= this.splitArr(res.data.volInfo.info.speciality);
-           this.voluSpeciality= this.splitArr(res.data.volInfo.info.voluSpeciality);
-
+          this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike);
+          this.speciality = this.splitArr(res.data.volInfo.info.speciality);
+          this.voluSpeciality = this.splitArr(
+            res.data.volInfo.info.voluSpeciality
+          );
+          this.rehabilitationType = this.splitArr(
+            res.data.memInfo.vipotherInfo.rehabilitationType
+          );
+          this.clothingSize = res.data.memInfo.userInfo.clothingSize;
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
@@ -1318,14 +1346,14 @@ export default {
     },
     setUpdata() {
       // 将多选题剔除保设置
-        if(!this.stationFormFlag) return
-        this.stationFormFlag = false
+      if (!this.stationFormFlag) return;
+      this.stationFormFlag = false;
       let _basicInfo = this.parameOBJ.basicInfo.info;
       let _volInfo = this.parameOBJ.volInfo.info;
       let _memInfo = this.parameOBJ.memInfo.vipotherInfo;
       let _userInfo = this.parameOBJ.memInfo.userInfo;
 
-        /**
+      /**
          * actTypeLike
 
 volSpeciality
@@ -1358,7 +1386,8 @@ voluSpeciality
         },
         memInfo: {
           // 会员信息
-          annualIncome: _memInfo.annualIncome,
+          // annualIncome: _memInfo.annualIncome,
+          annualIncome: "",
           msgOtherSendType: _memInfo.msgOtherSendType,
           msgSendType: this.msgSendType.toString(),
           hopeOtherOrg: _memInfo.hopeOtherOrg,
@@ -1406,19 +1435,19 @@ voluSpeciality
         } else {
           this.$Message.error("操作失败");
         }
-        setTimeout(()=> {
-          this.stationFormFlag = true
-        },500)
-      
+        setTimeout(() => {
+          this.stationFormFlag = true;
+        }, 500);
       });
     },
     splitArr(str) {
+      if (!str) return [];
       return str.split(",").filter(function(el) {
         return el != "";
       });
     },
     modifyLabel() {
-        this.$Message.info("暂无此功能！")
+      this.$Message.info("暂无此功能！");
       // this.modallable = true;
     },
     // 隐藏 空值
@@ -1872,6 +1901,6 @@ voluSpeciality
 }
 p {
   font-size: 14px;
-    height: 1.5rem;
+  height: 1.5rem;
 }
 </style>

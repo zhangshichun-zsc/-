@@ -255,9 +255,9 @@ export default {
             } else {
               let status = params.row.status;
               let statu = {
-                1: "待审核",
-                2: "已审核",
-                3: "已拒绝"
+                0: "待审核",
+                1: "已审核",
+                2: "已拒绝"
               };
 
               return h("span", statu[status]);
@@ -461,6 +461,7 @@ export default {
     singlePass(flag, obj) {
       if (flag === "vol") {
         auditCreateCoOrg({
+          userId: this.userId,
           ...obj
         }).then(res => {
           console.log(res);
@@ -475,7 +476,7 @@ export default {
           }
         });
       } else {
-        orgSetStatus({ ...obj }).then(res => {
+        orgSetStatus({ userId: this.userId, ...obj }).then(res => {
           if (res.code === 200) {
             this.getorgpage();
             this.$Message.info("通过成功");
@@ -501,9 +502,23 @@ export default {
         return;
       }
       if (this.navigation1.name === "volunteer") {
+        let arr = [];
+        this.arr.forEach(item => {
+          this.data.forEach(key => {
+            if (item == key.auditId && (key.status == 0 || key.status == 3)) {
+              arr.push(key.auditId);
+            }
+          });
+        });
+
+        if (arr.length < 1) {
+          this.$Message.error("请选择未审核的团队进行操作");
+          return;
+        }
         let paramsObj = {
+          userId: this.userId,
           orgIdStr: this.orgId.toString(),
-          auditIdStr: this.arr.toString(),
+          auditIdStr: arr.toString(),
           operation: "0"
         };
         auditCreateCoOrg(paramsObj).then(res => {
@@ -519,8 +534,23 @@ export default {
           }
         });
       } else {
+        // 过滤 一下,已经操作过的数据
+        let arr = [];
+        this.arr.forEach(item => {
+          this.data.forEach(key => {
+            if (item == key.auditId && (key.status == 0 || key.status == 3)) {
+              arr.push(key.auditId);
+            }
+          });
+        });
+
+        if (arr.length < 1) {
+          this.$Message.error("请选择未审核的小组进行操作");
+          return;
+        }
         let paramsObj = {
-          ids: this.arr.toString(),
+          userId: this.userId,
+          ids: arr.toString(),
           status: 2
         };
         orgSetStatus(paramsObj).then(res => {
@@ -540,13 +570,13 @@ export default {
     singleRefuse() {
       if (this.navigation1.name === "volunteer") {
         let paramsObj = {
+          userId: this.userId,
           orgIdStr: this.orgId.toString(),
           auditIdStr: this.arr.toString(),
           refReason: this.value,
           operation: "1"
         };
         auditCreateCoOrg(paramsObj).then(res => {
-          console.log(res);
           if (res.code === 200) {
             this.$Message.info("审批成功");
             this.getorgpage();
@@ -560,6 +590,7 @@ export default {
         this.removeaudutId();
       } else {
         let paramsObj = {
+          userId: this.userId,
           ids: this.arr.toString(),
           status: 3,
           refReason: this.value
@@ -581,12 +612,31 @@ export default {
     // 批量拒绝
     batchRefuse(flag, params) {
       if (this.navigation1.name === "volunteer") {
+        // 过滤 一下,已经操作过的数据
+        let arr = [];
+        this.arr.forEach(item => {
+          this.data.forEach(key => {
+            if (item == key.auditId && (key.status == 0 || key.status == 3)) {
+              arr.push(key.auditId);
+            }
+          });
+        });
+
+        if (arr.length < 1) {
+          this.$Message.error("请选择未审核的团队进行操作");
+          this.removeaudutId();
+          this.isBatch = false;
+          return;
+        }
+
         let paramsObj = {
+          userId: this.userId,
           orgIdStr: this.orgId.toString(),
-          auditIdStr: this.arr.toString(),
+          auditIdStr: arr.toString(),
           refReason: this.value,
           operation: "1"
         };
+
         auditCreateCoOrg(paramsObj).then(res => {
           console.log(res);
           if (res.code === 200) {
@@ -602,11 +652,28 @@ export default {
         this.removeaudutId();
         this.isBatch = false;
       } else {
+        // 过滤 一下,已经操作过的数据
+        let arr = [];
+        this.arr.forEach(item => {
+          this.data.forEach(key => {
+            if (item == key.auditId && (key.status == 0 || key.status == 3)) {
+              arr.push(key.auditId);
+            }
+          });
+        });
+        if (arr.length < 1) {
+          this.$Message.error("请选择未审核的小组进行操作");
+          this.removeaudutId();
+          this.isBatch = false;
+          return;
+        }
         let paramsObj = {
-          ids: this.arr.toString(),
+          userId: this.userId,
+          ids: arr.toString(),
           status: 3,
           refReason: this.value
         };
+
         orgSetStatus(paramsObj).then(res => {
           if (res.code === 200) {
             this.$Message.info("审批成功");

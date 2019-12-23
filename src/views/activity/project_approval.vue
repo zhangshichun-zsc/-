@@ -6,7 +6,7 @@
         <div slot="footer">
           <Button type="error" size="large" @click="success">确定</Button>
         </div>
-      </Modal>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="flex-center-start integral-body">
       <div class="flex-center-start list">

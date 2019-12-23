@@ -1,6 +1,38 @@
 <!--志愿者编辑招募报名项（志愿者）-->
 <template>
   <div>
+    <Modal v-model="modal" title="选择项目" width='700'>
+      <div class="wap">
+        <Row v-if='state===1'>
+          <Row class-name="row10"><span>新增报名项</span></Row>
+          <Row class-name="row10">
+            <i-col span='4'>常用报名项</i-col>
+            <i-col span='18' push='2'>
+                <Button v-for="(item,index) in items" :key='index' @click="addItem(item,0,index)" class="btn">{{ item.name }}</Button>
+            </i-col>
+          </Row>
+          <Row class-name="row10">
+            <i-col span='4'>自定义报名项</i-col>
+            <i-col span='18' push='2'>
+                <Button v-for="(item,index) in feedList" :key='index' @click="addItem(item,1)" class="btn">{{ item.name }}</Button>
+            </i-col>
+          </Row>
+        </Row>
+        <Row class-name="row10" v-else-if='state===2'>
+          <i-col span='4'>常用限制项</i-col>
+          <i-col span='18' push='2'>
+              <Button v-for="(item,index) in limitList" :key='index' @click="addLimitItem(item,index)" class="btn">{{ item.name }}</Button>
+          </i-col>
+        </Row>
+        <Row class-name="row10" v-else>
+          <i-col span='4'>优先规则库</i-col>
+          <i-col span='18' push='2'>
+              <Button v-for="(item,index) in goodList" :key='index' @click="addGoodItem(item,index)" class="btn">{{ item.name }}</Button>
+          </i-col>
+        </Row>
+      </div>
+      <div slot="footer"></div>
+    </Modal>
     <adress :value='adr' @change='getMap'/>
     <Navigation :labels="navigation1"></Navigation>
     <div class="post">
@@ -124,20 +156,8 @@
                 </Row>
               </Row>
           </Row>
-          <Row v-if='!isDisb'>
-            <Row class-name="row10"><span>新增报名项</span></Row>
-            <Row class-name="row10">
-              <i-col span='4'>常用报名项</i-col>
-              <i-col span='18' push='2'>
-                 <Button v-for="(item,index) in items" :key='index' @click="addItem(item,0,index)" class="btn">{{ item.name }}</Button>
-              </i-col>
-            </Row>
-            <Row class-name="row10">
-              <i-col span='4'>自定义报名项</i-col>
-              <i-col span='18' push='2'>
-                 <Button v-for="(item,index) in feedList" :key='index' @click="addItem(item,1)" class="btn">{{ item.name }}</Button>
-              </i-col>
-            </Row>
+          <Row v-if='!isDisb' type="flex" justify="center">
+             <Button @click="showModal(1)" class="add">+添加报名项</Button>
           </Row>
         </i-col>
       </Row>
@@ -180,11 +200,8 @@
               <Icon type="ios-trash" color='#FF565A' size='28'  @click="deleLimitItem(index,item.fors)" v-if='!isDisb'/>
             </i-col>
           </Row>
-          <Row v-if='!isDisb' class-name="row10">
-            <i-col span='4'>常用限制项</i-col>
-            <i-col span='18' push='2'>
-               <Button v-for="(item,index) in limitList" :key='index' @click="addLimitItem(item,index)" class="btn">{{ item.name }}</Button>
-            </i-col>
+          <Row v-if='!isDisb' class-name="row10" type="flex" justify="center">
+             <Button @click="showModal(1)" class="add">+添加限制项</Button>
           </Row>
         </i-col>
       </Row>
@@ -223,29 +240,26 @@
               </Row>
             </i-col>
           </Row>
-          <Row v-if='!isDisb' class-name="row10">
-            <i-col span='4'>优先规则库</i-col>
-            <i-col span='18' push='2'>
-               <Button v-for="(item,index) in goodList" :key='index' @click="addGoodItem(item,index)" class="btn">{{ item.name }}</Button>
-            </i-col>
+          <Row v-if='!isDisb' class-name="row10" type="flex" justify="center">
+             <Button @click="showModal(1)" class="add">+添加优先项</Button>
           </Row>
         </i-col>
       </Row>
       <Row class-name="row">
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
-           <DatePicker  size="small" placeholder="请输入" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"  :options="options" />
+           <DatePicker  size="large" placeholder="请输入" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"  :options="options" />
         </i-col>
       </Row>
       <Row class-name="row">
         <i-col span='3'><span>集合地址</span></i-col>
         <i-col span='4'>
-           <span @click="()=>{this.adr = true}">{{ args.setAddr?args.setAddr:"点击选中地址"}}</span>
+           <Button @click="getAdr" size='large'>{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
         </i-col>
       </Row>
       <Row>
         <i-col span='1' push='5'>
-          <Button shape="circle" size='large' @click="success()">完成</Button>
+          <Button shape="circle" size='large' @click="success()" type="success" style="width:150px;">完成</Button>
         </i-col>
       </Row>
     </div>
@@ -266,9 +280,11 @@ export default {
       },
        options: {
         disabledDate (date) {
-          return date && date.valueOf() < Date.now()
+          return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      state: 1,
+      modal: false,
       adr:false,
       i:null,
       userId:null,
@@ -306,6 +322,14 @@ export default {
   },
 
   methods: {
+    showModal(index){
+      this.modal = true
+      this.state = index
+    },
+    getAdr(){
+      if(this.isDisb)return
+      this.adr = !this.adr
+    },
     changeAudit(e){
       if (~~this.args.zmType === 2 && ~~this.good.length !== 0) {
         this.$Message.warning('您已设置优先条件，无法再次设置为报名需审核')
@@ -631,7 +655,6 @@ export default {
         arr.push(args)
         data.args.coActivityUserConfParamList = arr
       }
-      console.log(data)
       sessionStorage.setItem('data',JSON.stringify(data))
       this.$router.back()
     }
@@ -640,22 +663,33 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.wap{
+  * {
+    font-size: 16px;
+  }
+  .btn{
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  .btn:hover{
+    border-color:#FF565A;
+    color: #FF565A
+  }
+}
 .post {
   padding: 20px 50px;
   border-radius: 20px;
   background: #fff;
+  * {
+    font-size: 16px;
+  }
   .row{
     margin-bottom: 20px;
+    .add{
+      margin-top: 30px;
+    }
     .row10{
-       margin-bottom: 10px;
-       .btn{
-         margin-right: 10px !important;
-         margin-bottom: 10px !important;
-       }
-       .btn:hover{
-         border-color:#FF565A;
-         color: #FF565A
-       }
+      margin-bottom: 10px;     
     }
   }
 }

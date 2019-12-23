@@ -11,33 +11,32 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>活动名称:</span>
-          <Input size="large" placeholder="活动名称" class="inpt" v-model="name" />
+          <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
         </div>
         <div class="flex-center-start">
           <span>活动状态:</span>
-          <Input size="large" placeholder="活动状态" class="inpt" v-model="activityStatus" />
+          <Select v-model="query.status" size='large' class="inpt">
+            <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
         </div>
 
         <div class="flex-center-start">
           <span>活动日期:</span>
-           <Row>
-             <Col span="12">
-              <Date-picker
-                type="date"
-                placeholder="选择日期"
-                style="width: 150px;margin:0 20px 0 10px"
-                v-model="activityTimestampFrom"
-              ></Date-picker>
-             </Col>
-             <Col span="12">
-              <Date-picker
-                type="date"
-                placeholder="选择日期"
-                style="width: 150px"
-                v-model="activityTimestampTo"
-              ></Date-picker>
-              </Col>
-          </Row>
+           <div>
+             <Date-picker
+             type="date"
+              placeholder="选择日期"
+              style="width: 200px"
+              @on-change="handleChange('startT',$event)"
+            ></Date-picker>
+            <span>~</span>
+            <Date-picker
+             type="date"
+              placeholder="选择日期"
+              style="width: 200px"
+              @on-change="handleChange('endT',$event)"
+            ></Date-picker>
+          </div>
         </div>
         <div class="flex-center-start">
           <Button class="button-red" @click="result">查询</Button>
@@ -182,6 +181,7 @@ import {
   activedown
 } from "../../request/api";
 import { SERVER_URl } from '@/request/http.js'
+import { constants } from 'fs';
 export default {
   inject: ['reload'],
   data() {
@@ -344,7 +344,7 @@ export default {
                         {
                           nativeOn: {
                             click: name => {
-                              let status = this.statelist[Number(params.row.statusText)-1].name
+                              let status = this.activeState[Number(params.row.statusText)].name
                               if(status=="已结束"){
                                 this.$router.push({
                                   name: "summarize",
@@ -421,7 +421,7 @@ export default {
           render: (h, params) => {
             return h(
               "div",
-              this.statelist[Number(params.row.statusText)-1].name
+              this.activeState[~~params.row.status].name
             );
           }
         },
@@ -474,25 +474,28 @@ export default {
           key: "statue",
           align: "center",
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
-                props: {
-                  value: ~~params.row.statusText !== 10,
-                  disabled: params.row.statusText!="10"?false:"disabled"
-                },
-                'on':{
-                  'on-change': e => {
-                    if (params.row.statusText == "10") {
+            return (
+              <i-switch value={~~params.row.statusText !== 10} disabled={ params.row.statusText!="10"?false: true} onOnChange={this.changeSwitch.bind(this)}/>
+            )
+            // return h("div", [
+            //   h("i-switch", {
+            //     props: {
+            //       value: ~~params.row.statusText !== 10,
+            //       disabled: params.row.statusText!="10"?false: true
+            //     },
+            //     'on':{
+            //       'on-change': e => {
+            //         if (params.row.statusText == "10") {
 
-                    } else {
-                      this.activityId = params.row.acitvityId
-                      this.addstate = true
-                      this.index = params.index
-                    }
-                  }
-                }
-              })
-            ]);
+            //         } else {
+            //           this.activityId = params.row.acitvityId
+            //           this.addstate = true
+            //           this.index = params.index
+            //         }
+            //       }
+            //     }
+            //   })
+            // ]);
           }
         }
       ],
@@ -512,47 +515,24 @@ export default {
       size: 10,
       dataCount: 0,
       name: "",
-      activityStatus: "",
-      activityTimestampFrom: "",
-      activityTimestampTo: "",
+      status: "",
+      startT: "",
+      endT: "",
       arr: [],
       activeList: [],
       activityId: "",
       text: "",
       types: "",
-      statelist: [
-        { name: "待审核", value: 1 },
-        { name: "待招募", value: 2 },
-        { name: "招募中", value: 3 },
-        { name: "待开始", value: 4 },
-        { name: "进行中", value: 5 },
-        { name: "已结束", value: 6 },
-        { name: "已取消", value: 7 },
-        { name: "草稿箱", value: 8 },
-        { name: "审核不通过", value: 9 },
-        { name: "下架", value: 10 },
-        { name: "待发布", value: 11 },
-        { name: "模板", value: 12 },
-        { name: "关闭报名", value: 13 }
-      ],
-       statelists: [
-        { name: "待审核", value: 1 },
-        { name: "待招募", value: 2 },
-        { name: "招募中", value: 3 },
-        { name: "待开始", value: 4 },
-        { name: "进行中", value: 5 },
-        { name: "已结束", value: 6 },
-        { name: "已取消", value: 7 },
-
-        { name: "审核不通过", value: 9 },
-        { name: "下架", value: 10 },
-        { name: "待发布", value: 11 },
-
-        { name: "关闭报名", value: 13 }
-      ],
       modal5: false,
       addstate:false,
-      index: -1
+      index: -1,
+      query:{
+        status:'',
+        name:'',
+        startT:'',
+        endT:''
+      },
+      activeState: this.$store.state.activeState
     };
   },
   components: {},
@@ -570,16 +550,16 @@ export default {
   },
 
   methods: {
+    changeSwitch(e){
+      console.log(e)
+      if(params.row.statusText !== "10"){
+        this.activityId = params.row.acitvityId
+        this.addstate = true
+        this.index = params.index
+      }
+    },
     //列表和分页
     getactiveManager() {
-      let Fromtime = "";
-      let Totime = "";
-      if (this.activityTimestampFrom != "") {
-        Fromtime = this.activityTimestampFrom.getTime();
-      }
-      if (this.activityTimestampTo != "") {
-        Totime = this.activityTimestampTo.getTime();
-      }
       activeManager({
         page: {
           page: this.page,
@@ -588,12 +568,11 @@ export default {
         },
         name: this.name,
         sysType: this.sysType,
-        activityStatus: this.activityStatus,
-        activityTimestampFrom: Fromtime,
-        activityTimestampTo: Totime
+        activityStatus: this.status,
+        activityTimestampFrom: this.startT,
+        activityTimestampTo: this.endT
       }).then(res => {
         this.$refs.selection.selectAll(false);
-        console.log(res);
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
           this.datax = res.data.list;
@@ -676,6 +655,7 @@ export default {
 
     //取消
     modalCancel(){
+
       this.$set(this.datax[this.index],"statusText",1)
       this.addstate=false
     },
@@ -708,7 +688,24 @@ export default {
 
     //查询
     result() {
-      // this.name=e[0].value,
+      if(!!this.query.startT&&!!this.query.endT){
+        if(new Date(this.query.startT).getTime()>new Date(this.query.endT).getTime()){
+          this.$Message.info('开始时间应该小于结束时间')
+          return
+        }else if(new Date(this.query.startT).getTime() == new Date(this.query.endT).getTime()){
+          this.startT = new Date(this.query.startT + " 00:00:00").getTime()
+          this.endT = new Date(this.query.endT + " 23:59:59").getTime()
+        }else{
+          this.startT = new Date(this.query.startT).getTime()
+          this.endT = new Date(this.query.endT).getTime()
+        }
+      }else if((!!this.query.startT&&!this.query.endT)||(!!this.query.endT&&!this.query.startT)){
+        this.$Message.warning("时间段缺少")
+        return
+      }else{
+        this.startT = ''
+        this.endT = ''
+      }
       this.getactiveManager();
     },
 

@@ -45,20 +45,19 @@
           <!-- <span>已选择{{list.length}}</span> -->
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->
           <Button class="table-btns" @click="jump()">新增基金</Button>
-          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel" class-name="vertical-center-modal">
+          <Modal v-model="modal1" title="新增基金" @on-cancel="cancel">
             <Form ref="formValidate" :model="pams" :rules="ruleValidate" :label-width="120">
                  <FormItem label="基金名称" prop="orgName">
-                   <Input v-model.trim="pams.orgName" placeholder="请输入基金名称"/>
+                   <Input v-model="pams.orgName" placeholder="请输入基金名称"/>
                   </FormItem>
                    <FormItem label="联系人员" prop="contactUserName">
-                     <Input v-model.trim="pams.contactUserName"/>
+                     <Input v-model="pams.contactUserName"/>
                   </FormItem>
                    <FormItem label="联系方式" prop='contactUserPhone' >
-                     <Input v-model.trim="pams.contactUserPhone"/>
+                     <Input v-model="pams.contactUserPhone"/>
                   </FormItem>
               </Form>
               <div slot="footer">
-                 <Button  size="large" @click="quxiao">取消</Button>
                  <Button type="error" size="large" @click="ok">确定</Button>
               </div>
           </Modal>
@@ -69,16 +68,7 @@
 
       </div>
       <div class="pages">
-         <Page
-          :total="sumSize"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="args.size"
-          @on-change="changePage"
-        />
-
+        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
       </div>
     </div>
   </div>
@@ -131,25 +121,24 @@ export default {
           title: "基金名称",
           key: "orgName",
           align:'center',
-          width:300,
         },
         {
           title: "联系人",
           key: "contactUserName",
           align:'center',
-          width:240,
+          width:200,
         },
         {
           title: "联系电话",
           key: "contactUserPhone",
           align:'center',
-          width:240,
+          width:200,
         },
         {
           title: "创建时间",
           key: "createAt",
           align:'center',
-          width:230,
+          width:200,
         },
         {
           title: "有效状态",
@@ -187,10 +176,8 @@ export default {
                 "a",
                 {
                    clssName: "action",
-                   style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "red"
+                  style: {
+                    color: "#097276"
                   },
                   on: {
                     click: () => {
@@ -339,10 +326,6 @@ export default {
             this.$Message.error('没有填写完整');
         }
       })
-    },
-
-      quxiao(){
-      this.modal1=false
     },
     update(list){
       updateFun(filterNull({list})).then(res => {

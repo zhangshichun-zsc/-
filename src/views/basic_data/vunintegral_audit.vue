@@ -216,7 +216,8 @@ export default {
       sort: "asc",
       arr:'',
       arrs:[],
-      sysTypes:'2,3'
+      sysTypes:'2,3',
+      select:[]
     };
   },
 
@@ -273,7 +274,9 @@ export default {
      batch(){
       if(this.arrs.length==0){
         this.$Message.error("请先选择")
-      }else{
+      }else if(this.select.length!=0){
+       this.$Message.error("暂无权限审批")
+       }else{
         this.modal1=true
       }
     },
@@ -295,13 +298,13 @@ export default {
     },
     //选择内容
     handleSelectionChange(val) {
+      this.select=val
       let a = val.filter(
         item => item.auditStatus == 0
       );
       this.arrs=a.map(item=>{
         return item.auditStatus
       }).toString()
-        console.log(this.arr)
 
     },
     //拒绝和通过

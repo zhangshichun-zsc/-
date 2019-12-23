@@ -2,6 +2,8 @@
 <template>
   <div>
     <adress v-model='adr' @change='getMap'/>
+     <Modal v-model="rule" title="发布规则" width='50'>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
       <p class="content-head">
@@ -115,7 +117,7 @@
               <ul>
                 <li class="flex-start">
                   <span>活动地址</span>
-                  <div @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</div>
+                  <Button @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</Button>
                 </li>
                 <li>
                   <span>现场负责人</span>
@@ -298,7 +300,7 @@
           <Row class-name="row20">
             <Radio v-model="single">
               我同意
-              <a>《活动发布规则》</a>
+              <a @click="showRule">《活动发布规则》</a>
             </Radio>
           </Row>
         </i-col>
@@ -328,9 +330,10 @@ export default {
     return {
       options: {
         disabledDate (date) {
-          return date && date.valueOf() < Date.now()
+          return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      rule: false,
       add:false,
       navigation1: {
           head: "志愿者活动发布(志愿者)"
@@ -341,7 +344,7 @@ export default {
       isDisb:false,
       feed: [{
         sysId: 2,
-        typeFlag: 1,
+        typeFlag: 0,
         targetType: 3,
         detailText: null,
         isMust: 2,
@@ -437,6 +440,9 @@ export default {
     console.log(111)
   },
   methods: {
+    showRule(){
+      this.rule = true
+    },
     getAdr(){
       if(this.isDisb)return
       this.adr = !this.adr
@@ -598,7 +604,7 @@ export default {
       getOrgTeam({}).then(res => {
         this.orgList = res.data
       })
-      getActiveType({typeFlag:40}).then(res => {
+      getActiveType({typeFlag:7}).then(res => {
         this.array = res.data
       })
     },
@@ -792,7 +798,7 @@ export default {
       saveActive(obj).then(res => {
         this.once = false
         if(res.code == 200){
-          this.$router.replace({name:'manager'})
+          this.$router.replace({name:'volunteer_activity'})
           sessionStorage.removeItem("data")
           this.$Message.success('发布成功')
         }else{
@@ -985,7 +991,7 @@ export default {
     .cancel{
       position: absolute;
       top: 0px;
-      right: 0px;
+      right: -30px;
       z-index: 10;
     }
     .upload .file{
@@ -995,12 +1001,6 @@ export default {
       text-align: center;
       padding: 20px 0;
     }
-    // .upload .file:hover{
-    //   border: 1px dashed #FF565A;
-    // }
-    // .upload .file:hover .ivu-icon{
-    //   color: #FF565A !important;
-    // } 
     .upload .file input{
       display: none;
     }

@@ -61,7 +61,7 @@
           <Button class="search" @click="query()">查询</Button>
         </div>
         <div class="flex-center-end">
-          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel" class-name="vertical-center-modal">
+          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
               <FormItem label="组织:" prop="orgId">
                 <Select v-model="params.orgId">
@@ -88,7 +88,6 @@
               </FormItem>
             </Form>
             <div slot="footer">
-               <Button  size="large" @click="quxiao">取消</Button>
               <Button type="error" size="large" @click="success">确定</Button>
             </div>
           </Modal>
@@ -97,14 +96,14 @@
     </div>
     <div class="integral-table">
       <div class="table-header flex-between">
-        <div class="table-header flex-center-start">
+        <div class="flex-center-start">
           <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
-          <Select class="inpt" style="width:100px;margin-right:10px"  v-model="size" @on-change="changeNum">
+          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" @on-change="changeNum">
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
-          <Select class="inpt" style="width:100px"  v-model="sort" @on-change="changeSort">
+          <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
             <Option value="create_at desc">升序</Option>
             <Option value="create_at asc">降序</Option>
           </Select>
@@ -114,16 +113,7 @@
         <Table border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
-          <Page
-          :total="sumSize"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changePage"
-        />
-
+        <Page :total="sumSize" show-elevator @on-change="changePage" :page-size="size" />
       </div>
     </div>
   </div>
@@ -161,15 +151,15 @@ export default {
         orgId: "",
         title: "",
         effectiveAt: "",
-       orgType: 3,
-        sysId: 1,
+        orgType: 3,
+        sysId: 2
       },
       modal1: false,
       columns: [
         {
           title: "组织",
           key: "orgName",
-          width: 600,
+          width: 400,
           align: "center"
         },
         {
@@ -208,7 +198,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "red",
+                    color: "#097276",
                     marginRight: "5px"
                   },
                   on: {
@@ -229,7 +219,7 @@ export default {
                     {
                       clssName: "action",
                       style: {
-                        color: "red"
+                        color: "#097276"
                       },
                       on: {
                         click: () => {
@@ -299,11 +289,9 @@ export default {
     query() {
 
       if (this.args.startAt && this.args.endAt) {
-        if (this.args.startAt <= this.args.endAt) {
-          this.args.startAt = this.args.startAt.split('')[0] + " 00:00:00";
-          this.args.endAt = this.args.endAt.split('')[0] + " 23:59:59";
-           this.page = 1;
-      this.getList(this.args);
+        if (this.args.startAt < this.args.endAt) {
+          this.args.startAt = this.args.startAt + " 00:00:00";
+          this.args.endAt = this.args.endAt + " 23:59:59";
 
         } else {
            this.args.startAt=''
@@ -311,11 +299,9 @@ export default {
           this.$Message.error('时间选择错误请重新选择')
         }
 
-      }else{
-         this.page = 1;
-      this.getList(this.args);
       }
-
+      this.page = 1;
+      this.getList(this.args);
     },
 
     startTimeChange(e) {
@@ -370,10 +356,6 @@ export default {
         }
       });
     },
-
-    quxiao(){
-      this.modal1=false
-    },
     changeDate(e) {
       this.params.effectiveAt = e;
     },
@@ -383,19 +365,23 @@ export default {
       this.params.effectiveAt = "";
     },
     changeNum(e) {
-
+      this.size = e;
       this.page = 1;
-      this.getList(this.args);
+      this.getList();
     },
     changeSort(e) {
-
+      this.sort = e;
       this.page = 1;
-       this.getList(this.args);
+      this.getList({});
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+.integral-header{
+ margin-bottom: 20px;
+  border-radius: 10px;
+}
 .table-header{
   padding: 10px 0;
 }
@@ -409,9 +395,6 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   background: #fff;
-      margin-bottom: 20px;
-    border-radius: 10px;
-    height: 90px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
@@ -424,5 +407,5 @@ export default {
   padding:0 10px;
 }
 
-
+@import "../../libs/basicdata.css";
 </style>

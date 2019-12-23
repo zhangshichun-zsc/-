@@ -442,7 +442,10 @@ export default {
       "profile",
       "user_details_hy",
       "grouplisthy",
-      "detailshy"
+      "detailshy",
+      "personnel_details",
+      "feedDetail",
+      "draft"
     ];
 
     // 总菜单
