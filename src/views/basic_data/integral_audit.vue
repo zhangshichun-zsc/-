@@ -270,7 +270,7 @@ export default {
     },
 
     //积分管理--审核积分
-    getIntegralaudit() {
+    getIntegralaudit(e) {
       Integralaudit({
         auditIds: this.arr,
         sysType: this.sysType,
@@ -278,7 +278,9 @@ export default {
         operationUserId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
-          this.$refs.selection.selectAll(false);
+          if(e==2){
+            this.modal1=false
+          }
           this.$Message.info("操作成功");
           this.getintegralExa();
         } else {
@@ -287,23 +289,25 @@ export default {
         console.log(res);
       });
     },
-    //批量修改
-    batch() {
-      if (this.arrs.length == 0) {
-        this.$Message.error("请先选择");
-      } else if(this.select.length!=0){
-       this.$Message.error("暂无权限审批");
-      }else{
-         this.modal1 = true;
+     //批量修改
+     batch(){
+
+      if(this.select.length==0){
+        this.$Message.error("请先选择")
+      }else if(this.arrs==''){
+       this.$Message.error("暂无权限审批")
+       }else{
+        this.modal1=true
       }
     },
+
     cancel() {
       this.modal1 = false;
     },
     ok() {
       this.arr = this.arrs;
       this.auditStatus = 1;
-      this.getIntegralaudit();
+      this.getIntegralaudit(2);
     },
 
     //分页功能
@@ -319,7 +323,7 @@ export default {
         item => item.auditStatus == 0
       );
       this.arrs=a.map(item=>{
-        return item.auditStatus
+        return item.auditId
       }).toString()
     },
     //拒绝和通过

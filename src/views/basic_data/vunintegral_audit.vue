@@ -12,7 +12,6 @@
           <span>修改人:</span>
           <Input size="large" placeholder="修改人昵称" class="inpt" v-model="modifyName" />
         </div>
-
         <Button class="search" @click="query">查询</Button>
       </div>
     </div>
@@ -252,7 +251,7 @@ export default {
     },
 
     //积分管理--审核积分
-    getIntegralaudit() {
+    getIntegralaudit(e) {
 
       Integralaudit({
         auditIds: this.arr,
@@ -261,7 +260,9 @@ export default {
         operationUserId: this.$store.state.userId
       }).then(res => {
         if(res.code==200){
-
+          if(e==2){
+            this.modal1=false
+          }
            this.$Message.info("操作成功");
            this.getintegralExa()
         }else{
@@ -272,9 +273,10 @@ export default {
     },
     //批量修改
      batch(){
-      if(this.arrs.length==0){
+
+      if(this.select.length==0){
         this.$Message.error("请先选择")
-      }else if(this.select.length!=0){
+      }else if(this.arrs==''){
        this.$Message.error("暂无权限审批")
        }else{
         this.modal1=true
@@ -287,7 +289,7 @@ export default {
 
       this.arr=this.arrs
       this.auditStatus=1
-      this.getIntegralaudit()
+      this.getIntegralaudit(2)
     },
 
     //分页功能
@@ -303,7 +305,7 @@ export default {
         item => item.auditStatus == 0
       );
       this.arrs=a.map(item=>{
-        return item.auditStatus
+        return item.auditId
       }).toString()
 
     },

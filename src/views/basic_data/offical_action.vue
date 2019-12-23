@@ -424,7 +424,7 @@ export default {
   margin-right: 20px;
   span {
     display: block;
-    width: 80px;
+    // width: 80px;
   }
 }
 
