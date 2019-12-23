@@ -19,7 +19,7 @@
           <div class="upload" v-if='image == null'>
               <div class="file" @click="()=>{ this.$refs.files.click()}">
                 <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()">
-                <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+                <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
               </div>
           </div>
           <img class="imgs" v-else :src="image"/>
@@ -220,12 +220,9 @@ export default {
   .upload .file{
     height: 150px;
     width: 300px;
-    border: 1px dashed #dcdee2;
+    border: 1px dashed #FF565A;
     text-align: center;
     padding: 20px 0;
-  }
-  .upload .file:hover{
-    border: 1px dashed #2d8cf0;
   }
   .upload .file input{
     display: none;

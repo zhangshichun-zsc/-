@@ -1,55 +1,57 @@
 <!--活动立项审批(会员)-->
 <template>
   <div>
-     <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
-        <i-input placeholder="请输入拒绝内容" v-model="reason" type="textarea" :row='4'/>
-        <div slot="footer">
-          <Button type="error" size="large" @click="success">确定</Button>
-        </div>
+    <Modal v-model="modal1" title="拒绝理由"  @on-cancel='cancel'>
+      <i-input placeholder="请输入拒绝内容" v-model="reason" type="textarea" :row='4'/>
+      <div slot="footer">
+        <Button type="error" size="large" @click="success">确定</Button>
+      </div>
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="flex-center-start integral-body">
-      <div class="flex-center-start list">
-        <span>立项名称:</span>
-        <Input size="large" placeholder="活动名称" class="inpt" v-model="query.batchName" />
-      </div>
-      <div class="flex-center-start list">
-        <span class="span">审核状态:</span>
-        <Select v-model="query.statu" style="width:200px">
-          <Option :value="''">全部</Option>
-          <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="flex-center-start" style="margin-right:20px;">
-        <span>提交日期:</span>
-        <row class="flex-center-start inpt">
-          <i-col>
-            <Date-picker
-             type="date"
-              placeholder="选择日期"
-              style="width: 200px"
-              @on-change="handleChange('rom',$event)"
-            ></Date-picker>
-          </i-col>
-          <i-col style="padding-top:7px;">~</i-col>
-          <i-col>
-            <Date-picker
-             type="date"
-              placeholder="选择日期"
-              style="width: 200px"
-              @on-change="handleChange('tos',$event)"
-            ></Date-picker>
-          </i-col>
-        </row>
+    <div class="flex-between integral-body">
+      <div class="flex-start">
+        <div class="flex-center-start list">
+          <span class="span">立项名称:</span>
+          <Input size="large" placeholder="活动名称" class="inpt" v-model="query.batchName" />
+        </div>
+        <div class="flex-center-start list">
+          <span class="span">审核状态:</span>
+          <Select v-model="query.statu" style="width:200px" size="large">
+            <Option :value="''">全部</Option>
+            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </div>
+        <div class="flex-center-start list" style="margin-right:20px;">
+          <span class="span">提交日期:</span>
+          <row class="flex-center-start inpt">
+            <i-col>
+              <Date-picker
+                type="date"
+                placeholder="选择日期"
+                style="width: 200px"
+                size='large'
+                @on-change="handleChange('rom',$event)"
+              ></Date-picker>
+            </i-col>
+            <i-col style="padding:7px 5px 0;">~</i-col>
+            <i-col>
+              <Date-picker
+              type="date"
+                placeholder="选择日期"
+                style="width: 200px"
+                size='large'
+                @on-change="handleChange('tos',$event)"
+              ></Date-picker>
+            </i-col>
+          </row>
+        </div>
       </div>
       <div class="flex-center-end">
-        <Button @click="approval" style="margin-right:10px">新建立项</Button>
-        <Button class="table-btn" @click="draft">草稿箱</Button>
         <Button @click="querys" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between" style="display:flex;background-color:#fff;">
+      <div class="table-header flex-between">
         <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
@@ -58,14 +60,16 @@
           <Button class="table-btn" @click="modal1 = true">拒绝</Button>
         </div>
         <div>
+          <Button @click="approval" class="table-btn" >新建立项</Button>
+          <Button class="table-btn" @click="draft">草稿箱</Button>
           <Button class="table-btn">导出</Button>
-            <Select v-model="size" style="width:120px;marginRight:20px" placeholder="显示条数">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-              <Option :value="'create_at desc'">倒序</Option>
-              <Option :value="'create_at asc'">正序</Option>
-            </Select>
+          <Select v-model="size" class="table-btn" placeholder="显示条数" size='large' style="width: 150px;">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" style="width: 150px;" v-model="sort" class="table-btn"  size='large'>
+            <Option :value="'create_at desc'">倒序</Option>
+            <Option :value="'create_at asc'">正序</Option>
+          </Select>
         </div>
       </div>
       <Table
@@ -187,7 +191,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green"
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
@@ -205,7 +209,7 @@ export default {
                 {
                   style: {
                     marginLeft: "20px",
-                    color: "green"
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
@@ -387,12 +391,8 @@ export default {
 .btn{
   background: #FF565A !important;
   color: #fff !important;
-  border-color:none !important;
-}
-.btn:hover{
-  border:1px solid #FF565A !important;
-  color: #FF565A !important;
-  background: #fff !important;
+  border-color:#FF565A !important;
+  font-size: 16px;
 }
 .integral-top {
   border: 1px solid #e4e4e4;
@@ -403,11 +403,8 @@ export default {
   }
 }
 
-.flex-center-start {
-  font-size: 14px;
-  height: 60px;
-  padding-left: 5px;
-  background: #ffffff;
+.flex-start {
+  font-size: 16px;
   .list {
     margin-right: 20px;
     span {
@@ -416,18 +413,28 @@ export default {
       margin-right: 10px;
     }
     .span {
-      width: 70px;
+      width: 100px;
     }
   }
 }
-
-.table-header {
-  height: 50px;
-  .table-btn {
-    margin: 0 10px;
-  }
+.integral-body{
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 30px;
 }
-
+.integral-table{
+  background: #fff;
+  padding: 20px 10px;
+  border-radius: 20px;
+}
+.table-header {
+  padding: 10px 20px;
+}
+.table-btn {
+    margin: 0 10px;
+    font-size: 16px;
+  }
 .pages {
   height: 50px;
   display: flex;

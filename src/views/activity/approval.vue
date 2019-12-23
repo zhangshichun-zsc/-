@@ -229,7 +229,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动地址</span>
-                <span @click="getAdr()">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</span>
+                <Button @click="getAdr()">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</Button>
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
@@ -1194,7 +1194,7 @@ export default {
   }
 }
 .first-span{
-  margin-right: 20px;
+  margin-right: 30px;
 }
 .wave{
   display: flex;
@@ -1262,6 +1262,7 @@ export default {
 .lx-next{
   background: #FF565A;
   border-radius: 15px;
+  border-color: #FF565A;
   color: #FFF;
   width: 110px;
 }

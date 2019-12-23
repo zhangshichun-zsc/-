@@ -8,39 +8,40 @@
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span>活动名称:</span>
-          <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
-        </div>
-        <div class="flex-center-start">
-          <span>活动状态:</span>
-          <Select v-model="query.status" size='large' class="inpt">
-            <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </div>
-
-        <div class="flex-center-start">
-          <span>活动日期:</span>
-           <div>
-             <Date-picker
-             type="date"
+      <div class="flex-between integral-body">
+        <div class="flex-start">
+          <div class="flex-center-start">
+            <span>活动名称:</span>
+            <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
+          </div>
+          <div class="flex-center-start">
+            <span>活动状态:</span>
+            <Select v-model="query.status" size='large' class="inpt">
+              <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            </Select>
+          </div>
+          <div class="flex-center-start">
+            <span>活动日期:</span>
+            <div>
+              <Date-picker
+               size="large"
+                type="date"
+                placeholder="选择日期"
+                class="inpt"
+                @on-change="handleChange('startT',$event)"
+              ></Date-picker>
+              <i>~</i>
+              <Date-picker
+              type="date"
+              size="large"
               placeholder="选择日期"
-              style="width: 200px"
-              @on-change="handleChange('startT',$event)"
-            ></Date-picker>
-            <span>~</span>
-            <Date-picker
-             type="date"
-              placeholder="选择日期"
-              style="width: 200px"
-              @on-change="handleChange('endT',$event)"
-            ></Date-picker>
+                class="inpt"
+                @on-change="handleChange('endT',$event)"
+              ></Date-picker>
+            </div>
           </div>
         </div>
-        <div class="flex-center-start">
-          <Button class="button-red" @click="result">查询</Button>
-        </div>
+         <Button class="btn" @click="result" shape="circle" size='large' icon="ios-search">查询结果</Button>
       </div>
     </div>
     <div class="integral-table">
@@ -49,51 +50,14 @@
           <Checkbox v-model="status">全选</Checkbox>
         </Button>
        <div>
-          <Button class="table-btn" @click="exportData">导出</Button>
-          <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button>
-          <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
-            <div class="popup">
-              <p class="popup-head">
-                <span>目前导出字段顺序</span>
-                <span class="popup-head-tit">拖拽调整列显示顺序</span>
-              </p>
-              <div class="popup-content">
-                <p>
-                  <span>序号</span>
-                  <span>姓名</span>
-                  <span>性别</span>
-                  <span>手机号码</span>
-                  <span>身份证号</span>
-                  <span>年龄</span>
-                  <span>孩子姓名</span>
-                </p>
-                <p>
-                  <span>孩子性别</span>
-                  <span>孩子年龄</span>
-                  <span>签名（孩子）</span>
-                  <span>签名(家长)</span>
-                  <span>障碍类型</span>
-                </p>
-              </div>
-              <div class="bft">
-                <p>备选字段</p>
-                <div class="bft-tab">
-                  <CheckboxGroup v-model="fruit">
-                    <Checkbox label="香蕉">序号</Checkbox>
-                    <Checkbox label="苹果">姓名</Checkbox>
-                    <Checkbox label="西瓜">障碍类型</Checkbox>
-                  </CheckboxGroup>
-                </div>
-              </div>
-            </div>
-          </Modal>
-          <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button>
-          <Button class="table-btn" @click="draft">草稿箱</Button>
+          <Button class="table-btn">导出</Button>
+          <Button class="table-btn"  @click="exportData(1)">导出受益方签到表</Button>
+          <Button class="table-btn"  @click="exportData(2)">导出志愿者签到表</Button>
           <Button class="table-btn" @click="addaction">添加活动</Button>
-          <Select v-model="size" style="width:100px;margin:0 10px" placeholder="显示条数" class="space">
+          <Select size="large" v-model="size"  style="width:150px" placeholder="显示条数" class="table-btn">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
+          <Select size="large" placeholder="排序方式" class="table-btn" style="width: 150px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -145,17 +109,17 @@
 
       </div>
       <Modal v-model="addstate" width="360">
-                <p slot="header" style="color:#f60;text-align:center">
-                  <span>下架确定</span>
-                </p>
-                <div style="text-align:center">
-                  <p>是否确认下架，下架后无法上架</p>
-                </div>
-                <div slot="footer">
-                  <Button type="error" @click="modalCancel">取消</Button>
-                  <Button type="success" @click="modalOkdel">确定</Button>
-                </div>
-              </Modal>
+        <p slot="header" style="color:#f60;text-align:center">
+          <span>下架确定</span>
+        </p>
+        <div style="text-align:center">
+          <p>是否确认下架，下架后无法上架</p>
+        </div>
+        <div slot="footer">
+          <Button type="error" @click="modalCancel">取消</Button>
+          <Button type="success" @click="modalOkdel">确定</Button>
+        </div>
+      </Modal>
       <Page
         :total="dataCount"
         show-elevator
@@ -166,7 +130,6 @@
         @on-change="changepages"
       />
     </div>
-
   </div>
 </template>
 
@@ -236,7 +199,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -256,7 +219,7 @@ export default {
                   style: {
                     marginRight: "10px",
                     marginLeft: "10px",
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -275,7 +238,7 @@ export default {
                 {
                   style: {
                     marginRight: "10px",
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -421,7 +384,7 @@ export default {
           render: (h, params) => {
             return h(
               "div",
-              this.activeState[~~params.row.status].name
+              this.activeState[~~params.row.statusText].name
             );
           }
         },
@@ -474,28 +437,25 @@ export default {
           key: "statue",
           align: "center",
           render: (h, params) => {
-            return (
-              <i-switch value={~~params.row.statusText !== 10} disabled={ params.row.statusText!="10"?false: true} onOnChange={this.changeSwitch.bind(this)}/>
-            )
-            // return h("div", [
-            //   h("i-switch", {
-            //     props: {
-            //       value: ~~params.row.statusText !== 10,
-            //       disabled: params.row.statusText!="10"?false: true
-            //     },
-            //     'on':{
-            //       'on-change': e => {
-            //         if (params.row.statusText == "10") {
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  value: ~~params.row.statusText !== 10,
+                  disabled: params.row.statusText!="10"?false: true
+                },
+                'on':{
+                  'on-change': e => {
+                    if (params.row.statusText == "10") {
 
-            //         } else {
-            //           this.activityId = params.row.acitvityId
-            //           this.addstate = true
-            //           this.index = params.index
-            //         }
-            //       }
-            //     }
-            //   })
-            // ]);
+                    } else {
+                      this.activityId = params.row.acitvityId
+                      this.addstate = true
+                      this.index = params.index
+                    }
+                  }
+                }
+              })
+            ]);
           }
         }
       ],
@@ -712,12 +672,13 @@ export default {
     addaction() {
       this.$router.push({ name: "approval" });
     },
-    draft() {
-      this.$router.push({ name: "draft" });
-    },
-    exportData() {
+    exportData(i) {
+      if(this.arr.length == 0){
+        this.$Message.error("没有选择")
+        return
+      }
       for(let item of this.arr){
-         window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=1&activityName=
+         window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=${i}&activityName=
          ${item.activityName}`)
       }
     },
@@ -730,9 +691,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:#FF565A !important;
+  font-size: 16px;
+}
 .showimg{
     width: 100%;
     height: auto;
+}
+.integral-header{
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 16px;
+  margin-bottom: 20px;
 }
 .integral-header .integral-top {
   padding: 10px;
@@ -741,14 +715,11 @@ export default {
 .integral-header .integral-center {
   margin: 0 20px;
 }
-.integral-header .integral-body {
-  padding:  20px;
-  background: #fff;
-  justify-content: flex-start;
-  height: 50px;
+.integral-header .integral-body .flex-center-start  span{
+  margin-right: 15px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
-  width: 150px;
+  width: 180px;
   margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
@@ -756,17 +727,20 @@ export default {
 }
 
 .table-header {
-  padding: 20px;
+  padding: 10px 20px;
   background: white;
 }
 .table-header .table-btn {
   margin-left: 15px;
+  font-size: 16px;
 }
 .flex-data {
   display: flex;
 }
 .integral-table {
-  position: relative;
+  padding: 20px 10px;
+  background: #fff;
+  border-radius: 20px;
 }
 .popup {
   background: #ffffff;
@@ -802,14 +776,6 @@ export default {
       height: 150px;
     }
   }
-}
-li {
-  width: 160px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  border: 1px solid gray;
-  margin-top: -1px;
 }
 .pages{
   text-align: center;

@@ -1015,6 +1015,9 @@ export default {
   .btns{
     .right{
       margin-left: 20px;
+      background: #FF565A !important;
+      color: #fff !important;
+      border-color:#FF565A !important;
     }
   }
   .row20{

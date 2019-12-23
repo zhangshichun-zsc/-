@@ -58,11 +58,11 @@
           <div class="flex-center-start">
             <span>姓名：</span>
             <i-input v-model="query.userName" size='large' class="input"></i-input>
-            <span>报名类型:</span>
+            <!-- <span>报名类型:</span>
             <Select v-model="query.roleId" size='large' class="input">
               <Option :value="''">全部</Option>
               <Option v-for="item in cityList1" :value="item.roleId" :key="item.value">{{ item.roleName }}</Option>
-            </Select>
+            </Select> -->
             <span>报名状态:</span>
             <Select v-model="query.enrollStatus" size='large' class="input">
               <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>

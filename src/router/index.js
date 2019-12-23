@@ -1270,6 +1270,12 @@ const router = new Router({
         },
         component: () =>
           import('@/views/activity_vun/volunteer_rule.vue')
+      },
+      {
+        path: "volunteer-draft",
+        name: 'volunteer-draft',
+        component: () =>
+        import('@/views/activity_vun/volunteer-draft.vue')
       }
       ]
     },

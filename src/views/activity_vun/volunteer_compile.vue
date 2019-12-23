@@ -1,7 +1,7 @@
 <!--志愿者编辑招募报名项（志愿者）-->
 <template>
   <div>
-    <Modal v-model="modal" title="选择项目" width='700'>
+    <Modal v-model="modal" :title="titles[state-1]" width='700'>
       <div class="wap">
         <Row v-if='state===1'>
           <Row class-name="row10"><span>新增报名项</span></Row>
@@ -201,7 +201,7 @@
             </i-col>
           </Row>
           <Row v-if='!isDisb' class-name="row10" type="flex" justify="center">
-             <Button @click="showModal(1)" class="add">+添加限制项</Button>
+             <Button @click="showModal(2)" class="add">+添加限制项</Button>
           </Row>
         </i-col>
       </Row>
@@ -241,7 +241,7 @@
             </i-col>
           </Row>
           <Row v-if='!isDisb' class-name="row10" type="flex" justify="center">
-             <Button @click="showModal(1)" class="add">+添加优先项</Button>
+             <Button @click="showModal(3)" class="add">+添加优先项</Button>
           </Row>
         </i-col>
       </Row>
@@ -259,7 +259,7 @@
       </Row>
       <Row>
         <i-col span='1' push='5'>
-          <Button shape="circle" size='large' @click="success()" type="success" style="width:150px;">完成</Button>
+          <Button shape="circle" size='large' @click="success()" style="width:150px;" class="success">完成</Button>
         </i-col>
       </Row>
     </div>
@@ -283,6 +283,7 @@ export default {
           return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      titles:["设置报名项","设置限制项","设置优先项"],
       state: 1,
       modal: false,
       adr:false,
@@ -663,6 +664,11 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.success{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:#FF565A !important;
+}
 .wap{
   * {
     font-size: 16px;
