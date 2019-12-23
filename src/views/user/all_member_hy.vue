@@ -1253,6 +1253,11 @@ export default {
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
+.flex-center-start {
+  span {
+    font-size: 16px;
+  }
+}
 .integral-header .integral-body .flex-center-start .inpt {
   width: 150px;
   margin-left: 10px;

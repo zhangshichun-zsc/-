@@ -121,7 +121,7 @@
           <!-- <Dropdown @on-click='isALL'> -->
             <Button style="margin-left:10px;" class="btns"  @click="ismodal2">
               群发站内信
-              <Icon type="md-arrow-dropdown"></Icon>
+             
             </Button>
             <!-- <DropdownMenu slot="list">
               <DropdownItem name="ON" ref="ON" :selected="Sele2.ON">选中用户</DropdownItem>
@@ -1370,6 +1370,11 @@ export default {
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 10px;
+}
+.flex-center-start {
+  span {
+    font-size: 16px;
+  }
 }
 .integral-table {
   margin-top: 30px;

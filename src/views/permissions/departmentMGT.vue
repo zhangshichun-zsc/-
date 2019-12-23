@@ -478,7 +478,7 @@ export default {
         type: "default",
         size: "small"
       },
-      datalistCount: "",
+      datalistCount: 0,
       datalist: []
     };
   },

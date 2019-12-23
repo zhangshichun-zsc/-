@@ -1069,6 +1069,11 @@ export default {
   width: 150px;
   margin-left: 10px;
 }
+.flex-center-start {
+  span {
+    font-size: 16px;
+  }
+}
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }

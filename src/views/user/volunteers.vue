@@ -1204,6 +1204,12 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 10px;
 }
+
+.flex-center-start {
+  span {
+    font-size: 18px;
+  }
+}
 .integral-table {
   margin-top: 20px;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);

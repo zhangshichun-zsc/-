@@ -151,7 +151,7 @@ export default {
               "span",
               {
                 style: {
-                  color: "#FF565A",
+                  color: this.navigation1.name === "volunteer" ? "" : "#FF565A",
                   cursor: "pointer"
                 },
                 on: {
