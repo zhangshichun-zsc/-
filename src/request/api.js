@@ -633,6 +633,7 @@ export const getMatchingMeList = p =>posts("/activity-manage/work/act/match/mem/
 export const getMatchingVoList = p =>posts("/activity-manage/work/act/match/volu/list",p)
 export const Matchingupdate = p =>posts("/activity-manage/work/act/match/update",p)
 export const matchAdd = p => posts("/activity-manage/work/act/match/add",p)
+export const getDraft = p => posts("/volunteer-manager/queryInitiatalVolunteerActivity",p)
 
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 

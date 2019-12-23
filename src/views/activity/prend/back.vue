@@ -22,31 +22,31 @@
           <div v-for="(item,index) in feed" :key='index'>
             <div class="ls-item flex-between" v-if=' item.type === 1 '>
               <i-input placeholder="请输入单文本标题" v-model="item.context"/>
-              <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+              <Icon type="ios-trash"  @click="deleItem(index,null)" color='#FF565A' size='25'/>
             </div>
             <div class="ls-item flex-between" v-else-if=' item.type === 6 '>
               <i-input placeholder="请输入多行文本标题" v-model="item.context"/>
-              <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+              <Icon type="ios-trash"  @click="deleItem(index,null)" color='#FF565A' size='25'/>
             </div>
             <div class="ls-item"  v-else-if='item.type === 3 '>
               <div class="item flex-between">
                 <i-input placeholder="请输入单选标题" v-model="item.context"/>
-                <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+                <Icon type="ios-trash"  @click="deleItem(index,null)" color='#FF565A' size='25'/>
               </div>
               <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
                 <i-input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
-                <Icon type="ios-trash"  @click="deleItem(index,i)"/>
+                <Icon type="ios-trash"  @click="deleItem(index,i)" color='#FF565A' size='25'/>
               </div>
               <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
             <div class="ls-item" v-else>
               <div class="item flex-between">
                 <i-input placeholder="请输入多选标题" v-model="item.context"/>
-                <Icon type="ios-trash"  @click="deleItem(index,null)"/>
+                <Icon type="ios-trash"  @click="deleItem(index,null)" color='#FF565A' size='25'/>
               </div>
               <div class="item flex-between" v-for="(val,i) in item.answer" :key='i'>
                 <input :placeholder="`输入选项${i+1}`" v-model="val.answer"/>
-                <Icon type="ios-trash"  @click="deleItem(index,i)"/>
+                <Icon type="ios-trash"  @click="deleItem(index,i)" color='#FF565A' size='25'/>
               </div>
               <Button type="primary" ghost  @click="addSignIput(index)" class="btn">+</Button>
             </div>
@@ -236,8 +236,9 @@ export default {
   margin-bottom: 0px;
 }
 .content {
-  background: #f3f3f3;
-  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px 100px 20px 20px;
   .content-activity {
     height: 50px;
     line-height: 50px;
@@ -255,6 +256,7 @@ export default {
         }
         .btn{
           margin-left: 100px;
+          margin-bottom: 20px;
         }
         .item{
            margin-bottom: 10px;

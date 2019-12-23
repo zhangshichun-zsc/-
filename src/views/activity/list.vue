@@ -10,21 +10,23 @@
         :class="{active:num==index}"
         @click="onall(index)"
       >
-        <a>{{item}}</a>
+        {{item}}
       </span>
     </div>
-    <div class="name">
-      <span>活动名称:</span>
-      <i-input :value.sync="value" placeholder="活动名称" style="width: 120px" v-model="activityName"></i-input>
-      <span>姓名:</span>
-      <i-input :value.sync="value" placeholder="姓名" style="width: 120px" v-model="userName"></i-input>
-      <span>手机号:</span>
-      <i-input :value.sync="value" placeholder="手机号" style="width: 120px" v-model="userTel"></i-input>
-      <span>受益方:</span>
-      <Select v-model="types" style="width:120px">
-        <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-       <Button class="button-red" @click="query">查询</Button>
+    <div class="name flex-between">
+      <div class="flex-center-start">
+        <span>活动名称:</span>
+        <i-input :value.sync="value" placeholder="活动名称" style="width: 180px" v-model="activityName"></i-input>
+        <span>姓名:</span>
+        <i-input :value.sync="value" placeholder="姓名" style="width: 180px" v-model="userName"></i-input>
+        <span>手机号:</span>
+        <i-input :value.sync="value" placeholder="手机号" style="width: 180px" v-model="userTel"></i-input>
+        <span>受益方:</span>
+        <Select v-model="types" style="width:180px">
+          <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <Button class="btn" @click="query" shape="circle" size='large' icon="ios-search">查询结果</Button>
     </div>
     <div class="integral-table">
       <div class="table-header flex-between" style="display:flex">
@@ -34,7 +36,7 @@
         <div class="flex-center-end">
           <Button class="table-btn" @click="exportData">导出</Button>
           <Dropdown style="margin-left: 10px">
-            <Button>
+            <Button class="table-btn">
               群发消息
               <Icon type="ios-arrow-down"></Icon>
             </Button>
@@ -46,10 +48,10 @@
           </Dropdown>
           <div class="flex-center-start">
             <Button class="table-btn" @click="add">添加活动</Button>
-            <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数">
+            <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <Select placeholder="排序方式" style="width: 100px;" v-model="sort">
+            <Select class="table-btn" placeholder="排序方式" style="width: 150px;" v-model="sort" size="large">
               <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
          </div>
@@ -297,17 +299,20 @@ export default {
 <style lang="scss" scoped>
 .list {
   .all {
-    height: 40px;
-    padding-left: 20px;
+    padding: 20px;
     background: #ffffff;
-    line-height: 40px;
-    border: 1px solid #e4e4e4;
     margin-top: 20px;
     span {
+      display: inline-block;
+      height: 40;
+      line-height: 40px;
+      width: 120px;
+      text-align: center;
+      padding: 0 20px;
+      border-radius: 20px;
+      background: rgb(250, 248, 248);
       margin: 0 20px;
-      a {
-        color: black;
-      }
+      cursor: pointer;
     }
   }
   .integral-top {
@@ -316,20 +321,18 @@ export default {
   }
   .name {
     height: 60px;
-    display: flex;
-    align-items: center;
+    padding: 20px 20px 20px 0;
     background: #ffffff;
     span {
       margin-left: 35px;
-      margin-right: 10px;
-      font-size: 14px;
+      margin-right: 15px;
+      font-size: 16px;
     }
   }
 }
 .active {
-  a {
-    color: green !important;
-  }
+  background: #FF565A !important;
+  color: #fff !important;
 }
 .integral-table {
   background-color: #fff;
@@ -337,9 +340,16 @@ export default {
   .table-header {
     height: 50px;
     .table-btn {
+      font-size: 16px;
       margin: 0 10px;
     }
   }
+}
+.btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:#FF565A !important;
+  font-size: 16px;
 }
 .pages{
   padding: 16px;

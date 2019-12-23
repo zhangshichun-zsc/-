@@ -46,7 +46,7 @@
             <tr>
               <th>培训状态</th>
               <th>确认时间</th>
-              <!-- <th>操作</th> -->
+              <th>操作</th>
             </tr>
             <tr>
               <td v-if='msg.trainStatus==1'>未阅读</td>
@@ -79,7 +79,7 @@
             <tr>
               <th>反馈状态</th>
               <th>提交时间</th>
-              <!-- <th>操作</th> -->
+              <th>操作</th>
             </tr>
             <tr>
               <td v-if='msg.feedStatus==1'>已反馈</td>
