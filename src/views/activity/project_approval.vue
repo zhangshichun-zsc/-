@@ -44,6 +44,7 @@
       </div>
       <div class="flex-center-end">
         <Button @click="approval" style="margin-right:10px">新建立项</Button>
+        <Button class="table-btn" @click="draft">草稿箱</Button>
         <Button @click="querys" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
       </div>
     </div>
@@ -268,6 +269,12 @@ export default {
   },
 
   methods: {
+    draft() {
+      this.$router.push({ name: "draft" })
+    },
+    handleChange(name,e){
+      this.query[name] = e
+    },
     success(){
        this.modal1 = false
        this.operation(3)

@@ -520,7 +520,7 @@ export default {
         orgName: this.BasicDate.orgName,
         address: this.BasicDate.address,
         remark: this.BasicDate.remark,
-        orgPic: this.BasicDate.orgPic,
+        orgPic: this.picUrl ? this.picUrl : this.BasicDate.orgPic,
         ownerUserName: this.BasicDate.contactUserName,
         ownerUserPhone: this.BasicDate.contactUserPhone,
         description: this.BasicDate.description,
@@ -581,6 +581,7 @@ export default {
         reader.onload = e => {
           this.BasicDate.orgPicShow = e.target.result;
           this.picUrl = res.data;
+          console.log(this.picUrl);
         };
       });
     },
