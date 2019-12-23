@@ -195,7 +195,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "活动反馈详情(会员)"
+        head: "活动反馈详情(志愿者)"
       },
       seeModal: false,
       time: "请选择时间段",

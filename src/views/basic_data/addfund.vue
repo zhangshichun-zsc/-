@@ -29,21 +29,21 @@
           >
             <FormItem label="名称:" prop="orgName">
               <Input
-                v-model.trim="formValidate.orgName"
+                v-model="formValidate.orgName"
                 placeholder="点 击 输 入"
                 style="width: 220px"
               />
             </FormItem>
             <FormItem label="联系人:" prop="contactUserName">
               <Input
-                v-model.trim="formValidate.contactUserName"
+                v-model="formValidate.contactUserName"
                 placeholder="自动带出"
                 style="width: 220px"
               />
             </FormItem>
             <FormItem label="联系方式:" prop="contactUserPhone">
               <Input
-                v-model.trim="formValidate.contactUserPhone"
+                v-model="formValidate.contactUserPhone"
                 style="width: 220px"
               />
             </FormItem>
@@ -55,7 +55,7 @@
             </FormItem>
             <FormItem label="微信公众号:" prop="wechatOfficeAccount">
               <Input
-                v-model.trim="formValidate.wechatOfficeAccount"
+                v-model="formValidate.wechatOfficeAccount"
                 placeholder="点 击 输 入"
                 style="width: 220px"
               />
@@ -109,20 +109,93 @@
                 :autosize="{ minRows: 5, maxRows: 8 }"
               />
             </FormItem>
+
             <FormItem label="文件:">
               <div class="content">
+                <div class="">
+                  <div class="fil_txt" v-if="formInline.nameA != null">
+                    <p>{{ formInline.nameA }}</p>
+                    <Progress :percent="numA" style="width: 10rem" />
+                    <Icon
+                      type="ios-trash"
+                      class="cancel"
+                      size="20"
+                      color="#FF565A"
+                      @click="canceltxt(formInline.agPicA, formInline.nameA)"
+                    />
+                  </div>
+                  <div class="fil_txt" v-if="formInline.nameB != null">
+                    <p>{{ formInline.nameB }}</p>
+                    <Progress :percent="numB" style="width: 10rem" />
+                    <Icon
+                      type="ios-trash"
+                      class="cancel"
+                      size="24"
+                      color="#FF565A"
+                      @click="canceltxt(formInline.agPicB, formInline.nameB)"
+                    />
+                  </div>
+                  <div class="fil_txt" v-if="formInline.nameC != null">
+                    <p>{{ formInline.nameC }}</p>
+                    <Progress :percent="numC" style="width: 10rem" />
+                    <Icon
+                      type="ios-trash"
+                      class="cancel"
+                      size="24"
+                      color="#FF565A"
+                      @click="canceltxt(formInline.agPicC, formInline.nameC)"
+                    />
+                  </div>
+                </div>
                 <div class="middle">
-                  <Icon type="ios-paper-outline" size="30" />
+                  <div class="start-wap">
+                    <div
+                      class="upload"
+                      v-if="formValidate.texturl == null"
+                      @click="
+                        () => {
+                          this.$refs.filess.click();
+                        }
+                      "
+                    >
+                      <div class="file">
+                        <input
+                          style=" display:none;"
+                          type="file"
+                          accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
+                          ref="filess"
+                          @change="uploadFiles($event)"
+                          multiple
+                        />
+                        <Icon
+                          type="md-cloud-upload"
+                          :size="20"
+                          color="#FF565A"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FormItem>
+
+            <!-- <FormItem label="文件:">
+              <div class="content">
+                <div class="middle">
                   <div class="file">
                     <p>
                       <span>文件名称</span>
                     </p>
+                    <Progress :percent="num" style="width: 15rem" />
                   </div>
-                  <Button
-                    shape="circle"
-                    icon="md-close"
+
+                  <Icon
+                    v-if="formValidate.texturl != null"
                     style="margin-top: 0.5rem;"
-                  ></Button>
+                    @click="circle"
+                    size="20"
+                    type="ios-close-circle-outline"
+                  />
                 </div>
                 <div class="middle">
                   <div class="start-wap">
@@ -161,15 +234,13 @@
                   </div>
                 </div>
               </div>
-            </FormItem>
+            </FormItem> -->
             <FormItem label="备注:">
-              <div class="content">
-                <Input
-                  v-model="value"
-                  type="textarea"
-                  :autosize="{ minRows: 5, maxRows: 8 }"
-                />
-              </div>
+              <Input
+                v-model="value"
+                type="textarea"
+                :autosize="{ minRows: 5, maxRows: 8 }"
+              />
             </FormItem>
 
             <FormItem label="">
@@ -262,7 +333,9 @@ export default {
       },
       orgTypes: 9,
       defaultList: "",
-      num: 0,
+      numA: 0,
+      numB: 0,
+      numC: 0,
       formValidate: {
         address: "",
         contactUserName: "",
@@ -313,12 +386,39 @@ export default {
       file: "",
       cityId: 1,
       districtId: 1,
-      sysId:1
+      formInline: {
+        partA: "",
+        partB: "",
+        typeDicId: "",
+        agTime: "",
+        categoryId: "",
+        agFile: null,
+        name: null,
+        agPicA: null,
+        agPicB: null,
+        agPicC: null,
+
+        nameA: null,
+        nameB: null,
+        nameC: null
+      }
     };
   },
   components: { Selsect },
   methods: {
-
+    //获取组织类型列表
+    // getorgtype() {
+    //   orgtype({
+    //     sysType: this.$route.query.sysId
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       this.list = res.data.filter(res => {
+    //         return res.dataKey != 448;
+    //       });
+    //     }
+    //     console.log(res);
+    //   });
+    // },
 
     //  获取当前账号的 姓名和手机号
     getUserInfo() {
@@ -334,8 +434,20 @@ export default {
     },
     //增加组织
     getorgadd() {
+      let file = [];
+      let str = this.formInline;
+      if (str.agPicA) {
+        file.push(str.agPicA);
+      }
+      if (str.agPicB) {
+        file.push(str.agPicB);
+      }
+      if (str.agPicC) {
+        file.push(str.agPicC);
+      }
+
       orgadd({
-        sysId: this.sysId,
+        sysId: this.$route.query.sysId,
         orgType: this.orgTypes,
         orgName: this.formValidate.orgName,
         provinceId: this.formValidate.provinceId,
@@ -347,7 +459,7 @@ export default {
         contactUserName: this.formValidate.contactUserName,
         contactUserPhone: this.formValidate.contactUserPhone,
         orgPic: this.formValidate.orgPic,
-        file: this.file,
+        file: file.toString(),
         description: this.formValidate.description
       }).then(res => {
         if (res.code == 200) {
@@ -392,6 +504,30 @@ export default {
         }
       });
     },
+    // 删除附件
+    canceltxt(pic, name) {
+      orgimgdel({ path: pic }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          if (name == this.formInline.nameA) {
+            (this.formInline.nameA = null), (this.formInline.agPicA = null);
+            this.numA = 0;
+            return;
+          } else if (name == this.formInline.nameB) {
+            (this.formInline.nameB = null), (this.formInline.agPicB = null);
+            this.numB = 0;
+            return;
+          } else if ((name = this.formInline.nameC)) {
+            (this.formInline.nameC = null), (this.formInline.agPicC = null);
+            this.numC = 0;
+            return;
+          }
+          this.texturl = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
 
     //表单提交
     handleSubmit(name) {
@@ -415,23 +551,47 @@ export default {
     },
     //附件上传
     uploadFiles() {
-      console.log(this.$refs.filess.file);
-      let file = this.$refs.filess.file[0];
-      const dataForm = new FormData();
+      let file = this.$refs.filess.files[0];
+      if (this.formInline.nameA == null) {
+        this.formInline.nameA = file.name;
+      } else if (this.formInline.nameB == null) {
+        this.formInline.nameB = file.name;
+      } else if (this.formInline.nameC == null) {
+        this.formInline.nameC = file.name;
+      }
+      let dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.formValidate.texturl = e.target.result;
-          this.formValidate.text = res.data;
-          console.log(this.formValidate.texturl, this.formValidate.text);
-        };
+        if (res.code === 200) {
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = e => {
+            this.texturl = e.target.result;
+            // this.formInline.agPicA = res.data;
+            if (this.formInline.agPicA == null) {
+              this.formInline.agPicA = res.data;
+              this.numA = 100;
+              return;
+            } else if (this.formInline.agPicB == null) {
+              this.formInline.agPicB = res.data;
+              this.numB = 100;
+              return;
+            } else if (this.formInline.agPicC == null) {
+              this.formInline.agPicC = res.data;
+              this.numC = 100;
+              return;
+            } else {
+              this.$Message.error("最多上传三个附件!");
+            }
+          };
+        }
       });
     }
   },
   mounted() {
     this.getUserInfo();
+
+
   }
 };
 </script>
@@ -483,5 +643,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   font-size: 15px;
+}
+.fil_txt p {
+  font-size: 16px;
 }
 </style>

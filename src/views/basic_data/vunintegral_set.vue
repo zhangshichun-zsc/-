@@ -102,7 +102,8 @@ export default {
 <style lang="scss" scoped>
 .set-header{
   padding: 20px;
-  background: rgb(228, 228, 228);
+  background: #fff;
+   border-radius: 10px 10px 0 0;
 }
 .content{
   padding: 20px 30px 30px;
@@ -157,5 +158,6 @@ export default {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+   border-radius: 0 0 10px 10px;
 }
 </style>

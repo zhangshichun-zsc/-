@@ -110,7 +110,7 @@
               />
             </FormItem>
 
-            <FormItem label="文件:">
+            <FormItem label="附件:">
               <div class="content">
                 <div class="">
                   <div class="fil_txt" v-if="formInline.nameA != null">
@@ -552,6 +552,7 @@ export default {
     //附件上传
     uploadFiles() {
       let file = this.$refs.filess.files[0];
+      if (!file) return;
       if (this.formInline.nameA == null) {
         this.formInline.nameA = file.name;
       } else if (this.formInline.nameB == null) {

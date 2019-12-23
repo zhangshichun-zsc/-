@@ -66,7 +66,7 @@ export default {
           align: "center"
         },
         {
-          title: "智障类型",
+          title: "障碍类型",
           key: "dicName",
           align: "center",
            width:460,
@@ -316,5 +316,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../libs/basicdata.css"
+
 </style>

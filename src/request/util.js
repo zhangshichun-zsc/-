@@ -30,7 +30,7 @@ export default {
     let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours())
     let m = date.getMinutes() > 10 ? date.getMinutes() : '0' + date.getMinutes();
     let s = date.getSeconds() > 10 ? date.getSeconds() : '0' + date.getSeconds();
-    return Y + M + D + h + m + ':' + s;
+    return Y + M + D +' '+ h +':'+ m + ':' + s;
   },
   formatDate_time: function (timestamp) {
     let date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000

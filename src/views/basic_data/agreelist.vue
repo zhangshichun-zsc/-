@@ -2,19 +2,23 @@
 <template>
   <div class="integral">
     <Navigation :labels="navigation1"></Navigation>
-     <div class="flex-center-start integral-bodyss" >
-        <div class="flex-center-start name">
-          <span>甲乙方:</span>
-          <Input size="large" placeholder="甲乙方名称" class="inpt" v-model.trim="agreementObject" />
-        </div>
-        <div class="flex-center-start name">
-          <span>协议分类:</span>
-           <Select v-model="agreementType" class="inpt" style="width: 200px"  placeholder="协议类型">
-            <Option v-for="item in typelist" :value="item.dataKey" :key="item.dataKey">{{ item.dataValue }}</Option>
-          </Select>
-        </div>
-        <Button class="search" @click="query">查询</Button>
+    <div class="flex-center-start integral-bodyss">
+      <div class="flex-center-start name">
+        <span>甲乙方:</span>
+        <Input size="large" placeholder="甲乙方名称" class="inpt" v-model.trim="agreementObject" />
       </div>
+      <div class="flex-center-start name">
+        <span>协议分类:</span>
+        <Select v-model="agreementType" class="inpt" style="width: 200px" placeholder="协议类型">
+          <Option
+            v-for="item in typelist"
+            :value="item.dataKey"
+            :key="item.dataKey"
+          >{{ item.dataValue }}</Option>
+        </Select>
+      </div>
+      <Button class="search" @click="query">查询</Button>
+    </div>
     <div class="integral-table">
       <div class="table-header flex-between">
         <div class="flex-center-start paddings">
@@ -22,7 +26,12 @@
         </div>
         <div class="flex-center-end">
           <Button class="table-btns" @click="newclass">分类管理</Button>
-          <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">
+          <Select
+            v-model="size"
+            style="width:100px;margin-right:10px"
+            placeholder="显示条数"
+            class="space"
+          >
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" class="space" style="width:100px;" v-model="sort">
@@ -73,30 +82,30 @@ export default {
           title: "甲方",
           key: "partA",
           align: "center",
-          width:360,
+          width: 360
         },
         {
           title: "乙方",
           key: "partB",
           align: "center",
-          width:360,
+          width: 360
         },
         {
           title: "协议分类",
           key: "agreementTypeText",
           align: "center",
-           width:280,
+          width: 280
         },
         {
           title: "所属项目",
           key: "categoryName",
           align: "center",
-           width:280,
+          width: 280
         },
         {
           title: "协议时间",
           align: "center",
-           width:240,
+          width: 240,
           render: (h, params) => {
             return h("div", formatDate(params.row.agreementTimestamp));
           }
@@ -105,23 +114,32 @@ export default {
           title: "相关",
           key: "nameA",
           align: "center",
-          width:600,
+          width: 600,
           render: (h, params) => {
-            return h("div", params.row.nameA!=null? params.row.nameA:''+'  '+params.row.nameB!=null? params.row.nameB:''+'  '+params.row.nameC!=null? params.row.nameC:'');
+            return h(
+              "div",
+              params.row.nameA != null
+                ? params.row.nameA
+                : "" + "  " + params.row.nameB != null
+                ? params.row.nameB
+                : "" + "  " + params.row.nameC != null
+                ? params.row.nameC
+                : ""
+            );
           }
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-          width:180,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h(
                 "a",
                 {
                   clssName: "action",
-                   style: {
+                  style: {
                     marginRight: "5px",
                     marginLeft: "5px",
                     color: "red"
@@ -186,7 +204,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "desc",
-      typelist:[],
+      typelist: []
     };
   },
 
@@ -251,12 +269,11 @@ export default {
 
     //查询
     query(e) {
-      this.page=1
+      this.page = 1;
       if (this.agreementType == 0) {
         this.agreementType = "";
       }
       this.getAgreementpage();
-
     },
 
     newagree() {
@@ -287,9 +304,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .integral-bodyss {
- margin-bottom: 20px;
-    padding-left: 20px;
-    border-radius: 10px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-radius: 10px;
   display: flex;
   height: 90px;
   background: #ffffff;
@@ -304,5 +321,4 @@ export default {
     margin-right: 30px;
   }
 }
-@import "../../libs/basicdata.css"
 </style>

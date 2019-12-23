@@ -118,7 +118,11 @@
             :show-message="false"
           >
             <FormItem label="名称:" prop="orgName">
-              <Input v-model="BasicDate.orgName" style="width: 220px" />
+              <Input
+                disabled
+                v-model="BasicDate.orgName"
+                style="width: 220px"
+              />
             </FormItem>
             <FormItem label="联系人:" prop="orgName">
               <Input
@@ -129,6 +133,7 @@
             </FormItem>
             <FormItem label="地址:">
               <Selsect
+                :disabled_s="true"
                 :arr="[province, city, county]"
                 @change="idsactive"
               ></Selsect>
@@ -202,7 +207,7 @@
                 :autosize="{ minRows: 5, maxRows: 8 }"
               />
             </FormItem>
-            <FormItem label="附件:">
+            <!-- <FormItem label="附件:">
               <div class="content">
                 <div
                   class="middle"
@@ -238,7 +243,129 @@
                   </Upload>
                 </div>
               </div>
+            </FormItem> -->
+            <FormItem label="附件:">
+              <div class="content">
+                <div class="">
+                  <div class="fil_txt" v-if="formInline.nameA != null">
+                    <p>{{ formInline.nameA }}</p>
+                    <div>
+                      <div>
+                        <Progress
+                          v-if="!formInline.flagA"
+                          :percent="numA"
+                          style="width: 10rem"
+                        />
+                      </div>
+                      <div>
+                        <Icon
+                          type="ios-trash"
+                          class="cancel-txt"
+                          size="24"
+                          color="#FF565A"
+                          @click="
+                            canceltxt(formInline.agPicA, formInline.nameA)
+                          "
+                        />
+                        <a
+                          v-if="formInline.fileUrlShowA"
+                          class="download"
+                          @click="download(formInline.fileUrlShowA)"
+                          >下载</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fil_txt" v-if="formInline.nameB != null">
+                    <p>{{ formInline.nameB }}</p>
+                    <div>
+                      <div>
+                        <Progress
+                          v-if="!formInline.flagB"
+                          :percent="numB"
+                          style="width: 10rem"
+                        />
+                      </div>
+                      <div>
+                        <Icon
+                          type="ios-trash"
+                          class="cancel-txt"
+                          size="24"
+                          color="#FF565A"
+                          @click="
+                            canceltxt(formInline.agPicB, formInline.nameB)
+                          "
+                        />
+                        <a
+                          v-if="formInline.fileUrlShowB"
+                          class="download"
+                          @click="download(formInline.fileUrlShowB)"
+                          >下载</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fil_txt" v-if="formInline.nameC != null">
+                    <p>{{ formInline.nameC }}</p>
+                    <div>
+                      <div>
+                        <Progress
+                          v-if="!formInline.flagC"
+                          :percent="numC"
+                          style="width: 10rem"
+                        />
+                      </div>
+                      <div>
+                        <Icon
+                          type="ios-trash"
+                          class="cancel-txt"
+                          size="24"
+                          color="#FF565A"
+                          @click="
+                            canceltxt(formInline.agPicC, formInline.nameC)
+                          "
+                        />
+                        <a
+                          v-if="formInline.fileUrlShowC"
+                          class="download"
+                          @click="download(formInline.fileUrlShowC)"
+                          >下载</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="middle">
+                  <div class="start-wap">
+                    <div
+                      class="upload"
+                      @click="
+                        () => {
+                          this.$refs.filess.click();
+                        }
+                      "
+                    >
+                      <div class="file">
+                        <input
+                          style=" display:none;"
+                          type="file"
+                          accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
+                          ref="filess"
+                          @change="uploadFiles($event)"
+                          multiple
+                        />
+                        <Icon
+                          type="md-cloud-upload"
+                          :size="20"
+                          color="#FF565A"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </FormItem>
+
             <FormItem label="备注:">
               <div class="content">
                 <Input
@@ -376,7 +503,24 @@ export default {
       size: 10,
       dataCount: 0,
       arr: [],
-
+      //  附件
+      formInline: {
+        fileUrlShowA: null,
+        fileUrlShowB: null,
+        fileUrlShowC: null,
+        flagA: false,
+        flagB: false,
+        flagC: false,
+        agPicA: null,
+        agPicB: null,
+        agPicC: null,
+        nameA: null,
+        nameB: null,
+        nameC: null
+      },
+      numA: 0,
+      numB: 0,
+      numC: 0,
       ruleValidate: {
         orgName: [
           {
@@ -416,9 +560,9 @@ export default {
       orgimg: "",
       percent: 0, // 文件上传进度条
       statistics: [],
-      province: "",
-      county: "",
-      city: ""
+      province: "0",
+      county: "0",
+      city: "0"
     };
   },
   computed: {},
@@ -484,6 +628,50 @@ export default {
         console.log(res);
       });
     },
+    //附件上传
+    uploadFiles() {
+      let file = this.$refs.filess.files[0];
+      if (!file) return;
+      if (this.formInline.nameA == null) {
+        this.formInline.nameA = file.name;
+      } else if (this.formInline.nameB == null) {
+        this.formInline.nameB = file.name;
+      } else if (this.formInline.nameC == null) {
+        this.formInline.nameC = file.name;
+      }
+      let dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        if (res.code === 200) {
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = e => {
+            this.texturl = e.target.result;
+            // this.formInline.agPicA = res.data;
+            if (this.formInline.agPicA == null) {
+              this.formInline.agPicA = res.data;
+
+              this.numA = 100;
+
+              return;
+            } else if (this.formInline.agPicB == null) {
+              this.formInline.agPicB = res.data;
+
+              this.numB = 100;
+
+              return;
+            } else if (this.formInline.agPicC == null) {
+              this.formInline.agPicC = res.data;
+
+              this.numC = 100;
+              return;
+            } else {
+              this.$Message.error("最多上传三个附件!");
+            }
+          };
+        }
+      });
+    },
     // 组织成员分页
     getorgmember() {
       orgmember({
@@ -507,6 +695,33 @@ export default {
           this.province = res.data.provinceId;
           this.city = res.data.cityId;
           this.county = res.data.districtId;
+
+          if (res.data.fileList && res.data.fileList.length > 0) {
+            let arr = [];
+
+            res.data.fileList.forEach((item, index) => {
+              console.log(index);
+
+              if (index == 0) {
+                this.formInline.nameA = item.fileName;
+                this.formInline.agPicA = item.fileUrl;
+                this.formInline.fileUrlShowA = item.fileUrlShow;
+                this.formInline.flagA = true;
+              }
+              if (index == 1) {
+                this.formInline.nameB = item.fileName;
+                this.formInline.fileUrlShowB = item.fileUrlShow;
+                this.formInline.flagB = true;
+                this.formInline.agPicB = item.fileUrl;
+              }
+              if (index == 2) {
+                this.formInline.nameC = item.fileName;
+                this.formInline.fileUrlShowB = item.fileUrlShow;
+                this.formInline.flagC = true;
+                this.formInline.agPicC = item.fileUrl;
+              }
+            });
+          }
         } else {
         }
         console.log(res);
@@ -515,6 +730,20 @@ export default {
 
     //编辑修改组织
     getorgemod() {
+      console.log(33);
+
+      let file = [];
+      let str = this.formInline;
+      if (str.agPicA) {
+        file.push(str.agPicA);
+      }
+      if (str.agPicB) {
+        file.push(str.agPicB);
+      }
+      if (str.agPicC) {
+        file.push(str.agPicC);
+      }
+
       orgemod({
         orgId: this.$route.query.orgId,
         orgName: this.BasicDate.orgName,
@@ -525,10 +754,10 @@ export default {
         ownerUserPhone: this.BasicDate.contactUserPhone,
         description: this.BasicDate.description,
         wx: this.BasicDate.wx,
-        fileList: this.BasicDate.fileList,
         provinceId: this.province,
         cityId: this.city,
-        districtId: this.county
+        districtId: this.county,
+        fileList: file.toString() === "" ? "" : file
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功");
@@ -597,7 +826,30 @@ export default {
         }
       });
     },
-
+    // 删除附件
+    canceltxt(pic, name) {
+      orgimgdel({ path: pic }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("删除成功");
+          if (name == this.formInline.nameA) {
+            (this.formInline.nameA = null), (this.formInline.agPicA = null);
+            this.numA = 0;
+            return;
+          } else if (name == this.formInline.nameB) {
+            (this.formInline.nameB = null), (this.formInline.agPicB = null);
+            this.numB = 0;
+            return;
+          } else if ((name = this.formInline.nameC)) {
+            (this.formInline.nameC = null), (this.formInline.agPicC = null);
+            this.numC = 0;
+            return;
+          }
+          this.texturl = null;
+        } else {
+          this.$Message.success(res.msg);
+        }
+      });
+    },
     //上传附件
     handleSuccesstext(res, file) {
       if (res.code == 200) {
@@ -621,16 +873,13 @@ export default {
 
     //下载
     download(e) {
-      console.log(e);
-      window.open(e, "_blank");
+      window.open(e);
     },
 
     // 表单提交
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (!this.province || !this.city || !this.county)
-            return this.$Message.error("请选择地址");
           this.getorgemod();
         } else {
           this.$Message.error("必填项未填!");
@@ -818,6 +1067,7 @@ export default {
   top: 30%;
   transform: translateX(-50%);
 }
+
 .cancel {
   position: absolute;
   top: 10px;
@@ -825,8 +1075,22 @@ export default {
   z-index: 2;
   color: #ff565a;
 }
+
 .upload {
   position: relative;
-  height: 150px;
+}
+.fil_txt {
+  position: relative;
+
+  div {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+}
+.download {
+  font-size: 15px;
+  color: #ff565a;
+  margin-left: 15px;
 }
 </style>

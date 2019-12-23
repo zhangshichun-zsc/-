@@ -175,19 +175,19 @@ export default {
           title: "会员包",
           key: "packageFlagText",
           align: "center",
-           width:180,
+           width:240,
         },
         {
           title: "创建时间",
           key: "createAt",
           align: "center",
-          width:180,
+          width:240,
         },
         {
           title: "有效状态",
           key: "status",
           align: "center",
-          width:120,
+          width:180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -215,7 +215,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:140,
+          width:180,
           render: (h, params) => {
             return h("div", [
               h(
@@ -458,5 +458,4 @@ export default {
 .modals{
   height: 500px;
 }
-@import "../../libs/basicdata.css"
 </style>
