@@ -3,7 +3,7 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <div class="flex-center-between integral-top">
+      <!-- <div class="flex-center-between integral-top">
         <div>
           <Icon type="ios-search-outline" />
           <span>筛选查询</span>
@@ -13,30 +13,50 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-          <Button @click="query()">查询结果</Button>
+
         </div>
-      </div>
+      </div>-->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>组织</span>
-          <Input size="large" placeholder="请输入" class="inpt" v-model="args.orgName" />
+          <span>组织:</span>
+          <Input size="large" placeholder="请输入" class="inpt" v-model.trim="args.orgName" />
         </div>
         <div class="flex-center-start">
-          <span>创建时间</span>
+          <span>创建时间/时间段:</span>
+          <DatePicker
+            class="inpt"
+            style="width: 180px"
+            type="date"
+            @on-change="startTimeChange"
+            placeholder="请选择开始时间"
+            v-model="args.startAt"
+          ></DatePicker>
+          <span class="po">~</span>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            @on-change="endTimeChange"
+            placeholder="请选择结束时间"
+            v-model="args.endAt"
+          ></DatePicker>
+        </div>
+        <!-- <div class="flex-center-start">
+          <span>创建时间:</span>
           <Row>
             <DatePicker
               :open="open"
               confirm
               type="daterange"
               @on-change="handleChange"
-              @on-ok="successOk">
+              @on-ok="successOk"
+            >
               <a href="javascript:void(0)" @click="open = true">
-                  <Icon type="ios-calendar-outline"></Icon>
-                  <template>{{ time }}</template>
+                <Icon type="ios-calendar-outline"></Icon>
+                <template>{{ time }}</template>
               </a>
             </DatePicker>
           </Row>
-        </div>
+        </div>-->
         <div class="flex-center-end">
           <Button class="search" @click="query()">查询</Button>
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
@@ -78,79 +98,101 @@
          <Button class="table-btns" @click="modal1 = true">新增模板</Button>
         </div>
         <div class="flex-center-end">
-          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" @on-change="changeNum">
+          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" v-model="size" @on-change="changeNum">
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
-          <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
+          <Select class="inpt" style="width:100px" placeholder="排序方式" v-model="sort" @on-change="changeSort">
             <Option value="create_at desc">升序</Option>
             <Option value="create_at asc">降序</Option>
           </Select>
         </div>
       </div>
-      <Table border :columns="columns" :data="data"></Table>
+
+      <div class="min-height">
+        <Table border :columns="columns" :data="data"></Table>
+      </div>
       <div class="pages">
-        <Page :total="sumSize" show-elevator @on-change="changePage" :page-size="size" />
+         <Page
+          :total="sumSize"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changePage"
+        />
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getBooks, getVolunteer,updateBooks } from '@/request/api'
-import { filterNull } from '@/libs/utils'
+import { getBooks, getVolunteer, updateBooks } from "@/request/api";
+import { filterNull } from "@/libs/utils";
 export default {
   data() {
     return {
       open: false,
-      time:'请选择时间段',
+      time: "请选择时间段",
       navigation1: {
         head: "证书管理(志愿者)"
       },
-      params:{
-        orgId: '',
-        title:'',
-        effectiveAt:'',
-        orgType:3,
-        sysId:2
-       },
-      ruleValidate:{
+      params: {
+        orgId: "",
+        title: "",
+        effectiveAt: "",
+        orgType: 3,
+        sysId: 2
+      },
+      ruleValidate: {
         orgId: [
-             { required: true, message: '组织不能为空', trigger: 'change', type:'number',min:0 }
-            ],
+          {
+            required: true,
+            message: "组织不能为空",
+            trigger: "change",
+            type: "number",
+            min: 0
+          }
+        ],
         title: [
-            { required: true, message: '模板名称不能为空', trigger: 'blur' }
-            ],
+          { required: true, message: "模板名称不能为空", trigger: "blur" }
+        ],
         effectiveAt: [
-            { required: true, message: '有效日期不能为空', trigger: 'change' }
-            ],
+          { required: true, message: "有效日期不能为空", trigger: "change" }
+        ]
       },
       modal1: false,
       columns: [
         {
           title: "组织",
           key: "orgName",
-          width: 300,
+          width: 600,
           align: "center"
         },
         {
           title: "证书名称",
-          key: "title"
+          key: "title",
+          width: 440,
+          align: "center"
         },
         {
           title: "生效时间",
           key: "effectiveAt",
-          width: 200,
+          width: 240,
           align: "center"
         },
         {
           title: "失效时间",
           key: "inEffectiveAt",
-          width: 200,
+          width: 240,
           align: "center"
         },
-         {
-          title:"创建时间",
-          key:"createAt"
+        {
+          title: "创建时间",
+          key: "createAt",
+          width: 240,
+          align: "center"
         },
         {
           title: "操作",
@@ -164,15 +206,15 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#097276",
+                    color: "red",
                     marginRight: "5px"
                   },
                   on: {
                     click: () => {
                       let ob = params.row;
                       this.$router.push({
-                        name: "vun_prend.vue",
-                        query: { certMouldId: ob.certMouldId, show: 2 }
+                        name: "vun_prend",
+                        query: { certMouldId: ob.certMouldId, show: 0}
                       });
                     }
                   }
@@ -185,14 +227,14 @@ export default {
                     {
                       clssName: "action",
                       style: {
-                        color: "#097276"
+                        color: "red"
                       },
                       on: {
                         click: () => {
                           let ob = params.row;
                           this.$router.push({
-                            name: "vun_prend.vue",
-                            query: { certMouldId: ob.certMouldId, show: 2 }
+                            name: "vun_prend",
+                            query: { certMouldId: ob.certMouldId, show: 1 }
                           });
                         }
                       }
@@ -204,21 +246,21 @@ export default {
           }
         }
       ],
-      data: [
-      ],
-      page:1,
-      size:10,
-      sort:'create_at desc',
-      sumSize:10,
-      args:{
-        startAt:null,
-        endAt:null,
-        orgName:null,
+      data: [],
+      page: 1,
+      size: 10,
+      sort: "create_at desc",
+      sumSize: 10,
+      args: {
+        startAt: null,
+        endAt: null,
+        orgName: null
       },
-      volun:[],
-      numList:[10,15,20,],
-       options:{
-        disabledDate (date) {
+      volun: [],
+      numList: [10, 15, 20],
+
+      options: {
+        disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;
         }
       }
@@ -230,33 +272,42 @@ export default {
   computed: {},
 
   created() {
-    this.getList({})
-    this.getVoteer()
+    this.getList({});
+    this.getVoteer();
   },
 
+
   methods: {
-    getList ({startAt,endAt,orgName}) {
-      getBooks(filterNull({page:{page:this.page,size:this.size,sort:this.sort},startAt,endAt,orgName,sysType:'2,3'})).then(res => {
-         if(res.code == 200){
-           this.sumSize = res.data.totalSize
-           this.data = res.data.list
-           this.page = res.data.pageNum
-        }else{
-          this.$Message.error(res.msg)
+    getList({ startAt, endAt, orgName }) {
+      getBooks(
+        filterNull({
+          page: { page: this.page, size: this.size, sort: this.sort },
+          startAt,
+          endAt,
+          orgName,
+          sysType: "2,3"
+        })
+      ).then(res => {
+        if (res.code == 200) {
+          this.sumSize = res.data.totalSize;
+          this.data = res.data.list;
+          this.page = res.data.pageNum;
+        } else {
+          this.$Message.error(res.msg);
         }
-      })
+      });
     },
-    getVoteer(){
+    getVoteer() {
       getVolunteer({}).then(res => {
-        this.volun = res.data
-      })
+        this.volun = res.data;
+      });
     },
 
     query() {
       if (this.args.startAt && this.args.endAt) {
-        if (this.args.startAt < this.args.endAt) {
-          this.args.startAt = this.args.startAt.split('')[0] + " 00:00:00";
-          this.args.endAt = this.args.endAt.split('')[0] + " 23:59:59";
+        if (this.args.startAt <= this.args.endAt) {
+          this.args.startAt = this.args.startAt.split(' ')[0] + " 00:00:00";
+          this.args.endAt = this.args.endAt.split(' ')[0] + " 23:59:59";
 
         } else {
            this.args.startAt=''
@@ -269,48 +320,55 @@ export default {
       this.getList(this.args);
     },
 
-     successOk(){
-      if(!this.args.startAt&&!this.args.endAt){
-        this.time='请选择时间段'
-      }
-      this.open = false
-    },
-    handleChange(e){
-      let start = e[0]
-      let end = e[1]
-      this.time = e[0] + '-' + e[1]
-      if(start&&end){
-        if(start === end){
-          start = start + ' 00:00:00'
-          end = end + ' 23:59:59'
-        }else{
-          start = start + ' 00:00:00'
-          end = end + ' 00:00:00'
-        }
-      }
-      this.args.startAt = start
-      this.args.endAt = end
+    // successOk() {
+    //   if (!this.args.startAt && !this.args.endAt) {
+    //     this.time = "请选择时间段";
+    //   }
+    //   this.open = false;
+    // },
+    startTimeChange(e) {
+      this.args.startAt = e;
     },
 
-    changePage (e) {
-      this.page = e
-      this.getList(this.args)
+    endTimeChange(e) {
+      this.args.endAt = e;
     },
-    success () {
-      this.$refs.formValidate.validate((valid) => {
+    // handleChange(e) {
+    //   let start = e[0];
+    //   let end = e[1];
+    //   this.time = e[0] + "-" + e[1];
+    //   if (start && end) {
+    //     if (start === end) {
+    //       start = start + " 00:00:00";
+    //       end = end + " 23:59:59";
+    //     } else {
+    //       start = start + " 00:00:00";
+    //       end = end + " 00:00:00";
+    //     }
+    //   }
+    //   this.args.startAt = start;
+    //   this.args.endAt = end;
+    // },
+
+    changePage(e) {
+      this.page = e;
+      this.getList(this.args);
+    },
+    success() {
+      this.$refs.formValidate.validate(valid => {
         if (valid) {
-            updateBooks(this.params).then(res => {
-              if(res.code == 200){
-                this.modal1 = false
-                this.$Message.success('添加成功')
-                this.getList(this.args)
-                this.cancel()
-              }else{
-                this.$Message.error(res.msg)
-              }
-            })
+          updateBooks(this.params).then(res => {
+            if (res.code == 200) {
+              this.modal1 = false;
+              this.$Message.success("添加成功");
+              this.getList(this.args);
+              this.cancel();
+            } else {
+              this.$Message.error(res.msg);
+            }
+          });
         } else {
-            this.$Message.error('没有填写完整');
+          this.$Message.error("没有填写完整");
         }
       });
     },
@@ -318,9 +376,9 @@ export default {
       this.params.effectiveAt = e;
     },
     cancel() {
-      this.params.orgId = ''
-      this.params.title = ''
-      this.params.effectiveAt = ''
+      this.params.orgId = "";
+      this.params.title = "";
+      this.params.effectiveAt = "";
     },
     changeNum(e) {
       console.log(e);
@@ -337,25 +395,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.integral-header{
- margin-bottom: 20px;
-  border-radius: 10px;
-}
-.table-header{
-  padding: 10px 0;
 
-}
 .integral-header .integral-top {
   padding: 15px 20px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
 }
 .integral-header .integral-body {
+  margin-bottom: 20px;
   padding: 20px;
   background: #fff;
+  border-radius: 10px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 200px;
@@ -364,38 +416,9 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.integral-table {
-  margin-top: 30px;
+.po{
+  padding:0 10px;
 }
-.table-header {
-  padding: 5px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
-}
-.table-header .table-btn {
-  margin-left: 15px;
-}
-.integral-table .pages {
-  padding: 5px 20px;
-  margin-top: 50px;
-  background: #fff;
-}
-.pages {
-  text-align: center;
-}
-.ipt {
-  margin-left: 10px;
-}
-.sdate {
-  margin-left: 15px;
-}
-.data-ios{
-    padding: 5px;
-}
-.inpt{
-    margin: 5px;
-}
-.pages{
-    margin-top: 2.5rem;
-}
+
+@import "../../libs/basicdata.css";
 </style>

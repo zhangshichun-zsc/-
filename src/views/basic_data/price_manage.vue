@@ -68,7 +68,16 @@
 
       </div>
       <div class="pages">
-        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='args.size'/>
+         <Page
+          :total="sumSize"
+          show-elevator
+          show-total
+          size="small"
+          style="margin: auto"
+          :page-size="args.size"
+          @on-change="changePage"
+        />
+
       </div>
     </div>
   </div>
@@ -121,24 +130,25 @@ export default {
           title: "基金名称",
           key: "orgName",
           align:'center',
+          width:460
         },
         {
           title: "联系人",
           key: "contactUserName",
           align:'center',
-          width:200,
+          width:300,
         },
         {
           title: "联系电话",
           key: "contactUserPhone",
           align:'center',
-          width:200,
+          width:240,
         },
         {
           title: "创建时间",
           key: "createAt",
           align:'center',
-          width:200,
+          width:240,
         },
         {
           title: "有效状态",

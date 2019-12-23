@@ -90,6 +90,17 @@
   padding: 0 20px;
   margin: 0 20px;
 }
+.table-btns:hover{
+  background: #ff565a;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 16px;
+  font-size: 16px;
+  color: white;
+  height: 32px;
+  padding: 0 20px;
+  margin: 0 20px;
+}
 
 html ::-webkit-scrollbar {
   width: 15px;
