@@ -39,7 +39,7 @@
         </div>
         <div class="flex-center-end">
           <Button class="search" @click="query()">查询</Button>
-          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel" class-name="vertical-center-modal">
+          <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
             <Form ref="formValidate" :model="params" :rules="ruleValidate" :label-width="120">
               <FormItem label="组织" prop="orgId">
                 <Select v-model="params.orgId">
@@ -66,7 +66,6 @@
               </FormItem>
             </Form>
             <div slot="footer">
-               <Button  size="large" @click="quxiao">取消</Button>
               <Button type="error" size="large" @click="success">确定</Button>
             </div>
           </Modal>
@@ -74,26 +73,23 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div class="data-ios">
-         <div class="flex-center-start">
-           <Icon type="ios-apps" />
-          <span>数据列表</span>
-         </div>
-            <div class="flex-center-end">
-              <Select size='small' class="inpt" placeholder="显示条数" @on-change='changeNum'>
-                <Option :value="item" v-for='(item,index) in numList' :key="index">{{ item }}</Option>
-              </Select>
-              <Select size='small' class="inpt" placeholder="排序方式"  @on-change='changeSort'>
-                <Option value="create_at desc">升序</Option>
-                <Option value="create_at asc">降序</Option>
-              </Select>
-            </div>
+      <div class="table-header flex-between">
+        <div class="flex-center-start">
+         <Button class="table-btns" @click="modal1 = true">新增模板</Button>
+        </div>
+        <div class="flex-center-end">
+          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" @on-change="changeNum">
+            <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
+          </Select>
+          <Select class="inpt" style="width:100px" placeholder="排序方式" @on-change="changeSort">
+            <Option value="create_at desc">升序</Option>
+            <Option value="create_at asc">降序</Option>
+          </Select>
         </div>
       </div>
       <Table border :columns="columns" :data="data"></Table>
       <div class="pages">
-          <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
+        <Page :total="sumSize" show-elevator @on-change="changePage" :page-size="size" />
       </div>
     </div>
   </div>
@@ -133,7 +129,7 @@ export default {
         {
           title: "组织",
           key: "orgName",
-          width: 600,
+          width: 300,
           align: "center"
         },
         {
@@ -142,11 +138,15 @@ export default {
         },
         {
           title: "生效时间",
-          key: "effectiveAt"
+          key: "effectiveAt",
+          width: 200,
+          align: "center"
         },
         {
-          title:"失效时间",
-          key:"inEffectiveAt"
+          title: "失效时间",
+          key: "inEffectiveAt",
+          width: 200,
+          align: "center"
         },
          {
           title:"创建时间",
@@ -156,6 +156,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
+          width:220,
           render: (h, params) => {
             return h("div", [
               h(
@@ -164,34 +165,41 @@ export default {
                   clssName: "action",
                   style: {
                     color: "#097276",
-                    marginRight:"5px"
+                    marginRight: "5px"
                   },
                   on: {
                     click: () => {
-                       let ob = params.row
-                      this.$router.push({ name: 'vun_prend.vue' ,query:{certMouldId:ob.certMouldId,show:false}})
+                      let ob = params.row;
+                      this.$router.push({
+                        name: "vun_prend.vue",
+                        query: { certMouldId: ob.certMouldId, show: 2 }
+                      });
                     }
                   }
                 },
                 "预览"
               ),
-               params.row.isEdit == 1?
-              h(
-                "a",
-                {
-                  clssName: "action",
-                  style: {
-                    color: "#097276"
-                  },
-                  on: {
-                    click: () => {
-                      let ob = params.row
-                      this.$router.push({ name: 'vun_prend.vue',query:{certMouldId:ob.certMouldId,show:true}})
-                    }
-                  }
-                },
-                "编辑"
-              ):""
+              params.row.isEdit == 1
+                ? h(
+                    "a",
+                    {
+                      clssName: "action",
+                      style: {
+                        color: "#097276"
+                      },
+                      on: {
+                        click: () => {
+                          let ob = params.row;
+                          this.$router.push({
+                            name: "vun_prend.vue",
+                            query: { certMouldId: ob.certMouldId, show: 2 }
+                          });
+                        }
+                      }
+                    },
+                    "编辑"
+                  )
+                : ""
             ]);
           }
         }
@@ -304,32 +312,38 @@ export default {
         } else {
             this.$Message.error('没有填写完整');
         }
-      })
+      });
     },
-    changeDate(e){
-      this.params.effectiveAt = e
+    changeDate(e) {
+      this.params.effectiveAt = e;
     },
     cancel() {
       this.params.orgId = ''
       this.params.title = ''
       this.params.effectiveAt = ''
     },
-    changeNum(e){
-      this.size = e
-      this.page = 1
-      this.getList({})
+    changeNum(e) {
+      console.log(e);
+      this.size = e;
+      this.page = 1;
+      this.getList({});
     },
-    changeSort(e){
-      this.sort = e
-      this.page = 1
-      this.getList({})
+    changeSort(e) {
+      this.sort = e;
+      this.page = 1;
+      this.getList({});
     }
   }
 };
 </script>
-<style lang="scss">
-.integral-header {
-  border: 1px solid #eee;
+<style lang="scss" scoped>
+.integral-header{
+ margin-bottom: 20px;
+  border-radius: 10px;
+}
+.table-header{
+  padding: 10px 0;
+
 }
 .integral-header .integral-top {
   padding: 15px 20px;

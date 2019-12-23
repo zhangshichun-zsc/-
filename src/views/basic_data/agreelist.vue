@@ -304,5 +304,4 @@ export default {
     margin-right: 30px;
   }
 }
-@import "../../libs/basicdata.css"
 </style>

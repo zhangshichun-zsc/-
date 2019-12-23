@@ -458,5 +458,5 @@ export default {
 .modals{
   height: 500px;
 }
-@import "../../libs/basicdata.css"
+
 </style>
