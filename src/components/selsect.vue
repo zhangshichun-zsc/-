@@ -3,6 +3,7 @@
   <div>
     <Select
       v-model="val[0]"
+      :disabled="disabled_s"
       @on-change="changeProve(0, $event)"
       :label-in-value="true"
       :style="'width:' + styles + 'px'"
@@ -13,6 +14,7 @@
       }}</Option>
     </Select>
     <Select
+      :disabled="disabled_s"
       v-model="val[1]"
       style="margin-bottom:5px"
       @on-change="changeProve(1, $event)"
@@ -24,6 +26,7 @@
       }}</Option>
     </Select>
     <Select
+      :disabled="disabled_s"
       v-model="val[2]"
       @on-change="changeProve(2, $event)"
       :label-in-value="true"
@@ -67,7 +70,8 @@ export default {
         return [];
       }
     },
-    styles: Number
+    styles: Number,
+    disabled_s: Boolean
   },
   watch: {
     arr(val) {

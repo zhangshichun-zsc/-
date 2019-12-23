@@ -114,8 +114,12 @@
         /></Col>
         <Col span="8"></Col>
       </Row>
+      <Modal v-model="isDelete" @on-ok='deleteAdd()'>
+        <div>是否删除该广告</div>
+      </Modal>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -299,8 +303,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                       this.getAdvertisingRoof(params.row.contentId, 0,2);
-
+                      this.isDelete = true
+                      this.deleteId = params.row.contentId
                     }
                   }
                 },
@@ -333,7 +337,9 @@ export default {
       arr: [],
       batch: null,
       modal1:false,
-      showImg:''
+      showImg:'',
+      isDelete:false,
+      deleteId:''
     };
   },
 
@@ -348,7 +354,9 @@ export default {
     add() {
       this.$router.push({ name: "vp_add" });
     },
-
+    deleteAdd(){
+      this.getAdvertisingRoof(this.deleteId, 0,2)
+    },
     //列表
     getAdvertisingList() {
       AdvertisingList({
