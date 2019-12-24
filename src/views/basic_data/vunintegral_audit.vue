@@ -17,7 +17,7 @@
     </div>
     <!-- <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead> -->
     <div class="audit-list">
-      <div class="table-header">
+      <div class="table-header flex-center-end">
         <div class="flex-center-end">
           <Button class="table-btns" @click="batch">批量审批</Button>
           <Button class="table-btn"  disabled>
@@ -31,9 +31,9 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
-        <Modal v-model="modal1" class-name="vertical-center-modal">
+        <Modal v-model="modal1" title="审批确定" class-name="vertical-center-modal">
           <div class="approval">
-            <h3>是否确认审批？</h3>
+            <h3 style="font-size:16px;text-align: center;">是否确认审批？</h3>
           </div>
            <div slot="footer">
               <Button type="text" size="large" @click="cancel">取消</Button>

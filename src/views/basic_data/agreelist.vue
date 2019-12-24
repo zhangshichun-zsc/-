@@ -338,7 +338,7 @@ export default {
 .name {
   span {
     display: block;
-    width: 100px;
+    min-width: 80px;
   }
   .inpt {
     margin-right: 30px;

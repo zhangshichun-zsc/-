@@ -90,6 +90,7 @@
   height: 32px;
   padding: 0 20px;
   margin: 0 20px;
+  border: 1px solid #ff565a;
 }
 .table-btns:hover {
   background: #ff565a;
@@ -101,6 +102,7 @@
   height: 32px;
   padding: 0 20px;
   margin: 0 20px;
+  border: 1px solid #ff565a;
 }
 
 html ::-webkit-scrollbar {
@@ -180,8 +182,8 @@ html ::-webkit-scrollbar-thumb {
 .table-header {
   background: #ffffff;
   border: 0;
-  padding: 20px 10px;
   border-radius: 10px 10px 0 0;
+  height: 70px;
 }
 .pages {
   text-align: center;

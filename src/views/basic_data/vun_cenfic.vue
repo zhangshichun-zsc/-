@@ -361,7 +361,7 @@ export default {
           updateBooks(this.params).then(res => {
             if (res.code == 200) {
               this.modal1 = false;
-              this.$Message.success("添加成功");
+              this.$Message.success(res.msg);
               this.getList(this.args);
               this.cancel();
             } else {
@@ -397,13 +397,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.integral-header .integral-top {
-  padding: 15px 20px;
-  background: white;
-}
-.integral-header .integral-center {
-  margin: 0 20px;
-}
+
 .integral-header .integral-body {
   margin-bottom: 20px;
   padding: 20px;
@@ -421,5 +415,5 @@ export default {
   padding:0 10px;
 }
 
-@import "../../libs/basicdata.css";
+
 </style>
