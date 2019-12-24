@@ -54,7 +54,7 @@
         <Modal v-model="modal1" title="修改积分" class-name="vertical-center-modal">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
-              <RadioGroup v-model="formItem.addType">
+              <RadioGroup v-model="formItem.addType" size="large">
                 <Radio label="1">
                   增加
 
@@ -66,11 +66,11 @@
               </RadioGroup>
             </FormItem>
              <FormItem label="数值：" prop="addScore">
-               <InputNumber :min="1" v-model="formItem.addScore" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
+               <InputNumber :min="1" size="large" v-model="formItem.addScore" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
                    <Button type="error" >分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
-              <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
+              <Input v-model="formItem.remark" size="large" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
             </FormItem>
           </Form>
           <div slot="footer">
@@ -82,7 +82,7 @@
         <Modal v-model="modal2" title="志愿者活动积分比例设置" class-name="vertical-center-modal">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
             <FormItem label="1小时服务时长：" prop="serve">
-              <InputNumber :max="100" :min="0" placeholder="请输入大于0的整数" v-model="formValidate.serve" style="width:200px"></InputNumber>
+              <InputNumber :max="100" :min="0" size="large" placeholder="请输入大于0的整数" v-model="formValidate.serve" style="width:200px"></InputNumber>
 
               <!-- // <Input v-model="formValidate.serve" placeholder="请输入大于0的整数" style="width:250px"/> -->
               <Button type="error" >分</Button>

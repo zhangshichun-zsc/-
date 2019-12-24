@@ -53,7 +53,7 @@
         <Modal v-model="modal1" title="修改积分" class-name="vertical-center-modal">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
-              <RadioGroup v-model="formItem.addType">
+              <RadioGroup v-model="formItem.addType" size="large">
                 <Radio label="1">增加</Radio>
                 <Radio label="2">减少</Radio>
               </RadioGroup>
@@ -61,6 +61,7 @@
             <FormItem label="数值：" prop="addScore">
               <InputNumber
                 :min="1"
+                size="large"
                 v-model="formItem.addScore"
                 style="width: 160px;"
                 placeholder="请输入大于0的整数"
@@ -68,7 +69,7 @@
               <Button type="error" >分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
-              <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
+              <Input v-model="formItem.remark" size="large" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
             </FormItem>
           </Form>
           <div slot="footer">
