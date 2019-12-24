@@ -295,12 +295,8 @@ export default {
   },
   //事件监听
   watch: {
-    'size':()=>{
-      this.getAddressList()
-    },
-    'sort':()=>{
-      this.getAddressList()
-    },
+    'size':'getAddressList',
+    'sort':'getAddressList',
   },
   methods: {
     addBut() {
