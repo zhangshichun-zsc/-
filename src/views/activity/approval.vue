@@ -268,7 +268,7 @@
                 <Input v-model="item.ownerUserName" style="width: 200px" class="same-staff" @on-change='getWorkerList(item,index)'></Input>
                 <span>联系方式</span>
                 <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
-                <span @click="deleteWorker(index)">删除</span>
+                <Button @click="deleteWorker(index)">删除</Button>
               </li>
               <li v-if='addWorker' class="padd">
                 <Select style="width:300px" placeholder="请选择工作人员">
@@ -296,8 +296,8 @@
                 <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource">
                   <span>{{item.roleName}}</span>
                   <span>{{item.recruitNum}}</span>
-                  <span @click="changeRoles(i)">详情</span>
-                  <span @click="deleteRole(i)">删除</span>
+                  <Button @click="changeRoles(i)">详情</Button>
+                  <Button @click="deleteRole(i)">删除</Button>
                 </p>
               </li>
               <li class="lx-flex-center">
@@ -436,9 +436,9 @@
             </ul>
           </Col>
           <Col span="10">
-            <p class="active-head">
+            <div class="active-head">
               <span>活动立项批次</span>
-            </p>
+            </div>
             <div class="first-li" style="width:100%" v-for="(item,i) in projectMsg.actInfoList">
               <img style="width:200px;height:150px" :src='item.actShowPic' />
               <ul style="margin-left:20px;width:60%">
@@ -456,6 +456,9 @@
                   <Button @click.native="deletePc(i)">删除</Button>
                 </li>
               </ul>
+            </div>
+            <div class="lx-flex-center">
+              <Button @click="addBatch">新增批次</Button>
             </div>
           </Col>
         </Row>
@@ -1045,6 +1048,23 @@ export default {
       this.three = false;
       this.current = 1;
     },
+    addBatch(){
+      this.pcNum += 1
+      this.batch = this.projectMsg.actInfoList[this.projectMsg.actInfoList.length-1];
+      delete this.batch.startT
+      delete this.batch.endT
+      delete this.batch.releaseTime
+      for(let oi in this.batch.userConfList){
+        delete this.batch.userConfList[oi].enrollStarttime
+        delete this.batch.userConfList[oi].enrollEndtime
+        delete this.batch.userConfList[oi].outrollStarttime
+        delete this.batch.userConfList[oi].outrollEndtime
+        delete this.batch.userConfList[oi].setTime
+      }
+      this.two = true;
+      this.three = false;
+      this.current = 1;
+    },
 
     //提交
     submit() {
@@ -1055,7 +1075,7 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.$Message.success(res.msg);
-          this.$router.push({path: "manager"});
+          this.$router.back()
         } else {
           this.$Message.error(res.msg);
         }
@@ -1069,7 +1089,7 @@ export default {
       projectApproval(this.projectMsg).then(res => {
         if (res.code == 200) {
           this.$Message.success(res.msg);
-          this.$router.push({path: "manager"});
+          this.$router.back()
         } else {
           this.$Message.error(res.msg);
         }
