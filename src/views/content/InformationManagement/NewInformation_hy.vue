@@ -48,7 +48,7 @@
             <div class="title flex-center-start">
               <p>
                 <Icon style="color: #F9FAFC" type="md-bookmark" />
-                <span>专题正文</span>
+                <span>正文</span>
               </p>
             </div>
             <div class="jiao"></div>
@@ -64,7 +64,7 @@
             <div class="title flex-center-start">
               <p>
                 <Icon style="color: #F9FAFC" type="md-bookmark" />
-                <span>封面图片</span>
+                <span>图片</span>
               </p>
             </div>
             <div class="jiao"></div>

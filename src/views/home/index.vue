@@ -70,7 +70,6 @@
               @click="Jump(index)"
               v-for="(item, index) in Jumplist"
               :key="index"
-              :style="item.name == '快捷入口管理' ? 'width:35%' : ''"
             >
               <div>
                 <img
@@ -554,7 +553,7 @@ export default {
 }
 .pending-right {
   padding: 22px 32px;
-  width: 410px;
+  width: 500px;
   height: 320px;
   background: #ffffff;
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
@@ -630,10 +629,10 @@ export default {
       }
       .name-btn {
         text-align: center;
-        font-size: 12px;
+        font-size: 14px;
         color: #333333;
         text-align: center;
-        line-height: 16px;
+        line-height: 30px;
       }
     }
   }
@@ -746,7 +745,7 @@ export default {
   width: 1070px;
 }
 .hd-tw {
-  width: 410px;
+  width: 500px;
 }
 .hd-on,
 .hd-tw {

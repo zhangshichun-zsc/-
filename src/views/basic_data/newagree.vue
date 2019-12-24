@@ -4,13 +4,13 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="xieyi">
       <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="120">
-        <FormItem label="甲方" prop="partA">
+        <FormItem label="甲方:" prop="partA">
           <Input v-model.trim="formInline.partA" placeholder="甲方名称" style="width:300px" />
         </FormItem>
-        <FormItem label="乙方" prop="partB">
+        <FormItem label="乙方:" prop="partB">
           <Input v-model.trim="formInline.partB" placeholder="乙方名称" style="width:300px" />
         </FormItem>
-        <FormItem label="协议分类" prop="typeDicId">
+        <FormItem label="协议分类:" prop="typeDicId">
           <Select v-model="formInline.typeDicId" placeholder="请选择分类" style="width:300px">
             <Option
               v-for="item in locations"
@@ -19,7 +19,7 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="所属项目" prop="categoryId">
+        <FormItem label="所属项目:" prop="categoryId">
           <Select
             v-model="formInline.categoryId"
             placeholder="请选择项目类型"
@@ -33,7 +33,7 @@
           </Select>
         </FormItem>
 
-        <FormItem label="协议时间" prop="agTime">
+        <FormItem label="协议时间:" prop="agTime">
           <DatePicker
             type="date"
              placeholder="请选择协议时间"
@@ -44,10 +44,10 @@
             style="width: 200px"
           ></DatePicker>
         </FormItem>
-        <FormItem label="广告附件" prop="agFile">
+        <FormItem label="附件:" prop="agFile">
 
           <div class="flex-wrap-center">
-            <p class="imgs" v-if="formInline.nameA != null">
+            <p class="imgs" v-if="Boolean(formInline.nameA)">
               <span>{{formInline.nameA}}</span>
               <Icon
                 type="ios-trash"
@@ -57,7 +57,7 @@
                 @click="cancelImg(formInline.agPicA,formInline.nameA)"
               />
             </p>
-            <p class="imgs" v-if="formInline.nameB != null">
+            <p class="imgs" v-if="Boolean(formInline.nameB)">
               <span>{{formInline.nameB}}</span>
               <Icon
                 type="ios-trash"
@@ -67,7 +67,7 @@
                 @click="cancelImg(formInline.agPicB,formInline.nameB)"
               />
             </p>
-            <p class="imgs" v-if="formInline.nameC != null">
+            <p class="imgs" v-if="Boolean(formInline.nameC)">
               <span>{{formInline.nameC}}</span>
               <Icon
                 type="ios-trash"
@@ -207,9 +207,10 @@ export default {
 
   methods: {
     handleSubmit(name) {
+
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (this.formInline.agPicA == null) {
+          if (Boolean(this.formInline.agPicA) == false) {
             this.$Message.error("请上传附件");
           } else {
             if (this.agreementId!=null) {
@@ -341,11 +342,11 @@ export default {
     uploadFile() {
 
       let file = this.$refs.files.files[0];
-      if (this.formInline.nameA == null) {
+      if (Boolean(this.formInline.nameA)==false) {
         this.formInline.nameA = file.name;
-      } else if (this.formInline.nameB == null) {
+      } else if (Boolean(this.formInline.nameB)==false) {
         this.formInline.nameB = file.name;
-      } else if (this.formInline.nameC == null) {
+      } else if (Boolean(this.formInline.nameC)==false) {
         this.formInline.nameC = file.name;
       }
       let dataForm = new FormData();
@@ -356,13 +357,13 @@ export default {
         reader.onload = e => {
           this.texturl = e.target.result;
 
-          if (this.formInline.agPicA == null||this.formInline.agPicA =='') {
+          if (Boolean(this.formInline.agPicA)==false) {
             this.formInline.agPicA = res.data;
             return;
-          } else if (this.formInline.agPicB == null||this.formInline.agPicB == '') {
+          } else if (Boolean(this.formInline.agPicB)==false) {
             this.formInline.agPicB = res.data;
             return;
-          } else if (this.formInline.agPicC == null||this.formInline.agPicC == '') {
+          } else if (Boolean(this.formInline.agPicC)==false) {
             this.formInline.agPicC = res.data;
             return;
           } else {

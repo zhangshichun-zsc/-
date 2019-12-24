@@ -28,7 +28,9 @@
                   ></chu-tree>
                 </Col>
               </Row>
-              <Button type="error" @click="save">保存</Button>
+              <Button type="error" style="font-size: 14px" @click="save"
+                >保存</Button
+              >
             </TabPane>
           </Tabs>
         </div>

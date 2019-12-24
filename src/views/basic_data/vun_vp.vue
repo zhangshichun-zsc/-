@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="min-height">
-      <Table ref="selection" border :columns="columns" :data="data1"></Table>
+      <Table ref="selection" border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
         <Page
@@ -56,7 +56,7 @@ export default {
           { required: true, message: "特长名称不能为空", trigger: "blur" }
         ]
       },
-      title: "新增类型",
+      title: "新增特长",
       columns: [
         {
           type: "selection",
@@ -128,7 +128,7 @@ export default {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "修改障碍类型";
+                      this.text = "修改特长";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }
@@ -154,7 +154,7 @@ export default {
           }
         }
       ],
-      data1: [],
+      data: [],
       modal1: false,
       top: [
         {
@@ -218,7 +218,7 @@ export default {
       this.params = this.util.remove(params);
       Basicsearch(this.params).then(res => {
         if (res.code == 200) {
-          this.data1 = res.data.list;
+          this.data = res.data.list;
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }
@@ -314,6 +314,7 @@ export default {
 
     //弹出框
     btn() {
+      this.text='新增特长'
       this.id = 1;
       this.modal1 = true;
       this.formValidate.dicName = "";

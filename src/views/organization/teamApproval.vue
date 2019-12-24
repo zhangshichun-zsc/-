@@ -10,7 +10,7 @@
       <p v-show="isModel" class="tips">请输入拒绝理由</p>
       <div slot="footer">
         <Button type="text" size="large" @click="modalCancel">取消</Button>
-        <Button type="primary" size="large" @click="modalOk">确定</Button>
+        <Button type="error" size="large" @click="modalOk">确定</Button>
       </div>
     </Modal>
 
@@ -124,12 +124,12 @@
 
 <script>
 import {
-  orgpages,
   orgSetStatus,
   queryVouluteerOrgList,
   queryAuditList,
   getIsConfig,
-  auditCreateCoOrg
+  auditCreateCoOrg,
+  orggetAuditList
 } from "@/request/api";
 export default {
   data() {
@@ -146,12 +146,13 @@ export default {
           title: "组织名称",
           key: "orgName",
           align: "center",
+          minWidth: 140,
           render: (h, params) => {
             return h(
               "span",
               {
                 style: {
-                  color: "#FF565A",
+                  color: this.navigation1.name === "volunteer" ? "" : "#FF565A",
                   cursor: "pointer"
                 },
                 on: {
@@ -205,6 +206,7 @@ export default {
           title: "组织地址",
           key: "address",
           align: "center",
+          minWidth: 140,
           render: (h, params) => {
             let address = params.row;
             return h(
@@ -221,7 +223,8 @@ export default {
         {
           title: "人数",
           key: "num",
-          align: "center"
+          align: "center",
+          minWidth: 80
         },
         {
           title: "提交时间",
@@ -324,12 +327,12 @@ export default {
                   {
                     clssName: "action",
                     style: {
-                      color: params.row.status == 1 ? "#FF565A" : "#ccc",
+                      color: params.row.status == 0 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
                       click: () => {
-                        if (params.row.status == 1) {
+                        if (params.row.status == 0) {
                           this.singlePass("parent", {
                             ids: params.row.auditId,
                             status: 2
@@ -346,12 +349,12 @@ export default {
                     style: {
                       marginRight: "5px",
                       marginLeft: "5px",
-                      color: params.row.status == 1 ? "#FF565A" : "#ccc",
+                      color: params.row.status == 0 ? "#FF565A" : "#ccc",
                       cursor: "pointer"
                     },
                     on: {
                       click: () => {
-                        if (params.row.status == 1) {
+                        if (params.row.status == 0) {
                           this.showModal("parent", {
                             auditIdStr: params.row.auditId
                           });
@@ -439,12 +442,14 @@ export default {
           status = "0";
         }
 
-        orgpages(this.util.remove({ ...fromobj, status: status })).then(res => {
-          if (res.code == 200) {
-            this.dataCount = res.data.totalSize;
-            this.data = res.data.list;
+        orggetAuditList(this.util.remove({ ...fromobj, status: status })).then(
+          res => {
+            if (res.code == 200) {
+              this.dataCount = res.data.totalSize;
+              this.data = res.data.list;
+            }
           }
-        });
+        );
       } else {
         //  志愿者审批
         queryAuditList(
@@ -489,7 +494,7 @@ export default {
             this.getorgpage();
             this.$Message.info("通过成功");
           } else {
-            his.$Message.error({
+            this.$Message.error({
               background: true,
               content: "审批失败"
             });

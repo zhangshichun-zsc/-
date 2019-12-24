@@ -19,6 +19,14 @@
                 item.detailText == 1 ? "是" : "否"
               }}</span>
             </div>
+            <div class="ls-item" v-else-if="item.typeFlag == 1">
+              <span class="left">单行文本</span>
+              <span class="right">{{ item.detailText }}</span>
+            </div>
+            <div class="ls-item" v-else-if="item.typeFlag == 2">
+              <span class="left">多行文本</span>
+              <span class="right">{{ item.detailText }}</span>
+            </div>
             <div class="ls-item" v-else-if="item.typeFlag == 3">
               <span class="left">单选</span>
               <RadioGroup v-model="radioactive">

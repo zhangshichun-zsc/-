@@ -13,7 +13,7 @@
           <Input size="large" placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
         <div class="flex-center-start">
-          <span>注册时间/时间段:&nbsp;&nbsp;</span>
+          <span>注册时间段:&nbsp;&nbsp;</span>
           <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="startAt"></DatePicker>
           <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
           <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
@@ -68,25 +68,28 @@
             <Icon type="md-arrow-dropdown"></Icon>
           </Button>
           <!--群发站内信-->
-          <Modal v-model="modal2" title="群发站内信" @on-ok="onStation" @on-cancel="onStation" :mask-closable="false">
+          <Modal v-model="modal2" title="群发站内信" :mask-closable="false">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
               <FormItem label="发送对象：" prop="tag">
-                <p>
+                <p class="pitchOn">
                   <span>共</span>
                   <span class="red">{{ this.ALLLIST.length }}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
-              <FormItem label="标题" prop="title">
-                <Input v-model="formValidate2.title"></Input>
+              <FormItem label="标题：" prop="title">
+                <Input style="font-size: 14px;" v-model="formValidate2.title"></Input>
               </FormItem>
-              <FormItem label="内容：" prop="content">
-                <Input v-model="formValidate2.msg" type="textarea" :autosize="{ minRows: 5, maxRows: 8 }"></Input>
+              <FormItem label="内容：" prop="msg">
+                <Input style="font-size: 14px;" v-model="formValidate2.msg" type="textarea" :autosize="{ minRows: 5, maxRows: 8 }"></Input>
                 <p style="font-size: 12px;">
                   站内信标题不能超过20个字，内容不能超过100个字。
                 </p>
               </FormItem>
             </Form>
+            <div slot="footer">
+              <Button type="error" style="font-size:14px" size="large" @click="onStation">确定</Button>
+            </div>
           </Modal>
 
           <!--微信推送-->
@@ -238,16 +241,16 @@
               </Modal>
             </ButtonGroup>
           </Modal>
-          <Dropdown @on-click="isALL">
-            <Button @click="ismodal2" class="btns">
-              群发站内信
-            </Button>
-            <DropdownMenu slot="list">
+          <!-- <Dropdown @on-click="isALL"> -->
+          <Button @click="ismodal2" class="btns">
+            群发站内信
+          </Button>
+          <!-- <DropdownMenu slot="list">
               <DropdownItem name="ON" ref="ON" :selected="Sele2.ON">选中用户</DropdownItem>
               <DropdownItem name="ALL" :selected="Sele2.ALL">
                 全部用户</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+            </DropdownMenu> -->
+          <!-- </Dropdown> -->
           <!--设置标签-->
           <Modal v-model="modal4" title="设置标签">
             <Checkbox v-for="(item1, index) in label1" :name="item1" :key="index">{{ item1 }}</Checkbox>
@@ -258,7 +261,7 @@
           </Button>
           <!--导出数据-->
           <Dropdown>
-            <Button @click="exportData">
+            <Button @click="exportData" class="btns">
               导出数据
 
             </Button>
@@ -354,8 +357,8 @@
       <Table ref="volunteerSel" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
-       
-          <Button style="border:0px" >
+
+          <Button style="border:0px">
             <Checkbox v-model="ALLINFO"></Checkbox>全选
           </Button>
           <Select placement="top" placeholder="批量操作" style="width: 150px" v-model="batch">
@@ -395,9 +398,8 @@ export default {
         title: ''
       },
       ruleValidate2: {
-        tag: [{ required: true, trigger: 'blur' }],
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
+        msg: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
       },
       modal3: false, //微信推送
       modal3_1: false, //APP推送(链接)
@@ -767,9 +769,9 @@ export default {
   methods: {
     //用户列表
     getUserPage() {
-      let endAt = null;
+      let endAt = null
       if (this.endAt) {
-        endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
+        endAt = this.util.formatDate_time(this.endAt.getTime()) + ' 23:59:59'
       }
 
       //获取用户分页
@@ -780,8 +782,8 @@ export default {
         info: this.info,
         nickname: this.nickname,
         orgName: this.orgName,
-        registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : "",
-        registrationEndTimeStamp:  endAt ? new Date(endAt).getTime() : "",
+        registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : '',
+        registrationEndTimeStamp: endAt ? new Date(endAt).getTime() : '',
         labelName: this.labelName,
         account: this.account,
         levelId: this.levelId,
@@ -864,26 +866,34 @@ export default {
     },
     // 显示站内信模态框
     ismodal2() {
-      if (this.letters) {
-        if (this.letters === 'ON') {
-          if (this.ALLLIST.length > 0) {
-            this.modal2 = true
-          } else {
-            this.$Message.error({
-              background: true,
-              content: '请选择要修改的人员'
-            })
-          }
-        } else {
-          this.ALLINFO = true
-          this.modal2 = true
-        }
+      if (this.ALLLIST.length > 0) {
+        this.modal2 = true
       } else {
         this.$Message.error({
           background: true,
-          content: '请选择全部用户or选中用户'
+          content: '请选择要修改的人员'
         })
       }
+      // if (this.letters) {
+      //   if (this.letters === 'ON') {
+      //     if (this.ALLLIST.length > 0) {
+      //       this.modal2 = true
+      //     } else {
+      //       this.$Message.error({
+      //         background: true,
+      //         content: '请选择要修改的人员'
+      //       })
+      //     }
+      //   } else {
+      //     this.ALLINFO = true
+      //     this.modal2 = true
+      //   }
+      // } else {
+      //   this.$Message.error({
+      //     background: true,
+      //     content: '请选择全部用户or选中用户'
+      //   })
+      // }
     },
     // 选中站内信菜单
     isALL(name) {
@@ -897,9 +907,20 @@ export default {
     // 发送站内信
     onStation() {
       if (!this.stationFormFlag) return
-      this.stationFormFlag = false
-      let ids = this.ALLLIST
-      this.setsend({ ids, ...this.formValidate2 })
+
+      this.$refs.formValidate2.validate(valid => {
+        if (valid) {
+          this.stationFormFlag = false
+          let ids = this.ALLLIST.toString()
+          this.setsend({ ids, ...this.formValidate2 })
+        } else {
+          this.$Message.error('必填项未填!')
+        }
+      })
+      // if (!this.stationFormFlag) return
+      // this.stationFormFlag = false
+      // let ids = this.ALLLIST
+      // this.setsend({ ids, ...this.formValidate2 })
     },
     // 站内信
     setsend(params) {
@@ -908,11 +929,18 @@ export default {
         ...params
       }).then(res => {
         if (res.code === 200) {
+          this.modal2 = false
+          this.formValidate2 = {
+            msg: '',
+            title: ''
+          }
           this.$Message.info('站内信发送成功~')
         } else {
+          this.modal2 = false
+          let str = res.msg
           this.$Message.error({
             background: true,
-            content: '发送失败，请联系负责人'
+            content: str
           })
 
           console.log(res.msg)
@@ -1033,13 +1061,18 @@ export default {
 .integral-header .integral-body {
   padding: 20px;
   font-size: 14px;
-  background: #FFFFFF;
-  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 150px;
   margin-left: 10px;
+}
+.flex-center-start {
+  span {
+    font-size: 16px;
+  }
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
@@ -1047,8 +1080,8 @@ export default {
 .integral-table {
   margin-top: 20px;
   padding: 0 5px;
-  background: #FFFFFF;
-  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .table-header {
@@ -1062,7 +1095,6 @@ export default {
 }
 .integral-table .pages {
   padding: 15px 20px;
-
 }
 .model .model-port {
   display: inline-block;
@@ -1095,6 +1127,7 @@ export default {
 }
 .btns {
   margin-right: 10px;
+  font-size: 15px;
 }
 .pages {
   display: flex;
@@ -1103,5 +1136,8 @@ export default {
 }
 .space {
   margin-left: 10px;
+}
+.pitchOn {
+  font-size: 16px;
 }
 </style>

@@ -372,6 +372,8 @@ export const orgpage = p => posts('/org/get-org-Page', p) //组织管理--组织
 
 export const orgpages = p => posts('/org/getHomeList', p) //组织管理-家长小组
 
+export const orggetAuditList = p => posts('/org/getAuditList', p) //审批页面list组织管理-家长小组
+
 
 export const orgSetStatus = p => posts('/org/updateAdminAudit', p) // 审批
 
@@ -561,6 +563,7 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
+export const draftDetail = p => posts("/activity-manage/work/batch/draft/list", p) //官方活动草稿箱
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
@@ -616,24 +619,24 @@ export const getActiveFeedBack = p => posts("/activity-feedback/mould/detail", p
 export const delActiveFeedBack = p => posts("/activity-feedback/mould/del", p)
 export const getTranList = p => get("/activity-feedback/train/mould/list", p)
 export const addTranList = p => posts("/activity-feedback/train/mould/set", p)
-export const getFeedDetail = p => get("/activity-feedback/getDetail",p)
-export const getTypeFeed = p => get("/activity-feedback/getCategotyList",p)
-export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId",p)
-export const actMemberlist = p => posts("/activity-manage/getActUserList",p)
-export const getActiveIdType = p => get("/activity-manage/getAllByActId",p)
-export const activeReson = p => posts("/activity-manage/work/act/worker/set",p)
-export const sendInfo = p => posts("/user-list/user/inner/msg",p)
-export const feendDetail = p => posts("/activity-manage/act/user/detail",p)
-export const signUpStatus = p => posts("/activity-manage/work/act/sign/do",p)
-export const moveStatus = p => posts("/activity-manage/work/act/move/do",p)
-export const subDo = p => posts("/activity-manage/work/act/sub/do",p)
-export const getfeendDetail = p => get("/activity-manage/activity-feedback-list",p)
-export const getMatchingList = p =>posts("/activity-manage/work/act/match/list",p)
-export const getMatchingMeList = p =>posts("/activity-manage/work/act/match/mem/list",p)
-export const getMatchingVoList = p =>posts("/activity-manage/work/act/match/volu/list",p)
-export const Matchingupdate = p =>posts("/activity-manage/work/act/match/update",p)
-export const matchAdd = p => posts("/activity-manage/work/act/match/add",p)
-export const getDraft = p => posts("/volunteer-manager/queryInitiatalVolunteerActivity",p)
+export const getFeedDetail = p => get("/activity-feedback/getDetail", p)
+export const getTypeFeed = p => get("/activity-feedback/getCategotyList", p)
+export const getActiveRelse = p => get("/volunteer-manager/queryCoActivityDetailByActivityId", p)
+export const actMemberlist = p => posts("/activity-manage/getActUserList", p)
+export const getActiveIdType = p => get("/activity-manage/getAllByActId", p)
+export const activeReson = p => posts("/activity-manage/work/act/worker/set", p)
+export const sendInfo = p => posts("/user-list/user/inner/msg", p)
+export const feendDetail = p => posts("/activity-manage/act/user/detail", p)
+export const signUpStatus = p => posts("/activity-manage/work/act/sign/do", p)
+export const moveStatus = p => posts("/activity-manage/work/act/move/do", p)
+export const subDo = p => posts("/activity-manage/work/act/sub/do", p)
+export const getfeendDetail = p => get("/activity-manage/activity-feedback-list", p)
+export const getMatchingList = p => posts("/activity-manage/work/act/match/list", p)
+export const getMatchingMeList = p => posts("/activity-manage/work/act/match/mem/list", p)
+export const getMatchingVoList = p => posts("/activity-manage/work/act/match/volu/list", p)
+export const Matchingupdate = p => posts("/activity-manage/work/act/match/update", p)
+export const matchAdd = p => posts("/activity-manage/work/act/match/add", p)
+export const getDraft = p => posts("/volunteer-manager/queryInitiatalVolunteerActivity", p)
 
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 

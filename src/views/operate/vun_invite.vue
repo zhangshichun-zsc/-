@@ -48,7 +48,7 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width:140,
+          width:200,
         },
         {
           title: "用户昵称",
@@ -71,13 +71,13 @@ export default {
         {
           title: "成功参与活动好友",
           key: "actJoinedNum",
-          width:180,
+          width:200,
           align: "center"
         },
         {
           title: "成功邀请团队注册",
           key: "inviteOrgNum",
-          width:180,
+          width:200,
           align: "center"
         },
         {
@@ -122,7 +122,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-      top:[{name:'用户账号',type:'input',value:''},{name:'用户昵称',type:'input',value:''}],
+      top:[{name:'用户账号:',type:'input',value:''},{name:'用户昵称:',type:'input',value:''}],
       data: [],
        page:1,
       size:10,

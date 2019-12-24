@@ -18,7 +18,7 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <Button class="table-btns" @click="query">查询</Button>
+        <Button class="search" @click="query" style="margin-left:10px;">查询</Button>
       </div>
     </div>
     <div class="contents">
@@ -64,13 +64,13 @@
           :page-size="size"
           @on-change="changepages"
         />
-      </div>-->
-      <Row class="row">
-        <Col span="8">
+      </div> -->
+      <div class="row">
+        <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="type">
+          <Select placeholder="批量操作" style="width: 150px" v-model="type" placement='top'>
             <Option
               v-for="item in batchList"
               :value="item.dicId"
@@ -78,20 +78,16 @@
             >{{ item.dicName }}</Option>
           </Select>
           <Button class="space" @click="space">确定</Button>
-        </Col>
-        <Col span="8">
-          <Page
-            :total="dataCount"
-            show-elevator
-            show-total
-            size="small"
-            style="margin: auto"
-            :page-size="size"
-            @on-change="changepages"
-          />
-        </Col>
-        <Col span="8"></Col>
-      </Row>
+        </div>
+        <div><Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          :page-size="size"
+          @on-change="changepages"
+        /></div>
+      </div>
     </div>
   </div>
 </template>
@@ -234,8 +230,8 @@ export default {
   },
   //事件监听
   watch: {
-    size: "getReportList",
-    sort: "getReportList"
+    size: "getReportpage",
+    sort: "getReportpage"
   },
 
   mounted() {
@@ -344,6 +340,7 @@ export default {
       });
     },
     space() {
+      console.log(this.type)
       if (this.type == 0) {
         this.arr = this.arr
           .map(item => {
@@ -352,6 +349,7 @@ export default {
           .toString();
         this.getReportdeles();
       } else if (this.type != 0) {
+
         if (this.arr.length == 0 || this.arrs == "") {
           this.$Message.error("暂无可操作数据");
         } else {
@@ -441,6 +439,7 @@ export default {
 .row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 10px;
 }
 .space {

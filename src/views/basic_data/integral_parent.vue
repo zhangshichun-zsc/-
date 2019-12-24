@@ -137,7 +137,7 @@ export default {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "编辑新增家长职业类型";
+                      this.text = "编辑家长职业类型";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }
@@ -178,7 +178,7 @@ export default {
       dicCode: 0,
 
       list: [],
-      text: "新增家长职业类型管理",
+      text: "新增家长职业类型",
       states: "",
       id: 0
     };
@@ -252,12 +252,14 @@ export default {
         if (res.code == 200) {
           if (e == 0) {
             this.$Message.info("添加成功");
+            this.getBasicsearch();
           } else if (e == 1) {
             this.$Message.info("编辑成功");
+            this.getBasicsearch();
           } else if (e == 2) {
             this.$Message.info("操作成功");
           }
-          this.getBasicsearch();
+          // this.getBasicsearch();
           this.modal1 = false;
         }
         console.log(res);
@@ -266,12 +268,12 @@ export default {
 
     //查询
     query(e) {
+      this.data1=[]
       this.page = 1;
       this.validFlag = e.validFlag;
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-
       this.getBasicsearch();
     },
 

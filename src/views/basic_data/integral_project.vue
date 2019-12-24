@@ -7,20 +7,21 @@
     <div class="integral-table">
       <div class="table-header flex-center-between">
         <div>
-
           <!-- <span>已选择{{arr.length}}</span> -->
           <!-- <Button class="table-btn">批量删除</Button> -->
           <Button class="table-btns"  @click="added">新增项目</Button>
           <Modal v-model="modal1" :title="text" class="mol" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
-                <Input v-model.trim="formValidate.name" />
+                <Input v-model.trim="formValidate.name" style="width: 220px" />
               </FormItem>
               <FormItem label="总计预算" prop="allBudget">
-                <Input v-model.trim="formValidate.allBudget" />
+                <InputNumber  :min="0" :max="1000000000" style="width: 220px" v-model="formValidate.allBudget"></InputNumber>
+<Button type="error" >元</Button>
+                <!-- <Input v-model.trim="formValidate.allBudget" /> -->
               </FormItem>
               <FormItem label="预算来源" prop="orgId">
-                <Select v-model="formValidate.orgId" style="width:200px">
+                <Select v-model="formValidate.orgId" style="width: 220px">
                   <Option
                     v-for="item in budgetlist"
                     :value="item.orgId"
@@ -73,7 +74,7 @@ export default {
       },
       formValidate: {
         name: "",
-        allBudget: "",
+        allBudget: 0,
         orgId: null
       },
       ruleValidate: {
@@ -81,14 +82,11 @@ export default {
           { required: true, message: "职业名称不能为空", trigger: "blur" }
         ],
         allBudget: [
-          {
+         {
             required: true,
             message: "总计预算格式不正确",
             trigger: "blur",
-            type: "number",
-            transform(value) {
-              return Number(value);
-            }
+             type: "number"
           }
         ],
         orgId: [
@@ -115,7 +113,7 @@ export default {
           width: 300
         },
         {
-          title: "总预算",
+          title: "总预算/(元)",
           key: "allBudget",
            align: "center",
            width: 240
@@ -288,7 +286,7 @@ export default {
       ];
       projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
-          this.getprojectsetlist();
+
           this.$Message.info("操作成功");
         }
         console.log(res);
@@ -319,6 +317,7 @@ export default {
 
     // 查询结果按钮
     query(e) {
+      this.data=[]
       console.log(e);
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];

@@ -25,7 +25,7 @@
         </p>
 
       </div>
-        <Button @click="query()" shape="circle" size='large' class="table-btns">查询</Button>
+        <Button @click="query()" shape="circle" size='large' class="search" style="margin-left:10px;">查询</Button>
     </div>
     <div class="content">
       <div class="con">
@@ -47,17 +47,17 @@
         </div>
       </div>
       <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
-      <Row class="row">
-        <Col span="8">
+      <div class="row">
+        <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch" placement='top'>
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
-        </Col>
-        <Col span="8"><Page
+        </div>
+        <div><Page
           :total="dataCount"
           show-elevator
           show-total
@@ -65,9 +65,8 @@
           style="margin: auto"
           :page-size="size"
           @on-change="changepages"
-        /></Col>
-        <Col span="8"></Col>
-      </Row>
+        /></div>
+      </div>
     </div>
   </div>
 </template>
@@ -92,7 +91,7 @@ export default {
           align: "center",
         },
         {
-          title: "封面图",
+          title: "图片",
           key: "coverImg",
           width: 120,
           align: "center",
@@ -296,12 +295,8 @@ export default {
   },
   //事件监听
   watch: {
-    'size':()=>{
-      this.getAddressList()
-    },
-    'sort':()=>{
-      this.getAddressList()
-    },
+    'size':'getAddressList',
+    'sort':'getAddressList',
   },
   methods: {
     addBut() {
@@ -516,6 +511,7 @@ body {
 }
 .row{
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-top: 10px;
 }

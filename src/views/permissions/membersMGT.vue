@@ -5,9 +5,8 @@
     <div class="content bk">
       <div class="Members-search">
         <p class="item">
-          <span>输入搜索:</span>&nbsp;
+          <span>输入搜索: &nbsp;</span>
           <Input
-            search
             size="large"
             placeholder="姓名"
             v-model="name"
@@ -17,7 +16,7 @@
         </p>
         &nbsp;&nbsp;&nbsp;
         <p class="item">
-          <span>所属部门:</span>
+          <span>所属部门: &nbsp;</span>
           <Select v-model="role" style="width:200px" :transfer="true">
             <Option
               v-for="item in deplist"
@@ -28,12 +27,8 @@
           </Select>
         </p>
         <p class="item">
-          <a
-            href="javascript:;"
-            class="getInfo"
-            @click="getdepartmentmember(1)"
-          >
-            <Icon type="ios-search-outline" />查询</a
+          <a href="javascript:;" class="getInfo" @click="getdepartmentmember(1)"
+            >查询</a
           >
         </p>
         <div

@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="min-height">
-        <Table ref="selection" border :columns="columns" :data="data1"></Table>
+        <Table ref="selection" border :columns="columns" :data="data"></Table>
       </div>
 
       <div class="pages">
@@ -156,7 +156,7 @@ export default {
           }
         }
       ],
-      data1: [],
+      data: [],
       modal1: false,
       top: [
         {
@@ -220,7 +220,7 @@ export default {
       this.params = this.util.remove(params);
       Basicsearch(this.params).then(res => {
         if (res.code == 200) {
-          this.data1 = res.data.list;
+          this.data = res.data.list;
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }
@@ -278,6 +278,7 @@ export default {
 
     //查询
     query(e) {
+      this.data=[]
       this.page = 1;
       this.validFlag = e.validFlag;
       this.targetName = e.dicName;

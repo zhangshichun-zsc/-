@@ -99,7 +99,7 @@
         ref="selection"
         border
         :columns="columns"
-        :data="datax"
+        :data="data"
         @on-selection-change="handleSelectionChange"
       ></Table>
       </div>
@@ -261,7 +261,7 @@ export default {
       ],
       sort: "asc",
 
-      datax: [],
+      data: [],
       sysType: 2,
       page: 1,
       size: 10,
@@ -315,7 +315,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
-          this.datax = res.data.list;
+          this.data = res.data.list;
         } else {
           this.$Message.error(res.msg);
         }

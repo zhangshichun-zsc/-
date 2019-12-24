@@ -94,27 +94,25 @@
           @on-change="changepages"
         />
       </div> -->
-      <Row class="row">
-        <Col span="8">
+      <div class="row">
+        <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch" placement='top'>
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
-        </Col>
-        <Col span="8"><Page
+        </div>
+        <div style="margin-right:20px;"><Page
           :total="dataCount"
           show-elevator
           show-total
           size="small"
-          style="margin: auto"
           :page-size="size"
           @on-change="changepages"
-        /></Col>
-        <Col span="8"></Col>
-      </Row>
+        /></div>
+      </div>
       <Modal v-model="isDelete" @on-ok='deleteAdd()'>
         <div>是否删除该广告</div>
       </Modal>
@@ -124,7 +122,7 @@
 </template>
 
 <script>
-import { formatDate } from "../../request/datatime";
+import { formatDates } from "../../request/datatime";
 import {
   AdvertisingList,
   AdvertisingDetails,
@@ -208,7 +206,7 @@ export default {
           width:320,
           render: (h, params) => {
             return h("div",
-              formatDate(params.row.startAt)+'/'+formatDate(params.row.endAt),
+              formatDates(params.row.startAt)+'~'+formatDates(params.row.endAt),
 
             );
           }
@@ -383,7 +381,7 @@ export default {
         this.endTimeStamp = this.time + new Date().getTime();
       }
       AdvertisingPage({
-        page: { page: this.page, size: this.size },
+        page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort },
         title: this.title,
         sysType: this.sysType,
         location: this.location,
@@ -468,8 +466,8 @@ export default {
   },
     //事件监听
   watch:{
-    size:'getAdvertisingPage',
-    sort:'getAdvertisingPage'
+    'size':'getAdvertisingPage',
+    'sort':'getAdvertisingPage'
 
   },
   mounted() {
@@ -554,6 +552,7 @@ export default {
 .row{
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: #fff;
   padding: 20px 0;
   border-bottom-left-radius: 10px;

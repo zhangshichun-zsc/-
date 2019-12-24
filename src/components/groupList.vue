@@ -312,16 +312,6 @@ export default {
     }
   },
   methods: {
-    // 是否有权限显示审批按钮
-    // isJurisdiction() {
-    //   queryCoAuditConfig({
-    //     userId: this.userId,
-    //     typeFlag: this.navigation1.name === "parent" ? "5" : "6",
-    //     sysId: this.navigation1.name === "parent" ? "1,3" : "2,3"
-    //   }).then(res => {
-    //     this.jurisdiction = res.data.isAudit;
-    //   });
-    // },
     //标签分页
     getorgpage() {
       let endAt = null;
@@ -403,7 +393,7 @@ export default {
       }
     },
     setModifyOrgMsg(params) {
-      if (this.navigation1.head === "parent") {
+      if (this.navigation1.name === "parent") {
         console.log("掉用了家长小组的接口");
         // 家长小组修改 无效，有效
         orgSetGroup(params).then(res => {
@@ -530,13 +520,17 @@ export default {
     handleSelectAll(status) {
       this.$refs.selection.selectAll(status);
     },
-    jump() {
+    toURL() {
       this.$router.push({
         name: "teamApproval",
         query: {
           head: this.navigation1.name
         }
       });
+    },
+    jump() {
+      //  要先判断 当前用户的权限，
+      this.toURL();
     }
   }
 };

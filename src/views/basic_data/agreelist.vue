@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "协议管理(会员)"
+        head: "协议管理"
       },
       columns: [
         {
@@ -107,25 +107,46 @@ export default {
           align: "center",
           width: 240,
           render: (h, params) => {
-            return h("div", formatDate(params.row.agreementTimestamp));
+            return h(
+              "div",
+              this.util.formatDateYMD(params.row.agreementTimestamp)
+            );
           }
         },
         {
-          title: "相关",
-          key: "nameA",
+          title: "附件名称",
           align: "center",
-          width: 600,
+          width: 700,
           render: (h, params) => {
-            return h(
-              "div",
-              params.row.nameA != null
-                ? params.row.nameA
-                : "" + "  " + params.row.nameB != null
-                ? params.row.nameB
-                : "" + "  " + params.row.nameC != null
-                ? params.row.nameC
-                : ""
-            );
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    marginRight: "15px"
+                  }
+                },
+                params.row.nameA ? params.row.nameA : ""
+              ),
+              h(
+                "span",
+                {
+                  style: {
+                    marginRight: "15px"
+                  }
+                },
+                params.row.nameB ? params.row.nameB : ""
+              ),
+              h(
+                "span",
+                {
+                  style: {
+                    marginRight: "15px"
+                  }
+                },
+                params.row.nameC ? params.row.nameC : ""
+              )
+            ]);
           }
         },
         {
@@ -186,7 +207,7 @@ export default {
       agreementObject: "",
       agreementType: "",
       top: [
-        { name: "甲乙方", type: "input", value: "" },
+        { name: "甲方/乙方", type: "input", value: "" },
         {
           name: "协议分类",
           type: "select",
@@ -258,7 +279,9 @@ export default {
 
     //协议分页列表
     getAgreementList() {
-      AgreementList({}).then(res => {
+      AgreementList({
+        sysType: 1
+      }).then(res => {
         console.log(res);
         if (res.code == 200) {
           res.data.unshift({ dataKey: "0", dataValue: "全部" });
