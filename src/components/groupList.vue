@@ -530,14 +530,6 @@ export default {
     },
     jump() {
       //  要先判断 当前用户的权限，
-
-      if (this.navigation1.name === "parent") {
-        // 家长小组
-        // alert("判断家长小组权限");
-      } else {
-        // 志愿者团队
-        // alert("判断愿者团队权限");
-      }
       this.toURL();
     }
   }

@@ -10,7 +10,7 @@
         <Button type="success" size="large" @click="success">确定</Button>
       </div>
     </Modal>
-    <Modal v-model="modal3" title="拒绝理由"  @on-cancel='matchCancel'>
+    <Modal v-model="modal3" title="匹配"  @on-cancel='matchCancel'>
       <div>
         <Select v-model="mUserId" style="marginBottom:1rem;" :disabled='type == 0' @on-change='changeSele(0,$event)'>
           <Option :value="mUserId" v-if="type==0">{{ vName }}</Option>
@@ -40,7 +40,7 @@
       <div class="content-details">
         <ul class="list-one">
           <li @click="btnTab(index+1)" v-for='(item,index) in head' :key='index'>
-            <a :class="{active:show == index+1}">{{ item.name }}</a>
+            <span :class="{active:show == index+1}">{{ item.name }}</span>
           </li>
         </ul>
         <ul class="list" v-if="show==1">
@@ -49,26 +49,28 @@
             v-for="(item,index) in Statuslist"
             :key="index"
           >
-            <Button :class="{active:state[0] == item.id}">{{item.name}}</Button>
+            <Button :class="{on:state[0] == item.id}">{{item.name}}</Button>
           </li>
         </ul>
         <ul class="list" v-if="show==3">
           <li @click="grantbtn(item.id)" v-for='(item,index) in arrsList' :key='index'>
-            <Button :class="{active:state[1] == item.id}">{{ item.name }}</Button>
+            <Button :class="{on:state[1] == item.id}">{{ item.name }}</Button>
           </li>
         </ul>
-        <div class="searchs flex-center-start" v-if="show!=4">
-          <span>报名人：</span>
-          <i-input v-model="info" placeholder="报名人/手机号" style="width:150px" />
-          <Button shape="circle" size='large' icon="ios-search" class="btn" @click="search">搜索</Button>
-        </div>
         <div class="integral-table">
-          <div class="table-header flex-center-between"  v-if='show !== 4'>
+          <div class="table-header flex-between"  v-if='show !== 4'>
             <div>
-              <Button @click="chackall()" style="border:0px;">
+              <Button @click="chackall()" class="all">
                 <Checkbox v-model="status">全选</Checkbox>
               </Button>
               <span>已选择{{this.ids.length}}人</span>
+            </div>
+            <div class="searchs">
+              <span>报名人：</span>
+              <i-input v-model="info" placeholder="报名人/手机号" style="width:200px" size='large'/>
+              <Button shape="circle" size='large' icon="ios-search" class="btn" @click="search">搜索</Button>
+            </div>
+            <div>
               <Button class="table-btn" @click="pass" v-if="show==1||show==2">通过</Button>
               <Button class="table-btn" @click="showModal2" v-if="show==1||show==2">拒绝</Button>
               <Button class="table-btn" @click="sendInfos">群发信息</Button>
@@ -862,6 +864,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.all{
+  border: none !important;
+}
 .head {
   height: 70px;
   padding-left: 40px;
@@ -882,14 +887,20 @@ export default {
   }
   .list-one {
     display: flex;
-    padding: 20px; 
+    padding: 20px 15px; 
     background: #ffffff;
     margin-bottom: 5px;
-    border-bottom: 1px solid #eee;
     li {
-      margin: 0 20px;
-      a{
-        color: #515a6e;
+      span{
+        display: inline-block;
+        height: 40;
+        line-height: 40px;
+        width: 120px;
+        text-align: center;
+        padding: 0 20px;
+        border-radius: 20px;
+        background: rgb(250, 248, 248);
+        margin: 0 20px;
       }
     }
   }
@@ -897,44 +908,43 @@ export default {
     display: flex;
     padding: 10px 20px;
     background: #ffffff;
-    li {
-      padding: 0 20px;
-      text-align: center;
-      a {
-        color: black;
-      }
+    button {
+      font-size: 16px;
+      margin: 0 10px;
     }
   }
 } 
 .active {
-  border-color:#FF565A !important;
+  background: #FF565A !important;
+  color: #fff !important;
+}
+.on{
+  border: 1px solid #FF565A !important;
   color: #FF565A !important;
 }
 .table-header {
   padding: 10px 20px;
   background: #ffffff;
-  span {
-    font-size: 14px;
+  *{
+    font-size: 16px;
   }
   .table-btn {
     margin: 0 10px;
+    font-size: 16px;
   }
 }
 .searchs {
-  height: 40px;
   padding: 10px 20px;
   background: #ffffff;
-  .btn{
-  background: #FF565A !important;
-  color: #fff !important;
-  border-color:none !important;
-  margin-left: 20px;
-}
-.btn:hover{
-  border:1px solid #FF565A !important;
-  color: #FF565A !important;
-  background: #fff !important;
-}
+  *{
+    font-size: 16px;
+  }
+  .btn {
+    background: #FF565A !important;
+    color: #fff !important;
+    border-color:#FF565A !important;
+    margin-left: 20px;
+  }
 }
 .content-details {
   background: #ffffff;

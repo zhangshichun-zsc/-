@@ -309,7 +309,7 @@
         <i-col push='18' span='6'>
           <div class="btns">
             <Button @click="sumbmit(8)" shape="circle" size='large' class="left">存为草稿</Button>
-            <Button type="success" @click="sumbmit(1)" shape="circle" size='large' class="right">提交申请</Button>
+            <Button @click="sumbmit(1)" shape="circle" size='large' class="right">提交申请</Button>
           </div>
         </i-col>
       </Row>

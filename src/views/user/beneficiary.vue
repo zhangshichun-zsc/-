@@ -765,7 +765,7 @@ export default {
           title: '账户启用状态',
           key: 'userEnable',
           align: 'center',
-          width: 110,
+          minWidth: 140,
           render: (h, params) => {
             return h('div', [
               h('i-switch', {

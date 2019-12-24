@@ -2,94 +2,94 @@
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="head">
-      <p>{{activityName}}</p>
-      <span>未开始</span>
-    </div>
-    <div class="content">
-      <ul>
-        <li>
-          <p>报名</p>
-          <table>
-            <tr>
-              <th>姓名</th>
-              <th>手机号码</th>
-              <th>报名类型</th>
-              <th>报名时间</th>
-              <th>报名状态</th>
-            </tr>
-            <tr>
-              <td>{{msg.userName}}</td>
-              <td>{{msg.phone}}</td>
-              <td>{{msg.roleName}}</td>
-              <td>{{msg.createAt}}</td>
-              <td v-if='msg.userActType==1'>审核中</td>
-              <td v-else-if='msg.userActType==2'>报名成功</td>
-              <td v-else-if='msg.userActType==3'>报名被拒绝</td>
-              <td v-else-if='msg.userActType==4'>转移中</td>
-              <td v-else-if='msg.userActType==5'>被转移中</td>
-              <td v-else-if='msg.userActType==6'>转移成功</td>
-              <td v-else-if='msg.userActType==7'>自主取消</td>
-              <td v-else-if='msg.userActType==8'>主办方取消</td>
-              <td v-else-if='msg.userActType==9'>已违约</td>
-              <td v-else-if='msg.userActType==10'>排队中</td>
-              <td v-else-if='msg.userActType==11'>请假中</td>
-              <td v-else-if='msg.userActType==12'>待付款</td>
-              <td v-else-if='msg.userActType==13'>拒绝转移</td>
-              <td v-else-if='msg.userActType==14'>工作人员</td>
-            </tr>
-          </table>
-        </li>
-        <li>
-          <p>培训</p>
-          <table>
-            <tr>
-              <th>培训状态</th>
-              <th>确认时间</th>
-              <th>操作</th>
-            </tr>
-            <tr>
-              <td v-if='msg.trainStatus==1'>未阅读</td>
-              <td v-else-if='msg.trainStatus==2'>已阅读</td>
-              <td v-else-if='msg.trainStatus==3'>已确认</td>
-              <td>{{msg.trainTime}}</td>
-            </tr>
-          </table>
-        </li>
-        <li>
-          <p>签到</p>
-          <table>
-            <tr>
-              <th>签到状态</th>
-              <th>签到时间</th>
-              <th>签到地点</th>
-            </tr>
-            <tr>
-              <td v-if='msg.signStatus==0'>未签到</td>
-              <td v-else-if='msg.signStatus==1'>已签到</td>
-              <td v-else-if='msg.signStatus==2'>迟到</td>
-              <td>{{msg.signAt}}</td>
-              <td>{{msg.signAddress}}</td>
-            </tr>
-          </table>
-        </li>
-        <li>
-          <p>反馈</p>
-          <table>
-            <tr>
-              <th>反馈状态</th>
-              <th>提交时间</th>
-              <th>操作</th>
-            </tr>
-            <tr>
-              <td v-if='msg.feedStatus==1'>已反馈</td>
-              <td v-else-if='msg.feedStatus==2'>未反馈</td>
-              <td>{{msg.feedAt}}</td>
-              <td @click="jump">详情</td>
-            </tr>
-          </table>
-        </li>
-      </ul>
+    <div class="wapper">
+      <div class="head">
+        <p>{{activityName}}</p>
+      </div>
+      <div class="content">
+        <ul>
+          <li>
+            <p>报名</p>
+            <table>
+              <tr>
+                <th>姓名</th>
+                <th>手机号码</th>
+                <th>报名类型</th>
+                <th>报名时间</th>
+                <th>报名状态</th>
+              </tr>
+              <tr>
+                <td>{{msg.userName}}</td>
+                <td>{{msg.phone}}</td>
+                <td>{{msg.roleName}}</td>
+                <td>{{msg.createAt}}</td>
+                <td v-if='msg.userActType==1'>审核中</td>
+                <td v-else-if='msg.userActType==2'>报名成功</td>
+                <td v-else-if='msg.userActType==3'>报名被拒绝</td>
+                <td v-else-if='msg.userActType==4'>转移中</td>
+                <td v-else-if='msg.userActType==5'>被转移中</td>
+                <td v-else-if='msg.userActType==6'>转移成功</td>
+                <td v-else-if='msg.userActType==7'>自主取消</td>
+                <td v-else-if='msg.userActType==8'>主办方取消</td>
+                <td v-else-if='msg.userActType==9'>已违约</td>
+                <td v-else-if='msg.userActType==10'>排队中</td>
+                <td v-else-if='msg.userActType==11'>请假中</td>
+                <td v-else-if='msg.userActType==12'>待付款</td>
+                <td v-else-if='msg.userActType==13'>拒绝转移</td>
+                <td v-else-if='msg.userActType==14'>工作人员</td>
+              </tr>
+            </table>
+          </li>
+          <li>
+            <p>培训</p>
+            <table>
+              <tr>
+                <th>培训状态</th>
+                <th>确认时间</th>
+              </tr>
+              <tr>
+                <td v-if='msg.trainStatus==1'>未阅读</td>
+                <td v-else-if='msg.trainStatus==2'>已阅读</td>
+                <td v-else-if='msg.trainStatus==3'>已确认</td>
+                <td>{{msg.trainTime}}</td>
+              </tr>
+            </table>
+          </li>
+          <li>
+            <p>签到</p>
+            <table>
+              <tr>
+                <th>签到状态</th>
+                <th>签到时间</th>
+                <th>签到地点</th>
+              </tr>
+              <tr>
+                <td v-if='msg.signStatus==0'>未签到</td>
+                <td v-else-if='msg.signStatus==1'>已签到</td>
+                <td v-else-if='msg.signStatus==2'>迟到</td>
+                <td>{{msg.signAt}}</td>
+                <td>{{msg.signAddress}}</td>
+              </tr>
+            </table>
+          </li>
+          <li>
+            <p>反馈</p>
+            <table>
+              <tr>
+                <th>反馈状态</th>
+                <th>提交时间</th>
+                <th>操作</th>
+              </tr>
+              <tr>
+                <td v-if='msg.feedStatus==1'>已反馈</td>
+                <td v-else-if='msg.feedStatus==2'>未反馈</td>
+                <td>{{msg.feedAt}}</td>
+                <td @click="jump">详情</td>
+              </tr>
+            </table>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -136,6 +136,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.wapper{
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+}
 .head {
   height: 70px;
   padding-left: 40px;
@@ -154,16 +159,21 @@ export default {
   padding-left: 40px;
   li{
     margin: 20px 0;
+    p{
+      margin: 10px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
   table {
     border: 1px solid #e4e4e4;
     td,
     th {
-      height: 30px;
+      height: 50px;
       border: 1px solid #e4e4e4;
       text-align: center;
-      line-height: 30px;
-      width: 120px;
+      line-height: 50px;
+      width: 200px;
     }
     th {
       // font-weight: 700;

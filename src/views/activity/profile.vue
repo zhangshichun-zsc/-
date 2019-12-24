@@ -57,7 +57,7 @@
         <div class="inquire flex-between">
           <div class="flex-center-start">
             <span>姓名：</span>
-            <i-input v-model="query.userName" size='large' class="input"></i-input>
+            <i-input v-model="query.userName" size='large' class="input"  placeholder="输入名称"></i-input>
             <span>报名类型:</span>
             <Select v-model="query.roleId" size='large' class="input">
               <Option :value="''">全部</Option>
@@ -71,9 +71,15 @@
           <Button shape="circle" size='large' icon="ios-search" @click="querys" class="btn">搜索</Button>
         </div>
       </div>
-      <div class="exports">
-        <div>
-          <Button class="table-btn" disabled>
+      <div class="check">
+        <div class="flex-between">
+          <div class="flex-start">
+            <Checkbox :checked.sync="xuan" style="font-size: 16px;" class="span">全选</Checkbox>
+            <span >已选择</span>
+            <span>{{arr.length}}</span>
+          </div>
+          <div class="flex-start">
+            <Button class="table-btn" disabled size='large'>
             <Icon type="md-cloud-upload" />导出
           </Button>
           <!-- <Dropdown style="margin-left: 0.2rem;width:5rem;">
@@ -83,15 +89,9 @@
               <DropdownItem>导入参与人员</DropdownItem>
             </DropdownMenu>
           </Dropdown> -->
-          <Button @click="sendInfos">发送站内信</Button>
+          <Button @click="sendInfos"  class="table-btn" size='large'>发送站内信</Button>
+          </div>
         </div>
-      </div>
-      <div class="check">
-        <p>
-          <Checkbox :checked.sync="xuan">全选</Checkbox>
-          <span style="font-size: 14px;">已选择</span>
-          <span style="font-size: 14px;">{{arr.length}}</span>
-        </p>
         <Table border :columns="columns" :data="memberlist"  @on-selection-change="handleSelectionChange"></Table>
       </div>
     </div>
@@ -113,7 +113,7 @@ export default {
       value: "",
       xuan: false,
       navigation1: {
-        head: "活动概况(会员)"
+        head: "活动概况"
       },
       cityList1: [],
       cityList2: [
@@ -247,7 +247,7 @@ export default {
                 "span",
                 {
                   style: {
-                    color: "green"
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
@@ -274,7 +274,7 @@ export default {
                 {
                   style: {
 
-                    color: "green"
+                    color: "#FF565A"
                   },
                   on: {
                     click: () => {
@@ -372,7 +372,7 @@ export default {
     },
     pend(){
       this.$router.push({
-        name: "volunteer_pending",
+        name: "pending",
         query: { activityId: this.$route.query.acitvityId, activityName:this.activityName}
       })
     },
@@ -432,12 +432,12 @@ export default {
 .btn{
   background: #FF565A !important;
   color: #fff !important;
-  border-color:none !important;
+  border-color:#FF565A !important;
+  font-size: 16px;
 }
-.btn:hover{
-  border:1px solid #FF565A !important;
-  color: #FF565A !important;
-  background: #fff !important;
+.table-btn{
+  font-size: 16px;
+  margin: 0 10px;
 }
 .content {
   padding: 0 40px;
@@ -478,29 +478,19 @@ export default {
   line-height: 40px;
 }
 .inquire {
-  padding: 20px;
+  padding: 20px 20px 20px 0;
   .input{
     width: 250px;
   }
   span {
-    margin: 0 10px;
-  }
-}
-.exports {
-  display: flex;
-  justify-content: space-between;
-  padding-right: 200px;
-  margin: 20px 0;
-  .ivu-select-default,button {
-    margin-right: 10px;
+    margin: 0 10px 0 30px;
   }
 }
 .check {
-  p {
-    padding-left: 15px;
-    margin-bottom: 10px;
-    span{
-      font-size: 14px;
+  .flex-between{
+    padding: 10px 20px;
+    span,.span{
+      font-size: 16px;
     }
   }
 }

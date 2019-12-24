@@ -1,14 +1,29 @@
-<!--活动管理(会员)-->
+<!--志愿者活动管理(会员)-->
+
 <template>
   <div class="integral">
-    <Tophead :navigation1=navigation1 :top=top></Tophead>
+     <Modal
+      v-model="modal4">
+      <img :src="showImg" alt="" class="showimg"/>
+    </Modal>
+    <Navigation :labels="navigation1"></Navigation>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div>
-          <Checkbox :checked.sync="single1">全选</Checkbox>
-          <Button class="table-btn" @click="exportData">导出</Button>
-          <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button>
-          <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
+      <div class="table-header flex-between">
+       <div>
+          <Select size="large" v-model="size"  style="width:150px" placeholder="显示条数" class="table-btn">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </div>
+      </div>
+      <div class="table">
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="datax"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
+          <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
             <div class="popup">
               <p class="popup-head">
                 <span>目前导出字段顺序</span>
@@ -44,105 +59,137 @@
               </div>
             </div>
           </Modal>
-          <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button>
-          <Button class="table-btn">草稿箱</Button>
-        </div>
-        <div>
-          <Button class="table-btn" @click="addaction">添加活动</Button>
-          <Button class="table-btn">
-            显示条数
-            <Icon type="md-arrow-dropdown" />
-          </Button>
-          <Button class="table-btn">
-            排序方式
-            <Icon type="md-arrow-dropdown" />
-          </Button>
-        </div>
+
       </div>
-      <div class="table">
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="datax"
-          @on-selection-change="handleSelectionChange"
-        ></Table>
-        <div class="set">
-          <Icon type="ios-settings-outline" @click="modal1 = true"/>
+      <Modal v-model="addstate" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+          <span>下架确定</span>
+        </p>
+        <div style="text-align:center">
+          <p>是否确认下架，下架后无法上架</p>
         </div>
-      </div>
+        <div slot="footer">
+          <Button type="error" @click="modalCancel">取消</Button>
+          <Button type="success" @click="modalOkdel">确定</Button>
+        </div>
+      </Modal>
+      <Page
+        :total="dataCount"
+        show-elevator
+        show-total
+        size="small"
+        class="pages"
+        :page-size="size"
+        @on-change="changepages"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { getDraft } from "../../request/api"
+import { formatDate } from "../../request/datatime";
+import {
+ getDraft
+} from "../../request/api";
+import { SERVER_URl } from '@/request/http.js'
+import { constants } from 'fs';
 export default {
+  inject: ['reload'],
   data() {
     return {
-      single1: false,
-      modal1: false,
-      fruit: ["苹果"],
       navigation1: {
-        head: "草稿箱(志愿者)"
+        head: "活动管理(会员)"
       },
       columns: [
         {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
           title: "活动名称",
-          key: "activity",
-          align: "center"
+          key: "activityName",
+          align: "center",
+          width:500,
+          ellipsis: true,
+          tooltip: true,
         },
         {
           title: "提交时间",
-          key: "time",
-          align: "center"
+          key: "startTimestamp",
+          align: "center",
+          width:300,
+          render: (h, params) => {
+            return h("div", formatDate(params.row.startTimestamp));
+          }
         },
         {
           title: "活动类型",
-          key: "type",
+          width:200,
+          key: "activityType",
           align: "center"
         },
         {
-          width: 200,
-          title: "操作",
+          title: "创建人",
+          width:180,
+          key: "otherSignUpCount",
+          align: "center"
+        },
+         {
+          width: 300,
           key: "action",
           align: "center",
           render: (h, params) => {
+            let signup = "关闭报名";
+            if (params.row.statusText == "13") {
+              signup = "开启报名";
+            }
             return h("div", [
               h(
-                "span",
+                "a",
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
-                    cursor: "pointer",
-                    marginRight:"10px"
+                    color: "#FF565A",
+                    cursor: "pointer"
                   },
                   on: {
                     click: () => {
-                    //   this.$router.push({ path: "editing" });
+                      this.$router.push({
+                        path: "editing",
+                        query: { id: params.row.acitvityId }
+                      });
                     }
                   }
                 },
                 "编辑"
               ),
               h(
-                "span",
+                "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
-                    color: "green",
+                    marginRight: "10px",
+                    marginLeft: "10px",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
                     click: () => {
-                    //   this.$router.push({ path: "profile" });
+                      this.$router.push({
+                        path: "profile",
+                        query: { acitvityId: params.row.acitvityId,activityName: params.row.activityName }
+                      });
+                    }
+                  }
+                },
+                "概况"
+              ),
+              h(
+                "a",
+                {
+                  style: {
+                    marginRight: "10px",
+                    color: "#FF565A",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({ path: "activity_share" });
                     }
                   }
                 },
@@ -150,13 +197,17 @@ export default {
               )
             ]);
           }
-        }
+        },
       ],
       datax: [],
-      top:[{name:'活动名称',type:'input',value:''},{name:'活动状态',type:'select',list:[],value:''},{name:'活动日期',type:'date',value:''}],
-      arrs:'',
       page: 1,
-      size: 1
+      size: 10,
+      dataCount: 0,
+      Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
+      ],
     };
   },
   components: {},
@@ -164,85 +215,93 @@ export default {
   computed: {},
 
   created() {
-    this.getList()
+     this.getactiveManager();
+  },
+  //事件监听
+  watch: {
+    size: "getactiveManager",
   },
 
   methods: {
-    getList(){
-      getDraft({userId:this.$store.state.userId,status:this.status,page:{page:this.page,size:this.size}}).then(res => {
-
-      })
-    },
-    handleSelectionChange(){
-
-    },
-    addaction(){
-      this.$router.push({name:'approval'})
-    },
-    //导出数据
-   exportData(){
-    if (this.arrs.length == 0) {
-      this.arrs = this.datax
+    //列表和分页
+    getactiveManager() {
+      getDraft({
+        page: {
+          page: this.page,
+          size: this.size,
+        },
+        status: 8,
+        userId:this.$store.state.userId
+      }).then(res => {
+        this.$refs.selection.selectAll(false);
+        if (res.code == 200) {
+          this.dataCount = res.data.totalSize;
+          this.datax = res.data.list;
+        }
+      });
     }
-    this.$refs.selection.exportCsv({
-      filename: this.navigation1.head,
-      columns: this.columns.filter((col, index) => index > 0),
-      data: this.datax
-    });
-
-  },
   }
 };
 </script>
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
-  // font-size: 14px;
-  margin-top: 20px;
+.btn{
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:#FF565A !important;
+  font-size: 16px;
+}
+.showimg{
+    width: 100%;
+    height: auto;
+}
+.integral-header{
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 16px;
+  margin-bottom: 20px;
 }
 .integral-header .integral-top {
   padding: 10px;
-  background: rgb(228, 228, 228);
-  border-bottom: 1px solid #eee;
+  background: white;
 }
 .integral-header .integral-center {
   margin: 0 20px;
 }
-.integral-header .integral-body {
-  padding: 0 20px;
-  background: #fff;
-  justify-content: flex-start;
-  height: 50px;
+.integral-header .integral-body .flex-center-start  span{
+  margin-right: 15px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
-  width: 200px;
+  width: 180px;
   margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 40px;
 }
-// .integral-table {
-//   margin-top: 30px;
-// }
+
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
+  background: white;
 }
 .table-header .table-btn {
   margin-left: 15px;
+  font-size: 16px;
 }
 .flex-data {
   display: flex;
 }
-
-.popup{
+.integral-table {
+  padding: 20px 10px;
+  background: #fff;
+  border-radius: 20px;
+}
+.popup {
   background: #ffffff;
-  .popup-head{
+  .popup-head {
     height: 20px;
     line-height: 20px;
     margin-bottom: 10px;
-    .popup-head-tit{
+    .popup-head-tit {
       display: inline-block;
       // width: 140px;
       border: black solid 1px;
@@ -250,10 +309,10 @@ export default {
       margin-left: 20px;
     }
   }
-  .popup-content{
+  .popup-content {
     margin-bottom: 20px;
-    p{
-      span{
+    p {
+      span {
         display: inline-block;
         padding: 0 8px;
         line-height: 20px;
@@ -263,20 +322,17 @@ export default {
       }
     }
   }
-  .bft{
-    .bft-tab{
+  .bft {
+    .bft-tab {
       padding: 15px;
       background: #e4e4e4;
       height: 150px;
     }
   }
 }
-.table{
-  position: relative;
-}
-.set{
-  position: absolute;
-  top: 12px;
-  right: 50px;
+.pages{
+  text-align: center;
+  padding: 20px 0;
+  background-color: white;
 }
 </style>

@@ -17,17 +17,17 @@
     <div class="integral-header">
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
-          <span>活动名称:</span>
+          <span class="names">活动名称:</span>
           <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
         </div>
         <div class="flex-center-start">
-          <span>活动状态:</span>
+          <span class="names">活动状态:</span>
           <Select v-model="query.status" size='large' class="inpt">
             <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </div>
         <div class="flex-center-start">
-          <span>活动日期:</span>
+          <span class="names">活动日期:</span>
           <div>
              <Date-picker
              type="date"
@@ -57,49 +57,13 @@
           <div>
           <Button class="table-btn" @click="exportData" disabled>导出</Button>
           <!-- <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button> -->
-          <Modal draggable ok-text="导出" v-model="modal1" title="自定义展示字段">
-            <div class="popup">
-              <p class="popup-head">
-                <span>目前导出字段顺序</span>
-                <span class="popup-head-tit">拖拽调整列显示顺序</span>
-              </p>
-              <div class="popup-content">
-                <p>
-                  <span>序号</span>
-                  <span>姓名</span>
-                  <span>性别</span>
-                  <span>手机号码</span>
-                  <span>身份证号</span>
-                  <span>年龄</span>
-                  <span>孩子姓名</span>
-                </p>
-                <p>
-                  <span>孩子性别</span>
-                  <span>孩子年龄</span>
-                  <span>签名（孩子）</span>
-                  <span>签名(家长)</span>
-                  <span>障碍类型</span>
-                </p>
-              </div>
-              <div class="bft">
-                <p>备选字段</p>
-                <div class="bft-tab">
-                  <CheckboxGroup v-model="fruit">
-                    <Checkbox label="香蕉">序号</Checkbox>
-                    <Checkbox label="苹果">姓名</Checkbox>
-                    <Checkbox label="西瓜">障碍类型</Checkbox>
-                  </CheckboxGroup>
-                </div>
-              </div>
-            </div>
-          </Modal>
           <!-- <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button> -->
           <Button class="table-btn" @click="draft">草稿箱</Button>
           <Button class="table-btn" @click="addaction">添加活动</Button>
-          <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">
+          <Select v-model="size"  class="table-btn" style="width: 150px;" placeholder="显示条数" size="large">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 100px;" v-model="sort">
+          <Select placeholder="排序方式" class="table-btn" style="width: 150px;" v-model="sort" size="large">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -256,7 +220,7 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "volunteer_general",
+                        name: "profile",
                         query: { acitvityId: params.row.activityId,activityName: params.row.name }
                       });
                     }
@@ -377,8 +341,7 @@ export default {
               h("i-switch", {
                 props: {
                   value: ~~params.row.status !== 10,
-                  disabled: params.row.status!="10"?false: true,
-                  beforeChange:this.handleBeforeChange()
+                  disabled: params.row.status!="10"?false: true
                 },
                 'on':{
                   'on-change': e => {
@@ -436,18 +399,6 @@ export default {
   },
 
   methods: {
-     handleBeforeChange () {
-        return new Promise((resolve) => {
-          console.log('aaaa')
-          this.$Modal.confirm({
-            title: '切换确认',
-            content: '您确认要切换开关状态吗？',
-            onOk: () => {
-                resolve();
-            }
-          });
-        });
-    },
         // 活动下架
     getactivedown(ids) {
       ids = Array.of(ids);
@@ -591,7 +542,12 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 40px;
 }
-
+.integral-header span{
+  margin:0 10px;
+}
+.names{
+  margin-right: 10px;
+}
 .table-header {
   padding: 20px;
   background: white;
@@ -599,6 +555,7 @@ export default {
 }
 .table-header .table-btn {
   margin-left: 15px;
+  font-size: 16px;
 }
 .flex-data {
   display: flex;

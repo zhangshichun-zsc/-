@@ -6,19 +6,19 @@
       <div class="establish">
         <ul>
           <li>
-            <span>创建者</span>
+            <span class="tit">创建者</span>
             <span>{{list.createUserName}}</span>
           </li>
           <li>
-            <span>项目</span>
+            <span class="tit">项目</span>
             <span>{{list.categoryName}}</span>
           </li>
           <li>
-            <span>活动预算</span>
+            <span class="tit">活动预算</span>
             <span>{{list.budget}}</span>
           </li>
           <li>
-            <span>有效期限</span>
+            <span class="tit">有效期限</span>
             <span>{{list.startTime}}~{{list.endTime}}</span>
           </li>
         </ul>
@@ -26,19 +26,19 @@
       <div class="establish">
         <ul>
           <li>
-            <span>立项名称</span>
+            <span class="tit">立项名称</span>
             <span>{{list.batchName}}</span>
           </li>
           <li>
-            <span>活动目的</span>
+            <span class="tit">活动目的</span>
             <span>{{list.objective}}</span>
           </li>
           <li>
-            <span>小组归属</span>
+            <span class="tit">小组归属</span>
             <span>{{list.orgName}}</span>
           </li>
           <li>
-            <span>招募类型</span>
+            <span class="tit">招募类型</span>
             <span>{{list.recuitTypeText}}</span>
           </li>
         </ul>
@@ -50,13 +50,13 @@
         <p>
           <span>活动立项批次</span>
         </p>
-        <div class="main" v-for="item in actlist" :key="item.index">
+        <div class="main" v-for="item in actlist" :key="item.index" @click="jump(item.isUpdate,item.activityId,item.name)">
           <img :src="item.pic" />
           <ul>
-            <li class="ul-head">{{item.name}}</li>
-            <li>地点:{{item.address}}</li>
-            <li>活动日期:{{item.startAt}}--{{item.endAt}}</li>
-            <li>招募:{{item.recruitNum}}人</li>
+            <li class="ul-head" >{{item.name}}</li>
+            <li><span class="tit">地点:</span><span>{{item.address}}</span></li>
+            <li><span class="tit">活动日期:</span><span>{{item.startAt}}--{{item.endAt}}</span></li>
+            <li><span class="tit">招募:</span><span>{{item.recruitNum}}人</span></li>
             <li>{{item.pay}}</li>
           </ul>
         </div>
@@ -109,10 +109,19 @@ export default {
     this.getapprovaldet()
   },
   methods: {
+    jump(i,id,name){
+      if(i === 1){
+        this.$router.push({
+          name: "editing",
+          query: { dicId:id,name}
+        });
+      }
+    },
     //活动详情
     getapprovaldet() {
       approvaldet({
-        batchId: this.$route.query.batchId
+        batchId: this.$route.query.batchId,
+        userId: this.$store.state.userId
       }).then(res => {
         if (res.code == 200) {
           this.list = res.data
@@ -175,7 +184,7 @@ export default {
     background: #ffffff;
     padding-left: 50px;
     margin-bottom: 10px;
-    width: 900px;
+    width: 1000px;
     display: flex;
     align-items: center;
     ul {
@@ -189,8 +198,12 @@ export default {
         span {
           font-size: 14px;
           display: inline-block;
-          width: 200px;
+          width: 500px;
+          font-size: 16px;
           // margin-right: 70px;
+        }
+        .tit{
+          width: 200px;
         }
       }
     }
@@ -211,7 +224,7 @@ export default {
   }
   .project-content {
     // height: 500px;
-    width: 900px;
+    width: 1000px;
     margin-bottom: 10px;
     background: #ffffff;
     p {
@@ -226,12 +239,10 @@ export default {
   }
   .main {
     height: 200px;
-    width: 600px;
     margin-left: 40px;
     margin-top: 20px;
-
     display: flex;
-    padding: 20px 30px;
+    padding: 0px 30px;
     align-items: center;
     img {
       width: 150px;
@@ -240,7 +251,6 @@ export default {
       margin-right: 70px;
     }
     ul {
-      height: 120px;
       .ul-head {
         height: 40px;
         line-height: 40px;
@@ -248,8 +258,11 @@ export default {
         margin-bottom: 10px;
       }
       li {
-        font-size: 14px;
-        line-height: 18px;
+        margin-bottom: 10px;
+        .tit{
+          display: inline-block;
+          width: 100px;
+        }
       }
     }
   }

@@ -9,11 +9,11 @@
       </p>
       <div class="flex-center-start">
         <div class="flex-center-start" style=" margin-right: 10px;">
-          <span class="lab" style="width:80px">反馈人:</span>
+          <span class="lab" style="width:110px">反馈人:</span>
           <Input placeholder="活动名称" v-model="querys.userName" />
         </div>
         <div class="flex-center-start" style=" margin-right: 10px;">
-          <span class="lab">开始时间:</span>
+          <span class="lab" style="width:110px">开始时间:</span>
           <DatePicker
             v-model="querys.startAt"
             type="date"

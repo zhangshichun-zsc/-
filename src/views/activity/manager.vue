@@ -261,7 +261,7 @@ export default {
                     "a",
                     {
                       style: {
-                        color: "green"
+                        color: "#FF565A"
                       }
                     },
                     "更多操作"

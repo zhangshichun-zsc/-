@@ -124,12 +124,12 @@
 
 <script>
 import {
-  orgpages,
   orgSetStatus,
   queryVouluteerOrgList,
   queryAuditList,
   getIsConfig,
-  auditCreateCoOrg
+  auditCreateCoOrg,
+  orggetAuditList
 } from "@/request/api";
 export default {
   data() {
@@ -146,6 +146,7 @@ export default {
           title: "组织名称",
           key: "orgName",
           align: "center",
+          minWidth: 140,
           render: (h, params) => {
             return h(
               "span",
@@ -205,6 +206,7 @@ export default {
           title: "组织地址",
           key: "address",
           align: "center",
+          minWidth: 140,
           render: (h, params) => {
             let address = params.row;
             return h(
@@ -221,7 +223,8 @@ export default {
         {
           title: "人数",
           key: "num",
-          align: "center"
+          align: "center",
+          minWidth: 80
         },
         {
           title: "提交时间",
@@ -439,12 +442,14 @@ export default {
           status = "0";
         }
 
-        orgpages(this.util.remove({ ...fromobj, status: status })).then(res => {
-          if (res.code == 200) {
-            this.dataCount = res.data.totalSize;
-            this.data = res.data.list;
+        orggetAuditList(this.util.remove({ ...fromobj, status: status })).then(
+          res => {
+            if (res.code == 200) {
+              this.dataCount = res.data.totalSize;
+              this.data = res.data.list;
+            }
           }
-        });
+        );
       } else {
         //  志愿者审批
         queryAuditList(

@@ -5,12 +5,12 @@
     <div class="content">
       <div class="select flex-start">
         <span class="select-template">培训标题</span>
-        <Input  style="width:300px" v-model="args.fkMouldName">
+        <Input  style="width:300px" v-model="args.fkMouldName" size="large">
         </Input>
       </div>
       <div class="select flex-start">
         <span class="select-template">活动分类</span>
-        <Input  style="width:300px" v-model="args.typeDicName">
+        <Input  style="width:300px" v-model="args.typeDicName" size="large">
         </Input>
       </div>
       <div class="select flex-start">

@@ -447,7 +447,8 @@ export default {
       "feedDetail",
       "draft",
       "vun_prend",
-      "newzuzihy"
+      "newzuzihy",
+      "volunteer_pending"
     ];
 
     // 总菜单
