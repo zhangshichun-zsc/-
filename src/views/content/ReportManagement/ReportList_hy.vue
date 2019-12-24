@@ -230,8 +230,8 @@ export default {
   },
   //事件监听
   watch: {
-    size: "getReportList",
-    sort: "getReportList"
+    size: "getReportpage",
+    sort: "getReportpage"
   },
 
   mounted() {

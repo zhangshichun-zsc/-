@@ -381,7 +381,7 @@ export default {
         this.endTimeStamp = this.time + new Date().getTime();
       }
       AdvertisingPage({
-        page: { page: this.page, size: this.size },
+        page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort },
         title: this.title,
         sysType: this.sysType,
         location: this.location,
@@ -466,8 +466,8 @@ export default {
   },
     //事件监听
   watch:{
-    size:'getAdvertisingPage',
-    sort:'getAdvertisingPage'
+    'size':'getAdvertisingPage',
+    'sort':'getAdvertisingPage'
 
   },
   mounted() {
