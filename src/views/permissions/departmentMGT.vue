@@ -35,7 +35,7 @@
                     placeholder="请输入内容"
                   />
                 </FormItem>
-                <FormItem label="上级部门" prop="parentId">
+                <FormItem label="上级部门:" prop="parentId">
                   <Select
                     v-model="AddDate.parentId"
                     :disabled="isdispabled"
@@ -52,7 +52,7 @@
                 <FormItem label="设置负责人:" prop="leader">
                   <Input style="width: 10rem" v-model="AddDate.leader" />
                 </FormItem>
-                <FormItem label="活动类型" prop="ssproject">
+                <FormItem label="活动类型:" prop="ssproject">
                   <Select
                     multiple
                     style="width: 10rem"
@@ -478,7 +478,7 @@ export default {
         type: "default",
         size: "small"
       },
-      datalistCount: "",
+      datalistCount: 0,
       datalist: []
     };
   },

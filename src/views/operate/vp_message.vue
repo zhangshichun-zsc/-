@@ -183,7 +183,7 @@ export default {
 }
 
 .text2 {
-  font-size: 14px;
+  font-size: 16px;
 }
 .text1 {
   display: flex;

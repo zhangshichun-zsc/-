@@ -141,8 +141,10 @@ export default {
             trigger: "blur"
           }
         ],
-        newPassword: [{ validator: newPassword, trigger: "blur" }],
-        confirm: [{ validator: confirm, trigger: "blur" }]
+        newPassword: [
+          { required: true, validator: newPassword, trigger: "blur" }
+        ],
+        confirm: [{ required: true, validator: confirm, trigger: "blur" }]
       },
 
       picUrl: "",

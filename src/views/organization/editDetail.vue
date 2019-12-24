@@ -41,7 +41,7 @@
       <div class='item-right textarea info-text'>{{list.description}}</div>
     </div>
 
-    <div class='box'>
+    <div class='box '>
       <div class='item-left' style='line-height: 40px;'>图片</div>
       <img class='item-img' v-if="list.orgPicPath" :src="list.orgPicPath" alt="组织图片">
       <div v-else class="no-img">暂无图片</div>
@@ -183,16 +183,16 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
 }
 .item-left {
-  font-size: 14px;
-  width: 120px;
+  font-size: 16px;
+  width: 140px;
   margin-right: 10px;
 }
 
 .item-right {
-  font-size: 14px;
+  font-size: 16px;
   width: 400px;
   height: 40px;
   line-height: 40px;
@@ -207,9 +207,8 @@ export default {
 }
 .no-img {
   width: 400px;
-  height: 400px;
-  text-align: center;
-  line-height: 40px;
+  text-align: left;
+  line-height: 60px;
 }
 .textarea {
   height: 100px;

@@ -445,7 +445,9 @@ export default {
       "detailshy",
       "personnel_details",
       "feedDetail",
-      "draft"
+      "draft",
+      "vun_prend",
+      "newzuzihy"
     ];
 
     // 总菜单

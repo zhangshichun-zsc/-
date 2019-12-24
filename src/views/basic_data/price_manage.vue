@@ -1,7 +1,7 @@
 <!-- 基金管理(会员)-->
 <template>
   <div class="integral">
-     <basicdata :navigation1="navigation1" @query="getList"></basicdata>
+     <basicdata :navigation1="navigation1" @query="query"></basicdata>
     <div class="integral-header">
 
       <!-- <Navigation :labels="navigation1"></Navigation>
@@ -270,7 +270,8 @@ export default {
 
      //新建基金
     jump() {
-      this.$router.push({ name: "addfund"});
+       this.$router.push({ name: "newzuzihy",query:{sysId:3}});
+      // this.$router.push({ name: "addfund"});
     },
 
     //查询
@@ -279,7 +280,7 @@ export default {
       this.args.validFlag=e.validFlag
       this.args.startAt=e.createTimestamp[0]
       this.args.endAt=e.createTimestamp[0]
-      this.getList()
+      this.getList(this.args)
     },
     getList(){
       let args = filterNull(this.args)
@@ -291,7 +292,7 @@ export default {
     },
     changePage(e){
       this.$set(this.args.page,'page',e)
-      this.getList()
+      this.getList(this.args)
     },
     // successOk(){
     //   if(!this.args.startAt&&!this.args.endAt){

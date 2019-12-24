@@ -6,14 +6,14 @@
       <p class="content-activity">融融介绍</p>
       <Form :model="parameterObj" :label-width="80">
         <FormItem label="标题">
-          <Input v-model="parameterObj.title" placeholder="请输入..." style="width:10rem;"></Input>
+          <Input v-model="parameterObj.title" placeholder="请输入..." style="width:30rem;"  size="large"></Input>
         </FormItem>
         <FormItem label="详情">
           <wangeditor :labels="parameterObj.text" @change="change" id="ed1"></wangeditor>
         </FormItem>
       </Form>
       <div class="button-food">
-        <Button @click="setInfo">保存</Button>
+        <Button @click="setInfo" class="btn"  shape="circle" size='large'>保存</Button>
       </div>
     </div>
   </div>
@@ -100,6 +100,12 @@ export default {
     padding: 1rem;
     background-color: #ffffff;
   }
+}
+.btn{
+  width: 100px;
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:#FF565A !important;
 }
 .button-food {
   display: flex;

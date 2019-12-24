@@ -4,17 +4,17 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="wapper">
       <div class="select flex-between">
-        <RadioGroup v-model="sysType" @on-change="Singles">
-          <Radio label="1">会员</Radio>
-          <Radio label="2">
+        <RadioGroup v-model="sysType" @on-change="Singles"  size="large">
+          <Radio label="1" size="large">会员</Radio>
+          <Radio label="2" size="large">
             <span @click="vun">志愿者</span>
           </Radio>
         </RadioGroup>
         <div>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
+          <Select v-model="size" style="width:150px" placeholder="显示条数" class="space" size="large">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
+          <Select placeholder="排序方式" style="width: 150px;" v-model="sort" size="large">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -287,6 +287,9 @@ export default {
   background: #ffffff;
   padding: 10px 20px;
   margin-bottom: 30px;
+  *{
+    font-size: 16px;
+  }
 }
 .wapper{
   background: #fff;

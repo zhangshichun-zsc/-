@@ -32,7 +32,12 @@
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Select placeholder="排序方式" style="width: 120px;" v-model="sort">
-            <Option v-for="item in sorting" :value="item.value" :key="item.value" @click.native="getSort()">{{ item.label }}</Option>
+            <Option
+              v-for="item in sorting"
+              :value="item.value"
+              :key="item.value"
+              @click.native="getSort()"
+            >{{ item.label }}</Option>
           </Select>
         </div>
       </div>
@@ -71,7 +76,11 @@
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
           <Select placeholder="批量操作" style="width: 150px" v-model="type">
-            <Option v-for="item in batchList" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
+            <Option
+              v-for="item in batchList"
+              :value="item.dicId"
+              :key="item.dicId"
+            >{{ item.dicName }}</Option>
           </Select>
           <Button class="space" @click="space">确定</Button>
         </div>
@@ -108,7 +117,7 @@ export default {
       list: [],
       data: [],
       columns: [
-         {
+        {
           type: "selection",
           width: 60,
           align: "center"
@@ -219,9 +228,9 @@ export default {
         { value: "create_at desc", label: "倒序" }
       ],
       sort: "create_at desc",
-      arrs:[],
-      type:'',
-      types:'',
+      arrs: [],
+      type: "",
+      types: ""
     };
   },
   //事件监听
@@ -233,24 +242,22 @@ export default {
   mounted() {
     this.getReportList();
     this.getReportpage();
-    this.getReporttext()
+    this.getReporttext();
   },
   methods: {
-
-     //文本
-    getReporttext(){
-      Reporttext({
-      }).then(res=>{
-        if(res.code==200){
-          this.batchList=[{dicId:0,dicName:'删除举报'},...res.data]
+    //文本
+    getReporttext() {
+      Reporttext({}).then(res => {
+        if (res.code == 200) {
+          this.batchList = [{ dicId: 0, dicName: "删除举报" }, ...res.data];
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
     //获取举报原因列表
     getReportList() {
       ReportList({
-        sysType:2
+        sysType: 2
       }).then(res => {
         console.log(res);
         if (res.code == 200) {
@@ -302,25 +309,23 @@ export default {
 
     //批量操作
     getReportdeles() {
-      if(this.type==0){
-        this.types=0
-      }else{
-        this.types=1
+      if (this.type == 0) {
+        this.types = 0;
+      } else {
+        this.types = 1;
       }
-       let params = {
-        reportIds:this.arr,
-        dealUserId:this.$store.state.userId,
-        reportDealResult:this.type,
-        type:this.types,
-
-      }
-      this.params =this.util.remove(params)
+      let params = {
+        reportIds: this.arr,
+        dealUserId: this.$store.state.userId,
+        reportDealResult: this.type,
+        type: this.types
+      };
+      this.params = this.util.remove(params);
       Reportdeles(params).then(res => {
         if (res.code == 200) {
-          this.getReportpage()
-          this.$Message.info('操作成功');
+          this.getReportpage();
+          this.$Message.info("操作成功");
         }
-
       });
     },
     // 举报管理--删除举报
@@ -334,26 +339,23 @@ export default {
         console.log(res);
       });
     },
-      space(){
-      if(this.arr.length==0||this.arrs.length==0){
-         this.$Message.error('暂无可操作数据');
-      }else if(this.arrs.length==0){
-         this.$Message.error('暂无可操作数据');
-      }else if(this.type==0){
-           this.arr=this.arr.map(item=>{
-             return item.reportId
-           }).toString()
-          this.getReportdeles()
-        }else if(this.type!=0){
-           this.arr=this.arrs
-          console.log(this.arr)
-
-          this.getReportdeles()
+    space() {
+      if (this.type == 0) {
+        this.arr = this.arr
+          .map(item => {
+            return item.reportId;
+          })
+          .toString();
+        this.getReportdeles();
+      } else if (this.type != 0) {
+        if (this.arr.length == 0 || this.arrs == "") {
+          this.$Message.error("暂无可操作数据");
+        } else {
+          this.arr = this.arrs;
+          this.getReportdeles();
         }
-
-      },
-
-
+      }
+    },
 
     delete(e) {
       this.reportId = e;
@@ -361,7 +363,7 @@ export default {
     },
     //分页功能
     changepages(index) {
-      this.page = index
+      this.page = index;
 
       this.getReportpage();
     },
@@ -378,13 +380,13 @@ export default {
       } else {
         this.status = false;
       }
-      let a = val.filter(
-        item => item.reportStatusText == '未处理'
-      );
-      this.arrs=a.map(item=>{
-        return item.reportId
-      }).toString()
-      console.log(this.arrs)
+      let a = val.filter(item => item.reportStatusText == "未处理");
+      this.arrs = a
+        .map(item => {
+          return item.reportId;
+        })
+        .toString();
+      console.log(this.arrs);
     },
     //全选按钮
     chackall() {
@@ -432,13 +434,13 @@ export default {
   padding: 20px 0;
   background: #fff;
 }
-.row{
+.row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
 }
-.space{
-  margin-left: 10px
+.space {
+  margin-left: 10px;
 }
 </style>
