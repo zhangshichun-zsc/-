@@ -98,7 +98,7 @@
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status">全选</Checkbox>
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch" placement='top'>
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
@@ -379,7 +379,7 @@ export default {
         this.endTimeStamp = this.time + new Date().getTime();
       }
       AdvertisingPage({
-        page: { page: this.page, size: this.size },
+        page: { page: this.page, size: this.size,sort: "createAt" + " " + this.sort },
         title: this.title,
         sysType: this.sysType,
         location: this.location,
@@ -464,8 +464,8 @@ export default {
   },
     //事件监听
   watch:{
-    size:'getAdvertisingPage',
-    sort:'getAdvertisingPage'
+    'size':'getAdvertisingPage',
+    'sort':'getAdvertisingPage'
 
   },
   mounted() {

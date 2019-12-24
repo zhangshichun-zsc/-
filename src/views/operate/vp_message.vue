@@ -80,8 +80,8 @@ export default {
       ],
       sort: "create_at desc",
       top: [
-        { name: "关键词", type: "input", value: "" },
-        { name: "发布时间", type: "date", value: "" }
+        { name: "关键词:", type: "input", value: "" },
+        { name: "发布时间:", type: "date", value: "" }
       ]
     };
   },

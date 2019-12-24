@@ -36,6 +36,21 @@ export default {
           align: "center"
         },
         {
+          title: "项目预算",
+          key: "budget",
+          align: "center"
+        },
+        {
+          title: "创建人",
+          key: "userName",
+          align: "center"
+        },
+        {
+          title: "身份",
+          key: "orgType",
+          align: "center"
+        },
+        {
           title: "活动所属项目",
           key: "categoryName",
           align: "center"
@@ -43,11 +58,6 @@ export default {
         {
           title: "小组归属",
           key: "orgName",
-          align: "center"
-        },
-        {
-          title: "项目预算",
-          key: "budget",
           align: "center"
         },
         {
@@ -68,7 +78,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                    //   this.$router.push({ path: "editing" });
+                      this.$router.push({ path: "approval",query:{batchId:params.row.batchId} });
                     }
                   }
                 },

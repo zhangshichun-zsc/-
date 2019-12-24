@@ -75,7 +75,7 @@
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="type">
+          <Select placeholder="批量操作" style="width: 150px" v-model="type" placement='top'>
             <Option
               v-for="item in batchList"
               :value="item.dicId"
@@ -235,8 +235,8 @@ export default {
   },
   //事件监听
   watch: {
-    size: "getReportList",
-    sort: "getReportList"
+    size: "getReportpage",
+    sort: "getReportpage"
   },
 
   mounted() {

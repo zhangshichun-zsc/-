@@ -126,7 +126,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-      top:[{name:'用户账号',type:'input',value:''},{name:'用户昵称',type:'input',value:''}],
+      top:[{name:'用户账号:',type:'input',value:''},{name:'用户昵称:',type:'input',value:''}],
       data: [],
        page:1,
       size:10,

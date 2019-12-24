@@ -26,9 +26,9 @@
           :data='data'
         ></Table>
         </div>
-      <Modal class="QRcodemodal" v-model="modal2" title="查看消息">
-        <h1 style="text-align: center;font-size:16px">{{obj.title}}</h1>
-        <p style="text-align: center;color: #9EA7B4;font-size:12px">{{obj.createAt}}</p>
+      <Modal class="QRcodemodal" v-model="modal2"  title="查看消息">
+        <h1 style="text-align: center;font-size:20px">{{obj.title}}</h1>
+        <p style="text-align: center;color: #9EA7B4;font-size:16px">{{obj.createAt}}</p>
         <Divider style="margin: 0.5rem 0;" />
         <p style="font-size:16px;">{{obj.content}}</p>
         <div slot="footer"></div>
@@ -119,8 +119,8 @@ export default {
       ],
       sort: "create_at desc",
       top: [
-        { name: "消息标题", type: "input", value: "" },
-        { name: "发布时间", type: "date", value: "" }
+        { name: "消息标题:", type: "input", value: "" },
+        { name: "发布时间:", type: "date", value: "" }
       ],
       sysId: 1,
       channelFlag: 1,
@@ -178,9 +178,7 @@ export default {
       this.content = e[0].value;
        if(e[1].value!=''){
         this.createAt = e[1].value.getTime();
-
         this.createAt=this.util.formatDate(this.createAt)
-
       }
 
       this.getmessageShort()

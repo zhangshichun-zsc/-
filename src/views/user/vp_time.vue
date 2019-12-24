@@ -156,10 +156,10 @@ export default {
           title: "调整值",
           key: "adjustValue",
           align: "center",
-          minWidth: 140,
-          render: (h, params) => {
-            return h("div", "+12");
-          }
+          minWidth: 140
+          // render: (h, params) => {
+          //   return h("div", "+12");
+          // }
         },
         {
           title: "状态",
@@ -175,6 +175,7 @@ export default {
               待一级审核: "#FF565A",
               审核通过: "#ccc",
               审核不通过: "#ccc",
+              审核拒绝: "#ccc",
               待二级审核: "#FF565A"
             };
             return h(
@@ -202,7 +203,8 @@ export default {
                   style: {
                     color:
                       params.row.status == "审核通过" ||
-                      params.row.status == "审核不通过"
+                      params.row.status == "审核不通过" ||
+                      params.row.status == "审核拒绝"
                         ? "#ccc"
                         : "#FF565A"
                   },
@@ -210,7 +212,8 @@ export default {
                     click: () => {
                       if (
                         params.row.status == "审核通过" ||
-                        params.row.status == "审核不通过"
+                        params.row.status == "审核不通过" ||
+                        params.row.status == "审核拒绝"
                       ) {
                         return false;
                       } else {
@@ -231,7 +234,8 @@ export default {
                     marginLeft: "5px",
                     color:
                       params.row.status == "审核通过" ||
-                      params.row.status == "审核不通过"
+                      params.row.status == "审核不通过" ||
+                      params.row.status == "审核拒绝"
                         ? "#ccc"
                         : "#FF565A"
                   },
@@ -239,7 +243,8 @@ export default {
                     click: () => {
                       if (
                         params.row.status == "审核通过" ||
-                        params.row.status == "审核不通过"
+                        params.row.status == "审核不通过" ||
+                        params.row.status == "审核拒绝"
                       ) {
                         return false;
                       } else {

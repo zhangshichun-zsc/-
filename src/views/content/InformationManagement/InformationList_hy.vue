@@ -52,7 +52,7 @@
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch">
+          <Select placeholder="批量操作" style="width: 150px" v-model="batch" placement='top'>
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
@@ -295,12 +295,8 @@ export default {
   },
   //事件监听
   watch: {
-    'size':()=>{
-      this.getAddressList()
-    },
-    'sort':()=>{
-      this.getAddressList()
-    },
+    'size':'getAddressList',
+    'sort':'getAddressList',
   },
   methods: {
     addBut() {
