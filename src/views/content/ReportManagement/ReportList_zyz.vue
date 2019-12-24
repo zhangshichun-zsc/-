@@ -18,7 +18,7 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </div>
-        <Button class="table-btns" @click="query">查询</Button>
+        <Button class="search" @click="query" style="margin-left:10px;">查询</Button>
       </div>
     </div>
     <div class="contents">

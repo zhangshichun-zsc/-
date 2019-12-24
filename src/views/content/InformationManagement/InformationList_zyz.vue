@@ -25,7 +25,7 @@
         </p>
 
       </div>
-        <Button @click="query()" shape="circle" size='large' class="table-btns">查询结果</Button>
+        <Button @click="query()" shape="circle" size='large' class="search" style="margin-left:10px;">查询</Button>
     </div>
 
     <div class="content">

@@ -165,10 +165,14 @@ export default {
                 },
                 on: {
                   "on-change": (e) => {
-                    let item = params.row
-                    this.$set(this.pams,'orgId',item.orgId)
-                    this.$set(this.pams,'validFlag',e)
-                    this.update([this.pams])
+                    let validFlag
+                    if(e){
+                      validFlag=1
+                    }else{
+                      validFlag=0
+                    }
+                    let item = [{'orgId':params.row.orgId,'validFlag':validFlag}]
+                    this.update(item)
                   }
                 }
               })
@@ -192,8 +196,6 @@ export default {
                   on: {
                     click: () => {
                        this.$router.push({ name: "detailshy",query:{orgId:params.row.orgId,start:1}});
-
-
                     }
                   }
                 },
@@ -336,9 +338,11 @@ export default {
       })
     },
     update(list){
+
       updateFun(filterNull({list})).then(res => {
         if(res.code == 200){
           this.modal1 = false
+           this.$Message.info(res.msg);
           this.getList()
         }else{
           this.$Message.error(res.msg);
