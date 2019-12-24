@@ -40,7 +40,7 @@
       </div> -->
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-between">
         <div>
           <!-- <span>已选择{{list.length}}</span> -->
           <!-- <Button class="table-btn" @click="deletes()">批量删除</Button> -->

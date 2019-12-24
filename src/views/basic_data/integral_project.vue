@@ -5,7 +5,7 @@
       <basicdata :navigation1="navigation1" @query="query"></basicdata>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <!-- <Button class="table-btn">批量删除</Button> -->
@@ -16,7 +16,7 @@
                 <Input v-model.trim="formValidate.name" style="width: 220px" />
               </FormItem>
               <FormItem label="总计预算" prop="allBudget">
-                <InputNumber  :min="0" :max="1000000000" style="width: 220px" v-model="formValidate.allBudget"></InputNumber>
+                <InputNumber  :min="0" :max="1000000000" size="large"  style="width: 220px" v-model="formValidate.allBudget"></InputNumber>
 <Button type="error" >元</Button>
                 <!-- <Input v-model.trim="formValidate.allBudget" /> -->
               </FormItem>

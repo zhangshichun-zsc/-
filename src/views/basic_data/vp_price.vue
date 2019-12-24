@@ -4,12 +4,9 @@
       <basicdata :navigation1="navigation1" @query="query"></basicdata>
 
     <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div>
-          <!-- <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button> -->
-          <!-- <span>已选择{{arr.length}}</span> -->
+      <div class="table-header flex-between">
+
+
           <Button class="table-btns"  @click="add('formValidate')">{{Newly}}</Button>
           <Modal v-model="modal1" title="新增会费" class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -40,7 +37,7 @@
             </div>
           </Modal>
         </div>
-      </div>
+
        <Modal v-model="addstate" width="560" class-name="vertical-center-modal">
                 <p slot="header" class="flex-center-center" style="color:black">
                   <span>新增确定</span>
@@ -464,11 +461,6 @@ export default {
 .modals{
   height: 500px;
 }
-.w-e-text{
-  font-size: 16px !important;
-}
-#text-elem3472466774465377{
-  font-size: 16px !important;
-}
+
 
 </style>

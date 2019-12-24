@@ -432,9 +432,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.table-header{
-  padding: 10px 0;
-}
+
 .integral-body{
 margin-bottom: 20px;
     padding-left: 20px;
@@ -454,11 +452,7 @@ margin-bottom: 20px;
     margin-right: 30px;
   }
 }
-.table-header {
-  background: #ffffff;
-  border: 0;
-  padding: 20px 10px;
-}
+
 
 
 </style>

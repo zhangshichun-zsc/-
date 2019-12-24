@@ -3,7 +3,7 @@
   <div>
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-between">
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns" @click="btn">{{title}}</Button>

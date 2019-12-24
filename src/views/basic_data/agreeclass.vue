@@ -5,7 +5,7 @@
       <Navigation :labels="navigation1"></Navigation>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-center-end">
         <!-- <div class="flex-center-start">
           <Icon type="md-list" />
           <span>数据列表</span>
@@ -333,8 +333,8 @@ export default {
 <style lang="scss" scoped>
  .start-wap{
     position: relative;
-    height: 150px;
-    width: 300px;
+    height: 75px;
+    width: 200px;
     .upload{
       width: 100%;
       height: 100%;

@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="integral-table">
-      <div class="table-header flex-center-between">
+      <div class="table-header flex-between">
         <div>
           <!-- <span>已选择{{arr.length}}人</span> -->
           <Button class="table-btns" @click="add">新增活动分类</Button>
