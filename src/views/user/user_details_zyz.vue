@@ -238,6 +238,7 @@ export default {
           title: "活动时间",
           key: "startAt",
           align: "center",
+          minWidth: 160,
           render: (h, params) => {
             return h("div", this.util.formatDate(params.row.startAt));
           }

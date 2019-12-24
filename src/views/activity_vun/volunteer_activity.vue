@@ -52,7 +52,7 @@
     <div class="integral-table">
       <div class="table-header flex-between">
           <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status">全选</Checkbox>
+            <Checkbox v-model="state">全选</Checkbox>
           </Button>
           <div>
           <Button class="table-btn" @click="exportData" disabled>导出</Button>
@@ -95,7 +95,7 @@
           </Modal>
           <!-- <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button> -->
           <Button class="table-btn" @click="draft">草稿箱</Button>
-            <Button class="table-btn" @click="addaction">添加活动</Button>
+          <Button class="table-btn" @click="addaction">添加活动</Button>
           <Select v-model="size" style="width:100px;margin-right:10px" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -172,7 +172,7 @@ export default {
   data() {
     return {
       addstate: false,
-      status: false,
+      state: false,
       modal1: false,
       modal2: false,
       modal3: false,
@@ -376,18 +376,15 @@ export default {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: ~~params.row.statusText !== 10,
-                  disabled: params.row.statusText!="10"?false: true
+                  value: ~~params.row.status !== 10,
+                  disabled: params.row.status!="10"?false: true,
+                  beforeChange:this.handleBeforeChange()
                 },
                 'on':{
                   'on-change': e => {
-                    if (params.row.statusText == "10") {
-
-                    } else {
-                      this.activityId = params.row.acitvityId
-                      this.addstate = true
-                      this.index = params.index
-                    }
+                    this.activityId = params.row.activityId
+                    this.addstate = true
+                    this.index = params.index
                   }
                 }
               })
@@ -439,9 +436,22 @@ export default {
   },
 
   methods: {
+     handleBeforeChange () {
+        return new Promise((resolve) => {
+          console.log('aaaa')
+          this.$Modal.confirm({
+            title: '切换确认',
+            content: '您确认要切换开关状态吗？',
+            onOk: () => {
+                resolve();
+            }
+          });
+        });
+    },
         // 活动下架
     getactivedown(ids) {
       ids = Array.of(ids);
+      console.log(ids)
       activedown({
         activityId: ids
       }).then(res => {
@@ -457,8 +467,7 @@ export default {
     },
         //取消
     modalCancel(){
-
-      this.$set(this.datax[this.index],"statusText",1)
+      this.$set(this.datax[this.index],"status",1)
       this.addstate=false
     },
 
@@ -498,9 +507,9 @@ export default {
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
       ) {
-        this.status = true;
+        this.state = true;
       } else {
-        this.status = false;
+        this.state = false;
       }
       this.arr = val.map(v=> {
         return {activityId:v.acitvityId,activityName:v.activityName}
@@ -542,7 +551,7 @@ export default {
       this.$router.push({ name: "volunteer_issue" });
     },
     draft() {
-      this.$router.push({ name: "draft" });
+      this.$router.push({ name: "volunteer-draft" });
     },
 
     //导出数据

@@ -224,8 +224,9 @@ export default {
           title: "活动时间",
           align: "center",
           key: "startAt",
+          minWidth: 160,
           render: (h, params) => {
-            return h("div", this.util.formatDateYMD(params.row.startAt));
+            return h("div", this.util.formatDate(params.row.startAt));
           }
         },
         {
@@ -360,7 +361,7 @@ export default {
 
           this.statisticsInfo = [res.data.statisticsInfo];
           this.activityRecord = res.data.activityRecord;
-          this.userAdderes = res.data.userAdderes;
+          this.userAdderes = res.data.userAdderess;
           this.orgRecordList = res.data.orgRecordList;
 
           if (this.basicInfo.userLabel) {

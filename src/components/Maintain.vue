@@ -8,7 +8,7 @@
         <Button class="table-btn" @click="modal1 = true">新增模板</Button>
       </p>
       <Modal v-model="modal1" title="新增模板">
-        <p>请选择分类</p>
+        <p class="title">请选择分类</p>
         <div class="tabs">
           <Button
             class="btn"
@@ -117,9 +117,7 @@ export default {
     padding-right: 150px;
   }
   .table-btn {
-    height: 30px;
-    width: 80px;
-    margin-left: 10px;
+    font-size: 16px;
   }
 }
 .content {
@@ -138,13 +136,19 @@ export default {
       }
       .wap {
         padding: 20px;
-        .btn {
-          margin-right: 20px;
-          margin-bottom: 20px;
-        }
+       
       }
     }
   }
+}
+.btn {
+  margin-right: 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+.title{
+  font-size: 20px;
+  font-weight: bold;
 }
 .tabs {
   margin: 10px 0;

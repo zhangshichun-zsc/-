@@ -44,7 +44,6 @@
               placeholder="显示条数"
               @on-change="changeNum"
               v-model="size"
-              placement="top"
             >
               <Option
                 :value="item"
@@ -58,7 +57,6 @@
               placeholder="排序方式"
               @on-change="changeSort"
               v-model="sort"
-              placement="top"
             >
               <Option value="create_at desc">升序</Option>
               <Option value="create_at asc">降序</Option>
@@ -236,7 +234,7 @@ export default {
       modalView: false,
       FeedbackDate: {
         FeedbackIntroduction:
-          " 恭喜您已成功参与活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。",
+          " 恭喜您已成功参与活动！为了了解您的活动感受，进一步做好今后的活动工作，我们特进行此活动反馈，以便根据您的意见与建议，更加科学地、有针对性地改进课程，更好地满足您的需求。",
         FeedbackSuggestions: "希望此类活动更多些"
       },
       choose1: "choose-A",

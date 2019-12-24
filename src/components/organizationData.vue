@@ -29,7 +29,7 @@
           <FormItem label="负责人:">
             <Input
               v-model="ownerUserName"
-              placeholder="请选择负责人"
+              placeholder="负责人"
               style="width: 120px"
             />
           </FormItem>
@@ -75,16 +75,16 @@
             </div>
             <div class="flex-start">
               <div class="flex-center-end">
-                <Button class="space" @click="exportData">导入组织</Button>
+                <Button disabled class="space" @click="exportData"
+                  >导入组织</Button
+                >
                 <div class="flex-center-end">
-                  <Dropdown class="space">
-                    <Button @click="exportData">导出数据</Button>
+                  <Dropdown>
+                    <Button disabled class="space" @click="exportData"
+                      >导出数据</Button
+                    >
                   </Dropdown>
                 </div>
-              </div>
-            </div>
-            <div class="flex-start">
-              <div class="flex-center-end">
                 <Select
                   v-model="size"
                   style="width:80px;margin-right:10px"
@@ -581,7 +581,8 @@ body {
   margin: 0 0.4rem;
 }
 .space {
-  margin: 0 10px;
+  margin-right: 10px;
+  font-size: 15px;
 }
 
 .pages {

@@ -561,6 +561,7 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
+export const draftDetail = p => posts("/activity-manage/work/batch/draft/list", p) //官方活动草稿箱
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
@@ -633,6 +634,7 @@ export const getMatchingMeList = p =>posts("/activity-manage/work/act/match/mem/
 export const getMatchingVoList = p =>posts("/activity-manage/work/act/match/volu/list",p)
 export const Matchingupdate = p =>posts("/activity-manage/work/act/match/update",p)
 export const matchAdd = p => posts("/activity-manage/work/act/match/add",p)
+export const getDraft = p => posts("/volunteer-manager/queryInitiatalVolunteerActivity",p)
 
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 

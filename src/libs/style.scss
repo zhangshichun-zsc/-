@@ -90,7 +90,7 @@
   padding: 0 20px;
   margin: 0 20px;
 }
-.table-btns:hover{
+.table-btns:hover {
   background: #ff565a;
   border-radius: 15px;
   text-align: center;
@@ -149,7 +149,7 @@ html ::-webkit-scrollbar-thumb {
 
 .scrollModal {
   .ivu-modal-body {
-    height: 50vh;
+    height: 70vh;
     max-height: 70vh;
     overflow-y: scroll;
   }
@@ -187,4 +187,25 @@ html ::-webkit-scrollbar-thumb {
   padding: 20px 0;
   background: #fff;
   border-radius: 0 0 10px 10px;
+}
+
+.ivu-table-tip table td {
+  font-size: 16px;
+}
+
+textarea.ivu-input {
+  font-size: 16px;
+}
+
+.ivu-radio-group label span {
+  font-size: 16px;
+}
+.ivu-select-multiple .ivu-select-selection .ivu-select-placeholder {
+  font-size: 15px;
+}
+.ivu-select-multiple .ivu-tag span:not(.ivu-select-max-tag) {
+  font-size: 14px;
+}
+.ivu-transfer-list-content-item {
+  font-size: 18px !important;
 }
