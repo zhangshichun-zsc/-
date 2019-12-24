@@ -30,7 +30,7 @@
                 class="inpt"
                 @on-change="handleChange('startT',$event)"
               ></Date-picker>
-              <i>~</i>
+              <i style="margin:0 10px;">~</i>
               <Date-picker
               type="date"
               size="large"
@@ -720,7 +720,6 @@ export default {
 }
 .integral-header .integral-body .flex-center-start .inpt {
   width: 180px;
-  margin-left: 10px;
 }
 .integral-header .integral-body .flex-center-start {
   margin-right: 40px;

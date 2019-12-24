@@ -14,7 +14,7 @@
         </Input>
       </div>
       <div class="select flex-start">
-        <span class="select-template">活动图片</span>
+        <span class="select-template">培训图片</span>
         <div class="start-wap">
           <div class="upload" v-if='image == null'>
               <div class="file" @click="()=>{ this.$refs.files.click()}">
@@ -23,11 +23,11 @@
               </div>
           </div>
           <img class="imgs" v-else :src="image"/>
-          <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg()"/>
+          <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg()" color='#FF565A'/>
         </div>
       </div>
       <div class="select flex-start">
-        <span class="select-template">培训图片</span>
+        <span class="select-template">培训详情</span>
         <div><wangeditor :labels="args.trainComments" id="eddl" @change='changeEditorTrain'></wangeditor></div>
       </div>
        <Modal v-model="addstate" width="360">
@@ -44,7 +44,7 @@
               </Modal>
       <div class="button-food">
         <i-button @click="template" shape="circle" size='large' class="btn">保存</i-button>
-        <i-button @click="cencel(1)"  shape="circle" size='large' class="btn">作废</i-button>
+        <i-button @click="cencel(1)"  shape="circle" size='large' class="btn" v-if='ble==1'>作废</i-button>
       </div>
     </div>
   </div>
@@ -62,8 +62,9 @@ export default {
         head: "维护活动模板(会员)"
       },
       image: null,
-       addstate:false,
-       zuo:false,
+      addstate:false,
+      zuo:false,
+      ble:1,
       args:{
 	      fkMouldName:null,
 	      typeDicId:null,

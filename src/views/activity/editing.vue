@@ -1,6 +1,12 @@
 <!--编辑活动(会员)-->
 <template>
   <div class="lx-content">
+    <Modal v-model="adds" title="新增物资">
+      <div class="wap">
+         <Button v-for="(item,index) in batchItemList.resources" @click="chooseResource(item)" class="btn font" :key='index'>{{item.name}}</Button>
+      </div>
+      <div slot="footer"></div>
+    </Modal>
     <adress :value="adr" @change="getMap" />
     <Navigation :labels="navigation1"></Navigation>
     <div class="lx-cont">
@@ -59,7 +65,7 @@
                         @change="uploadActFmFile()"
                         style="display:none"
                       />
-                      <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+                      <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
                     </div>
                   </div>
                   <div class="first-picfm" v-else>
@@ -91,7 +97,7 @@
                         @change="uploadActFile()"
                         style="display:none"
                       />
-                      <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
+                      <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
                     </div>
                   </div>
                   <div class="first-pic" v-else>
@@ -106,7 +112,7 @@
               </li>
             </ul>
           </Col>
-          <Col span="10">
+          <Col span="12">
             <ul>
               <li class="first-li">
                 <span class="first-span">活动时间</span>
@@ -140,12 +146,14 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动地址</span>
-                <span
+                <div style="flex:1">
+                  <Button
                   @click="getAdr()"
+                  lang
                   >{{
-                    batch.actAddress == null ? "选择活动地址" : batch.actAddress
-                  }}</span
-                >
+                      batch.actAddress == null ? "选择活动地址" : batch.actAddress
+                  }}</Button>
+                </div>
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
@@ -163,67 +171,65 @@
               </li>
               <li class="li-flex-between">
                 <span class="first-span">现场联系人</span>
-                <span class="first-span">姓名</span>
-                <Input
-                  v-model="batch.ownerUserName"
-                  style="width: 150px"
-                  class="same-staff"
-                  @on-change="getLeaderList"
-                />
-                <span class="first-span">联系方式</span>
-                <Input
-                  v-model="batch.ownerUserTel"
-                  style="width: 150px"
-                  class="same-staff"
-                  disabled
-                />
+                <div class="flex-center-start" style="flex:1">
+                  <span class="tit">姓名</span>
+                  <Input
+                    v-model="batch.ownerUserName"
+                    style="width: 150px"
+                    class="same-staff"
+                    @on-change="getLeaderList"
+                  />
+                  <span class="twoT">联系方式</span>
+                  <Input
+                    v-model="batch.ownerUserTel"
+                    style="width: 150px"
+                    class="same-staff"
+                    disabled
+                  />
+                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场联系人" v-if="addLeader">
+                    <Option
+                      v-for="(item, idx) in leaderList"
+                      :value="item.name"
+                      :key="idx"
+                      @click.native="getLeader(item)"
+                      >{{ item.name }} {{ item.tel }}</Option
+                    >
+                  </Select>
+                </div>
               </li>
-              <li v-if="addLeader">
-                <Select style="width:300px" placeholder="请选择现场联系人">
-                  <Option
-                    v-for="(item, idx) in leaderList"
-                    :value="item.name"
-                    :key="idx"
-                    @click.native="getLeader(item)"
-                    >{{ item.name }} {{ item.tel }}</Option
-                  >
-                </Select>
-              </li>
-              <li class="first-li">
+              <li class="first-li start">
                 <span class="first-span">工作人员</span>
-                <Button @click="addWorkers">添加</Button>
-              </li>
-              <li
-                v-for="(item, index) in batch.workerIdList"
-                :key="index"
-                class="li-flex-around"
-              >
-                <span>姓名</span>
-                <Input
-                  v-model="item.ownerUserName"
-                  style="width: 200px"
-                  class="same-staff"
-                  @on-change="getWorkerList(item, index)"
-                />
-                <span>联系方式</span>
-                <Input
-                  v-model="item.ownerUserTel"
-                  style="width: 200px"
-                  class="same-staff"
-                  disabled
-                />
-                <span @click="deleteWorker(index)">删除</span>
-              </li>
-              <li v-if="addWorker">
-                <Select style="width:300px" placeholder="请选择工作人员">
-                  <Option
-                    v-for="(i, idx) in workerList"
-                    :value="i.name"
-                    :key="idx"
-                    @click.native="getWorker(i)"
-                    >{{ i.name }} {{ i.tel }}</Option
-                  >
-                </Select>
+                <div>
+                  <div class="flex-center-center"><Button @click="addWorkers" class="font">添加</Button></div>
+                  <div v-for="(item, index) in batch.workerIdList" :key="index" class="li-flex-around">
+                    <span class="tit">姓名</span>
+                    <Input
+                      v-model="item.ownerUserName"
+                      style="width: 200px"
+                      class="same-staff"
+                      @on-change="getWorkerList(item, index)"
+                    />
+                    <span class="twoT">联系方式</span>
+                    <Input
+                      v-model="item.ownerUserTel"
+                      style="width: 200px"
+                      class="same-staff"
+                      disabled
+                    />
+                     <Icon type="ios-trash"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
+                  </div>
+                  <div v-if="addWorker">
+                    <Select style="width:300px" placeholder="请选择工作人员">
+                      <Option
+                        v-for="(i, idx) in workerList"
+                        :value="i.name"
+                        :key="idx"
+                        @click.native="getWorker(i)"
+                        >{{ i.name }} {{ i.tel }}</Option
+                      >
+                    </Select>
+                  </div>
+                </div>
               </li>
               <li class="first-li">
                 <span class="first-span">活动标签</span>
@@ -241,53 +247,35 @@
                   >
                 </Select>
               </li>
-              <li class="first-li">招募角色</li>
-              <li>
-                <p
-                  v-for="(item, i) in batch.userConfList"
-                  class="li-flex-around lx-resource"
-                  :key="i"
-                >
-                  <span>{{ item.roleName }}</span>
-                  <span>{{ item.recruitNum }}</span>
-                  <span @click="changeRoles(i)">详情</span>
-                  <span @click="deleteRole(i)">删除</span>
-                </p>
+              <li class="first-li start">
+                <span class="first-span">招募角色</span>
+                <div>
+                  <div class="flex-center-center"><Button @click="addRoles()" class="font">+新增招募角色</Button></div>
+                  <div>
+                    <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource" :key='i'>
+                      <span>{{item.roleName}}</span>
+                      <span>{{item.recruitNum}}</span>
+                      <Button @click="changeRoles(i)" class="font">详情</Button>
+                      <Icon type="ios-trash"   @click="deleteRole(i)" color='#FF565A' size='28'/>
+                    </p>
+                  </div>
+                </div>
               </li>
-              <li class="lx-flex-center">
-                <Button @click="addRoles()">+新增招募角色</Button>
-              </li>
-              <li class="first-li">所需物资</li>
-              <li>
-                <p
-                  v-for="(item, i) in batch.actResList"
-                  class="li-flex-around lx-resource"
-                  :key="i"
-                >
-                  <span>{{ item.resourcesName }}</span>
-                  <Input
-                    v-model="item.num"
-                    style="width: 200px"
-                    placeholder="请输入数量"
-                  />
-                  <span>
-                    <Checkbox v-model="item.isOk" :true-value="1"
-                      >已筹</Checkbox
-                    >
-                    <Icon type="ios-close" @click="deleteResources(i)"></Icon>
-                  </span>
-                </p>
-              </li>
-              <li class="lx-flex-center">
-                <Button @click="addResources">+新增物质</Button>
-              </li>
-              <li v-if="adds">
-                <Button
-                  v-for="(item, index) in batchItemList.resources"
-                  :key="index"
-                  @click="chooseResource(item)"
-                  >{{ item.name }}</Button
-                >
+               <li class="first-li start">
+                <span class="first-span">所需物资</span>
+                <div>
+                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物质</Button></div>
+                  <div>
+                    <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource" :key='i'>
+                      <span>{{item.resourcesName}}</span>
+                      <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"></Input>
+                      <span>
+                        <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
+                        <Icon type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
+                      </span>
+                    </p>
+                  </div>
+                </div>
               </li>
               <li class="first-li">
                 <span class="first-span">发布时间</span>
@@ -333,7 +321,7 @@
       </div>
 
       <div v-if="two" class="lx-flex-center" style="margin-top:80px;">
-        <Button @click="save()">保存</Button>
+        <Button @click="save()" shape="circle" size='large' class="btn">保存</Button>
       </div>
     </div>
   </div>
@@ -709,6 +697,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.btn{
+  margin-left: 20px;
+  background: #FF565A !important;
+  color: #fff !important;
+  border-color:#FF565A !important;
+}
+.font{
+  font-size: 16px;
+}
+.start{
+   align-items: flex-start !important;
+}
+.btn{
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+}
+.tit{
+  margin-right: 15px;
+}
+.twoT{
+  margin: 0 15px;
+}
 .lx-content {
   background-color: #fff;
 }
@@ -718,10 +728,14 @@ export default {
 .first-li {
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 0;
+  .ivu-radio-wrapper{
+    font-size: 16px !important;
+  }
 }
 .first-span {
-  margin-right: 10px;
+  width: 120px;
+  margin-right: 30px;
 }
 .wave {
   display: flex;
@@ -737,6 +751,7 @@ export default {
   line-height: 200px;
   border: 1px solid;
   position: relative;
+  border: 1px dashed #FF565A;
 }
 .first-picfm {
   width: 200px;
@@ -745,6 +760,7 @@ export default {
   line-height: 200px;
   border: 1px solid;
   position: relative;
+  border: 1px dashed #FF565A;
 }
 .cancel {
   position: absolute;

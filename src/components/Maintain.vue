@@ -70,6 +70,7 @@ export default {
   computed: {},
 
   created() {
+    this.modal1 = false
     this.getList();
   },
 
