@@ -12,9 +12,9 @@
           <Icon type="ios-list" />
           <span>数据列表</span>
         </p>
-        <div class="but">
+        <!-- <div class="but">
           <Button @click="add">添加</Button>
-        </div>
+        </div> -->
       </div>
       <Table
         ref="selection"
@@ -90,8 +90,8 @@
           @on-change="changepages"
         />
       </div> -->
-      <Row class="row">
-        <Col span="8">
+      <div class="row">
+        <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
@@ -99,18 +99,16 @@
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
-        </Col>
-        <Col span="8"><Page
+        </div>
+        <div><Page
           :total="dataCount"
           show-elevator
           show-total
           size="small"
-          style="margin: auto"
           :page-size="size"
           @on-change="changepages"
-        /></Col>
-        <Col span="8"></Col>
-      </Row>
+        /></div>
+      </div>
     </div>
   </div>
 </template>
@@ -535,6 +533,7 @@ body {
 .row{
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 10px;
 }
 .bk-szy {

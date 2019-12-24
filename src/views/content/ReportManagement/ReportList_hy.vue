@@ -65,8 +65,8 @@
           @on-change="changepages"
         />
       </div> -->
-      <Row class="row">
-        <Col span="8">
+      <div class="row">
+        <div>
           <Button @click="chackall()" style="border:0px;">
             <Checkbox v-model="status"></Checkbox>全选
           </Button>
@@ -74,18 +74,16 @@
             <Option v-for="item in batchList" :value="item.dicId" :key="item.dicId">{{ item.dicName }}</Option>
           </Select>
           <Button class="space" @click="space">确定</Button>
-        </Col>
-        <Col span="8"><Page
+        </div>
+        <div><Page
           :total="dataCount"
           show-elevator
           show-total
           size="small"
-          style="margin: auto"
           :page-size="size"
           @on-change="changepages"
-        /></Col>
-        <Col span="8"></Col>
-      </Row>
+        /></div>
+      </div>
     </div>
   </div>
 </template>
@@ -438,6 +436,7 @@ export default {
 .row{
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 10px;
 }
 .space{

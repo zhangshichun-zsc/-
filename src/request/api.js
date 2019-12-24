@@ -561,6 +561,7 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 export const projectApproval = p => posts('activity-manage/apply/batch/add', p) //立项
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
+export const draftDetail = p => posts("/activity-manage/work/batch/draft/list", p) //官方活动草稿箱
 
 export const projectItem = p => posts('/activity-manage/apply/base-data/before', p) //立项前置信息查询
 
