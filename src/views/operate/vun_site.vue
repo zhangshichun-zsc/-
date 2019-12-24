@@ -120,8 +120,8 @@ export default {
       ],
       sort: "create_at desc",
       top: [
-        { name: "消息标题", type: "input", value: "" },
-        { name: "发布时间", type: "date", value: "" }
+        { name: "消息标题:", type: "input", value: "" },
+        { name: "发布时间:", type: "date", value: "" }
       ],
       sysId: 2,
       channelFlag: 1,
