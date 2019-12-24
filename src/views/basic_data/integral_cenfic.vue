@@ -102,24 +102,24 @@ export default {
       ruleValidate: {
         name: [{ required: true, message: "不能为空", trigger: "blur" }]
       },
-      title: "证书管理",
+      title: "证件管理",
       columns: [
         {
           title: "名称",
           key: "name",
           align: "center",
-          width:400,
+
         },
         {
           title: "创建时间",
           key: "createAt",
-          width: 240,
+
           align: "center"
         },
         {
           title: "创建人",
           key: "userName",
-          width: 300,
+
           align: "center",
           render: (h, params) => {
             return h(
@@ -132,7 +132,7 @@ export default {
           title: "有效状态",
 
           align: "center",
-          width: 180,
+
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -153,35 +153,35 @@ export default {
             ]);
           }
         },
-        {
-          title: "操作",
-          key: "action",
-          align: "center",
-          width: 180,
+        // {
+        //   title: "操作",
+        //   key: "action",
+        //   align: "center",
+        //   width: 180,
 
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "a",
-                {
-                  clssName: "action",
-                  style: {
-                    color: "red"
-                  },
-                  on: {
-                    click: () => {
-                      this.args.name = params.row.name;
-                      this.args.dicId = params.row.dicId;
-                      this.args.validFlag = params.row.validFlag;
-                      this.modal1 = true;
-                    }
-                  }
-                },
-                "编辑"
-              )
-            ]);
-          }
-        }
+        //   render: (h, params) => {
+        //     return h("div", [
+        //       h(
+        //         "a",
+        //         {
+        //           clssName: "action",
+        //           style: {
+        //             color: "red"
+        //           },
+        //           on: {
+        //             click: () => {
+        //               this.args.name = params.row.name;
+        //               this.args.dicId = params.row.dicId;
+        //               this.args.validFlag = params.row.validFlag;
+        //               this.modal1 = true;
+        //             }
+        //           }
+        //         },
+        //         "编辑"
+        //       )
+        //     ]);
+        //   }
+        // }
       ],
       query: {
         name: null,

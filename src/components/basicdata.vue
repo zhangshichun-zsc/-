@@ -32,7 +32,7 @@
           </Select>
         </div>
         <div class="flex-center-start">
-          <span>创建时间/时间段:</span>
+          <span>创建时间段:</span>
           <DatePicker
            class="inpt"
             style="width: 180px"

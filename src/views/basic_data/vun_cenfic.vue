@@ -22,7 +22,7 @@
           <Input size="large" placeholder="请输入" class="inpt" v-model.trim="args.orgName" />
         </div>
         <div class="flex-center-start">
-          <span>创建时间/时间段:</span>
+          <span>创建时间段:</span>
           <DatePicker
             class="inpt"
             style="width: 180px"
@@ -86,6 +86,7 @@
               </FormItem>
             </Form>
             <div slot="footer">
+               <Button  size="large" @click="modal1=false">取消</Button>
               <Button type="error" size="large" @click="success">确定</Button>
             </div>
           </Modal>

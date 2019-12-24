@@ -187,15 +187,12 @@ export default {
                 {
                    clssName: "action",
                   style: {
-                    color: "#097276"
+                    color: "red"
                   },
                   on: {
                     click: () => {
-                      if(params.row.validFlag == '1'){
-                         this.showModal(params.row)
-                      }else{
-                        this.$Message.error('无效状态不能编辑')
-                      }
+                       this.$router.push({ name: "detailshy",query:{orgId:params.row.orgId,start:1}});
+
 
                     }
                   }

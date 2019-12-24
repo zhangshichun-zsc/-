@@ -56,7 +56,7 @@ export default {
           { required: true, message: "特长名称不能为空", trigger: "blur" }
         ]
       },
-      title: "新增类型",
+      title: "新增特长",
       columns: [
         {
           type: "selection",
@@ -130,7 +130,7 @@ export default {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "修改障碍类型";
+                      this.text = "修改特长";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }
@@ -260,11 +260,13 @@ export default {
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
-          this.getBasicsearch();
+
           this.modal1 = false;
           if (e == 0) {
+            this.getBasicsearch();
             this.$Message.info("添加成功");
           } else if (e == 1) {
+            this.getBasicsearch();
             this.$Message.info("编辑成功");
           } else if (e == 2) {
             this.$Message.info("操作成功");
@@ -276,6 +278,7 @@ export default {
 
     //查询
     query(e) {
+      this.data1=[]
       this.page = 1;
       this.validFlag = e.validFlag;
       this.targetName = e.dicName;

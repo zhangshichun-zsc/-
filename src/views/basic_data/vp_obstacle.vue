@@ -256,11 +256,12 @@ export default {
       }
       Basicbatch({ list: this.list }).then(res => {
         if (res.code == 200) {
-          this.getBasicsearch();
           this.modal1 = false;
           if (e == 0) {
+             this.getBasicsearch();
             this.$Message.info("添加成功");
           } else if (e == 1) {
+             this.getBasicsearch();
             this.$Message.info("编辑成功");
           } else if (e == 2) {
             this.$Message.info("操作成功");
@@ -272,6 +273,7 @@ export default {
 
     //查询
     query(e) {
+      this.data1=[]
       this.page = 1;
       this.validFlag = e.validFlag;
       this.targetName = e.dicName;

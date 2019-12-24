@@ -26,7 +26,7 @@
         </div>
         </div>
       </div>
-      <div class="integral-right">
+      <div class="integral-right" >
         <div class="top">
           <p  :class="i===1?'active':'default'"> <a href="javascript:;" @click="showUpload(1)">更换LOGO</a></p>
            <p :class="i===2?'active':'default'"> <a href="javascript:;" @click="showUpload(2)">更换页尾</a></p>

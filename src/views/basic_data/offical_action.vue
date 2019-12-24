@@ -54,8 +54,8 @@
               <FormItem label="活动分类" prop="dicNamemod">
                 <Input v-model.trim="formValidate.dicNamemod" style="width:200px" />
               </FormItem>
-              <FormItem label="收益对象" prop="actTypeFlag">
-                <Select v-model="formValidate.actTypeFlag" style="width: 150px;margin-right:10px">
+              <FormItem label="受益对象" prop="actTypeFlag">
+                <Select v-model="formValidate.actTypeFlag" style="width: 200px;margin-right:10px">
                   <Option
                     v-for="item in actTypelist"
                     :value="item.value"
@@ -424,7 +424,7 @@ export default {
   margin-right: 20px;
   span {
     display: block;
-    // width: 80px;
+    min-width: 60px;
   }
 }
 

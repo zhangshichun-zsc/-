@@ -14,14 +14,14 @@
           <Modal v-model="modal1" title="新增会费" class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称:" prop="name">
-                <Input v-model.trim="formValidate.name" style="width: 220px"/>
+                <Input v-model.trim="formValidate.name" size="large" style="width: 220px"/>
               </FormItem>
               <FormItem label="金额:" prop="amount">
-                <InputNumber :min="0" v-model="formValidate.amount"  style="width: 220px"></InputNumber>
+                <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount"  style="width: 220px"></InputNumber> <Button type="error" >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
-                <InputNumber :max="99" :min="1" v-model="formValidate.imonth"  style="width: 220px"></InputNumber>
-                <span>月</span>
+                <InputNumber :max="99" :min="1" v-model="formValidate.imonth"  style="width: 220px;"></InputNumber>
+               <Button type="error" >月</Button>
               </FormItem>
               <FormItem label="会员包:" prop="packageFlag">
                 <RadioGroup v-model="formValidate.packageFlag">
@@ -41,11 +41,11 @@
           </Modal>
         </div>
       </div>
-       <Modal v-model="addstate" width="360" class-name="vertical-center-modal">
+       <Modal v-model="addstate" width="560" class-name="vertical-center-modal">
                 <p slot="header" class="flex-center-center" style="color:black">
                   <span>新增确定</span>
                 </p>
-                <div style="text-align:center">
+                <div style="text-align:center;font-size:16px">
                   <p>是否确认新增，新增后上一条有效数据将自动设为无效</p>
                 </div>
                 <div slot="footer">
@@ -152,6 +152,7 @@ export default {
           width:200,
           render:(h,params)=>{
             // let imonths
+
             // if(params.row.imonth>12){
             //   let year = Math.floor(params.row.imonth/12)
             //   let imonth =params.row.imonth%12
@@ -166,10 +167,13 @@ export default {
           }
         },
         {
-          title: "金额",
+          title: "金额(元)",
           key: "amount",
           align: "center",
            width:200,
+            render:(h,params)=>{
+              return h('p',params.row.amount.toFixed(2))
+            }
         },
         {
           title: "会员包",
@@ -346,13 +350,15 @@ export default {
           if(e==0){
             this.modal1=false
             this.$Message.info('添加成功')
+             this.getCostlist()
           }else if(e==1){
             this.modal1=false
             this.$Message.info('修改成功')
+             this.getCostlist()
           }else if(e==2){
             this.$Message.info('操作成功')
           }
-          this.getCostlist()
+
         }
 
         console.log(res);
@@ -406,7 +412,7 @@ export default {
 
     //查询
     query(e) {
-      console.log(e)
+      this.data=[]
       this.page = 1;
        this.statues = e.validFlag;
       this.name = e.dicName;
@@ -457,5 +463,14 @@ export default {
 <style lang="scss" scoped>
 .modals{
   height: 500px;
+}
+input{
+  font-size: 16px !important;
+}
+.ivu-form input{
+  font-size: 16px !important;
+}
+.ivu-input-number-input{
+  font-size: 16px !important;
 }
 </style>
