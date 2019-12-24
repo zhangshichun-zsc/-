@@ -165,5 +165,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.w-e-text{
+  font-size: 16px !important;
+}
+#text-elem3472466774465377{
+  font-size: 16px !important;
+}
+
 </style>

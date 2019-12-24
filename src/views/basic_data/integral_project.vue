@@ -86,7 +86,7 @@ export default {
             required: true,
             message: "总计预算格式不正确",
             trigger: "blur",
-
+             type: "number"
           }
         ],
         orgId: [
@@ -113,7 +113,7 @@ export default {
           width: 300
         },
         {
-          title: "总预算(元)",
+          title: "总预算/(元)",
           key: "allBudget",
            align: "center",
            width: 240
@@ -286,7 +286,7 @@ export default {
       ];
       projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
-          this.getprojectsetlist();
+
           this.$Message.info("操作成功");
         }
         console.log(res);
@@ -317,6 +317,7 @@ export default {
 
     // 查询结果按钮
     query(e) {
+      this.data=[]
       console.log(e);
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];

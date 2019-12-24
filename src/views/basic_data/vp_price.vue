@@ -17,14 +17,14 @@
                 <Input v-model.trim="formValidate.name" size="large" style="width: 220px"/>
               </FormItem>
               <FormItem label="金额:" prop="amount">
-                <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount"  style="width: 220px"></InputNumber> <Button type="error" >元</Button>
+                <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button type="error" >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
-                <InputNumber :max="99" :min="1" v-model="formValidate.imonth"  style="width: 220px;"></InputNumber>
+                <InputNumber :max="99" :min="1" v-model="formValidate.imonth" size="large"  style="width: 220px;"></InputNumber>
                <Button type="error" >月</Button>
               </FormItem>
               <FormItem label="会员包:" prop="packageFlag">
-                <RadioGroup v-model="formValidate.packageFlag">
+                <RadioGroup v-model="formValidate.packageFlag" size="large">
                   <Radio label="1">有</Radio>
                   <Radio label="0">无</Radio>
                 </RadioGroup>
@@ -167,7 +167,7 @@ export default {
           }
         },
         {
-          title: "金额(元)",
+          title: "金额/(元)",
           key: "amount",
           align: "center",
            width:200,
@@ -464,13 +464,11 @@ export default {
 .modals{
   height: 500px;
 }
-input{
+.w-e-text{
   font-size: 16px !important;
 }
-.ivu-form input{
+#text-elem3472466774465377{
   font-size: 16px !important;
 }
-.ivu-input-number-input{
-  font-size: 16px !important;
-}
+
 </style>

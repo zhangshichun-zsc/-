@@ -3,7 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="main">
-      <div class="basic">
+      <div class="basic" v-if="orgTypes!=9">
         <p class="title">分类</p>
         <div class="content middle">
           <RadioGroup v-model="orgTypes">
@@ -423,7 +423,6 @@ export default {
     //  获取当前账号的 姓名和手机号
     getUserInfo() {
       let userId = this.$store.state.userId;
-
       if (!userId) {
         this.$router.push({ name: "login" });
       }
@@ -445,7 +444,6 @@ export default {
       if (str.agPicC) {
         file.push(str.agPicC);
       }
-
       orgadd({
         sysId: this.$route.query.sysId,
         orgType: this.orgTypes,
