@@ -47,7 +47,7 @@
         <FormItem label="附件:" prop="agFile">
 
           <div class="flex-wrap-center">
-            <p class="imgs" v-if="formInline.nameA != null">
+            <p class="imgs" v-if="Boolean(formInline.nameA)">
               <span>{{formInline.nameA}}</span>
               <Icon
                 type="ios-trash"
@@ -57,7 +57,7 @@
                 @click="cancelImg(formInline.agPicA,formInline.nameA)"
               />
             </p>
-            <p class="imgs" v-if="formInline.nameB != null">
+            <p class="imgs" v-if="Boolean(formInline.nameB)">
               <span>{{formInline.nameB}}</span>
               <Icon
                 type="ios-trash"
@@ -67,7 +67,7 @@
                 @click="cancelImg(formInline.agPicB,formInline.nameB)"
               />
             </p>
-            <p class="imgs" v-if="formInline.nameC != null">
+            <p class="imgs" v-if="Boolean(formInline.nameC)">
               <span>{{formInline.nameC}}</span>
               <Icon
                 type="ios-trash"
@@ -207,9 +207,10 @@ export default {
 
   methods: {
     handleSubmit(name) {
+
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (this.formInline.agPicA == null) {
+          if (Boolean(this.formInline.agPicA) == false) {
             this.$Message.error("请上传附件");
           } else {
             if (this.agreementId!=null) {
@@ -341,11 +342,11 @@ export default {
     uploadFile() {
 
       let file = this.$refs.files.files[0];
-      if (this.formInline.nameA == null) {
+      if (Boolean(this.formInline.nameA)==false) {
         this.formInline.nameA = file.name;
-      } else if (this.formInline.nameB == null) {
+      } else if (Boolean(this.formInline.nameB)==false) {
         this.formInline.nameB = file.name;
-      } else if (this.formInline.nameC == null) {
+      } else if (Boolean(this.formInline.nameC)==false) {
         this.formInline.nameC = file.name;
       }
       let dataForm = new FormData();
@@ -356,13 +357,13 @@ export default {
         reader.onload = e => {
           this.texturl = e.target.result;
 
-          if (this.formInline.agPicA == null||this.formInline.agPicA =='') {
+          if (Boolean(this.formInline.agPicA)==false) {
             this.formInline.agPicA = res.data;
             return;
-          } else if (this.formInline.agPicB == null||this.formInline.agPicB == '') {
+          } else if (Boolean(this.formInline.agPicB)==false) {
             this.formInline.agPicB = res.data;
             return;
-          } else if (this.formInline.agPicC == null||this.formInline.agPicC == '') {
+          } else if (Boolean(this.formInline.agPicC)==false) {
             this.formInline.agPicC = res.data;
             return;
           } else {
