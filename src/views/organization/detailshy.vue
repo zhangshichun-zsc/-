@@ -450,11 +450,7 @@ export default {
           align: "center",
           width: 140,
           render: (h, params) => {
-            let del;
-            if (params.row.userType != 1) {
-              del = "删除";
-            }
-            return h("div", [
+            return h("a", [
               h(
                 "span",
                 {
@@ -473,24 +469,24 @@ export default {
                   }
                 },
                 "查看"
-              ),
-              h(
-                "span",
-                {
-                  style: {
-                    marginRight: "5px",
-                    marginLeft: "5px",
-                    color: "#FF565A",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.getorgdelete(params.row.orgUserId);
-                    }
-                  }
-                },
-                del
               )
+              // h(
+              //   "span",
+              //   {
+              //     style: {
+              //       marginRight: "5px",
+              //       marginLeft: "5px",
+              //       color: "#FF565A",
+              //       cursor: "pointer"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.getorgdelete(params.row.orgUserId);
+              //       }
+              //     }
+              //   },
+              //   del
+              // )
             ]);
           }
         }
@@ -757,7 +753,7 @@ export default {
         provinceId: this.province,
         cityId: this.city,
         districtId: this.county,
-        fileList: file.toString() === "" ? "" : file
+        fileList: file.toString() === "" ? "" : file.toString() 
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功");

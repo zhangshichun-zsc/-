@@ -156,10 +156,10 @@ export default {
           title: "调整值",
           key: "adjustValue",
           align: "center",
-          minWidth: 140,
-          render: (h, params) => {
-            return h("div", "+12");
-          }
+          minWidth: 140
+          // render: (h, params) => {
+          //   return h("div", "+12");
+          // }
         },
         {
           title: "状态",
