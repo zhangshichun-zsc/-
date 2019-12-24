@@ -131,26 +131,26 @@ export default {
           title: "积分来源",
           key: "scoreOrigin",
           align:'center',
-          width:300,
+
         },
         {
           title: "积分变化",
           key: "score",
           align:'center',
-          width:240,
+
         },
         {
           title: "时间",
           key: "updateAt",
           align:'center',
-          width:240,
+
 
         },
         {
           title: "备注",
           key: "comments",
           align:'center',
-          width:500,
+
         }
       ],
 
@@ -208,7 +208,10 @@ export default {
       }).then(res => {
         console.log(res);
         if (res.code == 200) {
+           res.data.unshift({ scoreRuleId: "", comments: "全部" });
           this.list = res.data;
+
+
         }
       });
     },

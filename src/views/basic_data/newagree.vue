@@ -4,13 +4,13 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="xieyi">
       <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="120">
-        <FormItem label="甲方" prop="partA">
+        <FormItem label="甲方:" prop="partA">
           <Input v-model.trim="formInline.partA" placeholder="甲方名称" style="width:300px" />
         </FormItem>
-        <FormItem label="乙方" prop="partB">
+        <FormItem label="乙方:" prop="partB">
           <Input v-model.trim="formInline.partB" placeholder="乙方名称" style="width:300px" />
         </FormItem>
-        <FormItem label="协议分类" prop="typeDicId">
+        <FormItem label="协议分类:" prop="typeDicId">
           <Select v-model="formInline.typeDicId" placeholder="请选择分类" style="width:300px">
             <Option
               v-for="item in locations"
@@ -19,7 +19,7 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="所属项目" prop="categoryId">
+        <FormItem label="所属项目:" prop="categoryId">
           <Select
             v-model="formInline.categoryId"
             placeholder="请选择项目类型"
@@ -33,7 +33,7 @@
           </Select>
         </FormItem>
 
-        <FormItem label="协议时间" prop="agTime">
+        <FormItem label="协议时间:" prop="agTime">
           <DatePicker
             type="date"
              placeholder="请选择协议时间"
@@ -44,7 +44,7 @@
             style="width: 200px"
           ></DatePicker>
         </FormItem>
-        <FormItem label="广告附件" prop="agFile">
+        <FormItem label="附件:" prop="agFile">
 
           <div class="flex-wrap-center">
             <p class="imgs" v-if="formInline.nameA != null">

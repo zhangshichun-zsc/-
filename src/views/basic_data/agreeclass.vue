@@ -129,9 +129,9 @@ export default {
           render: (h, params) => {
             let type = "";
             if (params.row.typeFlag == "16") {
-              type = "合作方可签署协议类型";
+              type = "组织方可签署协议类型";
             } else if (params.row.typeFlag == "47") {
-              type = "个人可签署协议类型";
+              type = "非组织方可签署协议类型";
             }
             return h("div", type);
           }
@@ -198,8 +198,8 @@ export default {
       orgimg: "",
       type: "",
       list: [
-        { name: "个人可签署协议类型", value: "47" },
-        { name: "合作方可签署协议类型", value: "16" }
+        { name: "非组织方可签署协议类型", value: "47" },
+        { name: "组织方可签署协议类型", value: "16" }
       ],
       file: ""
     };

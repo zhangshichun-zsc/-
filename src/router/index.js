@@ -277,8 +277,8 @@ const router = new Router({
           import('@/views/basic_data/vp_cenfic.vue')
       },
       {
-        path: 'vun_prend.vue',
-        name: 'vun_prend.vue',
+        path: 'vun_prend',
+        name: 'vun_prend',
         meta: {},
         component: () =>
           import('@/views/basic_data/vun_prend.vue')

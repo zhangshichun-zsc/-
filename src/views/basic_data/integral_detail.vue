@@ -18,7 +18,7 @@
           </Select>
         </div>
          <div class="flex-center-start">
-          <span>操作时间/时间段:</span>
+          <span>操作时间段:</span>
           <DatePicker
             class="inpt"
             style="width: 180px"
@@ -131,26 +131,26 @@ export default {
           title: "积分来源",
           key: "scoreOrigin",
           align:'center',
-          width:300,
+
         },
         {
           title: "积分变化",
           key: "score",
           align:'center',
-          width:240,
+
         },
         {
           title: "时间",
           key: "updateAt",
           align:'center',
-          width:240,
+
 
         },
         {
           title: "备注",
           key: "comments",
           align:'center',
-          width:500,
+
         }
       ],
 
@@ -206,8 +206,8 @@ export default {
       integralrule({
         sysType: this.sysType
       }).then(res => {
-        console.log(res);
         if (res.code == 200) {
+           res.data.unshift({ scoreRuleId: "", comments: "全部" });
           this.list = res.data;
         }
       });
