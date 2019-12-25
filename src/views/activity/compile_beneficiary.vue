@@ -410,7 +410,7 @@
               <i-switch v-model="oneRole.isFeedback" :true-value="1" :false-value="2" />
             </li>
             <li v-if="oneRole.isFeedback === 1">
-              <div v-for="(item,index) in oneRole.fdList" :key="index" class="role-table">
+              <div v-for="(item,index) in oneRole.fkDetailList" :key="index" class="role-table">
                 <div class="role-tr" v-if=" item.type ==0 " style="width:90%">
                   <div>反馈简介</div>
                   <Input
@@ -426,17 +426,17 @@
                   <span class="first-span">上传图片</span>
                   <i-switch v-model="item.context" :true-value="1" :false-value="2" />
                 </div>
-                <div class="role-tr" v-else-if=" item.type === 1 " style="width:90%">
+                <div class="role-tr" v-else-if="item.type === 1" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="role-tr" v-else-if=" item.type === 6 " style="width:90%">
+                <div class="role-tr" v-else-if="item.type === 6" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div v-else-if="item.type === 3 " style="width:90%">
+                <div v-else-if="item.type === 3" style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
@@ -720,23 +720,23 @@ export default {
       this.oneRole.userPosition = val.dicId;
     },
     addItem(e){
-      this.oneRole.fdList.push(e)
+      this.oneRole.fkDetailList.push(e)
       this.fk = false
     },
     deleItem(e,ei){
       if(ei>=0){
-        if(this.oneRole.fdList[e].answer.length>2){
-          this.oneRole.fdList[e].answer.splice(ei,1)
+        if(this.oneRole.fkDetailList[e].answer.length>2){
+          this.oneRole.fkDetailList[e].answer.splice(ei,1)
         }else{
           this.$Message.warning("至少需要两个选项")
         }
       }else{
-        this.oneRole.fdList.splice(e,1)
+        this.oneRole.fkDetailList.splice(e,1)
       }
     },
     addSignIput(e){
-      if(this.oneRole.fdList[e].answer.length<6){
-        this.oneRole.fdList[e].answer.push({answer:''})
+      if(this.oneRole.fkDetailList[e].answer.length<6){
+        this.oneRole.fkDetailList[e].answer.push({answer:''})
       }else{
         this.$Message.warning("最多只可添加6个选项")
       }

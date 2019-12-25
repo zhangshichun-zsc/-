@@ -652,7 +652,7 @@ export default {
       image: "",
       oneRole: {},
       roleMsg: {
-        fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
+        fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
         refund: {},
         signRuleList: [],
         itemList: [],
@@ -938,7 +938,7 @@ export default {
     //新增招募角色
     addRoles() {
       let r = {
-        fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
+        fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
         actRefund: {},
         signRuleList: [],
         itemList: [],
