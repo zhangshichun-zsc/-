@@ -187,17 +187,17 @@ export default {
                     click: () => {
                       console.log(params.row.activityId);
                       if (
-                        params.row.statusText == 1 ||
-                        params.row.statusText == 2 ||
-                        params.row.statusText == 3 ||
-                        params.row.statusText == 4
+                        params.row.status == 1 ||
+                        params.row.status == 2 ||
+                        params.row.status == 3 ||
+                        params.row.status == 4
                       ) {
                         this.$router.push({
                           name: "volunteer_issue",
                           query: {
                             activityId: params.row.activityId,
                             isEdit: 1,
-                            status: params.row.statusText
+                            status: params.row.status
                           }
                         });
                       } else {

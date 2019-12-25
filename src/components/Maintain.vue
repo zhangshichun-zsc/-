@@ -14,7 +14,7 @@
             class="btn"
             v-for="(item, index) in arr"
             :key="index"
-            @click="train(item.dicId,item.dicName,0)"
+            @click="train(item.dicId,item.dicName,0,null)"
             >{{ item.dicName }}</Button
           >
         </div>
@@ -26,7 +26,7 @@
           <p class="content-head">{{ item.dicName }}</p>
           <div class="wap">
             <Button
-              @click="train(i[id], i[name], 1)"
+              @click="train(i[id], i[name], 1,i.actMouldId)"
               v-for="(i, m) in item.mouldList"
               :key="m"
               class="btn"
@@ -75,17 +75,22 @@ export default {
   },
 
   methods: {
-    train(id, name, ble) {
+    train(id, name, ble,actMouldId) {
       this.modal1 = false
-      if(ble== 0&& this.from == 'editing'){
+      if(ble== 0 && this.from == 'editing'){
         this.$router.push({
           name: this.from,
           query: { dicId:id,name}
         })
+      }else if(ble == 1 && this.from == 'editing'){
+        this.$router.push({
+          name: this.from,
+          query: { id, name, ble,actMouldId }
+        });
       }else{
         this.$router.push({
           name: this.from,
-          query: { id, name, ble }
+          query: { id, name, ble ,}
         });
       }
     },

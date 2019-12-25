@@ -94,7 +94,7 @@
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-pic" style="border:none" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
                     <Icon type="ios-trash" v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
@@ -178,7 +178,7 @@
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-picfm" v-else>
+                  <div class="first-picfm" style="border:none" v-else>
                     <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
@@ -193,7 +193,7 @@
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-pic" style="border:none" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
