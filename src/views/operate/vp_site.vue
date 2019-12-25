@@ -179,6 +179,8 @@ export default {
        if(e[1].value!=''){
         this.createAt = e[1].value.getTime();
         this.createAt=this.util.formatDate(this.createAt)
+      }else{
+         this.createAt = e[1].value;
       }
 
       this.getmessageShort()

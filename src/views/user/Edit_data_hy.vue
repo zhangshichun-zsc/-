@@ -369,7 +369,7 @@
                 </Select>
               </FormItem>
                 <FormItem label="家庭账号成员*">
-                <p v-for="item in parameOBJ.memInfo.homeMemberList" :key="item.typeDicId">
+                <p v-for="(item, index) in parameOBJ.memInfo.homeMemberList" :key="index">
                   {{ item.userName }} {{ item.typeDicId }} {{ item.userPhone }}
                 </p>
               </FormItem>

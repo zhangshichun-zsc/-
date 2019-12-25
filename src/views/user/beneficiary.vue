@@ -1010,7 +1010,11 @@ export default {
       Public.optTime({ ...obj }).then(res => {
         if (res.code === 200) {
           this.$Message.info('修改vip时间成功')
-
+          this.formVip= {
+            IncreaseDecrease: '0', 
+            remark: '', 
+            adjustValue: 1 
+          }
         } else {
           this.$Message.error({
             background: true,

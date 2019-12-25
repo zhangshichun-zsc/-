@@ -351,7 +351,7 @@ export default {
           this.basicInfo = res.data.basicInfo;
           this.statisticsInfo = [res.data.statisticsInfo];
           this.activityRecord = res.data.activityRecord;
-          this.userAdderes = res.data.userAdderes;
+          this.userAdderes = res.data.userAddress;
           this.orgRecordList = res.data.orgRecordList;
 
           if (this.basicInfo.userLabel) {
