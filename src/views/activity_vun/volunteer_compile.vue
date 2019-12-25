@@ -487,7 +487,7 @@ export default {
       this.good = good
     },
     addGoodItem(item,index){
-      if (~~this.data.args.zmType === 2 && ~~this.data.args.isAudit === 1){
+      if (~~this.args.zmType === 2 && ~~this.args.isAudit === 1){
         this.$Message.warning('您已设置为报名需审核，无法再次设置优先条件')
         return
       }

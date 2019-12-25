@@ -21,12 +21,11 @@
         </div>
         <div>
           <span class="itemizes">分类 </span>
-
           <span
             class="itemize"
-            v-for="item in parameOBJ.titleInfo.userRole"
-            :key="item.roleId"
-            >{{ item.roleName }}</span
+            v-for="item in parameOBJ.titleInfo.userRole.split(',')"
+            :key="item"
+            >{{ item}}</span
           >
         </div>
         <div style="flex:2">
