@@ -332,7 +332,7 @@
           <Row class-name="row20">
               <i-col span='3'>受益群体人数</i-col>
               <i-col span='5' push='2'>
-                <Input v-model="args.memberGroupNum" placeholder="输入收益群体人数" :disabled="isDisb"/>
+                <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb"/>
               </i-col>        
           </Row>
           <Row class-name="row20" type="flex" justify="middle">
