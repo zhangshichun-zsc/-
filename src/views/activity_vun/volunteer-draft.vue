@@ -2,10 +2,6 @@
 
 <template>
   <div class="integral">
-     <Modal
-      v-model="modal4">
-      <img :src="showImg" alt="" class="showimg"/>
-    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-table">
       <div class="table-header flex-between">
@@ -98,7 +94,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "活动管理(会员)"
+        head: "草稿箱(会员)"
       },
       columns: [
         {

@@ -3,7 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="main">
-      <div class="basic" v-if="orgTypes!=9">
+      <div class="basic" v-if="orgTypes != 9">
         <p class="title">分类</p>
         <div class="content middle">
           <RadioGroup v-model="orgTypes">
@@ -102,7 +102,7 @@
                 />
               </div>
             </FormItem>
-            <FormItem label="详情:" prop="orgName">
+            <FormItem label="详情:" prop="description">
               <Input
                 v-model="formValidate.description"
                 type="textarea"
@@ -179,62 +179,6 @@
               </div>
             </FormItem>
 
-            <!-- <FormItem label="文件:">
-              <div class="content">
-                <div class="middle">
-                  <div class="file">
-                    <p>
-                      <span>文件名称</span>
-                    </p>
-                    <Progress :percent="num" style="width: 15rem" />
-                  </div>
-
-                  <Icon
-                    v-if="formValidate.texturl != null"
-                    style="margin-top: 0.5rem;"
-                    @click="circle"
-                    size="20"
-                    type="ios-close-circle-outline"
-                  />
-                </div>
-                <div class="middle">
-                  <div class="start-wap">
-                    <div
-                      class="upload"
-                      v-if="formValidate.texturl == null"
-                      @click="
-                        () => {
-                          this.$refs.filess.click();
-                        }
-                      "
-                    >
-                      <div class="file">
-                        <input
-                          style=" display:none;"
-                          type="file"
-                          accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
-                          ref="filess"
-                          @change="uploadFiles()"
-                          multiple
-                        />
-                        <Icon
-                          type="md-cloud-upload"
-                          :size="20"
-                          color="#FF565A"
-                        />
-                      </div>
-                    </div>
-                    <Icon
-                      type="ios-trash"
-                      v-if="formValidate.texturl != null"
-                      class="cancel"
-                      :size="20"
-                      @click="cancelImg()"
-                    />
-                  </div>
-                </div>
-              </div>
-            </FormItem> -->
             <FormItem label="备注:">
               <Input
                 v-model="value"
@@ -254,62 +198,6 @@
           </Form>
         </div>
       </div>
-      <!-- <div class="basic">
-        <p class="title">文件</p>
-        <div class="content">
-          <div class="middle">
-            <Icon type="ios-paper-outline" size="100" />
-            <div class="file">
-              <p>
-                <span>文件名称</span>
-              </p>
-              <Progress :percent="num" style="width: 15rem" />
-            </div>
-            <Button
-              shape="circle"
-              icon="md-close"
-              style="margin-top: 0.5rem;"
-            ></Button>
-          </div>
-          <div class="middle">
-            <div class="start-wap">
-              <div
-                class="upload"
-                v-if="formValidate.texturl == null"
-                @click="
-                  () => {
-                    this.$refs.files.click();
-                  }
-                "
-              >
-                <div class="file">
-                  <input
-                    style=" display:none;"
-                    type="file"
-                    accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
-                    ref="filess"
-                    @change="uploadFiles()"
-                    multiple
-                  />
-                  <Icon type="md-cloud-upload" :size="40" color="#FF565A" /> -->
-      <!-- <Button icon="ios-cloud-upload-outline">上传附件</Button> -->
-      <!-- </div>
-              </div> -->
-
-      <!-- <img :src="formValidate.text" style="height:30px;width:100px;" /> -->
-      <!-- <Icon
-                type="ios-trash"
-                v-if="formValidate.texturl != null"
-                class="cancel"
-                :size="26"
-                @click="cancelImg()"
-              />
-            </div> -->
-      <!-- <Upload :action="orgimg" :on-success="handleSuccess">
-              <Button icon="ios-cloud-upload-outline">添加附件</Button>
-            </Upload>-->
-      <!-- </div> -->
-      <!-- </div> -->
     </div>
   </div>
 </template>

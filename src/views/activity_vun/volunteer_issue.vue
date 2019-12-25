@@ -66,7 +66,7 @@
                    confirm 
                    style="width: 150px"
                    @on-change="handleChange(0,'startAt',$event)"
-                   @on-ok="successOk(0)"  
+                   @on-open-change="successOk(0,$event)"
                    format="yyyy-MM-dd HH:mm"/>
                    <i>&nbsp;~&nbsp;</i>
                    <DatePicker
@@ -76,7 +76,7 @@
                    :disabled='isDisb' 
                    placeholder="结束时间"
                    @on-change="handleChange(0,'endAt',$event)"
-                   @on-ok="successOk(1)"  
+                   @on-open-change="successOk(1,$event)"
                    confirm 
                    style="width: 150px"  
                    format="yyyy-MM-dd HH:mm"/>
@@ -92,7 +92,7 @@
                    confirm 
                    style="width: 150px"
                    @on-change="handleChange(1,'zhaStart',$event)"
-                   @on-ok="successOk(2)"    
+                   @on-open-change="successOk(2,$event)"
                    format="yyyy-MM-dd HH:mm"/>
                    <i>&nbsp;~&nbsp;</i>
                    <DatePicker
@@ -102,7 +102,7 @@
                    :options="options" 
                    placeholder="结束时间"
                    @on-change="handleChange(1,'zhaEnd',$event)"
-                   @on-ok="successOk(3)"  
+                   @on-open-change="successOk(3,$event)"
                    confirm 
                    style="width: 150px"  
                    format="yyyy-MM-dd HH:mm"/>
@@ -686,10 +686,15 @@ export default {
       this.args.yy = e.yy
       this.$set(this.args,'address',e.address)
     },
-    successOk(m){
+    successOk(m,e){
+      if(e)return
       if(m == 0 || m == 1){
         if(m == 0 &&!!this.args.startAt){
-          if(!!this.args.endAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
+          console.log(new Date(this.args.startAt).getTime()>=new Date().getTime())
+          if(new Date(this.args.startAt).getTime()>=new Date().getTime()){
+            this.$Message.warning("活动开始时间要晚于当前时间")
+            this.$set(this.args,'startAt','')
+          }else if(!!this.args.endAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
             this.$Message.warning("活动开始时间要早于活动结束时间")
             this.$set(this.args,'startAt','')
           }else if(!!this.zhaEnd&&new Date(this.args.startAt).getTime()<=new Date(this.zhaEnd).getTime()){
@@ -697,19 +702,28 @@ export default {
             this.$set(this.args,'startAt','')
           }
         }else if(m == 1 && !!this.args.endAt){
-          if(!!this.args.startAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
+          if(new Date(this.args.endAt).getTime()>=new Date().getTime()){
+            this.$Message.warning("活动结束时间要晚于当前时间")
+            this.$set(this.args,'endAt','')
+          }else if(!!this.args.startAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
             this.$Message.warning("活动开始时间要早于活动结束时间")
             this.$set(this.args,'endAt','')
           }
         }
       }else{
        if(m == 2 &&!!this.zhaStart){
-          if(!!this.zhaEnd&&new Date(this.zhaStart).getTime()>=new Date(this.zhaEnd).getTime()){
+          if(new Date(this.zhaStart).getTime()>=new Date().getTime()){
+            this.$Message.warning("招募开始时间要晚于当前时间")
+            this.zhaStart = ''
+          }else if(!!this.zhaEnd&&new Date(this.zhaStart).getTime()>=new Date(this.zhaEnd).getTime()){
             this.$Message.warning("活动开始时间要早于活动结束时间")
             this.zhaStart = ''
           }
         }else if(m == 3 && !!this.zhaEnd){
-          if(!!this.zhaStart&&new Date(this.zhaStart).getTime()>=new Date(this.zhaEnd).getTime()){
+          if(new Date(this.zhaEnd).getTime()>=new Date().getTime()){
+            this.$Message.warning("招募结束时间要晚于当前时间")
+            this.zhaEnd = ''
+          }else if(!!this.zhaStart&&new Date(this.zhaStart).getTime()>=new Date(this.zhaEnd).getTime()){
             this.$Message.warning("活动开始时间要早于活动结束时间")
             this.zhaEnd = ''
           }else if(!!this.args.startAt&&new Date(this.args.startAt).getTime()<=new Date(this.zhaEnd).getTime()){

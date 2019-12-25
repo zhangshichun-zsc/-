@@ -119,7 +119,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "活动待处理(会员)"
+        head: "活动待处理"
       },
       info: "",
       status: false,
@@ -793,6 +793,10 @@ export default {
 
     //通过
     pass() {
+      if(this.ids.length === 0){
+        this.$Message.warning("请选择")
+        return
+      }
       if(this.show == 1){
         this.getPass(2)
       }else if(this.show == 2){
@@ -801,7 +805,7 @@ export default {
     },
     showModal2(){
       if(this.ids.length == 0){
-        this.$Message.info("请选择拒绝的列表")
+        this.$Message.warning("请选择拒绝的列表")
         return
       }
       this.modal2 = true

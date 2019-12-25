@@ -127,6 +127,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getBatchStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -140,6 +141,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getBatchEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
@@ -295,6 +297,7 @@
                   placeholder="选择日期"
                   style="width: 200px"
                   @on-change="getReleaseTime"
+                  :options="options" 
                 ></Date-picker>
               </li>
             </ul>
@@ -370,7 +373,12 @@ export default {
       releaseTimeSelf: false,
       isAddRole: false,
       editor1: "",
-      templateList: []
+      templateList: [],
+      options: {
+        disabledDate (date) {
+          return  date && date.valueOf() < Date.now() - 86400000
+        }
+      },
     };
   },
 
@@ -614,7 +622,7 @@ export default {
     //新增招募角色
     addRoles() {
       let r = {
-        fdList: [{ name: "反馈简介", type: 0 }],
+        fkDetailList: [{ name: "反馈简介", type: 0 }],
         actRefund: {},
         signRuleList: [],
         itemList: [],

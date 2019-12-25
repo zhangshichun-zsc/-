@@ -56,6 +56,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -69,6 +70,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
@@ -94,7 +96,7 @@
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-pic" style="border:none" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
                     <Icon type="ios-trash" v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
@@ -178,7 +180,7 @@
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-picfm" v-else>
+                  <div class="first-picfm" style="border:none" v-else>
                     <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
@@ -193,7 +195,7 @@
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-pic" style="border:none" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
@@ -216,6 +218,7 @@
                       style="width: 200px"
                       :editable="false"
                       @on-change="getBatchStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -229,6 +232,7 @@
                       style="width: 200px"
                       :editable="false"
                       @on-change="getBatchEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
@@ -337,7 +341,7 @@
                   <Radio label="0">活动开始前一个月自动发布</Radio>
                   <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
-                <Date-picker :value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker :value="batch.releaseTime" :options="options" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
@@ -382,6 +386,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -395,6 +400,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
@@ -483,6 +489,10 @@
       <div v-if="two" class="lx-flex-center lx-btn">
         <Button class="lx-draft" @click="draft">存为草稿</Button>
         <Button class="lx-next" @click.native="nextTwo()">下一步</Button>
+      </div>
+
+      <div v-if="three" class="lx-flex-center lx-btn">
+        <Checkbox v-model="isAgree">我同意</Checkbox><span>《活动发布规则》</span>
       </div>
 
       <div v-if="three" class="lx-flex-center lx-btn">
@@ -652,7 +662,7 @@ export default {
       image: "",
       oneRole: {},
       roleMsg: {
-        fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
+        fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
         refund: {},
         signRuleList: [],
         itemList: [],
@@ -662,6 +672,12 @@ export default {
       adr: false,
       pcNum: 0,
       templateList: [],
+      options: {
+        disabledDate (date) {
+          return  date && date.valueOf() < Date.now() - 86400000
+        }
+      },
+      isAgree:false
     };
   },
 
@@ -938,7 +954,7 @@ export default {
     //新增招募角色
     addRoles() {
       let r = {
-        fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
+        fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
         actRefund: {},
         signRuleList: [],
         itemList: [],
@@ -1080,17 +1096,21 @@ export default {
     //提交
     submit() {
       console.log(this.projectMsg);
-      this.projectMsg.userId = this.userId;
-      this.projectMsg.is_draft = 2;
-      projectApproval(this.projectMsg).then(res => {
-        console.log(res);
-        if (res.code == 200) {
-          this.$Message.success(res.msg);
-          this.$router.back()
-        } else {
-          this.$Message.error(res.msg);
-        }
-      });
+      if(this.isAgree){
+        this.projectMsg.userId = this.userId;
+        this.projectMsg.is_draft = 2;
+        projectApproval(this.projectMsg).then(res => {
+          console.log(res);
+          if (res.code == 200) {
+            this.$Message.success(res.msg);
+            this.$router.back()
+          } else {
+            this.$Message.error(res.msg);
+          }
+        });
+      }else{
+        this.$Message.warning('请先同意活动发布规则')
+      }
     },
     //提交
     draft() {
