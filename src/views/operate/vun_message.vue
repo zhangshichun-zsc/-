@@ -4,7 +4,7 @@
     <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
 
     <div class="integral-table">
-      <div class="table-header flex-between"style="padding:10px">
+      <div class="table-header flex-between" style="padding:10px">
         <div>
           <Icon type="ios-list" size="30" />
           <span>数据列表</span>
@@ -173,6 +173,8 @@ export default {
       if(e[1].value!=''){
         this.createAt = e[1].value.getTime();
         this.createAt=this.util.formatDate(this.createAt)
+      }else{
+         this.createAt = e[1].value;
       }
       this.getmessageShort()
     }
