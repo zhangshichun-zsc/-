@@ -938,6 +938,7 @@ export default {
     },
     save(){
       console.log(this.oneRole)
+      delete this.oneRole.fkDetailList
       this.$emit("oneRole",this.oneRole)
     },
     changeEditorTrain(e){
