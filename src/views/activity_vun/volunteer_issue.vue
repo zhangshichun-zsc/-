@@ -691,7 +691,7 @@ export default {
       if(m == 0 || m == 1){
         if(m == 0 &&!!this.args.startAt){
           console.log(new Date(this.args.startAt).getTime()>=new Date().getTime())
-          if(new Date(this.args.startAt).getTime()>=new Date().getTime()){
+          if(new Date(this.args.startAt).getTime()<new Date().getTime()){
             this.$Message.warning("活动开始时间要晚于当前时间")
             this.$set(this.args,'startAt','')
           }else if(!!this.args.endAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
@@ -702,7 +702,7 @@ export default {
             this.$set(this.args,'startAt','')
           }
         }else if(m == 1 && !!this.args.endAt){
-          if(new Date(this.args.endAt).getTime()>=new Date().getTime()){
+          if(new Date(this.args.endAt).getTime()<new Date().getTime()){
             this.$Message.warning("活动结束时间要晚于当前时间")
             this.$set(this.args,'endAt','')
           }else if(!!this.args.startAt&&new Date(this.args.startAt).getTime()>=new Date(this.args.endAt).getTime()){
@@ -712,7 +712,7 @@ export default {
         }
       }else{
        if(m == 2 &&!!this.zhaStart){
-          if(new Date(this.zhaStart).getTime()>=new Date().getTime()){
+          if(new Date(this.zhaStart).getTime()<new Date().getTime()){
             this.$Message.warning("招募开始时间要晚于当前时间")
             this.zhaStart = ''
           }else if(!!this.zhaEnd&&new Date(this.zhaStart).getTime()>=new Date(this.zhaEnd).getTime()){
@@ -720,7 +720,7 @@ export default {
             this.zhaStart = ''
           }
         }else if(m == 3 && !!this.zhaEnd){
-          if(new Date(this.zhaEnd).getTime()>=new Date().getTime()){
+          if(new Date(this.zhaEnd).getTime()<new Date().getTime()){
             this.$Message.warning("招募结束时间要晚于当前时间")
             this.zhaEnd = ''
           }else if(!!this.zhaStart&&new Date(this.zhaStart).getTime()>=new Date(this.zhaEnd).getTime()){

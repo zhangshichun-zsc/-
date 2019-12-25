@@ -326,28 +326,6 @@ export default {
                 },
                 "查看"
               )
-              // h(
-              //   "a",
-              //   {
-              //     style: {
-              //       marginRight: "5px",
-              //       marginLeft: "5px",
-              //       color: "#FF565A "
-              //     },
-              //     on: {
-              //       click: () => {
-              //         if (params.row.validFlag == "1") {
-              //           this.types = 2;
-              //         } else {
-              //           this.types = 1;
-              //         }
-              //         this.arr = Array.of(params.row.orgId);
-              //         this.getorgbatch();
-              //       }
-              //     }
-              //   },
-              //   status
-              // )
             ]);
           }
         }
@@ -390,7 +368,7 @@ export default {
     //类型
     getorgtype() {
       orgtype({
-        sysType: this.sysType
+        sysType: this.sysType == "1,3" ? 1 : this.sysType
       }).then(res => {
         if (res.code == 200) {
           this.typelist = [
@@ -427,6 +405,7 @@ export default {
       } else {
         orgTypes = this.orgType;
       }
+
       orgpage({
         page: {
           page: this.page,
@@ -450,7 +429,6 @@ export default {
     //收起筛选
     Retractbtn() {
       this.Retract = !this.Retract;
-      console.log(11);
     },
     //查询结果
     query() {
@@ -534,15 +512,17 @@ export default {
   },
   props: ["navigation1"],
   mounted() {
+    console.log(this.navigation1.id);
+
     if (this.navigation1.id == "") {
       this.sysType = 2;
       this.getorgpage();
     } else if (this.navigation1.id == 100) {
-      this.sysType = 1;
+      this.sysType = "1,3";
       this.getorgpage();
       this.getorgtype();
     } else {
-      this.sysType = 1;
+      this.sysType = "1,3";
       this.orgType = this.navigation1.id;
       this.getorgpage();
     }

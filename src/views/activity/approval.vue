@@ -348,7 +348,7 @@
         </Row>
         <Row style="margin-top:40px">
           <Col style="margin-bottom:10px;"><span>活动详情</span></Col>
-          <Col>
+          <Col span='12'>
             <wangeditor :labels="batch.detail" id="ed1" @change="changeEditorTrain"></wangeditor>
           </Col>
         </Row>

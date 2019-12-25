@@ -257,7 +257,6 @@ export default {
       dicId: "",
       arr: [],
       text: "",
-
       actTypelist: [{ name: "家长", value: 1 }, { name: "孩子", value: 2 }]
     };
   },
