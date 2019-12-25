@@ -2,7 +2,11 @@
 <template>
   <div>
     <adress v-model='adr' @change='getMap'/>
-     <Modal v-model="rule" title="发布规则" width='50'>
+     <Modal v-model="rule" title="志益行活动发布规则" width='50'>
+       <div>
+         <p>欢迎您使用“志益行”系统（以下简称“本系统”）及服务！ </p>
+         <p>活动发布规则（以下简称“规则”）系在本系统成功注册的志愿者或志愿者团体就本系统活动发布规则的说明。</p>
+       </div>
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">
@@ -289,15 +293,12 @@
             </Row>
           </Row>
           <Row class-name="row20">
-            <Button @click="add = true" v-if='!add'>添加</Button>
-            <Row v-if='add'>
-              <i-col span='4'>受益群体人数</i-col>
-              <i-col span='4' push='2'>
+              <i-col span='3'>受益群体人数</i-col>
+              <i-col span='5' push='2'>
                 <Input v-model="args.memberGroupNum" placeholder="输入收益群体人数" :disabled="isDisb"/>
               </i-col>        
-            </Row>
           </Row>
-          <Row class-name="row20">
+          <Row class-name="row20" type="flex" justify="middle">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -334,7 +335,6 @@ export default {
         }
       },
       rule: false,
-      add:false,
       navigation1: {
           head: "志愿者活动发布(志愿者)"
       },

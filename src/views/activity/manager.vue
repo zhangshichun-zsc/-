@@ -16,7 +16,7 @@
           </div>
           <div class="flex-center-start">
             <span>活动状态:</span>
-            <Select v-model="query.status" size='large' class="inpt">
+            <Select v-model="query.state" size='large' class="inpt">
               <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
@@ -475,7 +475,7 @@ export default {
       size: 10,
       dataCount: 0,
       name: "",
-      status: "",
+      state: "",
       startT: "",
       endT: "",
       arr: [],
@@ -487,7 +487,7 @@ export default {
       addstate:false,
       index: -1,
       query:{
-        status:'',
+        state:'',
         name:'',
         startT:'',
         endT:''
@@ -528,7 +528,7 @@ export default {
         },
         name: this.name,
         sysType: this.sysType,
-        activityStatus: this.status,
+        activityStatus: this.state,
         activityTimestampFrom: this.startT,
         activityTimestampTo: this.endT
       }).then(res => {
