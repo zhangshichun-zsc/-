@@ -68,6 +68,7 @@
                     style="width: 140px"
                     :editable="false"
                     @on-change="getStartDate"
+                    :options="options" 
                   ></Date-picker>
                 </Col>
                 <Col span="2" class="wave">~</Col>
@@ -81,6 +82,7 @@
                     style="width: 140px"
                     :editable="false"
                     @on-change="getEndDate"
+                    :options="options" 
                   ></Date-picker>
                 </Col>
               </Row>
@@ -98,6 +100,7 @@
                     style="width: 140px"
                     :editable="false"
                     @on-change="getStartDatec"
+                    :options="options" 
                   ></Date-picker>
                 </Col>
                 <Col span="2" class="wave">~</Col>
@@ -111,6 +114,7 @@
                     style="width: 140px"
                     :editable="false"
                     @on-change="getEndDatec"
+                    :options="options" 
                   ></Date-picker>
                 </Col>
               </Row>
@@ -126,6 +130,7 @@
                   placeholder="选择集合日期"
                   style="width: 300px"
                   @on-change="getDates"
+                  :options="options" 
                 ></Date-picker>
               </div>
             </li>
@@ -590,7 +595,12 @@ export default {
       bmx:false,
       xzx:false,
       yx:false,
-      fk:false
+      fk:false,
+      options: {
+        disabledDate (date) {
+          return  date && date.valueOf() < Date.now() - 86400000
+        }
+      },
     };
   },
   mounted() {
