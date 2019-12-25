@@ -13,7 +13,7 @@
           <Modal v-model="modal1" :title="text" class="mol" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
-                <Input v-model.trim="formValidate.name" style="width: 220px" />
+                <Input v-model.trim="formValidate.name" :maxlength=30 style="width: 220px" />
               </FormItem>
               <FormItem label="总计预算" prop="allBudget">
                 <InputNumber  :min="0" :max="1000000000" size="large"  style="width: 220px" v-model="formValidate.allBudget"></InputNumber>

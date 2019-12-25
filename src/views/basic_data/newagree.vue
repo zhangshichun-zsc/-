@@ -5,6 +5,22 @@
     <div class="xieyi">
       <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="120">
         <FormItem label="甲方:" prop="partA">
+          <!-- <Select
+            v-model="model13"
+            filterable
+            remote
+            size="large"
+            style="width:300px"
+            placeholder="甲方名称"
+            :remote-method="remoteMethod1"
+            :loading="loading1"
+          >
+            <Option
+              v-for="(option, index) in options1"
+              :value="option.value"
+              :key="index"
+            >{{option.label}}</Option>
+          </Select> -->
           <Input v-model.trim="formInline.partA" placeholder="甲方名称" style="width:300px" />
         </FormItem>
         <FormItem label="乙方:" prop="partB">
@@ -19,12 +35,8 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="所属项目:" prop="categoryId">
-          <Select
-            v-model="formInline.categoryId"
-            placeholder="请选择项目类型"
-            style="width:300px"
-          >
+        <FormItem label="活动类型:" prop="categoryId">
+          <Select v-model="formInline.categoryId" placeholder="请选择活动类型" style="width:300px">
             <Option
               v-for="item in typeList"
               :value="item.categoryId"
@@ -36,16 +48,14 @@
         <FormItem label="协议时间:" prop="agTime">
           <DatePicker
             type="date"
-             placeholder="请选择协议时间"
+            placeholder="请选择协议时间"
             v-model="formInline.agTime"
             format="yyyy-MM-dd"
             @on-change="handleChange"
-
-            style="width: 200px"
+            style="width: 300px"
           ></DatePicker>
         </FormItem>
         <FormItem label="附件:" prop="agFile">
-
           <div class="flex-wrap-center">
             <p class="imgs" v-if="Boolean(formInline.nameA)">
               <span>{{formInline.nameA}}</span>
@@ -96,12 +106,11 @@
             <!-- <img class="imgs" v-else :src="texturl" style="width:100px;height:100px"/> -->
           </div>
         </FormItem>
-          <div class="centers">
-        <Button align="center" class="button-red" @click="handleSubmit('formInline')">保存</Button>
-      </div>
+        <div class="centers">
+          <Button align="center" class="button-red" @click="handleSubmit('formInline')">保存</Button>
+        </div>
       </Form>
       <br />
-
     </div>
   </div>
 </template>
@@ -185,7 +194,12 @@ export default {
 
       params: "",
       Times: "",
-      agreementId:this.$route.query.agreementId,
+      agreementId: this.$route.query.agreementId,
+
+      model13: "",
+      loading1: false,
+      options1: [],
+      list: ["ab", "ac"]
     };
   },
 
@@ -193,10 +207,9 @@ export default {
 
   computed: {},
   mounted() {
-
     this.getAgreementNewList();
     this.getAgreementList();
-    if (this.agreementId!=null) {
+    if (this.agreementId != null) {
       this.navigation1.head = "编辑协议";
       this.getAgreementdet();
     }
@@ -206,14 +219,36 @@ export default {
   created() {},
 
   methods: {
+    //输入框检索
+    remoteMethod1(query) {
+      if (query !== "") {
+        this.loading1 = true;
+        setTimeout(() => {
+          this.loading1 = false;
+          const list = this.list.map(item => {
+            return {
+              value: item,
+              label: item
+            };
+          });
+          this.options1 = list.filter(
+            item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
+          );
+        }, 200);
+      } else {
+        this.options1 = [];
+      }
+    },
+
     handleSubmit(name) {
+      console.log(this.model13, this.options1, this.list);
 
       this.$refs[name].validate(valid => {
         if (valid) {
           if (Boolean(this.formInline.agPicA) == false) {
             this.$Message.error("请上传附件");
           } else {
-            if (this.agreementId!=null) {
+            if (this.agreementId != null) {
               this.getAgreementmodify();
             } else {
               this.getAgreementadd();
@@ -291,7 +326,9 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.formInline = res.data;
-          this.formInline.agTime = this.util.formatDate(res.data.agreementTimestamp);
+          this.formInline.agTime = this.util.formatDate(
+            res.data.agreementTimestamp
+          );
         }
       });
     },
@@ -332,21 +369,19 @@ export default {
     handleChange(e) {
       if (e != "") {
         let datas = e;
-        datas = datas.split('')[0] + " 00:00:00";
+        datas = datas.split("")[0] + " 00:00:00";
         this.Times = datas;
-
       }
     },
 
     //图片上传
     uploadFile() {
-
       let file = this.$refs.files.files[0];
-      if (Boolean(this.formInline.nameA)==false) {
+      if (Boolean(this.formInline.nameA) == false) {
         this.formInline.nameA = file.name;
-      } else if (Boolean(this.formInline.nameB)==false) {
+      } else if (Boolean(this.formInline.nameB) == false) {
         this.formInline.nameB = file.name;
-      } else if (Boolean(this.formInline.nameC)==false) {
+      } else if (Boolean(this.formInline.nameC) == false) {
         this.formInline.nameC = file.name;
       }
       let dataForm = new FormData();
@@ -357,13 +392,13 @@ export default {
         reader.onload = e => {
           this.texturl = e.target.result;
 
-          if (Boolean(this.formInline.agPicA)==false) {
+          if (Boolean(this.formInline.agPicA) == false) {
             this.formInline.agPicA = res.data;
             return;
-          } else if (Boolean(this.formInline.agPicB)==false) {
+          } else if (Boolean(this.formInline.agPicB) == false) {
             this.formInline.agPicB = res.data;
             return;
-          } else if (Boolean(this.formInline.agPicC)==false) {
+          } else if (Boolean(this.formInline.agPicC) == false) {
             this.formInline.agPicC = res.data;
             return;
           } else {
@@ -418,7 +453,7 @@ export default {
   border: 1px solid #eee;
 }
 .xieyi {
-      border-radius: 10px;
+  border-radius: 10px;
   padding-top: 50px;
   padding-left: 50px;
   background: #ffffff;
@@ -426,7 +461,6 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-
 }
 .centers {
   margin-top: 30px;
@@ -444,36 +478,45 @@ export default {
     font-size: 18px;
   }
 }
- .start-wap{
-    position: relative;
-    height: 150px;
-    width: 300px;
-    .upload{
-      width: 100%;
-      height: 100%;
-    }
-    .cancel{
-      position: absolute;
-      top: 10px;
-      right: -30px;
-      z-index: 10;
-    }
-    .upload .file{
-      width: 100%;
-      height: 100%;
-      border: 1px dashed #dcdee2;
-      text-align: center;
-      padding: 20px 0;
-    }
-    .upload .file:hover{
-      border: 1px dashed #FF565A;
-    }
-    .upload .file input{
-      display: none;
-    }
-    .shae{
-      height: 150px;
-      width: 150px;
-    }
+.start-wap {
+  position: relative;
+  height: 150px;
+  width: 300px;
+  .upload {
+    width: 100%;
+    height: 100%;
   }
+  .cancel {
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    z-index: 10;
+  }
+  .upload .file {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #dcdee2;
+    text-align: center;
+    padding: 20px 0;
+  }
+  .upload .file:hover {
+    border: 1px dashed #ff565a;
+  }
+  .upload .file input {
+    display: none;
+  }
+  .shae {
+    height: 150px;
+    width: 150px;
+  }
+}
+.ivu-select-input {
+  font-size: 16px;
+}
+
+.ivu-select-dropdown-list {
+  li {
+    font-size: 16px !important;
+  }
+}
 </style>

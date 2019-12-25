@@ -1146,19 +1146,21 @@ export default {
       if (!time) return ''
       return time.getTime()
     },
-    sameday(timeObj) {
+   sameday(timeObj) {
       let { star, end } = timeObj
       if (!star || !end) return { star: star, end: end }
       if (star === end) {
-        let time1 = this.util.formatDate(star)
-        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        let time1 = this.util.formatDate_time(star) +" 00:00:00"
+        let time2 = this.util.formatDate_time(end).split(' ')[0] + ' 23:59:59'
+      
         return {
           star: new Date(time1).getTime(),
           end: new Date(time2).getTime()
         }
       } else {
-        let time1 = this.util.formatDate(star)
-        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        let time1 = this.util.formatDate_time(star) +" 00:00:00"
+        let time2 = this.util.formatDate_time(end).split(' ')[0] + ' 23:59:59'
+
         return {
           star: new Date(time1).getTime(),
           end: new Date(time2).getTime()

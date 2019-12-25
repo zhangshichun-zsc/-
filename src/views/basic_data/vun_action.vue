@@ -10,7 +10,7 @@
           <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="活动分类" prop="dicName">
-                <Input v-model.trim="formValidate.dicName" />
+                <Input v-model.trim="formValidate.dicName"  :maxlength=30 />
               </FormItem>
             </Form>
             <div slot="footer">

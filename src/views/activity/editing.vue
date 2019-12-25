@@ -324,8 +324,14 @@
       </div>
 
       <div v-if="two" class="lx-flex-center" style="margin-top:80px;">
+        <Button v-if="showZf" @click="zf" shape="circle" size='large' class="btn">作废</Button>
         <Button @click="save()" shape="circle" size='large' class="btn">保存</Button>
       </div>
+
+      <Modal v-model="isZf" title="作废模板" @on-ok='sureZf'>
+        <div>是否确定作废该活动模板</div>
+      </Modal>
+
     </div>
   </div>
 </template>
@@ -338,7 +344,8 @@ import {
   projectDetail,
   projectEdit,
   chooseTempalte,
-  orgimgdel
+  orgimgdel,
+  zfmb
 } from "@/request/api";
 import { projectApproval } from "../../request/api";
 import role from "./compile_beneficiary.vue";
@@ -379,6 +386,8 @@ export default {
           return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      showZf:false,
+      isZf:false
     };
   },
 
@@ -397,6 +406,9 @@ export default {
       this.getTemplate();
     }else if(this.$route.query.id){
       this.getProjectDetail();
+    }
+    if(this.$route.query.ble===1){
+      this.showZf = true
     }
   },
 
@@ -700,6 +712,20 @@ export default {
     getReleaseTime(e) {
       console.log(e);
       this.batch.releaseTime = e;
+    },
+    zf(){
+      this.isZf = true
+    },
+    sureZf(){
+      zfmb({
+        actMouldId:this.$route.query.actMouldId,
+        type:0
+      }).then(res=>{
+        this.$Message.info(res.msg)
+        if(res.code==200){
+          this.$router.back()
+        }
+      })
     }
   }
 };
