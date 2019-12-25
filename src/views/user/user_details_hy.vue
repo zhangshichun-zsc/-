@@ -361,11 +361,10 @@ export default {
 
           this.statisticsInfo = [res.data.statisticsInfo];
           this.activityRecord = res.data.activityRecord;
-          this.userAdderes = res.data.userAdderess;
+          this.userAdderes = res.data.userAddress;
           this.orgRecordList = res.data.orgRecordList;
 
           if (this.basicInfo.userLabel) {
-            console.log();
             this.userLabel = res.data.basicInfo.userLabel.split(",");
           }
           if (this.basicInfo.role) {
