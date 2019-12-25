@@ -1,6 +1,12 @@
 <!--活动立项(会员)-->
 <template>
   <div class="lx-content">
+     <Modal v-model="adds" title="新增物资">
+      <div class="wap">
+         <Button v-for="(item,index) in batchItemList.resources" @click="chooseResource(item)" class="btn font" :key='index'>{{item.name}}</Button>
+      </div>
+      <div slot="footer"></div>
+    </Modal>
     <adress :value="adr" @change="getMap" />
     <Navigation :labels="navigation1"></Navigation>
     <div class="lx-cont">
@@ -195,7 +201,7 @@
               </li>
             </ul>
           </Col>
-          <Col span='14'>
+          <Col span='12'>
             <ul>
               <li class="first-li">
                 <span class="first-span">活动时间</span>
@@ -248,7 +254,7 @@
                 <span class="first-span">现场联系人</span>
                 <div class="flex-center-start" style="flex:1">
                   <span class="tit">姓名</span>
-                  <Input v-model="batch.ownerUserName" style="width: 150px" class="same-staff" @on-change='getLeaderList'></Input>
+                  <Input v-model="batch.ownerUserName" style="width: 150px" class="same-staff" @on-change='getLeaderList' placeholder="输入姓名"></Input>
                   <span class="twoT">联系方式</span>
                   <Input v-model="batch.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
                   <Select style="width:200px;margin-left:15px;" placeholder="请选择现场联系人" v-if='addLeader'>
@@ -261,16 +267,16 @@
                 </Select>
                 </div>
               </li>
-              <li class="first-li">
+              <li class="first-li start">
                 <span class="first-span">工作人员</span>
                 <div>
-                  <div><Button @click="addWorkers">添加</Button></div>
+                  <div><Button @click="addWorkers" class="font">添加</Button></div>
                   <div v-for="(item,index) in batch.workerIdList" class="li-flex-around" :key='index'>
-                    <span>姓名</span>
-                    <Input v-model="item.ownerUserName" style="width: 200px" class="same-staff" @on-change='getWorkerList(item,index)'></Input>
-                    <span>联系方式</span>
-                    <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
-                    <Button @click="deleteWorker(index)">删除</Button>
+                    <span class="tit">姓名</span>
+                    <Input v-model="item.ownerUserName" style="width: 150px" class="same-staff" @on-change='getWorkerList(item,index)' placeholder="输入姓名"></Input>
+                    <span class="twoT">联系方式</span>
+                    <Input v-model="item.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
+                     <Icon type="ios-trash"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
                   </div>
                   <div v-if='addWorker'>
                     <Select style="width:300px" placeholder="请选择工作人员">
@@ -295,34 +301,35 @@
                   >{{ item.name }}</Option>
                 </Select>
               </li>
-              <li class="first-li">招募角色</li>
-              <li>
-                <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource" :key='i'>
-                  <span>{{item.roleName}}</span>
-                  <span>{{item.recruitNum}}</span>
-                  <Button @click="changeRoles(i)">详情</Button>
-                  <Button @click="deleteRole(i)">删除</Button>
-                </p>
+              <li class="first-li start">
+                <span class="first-span">招募角色</span>
+                <div>
+                  <div class="flex-center-center"><Button @click="addRoles()" class="font">+新增招募角色</Button></div>
+                  <div>
+                    <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource" :key='i'>
+                      <span>{{item.roleName}}</span>
+                      <span>{{item.recruitNum}}</span>
+                      <Button @click="changeRoles(i)" class="font">详情</Button>
+                      <Icon type="ios-trash"   @click="deleteRole(i)" color='#FF565A' size='28'/>
+                    </p>
+                  </div>
+                </div>
               </li>
-              <li class="lx-flex-center">
-                <Button @click="addRoles()">+新增招募角色</Button>
-              </li>
-              <li class="first-li">所需物资</li>
-              <li>
-                <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource">
-                  <span>{{item.resourcesName}}</span>
-                  <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"></Input>
-                  <span>
-                    <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
-                    <Icon type="ios-close" @click="deleteResources(i)"></Icon>
-                  </span>
-                </p>
-              </li>
-              <li class="lx-flex-center">
-                <Button @click="addResources" style="marginBottom:20px">+新增物质</Button>
-              </li>
-              <li v-if="adds">
-                <Button v-for="item in batchItemList.resources" @click="chooseResource(item)" class="btn">{{item.name}}</Button>
+              <li class="first-li start">
+                <span class="first-span">所需物资</span>
+                <div>
+                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物质</Button></div>
+                  <div>
+                    <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource" :key='i'>
+                      <span>{{item.resourcesName}}</span>
+                      <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"></Input>
+                      <span>
+                        <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
+                        <Icon type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
+                      </span>
+                    </p>
+                  </div>
+                </div>
               </li>
               <li class="first-li">
                 <span class="first-span">发布时间</span>
@@ -336,7 +343,7 @@
           </Col>
         </Row>
         <Row style="margin-top:40px">
-          <Col style="margin-bottom:10px;">活动详情</Col>
+          <Col style="margin-bottom:10px;"><span>活动详情</span></Col>
           <Col>
             <wangeditor :labels="batch.detail" id="ed1" @change="changeEditorTrain"></wangeditor>
           </Col>
@@ -443,7 +450,7 @@
             <div class="active-head">
               <span>活动立项批次</span>
             </div>
-            <div class="first-li" style="width:100%" v-for="(item,i) in projectMsg.actInfoList">
+            <div class="first-li" style="width:100%" v-for="(item,i) in projectMsg.actInfoList" :key='i'>
               <img style="width:200px;height:150px" :src='item.actShowPic' />
               <ul style="margin-left:20px;width:60%">
                 <li class="first-li">
@@ -456,13 +463,13 @@
                   <span>活动日期：{{item.startT}}至{{item.endT}}</span>
                 </li>
                 <li class="li-flex-around">
-                  <Button @click.native="changePc(i)">修改</Button>
-                  <Button @click.native="deletePc(i)">删除</Button>
+                  <Button @click.native="changePc(i)" class="font">修改</Button>
+                  <Button @click.native="deletePc(i)" class="font">删除</Button>
                 </li>
               </ul>
             </div>
             <div class="lx-flex-center">
-              <Button @click="addBatch">新增批次</Button>
+              <Button @click="addBatch" class="font">新增批次</Button>
             </div>
           </Col>
         </Row>
@@ -490,15 +497,15 @@
           <ul>
             <li class="first-li">
               <span class="first-span">合作方</span>
-              <Input v-model="partner.partName" placeholder="请输入合作方名称" style="width: 300px;margin-left:15px"></Input>
+              <Input v-model="partner.partName" placeholder="请输入合作方名称" style="width: 300px;"></Input>
             </li>
             <li class="first-li">
               <span class="first-span">介绍</span>
-              <Input type="textarea" v-model="partner.description" placeholder="请输入合作方介绍" style="width: 300px;margin-left: 30px;" :rows='5'></Input>
+              <Input type="textarea" v-model="partner.description" placeholder="请输入合作方介绍" style="width: 300px;" :rows='5'></Input>
             </li>
             <li class="first-li">
                 <span class="first-span">图片</span>
-                <div style="margin-left: 30px;">
+                <div>
                   <div class="first-pic" v-if='partner.partPicShow == null'>
                       <div class="" @click="()=>{ this.$refs.filepar.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filepar" @change="uploadPartnerFile()" style="display:none" >
@@ -514,7 +521,7 @@
             <li>
               <p style="padding:10px 0">协议</p>
               <div>
-                <ul v-for="(item,index) in partner.agrees">
+                <ul v-for="(item,index) in partner.agrees" :key='index'>
                   <li class="first-li">
                     <span class="first-span">协议名称</span>
                     <Input v-model="item.agreeName" placeholder="请输入协议名称" style="width: 300px"></Input>
@@ -532,11 +539,11 @@
                   </li>
                   <li class="first-li">
                     <span class="first-span">甲方</span>
-                    <Input v-model="item.partA" placeholder="请输入甲方名称" style="width: 300px;margin-left: 30px"></Input>
+                    <Input v-model="item.partA" placeholder="请输入甲方名称" style="width: 300px;"></Input>
                   </li>
                   <li class="first-li">
                     <span class="first-span">乙方</span>
-                    <Input v-model="item.partB" placeholder="请输入乙方名称" style="width: 300px;margin-left: 30px"></Input>
+                    <Input v-model="item.partB" placeholder="请输入乙方名称" style="width: 300px;"></Input>
                   </li>
                 </ul>
               </div>
@@ -544,15 +551,15 @@
           </ul>
         </div>
         <p class="add-deal">
-          <Button @click="addAgrees">+新增协议</Button>
+          <Button @click="addAgrees" class="font" style="margin-left:200px">+新增协议</Button>
         </p>
         <!-- <div class="upload">
           <span>上传附件</span>
         </div> -->
         <div class="lx-flex-center" style="width:80%">
           <div class="li-flex-around" style="width:40%">
-            <Button class="table-btn" @click="off()">取消</Button>
-            <Button class="table-btn active" @click="save()">保存</Button>
+            <Button class="lx-draft" @click="off()">取消</Button>
+            <Button class="lx-submit" @click="save()">保存</Button>
           </div>
         </div>
       </div>
@@ -1199,6 +1206,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.font{
+  font-size: 16px;
+}
+.start{
+   align-items: flex-start !important;
+}
 .btn{
   margin-right: 10px !important;
   margin-bottom: 10px !important;
@@ -1213,12 +1226,12 @@ export default {
   background-color: #fff;
 }
 .lx-cont{
-  padding: 20px;
+  padding: 30px;
 }
 .first-li{
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 0;
   .ivu-radio-wrapper{
     font-size: 16px !important;
   }
@@ -1298,9 +1311,10 @@ export default {
   width: 110px;
 }
 .lx-submit{
-  background: #00FF7F;
+  background: #FF565A;
   border-radius: 15px;
   width: 110px;
+  color: #fff;
 }
 .li-flex-around{
   display: flex;

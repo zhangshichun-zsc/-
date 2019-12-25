@@ -117,27 +117,25 @@
             </li>
             <li class="first-li">
               <span class="first-span">集合时间</span>
-              <Row>
-                <Col span="12">
-                  <Date-picker
-                    type="date"
-                    :value="oneRole.setTime"
-                    format="yyyy-MM-dd HH:mm"
-                    placement="bottom-end"
-                    placeholder="选择集合日期"
-                    style="width: 300px"
-                    @on-change="getDates"
-                  ></Date-picker>
-                </Col>
-              </Row>
+              <div>
+                 <Date-picker
+                  type="date"
+                  :value="oneRole.setTime"
+                  format="yyyy-MM-dd HH:mm"
+                  placement="bottom-end"
+                  placeholder="选择集合日期"
+                  style="width: 300px"
+                  @on-change="getDates"
+                ></Date-picker>
+              </div>
             </li>
             <li class="first-li">
               <span class="first-span">集合地址</span>
-              <Button @click="getAdr()">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</Button>
+              <Button @click="getAdr()" lang class="font">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</Button>
             </li>
             <li class="first-li">
               <span class="first-span">模式</span>
-              <RadioGroup v-model="oneRole.zmType">
+              <RadioGroup v-model="oneRole.zmType" class="font">
                 <Radio label="1" >先到先得</Radio>
                 <Radio label="2">预约型</Radio>
               </RadioGroup>
@@ -152,21 +150,21 @@
             </li>
             <li class="first-li" v-if="oneRole.zmType==2">
               <span class="first-span">是否自动筛选替补人员</span>
-              <RadioGroup v-model="oneRole.isAutoChoose">
+              <RadioGroup v-model="oneRole.isAutoChoose" class="font" size='large'>
                 <Radio label="0" :trueValue='0'>是</Radio>
                 <Radio label="1" :trueValue='1'>否</Radio>
               </RadioGroup>
             </li>
             <li class="first-li">
               <span class="first-span">是否发放补助</span>
-              <RadioGroup v-model="oneRole.isHaveSubsidy">
+              <RadioGroup v-model="oneRole.isHaveSubsidy" class="font" size='large'>
                 <Radio label="1">是</Radio>
                 <Radio label="2">否</Radio>
               </RadioGroup>
             </li>
             <li class="first-li" v-if="oneRole.isHaveSubsidy==1">
               <span class="first-span">补助类型</span>
-              <RadioGroup v-model="oneRole.subsidyType">
+              <RadioGroup v-model="oneRole.subsidyType" class="font" size='large'>
                 <Radio label="1">现金</Radio>
                 <Radio label="2">物质</Radio>
               </RadioGroup>
@@ -197,7 +195,7 @@
               </div>
             </li>
             <li v-if="oneRole.actRefund.refundRule==1 || oneRole.actRefund.refundRule==2">
-              <RadioGroup v-model="oneRole.actRefund.refundRule" vertical>
+              <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
                 <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
                 <Radio label="2" :trueValue='2'>
                   活动开始前
@@ -209,7 +207,7 @@
               <span>限制设置</span>
             </li>
             <li>
-              <table v-for="(item,index) in oneRole.signRuleList" class="role-table">
+              <table v-for="(item,index) in oneRole.signRuleList" class="role-table" :key='index'>
                   <tr v-if="item.ruleId==21 || item.ruleId==3" class="role-tr">
                     <td>年龄限制</td>
                     <td>
@@ -317,7 +315,7 @@
               </table>
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
-              <Button @click="addxzx">添加限制项</Button>
+              <Button @click="addxzx" class="font">添加限制项</Button>
             </li>
             <li class="first-li">
               <span>报名项设置</span>
@@ -370,7 +368,7 @@
               </div>
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
-              <Button @click="addbmx">添加报名项</Button>
+              <Button @click="addbmx" class="font">添加报名项</Button>
             </li>
             <li class="first-li">
               <span>优先设置</span>
@@ -391,7 +389,7 @@
               </table>
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
-              <Button @click="addyx">添加优先规则</Button>
+              <Button @click="addyx" class="font">添加优先规则</Button>
             </li>
           </ul>
         </Col>
@@ -475,22 +473,16 @@
         </Col>
       </Row>
 
-      <Modal v-model="xzx">
-        <ul>
-          <li class="lx-flex-center" style="padding:8px 0">
-            <div class="first-span">常用限制项</div>
-          </li>
-          <li class="lx-flex-around" style="padding:8px 0">
-            <div v-for="item in signLimitsList">
-              <Button @click.native="getLimits(item)" class="btn">{{item.name}}</Button>
-            </div>
-          </li>
-        </ul>
+      <Modal v-model="xzx"  title="限制项设置">
+        <div>
+          <Button @click.native="getLimits(item)" class="btn" v-for="(item,index) in signLimitsList" :key='index'>{{item.name}}</Button>
+        </div>
+         <div slot="footer"></div>
       </Modal>
-      <Modal v-model="bmx">
+      <Modal v-model="bmx" title="报名项设置">
         <ul>
           <li class="lx-flex-center" style="padding:8px 0">
-            <div class="first-span">常用报名项</div>
+            <div class="first-span" style="font-size:20px;">常用报名项</div>
           </li>
           <li class="lx-flex-around" style="padding:8px 0">
             <div v-for="item in signItemList">
@@ -506,33 +498,30 @@
             </div>
           </li>
         </ul>
+         <div slot="footer"></div>
       </Modal>
-      <Modal v-model="yx">
-        <ul>
-          <li class="lx-flex-center" style="padding:8px 0">
-            <div class="first-span">优先规则</div>
-          </li>
-          <li class="lx-flex-around" style="padding:8px 0">
-            <div v-for="item in firstItemList">
-              <Button @click.native="getFirst(item)" class="btn">{{item.name}}</Button>
+      <Modal v-model="yx" title="优先项设置">
+       
+            <div>
+              <Button @click.native="getFirst(item)" class="btn" v-for="(item,index) in firstItemList" :key='index'>{{item.name}}</Button>
             </div>
-          </li>
-        </ul>
+         <div slot="footer"></div>
       </Modal>
-      <Modal v-model="fk">
+      <Modal v-model="fk" title="反馈项设置">
         <ul>
           <li class="lx-flex-around" style="padding:8px 0" v-if="oneRole.isFeedback === 1">
-            <div v-for="(item,index) in feedList">
-              <Button @click.native="addItem(item)" class="btn">{{item.name}}</Button>
+            <div >
+              <Button @click.native="addItem(item)" class="btn" v-for="(item,index) in feedList" :key='index'>{{item.name}}</Button>
             </div>
           </li>
         </ul>
       </Modal>
-
-      <div class="role-row" style="margin-top:80px">
-        <div class="lx-flex-around" style="width:40%">
-          <Button @click.native="cancel">取消</Button>
-          <Button class="active" @click.native="save">保存</Button>
+      
+      <div class="role-row flex-between" style="margin-top:80px">
+        <span></span>
+        <div>
+          <Button @click.native="cancel" shape="circle" size='large'>取消</Button>
+          <Button class="active" @click.native="save" shape="circle" size='large'>保存</Button>
         </div>
       </div>
     </div>
@@ -1007,22 +996,24 @@ export default {
       width: 140px;
     }
     .active {
-      background: #339933;
-      color: #ffffff;
+      background: #FF565A !important;
+      color: #fff !important;
+      border-color:#FF565A !important;
     }
   }
 }
 .first-li{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 0;
+  justify-content: flex-start;
+  padding: 12px 0;
   .ivu-radio-wrapper{
     font-size: 16px !important;
   }
 }
 .first-span{
-  margin-right: 10px;
+  width: 200px;
+  margin-right: 30px;
 }
 .wave{
   display: flex;
@@ -1062,11 +1053,15 @@ export default {
   padding: 5px 0;
 }
 .role-row{
-  display: flex;
-  justify-content: center;
-  width: 80%;
+  padding: 20px;
 }
 .txt{
   width: 80%;
+}
+.font{
+  font-size: 16px;
+  * {
+    font-size:  16px;
+  }
 }
 </style>

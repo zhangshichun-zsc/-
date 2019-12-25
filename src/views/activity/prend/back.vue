@@ -65,7 +65,7 @@
       </div>
       <div class="button-food">
         <i-button @click="feedback()" shape="circle" size='large' class="btn">保存</i-button>
-        <i-button @click="delFeed()" shape="circle" size='large' class="btn">作废</i-button>
+        <i-button @click="delFeed()" shape="circle" size='large' class="btn" v-if="ble===1">作废</i-button>
       </div>
     </div>
   </div>
@@ -101,7 +101,7 @@ export default {
         isPicFlag: 0,
         details:[]
       },
-      ble:false
+      ble:1
     }
   },
 

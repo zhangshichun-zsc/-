@@ -180,7 +180,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -214,7 +214,7 @@ export default {
                   style: {
                     marginRight: "10px",
                     marginLeft: "10px",
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -234,7 +234,7 @@ export default {
                   style: {
                     marginRight: "2px",
                     marginLeft: "2px",
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {

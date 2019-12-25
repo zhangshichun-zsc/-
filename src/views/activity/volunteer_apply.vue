@@ -5,56 +5,7 @@
       v-model="modal1">
       <img :src="showImg" alt="" class="showimg"/>
     </Modal>
-    <Navigation :labels="navigation1"></Navigation>
-    <div class="integral-header">
-      <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <Button>收起筛选</Button>
-          <Button @click="changeGet">查询结果</Button>
-        </div>
-      </div>
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span>名称</span>
-          <Input size="small" placeholder="组织名称" class="inpt" v-model="args.name"/>
-        </div>
-        <div class="flex-center-start">
-          <span>有效状态</span>
-          <Select size="small" class="inpt" v-model="args.validFlag">
-            <Option value="">全部</Option>
-            <Option value="1">有效状态</Option>
-            <Option value="0">无效状态</Option>
-          </Select>
-        </div>
-        <div class="flex-center-start">
-          <span>创建时间</span>
-          <row>
-             <DatePicker
-              :open="open"
-              confirm
-              type="date"
-              @on-change="changeDate"
-              @on-ok="successOk">
-              <a href="javascript:void(0)" @click="open = true">
-                  <Icon type="ios-calendar-outline"></Icon>
-                  <template>{{ time }}</template>
-              </a>
-            </DatePicker>
-          </row>
-        </div>
-      </div>
-    </div>
-    <div class="integral-table">
-      <div class="table-header flex-center-between">
-        <div>
-          <Icon type="md-reorder" size="20" />
-          <span @click="handleSelectAll(true)">全选</span>
-          <Button class="table-btn" @click="showModal(null)">新增常用报名项</Button>
-          <Modal v-model="modal1" title="新增常用报名项"   @on-cancel='cancel'>
+     <Modal v-model="modal1" title="新增常用报名项"   @on-cancel='cancel'>
             <Tabs type="line" value="name1" v-model="adds.typeFlag" size="small" >
                 <TabPane label="单选题" name="3">
                   <div class="flex-start"><span>常用报名项名称：</span><Input placeholder="请输入标题" style="width:200px" v-model="adds.name"/></div>
@@ -75,14 +26,51 @@
                  <Button type="error" size="large" @click="addOk">确定</Button>
                </div>                
         </Modal>
+    <Navigation :labels="navigation1"></Navigation>
+    <div class="wap">
+      <div class="integral-header">
+        <div class="flex-between integral-body">
+          <div class="flex-start">
+            <div class="flex-center-start">
+              <span>名称</span>
+              <Input size="large" placeholder="组织名称" class="inpt" v-model="args.name"/>
+            </div>
+            <div class="flex-center-start">
+              <span>有效状态</span>
+              <Select size="large" class="inpt" v-model="args.validFlag">
+                <Option value="">全部</Option>
+                <Option value="1">有效状态</Option>
+                <Option value="0">无效状态</Option>
+              </Select>
+            </div>
+            <div class="flex-center-start">
+              <span style="margin-right:15px;">创建时间</span>
+              <Date-picker
+              type="date"
+                placeholder="选择日期"
+                style="width: 200px"
+                @on-change="changeDate"
+              ></Date-picker>
+            </div>
+          </div>
+          <Button @click="changeGet" class="button-red">查询结果</Button>
         </div>
       </div>
-    </div>
-    <Table border :columns="columns" :data="datax"></Table>
+      <div class="integral-table">
+        <div class="table-header flex-center-between">
+          <div>
+            <Icon type="md-reorder" size="20" />
+            <span @click="handleSelectAll(true)">全选</span>
+            <Button class="table-btn" @click="showModal(null)">新增常用报名项</Button>
+          </div>
+        </div>
+      </div>
+      <Table border :columns="columns" :data="datax"></Table>
       <div class="pages">
         <span>共{{sumPage}}页/{{sumSize}}条数据</span>
-         <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
+        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
       </div>
+    </div>
   </div>
 </template>
 
@@ -184,7 +172,7 @@ export default {
               h('a', {
                 clssName: 'action',
                 style: {
-                  color: 'green'
+                  color: '#FF565A'
                 },
                 on: {
                   click: () => {
@@ -282,12 +270,6 @@ export default {
     cancel(){
       this.adds.name = null
     },
-    successOk(){
-      if(!this.args.createAt){
-        this.time='请选择时间段'
-      }
-      this.open = false
-    },
     changeDate(e){
       if(e){
         this.time = e
@@ -300,8 +282,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.integral-header {
-  border: 1px solid #eee;
+.wap {
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  margin-bottom: 30px;
 }
 .integral-header .integral-top {
   padding: 10px;
@@ -325,11 +310,10 @@ export default {
 
 .table-header {
   padding: 10px 20px;
-  background: rgb(228, 228, 228);
-  border: 1px solid #eee;
 }
 .table-header .table-btn {
   margin-left: 15px;
+  font-size: 16px;
 }
 .line {
   width: 20px;
