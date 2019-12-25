@@ -101,7 +101,7 @@ export default {
           title: "活动名称",
           key: "activityName",
           align: "center",
-          width:500,
+          width:700,
           ellipsis: true,
           tooltip: true,
         },
@@ -116,17 +116,18 @@ export default {
         },
         {
           title: "活动类型",
-          width:200,
+          width:300,
           key: "activityType",
           align: "center"
         },
         {
           title: "创建人",
-          width:180,
+          width:200,
           key: "otherSignUpCount",
           align: "center"
         },
          {
+          title: "操作人",
           width: 300,
           key: "action",
           align: "center",
@@ -147,49 +148,13 @@ export default {
                   on: {
                     click: () => {
                       this.$router.push({
-                        path: "editing",
-                        query: { id: params.row.acitvityId }
+                        path: "volunteer_issue",
+                        query: { activityId: params.row.activityId,isEdit:3 }
                       });
                     }
                   }
                 },
                 "编辑"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({
-                        path: "profile",
-                        query: { acitvityId: params.row.acitvityId,activityName: params.row.activityName }
-                      });
-                    }
-                  }
-                },
-                "概况"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({ path: "activity_share" });
-                    }
-                  }
-                },
-                "发布"
               )
             ]);
           }
