@@ -71,7 +71,7 @@
                 </Select>
               </FormItem>
               <FormItem label="模板名称" prop="title">
-                <Input v-model.trim="params.title" />
+                <Input v-model.trim="params.title" :maxlength=30 />
               </FormItem>
               <FormItem label="生效日期" prop="effectiveAt">
                 <Date-picker

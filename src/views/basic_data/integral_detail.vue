@@ -285,8 +285,8 @@ export default {
     query() {
        if (this.startAt && this.endAt) {
         if (this.startAt <= this.endAt) {
-          this.startAt = this.startAt.split('')[0] + " 00:00:00";
-          this.endAt = this.endAt.split('')[0] + " 23:59:59";
+          this.startAt = this.startAt.split(' ')[0] + " 00:00:00";
+          this.endAt = this.endAt.split(' ')[0] + " 23:59:59";
            this.page = 1;
             this.getintegralHistory();
         } else {

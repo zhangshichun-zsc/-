@@ -11,7 +11,7 @@
           <Modal v-model="modal1" title="新增会费" class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称:" prop="name">
-                <Input v-model.trim="formValidate.name" size="large" style="width: 220px"/>
+                <Input v-model.trim="formValidate.name" size="large" :maxlength=30 style="width: 220px"/>
               </FormItem>
               <FormItem label="金额:" prop="amount">
                 <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button type="error" >元</Button>
