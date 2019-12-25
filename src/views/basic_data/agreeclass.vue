@@ -16,7 +16,7 @@
         <Modal v-model="modal1" title="添加分类" class-name="vertical-center-modal">
           <Form :model="formItem" ref="formItem" :rules="ruleValidate" :label-width="120">
             <FormItem label="类型名称:" prop="name" >
-              <Input v-model="formItem.name"  style="width:200px"/>
+              <Input v-model="formItem.name" :maxlength=30  style="width:200px"/>
             </FormItem>
             <FormItem label="类型:" prop="type">
               <Select v-model="formItem.type" style="width:200px">
