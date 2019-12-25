@@ -496,7 +496,7 @@ margin-bottom: 20px;
 .name {
   span {
     display: block;
-    width: 120px;
+     min-width: 80px;
   }
   .inpt {
     margin-right: 30px;

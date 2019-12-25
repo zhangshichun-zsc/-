@@ -15,7 +15,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="modalOk('formValidate')" >确定</Button>
             </div>
           </Modal>
         </div>

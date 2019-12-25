@@ -124,7 +124,8 @@ import {
   AgreementList,
   Agreementdet,
   Agreementmodify,
-  orgimgdel
+  orgimgdel,
+  Offactivities
 } from "@/request/api";
 import { date1 } from "@/request/datatime";
 export default {
@@ -219,6 +220,25 @@ export default {
   created() {},
 
   methods: {
+    // // -获取官方活动分页
+    // getOffactivities() {
+    //   Offactivities({
+    //     page: { page: this.page, size: this.size },
+    //     dicName: '',
+    //     validFlag: 1,
+    //     createTimestamp: ''
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       this.data = res.data.list;
+    //     } else {
+    //       this.$Message.error(res.msg);
+    //     }
+    //
+    //   });
+    // },
+
+
+
     //输入框检索
     remoteMethod1(query) {
       if (query !== "") {

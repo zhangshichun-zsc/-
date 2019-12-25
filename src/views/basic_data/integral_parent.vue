@@ -4,38 +4,48 @@
     <basicdata :navigation1="navigation1" @query="query"></basicdata>
     <div class="integral-table">
       <div class="yuan">
-      <div class="table-header flex-between">
-        <div>
-          <!-- <span>已选择{{arr.length}}</span> -->
-          <Button class="table-btns" @click="btn">新增类型</Button>
-          <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="150">
-              <FormItem :label="title" prop="dicName">
-                <Input v-model.trim="formValidate.dicName"  :maxlength=30 />
-              </FormItem>
-            </Form>
-            <div slot="footer">
-              <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
-            </div>
-          </Modal>
+        <div class="table-header flex-between">
+          <div>
+            <!-- <span>已选择{{arr.length}}</span> -->
+            <Button class="table-btns" @click="btn">新增类型</Button>
+            <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
+              <Form
+                ref="formValidate"
+                :model="formValidate"
+                :rules="ruleValidate"
+                :label-width="150"
+              >
+                <FormItem :label="title" prop="dicName">
+                  <Input v-model.trim="formValidate.dicName" :maxlength="30" />
+                </FormItem>
+              </Form>
+              <div slot="footer">
+                <Button type="text" size="large" @click="modalCancel">取消</Button>
+                <Button
+                  type="error"
+                  size="large"
+                  @click="modalOk('formValidate')"
+                  :loading="loading"
+                >确定</Button>
+              </div>
+            </Modal>
+          </div>
+        </div>
+        <div class="min-height">
+          <Table ref="selection" :columns="columns" :data="data1" border></Table>
+        </div>
+        <div class="pages">
+          <Page
+            :total="dataCount"
+            show-elevator
+            show-total
+            size="small"
+            style="margin: auto"
+            :page-size="size"
+            @on-change="changepages"
+          />
         </div>
       </div>
-      <div class="min-height">
-        <Table ref="selection"  :columns="columns" :data="data1" border></Table>
-      </div>
-      <div class="pages">
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changepages"
-        />
-      </div>
-    </div>
     </div>
   </div>
 </template>
@@ -121,7 +131,7 @@ export default {
           key: "action",
           align: "center",
           resizable: true,
-          width:180,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h(
@@ -180,7 +190,8 @@ export default {
       list: [],
       text: "新增家长职业类型",
       states: "",
-      id: 0
+      id: 0,
+      loading: false
     };
   },
 
@@ -249,6 +260,11 @@ export default {
         ];
       }
       Basicbatch({ list: this.list }).then(res => {
+
+        //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           if (e == 0) {
             this.$Message.info("添加成功");
@@ -268,7 +284,7 @@ export default {
 
     //查询
     query(e) {
-      this.data1=[]
+      this.data1 = [];
       this.page = 1;
       this.validFlag = e.validFlag;
       this.targetName = e.dicName;
@@ -287,6 +303,7 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading = true;
           if (this.id == 0) {
             this.getBasicbatch(1);
           } else {
@@ -314,7 +331,4 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
-
-
 </style>
