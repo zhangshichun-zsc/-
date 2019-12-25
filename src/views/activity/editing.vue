@@ -614,7 +614,7 @@ export default {
     //新增招募角色
     addRoles() {
       let r = {
-        fdList: [{ name: "反馈简介", type: 0 }],
+        fkDetailList: [{ name: "反馈简介", type: 0 }],
         actRefund: {},
         signRuleList: [],
         itemList: [],
