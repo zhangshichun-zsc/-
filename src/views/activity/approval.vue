@@ -521,7 +521,7 @@
               </ul>
             </div>
             <div class="lx-flex-center">
-              <Button @click="addPc" class="font">新增批次</Button>
+              <Button @click="addBatch" class="font">新增批次</Button>
             </div>
           </Col>
         </Row>
@@ -1123,25 +1123,29 @@ export default {
       this.three = false;
       this.current = 1;
     },
+    deepClone(obj){
+      let _obj = JSON.stringify(obj),
+      objClone = JSON.parse(_obj);
+      return objClone
+    },  
     addBatch(){
-      // let p = this.projectMsg
-      // this.pcNum = p.actInfoList.length
-      // debugger
-      // let b = p.actInfoList[p.actInfoList.length-1]
-      // delete b.startT
-      // delete b.endT
-      // delete b.releaseTime
-      // for(let oi in b.userConfList){
-      //   delete b.userConfList[oi].enrollStarttime
-      //   delete b.userConfList[oi].enrollEndtime
-      //   delete b.userConfList[oi].outrollStarttime
-      //   delete b.userConfList[oi].outrollEndtime
-      //   delete b.userConfList[oi].setTime
-      // }
-      // this.two = true;
-      // this.three = false;
-      // this.current = 1;
-      // this.batch = b
+      let p = this.deepClone(this.projectMsg)
+      this.pcNum = p.actInfoList.length
+      let b = p.actInfoList[p.actInfoList.length-1]
+      delete b.startT
+      delete b.endT
+      delete b.releaseTime
+      for(let oi in b.userConfList){
+        delete b.userConfList[oi].enrollStarttime
+        delete b.userConfList[oi].enrollEndtime
+        delete b.userConfList[oi].outrollStarttime
+        delete b.userConfList[oi].outrollEndtime
+        delete b.userConfList[oi].setTime
+      }
+      this.two = true;
+      this.three = false;
+      this.current = 1;
+      this.batch = b
       console.log(this.projectMsg.actInfoList)
     },
 
