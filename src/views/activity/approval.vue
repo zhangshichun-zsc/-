@@ -1142,7 +1142,26 @@ export default {
       if(this.isAgree){
         this.projectMsg.userId = this.userId;
         this.projectMsg.is_draft = 2;
-        projectApproval(this.projectMsg).then(res => {
+        projectApproval({
+          actInfoList: this.projectMsg.actInfoList,
+          batchName: this.projectMsg.batchName,
+          batchId:this.projectMsg.batchId,
+          batchObjective: this.projectMsg.batchObjective,
+          batchPic: this.projectMsg.batchPic,
+          budget: this.projectMsg.budget,
+          categoryId: this.projectMsg.categoryId,
+          categoryName: this.projectMsg.categoryName,
+          channel: 1,
+          endT: this.projectMsg.endT,
+          is_draft: this.projectMsg.is_draft,
+          orgId: this.projectMsg.orgId,
+          orgName: this.projectMsg.orgName,
+          orgType: this.projectMsg.orgType,
+          partnerList: this.projectMsg.partnerList,
+          recruitType: this.projectMsg.recruitType,
+          startT: this.projectMsg.startT,
+          userId: this.projectMsg.userId
+        }).then(res => {
           console.log(res);
           if (res.code == 200) {
             this.$Message.success(res.msg);
@@ -1160,7 +1179,26 @@ export default {
       console.log(this.projectMsg);
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
-      projectApproval(this.projectMsg).then(res => {
+      projectApproval({
+        actInfoList: this.projectMsg.actInfoList,
+        batchName: this.projectMsg.batchName,
+        batchId:this.projectMsg.batchId,
+        batchObjective: this.projectMsg.batchObjective,
+        batchPic: this.projectMsg.batchPic,
+        budget: this.projectMsg.budget,
+        categoryId: this.projectMsg.categoryId,
+        categoryName: this.projectMsg.categoryName,
+        channel: 1,
+        endT: this.projectMsg.endT,
+        is_draft: this.projectMsg.is_draft,
+        orgId: this.projectMsg.orgId,
+        orgName: this.projectMsg.orgName,
+        orgType: this.projectMsg.orgType,
+        partnerList: this.projectMsg.partnerList,
+        recruitType: this.projectMsg.recruitType,
+        startT: this.projectMsg.startT,
+        userId: this.projectMsg.userId
+      }).then(res => {
         if (res.code == 200) {
           this.$Message.success(res.msg);
           this.$router.back()

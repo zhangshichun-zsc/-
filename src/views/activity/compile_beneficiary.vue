@@ -127,6 +127,7 @@
                   :value="oneRole.setTime"
                   format="yyyy-MM-dd HH:mm"
                   placement="bottom-end"
+                  :editable="false"
                   placeholder="选择集合日期"
                   style="width: 300px"
                   @on-change="getDates"
@@ -604,8 +605,8 @@ export default {
     };
   },
   mounted() {
-    console.log(this.oneRole)
-  },
+
+},
   components: {selects,adress},
 
   computed: {},
@@ -938,7 +939,7 @@ export default {
     },
     save(){
       console.log(this.oneRole)
-      delete this.oneRole.fkDetailList
+      // delete this.oneRole.fkDetailList
       this.$emit("oneRole",this.oneRole)
     },
     changeEditorTrain(e){
