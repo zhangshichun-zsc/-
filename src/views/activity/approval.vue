@@ -521,7 +521,7 @@
               </ul>
             </div>
             <div class="lx-flex-center">
-              <Button @click="addBatch" class="font">新增批次</Button>
+              <Button @click="addPc" class="font">新增批次</Button>
             </div>
           </Col>
         </Row>
@@ -1104,7 +1104,6 @@ export default {
       let b = {
         userConfList: [],
         actResList: [],
-        actShowPic: "",
         workerIdList: [{}]
       };
       this.batch = b;
@@ -1118,26 +1117,32 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
+      console.log(this.pcNum)
+      console.log(this.batch)
       this.two = true;
       this.three = false;
       this.current = 1;
     },
     addBatch(){
-      this.pcNum = this.projectMsg.actInfoList.length
-      this.batch = this.projectMsg.actInfoList[this.projectMsg.actInfoList.length-1];
-      delete this.batch.startT
-      delete this.batch.endT
-      delete this.batch.releaseTime
-      for(let oi in this.batch.userConfList){
-        delete this.batch.userConfList[oi].enrollStarttime
-        delete this.batch.userConfList[oi].enrollEndtime
-        delete this.batch.userConfList[oi].outrollStarttime
-        delete this.batch.userConfList[oi].outrollEndtime
-        delete this.batch.userConfList[oi].setTime
-      }
-      this.two = true;
-      this.three = false;
-      this.current = 1;
+      // let p = this.projectMsg
+      // this.pcNum = p.actInfoList.length
+      // debugger
+      // let b = p.actInfoList[p.actInfoList.length-1]
+      // delete b.startT
+      // delete b.endT
+      // delete b.releaseTime
+      // for(let oi in b.userConfList){
+      //   delete b.userConfList[oi].enrollStarttime
+      //   delete b.userConfList[oi].enrollEndtime
+      //   delete b.userConfList[oi].outrollStarttime
+      //   delete b.userConfList[oi].outrollEndtime
+      //   delete b.userConfList[oi].setTime
+      // }
+      // this.two = true;
+      // this.three = false;
+      // this.current = 1;
+      // this.batch = b
+      console.log(this.projectMsg.actInfoList)
     },
 
     //提交
