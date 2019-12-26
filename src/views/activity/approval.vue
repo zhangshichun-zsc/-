@@ -1123,7 +1123,7 @@ export default {
       this.current = 1;
     },
     addBatch(){
-      this.pcNum += 1
+      this.pcNum = this.projectMsg.actInfoList.length
       this.batch = this.projectMsg.actInfoList[this.projectMsg.actInfoList.length-1];
       delete this.batch.startT
       delete this.batch.endT
