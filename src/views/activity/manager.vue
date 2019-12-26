@@ -6,6 +6,12 @@
       v-model="modal4">
       <img :src="showImg" alt="" class="showimg"/>
     </Modal>
+     <Modal
+      v-model="modal5">
+        <div>
+          
+        </div>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
       <div class="flex-between integral-body">
@@ -41,7 +47,7 @@
             </div>
           </div>
         </div>
-         <Button class="btn" @click="result" shape="circle" size='large' icon="ios-search">查询结果</Button>
+         <Button class="button-red" @click="result" >查询</Button>
       </div>
     </div>
     <div class="integral-table">
@@ -425,7 +431,7 @@ export default {
               on: {
                 click: () => {
                   this.modal4 = true
-                  this.showImg = params.row.activityQrCode
+                  this.showImg = params.row.memQrCode
                 }
               }
             })

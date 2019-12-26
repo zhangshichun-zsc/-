@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="flex-center-end">
-        <Button @click="querys" shape="circle" size='large' icon="ios-search" class="btn">查询结果</Button>
+        <Button @click="querys" class="button-red">查询</Button>
       </div>
     </div>
     <div class="integral-table">

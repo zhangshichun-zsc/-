@@ -335,7 +335,7 @@
                 <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb"/>
               </i-col>        
           </Row>
-          <Row class-name="row20" type="flex" justify="middle">
+          <Row class-name="row20" type="flex" justify="center">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>

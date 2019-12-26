@@ -831,7 +831,7 @@ export default {
         this.$Message.error("内容没有填写")
         return
       }
-      sendInfo({ids:this.arr,msg:this.msg,title:this.title,sysId:1}).then(res => {
+      sendInfo({ids:this.arr,msg:this.msg,title:this.title,sysId:this.$route.query.sysId}).then(res => {
         if(res.code == 200){
           this.modal1 = false
           this.$Message.success("发送成功")

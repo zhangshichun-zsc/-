@@ -26,7 +26,7 @@
           <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
-      <Button class="btn" @click="query" shape="circle" size='large' icon="ios-search">查询结果</Button>
+      <Button class="button-red" @click="query">查询</Button>
     </div>
     <div class="integral-table">
       <div class="table-header flex-between" style="display:flex">

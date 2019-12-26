@@ -68,7 +68,7 @@
               <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
-          <Button shape="circle" size='large' icon="ios-search" @click="querys" class="btn">搜索</Button>
+          <Button shape="circle" size='large' @click="querys" class="btn">搜索</Button>
         </div>
       </div>
       <div class="check">
@@ -340,7 +340,7 @@ export default {
         this.$Message.error("内容没有填写")
         return
       }
-      sendInfo({ids:this.arr,msg:this.msg,title:this.title,sysId:1}).then(res => {
+      sendInfo({ids:this.arr,msg:this.msg,title:this.title,sysId:this.$route.query.sysId}).then(res => {
         if(res.code == 200){
           this.modal1 = false
           this.$Message.success("发送成功")
