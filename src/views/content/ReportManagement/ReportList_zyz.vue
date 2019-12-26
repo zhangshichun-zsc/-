@@ -172,12 +172,12 @@ export default {
                     click: () => {
                       if (params.row.reportStatusText == "未处理") {
                         this.$router.push({
-                          name: "ReportDetails-Not_zyz",
+                          name: "ReportDetails-Not_hy",
                           query: { reportId: params.row.reportId, states: 2 }
                         }); //未处理
                       } else {
                         this.$router.push({
-                          name: "ReportDetails-Handled_zyz",
+                          name: "ReportDetails-Handled_hy",
                           query: { reportId: params.row.reportId, states: 2 }
                         }); //已处理
                       }

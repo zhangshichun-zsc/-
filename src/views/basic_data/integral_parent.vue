@@ -275,7 +275,6 @@ export default {
           } else if (e == 2) {
             this.$Message.info("操作成功");
           }
-          // this.getBasicsearch();
           this.modal1 = false;
         }
         console.log(res);

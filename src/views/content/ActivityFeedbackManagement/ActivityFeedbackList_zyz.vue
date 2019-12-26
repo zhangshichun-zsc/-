@@ -15,7 +15,7 @@
             />
           </p>
           <p>
-            <span>所属项目:</span>&nbsp;
+            <span>活动分类:</span>&nbsp;
             <Select
               style="width:6rem;"
               v-model="querys.categoryId"
@@ -136,7 +136,7 @@ export default {
           tooltip: true
         },
         {
-          title: "项目名称",
+          title: "活动分类",
           key: "categoryName",
           align: "center",
           width: 300
@@ -153,7 +153,7 @@ export default {
           width: 280,
           align: "center",
           render: (h, params) => {
-            return h("div", [h("p", formatDate(params.row.activityTimestamp))]);
+            return h("div", [h("p", params.row.activityTimestamp)]);
           }
         },
         {

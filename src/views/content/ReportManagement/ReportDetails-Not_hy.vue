@@ -12,132 +12,145 @@
         <table width="100%;">
           <tr>
             <td class="zt">举报理由</td>
-            <td class="zt">{{ReportData.reportDetail.reportReasonText}}</td>
+            <td class="zt">{{reportDetail.reportReasonText}}</td>
           </tr>
           <tr>
             <td class="zt">举报人</td>
-            <td class="zt">{{ReportData.reportDetail.reportUserName}}</td>
+            <td class="zt">{{reportDetail.reportUserName}}</td>
           </tr>
           <tr>
             <td class="zt">举报时间</td>
-            <td class="zt">{{ReportData.reportDetail.reportTimestamp}}</td>
+            <td class="zt">{{reportDetail.reportTimestamp}}</td>
           </tr>
           <tr>
             <td class="zt">举报对象</td>
-            <td class="zt">{{ReportData.reportDetail.activityName}}</td>
+            <td class="zt">{{reportDetail.activityName}}</td>
           </tr>
           <tr>
             <td class="zt">举报状态</td>
-            <td class="zt">{{ReportData.reportDetail.reportStatusText}}</td>
+            <td class="zt">{{reportDetail.reportStatusText}}</td>
           </tr>
           <tr>
             <td class="zt">举报内容</td>
-            <td class="zt">{{ReportData.reportDetail.reportContent}}</td>
+            <td class="zt">{{reportDetail.reportContent}}</td>
           </tr>
           <tr>
             <td class="zt" style="position:relative">
               <div style="position:absolute;right:27px;">举报图片</div>
             </td>
             <td class="tp">
-              <img class="oneTp" v-for='(item,index) in ReportData.picList' :key="index" :src="item.picPath" />
+              <img class="oneTp" v-for="(item,index) in picList" :key="index" :src="item.picPath" />
             </td>
           </tr>
         </table>
         <table width="100%;">
           <tr>
             <td class="zt">处理备注</td>
-            <td><Input class="zt" size="small" style="width: 8rem"  v-model="ReportData.answerContent" /></td>
+            <td>
+              <Input
+                class="zt"
+                size="small"
+                style="width: 8rem"
+                v-model="reportDetail.answerContent"
+              />
+            </td>
           </tr>
         </table>
-        <div class="but"  >
-          <Button size="small" type="success" v-for="(item,index) in list" :key="index" @click="btns(item.dicId)">{{item.dicName}}</Button>
+        <div class="but">
+          <Button
+            size="small"
+            type="success"
+            v-for="(item,index) in list"
+            :key="index"
+            @click="btns(item.dicId)"
+          >{{item.dicName}}</Button>
           <!-- <Button size="small" type="error">恶意举报</Button>
-          <Button size="small" type="error">无效报举</Button> -->
+          <Button size="small" type="error">无效报举</Button>-->
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from '@/request/datatime'
-import {ReportDel,Reporttext,Reportdeles} from '@/request/api'
+import { formatDate } from "@/request/datatime";
+import { ReportDel, Reporttext, Reportdeles } from "@/request/api";
 export default {
   data() {
     return {
       navigation1: {
-        head: '举报详情-未处理(会员)'
+        head: "举报详情-未处理(会员)"
       },
       ReportData: {},
-      text:'',
-      list:[],
-      params:{},
-      reportId:this.$route.query.reportId,
-      state:this.$route.query.state
-    }
+      text: "",
+      list: [],
+      params: {},
+      reportId: this.$route.query.reportId,
+      state: this.$route.query.states,
+
+      reportDetail: {},
+      picList: {}
+    };
   },
-  mounted(){
-
-    if(this.state==1){
-      this.navigation1.head='举报详情-未处理(会员)'
-
-    }else if(this.state==2){
-       this.navigation1.head='举报详情-未处理(志愿者)'
+  mounted() {
+    if (this.state == 1) {
+      this.navigation1.head = "举报详情-未处理(会员)";
+    } else if (this.state == 2) {
+      this.navigation1.head = "举报详情-未处理(志愿者)";
     }
-    this.getReportDel()
-     this.getReporttext()
-
+    this.getReportDel();
+    this.getReporttext();
   },
-  methods:{
+  methods: {
     // 详情
-    getReportDel(){
+    getReportDel() {
       ReportDel({
-        reportId:this.reportId
-      }).then(res=>{
-        if(res.code==200){
-          this.ReportData=res.data
-          this.ReportData.reportDetail.reportTimestamp = formatDate(
-            res.data.reportDetail.reportTimestamp
-          )
+        reportId: this.reportId
+      }).then(res => {
+        if (res.code == 200) {
+          this.picList = res.data.picList;
+          this.reportDetail = res.data.reportDetail;
+          this.reportDetail.reportTimestamp = formatDate(
+            this.reportDetail.reportTimestamp
+          );
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
-     //批量操作
-    getReportdeles(id){
+    //批量操作
+    getReportdeles(id) {
       let params = {
-        reportIds:this.reportId,
-        dealUserId:this.$store.state.userId,
-        reportDealResult:id,
-        type:1,
-        remark:this.ReportData.answerContent,
-      }
-      this.params =this.util.remove(params)
-      Reportdeles(params).then(res=>{
-        if(res.code==200){
-          this.$Message.info('操作成功');
-          this.$router.back()
+        reportIds: this.reportId,
+        dealUserId: this.$store.state.userId,
+        reportDealResult: id,
+        type: 1,
+        remark: this.reportDetail.answerContent
+      };
+      this.params = this.util.remove(params);
+      Reportdeles(params).then(res => {
+        if (res.code == 200) {
+          this.$Message.info("操作成功");
+          this.$router.back();
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
     //按钮
-    btns(id){
-      this.getReportdeles(id)
+    btns(id) {
+      this.getReportdeles(id);
     },
     //文本
-    getReporttext(){
-      Reporttext({
-      }).then(res=>{
-        if(res.code==200){
-          this.list=res.data
+    getReporttext() {
+      Reporttext({}).then(res => {
+        if (res.code == 200) {
+          this.list = res.data;
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     }
-  },
-}
+  }
+};
 </script>
 <style scoped>
 html,
@@ -149,7 +162,7 @@ body {
   min-height: 875px;
   font-size: 18px;
 }
-.zt{
+.zt {
   font-size: 16px;
 }
 
@@ -194,11 +207,11 @@ body {
 .but button {
   margin-right: 1rem;
 }
-.tp{
+.tp {
   display: flex;
   align-items: center;
 }
-.oneTp{
+.oneTp {
   width: 200px;
   height: 200px;
   padding: 5px;

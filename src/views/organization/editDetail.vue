@@ -15,11 +15,11 @@
     </div>
     <div class='box box_' v-if="this.$route.query.head !== 'parent'">
       <div class='item-left'>志愿群体</div>
-      <div class='item-right'>学生</div>
+      <div class='item-right'>{{list.userTypeName}}</div>
     </div>
     <div class='box box_' v-if="this.$route.query.head !== 'parent'">
       <div class='item-left'>服务意向</div>
-      <div class='item-right'>扶贫</div>
+      <div class='item-right'>{{list.servicePointName}}</div>
     </div>
     <div class='box box_'>
       <div class='item-left'>城市</div>
@@ -27,7 +27,7 @@
     </div>
     <div class='box box_' v-if="this.$route.query.head !== 'parent'">
       <div class='item-left'>成立时间</div>
-      <div class='item-right'>{{list.createAt}}
+      <div class='item-right'>{{list.businessDays}}
       </div>
     </div>
     <div class='box box_' v-if="this.$route.query.head !== 'parent'">
@@ -94,7 +94,6 @@ export default {
         }).then(res => {
           if (res.code == 200) {
             this.list = res.data.data
-            console.log(res.data.data)
             this.btnFlag = res.data.flag
           }
         })

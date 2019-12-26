@@ -117,7 +117,7 @@
 
 <script>
 import { upload } from "../../request/http";
-import { orgimg } from "@/request/http";
+
 import {
   Agreementadd,
   AgreementNewList,
@@ -128,6 +128,7 @@ import {
   Offactivities
 } from "@/request/api";
 import { date1 } from "@/request/datatime";
+import { newAgreement,Agreementtype} from '@/request/api'
 export default {
   data() {
     return {
@@ -188,7 +189,7 @@ export default {
       sysId: 1,
       data1: "",
 
-      orgimg: "",
+
       Enclosure: "",
 
       texturl: null,
@@ -200,7 +201,8 @@ export default {
       model13: "",
       loading1: false,
       options1: [],
-      list: ["ab", "ac"]
+      list: ["ab", "ac"],
+      orgType:1,
     };
   },
 
@@ -208,18 +210,43 @@ export default {
 
   computed: {},
   mounted() {
-    this.getAgreementNewList();
-    this.getAgreementList();
-    if (this.agreementId != null) {
-      this.navigation1.head = "编辑协议";
-      this.getAgreementdet();
-    }
-    this.orgimg = orgimg;
+    this.getAgreementtype()
+    this.getnewAgreement()
+    // this.getAgreementNewList();
+    // this.getAgreementList();
+    // if (this.agreementId != null) {
+    //   this.navigation1.head = "编辑协议";
+    //   this.getAgreementdet();
+    // }
+
   },
 
   created() {},
 
   methods: {
+
+    // newAgreement,Agreementtype
+    //甲方名称
+    getnewAgreement(){
+      newAgreement({
+        orgType:this.orgType,
+      }).then(res=>{
+        console.log(res)
+      })
+    },
+
+    //活动类型
+    getAgreementtype(){
+      Agreementtype({
+        typeFlag:8,
+      }).then(res=>{
+        console.log(res)
+      })
+    },
+
+
+
+
     // // -获取官方活动分页
     // getOffactivities() {
     //   Offactivities({

@@ -431,7 +431,7 @@ export default {
         {
           title: "反馈人",
           key: "userName",
-          width: "100px",
+
           ellipsis: true,
           tooltip: true,
           align: "center",
@@ -738,8 +738,8 @@ export default {
     height: 100px;
   }
   .img {
-    width: 50px;
-    height: 50px;
+    width: 10rem;
+    height: 10rem;
     margin-right: 10px;
   }
 }
