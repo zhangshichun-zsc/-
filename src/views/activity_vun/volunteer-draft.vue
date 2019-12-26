@@ -19,56 +19,8 @@
           :data="datax"
           @on-selection-change="handleSelectionChange"
         ></Table>
-          <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
-            <div class="popup">
-              <p class="popup-head">
-                <span>目前导出字段顺序</span>
-                <span class="popup-head-tit">拖拽调整列显示顺序</span>
-              </p>
-              <div class="popup-content">
-                <p>
-                  <span>序号</span>
-                  <span>姓名</span>
-                  <span>性别</span>
-                  <span>手机号码</span>
-                  <span>身份证号</span>
-                  <span>年龄</span>
-                  <span>孩子姓名</span>
-                </p>
-                <p>
-                  <span>孩子性别</span>
-                  <span>孩子年龄</span>
-                  <span>签名（孩子）</span>
-                  <span>签名(家长)</span>
-                  <span>障碍类型</span>
-                </p>
-              </div>
-              <div class="bft">
-                <p>备选字段</p>
-                <div class="bft-tab">
-                  <CheckboxGroup v-model="fruit">
-                    <Checkbox label="香蕉">序号</Checkbox>
-                    <Checkbox label="苹果">姓名</Checkbox>
-                    <Checkbox label="西瓜">障碍类型</Checkbox>
-                  </CheckboxGroup>
-                </div>
-              </div>
-            </div>
-          </Modal>
 
       </div>
-      <Modal v-model="addstate" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-          <span>下架确定</span>
-        </p>
-        <div style="text-align:center">
-          <p>是否确认下架，下架后无法上架</p>
-        </div>
-        <div slot="footer">
-          <Button type="error" @click="modalCancel">取消</Button>
-          <Button type="success" @click="modalOkdel">确定</Button>
-        </div>
-      </Modal>
       <Page
         :total="dataCount"
         show-elevator
@@ -200,6 +152,10 @@ export default {
           this.datax = res.data.list;
         }
       });
+    },
+    changepages(e){
+      this.page = e
+      this.getactiveManager()
     }
   }
 };

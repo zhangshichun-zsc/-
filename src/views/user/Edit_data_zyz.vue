@@ -27,7 +27,6 @@
             :key="item"
             >{{ item }}</span
           >
-
         </div>
         <div style="flex:2">
           <span class="itemizes">标签 </span>
@@ -545,7 +544,9 @@ export default {
       this.stationFormFlag = false;
       let _basicInfo = this.parameOBJ.basicInfo.info;
       let _volInfo = this.parameOBJ.volInfo.info;
-
+      let birthDay = this.util.formatDateYMD(
+        new Date(_basicInfo.birthDay).getTime()
+      );
       /**
          * actTypeLike
 
@@ -564,7 +565,7 @@ voluSpeciality
           cityId: this.city,
           provinceId: this.province,
           sex: _basicInfo.sex,
-          birthDay: _basicInfo.birthDay,
+          birthDay: birthDay,
           idCard: _basicInfo.idCard,
           idcardType: _basicInfo.idcardType,
           displayName: _basicInfo.displayName

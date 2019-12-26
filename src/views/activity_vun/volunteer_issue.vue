@@ -330,15 +330,12 @@
             </Row>
           </Row>
           <Row class-name="row20">
-            <Button @click="add = true" v-if='!add'>添加</Button>
-            <Row v-if='add'>
-              <i-col span='4'>受益群体人数</i-col>
-              <i-col span='4' push='2'>
-                <Input v-model="args.memberGroupNum" placeholder="输入收益群体人数" :disabled="isDisb"/>
-              </i-col>
-            </Row>
+              <i-col span='3'>受益群体人数</i-col>
+              <i-col span='5' push='2'>
+                <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb"/>
+              </i-col>        
           </Row>
-          <Row class-name="row20">
+          <Row class-name="row20" type="flex" justify="middle">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -375,7 +372,6 @@ export default {
         }
       },
       rule: false,
-      add:false,
       navigation1: {
           head: "志愿者活动发布(志愿者)"
       },

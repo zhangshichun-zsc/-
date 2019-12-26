@@ -1323,7 +1323,9 @@ export default {
       let _volInfo = this.parameOBJ.volInfo.info;
       let _memInfo = this.parameOBJ.memInfo.vipotherInfo;
       let _userInfo = this.parameOBJ.memInfo.userInfo;
+      let birthDay = this.util.formatDateYMD(new Date(_basicInfo.birthDay).getTime()) 
 
+  
       let obj = {
         userId: this.$route.query.userId,
         basicInfo: {
@@ -1333,7 +1335,7 @@ export default {
           cityId: this.city,
           provinceId: this.province,
           sex: _basicInfo.sex,
-          birthDay: _basicInfo.birthDay,
+          birthDay: birthDay,
           idCard: _basicInfo.idCard,
           idcardType: _basicInfo.idcardType,
           displayName: _basicInfo.displayName
