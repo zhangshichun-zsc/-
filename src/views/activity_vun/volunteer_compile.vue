@@ -4,7 +4,6 @@
     <Modal v-model="modal" :title="titles[state-1]" width='700'>
       <div class="wap">
         <Row v-if='state===1'>
-          <Row class-name="row10"><span>新增报名项</span></Row>
           <Row class-name="row10">
             <i-col span='4'>常用报名项</i-col>
             <i-col span='18' push='2'>
@@ -332,9 +331,9 @@ export default {
       this.adr = !this.adr
     },
     changeAudit(e){
-      if (~~this.args.zmType === 2 && ~~this.good.length !== 0) {
+      if (~~this.args.zmType === 2 && this.good.length !== 0) {
         this.$Message.warning('您已设置优先条件，无法再次设置为报名需审核')
-        this.args.isAudit = 2
+        this.$set(this.args,"isAudit",2)
         return
       }
       this.args.isAudit = e
