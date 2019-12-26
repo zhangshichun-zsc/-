@@ -373,7 +373,7 @@ export default {
     pend(){
       this.$router.push({
         name: "pending",
-        query: { activityId: this.$route.query.acitvityId, activityName:this.activityName}
+        query: { activityId: this.$route.query.acitvityId, activityName:this.activityName,sysId:this.$route.query.sysId}
       })
     },
     querys(){

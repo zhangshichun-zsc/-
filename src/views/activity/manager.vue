@@ -6,11 +6,11 @@
       v-model="modal4">
       <img :src="showImg" alt="" class="showimg"/>
     </Modal>
-     <Modal
-      v-model="modal5">
-        <div>
-          
-        </div>
+    <Modal v-model="modal5" title="取消理由"  @on-cancel='cancel'>
+      <i-input placeholder="请输入取消理由" v-model="text" type="textarea" :row='4'/>
+      <div slot="footer">
+        <Button type="error" size="large" @click="modalOk">确定</Button>
+      </div>
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
@@ -232,7 +232,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         path: "profile",
-                        query: { acitvityId: params.row.acitvityId,activityName: params.row.activityName }
+                        query: { acitvityId: params.row.acitvityId,activityName: params.row.activityName,sysId:1 }
                       });
                     }
                   }
@@ -295,7 +295,6 @@ export default {
                         {
                           nativeOn: {
                             click: name => {
-
                               if (signup == "关闭报名") {
                                 this.types = 1;
                                 this.getactiveclose(params.row.acitvityId);
@@ -555,6 +554,7 @@ export default {
         channel: 2
       }).then(res => {
         if (res.code == 200) {
+          this.modal5 = false
           this.getactiveManager()
           this.$Message.info("取消成功");
         }else{
@@ -616,7 +616,6 @@ export default {
     },
     cancel() {
       this.modal5 = false;
-      this.$Message.info("已取消操作");
     },
 
     //取消

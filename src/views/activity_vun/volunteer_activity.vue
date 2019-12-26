@@ -232,7 +232,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "profile",
-                        query: { acitvityId: params.row.activityId,activityName: params.row.name }
+                        query: { acitvityId: params.row.activityId,activityName: params.row.name,sysId:2 }
                       });
                     }
                   }
