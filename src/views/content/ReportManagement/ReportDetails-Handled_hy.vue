@@ -79,7 +79,7 @@ export default {
         head: "举报详情-已处理(会员)"
       },
       ReportData: {},
-      state:this.$route.query.state,
+      state:this.$route.query.states,
       reportId:this.$route.query.reportId,
        picList:[]
     };

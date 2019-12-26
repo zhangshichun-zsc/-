@@ -142,8 +142,13 @@ export const Activerulepage = p => get('/activity-manage/get-activity-rule-page'
 // 官方活动分类管理
 // 障碍类型
 export const Basicsearch = p => posts('/volunteer-manager/queryUserBasicData', p)  //查询
+
 export const Basicbatch = p => postdel('/volunteer-manager/updateUserBasicData', p)  //操作
 
+
+export const newAgreement = p => get('/org/queryOrgForAgreement', p) //新建协议管理--甲方乙方
+
+export const Agreementtype = p => get('/agreement-manage/queryDicByTypeFlagForAgreement', p) //新建协议管理--官方活动
 
 export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p) //协议管理--协议分页
 
