@@ -555,12 +555,12 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.modal5 = false
+          this.text = ''
           this.getactiveManager()
           this.$Message.info("取消成功");
         }else{
           this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
     //关闭
@@ -576,7 +576,6 @@ export default {
         }else{
           this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
     // 设置模板
@@ -590,7 +589,6 @@ export default {
         }else{
           this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
     // 活动下架
@@ -606,7 +604,6 @@ export default {
         }else{
           this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
 
