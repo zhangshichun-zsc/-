@@ -285,7 +285,7 @@ export default {
                           nativeOn: {
                             click: name => {
                               this.modal5 = true;
-                              this.activityId = params.row.acitvityId;
+                              this.activityId = params.row.activityId;
                             }
                           }
                         },
@@ -299,10 +299,10 @@ export default {
 
                               if (signup == "关闭报名") {
                                 this.types = 1;
-                                this.getactiveclose(params.row.acitvityId);
+                                this.getactiveclose(params.row.activityId);
                               } else {
                                 this.types = 2;
-                                this.getactiveclose(params.row.acitvityId);
+                                this.getactiveclose(params.row.activityId);
                               }
                             }
                           }
@@ -437,6 +437,8 @@ export default {
         channel: 2
       }).then(res => {
         if (res.code == 200) {
+          this.modal5 = false
+          this.text = ''
           this.getactiveManager()
           this.$Message.info("取消成功");
         }else{
