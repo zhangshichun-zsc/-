@@ -83,7 +83,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动预算</span>
-                <Input v-model="projectMsg.budget" placeholder="请输入活动预算金额" style="width: 300px"></Input>
+                <Input v-model="projectMsg.budget" type="number" placeholder="请输入活动预算金额" style="width: 300px"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">有效期限</span>
@@ -413,7 +413,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动预算</span>
-                <Input v-model="projectMsg.budget" placeholder="请输入活动预算金额" style="width: 300px"></Input>
+                <Input v-model="projectMsg.budget" type="number" placeholder="请输入活动预算金额" style="width: 300px"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">有效期限</span>
