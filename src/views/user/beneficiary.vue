@@ -72,7 +72,7 @@
                 <p style="font-size: 12px;">内容上限不能超过<span class="red">500</span>字，当前已输入<span class="red">3</span>字，将作为<span class="red">1</span>条发送</p>
               </FormItem>
               <FormItem label="发送统计：" prop="tag">
-                <p >
+                <p>
                   <span>发送条数：</span>
                   <span style="color: red;">20</span>
                   <span>条</span>
@@ -90,7 +90,7 @@
             </DropdownMenu> -->
           </Dropdown>
           <!--群发站内信-->
-          <Modal v-model="modal2" title="群发站内信" class='QRcodemodal'    :mask-closable="false">
+          <Modal v-model="modal2" title="群发站内信" class='QRcodemodal' :mask-closable="false">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
               <FormItem label="发送对象：" prop="tag">
                 <p class="pitchOn">
@@ -109,21 +109,15 @@
             </Form>
 
             <div slot="footer">
-              <Button
-                type="error"
-                style="font-size:14px"
-                size="large"
-                @click="onStation"
-                >确定</Button
-              >
+              <Button type="error" style="font-size:14px" size="large" @click="onStation">确定</Button>
             </div>
           </Modal>
           <!-- <Dropdown @on-click='isALL'> -->
-            <Button style="margin-left:10px;" class="btns"  @click="ismodal2">
-              群发站内信
-             
-            </Button>
-            <!-- <DropdownMenu slot="list">
+          <Button style="margin-left:10px;" class="btns" @click="ismodal2">
+            群发站内信
+
+          </Button>
+          <!-- <DropdownMenu slot="list">
               <DropdownItem name="ON" ref="ON" :selected="Sele2.ON">选中用户</DropdownItem>
               <DropdownItem name="ALL" :selected="Sele2.ALL"> 全部用户</DropdownItem>
             </DropdownMenu>
@@ -270,7 +264,7 @@
             </ButtonGroup>
           </Modal>
           <Dropdown>
-            <Button style="margin-left:10px;" class="btns"   disabled @click="modal3 = true">
+            <Button style="margin-left:10px;" class="btns" disabled @click="modal3 = true">
               微信推送
               <Icon type="md-arrow-dropdown"></Icon>
             </Button>
@@ -285,7 +279,7 @@
               <Checkbox v-for="item in labelList_c" :key='item.labelId' :label="item.labelId">{{item.labelName}}</Checkbox>
             </CheckboxGroup>
           </Modal>
-          <Button style="margin-left:10px;" class="btns"   disabled @click="onLabel">
+          <Button style="margin-left:10px;" class="btns" disabled @click="onLabel">
             设置标签
           </Button>
 
@@ -301,14 +295,14 @@
           <!-- </Dropdown> -->
           <!--导出数据-->
           <Dropdown>
-            <Button style="margin-left:10px;" class="btns"   @click="onExport">
+            <Button style="margin-left:10px;" class="btns" @click="onExport">
               导出数据
             </Button>
           </Dropdown>
         </div>
         <div>
           <!--修改vip时间-->
-          <Modal v-model="modal5" title="修改vip时间">
+          <Modal v-model="modal5" title="修改vip时间" @on-cancel='cancelModel5'>
             <Form ref="formVip" :model="formVip" :rules="formVip" :label-width="180">
               <FormItem label="调整到期时间：" prop="AdjustedExpirationTime">
                 <RadioGroup v-model="formVip.IncreaseDecrease" vertical>
@@ -341,7 +335,7 @@
           </Modal>
 
           <Dropdown @on-click='isALL2'>
-            <Button style="margin-left:10px;"  class="btns"  @click="isModal5">
+            <Button style="margin-left:10px;" class="btns" @click="isModal5">
               修改vip时间
             </Button>
             <!-- <DropdownMenu slot="list" v-model="letters_modal5">
@@ -351,11 +345,11 @@
           </Dropdown>
           <!--审核vip时间-->
           <Dropdown>
-            <Button style="margin-left:10px;" class="btns"   @click="jump3()">
+            <Button style="margin-left:10px;" class="btns" @click="jump3()">
               审核vip时间
             </Button>
           </Dropdown>
-          <Button style="margin-left:10px;"  class="integral-rig btns" @click="setup">会费设置</Button>
+          <Button style="margin-left:10px;" class="integral-rig btns" @click="setup">会费设置</Button>
         </div>
         <div>
           <Select v-model="size" style="width:120px; margin-left:10px;" placeholder="显示条数" class="space">
@@ -439,7 +433,7 @@
         <Page :total="totalSize" show-elevator show-total size='small' @on-change='setPage' />
       </div>
     </div>
-    <Modal title="二维码" v-model="modal4" class='QRcodemodal' style='text-align: center;' >
+    <Modal title="二维码" v-model="modal4" class='QRcodemodal' style='text-align: center;'>
       <div class='bg'>
         <img :src="QRCode" alt="二维码">
       </div>
@@ -900,8 +894,8 @@ export default {
     },
     ALLINFO(newVlaue, oldValue) {
       //  全选 and 全不选
-      console.log(newVlaue);
-      
+      console.log(newVlaue)
+
       if (newVlaue === true) {
         this.$refs.volunteerSel.selectAll(true)
         let arr = this.data.map(item => {
@@ -955,7 +949,7 @@ export default {
         ...time,
         ...paramsObj
       })
-    
+
       Public.getUserList(obj).then(res => {
         if (res.code === 200) {
           this.data = res.data.list
@@ -1010,11 +1004,6 @@ export default {
       Public.optTime({ ...obj }).then(res => {
         if (res.code === 200) {
           this.$Message.info('修改vip时间成功')
-          this.formVip= {
-            IncreaseDecrease: '0', 
-            remark: '', 
-            adjustValue: 1 
-          }
         } else {
           this.$Message.error({
             background: true,
@@ -1022,6 +1011,11 @@ export default {
           })
         }
         this.modal5 = false
+        this.formVip = {
+          IncreaseDecrease: '0',
+          remark: '',
+          adjustValue: 1
+        }
       })
     },
     // 站内信
@@ -1031,10 +1025,10 @@ export default {
         ...params
       }).then(res => {
         if (res.code === 200) {
-           this.modal2 = false
+          this.modal2 = false
           this.formValidate2 = {
-            msg:'',
-            title:''
+            msg: '',
+            title: ''
           }
           this.$Message.info('站内信发送成功~')
         } else {
@@ -1043,12 +1037,11 @@ export default {
           this.$Message.error({
             background: true,
             content: str
-          });
+          })
         }
-        setTimeout(()=> {
+        setTimeout(() => {
           this.stationFormFlag = true
-        },500)
-       
+        }, 500)
       })
     },
     // 用户状态的变更
@@ -1076,13 +1069,13 @@ export default {
     },
     // 显示站内信模态框
     ismodal2() {
-    if (this.ALLLIST.length > 0) {
-        this.modal2 = true;
+      if (this.ALLLIST.length > 0) {
+        this.modal2 = true
       } else {
         this.$Message.error({
           background: true,
-          content: "请选择要修改的人员"
-        });
+          content: '请选择要修改的人员'
+        })
       }
       // if (this.letters) {
       //   if (this.letters === 'ON') {
@@ -1096,7 +1089,7 @@ export default {
       //     }
       //   } else {
       //     this.ALLINFO = true
-          
+
       //     this.modal2 = true
       //   }
       // } else {
@@ -1109,22 +1102,19 @@ export default {
 
     //  修改vip 时间弹窗
     isModal5() {
-         if (this.ALLLIST.length > 0) {
-            this.modal5 = true
-          } else {           
-            this.$Message.error({
-              background: true,
-              content: '请选择一条记录'
-            })
-          }
-  
-
-  
+      if (this.ALLLIST.length > 0) {
+        this.modal5 = true
+      } else {
+        this.$Message.error({
+          background: true,
+          content: '请选择一条记录'
+        })
+      }
 
       //   if (this.letters_modal5 === 'ON') {
       //     if (this.ALLLIST.length > 0) {
       //       this.modal5 = true
-      //     } else {           
+      //     } else {
       //       this.$Message.error({
       //         background: true,
       //         content: '请选择一条记录'
@@ -1159,9 +1149,9 @@ export default {
     // 关闭 二维码
     modalCancel() {
       this.modal4 = false
-      setTimeout(()=>{
-        this.QRCode = "";
-      },500)
+      setTimeout(() => {
+        this.QRCode = ''
+      }, 500)
     },
     // 设置标签按钮
     onLabel() {
@@ -1230,20 +1220,16 @@ export default {
     },
     // 发送站内信
     onStation() {
-
-        if(!this.stationFormFlag) return
-       this.$refs.formValidate2.validate(valid => {
+      if (!this.stationFormFlag) return
+      this.$refs.formValidate2.validate(valid => {
         if (valid) {
-          this.stationFormFlag = false;
-           let ids = this.ALLLIST.toString()
-            this.setsend({ ids, ...this.formValidate2 })
-        } else {          
-          this.$Message.error("必填项未填!");
+          this.stationFormFlag = false
+          let ids = this.ALLLIST.toString()
+          this.setsend({ ids, ...this.formValidate2 })
+        } else {
+          this.$Message.error('必填项未填!')
         }
-      });
-
-  
-     
+      })
     },
     // 导出用户数据
     exportFn(params) {
@@ -1303,15 +1289,15 @@ export default {
       let { star, end } = timeObj
       if (!star || !end) return { star: star, end: end }
       if (star === end) {
-        let time1 = this.util.formatDate_time(star) +" 00:00:00"
+        let time1 = this.util.formatDate_time(star) + ' 00:00:00'
         let time2 = this.util.formatDate_time(end).split(' ')[0] + ' 23:59:59'
-      
+
         return {
           star: new Date(time1).getTime(),
           end: new Date(time2).getTime()
         }
       } else {
-        let time1 = this.util.formatDate_time(star) +" 00:00:00"
+        let time1 = this.util.formatDate_time(star) + ' 00:00:00'
         let time2 = this.util.formatDate_time(end).split(' ')[0] + ' 23:59:59'
 
         return {
@@ -1322,7 +1308,6 @@ export default {
     },
 
     setALL() {
-      console.log(123)
       console.log(this.ALLINFO)
     },
     // 选中页码
@@ -1335,6 +1320,11 @@ export default {
     cancelModel5() {
       console.log('关闭模态框')
       this.modal5 = false
+      this.formVip = {
+        IncreaseDecrease: '0',
+        remark: '',
+        adjustValue: 1
+      }
     },
     ok() {
       this.$Message.info('Clicked ok')
@@ -1366,8 +1356,8 @@ export default {
 }
 .integral-header .integral-body {
   padding: 20px;
-  background: #FFFFFF;
-  box-shadow: 0 3px 4px 0 rgba(188,188,188,0.21);
+  background: #ffffff;
+  box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
 }
 .integral-header .integral-body .flex-center-start .inpt {
@@ -1429,7 +1419,7 @@ export default {
 .pitchOn {
   font-size: 16px;
 }
-.btns{
+.btns {
   font-size: 15px;
 }
 </style>

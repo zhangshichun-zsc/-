@@ -152,13 +152,31 @@ export default {
               "span",
               {
                 style: {
-                  color: this.navigation1.name === "volunteer" ? "" : "#FF565A",
+                  color: "#FF565A",
                   cursor: "pointer"
                 },
                 on: {
                   click: () => {
                     let name = this.navigation1.name;
                     if (name === "volunteer") {
+                      let address = params.row;
+                      localStorage.setItem(
+                        "city",
+                        address.provinceName +
+                          address.cityName +
+                          address.districtName
+                      );
+                      setTimeout(res => {
+                        this.$router.push({
+                          path: "/organization/editDetail",
+                          query: {
+                            orgId: params.row.orgId,
+                            status: params.row.status,
+                            auditId: params.row.auditId,
+                            head: this.navigation1.name
+                          }
+                        });
+                      });
                       return;
                     } else {
                       let address = params.row;
