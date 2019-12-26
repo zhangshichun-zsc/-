@@ -286,6 +286,10 @@
                 </div>
               </li>
               <li class="first-li">
+                <span class="first-span">详细地址</span>
+                <Input v-model="batch.addressSup" placeholder="请输入详细地址"></Input>
+              </li>
+              <li class="first-li">
                 <span class="first-span">出行方式</span>
                 <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
                   <Radio label="自驾">自驾</Radio>
