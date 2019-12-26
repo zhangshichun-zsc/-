@@ -140,6 +140,10 @@
               <Button @click="getAdr()" lang class="font">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</Button>
             </li>
             <li class="first-li">
+              <span class="first-span">详细地址</span>
+              <Input v-model="oneRole.addressSup" placeholder="请输入详细地址"></Input>
+            </li>
+            <li class="first-li">
               <span class="first-span">模式</span>
               <RadioGroup v-model="oneRole.zmType" class="font">
                 <Radio label="1" >先到先得</Radio>

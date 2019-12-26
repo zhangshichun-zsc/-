@@ -286,6 +286,10 @@
                 </div>
               </li>
               <li class="first-li">
+                <span class="first-span">详细地址</span>
+                <Input v-model="batch.addressSup" placeholder="请输入详细地址"></Input>
+              </li>
+              <li class="first-li">
                 <span class="first-span">出行方式</span>
                 <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
                   <Radio label="自驾">自驾</Radio>
@@ -1119,7 +1123,7 @@ export default {
       this.current = 1;
     },
     addBatch(){
-      this.pcNum += 1
+      this.pcNum = this.projectMsg.actInfoList.length
       this.batch = this.projectMsg.actInfoList[this.projectMsg.actInfoList.length-1];
       delete this.batch.startT
       delete this.batch.endT
