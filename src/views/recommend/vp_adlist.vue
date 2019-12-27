@@ -19,6 +19,7 @@
       <Modal
       v-model="modal1">
       <img :src="showImg" alt="" class="showimg"/>
+      <span slot="footer"></span>
     </Modal>
       <div class="flex-center-start integral-body cnm cnmd">
         <div class="flex-center-start">

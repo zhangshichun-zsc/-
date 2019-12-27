@@ -101,7 +101,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "活动人员明细(会员)"
+        head: "活动人员明细"
       },
       actUserId:1,
       msg:{},

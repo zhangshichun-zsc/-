@@ -4,6 +4,7 @@
     <Modal
       v-model="modal1">
       <img :src="showImg" alt="" class="showimg"/>
+      <span slot="footer"></span>
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="content">

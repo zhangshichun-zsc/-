@@ -112,39 +112,47 @@
 
             <FormItem label="附件:">
               <div class="content">
-                <div class="">
+                <div>
                   <div class="fil_txt" v-if="formInline.nameA != null">
-                    <p>{{ formInline.nameA }}</p>
-                    <Progress :percent="numA" style="width: 10rem" />
-                    <Icon
-                      type="ios-trash"
-                      class="cancel"
-                      size="20"
-                      color="#FF565A"
-                      @click="canceltxt(formInline.agPicA, formInline.nameA)"
-                    />
+                    <div class="fil-itme">
+                      <p>{{ formInline.nameA }}</p>
+                      <Icon
+                        type="ios-trash"
+                        class="cancel"
+                        size="20"
+                        color="#FF565A"
+                        @click="canceltxt(formInline.agPicA, formInline.nameA)"
+                      />
+                    </div>
+                    <!--    :hide-info="true" -->
+                    <Progress stroke-color="#FF565A" :percent="numA" />
                   </div>
                   <div class="fil_txt" v-if="formInline.nameB != null">
-                    <p>{{ formInline.nameB }}</p>
-                    <Progress :percent="numB" style="width: 10rem" />
-                    <Icon
-                      type="ios-trash"
-                      class="cancel"
-                      size="24"
-                      color="#FF565A"
-                      @click="canceltxt(formInline.agPicB, formInline.nameB)"
-                    />
+                    <div class="fil-itme">
+                      <p>{{ formInline.nameB }}</p>
+                      <Icon
+                        type="ios-trash"
+                        class="cancel"
+                        size="24"
+                        color="#FF565A"
+                        @click="canceltxt(formInline.agPicB, formInline.nameB)"
+                      />
+                    </div>
+                    <Progress stroke-color="#FF565A" :percent="numB" />
                   </div>
                   <div class="fil_txt" v-if="formInline.nameC != null">
-                    <p>{{ formInline.nameC }}</p>
-                    <Progress :percent="numC" style="width: 10rem" />
-                    <Icon
-                      type="ios-trash"
-                      class="cancel"
-                      size="24"
-                      color="#FF565A"
-                      @click="canceltxt(formInline.agPicC, formInline.nameC)"
-                    />
+                    <div class="fil-itme">
+                      <p>{{ formInline.nameC }}</p>
+
+                      <Icon
+                        type="ios-trash"
+                        class="cancel"
+                        size="24"
+                        color="#FF565A"
+                        @click="canceltxt(formInline.agPicC, formInline.nameC)"
+                      />
+                    </div>
+                    <Progress stroke-color="#FF565A" :percent="numC" />
                   </div>
                 </div>
                 <div class="middle">
@@ -297,8 +305,7 @@ export default {
     //获取组织类型列表
     getorgtype() {
       orgtype({
-        sysType:
-          this.$route.query.sysId == "1,3" ? "1" : this.$route.query.sysId
+        sysType: this.$route.query.sysId
       }).then(res => {
         if (res.code == 200) {
           this.list = res.data.filter(res => {
@@ -481,9 +488,6 @@ export default {
     if (this.$route.query.sysId == "1") {
       this.navigation1.head = "新建组织(会员)";
       this.getorgtype();
-    } else if (this.$route.query.sysId == "1,3") {
-      this.navigation1.head = "新建组织(会员)";
-      this.getorgtype();
     } else if (this.$route.query.sysId == "2") {
       this.navigation1.head = "新建组织(志愿者)";
       this.list = [{ dataKey: 332, dataValue: "志愿者团队", dicCode: 3 }];
@@ -545,7 +549,19 @@ export default {
   align-items: center;
   font-size: 15px;
 }
-.fil_txt p {
+
+.fil-itme {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fil-itme p {
+  display: block;
   font-size: 16px;
+  line-height: 1.4;
+  width: 10rem;
+}
+.fil_txt {
+  margin-bottom: 15px;
 }
 </style>

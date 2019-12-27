@@ -448,7 +448,8 @@ export default {
       "draft",
       "vun_prend",
       "newzuzihy",
-      "volunteer_pending"
+      "volunteer_pending",
+      "pending"
     ];
 
     // 总菜单

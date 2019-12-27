@@ -127,6 +127,7 @@
                   :value="oneRole.setTime"
                   format="yyyy-MM-dd HH:mm"
                   placement="bottom-end"
+                  :editable="false"
                   placeholder="选择集合日期"
                   style="width: 300px"
                   @on-change="getDates"
@@ -137,6 +138,10 @@
             <li class="first-li">
               <span class="first-span">集合地址</span>
               <Button @click="getAdr()" lang class="font">{{ oneRole.setAddr == null?"点击选中地址":oneRole.setAddr}}</Button>
+            </li>
+            <li class="first-li">
+              <span class="first-span">详细地址</span>
+              <Input v-model="oneRole.addressSup" placeholder="请输入详细地址"></Input>
             </li>
             <li class="first-li">
               <span class="first-span">模式</span>
@@ -604,8 +609,8 @@ export default {
     };
   },
   mounted() {
-    console.log(this.oneRole)
-  },
+
+},
   components: {selects,adress},
 
   computed: {},
@@ -938,7 +943,7 @@ export default {
     },
     save(){
       console.log(this.oneRole)
-      delete this.oneRole.fkDetailList
+      // delete this.oneRole.fkDetailList
       this.$emit("oneRole",this.oneRole)
     },
     changeEditorTrain(e){

@@ -207,158 +207,104 @@
                 :autosize="{ minRows: 5, maxRows: 8 }"
               />
             </FormItem>
-            <!-- <FormItem label="附件:">
-              <div class="content">
-                <div
-                  class="middle"
-                  v-for="(item, index) in BasicDate.fileList"
-                  :key="index"
-                >
-                  <Icon type="ios-paper-outline" size="100" />
-                  <div class="file">
-                    <p>
-                      <span>{{ item.fileName }}</span>
-                      <span>
-                        <a @click="download(item.fileUrlShow)">下载</a>
-                      </span>
-                    </p>
-                    <Progress :percent="percent" style="width: 15rem" />
-                  </div>
-                  <Button
-                    shape="circle"
-                    icon="md-close"
-                    style="margin-top: 0.5rem;"
-                    @click="removetext(index)"
-                  ></Button>
-                </div>
-                <div class="middle">
-                  <Upload
-                    multiple
-                    :action="orgimg"
-                    :on-success="handleSuccesstext"
-                    :default-file-list="BasicDate.fileList"
-                    :show-upload-list="false"
-                  >
-                    <Button icon="ios-cloud-upload-outline">添加附件</Button>
-                  </Upload>
-                </div>
-              </div>
-            </FormItem> -->
+
             <FormItem label="附件:">
               <div class="content">
                 <div class="">
                   <div class="fil_txt" v-if="formInline.nameA != null">
-                    <p>{{ formInline.nameA }}</p>
-                    <div>
-                      <div>
-                        <Progress
-                          v-if="!formInline.flagA"
-                          :percent="numA"
-                          style="width: 10rem"
-                        />
-                      </div>
-                      <div>
-                        <Icon
-                          type="ios-trash"
-                          class="cancel-txt"
-                          size="24"
-                          color="#FF565A"
-                          @click="
-                            canceltxt(formInline.agPicA, formInline.nameA)
-                          "
-                        />
-                        <a
-                          v-if="formInline.fileUrlShowA"
-                          class="download"
-                          @click="download(formInline.fileUrlShowA)"
-                          >下载</a
-                        >
-                      </div>
+                    <div class="fil-itme">
+                      <p>{{ formInline.nameA }}</p>
+                      <Icon
+                        type="ios-trash"
+                        class="cancel-txt"
+                        size="24"
+                        color="#FF565A"
+                        @click="canceltxt(formInline.agPicA, formInline.nameA)"
+                      />
+                      <a
+                        v-if="formInline.fileUrlShowA"
+                        class="download"
+                        @click="download(formInline.fileUrlShowA)"
+                        >下载</a
+                      >
+                      <Progress
+                        stroke-color="#FF565A"
+                        v-if="!formInline.flagA"
+                        :percent="numA"
+                      />
                     </div>
                   </div>
                   <div class="fil_txt" v-if="formInline.nameB != null">
-                    <p>{{ formInline.nameB }}</p>
-                    <div>
-                      <div>
-                        <Progress
-                          v-if="!formInline.flagB"
-                          :percent="numB"
-                          style="width: 10rem"
-                        />
-                      </div>
-                      <div>
-                        <Icon
-                          type="ios-trash"
-                          class="cancel-txt"
-                          size="24"
-                          color="#FF565A"
-                          @click="
-                            canceltxt(formInline.agPicB, formInline.nameB)
-                          "
-                        />
-                        <a
-                          v-if="formInline.fileUrlShowB"
-                          class="download"
-                          @click="download(formInline.fileUrlShowB)"
-                          >下载</a
-                        >
-                      </div>
+                    <div class="fil-itme">
+                      <p>{{ formInline.nameB }}</p>
+                      <Icon
+                        type="ios-trash"
+                        class="cancel-txt"
+                        size="24"
+                        color="#FF565A"
+                        @click="canceltxt(formInline.agPicB, formInline.nameB)"
+                      />
+                      <a
+                        v-if="formInline.fileUrlShowB"
+                        class="download"
+                        @click="download(formInline.fileUrlShowB)"
+                        >下载</a
+                      >
                     </div>
+                    <Progress
+                      stroke-color="#FF565A"
+                      v-if="!formInline.flagB"
+                      :percent="numB"
+                    />
                   </div>
                   <div class="fil_txt" v-if="formInline.nameC != null">
-                    <p>{{ formInline.nameC }}</p>
-                    <div>
-                      <div>
-                        <Progress
-                          v-if="!formInline.flagC"
-                          :percent="numC"
-                          style="width: 10rem"
-                        />
-                      </div>
-                      <div>
-                        <Icon
-                          type="ios-trash"
-                          class="cancel-txt"
-                          size="24"
-                          color="#FF565A"
-                          @click="
-                            canceltxt(formInline.agPicC, formInline.nameC)
-                          "
-                        />
-                        <a
-                          v-if="formInline.fileUrlShowC"
-                          class="download"
-                          @click="download(formInline.fileUrlShowC)"
-                          >下载</a
-                        >
-                      </div>
+                    <div class="fil-itme">
+                      <p>{{ formInline.nameC }}</p>
+                      <Icon
+                        type="ios-trash"
+                        class="cancel-txt"
+                        size="24"
+                        color="#FF565A"
+                        @click="canceltxt(formInline.agPicC, formInline.nameC)"
+                      />
+                      <a
+                        v-if="formInline.fileUrlShowC"
+                        class="download"
+                        @click="download(formInline.fileUrlShowC)"
+                        >下载</a
+                      >
                     </div>
+                    <Progress
+                      stroke-color="#FF565A"
+                      v-if="!formInline.flagC"
+                      :percent="numC"
+                    />
                   </div>
-                </div>
-                <div class="middle">
-                  <div class="start-wap">
-                    <div
-                      class="upload"
-                      @click="
-                        () => {
-                          this.$refs.filess.click();
-                        }
-                      "
-                    >
-                      <div class="file">
-                        <input
-                          style=" display:none;"
-                          type="file"
-                          accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
-                          ref="filess"
-                          @change="uploadFiles($event)"
-                          multiple
-                        />
-                        <Icon
-                          type="md-cloud-upload"
-                          :size="20"
-                          color="#FF565A"
-                        />
+                  <div class="middle">
+                    <div class="start-wap">
+                      <div
+                        class="upload"
+                        @click="
+                          () => {
+                            this.$refs.filess.click();
+                          }
+                        "
+                      >
+                        <div class="file">
+                          <input
+                            style=" display:none;"
+                            type="file"
+                            accept=".txt, .zip, .doc, .ppt, .xls, .pdf, .docx, .xlsx"
+                            ref="filess"
+                            @change="uploadFiles($event)"
+                            multiple
+                          />
+                          <Icon
+                            type="md-cloud-upload"
+                            :size="20"
+                            color="#FF565A"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1070,18 +1016,25 @@ export default {
 .upload {
   position: relative;
 }
-.fil_txt {
-  position: relative;
 
-  div {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-}
 .download {
   font-size: 15px;
   color: #ff565a;
   margin-left: 15px;
+}
+
+.fil-itme {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fil-itme p {
+  display: block;
+  font-size: 16px;
+  line-height: 1.4;
+  width: 10rem;
+}
+.fil_txt {
+  margin-bottom: 15px;
 }
 </style>

@@ -1,18 +1,24 @@
 <!--志愿者活动管理(会员)-->
 <template>
   <div class="integral">
-     <Modal v-model="addstate" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-          <span>下架确定</span>
-        </p>
-        <div style="text-align:center">
-          <p>是否确认下架，下架后无法上架</p>
-        </div>
-        <div slot="footer">
-          <Button type="error" @click="modalCancel">取消</Button>
-          <Button type="success" @click="modalOkdel">确定</Button>
-        </div>
-      </Modal>
+    <Modal v-model="addstate" width="360">
+      <p slot="header" style="color:#f60;text-align:center">
+        <span>下架确定</span>
+      </p>
+      <div style="text-align:center">
+        <p>是否确认下架，下架后无法上架</p>
+      </div>
+      <div slot="footer">
+        <Button type="error" @click="modalCancel">取消</Button>
+        <Button type="success" @click="modalOkdel">确定</Button>
+      </div>
+    </Modal>
+    <Modal v-model="modal5" title="取消理由"  @on-cancel='cancel'>
+      <i-input placeholder="请输入取消理由" v-model="text" type="textarea" :row='4'/>
+      <div slot="footer">
+        <Button type="error" size="large" @click="modalOk">确定</Button>
+      </div>
+    </Modal>
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-header">
       <div class="flex-center-start integral-body">
@@ -129,7 +135,7 @@
 
 <script>
 import { formatDate } from "@/request/datatime";
-import { actManager,activedown } from "../../request/api";
+import { actManager,activedown,activecancel,activeclose } from "../../request/api";
 import { SERVER_URl } from '@/request/http.js'
 import { filterNull } from '@/libs/utils'
 export default {
@@ -140,6 +146,7 @@ export default {
       modal1: false,
       modal2: false,
       modal3: false,
+      modal5: false,
       fruit: ["苹果"],
       navigation1: {
         head: "志愿者活动管理(志愿者)"
@@ -174,6 +181,10 @@ export default {
             ])
           },
           render: (h, params) => {
+             let signup = "关闭报名";
+            if (params.row.status == "13") {
+              signup = "开启报名";
+            }
             return h("div", [
               h(
                 "a",
@@ -221,7 +232,7 @@ export default {
                     click: () => {
                       this.$router.push({
                         name: "profile",
-                        query: { acitvityId: params.row.activityId,activityName: params.row.name }
+                        query: { acitvityId: params.row.activityId,activityName: params.row.name,sysId:2 }
                       });
                     }
                   }
@@ -244,48 +255,64 @@ export default {
                   }
                 },
                 "分享"
+              ),
+            h(
+                "Dropdown",
+                {
+                  props: {
+                    transfer: true
+                  }
+                },
+                [
+                  h(
+                    "a",
+                    {
+                      style: {
+                        color: "#FF565A"
+                      }
+                    },
+                    "更多操作"
+                  ),
+                  h(
+                    "DropdownMenu",
+                    {
+                      slot: "list"
+                    },
+                    [
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+                              this.modal5 = true;
+                              this.activityId = params.row.activityId;
+                            }
+                          }
+                        },
+                        "取消"
+                      ),
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+
+                              if (signup == "关闭报名") {
+                                this.types = 1;
+                                this.getactiveclose(params.row.activityId);
+                              } else {
+                                this.types = 2;
+                                this.getactiveclose(params.row.activityId);
+                              }
+                            }
+                          }
+                        },
+                        signup
+                      )
+                    ]
+                  )
+                ]
               )
-              // h(
-              //   "Dropdown",
-              //   {
-              //     props: {
-              //       transfer: true
-              //     }
-              //   },
-              //   [
-              //     h(
-              //       "a",
-              //       {
-              //         style: {
-              //           color: "green"
-              //         }
-              //       },
-              //       "更多操作"
-              //     ),
-              //     h(
-              //       "DropdownMenu",
-              //       {
-              //         slot: "list"
-              //       },
-              //       [
-              //         h(
-              //           "DropdownItem",
-              //           {
-              //             nativeOn: {
-              //               click: name => {
-              //                 this.show(params.index);
-              //               }
-              //             }
-              //           },
-              //           "取消"
-              //         ),
-              //         h("DropdownItem", "关闭报名"),
-              //         h("DropdownItem", "活动总结"),
-              //         h("DropdownItem", "设为新活动模板")
-              //       ]
-              //     )
-              //   ]
-              // )
             ]);
           }
         },
@@ -381,7 +408,9 @@ export default {
         startT:'',
         endT:''
       },
-      activeState: this.$store.state.activeState
+      activeState: this.$store.state.activeState,
+      activityId: null,
+      text: ''
     };
   },
   components: {},
@@ -399,6 +428,48 @@ export default {
   },
 
   methods: {
+        //取消
+    getactivecancel() {
+      activecancel({
+        userId: this.$store.state.userId,
+        activityId: this.activityId,
+        text: this.text,
+        channel: 2
+      }).then(res => {
+        if (res.code == 200) {
+          this.modal5 = false
+          this.text = ''
+          this.getactiveManager()
+          this.$Message.info("取消成功");
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+      //关闭
+    getactiveclose(ids) {
+      activeclose({
+        userId: this.$store.state.userId,
+        activityId: ids,
+        type: this.types,
+        channel: 2
+      }).then(res => {
+         if(res.code==200){
+          this.$Message.info('关闭成功')
+        }else{
+          this.$Message.error(res.msg)
+        }
+        console.log(res);
+      });
+    },
+        //拒绝理由
+    modalOk() {
+      this.getactivecancel();
+    },
+    cancel() {
+      this.modal5 = false;
+    },
         // 活动下架
     getactivedown(ids) {
       ids = Array.of(ids);
