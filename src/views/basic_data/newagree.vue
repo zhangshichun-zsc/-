@@ -5,26 +5,47 @@
     <div class="xieyi">
       <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="120">
         <FormItem label="甲方:" prop="partA">
-          <!-- <Select
-            v-model="model13"
+          <!-- <Select v-model="formInline.partA" @change="jia(e)" filterable>
+                <Option v-for="item in list"  :value="item.orgId" :key="item.orgId">{{ item.orgName }}</Option>
+          </Select> -->
+          <Select
+          ref="select1"
+            v-model="formInline.partA"
             filterable
             remote
             size="large"
-            style="width:300px"
             placeholder="甲方名称"
+            style="width:300px"
             :remote-method="remoteMethod1"
             :loading="loading1"
+
           >
             <Option
               v-for="(option, index) in options1"
-              :value="option.value"
+              :value="option.orgId"
               :key="index"
-            >{{option.label}}</Option>
-          </Select> -->
-          <Input v-model.trim="formInline.partA" placeholder="甲方名称" style="width:300px" />
+            >{{option.orgName}}</Option>
+          </Select>
+          <!-- <Input v-model.trim="formInline.partA" placeholder="甲方名称" style="width:300px" @on-change="jia" /> -->
         </FormItem>
         <FormItem label="乙方:" prop="partB">
-          <Input v-model.trim="formInline.partB" placeholder="乙方名称" style="width:300px" />
+          <Select
+            v-model="formInline.partB"
+
+            filterable
+            remote
+            placeholder="乙方名称"
+            style="width:300px"
+            :remote-method="remoteMethod2"
+            :loading="loading2"
+          >
+            <Option
+              v-for="(option, index) in options2"
+              :value="option.orgId"
+              :key="index"
+            >{{option.orgName}}</Option>
+          </Select>
+          <!-- <Input v-model.trim="formInline.partB" placeholder="乙方名称" style="width:300px" /> -->
         </FormItem>
         <FormItem label="协议分类:" prop="typeDicId">
           <Select v-model="formInline.typeDicId" placeholder="请选择分类" style="width:300px">
@@ -39,18 +60,20 @@
           <Select v-model="formInline.categoryId" placeholder="请选择活动类型" style="width:300px">
             <Option
               v-for="item in typeList"
-              :value="item.categoryId"
-              :key="item.name"
-            >{{ item.name }}</Option>
+              :value="item.dicId"
+              :key="item.dicId"
+            >{{ item.dicName }}</Option>
           </Select>
         </FormItem>
 
         <FormItem label="协议时间:" prop="agTime">
+           <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm"   @on-change="handleChange"  v-model="formInline.agTime"  placeholder="请选择协议时间" style="width: 300px"></DatePicker> -->
+
           <DatePicker
             type="date"
             placeholder="请选择协议时间"
             v-model="formInline.agTime"
-            format="yyyy-MM-dd"
+            format="yyyy-MM-dd HH:mm:ss"
             @on-change="handleChange"
             style="width: 300px"
           ></DatePicker>
@@ -128,7 +151,7 @@ import {
   Offactivities
 } from "@/request/api";
 import { date1 } from "@/request/datatime";
-import { newAgreement,Agreementtype} from '@/request/api'
+import { newAgreement, Agreementtype } from "@/request/api";
 export default {
   data() {
     return {
@@ -140,7 +163,7 @@ export default {
       formInline: {
         partA: "",
         partB: "",
-        typeDicId: "",
+        typeDicId:'',
         agTime: "",
         categoryId: "",
         agFile: null,
@@ -155,10 +178,10 @@ export default {
       },
       ruleInline: {
         partA: [
-          { required: true, message: "甲方名称不能为空", trigger: "blur" }
+          { required: true, message: "甲方名称不能为空", trigger: "change",type:'number' }
         ],
         partB: [
-          { required: true, message: "乙方名称不能为空", trigger: "blur" }
+          { required: true, message: "乙方名称不能为空", trigger: "change",type:'number' }
         ],
         typeDicId: [
           {
@@ -189,7 +212,6 @@ export default {
       sysId: 1,
       data1: "",
 
-
       Enclosure: "",
 
       texturl: null,
@@ -200,9 +222,17 @@ export default {
 
       model13: "",
       loading1: false,
-      options1: [],
-      list: ["ab", "ac"],
-      orgType:1,
+      options1:  [],
+      list: [],
+      orgType: 1,
+
+      loading2: false,
+      options2: [],
+      list2: [],
+      orgTypes: "2,3",
+
+      namea: "",
+      nameb: ""
     };
   },
 
@@ -210,86 +240,122 @@ export default {
 
   computed: {},
   mounted() {
-    this.getAgreementtype()
-    this.getnewAgreement()
-    // this.getAgreementNewList();
-    // this.getAgreementList();
-    // if (this.agreementId != null) {
-    //   this.navigation1.head = "编辑协议";
-    //   this.getAgreementdet();
-    // }
+
+    this.getAgreementtype();
+    this.getAgreementList();
+    if (this.agreementId != null) {
+      this.navigation1.head = "编辑协议";
+      this.getAgreementdet();
+    }
 
   },
 
   created() {},
 
   methods: {
+    jia(e) {
+      console.log(e)
+      // console.log(e,this.options1,this.formInline.partA,this.list)
+      // this.getnewAgreement()
+    },
 
-    // newAgreement,Agreementtype
+
     //甲方名称
-    getnewAgreement(){
-      newAgreement({
-        orgType:this.orgType,
-      }).then(res=>{
-        console.log(res)
-      })
+    getnewAgreement(e) {
+
+      let  params = {
+          orgType: this.orgType,
+          orgName: e
+        };
+      newAgreement(params).then(res => {
+        if (res.code == 200) {
+            this.list = res.data;
+            console.log(this)
+        }
+        console.log(res);
+      });
     },
 
     //活动类型
-    getAgreementtype(){
+    getAgreementtype() {
       Agreementtype({
-        typeFlag:8,
-      }).then(res=>{
-        console.log(res)
-      })
+        typeFlag: 8
+      }).then(res => {
+        if (res.code == 200) {
+          this.typeList = res.data;
+        }
+        console.log(res);
+      });
     },
-
-
-
-
-    // // -获取官方活动分页
-    // getOffactivities() {
-    //   Offactivities({
-    //     page: { page: this.page, size: this.size },
-    //     dicName: '',
-    //     validFlag: 1,
-    //     createTimestamp: ''
-    //   }).then(res => {
-    //     if (res.code == 200) {
-    //       this.data = res.data.list;
-    //     } else {
-    //       this.$Message.error(res.msg);
-    //     }
-    //
-    //   });
-    // },
-
-
 
     //输入框检索
     remoteMethod1(query) {
+      if(this.namea!=''){
+        query=this.namea
+        console.log(1,this.namea)
+      }
+      console.log(query)
       if (query !== "") {
         this.loading1 = true;
-        setTimeout(() => {
-          this.loading1 = false;
-          const list = this.list.map(item => {
-            return {
-              value: item,
-              label: item
-            };
-          });
-          this.options1 = list.filter(
-            item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
-          );
-        }, 200);
+        let params = {
+          orgType: this.orgType,
+          orgName: query
+        };
+        newAgreement(params).then(res => {
+          if (res.code == 200) {
+            this.list = res.data;
+            setTimeout(() => {
+              this.loading1 = false;
+              const list = this.list.map(item => {
+                return {
+                  orgId: item.orgId,
+                  orgName: item.orgName
+                };
+              });
+              this.options1 = list.filter(
+                item =>
+                  item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
+              );
+            }, 500);
+          }
+        });
       } else {
         this.options1 = [];
+      }
+      console.log(this.options1,this.list,query,this.formInline.partA)
+    },
+    //乙方
+    remoteMethod2(query) {
+      if (query !== "") {
+        this.loading2 = true;
+        let params = {
+          orgType: this.orgTypes,
+          orgName: query
+        };
+        newAgreement(params).then(res => {
+          if (res.code == 200) {
+            this.list2 = res.data;
+            setTimeout(() => {
+              this.loading2 = false;
+              const list = this.list2.map(item => {
+                return {
+                  orgId: item.orgId,
+                  orgName: item.orgName
+                };
+              });
+              this.options2 = list.filter(
+                item =>
+                  item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
+              );
+            }, 500);
+          }
+        });
+      } else {
+        this.options2 = [];
       }
     },
 
     handleSubmit(name) {
-      console.log(this.model13, this.options1, this.list);
-
       this.$refs[name].validate(valid => {
         if (valid) {
           if (Boolean(this.formInline.agPicA) == false) {
@@ -317,31 +383,38 @@ export default {
       });
     },
 
-    //列表
-    getAgreementNewList() {
-      AgreementNewList({
-        sysType: this.sysType
-      }).then(res => {
-        console.log(res);
-        if (res.code == 200) {
-          this.typeList = res.data;
-        }
-      });
-    },
+    // //列表
+    // getAgreementNewList() {
+    //   AgreementNewList({
+    //     sysType: this.sysType
+    //   }).then(res => {
+    //     console.log(res);
+    //     if (res.code == 200) {
+    //       this.typeList = res.data;
+    //     }
+    //   });
+    // },
 
     //新增协议
     getAgreementadd() {
+      let name= this.locations.filter(item=>{
+        return item.dataValue==this.formInline.typeDicId
+      })
+      this.formInline.agTime=this.Times
+      console.log(name,this.formInline.agTime)
       let params = {
         sysId: this.sysId,
         // name: this.name,
         targetType: this.targetType,
         typeDicId: this.formInline.typeDicId,
+        typeDicName:name,
+
         actTypeDicId: this.actTypeDicId,
         batchId: this.batchId,
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-        agTime: this.Times,
+        agTime: this.formInline.agTime,
 
         agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
@@ -373,22 +446,27 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.formInline = res.data;
-          this.formInline.agTime = this.util.formatDate(
-            res.data.agreementTimestamp
-          );
+          this.list=[{orgName:res.data.orgNameA,orgId: Number(res.data.partA)}],
+          //   this.options1=this.list
+          // this.list2=[{orgName:res.data.orgNameB,orgId: Number(res.data.partB)}]
+          // this.formInline.partA=res.data.orgNameA
+          // this.formInline.partB=res.data.orgNameB
+          this.Times=res.data.agTime
+          console.log(this.options1,this.formInline)
         }
       });
     },
 
     //修改接口
     getAgreementmodify() {
+       this.formInline.agTime=this.Times
       let params = {
-        agreementId: this.formInline.agreementId,
-        typeDicId: this.typeDicId,
+        agreementId: this.agreementId,
+        typeDicId: this.formInline.typeDicId,
         categoryId: this.formInline.categoryId,
         partA: this.formInline.partA,
         partB: this.formInline.partB,
-        agTime: this.Times,
+        agTime: this.formInline.agTime,
         // agTime: this.data1,
         // agFile: this.formInline.agFile,
         agPicA: this.formInline.agPicA,
@@ -414,11 +492,9 @@ export default {
       });
     },
     handleChange(e) {
-      if (e != "") {
-        let datas = e;
-        datas = datas.split("")[0] + " 00:00:00";
-        this.Times = datas;
-      }
+
+        this.Times = e;
+
     },
 
     //图片上传

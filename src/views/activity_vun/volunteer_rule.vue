@@ -202,6 +202,7 @@ export default {
     // 活动规则池--批量操作活动规则
     getActiverule() {
       Activerule({
+         userId:this.$store.state.userId,
         ruleIds: this.ruleIds,
         ruleOprType: this.ruleOprType
       }).then(res => {
