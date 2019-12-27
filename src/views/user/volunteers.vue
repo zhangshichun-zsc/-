@@ -665,13 +665,13 @@ export default {
         },
         {
           title: '参与活动数',
-          key: 'voluActNum',
+          key: 'joinActivityNum',
           align: 'center',
           width: 130
         },
         {
           title: '积分',
-          key: 'voluScore',
+          key: 'score',
           align: 'center',
           width: 100
         },

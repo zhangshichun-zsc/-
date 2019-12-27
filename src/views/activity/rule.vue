@@ -215,6 +215,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info(res.msg);
+          this.getActiverulepage()
         }
         console.log(res);
       });

@@ -268,7 +268,8 @@ export default {
                         name: "profile",
                         query: {
                           acitvityId: params.row.activityId,
-                          activityName: params.row.name
+                          activityName: params.row.name,
+                          sysId:1
                         }
                       });
                     }

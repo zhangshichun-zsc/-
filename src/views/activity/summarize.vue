@@ -3,7 +3,7 @@
   <div>
     <Navigation :labels="navigation1"></Navigation>
     <div class="head">
-      <p>{{activityName}}</p>
+      {{activityName}}
     </div>
     <div class="content">
       <div class="summarize">
@@ -16,24 +16,24 @@
           <span>您可以上传有意思的活动照片</span>
           <span>上传图片(最多6张)</span>
         </p>
-        <div class="uploading-img" v-for='(item,i) in picList'>
+        <div class="uploading-img" v-for='(item,i) in picList' :key='i'>
           <div v-if="item.pic">
-            <img class="imgs" :src="item.pic"/>
+            <img class="imgs" :src="item"/>
             <Icon src="" alt="" class="cancel" @click="cancelImg()"/>
           </div>
         </div>
         
-        <div v-if='picList.length<6'>
+        <div v-if='picList.length<6'  @click="()=>{ this.$refs.files.click()}">
           <div class="upload" >
-            <div class="file" @click="()=>{ this.$refs.files.click()}">
+            <div class="file flex-center-center">
               <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-              <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
+              <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
             </div>
           </div>
         </div>
 
         <div class="btn">
-          <Button class="table-btn" @click="getactivesum">提交</Button>
+          <Button class="button-red" @click="getactivesum">提交</Button>
         </div>
       </div>
     </div>
@@ -79,13 +79,10 @@ export default {
         var reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = (e) => {
-          console.log(e)
-          this.picList[this.picList.length] = e.target.result
-          this.pics[this.pics.length] = res.data
+          this.$set(this.picList,this.picList.length,e.target.result)
+          this.$set(this.pics,this.pics.length,res.data)
         }
       })
-      console.log(this.picList)
-      console.log(this.pics)
     },
     cancelImg(){
       orgimgdel({path:this.projectMsg.batchPic}).then(res => {
@@ -101,22 +98,16 @@ export default {
         text:this.text,
         pics:this.pics
       }).then(res=>{
-        console.log(res)
+        if(res.code == 200){
+          this.$router.back()
+        }else{
+          this.$Message.error(res.msg)
+        }
       })
     },
-    //
     btns(e){
-      console.log(e)
       this.text = e
-    },
-
-    btn(){
-      console.log(apiAddress)
-      apiAddress().then(res=> {
-            console.log(res)
-        })
     }
-
   }
 };
 </script>
@@ -124,29 +115,26 @@ export default {
 .head {
   height: 70px;
   padding-left: 40px;
-  display: flex;
-  flex-direction: column;
+  line-height: 70px;
   background: #ffffff;
-  align-items: flex-start;
   margin-bottom: 20px;
-  p {
-    margin: 5px 0px;
-    font-size: 20px;
-    height: 20px;
-  }
+}
+.upload{
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #FF565A;
 }
 .content {
   padding-left: 80px;
   background: #ffffff;
   .summarize {
-
+    padding-right: 100px;
     padding-top: 20px;
     p {
       width: 280px;
       height: 40px;
       line-height: 40px;
-      color: #ffffff;
-      background: green;
+      font-weight: bold;
       padding-left: 20px;
     }
   }

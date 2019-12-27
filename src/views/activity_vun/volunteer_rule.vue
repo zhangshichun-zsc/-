@@ -106,7 +106,6 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
                     this.stater(params.row.ruleId, e);
                   }
                 }
@@ -208,8 +207,8 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.$Message.info(res.msg);
+          this.getActiverulepage()
         }
-        console.log(res);
       });
     },
     //活动规则池--获取活动规则分页

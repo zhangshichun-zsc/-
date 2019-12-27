@@ -17,7 +17,6 @@
           border
           :columns="columns"
           :data="datax"
-          @on-selection-change="handleSelectionChange"
         ></Table>
 
       </div>
@@ -59,23 +58,20 @@ export default {
         },
         {
           title: "提交时间",
-          key: "startTimestamp",
+          key: "createAt",
           align: "center",
           width:300,
-          render: (h, params) => {
-            return h("div", formatDate(params.row.startTimestamp));
-          }
         },
         {
           title: "活动类型",
           width:300,
-          key: "activityType",
+          key: "typeDicName",
           align: "center"
         },
         {
           title: "创建人",
           width:200,
-          key: "otherSignUpCount",
+          key: "createUserName",
           align: "center"
         },
          {

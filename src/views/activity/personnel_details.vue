@@ -4,19 +4,21 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="wapper">
       <div class="head">
-        <p>{{activityName}}</p>
+        <p>{{ activityName }}</p>
+        <p>{{ activeState[msg.actStatus].name }}</p>
       </div>
       <div class="content">
         <ul>
-          <li>
+          <li class="sign">
             <p>报名</p>
-            <table>
+            <table :style="{width:(5+msg.items.length)*200+'px'}">
               <tr>
                 <th>姓名</th>
                 <th>手机号码</th>
                 <th>报名类型</th>
                 <th>报名时间</th>
                 <th>报名状态</th>
+                <th v-for='(item,index) in msg.items' :key='index'>{{ item.itemName }}</th>
               </tr>
               <tr>
                 <td>{{msg.userName}}</td>
@@ -37,6 +39,7 @@
                 <td v-else-if='msg.userActType==12'>待付款</td>
                 <td v-else-if='msg.userActType==13'>拒绝转移</td>
                 <td v-else-if='msg.userActType==14'>工作人员</td>
+                <td v-for='(val,i) in msg.items' :key='i'>{{ val.itemValue }}</td>
               </tr>
             </table>
           </li>
@@ -48,9 +51,7 @@
                 <th>确认时间</th>
               </tr>
               <tr>
-                <td v-if='msg.trainStatus==1'>未阅读</td>
-                <td v-else-if='msg.trainStatus==2'>已阅读</td>
-                <td v-else-if='msg.trainStatus==3'>已确认</td>
+                <td>{{ trainStatus[msg.trainStatus-1] }}</td>
                 <td>{{msg.trainTime}}</td>
               </tr>
             </table>
@@ -61,14 +62,12 @@
               <tr>
                 <th>签到状态</th>
                 <th>签到时间</th>
-                <th>签到地点</th>
+                <th style="width:500px">签到地点</th>
               </tr>
               <tr>
-                <td v-if='msg.signStatus==0'>未签到</td>
-                <td v-else-if='msg.signStatus==1'>已签到</td>
-                <td v-else-if='msg.signStatus==2'>迟到</td>
+                <td>{{ signStatus[msg.signStatus] }}</td>
                 <td>{{msg.signAt}}</td>
-                <td>{{msg.signAddress}}</td>
+                <td style="width:500px">{{msg.signAddress}}</td>
               </tr>
             </table>
           </li>
@@ -81,8 +80,7 @@
                 <th>操作</th>
               </tr>
               <tr>
-                <td v-if='msg.feedStatus==1'>已反馈</td>
-                <td v-else-if='msg.feedStatus==2'>未反馈</td>
+                <td>{{ msg.feedStatus==1?"已反馈":"未反馈"}}</td>
                 <td>{{msg.feedAt}}</td>
                 <td @click="jump">详情</td>
               </tr>
@@ -95,7 +93,7 @@
 </template>
 
 <script>
-import { userDetail ,feendDetail } from '@/request/api'
+import { feendDetail } from '@/request/api'
 
 export default {
   data() {
@@ -105,7 +103,10 @@ export default {
       },
       actUserId:1,
       msg:{},
+      activeState: this.$store.state.activeState,
       activityName: this.$route.query.activityName,
+      signStatus: ["未签到","未反馈","迟到"],
+      trainStatus: ["未阅读","已阅读","已确认"]
     };
   },
 
@@ -155,6 +156,10 @@ export default {
     height: 20px;
   }
 }
+.sign{
+  max-width: 100%;
+  overflow-x: scroll;
+}
 .content {
   padding-left: 40px;
   li{
@@ -174,6 +179,8 @@ export default {
       text-align: center;
       line-height: 50px;
       width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
     }
     th {
       // font-weight: 700;

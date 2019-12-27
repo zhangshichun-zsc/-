@@ -123,7 +123,7 @@
               <span class="first-span">集合时间</span>
               <div>
                  <Date-picker
-                  type="date"
+                  type="datetime"
                   :value="oneRole.setTime"
                   format="yyyy-MM-dd HH:mm"
                   placement="bottom-end"
@@ -176,7 +176,7 @@
               <span class="first-span">补助类型</span>
               <RadioGroup v-model="oneRole.subsidyType" class="font" size='large'>
                 <Radio label="1">现金</Radio>
-                <Radio label="2">物质</Radio>
+                <Radio label="2">物资</Radio>
               </RadioGroup>
             </li>
             <li class="first-li" v-if="oneRole.subsidyType==1">
@@ -194,6 +194,21 @@
                 >{{ item.name }}</Option>
               </Select>
               <Input v-model="oneRole.resourcesRemark" placeholder="备注" style="width: 150px" />
+            </li>
+            <li class="first-li">
+              <span class="first-span">群二维码</span>
+              <div>
+                <div class="first-pic" v-if='oneRole.qrCodeShow == null'>
+                  <div class="" @click="()=>{ this.$refs.filezt.click()}">
+                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
+                    <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+                  </div>
+                </div>
+                <div class="first-pic" style="border:none" v-else>
+                  <img class="imgs" style="width:283px;height:188px" :src="oneRole.qrCodeShow"/>
+                  <Icon type="ios-trash" v-if='oneRole.qrCodeShow' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
+                </div>
+              </div>
             </li>
             <li class="first-li">
               <span class="first-span">退款设置</span>
@@ -338,18 +353,18 @@
                   <Button @click.native="deleteItem(index)">删除</Button>
                 </div>
                 <div v-else-if=" item.type === 1" class="role-tr">
-                  <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
+                  <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.itemName" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
                 </div>
                 <div v-else-if=" item.type === 6 " class="role-tr">
-                  <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
+                  <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.itemName" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
                 </div>
                 <div v-else-if="item.type === 3 " style="width:80%">
                   <div class="role-trs">
-                    <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
+                    <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.itemName" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                     <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
                   </div>
@@ -363,7 +378,7 @@
                 </div>
                 <div v-else style="width:80%">
                   <div class="role-trs">
-                    <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
+                    <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.itemName" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                     <span @click="deleteItem(index)" v-if="!isDisb">删除</span>
                   </div>
@@ -539,7 +554,7 @@
 </template>
 
 <script>
-import { batchItem,signType, signPost,signLimits,signItems,firstList } from "../../request/api";
+import { batchItem,signType, signPost,signLimits,signItems,firstList,orgimgdel } from "../../request/api";
 import selects from'_c/selsect'
 import adress from'_c/map'
 import { upload }from '@/request/http'
@@ -792,6 +807,27 @@ export default {
       this.oneRole.districtName = e.district
       this.$set(this.oneRole,'setAddr',e.address)
     },
+    uploadActFile() {
+      let file = this.$refs.filezt.files[0];
+      const dataForm = new FormData();
+      dataForm.append("file", file);
+      upload(dataForm).then(res => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          console.log(e);
+          this.$set(this.oneRole, "qrCodeShow", e.target.result);
+          this.$set(this.oneRole, "qrCode", res.data);
+        };
+      });
+    },
+    cancelActImg() {
+      orgimgdel({ path: this.oneRole.qrCode }).then(res => {
+        this.oneRole.qrCodeShow = null;
+        this.oneRole.qrCode = null;
+        this.$Message.success("删除成功");
+      });
+    },
     getLimits(e){
       console.log(e)
       debugger
@@ -890,8 +926,14 @@ export default {
         this.oneRole.itemList.splice(e,1)
       }
     },
+    deepClone(obj){
+      let _obj = JSON.stringify(obj),
+      objClone = JSON.parse(_obj);
+      return objClone
+    },  
     addSign(e){
-      this.oneRole.itemList.push(e)
+      let i = this.deepClone(e)
+      this.oneRole.itemList.push(i)
       this.bmx = false
     },
     addItemIput(e){
@@ -957,27 +999,6 @@ export default {
         }
       }
     },
-    uploadFile() {
-      let file = this.$refs.files.files[0]
-      const dataForm = new FormData()
-      dataForm.append('file', file)
-      upload(dataForm).then(res => {
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = (e) => {
-          console.log(e)
-          this.oneRole.qrCodeShow = e.target.result
-          this.oneRole.qrCode = res.data
-        }
-      })
-    },
-    cancelImg(){
-      orgimgdel({path:this.oneRole.qrCode}).then(res => {
-        this.oneRole.qrCodeShow = null
-        this.oneRole.qrCode = null
-        this.$Message.success('删除成功')
-      })
-    },
     addbmx(){
       this.bmx = true
     },
@@ -997,6 +1018,19 @@ export default {
 .btn{
   margin-right: 10px !important;
   margin-bottom: 10px !important;
+}
+.first-pic{
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px dashed #FF565A;
+  position: relative;
+}
+.cancel{
+  position: absolute;
+  top: 0;
+  right: -30px;
 }
 .compole {
   .compole-head {

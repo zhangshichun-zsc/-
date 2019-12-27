@@ -68,7 +68,7 @@
                       <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
                     </div>
                   </div>
-                  <div class="first-picfm" v-else>
+                  <div class="first-picfm"  style="border:none" v-else>
                     <img
                       class="imgs"
                       style="width:200px;height:200px"
@@ -100,7 +100,7 @@
                       <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-pic"  style="border:none" v-else>
                     <img
                       class="imgs"
                       style="width:283px;height:188px"
@@ -211,21 +211,19 @@
                     <span class="tit">姓名</span>
                     <Input
                       v-model="item.ownerUserName"
-                      style="width: 200px"
-                      class="same-staff"
+                      class="same-staff lw"
                       @on-change="getWorkerList(item, index)"
                     />
                     <span class="twoT">联系方式</span>
                     <Input
                       v-model="item.ownerUserTel"
-                      style="width: 200px"
-                      class="same-staff"
+                      class="same-staff lw"
                       disabled
                     />
                      <Icon type="ios-trash"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
                   </div>
                   <div v-if="addWorker">
-                    <Select style="width:300px" placeholder="请选择工作人员">
+                    <Select class="lw" placeholder="请选择工作人员">
                       <Option
                         v-for="(i, idx) in workerList"
                         :value="i.name"
@@ -270,11 +268,11 @@
                <li class="first-li start">
                 <span class="first-span">所需物资</span>
                 <div>
-                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物质</Button></div>
+                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px" class="font">+新增物资</Button></div>
                   <div>
                     <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource" :key='i'>
                       <span>{{item.resourcesName}}</span>
-                      <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"></Input>
+                      <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"  class="twoT"></Input>
                       <span>
                         <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
                         <Icon type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
@@ -872,5 +870,8 @@ export default {
 .lx-jd {
   height: 80px;
   padding-top: 30px;
+}
+.lw{
+  width: 200px;
 }
 </style>
