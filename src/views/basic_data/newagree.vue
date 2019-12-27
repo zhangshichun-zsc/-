@@ -22,7 +22,7 @@
           >
             <Option
               v-for="(option, index) in options1"
-              :value="option.orgId"
+              :value="option.orgName"
               :key="index"
             >{{option.orgName}}</Option>
           </Select>
@@ -41,7 +41,7 @@
           >
             <Option
               v-for="(option, index) in options2"
-              :value="option.orgId"
+              :value="option.orgName"
               :key="index"
             >{{option.orgName}}</Option>
           </Select>
@@ -161,7 +161,7 @@ export default {
       typeList: [],
       locations: [],
       formInline: {
-        partA: "",
+        partA: null,
         partB: "",
         typeDicId:'',
         agTime: "",
@@ -178,10 +178,10 @@ export default {
       },
       ruleInline: {
         partA: [
-          { required: true, message: "甲方名称不能为空", trigger: "change",type:'number' }
+          { required: true, message: "甲方名称不能为空", trigger: "change"}
         ],
         partB: [
-          { required: true, message: "乙方名称不能为空", trigger: "change",type:'number' }
+          { required: true, message: "乙方名称不能为空", trigger: "change" }
         ],
         typeDicId: [
           {
@@ -231,8 +231,8 @@ export default {
       list2: [],
       orgTypes: "2,3",
 
-      namea: "",
-      nameb: ""
+      nameaID: null,
+      namebID: null,
     };
   },
 
@@ -290,11 +290,6 @@ export default {
 
     //输入框检索
     remoteMethod1(query) {
-      if(this.namea!=''){
-        query=this.namea
-        console.log(1,this.namea)
-      }
-      console.log(query)
       if (query !== "") {
         this.loading1 = true;
         let params = {
@@ -316,13 +311,14 @@ export default {
                 item =>
                   item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
               );
-            }, 500);
+              console.log(this.options1)
+            }, 300);
           }
         });
       } else {
         this.options1 = [];
       }
-      console.log(this.options1,this.list,query,this.formInline.partA)
+
     },
     //乙方
     remoteMethod2(query) {
@@ -345,9 +341,10 @@ export default {
               });
               this.options2 = list.filter(
                 item =>
+
                   item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
               );
-            }, 500);
+            }, 300);
           }
         });
       } else {
@@ -397,23 +394,30 @@ export default {
 
     //新增协议
     getAgreementadd() {
-      let name= this.locations.filter(item=>{
-        return item.dataValue==this.formInline.typeDicId
+      let name= this.locations.find(item=>{
+        return item.dataKey==this.formInline.typeDicId
+      })
+      this.nameaID=this.list.find(item=>{
+        return item.orgName==this.formInline.partA
+      })
+       this.namebID=this.list2.find(item=>{
+        return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
-      console.log(name,this.formInline.agTime)
+      console.log(name,this.formInline.agTime,this.namebID,this.nameaID)
+
       let params = {
         sysId: this.sysId,
         // name: this.name,
         targetType: this.targetType,
         typeDicId: this.formInline.typeDicId,
-        typeDicName:name,
+        typeDicName:name.dataValue,
 
         actTypeDicId: this.actTypeDicId,
         batchId: this.batchId,
         categoryId: this.formInline.categoryId,
-        partA: this.formInline.partA,
-        partB: this.formInline.partB,
+        partA: this.nameaID.orgId,
+        partB: this.namebID.orgId,
         agTime: this.formInline.agTime,
 
         agPicA: this.formInline.agPicA,
@@ -446,26 +450,38 @@ export default {
         console.log(res);
         if (res.code == 200) {
           this.formInline = res.data;
-          this.list=[{orgName:res.data.orgNameA,orgId: Number(res.data.partA)}],
-          //   this.options1=this.list
-          // this.list2=[{orgName:res.data.orgNameB,orgId: Number(res.data.partB)}]
-          // this.formInline.partA=res.data.orgNameA
-          // this.formInline.partB=res.data.orgNameB
+          this.formInline.partA=res.data.orgNameA
+          this.formInline.partB=res.data.orgNameB
+          this.nameaID=res.data.partA
+          this.namebID=res.data.partB
           this.Times=res.data.agTime
-          console.log(this.options1,this.formInline)
         }
       });
     },
 
     //修改接口
     getAgreementmodify() {
+       let name= this.locations.find(item=>{
+        return item.dataKey==this.formInline.typeDicId
+      })
+      this.nameaID=this.list.find(item=>{
+        return item.orgName==this.formInline.partA
+      })
+       this.namebID=this.list2.find(item=>{
+        return item.orgName==this.formInline.partB
+      })
+      this.formInline.agTime=this.Times
+      console.log(name,this.formInline.agTime,this.namebID,this.nameaID)
        this.formInline.agTime=this.Times
       let params = {
         agreementId: this.agreementId,
         typeDicId: this.formInline.typeDicId,
         categoryId: this.formInline.categoryId,
-        partA: this.formInline.partA,
-        partB: this.formInline.partB,
+          partA: this.nameaID.orgId,
+        partB: this.namebID.orgId,
+         typeDicName:name.dataValue,
+        // partA: this.formInline.partA,
+        // partB: this.formInline.partB,
         agTime: this.formInline.agTime,
         // agTime: this.data1,
         // agFile: this.formInline.agFile,
