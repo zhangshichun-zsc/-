@@ -620,7 +620,7 @@
         </div>
       </div>
       <div class="" v-if="isAddRole">
-        <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
+        <role :oneRoles="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
       </div>
 
     </div>
