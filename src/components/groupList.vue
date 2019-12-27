@@ -7,15 +7,7 @@
           <span>组织名称:</span>
           <Input placeholder="组织名称" class="inpt" v-model="orgName" />
         </div>
-        <!-- <div class="flex-center-start" v-if="navigation1.name === 'parent'">
-          <span>审核状态:</span>
-          <Select size="large" v-model="orgStatus" class="inpt">
-            <Option value="0">全部</Option>
-            <Option value="1">待审核</Option>
-            <Option value="2">已审核</Option>
-            <Option value="3">已拒绝</Option>
-          </Select>
-        </div> -->
+
         <div class="flex-center-start">
           <span>提交日期:&nbsp;&nbsp;</span>
           <Row>

@@ -83,7 +83,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动预算</span>
-                <Input v-model="projectMsg.budget" placeholder="请输入活动预算金额" style="width: 300px"></Input>
+                <Input v-model="projectMsg.budget" type="number" placeholder="请输入活动预算金额" style="width: 300px"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">有效期限</span>
@@ -286,6 +286,10 @@
                 </div>
               </li>
               <li class="first-li">
+                <span class="first-span">详细地址</span>
+                <Input v-model="batch.addressSup" placeholder="请输入详细地址"></Input>
+              </li>
+              <li class="first-li">
                 <span class="first-span">出行方式</span>
                 <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
                   <Radio label="自驾">自驾</Radio>
@@ -413,7 +417,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动预算</span>
-                <Input v-model="projectMsg.budget" placeholder="请输入活动预算金额" style="width: 300px"></Input>
+                <Input v-model="projectMsg.budget" type="number" placeholder="请输入活动预算金额" style="width: 300px"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">有效期限</span>
@@ -1100,7 +1104,6 @@ export default {
       let b = {
         userConfList: [],
         actResList: [],
-        actShowPic: "",
         workerIdList: [{}]
       };
       this.batch = b;
@@ -1114,26 +1117,36 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
+      console.log(this.pcNum)
+      console.log(this.batch)
       this.two = true;
       this.three = false;
       this.current = 1;
     },
+    deepClone(obj){
+      let _obj = JSON.stringify(obj),
+      objClone = JSON.parse(_obj);
+      return objClone
+    },  
     addBatch(){
-      this.pcNum += 1
-      this.batch = this.projectMsg.actInfoList[this.projectMsg.actInfoList.length-1];
-      delete this.batch.startT
-      delete this.batch.endT
-      delete this.batch.releaseTime
-      for(let oi in this.batch.userConfList){
-        delete this.batch.userConfList[oi].enrollStarttime
-        delete this.batch.userConfList[oi].enrollEndtime
-        delete this.batch.userConfList[oi].outrollStarttime
-        delete this.batch.userConfList[oi].outrollEndtime
-        delete this.batch.userConfList[oi].setTime
+      let p = this.deepClone(this.projectMsg)
+      this.pcNum = p.actInfoList.length
+      let b = p.actInfoList[p.actInfoList.length-1]
+      delete b.startT
+      delete b.endT
+      delete b.releaseTime
+      for(let oi in b.userConfList){
+        delete b.userConfList[oi].enrollStarttime
+        delete b.userConfList[oi].enrollEndtime
+        delete b.userConfList[oi].outrollStarttime
+        delete b.userConfList[oi].outrollEndtime
+        delete b.userConfList[oi].setTime
       }
       this.two = true;
       this.three = false;
       this.current = 1;
+      this.batch = b
+      console.log(this.projectMsg.actInfoList)
     },
 
     //提交
@@ -1142,7 +1155,26 @@ export default {
       if(this.isAgree){
         this.projectMsg.userId = this.userId;
         this.projectMsg.is_draft = 2;
-        projectApproval(this.projectMsg).then(res => {
+        projectApproval({
+          actInfoList: this.projectMsg.actInfoList,
+          batchName: this.projectMsg.batchName,
+          batchId:this.projectMsg.batchId,
+          batchObjective: this.projectMsg.batchObjective,
+          batchPic: this.projectMsg.batchPic,
+          budget: this.projectMsg.budget,
+          categoryId: this.projectMsg.categoryId,
+          categoryName: this.projectMsg.categoryName,
+          channel: 1,
+          endT: this.projectMsg.endT,
+          is_draft: this.projectMsg.is_draft,
+          orgId: this.projectMsg.orgId,
+          orgName: this.projectMsg.orgName,
+          orgType: this.projectMsg.orgType,
+          partnerList: this.projectMsg.partnerList,
+          recruitType: this.projectMsg.recruitType,
+          startT: this.projectMsg.startT,
+          userId: this.projectMsg.userId
+        }).then(res => {
           console.log(res);
           if (res.code == 200) {
             this.$Message.success(res.msg);
@@ -1160,7 +1192,26 @@ export default {
       console.log(this.projectMsg);
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
-      projectApproval(this.projectMsg).then(res => {
+      projectApproval({
+        actInfoList: this.projectMsg.actInfoList,
+        batchName: this.projectMsg.batchName,
+        batchId:this.projectMsg.batchId,
+        batchObjective: this.projectMsg.batchObjective,
+        batchPic: this.projectMsg.batchPic,
+        budget: this.projectMsg.budget,
+        categoryId: this.projectMsg.categoryId,
+        categoryName: this.projectMsg.categoryName,
+        channel: 1,
+        endT: this.projectMsg.endT,
+        is_draft: this.projectMsg.is_draft,
+        orgId: this.projectMsg.orgId,
+        orgName: this.projectMsg.orgName,
+        orgType: this.projectMsg.orgType,
+        partnerList: this.projectMsg.partnerList,
+        recruitType: this.projectMsg.recruitType,
+        startT: this.projectMsg.startT,
+        userId: this.projectMsg.userId
+      }).then(res => {
         if (res.code == 200) {
           this.$Message.success(res.msg);
           this.$router.back()

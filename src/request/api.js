@@ -461,7 +461,7 @@ export const rolequery = p => get('/sysRole/findAllRole', p) //角色管理--查
 
 export const rolenew = p => posts('/sysRole/addRole', p) //角色管理--新建角色
 
-export const roleSetup = p => get('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
+export const roleSetup = p => posts('/sysRole/addRoleMenuPermission', p) //角色管理--角色权限设置
 
 export const roledel = p => post('/sysRole/delUserRole', p) //角色管理--删除
 
@@ -565,7 +565,7 @@ export const materialdel = p => postdel('/member-resources/delResourcesType', p)
 
 
 //立项前置信息查询
-export const projectApproval = p => posts('/activity-manage/apply/batch/add', p) //立项
+export const projectApproval = p => postdel('/activity-manage/apply/batch/add', p) //立项
 export const chooseTempalte = p => posts("/activity-manage/apply/act-mould/list", p) //模板列表
 export const templateMsg = p => posts("/activity-manage/apply/act/id", p) //模板信息
 export const draftDetail = p => posts("/activity-manage/work/batch/draft/list", p) //官方活动草稿箱
