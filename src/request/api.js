@@ -331,6 +331,7 @@ export const userEnable = p => posts('/user-list/account/enable/update', p) // �
 
 //  用户列表
 export const UserList = p => get('/user-list/get-user-page', p) //-用户列表--获取用户详情
+export const UserListPage = p => get('/user-list/get-user-list-page', p) //-用户列表--获取用户详情
 
 
 
