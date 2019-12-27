@@ -368,7 +368,7 @@
               <li class="first-li start">
                 <span class="first-span">所需物资</span>
                 <div>
-                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物质</Button></div>
+                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物资</Button></div>
                   <div>
                     <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource" :key='i'>
                       <span>{{item.resourcesName}}</span>
