@@ -516,7 +516,6 @@ export default {
 
   methods: {
     changeSwitch(e){
-      console.log(e)
       if(params.row.statusText !== "10"){
         this.activityId = params.row.acitvityId
         this.addstate = true
@@ -668,6 +667,8 @@ export default {
         this.startT = ''
         this.endT = ''
       }
+      this.name = this.query.name
+      this.state = this.query.state
       this.getactiveManager();
     },
 

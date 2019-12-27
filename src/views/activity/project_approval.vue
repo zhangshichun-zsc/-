@@ -12,7 +12,7 @@
       <div class="flex-start">
         <div class="flex-center-start list">
           <span class="span">立项名称:</span>
-          <Input size="large" placeholder="活动名称" class="inpt" v-model="query.batchName" />
+          <Input size="large" placeholder="立项名称" class="inpt" v-model="query.batchName" />
         </div>
         <div class="flex-center-start list">
           <span class="span">审核状态:</span>
@@ -104,7 +104,7 @@ export default {
     return {
       modal1:false,
       navigation1: {
-        head: "活动立项审批(会员)"
+        head: "活动立项管理"
       },
       cityList: [
         {
