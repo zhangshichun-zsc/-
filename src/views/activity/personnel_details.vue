@@ -4,11 +4,12 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="wapper">
       <div class="head">
-        <p>{{activityName}}</p>
+        <p>{{ activityName }}</p>
+        <p>{{ activeState[msg.actStatus] }}</p>
       </div>
       <div class="content">
         <ul>
-          <li>
+          <li class="sign">
             <p>报名</p>
             <table>
               <tr>
@@ -17,6 +18,7 @@
                 <th>报名类型</th>
                 <th>报名时间</th>
                 <th>报名状态</th>
+                <th v-for='(item,index) in msg.items' :key='index'>{{ item.itemName }}</th>
               </tr>
               <tr>
                 <td>{{msg.userName}}</td>
@@ -37,6 +39,7 @@
                 <td v-else-if='msg.userActType==12'>待付款</td>
                 <td v-else-if='msg.userActType==13'>拒绝转移</td>
                 <td v-else-if='msg.userActType==14'>工作人员</td>
+                <td v-for='(val,i) in msg.item' :key='i'>{{ val.itemValue }}</td>
               </tr>
             </table>
           </li>
@@ -46,12 +49,14 @@
               <tr>
                 <th>培训状态</th>
                 <th>确认时间</th>
+                <th>操作</th>
               </tr>
               <tr>
                 <td v-if='msg.trainStatus==1'>未阅读</td>
                 <td v-else-if='msg.trainStatus==2'>已阅读</td>
                 <td v-else-if='msg.trainStatus==3'>已确认</td>
                 <td>{{msg.trainTime}}</td>
+                <td>详情</td>
               </tr>
             </table>
           </li>
@@ -95,7 +100,7 @@
 </template>
 
 <script>
-import { userDetail ,feendDetail } from '@/request/api'
+import { feendDetail } from '@/request/api'
 
 export default {
   data() {
@@ -105,6 +110,7 @@ export default {
       },
       actUserId:1,
       msg:{},
+      activeState: this.$store.state.activeState,
       activityName: this.$route.query.activityName,
     };
   },
@@ -154,6 +160,10 @@ export default {
     font-size: 20px;
     height: 20px;
   }
+}
+.sign{
+  max-width: 100%;
+  overflow: hidden;
 }
 .content {
   padding-left: 40px;
