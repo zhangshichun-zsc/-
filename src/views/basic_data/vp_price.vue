@@ -14,11 +14,11 @@
                 <Input v-model.trim="formValidate.name" size="large" :maxlength=30 style="width: 220px"/>
               </FormItem>
               <FormItem label="金额:" prop="amount">
-                <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button type="error" >元</Button>
+                <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
                 <InputNumber :max="99" :min="1" v-model="formValidate.imonth" size="large"  style="width: 220px;"></InputNumber>
-               <Button type="error" >月</Button>
+               <Button  >月</Button>
               </FormItem>
               <FormItem label="会员包:" prop="packageFlag">
                 <RadioGroup v-model="formValidate.packageFlag" size="large">
