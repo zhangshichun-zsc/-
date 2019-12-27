@@ -80,13 +80,13 @@ export default {
         },
         {
           title: "甲方",
-          key: "partA",
+          key: "orgNameA",
           align: "center",
           width: 360
         },
         {
           title: "乙方",
-          key: "partB",
+          key: "orgNameB",
           align: "center",
           width: 360
         },
@@ -97,21 +97,17 @@ export default {
           width: 280
         },
         {
-          title: "所属项目",
-          key: "categoryName",
+          title: "活动类型",
+          key: "dicName",
           align: "center",
           width: 280
         },
         {
           title: "协议时间",
-          align: "center",
+          key: "createAt",
           width: 240,
-          render: (h, params) => {
-            return h(
-              "div",
-              this.util.formatDateYMD(params.row.agreementTimestamp)
-            );
-          }
+           align: "center",
+
         },
         {
           title: "附件名称",
@@ -252,7 +248,6 @@ export default {
           size: this.size,
           sort: "createAt" + " " + this.sort
         },
-        sysType: this.sysType,
         agreementObject: this.agreementObject,
         agreementType: this.agreementType
       }).then(res => {

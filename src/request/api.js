@@ -154,7 +154,7 @@ export const Agreementpage = p => get('/agreement-manage/get-agreement-page', p)
 
 export const Agreementdel = p => post('/agreement-manage/del-agreement', p) //删除协议
 
-export const Agreementadd = p => posts('/agreement-manage/updateAgreeMent', p) //添加协议
+export const Agreementadd = p => posts('/agreement-manage/update-agreement', p) //添加协议
 
 // export const Agreementadd = p => posts('/agreement-manage/add-agreement', p) //添加协议
 

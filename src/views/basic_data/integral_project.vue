@@ -9,15 +9,21 @@
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <!-- <Button class="table-btn">批量删除</Button> -->
-          <Button class="table-btns"  @click="added">新增项目</Button>
+          <Button class="table-btns" @click="added">新增项目</Button>
           <Modal v-model="modal1" :title="text" class="mol" class-name="vertical-center-modal">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="项目名称" prop="name">
-                <Input v-model.trim="formValidate.name" :maxlength=30 style="width: 220px" />
+                <Input v-model.trim="formValidate.name" :maxlength="30" style="width: 220px" />
               </FormItem>
               <FormItem label="总计预算" prop="allBudget">
-                <InputNumber  :min="0" :max="1000000000" size="large"  style="width: 220px" v-model="formValidate.allBudget"></InputNumber>
-<Button type="error" >元</Button>
+                <InputNumber
+                  :min="0"
+                  :max="1000000000"
+                  size="large"
+                  style="width: 220px"
+                  v-model="formValidate.allBudget"
+                ></InputNumber>
+                <Button >元</Button>
                 <!-- <Input v-model.trim="formValidate.allBudget" /> -->
               </FormItem>
               <FormItem label="预算来源" prop="orgId">
@@ -79,14 +85,14 @@ export default {
       },
       ruleValidate: {
         name: [
-          { required: true, message: "职业名称不能为空", trigger: "blur" }
+          { required: true, message: "项目名称不能为空", trigger: "blur" }
         ],
         allBudget: [
-         {
+          {
             required: true,
             message: "总计预算格式不正确",
             trigger: "blur",
-             type: "number"
+            type: "number"
           }
         ],
         orgId: [
@@ -115,14 +121,14 @@ export default {
         {
           title: "总预算/(元)",
           key: "allBudget",
-           align: "center",
-           width: 240
+          align: "center",
+          width: 240
         },
         {
           title: "预算来源",
           key: "orgName",
           align: "center",
-            width: 400,
+          width: 400
         },
         {
           title: "创建时间",
@@ -134,7 +140,7 @@ export default {
           title: "有效状态",
           key: "status",
           align: "center",
-           width: 180,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -163,14 +169,14 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-           width: 180,
+          width: 180,
           render: (h, params) => {
             return h("div", [
               h(
                 "a",
                 {
                   clssName: "action",
-                   style: {
+                  style: {
                     marginRight: "5px",
                     marginLeft: "5px",
                     color: "red"
@@ -271,6 +277,8 @@ export default {
           this.$Message.info("新增成功");
           this.getprojectsetlist();
           this.modal1 = false;
+        } else {
+          this.$Message.error(res.msg);
         }
         console.log(res);
       });
@@ -286,7 +294,6 @@ export default {
       ];
       projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
-
           this.$Message.info("操作成功");
         }
         console.log(res);
@@ -317,7 +324,7 @@ export default {
 
     // 查询结果按钮
     query(e) {
-      this.data=[]
+      this.data = [];
       console.log(e);
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
@@ -354,11 +361,9 @@ export default {
     },
     cancel() {
       this.modal1 = false;
-
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-
 </style>
