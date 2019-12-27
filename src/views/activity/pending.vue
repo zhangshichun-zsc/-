@@ -39,7 +39,7 @@
     <div class="content">
       <div class="content-details">
         <ul class="list-one">
-          <li @click="btnTab(index+1)" v-for='(item,index) in head' :key='index'>
+          <li @click="btnTab(index+1)" v-for='(item,index) in head' :key='index' v-if='(sysId === 2&&index===0) || sysId === 1'>
             <span :class="{active:show == index+1}">{{ item.name }}</span>
           </li>
         </ul>
@@ -549,7 +549,8 @@ export default {
       listM:[],
       listV:[],
       vName:'',
-      actMatchId: null
+      actMatchId: null,
+      sysId:this.$route.query.sysId
     };
   },
 
