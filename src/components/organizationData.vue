@@ -368,7 +368,7 @@ export default {
     //类型
     getorgtype() {
       orgtype({
-        sysType: this.sysType == "1,3" ? 1 : this.sysType
+        sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
           this.typelist = [
@@ -412,7 +412,7 @@ export default {
           size: this.size,
           sort: this.sort
         },
-        sysType: this.sysType,
+        sysType: this.navigation1.id == 100 ? "1,3" : 2,
         orgName: this.orgName,
         address: this.address,
         ownerUserName: this.ownerUserName,
@@ -518,11 +518,11 @@ export default {
       this.sysType = 2;
       this.getorgpage();
     } else if (this.navigation1.id == 100) {
-      this.sysType = "1,3";
+      this.sysType = 1;
       this.getorgpage();
       this.getorgtype();
     } else {
-      this.sysType = "1,3";
+      this.sysType = 1;
       this.orgType = this.navigation1.id;
       this.getorgpage();
     }
