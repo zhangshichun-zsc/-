@@ -641,7 +641,6 @@ import {
 
 import role from "./compile_beneficiary.vue";
 import adress from "_c/map";
-import { orgimg } from "@/request/http";
 import { upload } from "@/request/http";
 
 export default {
@@ -682,16 +681,10 @@ export default {
       itemsList: [],
       part: [],
       batchItemList: [],
-      editorContent1: "",
       navigation1: {
         head: "活动立项"
       },
       current: 0,
-      single: false,
-      model1: "",
-      value: "",
-      value2: "",
-      animal: "批次招募",
       add: false,
       selects: true,
       two: false,
@@ -703,10 +696,7 @@ export default {
       addWorker: false,
       releaseTimeSelf: false,
       isAddRole: false,
-      editor1: "",
-      orgimg: "",
       userId: 1,
-      image: "",
       oneRole: {},
       roleMsg: {
         fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
@@ -745,8 +735,8 @@ export default {
     this.getBatchItem();
   },
   mounted() {
-    this.orgimg = orgimg;
-  },
+
+},
 
   methods: {
     getDraftsDetail(e){
