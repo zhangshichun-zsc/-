@@ -560,7 +560,7 @@ import adress from'_c/map'
 import { upload }from '@/request/http'
 
 export default {
-  props:['oneRole'],
+  props:['oneRoles'],
   data() {
     return {
       adr:false,
@@ -580,6 +580,7 @@ export default {
           label: "上海市"
         }
       ],
+      oneRole:this.oneRoles,
       model1: "",
       value: "",
       fruit: "先到先得",
