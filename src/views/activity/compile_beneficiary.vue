@@ -711,7 +711,7 @@ export default {
     getTypes(val) {
       signPost({
         roleId: val.roleId,
-        name: val.name
+        name: val.roleName
       }).then(res => {
         if(res.code==200){
           this.signPostList = res.data.voluJobs;
