@@ -18,6 +18,7 @@
             >{{ item.dicName }}</Button
           >
         </div>
+        <div class="footer"></div>
       </Modal>
     </div>
     <div class="content">
@@ -70,7 +71,8 @@ export default {
   computed: {},
 
   created() {
-    this.modal1 = false
+    let obd = document.getElementsByTagName("body")[0]
+    obd.style.overflow = "visible"
     this.getList();
   },
 
