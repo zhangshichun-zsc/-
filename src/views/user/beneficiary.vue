@@ -745,13 +745,13 @@ export default {
         },
         {
           title: '参与活动数',
-          key: 'memActNum',
+          key: 'joinActivityNum',
           align: 'center',
           width: 120
         },
         {
           title: '积分',
-          key: 'memScore',
+          key: 'score',
           align: 'center',
           width: 100
         },

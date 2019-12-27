@@ -305,8 +305,7 @@ export default {
     //获取组织类型列表
     getorgtype() {
       orgtype({
-        sysType:
-          this.$route.query.sysId == "1,3" ? "1" : this.$route.query.sysId
+        sysType: this.$route.query.sysId
       }).then(res => {
         if (res.code == 200) {
           this.list = res.data.filter(res => {
@@ -487,9 +486,6 @@ export default {
   mounted() {
     this.getUserInfo();
     if (this.$route.query.sysId == "1") {
-      this.navigation1.head = "新建组织(会员)";
-      this.getorgtype();
-    } else if (this.$route.query.sysId == "1,3") {
       this.navigation1.head = "新建组织(会员)";
       this.getorgtype();
     } else if (this.$route.query.sysId == "2") {

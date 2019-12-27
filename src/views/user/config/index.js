@@ -1,5 +1,5 @@
 import {
-    UserList, getLabel, Userbatch, Setsend, SetUserLabel, getLevel, userExprot, optTime, Userdetail, getVipPage, vipApproval, getVipUserInfo, setUpdate, orgcity, orgprovince,
+    UserList, UserListPage, getLabel, Userbatch, Setsend, SetUserLabel, getLevel, userExprot, optTime, Userdetail, getVipPage, vipApproval, getVipUserInfo, setUpdate, orgcity, orgprovince,
     orgdistrict
 } from "@/request/api";
 
@@ -12,7 +12,7 @@ Public.getInfo = function () {
 
 //  获取  用户信息 列表信息
 Public.getUserList = function (parame) {
-    return UserList(parame)
+    return UserListPage(parame)
 }
 //  变更用户状态
 Public.setBatch = function (parame) {
