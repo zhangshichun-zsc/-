@@ -195,22 +195,22 @@
                 <li>
                   <span>是否允许空降</span>
                   <RadioGroup v-model="args.flyFlag" :disabled='isDisb'>
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
+                    <Radio :label="1">是</Radio>
+                    <Radio :label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否发放证书</span>
                   <RadioGroup v-model="args.isNeedCertMould" :disabled='isDisb'>
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
+                    <Radio :label="1">是</Radio>
+                    <Radio :label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否显示主办方小站</span>
                   <RadioGroup v-model="args.isShowHolder" :disabled='isDisb'>
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
+                    <Radio :label="1">是</Radio>
+                    <Radio :label="2">否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
@@ -497,11 +497,14 @@ export default {
           this.zhaStart = i==4?"":res.data.enrollStarttime + ':00' || null,
           this.zhaEnd = i==4?"":res.data.enrollEndtime + ':00' || null,
           this.judge = res.data.result || '',
-          this.isFeedback = res.data.isFeedback || 0,
-          this.isTrain = res.data.isTrain || 0,
+          this.isFeedback = ~~res.data.isFeedback || 0,
+          this.isTrain = ~~res.data.isTrain || 0,
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
           this.add = add
+          if(i===4){
+            this.args.status = 1
+          }
           this.separation()
           this.filter()
         }else{
@@ -841,7 +844,7 @@ export default {
       if (this.isEdit !== 1){
         item.status = i
       }else{
-        item.activityId = this.data.activityId
+        item.activityId = this.activityId
       }
       item.userId = this.userId
       if(i == 1){
