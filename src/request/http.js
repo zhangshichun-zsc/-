@@ -48,7 +48,6 @@ axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded
 axios.interceptors.request.use(
   config => {
     if (router.currentRoute.fullPath.indexOf('/login') != -1) {
-
       // config.params = {
       //   ...config.params
       // };

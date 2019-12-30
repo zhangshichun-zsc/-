@@ -22,13 +22,13 @@
       <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start name">
           <span>用户账户:</span>
-          <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="userAccount" />
+          <Input size="large" placeholder="请输入用户ID/账号" class="inpt" v-model="userAccount" />
         </div>
         <div class="flex-center-start name">
           <span>用户昵称:</span>
-          <Input size="large" placeholder="用户昵称" class="inpt" v-model="nickname" />
+          <Input size="large" placeholder="请输入用户昵称" class="inpt" v-model="nickname" />
         </div>
-        <InputNumber :min=1 v-model="value3" size="small"></InputNumber>
+
 
         <Button class="search" @click="query">查询</Button>
       </div>

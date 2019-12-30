@@ -19,7 +19,7 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>组织:</span>
-          <Input size="large" placeholder="请输入" class="inpt" v-model.trim="args.orgName" />
+          <Input size="large" placeholder="请输入名称" class="inpt" v-model.trim="args.orgName" />
         </div>
         <div class="flex-center-start">
           <span>创建时间段:</span>
