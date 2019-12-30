@@ -86,8 +86,17 @@
             </div>
           </div>
         </FormItem>
-        <FormItem label="广告链接" prop="linkUrl">
+        <FormItem label="是否跳转外部链接" prop="linkType">
+          <RadioGroup v-model="formValidate.linkType">
+            <Radio label="1">是</Radio>
+            <Radio label="0">否</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="广告链接" prop="linkUrl" v-if='formValidate.linkType==1'>
           <Input v-model="formValidate.linkUrl" />
+        </FormItem>
+        <FormItem label="广告内容" prop="comments" v-if='formValidate.linkType==0'>
+          <wangeditor :labels="formValidate.comments" id="ed1" @change="changeEditorTrain"></wangeditor>
         </FormItem>
         <FormItem label="广告备注">
           <Input
@@ -136,7 +145,9 @@ export default {
         remark: "",
         linkUrl: "",
         picUrl: "",
-        imgUrl: null
+        imgUrl: null,
+        linkType:1,
+        comments:''
       },
       ruleValidate: {
         title: [
@@ -155,6 +166,9 @@ export default {
           }
         ],
         status: [
+          { required: true, message: "请选择其中一个", trigger: "change" }
+        ],
+        linkType: [
           { required: true, message: "请选择其中一个", trigger: "change" }
         ],
         startAt: [
@@ -278,6 +292,10 @@ export default {
           this.$Message.error(res.msg);
         }
       });
+    },
+    //广告内容
+    changeEditorTrain(e) {
+      this.formValidate.comments = e;
     },
 
     handleSubmit(name) {
