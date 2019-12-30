@@ -65,6 +65,7 @@
           </tr>
         </table>
       </div>
+
     </div>
   </div>
 </template>
@@ -81,7 +82,8 @@ export default {
       ReportData: {},
       state:this.$route.query.states,
       reportId:this.$route.query.reportId,
-       picList:[]
+       picList:[],
+
     };
   },
   mounted() {
@@ -110,7 +112,9 @@ export default {
         }
         console.log(res);
       });
-    }
+    },
+
+
   }
 };
 </script>

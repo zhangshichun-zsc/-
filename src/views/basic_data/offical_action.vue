@@ -202,6 +202,12 @@ export default {
                       this.modal2 = true;
                       this.dicId = params.row.dicId;
                       this.formValidate.dicNamemod = params.row.dicName;
+                      if(params.row.beneficiary=="孩子"){
+                        this.formValidate.actTypeFlag=2
+                      }else{
+                        this.formValidate.actTypeFlag=1
+                      }
+
                     }
                   }
                 },

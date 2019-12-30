@@ -51,7 +51,7 @@
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
-        <Modal v-model="modal1" title="修改积分" class-name="vertical-center-modal">
+        <Modal v-model="modal1" title="编辑积分" class-name="vertical-center-modal">
           <Form ref="formItem" :model="formItem" :rules="ruleValidates" :label-width="120">
             <FormItem label="调整积分" prop="addType">
               <RadioGroup v-model="formItem.addType" size="large">

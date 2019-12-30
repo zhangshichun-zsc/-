@@ -130,7 +130,7 @@ export default {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "修改活动分类";
+                      this.text = "编辑活动分类";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }
@@ -284,16 +284,6 @@ export default {
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-      // if (e.createTimestamp == "") {
-      // this.startAt = '';
-      // this.endAt = '';
-      // } else if (new Date() > e.createTimestamp) {
-      //   this.startAt = e.createTimestamp;
-      //   this.endAt = new Date();
-      // } else {
-      //   this.startAt = new Date();
-      //   this.endAt = e.createTimestamp;
-      // }
       this.getBasicsearch();
     },
 

@@ -128,7 +128,7 @@ export default {
                     click: () => {
                       this.modal1 = true;
                       this.dicId = params.row.dicId;
-                      this.text = "修改特长";
+                      this.text = "编辑特长";
                       this.id = 0;
                       this.formValidate.dicName = params.row.dicName;
                     }

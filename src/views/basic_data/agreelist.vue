@@ -82,13 +82,13 @@ export default {
           title: "甲方",
           key: "orgNameA",
           align: "center",
-          width: 360
+          width: 500
         },
         {
           title: "乙方",
           key: "orgNameB",
           align: "center",
-          width: 360
+          width: 500
         },
         {
           title: "协议分类",
@@ -242,15 +242,19 @@ export default {
   methods: {
     //协议分页
     getAgreementpage() {
-      Agreementpage({
-        page: {
+      let params ={
+         page: {
           page: this.page,
           size: this.size,
           sort: "createAt" + " " + this.sort
         },
         agreementObject: this.agreementObject,
         agreementType: this.agreementType
-      }).then(res => {
+      }
+      params = this.util.remove(params);
+      Agreementpage(
+       params
+      ).then(res => {
         console.log(res);
         if (res.code == 200) {
           this.data = res.data.list;

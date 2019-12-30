@@ -318,6 +318,7 @@ export default {
     btn() {
       this.modal1 = true;
       this.id = 1;
+       this.text = "新增家长职业类型";
       this.formValidate.dicName = "";
     },
 
