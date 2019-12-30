@@ -74,37 +74,16 @@
         </FormItem>
         <FormItem label="广告图片" prop="imgUrl">
           <div class="start-wap">
-            <img :src="formValidate.imgUrl" style="height:150px;width:150px;" />
-            <div
-              class="upload"
-              v-if="formValidate.imgUrl == null"
-              @click="
-                () => {
-                  this.$refs.files.click();
-                }
-              "
-            >
-              <div class="file">
-                <input
-                  style=" display:none;"
-                  type="file"
-                  accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                  ref="files"
-                  @change="uploadFile()"
-                  multiple
-                />
-                <Button icon="ios-cloud-upload-outline">上传图片</Button>
-                <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+            <div class="first-pic" v-if='formValidate.imgUrl == null'>
+              <div class="" @click="()=>{ this.$refs.files.click()}">
+                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
               </div>
             </div>
-
-            <Icon
-              type="ios-trash"
-              v-if="formValidate.imgUrl != null"
-              class="cancel"
-              :size="26"
-              @click="cancelImg()"
-            />
+            <div class="first-pic" style="border:none" v-else>
+              <img class="imgs" style="width:283px;height:188px" :src="formValidate.imgUrl"/>
+              <Icon type="ios-trash" v-if='formValidate.imgUrl' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
+            </div>
           </div>
         </FormItem>
         <FormItem label="广告链接" prop="linkUrl">
@@ -344,5 +323,18 @@ export default {
   padding: 5px 20px;
   background: rgb(228, 228, 228);
   border: 1px solid #eee;
+}
+.first-pic{
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px dashed #FF565A;
+  position: relative;
+}
+.cancel{
+  position: absolute;
+  top: 0;
+  right: -30px;
 }
 </style>

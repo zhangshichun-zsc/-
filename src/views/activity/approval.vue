@@ -570,7 +570,7 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="partner.partPicShow"/>
-                    <span v-if='partner.partPicShow' class="cancel" @click="cancelPartnerImg()">X</span>
+                    <Icon type="ios-trash" v-if='partner.partPicShow' class="cancel" @click="cancelPartnerImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
