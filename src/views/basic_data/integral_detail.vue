@@ -12,7 +12,7 @@
           <Select size="large" class="inpt" v-model="scoreRuleType">
             <Option
               v-for="item in list"
-              :value="item.scoreRuleId"
+              :value="item.typeFlag"
               :key="item.scoreRuleId"
             >{{item.comments}}</Option>
           </Select>
@@ -146,6 +146,15 @@ export default {
 
 
         },
+          {
+          title: "审批状态",
+          // key: "updateAt",
+          align:'center',
+          render: (h, params) => {
+            let states=["待审批","已拒绝","审核通过"]
+             return h("p",states[params.row.auditFlag])
+           }
+        },
         {
           title: "备注",
           key: "comments",
@@ -207,7 +216,7 @@ export default {
         sysType: this.sysType
       }).then(res => {
         if (res.code == 200) {
-           res.data.unshift({ scoreRuleId: "", comments: "全部" });
+           res.data.unshift({ typeFlag: "", comments: "全部" });
           this.list = res.data;
         }
       });

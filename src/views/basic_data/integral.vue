@@ -28,13 +28,15 @@
           <span>用户昵称:</span>
           <Input size="large" placeholder="用户昵称" class="inpt" v-model="nickname" />
         </div>
+        <InputNumber :min=1 v-model="value3" size="small"></InputNumber>
+
         <Button class="search" @click="query">查询</Button>
       </div>
     </div>
     <div class="integral-table">
       <div class="table-header flex-between">
         <div>
-           <Button class="table-btns" @click="set" >积分规则设置</Button>
+          <Button class="table-btns" @click="set">积分规则设置</Button>
           <Button class="table-btns" @click="sets" v-if="power==1">积分审核</Button>
         </div>
 
@@ -61,15 +63,22 @@
             <FormItem label="数值：" prop="addScore">
               <InputNumber
                 :min="1"
+
                 size="large"
                 v-model="formItem.addScore"
                 style="width: 160px;"
                 placeholder="请输入大于0的整数"
+                @on-change="numbers"
               ></InputNumber>
-              <Button type="error" >分</Button>
+              <Button type="error">分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
-              <Input v-model="formItem.remark" size="large" type="textarea" :autosize="{minRows: 4,maxRows: 4}" />
+              <Input
+                v-model="formItem.remark"
+                size="large"
+                type="textarea"
+                :autosize="{minRows: 4,maxRows: 4}"
+              />
             </FormItem>
           </Form>
           <div slot="footer">
@@ -104,8 +113,11 @@
 </template>
 
 <script>
-
-import { integralpage, integralmodify,approvalAuditScorePower } from "../../request/api";
+import {
+  integralpage,
+  integralmodify,
+  approvalAuditScorePower
+} from "../../request/api";
 export default {
   data() {
     return {
@@ -130,13 +142,19 @@ export default {
             trigger: "change"
           }
         ],
-        addScore: [
-          {
-            required: true,
-            message: "必填项不能为空",
-            trigger: "blur",
-            type: "number"
-          }
+        // \b[1-9]\d{0-2}\b
+        // addScore: [
+        //   { required: true, message: "必填项不能为空", trigger: "blur" },
+        //   {
+        //     type: "number",
+        //     pattern: /^[1-9]*$/,
+        //     message: "输入数字必须大于0",
+        //     trigger: "blur"
+        //   }
+        // ],
+         addScore: [
+          { required: true, message: "必填项不能为空", trigger: "blur", type: "number",},
+
         ],
         remark: [
           {
@@ -152,7 +170,7 @@ export default {
         head: "积分查询(会员)"
       },
       columns: [
-         {
+        {
           type: "selection",
           width: 60,
           align: "center"
@@ -161,44 +179,44 @@ export default {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width: 300,
+          width: 300
         },
         {
           title: "用户昵称",
           key: "nickName",
           align: "center",
-          width:400
+          width: 400
         },
         {
           title: "用户类型",
           key: "userType",
           align: "center",
-          width:230,
+          width: 230
         },
         {
           title: "可用积分",
           key: "score",
           align: "center",
-          width:180,
+          width: 180
         },
         {
           title: "是否有待审核积分",
           key: "isAuditScore",
           align: "center",
-          width:260,
+          width: 260
         },
         {
           title: "操作",
           key: "action",
           align: "center",
-           width: 260,
+          width: 260,
           render: (h, params) => {
             return h("div", [
               h(
                 "a",
                 {
                   clssName: "action",
-                   style: {
+                  style: {
                     marginRight: "5px",
                     marginLeft: "5px",
                     color: "red"
@@ -230,7 +248,7 @@ export default {
                   }
                 },
                 "修改数值"
-              ),
+              )
             ]);
           }
         }
@@ -262,8 +280,9 @@ export default {
       userIds: "",
       Retract: true,
       num: "",
-      sysId:'1,3',
-      power:''
+      sysId: "1,3",
+      power: "",
+      value3:2,
     };
   },
 
@@ -272,10 +291,8 @@ export default {
   computed: {},
   mounted() {
     this.getintegralpage();
-    this.getapprovalAuditScorePower()
+    this.getapprovalAuditScorePower();
   },
-
-
 
   created() {},
 
@@ -285,6 +302,14 @@ export default {
     sort: "getintegralpage"
   },
   methods: {
+    numbers(e){
+      if(e==0){
+        this.formItem.addScore=1
+      }else{
+        this.formItem.addScore=e
+      }
+      console.log(e)
+    },
     //积分管理--积分分页
     getintegralpage() {
       integralpage({
@@ -307,14 +332,14 @@ export default {
     },
 
     //审核权限
-    getapprovalAuditScorePower(){
+    getapprovalAuditScorePower() {
       approvalAuditScorePower({
-        userId:this.$store.state.userId,
-        sysId:this.sysId,
-      }).then(res=>{
-        this.power=res.data.power
-        console.log(res)
-      })
+        userId: this.$store.state.userId,
+        sysId: this.sysId
+      }).then(res => {
+        this.power = res.data.power;
+        console.log(res);
+      });
     },
 
     //修改积分
@@ -375,14 +400,14 @@ export default {
 
     clearinput() {
       this.formItem.remark = "";
-      this.formItem.addScore = 0;
+      this.formItem.addScore = 1;
       // this.formItem.addScore2 = 0;
       this.modal1 = true;
     },
 
     //搜索结果
     query() {
-      this.page=1
+      this.page = 1;
       this.getintegralpage();
     },
 
@@ -390,9 +415,7 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-
           this.getintegralmodify();
-
         } else {
           this.$Message.error("必填项未填");
         }
@@ -419,30 +442,28 @@ export default {
     //   this.modal2 = false;
     // },
 
-    set(){
+    set() {
       this.$router.push({
-        name:'integral_set'
-      })
+        name: "integral_set"
+      });
     },
-    sets(){
-       this.$router.push({
-        name:'integral_audit'
-      })
+    sets() {
+      this.$router.push({
+        name: "integral_audit"
+      });
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-
-.integral-body{
-margin-bottom: 20px;
-    padding-left: 20px;
-    border-radius: 10px;
+.integral-body {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-radius: 10px;
   display: flex;
   height: 90px;
   background: #ffffff;
   border: 0;
-
 }
 .name {
   span {
@@ -453,7 +474,4 @@ margin-bottom: 20px;
     margin-right: 30px;
   }
 }
-
-
-
 </style>
