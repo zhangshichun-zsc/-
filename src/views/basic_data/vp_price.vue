@@ -7,8 +7,8 @@
       <div class="table-header flex-between">
 
 
-          <Button class="table-btns"  @click="add('formValidate')">{{Newly}}</Button>
-          <Modal v-model="modal1" title="新增会费" class="modals"  width="700">
+          <Button class="table-btns"  @click="add('formValidate')">新增会费</Button>
+          <Modal v-model="modal1" :title=Newly class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="会费名称:" prop="name">
                 <Input v-model.trim="formValidate.name" size="large" :maxlength=30 style="width: 220px"/>
@@ -46,7 +46,7 @@
                   <p>是否确认新增，新增后上一条有效数据将自动设为无效</p>
                 </div>
                 <div slot="footer">
-                  <Button  @click="modalCancel2">取消</Button>
+                  <Button type="text"  @click="modalCancel2">取消</Button>
                   <Button type="error" @click="modalOkdel2">确定</Button>
                 </div>
               </Modal>
@@ -232,6 +232,7 @@ export default {
                         return
                       }else{
                         this.modal1 = true;
+      this.Newly='编辑会费'
                         this.duesId=params.row.duesId
                         this.getCostdels()
                       }
@@ -449,6 +450,7 @@ export default {
     },
     //新增
     add(name) {
+      this.Newly='新增会费'
       this.duesId=''
       this.editorContent = "";
       this.$refs[name].resetFields();

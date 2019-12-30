@@ -36,6 +36,10 @@ export default {
   font-size: 16px;
 }
 
+.selec .ivu-select-selection input{
+  font-size: 16px;
+}
+
 // //  隐藏滚动条的样式
 // ::-webkit-scrollbar {
 //   width: 0px;

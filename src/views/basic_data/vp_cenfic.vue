@@ -98,7 +98,7 @@
     <div class="integral-table">
       <div class="table-header flex-between">
         <div class="flex-center-start">
-          <Button class="table-btns" @click="modal1 = true">新增模板</Button>
+          <Button class="table-btns" @click="modal1 = true">新增证书</Button>
         </div>
         <div class="flex-center-end">
           <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" v-model="size" @on-change="changeNum">
@@ -256,7 +256,7 @@ export default {
         endAt: null,
         orgName: null
       },
-      volun: [{ orgName: "融爱融乐", orgId: 1 }],
+      volun: [{ orgName: "北京市海淀区融爱融乐心智障碍者家庭支持中心", orgId: 1 }],
       sumSize: 10,
       page: 1,
       numList: [10, 15, 20],

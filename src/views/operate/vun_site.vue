@@ -155,7 +155,7 @@ export default {
         content:this.content,
         channelFlag: this.channelFlag,
         createAt:this.createAt,
-        page: { page: this.page, size: this.size }
+        page: { page: this.page, size: this.size,sort:this.sort }
       }
       params=this.util.remove(params)
       console.log(params)
@@ -174,14 +174,14 @@ export default {
     },
 
     query(e) {
-            this.page=1
+      this.page=1
       this.content = e[0].value;
 
        if(e[1].value!=''){
         this.createAt = e[1].value.getTime();
         this.createAt=this.util.formatDate(this.createAt)
       }else{
-         this.createAt = e[1].value;
+        this.createAt = e[1].value;
       }
       this.getmessageShort()
     },
