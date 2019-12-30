@@ -471,7 +471,7 @@ export default {
     this.status = status
     this.activityId = this.$route.query.activityId
     this.initData()
-    this.getRelse()
+    this.getRelse(isEdit)
   },
   beforeDestroy(){
     console.log(111)
@@ -484,18 +484,18 @@ export default {
       if(this.isDisb)return
       this.adr = !this.adr
     },
-    getRelse(){
+    getRelse(i){
       if(!this.activityId)return
       getActiveRelse({activityId:this.activityId}).then(res => {
         if(res.code == 200){
           let args = Object.assign(this.args, res.data)
           let add = !!args.memberGroupNum? true : false
           this.args = args
-          this.args.startAt = res.data.startAt + ':00'
-          this.args.endAt = res.data.endAt + ':00'
+          this.args.startAt = i==4?"":res.data.startAt + ':00'
+          this.args.endAt = i==4?"":res.data.endAt + ':00'
           this.image = res.data.picPath
-          this.zhaStart = res.data.enrollStarttime + ':00' || null,
-          this.zhaEnd = res.data.enrollEndtime + ':00' || null,
+          this.zhaStart = i==4?"":res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = i==4?"":res.data.enrollEndtime + ':00' || null,
           this.judge = res.data.result || '',
           this.isFeedback = res.data.isFeedback || 0,
           this.isTrain = res.data.isTrain || 0,
@@ -517,6 +517,9 @@ export default {
         }
         if (item.coActivityRuleParamList){
           this.forlist(item.coActivityRuleParamList)
+        }
+        if(this.isEdit === 4){
+          item.setTime = ''
         }
       }
       this.args.coActivityUserConfParamList = list

@@ -58,8 +58,8 @@
           <div class="flex-center-start">
             <span>姓名：</span>
             <i-input v-model="query.userName" size='large' class="input"  placeholder="输入名称"></i-input>
-            <span>报名类型:</span>
-            <Select v-model="query.roleId" size='large' class="input">
+            <span v-if="sysId === 1">报名类型:</span>
+            <Select v-model="query.roleId" size='large' class="input"  v-if="sysId === 1">
               <Option :value="''">全部</Option>
               <Option v-for="item in cityList1" :value="item.roleId" :key="item.value">{{ item.roleName }}</Option>
             </Select>
@@ -310,7 +310,8 @@ export default {
       memberlist:[],
       activityName: this.$route.query.activityName,
       title:'',
-      msg: ''
+      msg: '',
+      sysId:this.$route.query.sysId
     }
   },
 
@@ -413,6 +414,7 @@ export default {
       })
     },
     typeList(){
+      if(~~this.sysId === 2)return
       getActiveIdType({activityId:this.$route.query.acitvityId}).then(res => {
         if(res.code == 200){
           this.cityList1 = res.data

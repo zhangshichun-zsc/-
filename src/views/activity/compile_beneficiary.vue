@@ -560,7 +560,7 @@ import adress from'_c/map'
 import { upload }from '@/request/http'
 
 export default {
-  props:['oneRole'],
+  props:['oneRoles'],
   data() {
     return {
       adr:false,
@@ -569,29 +569,7 @@ export default {
       navigation1: {
         head: "编辑招募报名项-受益方(会员)"
       },
-      animal: "",
-      cityList: [
-        {
-          value: "beijing",
-          label: "北京市"
-        },
-        {
-          value: "shanghai",
-          label: "上海市"
-        }
-      ],
-      model1: "",
-      value: "",
-      fruit: "先到先得",
-      switch1: false,
-      animal: "金斑蝶",
-      subsidys: false,
-      single: false,
-      others: true,
-      // 富文本editor
-      editor1: {
-        contents: ""
-      },
+      oneRole:this.oneRoles,
       feedList:[
         { name: '单行文本', type: 1},
         { name: '多行文本', type: 6},
@@ -625,7 +603,7 @@ export default {
   },
   mounted() {
 
-},
+  },
   components: {selects,adress},
 
   computed: {},
@@ -658,22 +636,24 @@ export default {
     },
     //招募类型
     getSignType() {
-      signType({}).then(res => {
-        this.signTypeList = res.data.roles;
+      signType().then(res => {
+        if(res.code==200){
+          this.signTypeList = res.data.roles;
+        }
       });
     },
     //招募类型
     getType(val) {
-      // if (this.oneRole.roleName) {
-      //   this.$Message.warning('招募岗位，限制设置，报名项设置，优先设置已清空,请重新填写')
-      // }
+      if (this.oneRole.roleName) {
+        this.$Message.warning('招募岗位，限制设置，报名项设置，优先设置已清空,请重新填写')
+      }
       this.oneRole.roleName = val.name;
       this.oneRole.roleId = val.roleId;
-      // this.oneRole.userPosition = '';
-      // this.oneRole.positionName = ''
-      // this.oneRole.signRuleList = []
-      // this.oneRole.choiceRuleList = []
-      // this.oneRole.itemList = []
+      this.oneRole.userPosition = '';
+      this.oneRole.positionName = ''
+      this.oneRole.signRuleList = []
+      this.oneRole.choiceRuleList = []
+      this.oneRole.itemList = []
       signPost({
         roleId: val.roleId,
         name: this.oneRole.roleName
@@ -711,7 +691,7 @@ export default {
     getTypes(val) {
       signPost({
         roleId: val.roleId,
-        name: val.name
+        name: val.roleName
       }).then(res => {
         if(res.code==200){
           this.signPostList = res.data.voluJobs;

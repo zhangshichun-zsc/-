@@ -319,7 +319,7 @@
 
       <div class="" v-if="isAddRole">
         <role
-          :oneRole="oneRole"
+          :oneRoles="oneRole"
           @cancelEdit="cancelRole"
           @oneRole="getRole"
         ></role>
@@ -366,14 +366,9 @@ export default {
         workerIdList: [{}]
       },
       batchItemList: [],
-      editorContent1: "",
       navigation1: {
         head: "编辑活动"
       },
-      model1: "basketball",
-      animal: "daba",
-      value: "",
-      single: "",
       adds: false,
       addbtns: true,
       tripSelf: false,
@@ -415,11 +410,7 @@ export default {
   },
 
   mounted() {
-    // var editor1 = new E('.editorElem1');
-    // editor1.customConfig.onchange = (html) => {
-    //   this.editorContent1 = html
-    // };
-    // editor1.create()
+    
   },
   methods: {
     changeEditorTrain(e) {

@@ -158,7 +158,7 @@ export default {
           align: "center"
         },
         {
-          width: 260,
+          width: 350,
           key: "action",
           align: "center",
           renderHeader:(h,params)=>{
@@ -243,8 +243,8 @@ export default {
                 "a",
                 {
                   style: {
-                    marginRight: "2px",
-                    marginLeft: "2px",
+                    marginRight: "10px",
+                    marginLeft: "10px",
                     color: "#FF565A",
                     cursor: "pointer"
                   },
@@ -256,64 +256,84 @@ export default {
                 },
                 "分享"
               ),
-            h(
-                "Dropdown",
+              h(
+                "a",
                 {
-                  props: {
-                    transfer: true
+                  style: {
+                    marginRight: "10px",
+                    marginLeft: "10px",
+                    color: "#FF565A",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        path: "volunteer_issue",
+                        query: { activityId: params.row.activityId,isEdit:4 }
+                      });
+                    }
                   }
                 },
-                [
-                  h(
-                    "a",
-                    {
-                      style: {
-                        color: "#FF565A"
-                      }
-                    },
-                    "更多操作"
-                  ),
-                  h(
-                    "DropdownMenu",
-                    {
-                      slot: "list"
-                    },
-                    [
-                      h(
-                        "DropdownItem",
-                        {
-                          nativeOn: {
-                            click: name => {
-                              this.modal5 = true;
-                              this.activityId = params.row.activityId;
-                            }
-                          }
-                        },
-                        "取消"
-                      ),
-                      h(
-                        "DropdownItem",
-                        {
-                          nativeOn: {
-                            click: name => {
-
-                              if (signup == "关闭报名") {
-                                this.types = 1;
-                                this.getactiveclose(params.row.activityId);
-                              } else {
-                                this.types = 2;
-                                this.getactiveclose(params.row.activityId);
+                "复制"
+              ),
+              h(
+                  "Dropdown",
+                  {
+                    props: {
+                      transfer: true
+                    }
+                  },
+                  [
+                    h(
+                      "a",
+                      {
+                        style: {
+                          color: "#FF565A"
+                        }
+                      },
+                      "更多操作"
+                    ),
+                    h(
+                      "DropdownMenu",
+                      {
+                        slot: "list"
+                      },
+                      [
+                        h(
+                          "DropdownItem",
+                          {
+                            nativeOn: {
+                              click: name => {
+                                this.modal5 = true;
+                                this.activityId = params.row.activityId;
                               }
                             }
-                          }
-                        },
-                        signup
-                      )
-                    ]
-                  )
-                ]
-              )
-            ]);
+                          },
+                          "取消"
+                        ),
+                        h(
+                          "DropdownItem",
+                          {
+                            nativeOn: {
+                              click: name => {
+
+                                if (signup == "关闭报名") {
+                                  this.types = 1;
+                                  this.getactiveclose(params.row.activityId);
+                                } else {
+                                  this.types = 2;
+                                  this.getactiveclose(params.row.activityId);
+                                }
+                              }
+                            }
+                          },
+                          signup
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ]);
           }
         },
         {

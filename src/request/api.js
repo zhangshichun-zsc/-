@@ -604,7 +604,7 @@ export const setpropaganda = p => posts('/org/propaganda/update', p) //  设置 
 export const getActiveType = p => get('/volunteer-manager/queryDicByTypeFlag', p) //查询类型 typeFlag
 export const getActiveLimit = p => posts('/volunteer-manager/apply/sign/limits', p)// 活动限制项
 export const getActiveSign = p => get('/volunteer-manager/queryActivityItem', p) //活动报名项
-export const getOrgTeam = p => get('/org/queryOrgForCreateActivity', p)//查询归属团队
+export const getOrgTeam = p => get('/volunteer-manager/selectOrgForCreateActivity', p)//查询归属团队
 export const saveActive = p => posts('/volunteer-manager/saveVolunteerActivity', p)//保存
 export const getOrgId = p => posts("/volunteer-manager/queryOrgUserByOrgId", p)//获取负责人
 export const getGood = p => posts("/volunteer-manager/applySigenFirst", p)//优先
