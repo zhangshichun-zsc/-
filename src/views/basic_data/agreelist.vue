@@ -5,11 +5,11 @@
     <div class="flex-center-start integral-bodyss">
       <div class="flex-center-start name">
         <span>甲乙方:</span>
-        <Input size="large" placeholder="甲乙方名称" class="inpt" v-model.trim="agreementObject" />
+        <Input size="large" placeholder="请输入甲乙方名称" class="inpt" v-model.trim="agreementObject" />
       </div>
       <div class="flex-center-start name">
         <span>协议分类:</span>
-        <Select v-model="agreementType" class="inpt" style="width: 200px" placeholder="协议类型">
+        <Select v-model="agreementType" class="inpt" style="width: 200px" placeholder="请选择协议类型">
           <Option
             v-for="item in typelist"
             :value="item.dataKey"

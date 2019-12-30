@@ -10,24 +10,22 @@
           <span>筛选查询</span>
         </div>
         <div class="flex-center-end">
-
           <div class="integral-rig"  @click="Retractbtn">
             <Icon type="ios-arrow-down" v-if="Retract==true" />
               <Icon type="ios-arrow-up" v-if="Retract==false" />
               <span v-if="Retract==true">收起筛选</span>
               <span v-if="Retract==false">启用筛选</span>
           </div>
-
         </div>
       </div> -->
       <div class="flex-center-start integral-body" v-if="Retract==true">
         <div class="flex-center-start name">
           <span>用户账户:</span>
-          <Input size="large" placeholder="用户ID/账号" class="inpt" v-model="userAccount" />
+          <Input size="large" placeholder="请输入用户ID/账号" class="inpt" v-model="userAccount" />
         </div>
         <div class="flex-center-start name">
           <span>用户昵称:</span>
-          <Input size="large" placeholder="用户昵称" class="inpt" v-model="nickname" />
+          <Input size="large" placeholder="请输入用户昵称" class="inpt" v-model="nickname" />
         </div>
          <Button class="search" @click="query">查询</Button>
       </div>

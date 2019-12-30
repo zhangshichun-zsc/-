@@ -19,7 +19,7 @@
       <div class="flex-center-start integral-body">
         <div class="flex-center-start name">
           <span>名称:</span>
-          <Input size="large" placeholder="活动分类名称" class="inpt" v-model="dicName" />
+          <Input size="large" placeholder="请输入名称" class="inpt" v-model="dicName" />
         </div>
         <div class="flex-center-start name">
           <span>有效状态:</span>
