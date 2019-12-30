@@ -227,12 +227,12 @@
                         @click="download(formInline.fileUrlShowA)"
                         >下载</a
                       >
-                      <Progress
-                        stroke-color="#FF565A"
-                        v-if="!formInline.flagA"
-                        :percent="numA"
-                      />
                     </div>
+                    <Progress
+                      stroke-color="#FF565A"
+                      v-if="!formInline.flagA"
+                      :percent="numA"
+                    />
                   </div>
                   <div class="fil_txt" v-if="formInline.nameB != null">
                     <div class="fil-itme">
@@ -656,7 +656,7 @@ export default {
               }
               if (index == 2) {
                 this.formInline.nameC = item.fileName;
-                this.formInline.fileUrlShowB = item.fileUrlShow;
+                this.formInline.fileUrlShowC = item.fileUrlShow;
                 this.formInline.flagC = true;
                 this.formInline.agPicC = item.fileUrl;
               }
@@ -673,14 +673,15 @@ export default {
       let file = [];
       let str = this.formInline;
       if (str.agPicA) {
-        file.push(str.agPicA);
+        file.push(str.agPicA + "/" + str.nameA);
       }
       if (str.agPicB) {
-        file.push(str.agPicB);
+        file.push(str.agPicB + "/" + str.nameB);
       }
       if (str.agPicC) {
-        file.push(str.agPicC);
+        file.push(str.agPicC + "/" + str.nameC);
       }
+
       orgemod({
         orgId: this.$route.query.orgId,
         orgName: this.BasicDate.orgName,
@@ -738,7 +739,6 @@ export default {
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      console.log(file);
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -747,7 +747,6 @@ export default {
         reader.onload = e => {
           this.BasicDate.orgPicShow = e.target.result;
           this.picUrl = res.data;
-          console.log(this.picUrl);
         };
       });
     },
@@ -1001,8 +1000,8 @@ export default {
   color: #ff565a;
   position: absolute;
   left: 50%;
-  top: 30%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .cancel {

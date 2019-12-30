@@ -74,41 +74,29 @@
         </FormItem>
         <FormItem label="广告图片" prop="imgUrl">
           <div class="start-wap">
-            <img :src="formValidate.imgUrl" style="height:150px;width:150px;" />
-            <div
-              class="upload"
-              v-if="formValidate.imgUrl == null"
-              @click="
-                () => {
-                  this.$refs.files.click();
-                }
-              "
-            >
-              <div class="file">
-                <input
-                  style=" display:none;"
-                  type="file"
-                  accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                  ref="files"
-                  @change="uploadFile()"
-                  multiple
-                />
-                <Button icon="ios-cloud-upload-outline">上传图片</Button>
-                <!-- <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" /> -->
+            <div class="first-pic" v-if='formValidate.imgUrl == null'>
+              <div class="" @click="()=>{ this.$refs.files.click()}">
+                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
+                <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
               </div>
             </div>
-
-            <Icon
-              type="ios-trash"
-              v-if="formValidate.imgUrl != null"
-              class="cancel"
-              :size="26"
-              @click="cancelImg()"
-            />
+            <div class="first-pic" style="border:none" v-else>
+              <img class="imgs" style="width:283px;height:188px" :src="formValidate.imgUrl"/>
+              <Icon type="ios-trash" v-if='formValidate.imgUrl' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
+            </div>
           </div>
         </FormItem>
-        <FormItem label="广告链接" prop="linkUrl">
+        <FormItem label="是否跳转外部链接" prop="linkType">
+          <RadioGroup v-model="formValidate.linkType">
+            <Radio label="1">是</Radio>
+            <Radio label="0">否</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="广告链接" prop="linkUrl" v-if='formValidate.linkType==1'>
           <Input v-model="formValidate.linkUrl" />
+        </FormItem>
+        <FormItem label="广告内容" prop="comments" v-if='formValidate.linkType==0'>
+          <wangeditor :labels="formValidate.comments" id="ed1" @change="changeEditorTrain"></wangeditor>
         </FormItem>
         <FormItem label="广告备注">
           <Input
@@ -157,7 +145,9 @@ export default {
         remark: "",
         linkUrl: "",
         picUrl: "",
-        imgUrl: null
+        imgUrl: null,
+        linkType:1,
+        comments:''
       },
       ruleValidate: {
         title: [
@@ -176,6 +166,9 @@ export default {
           }
         ],
         status: [
+          { required: true, message: "请选择其中一个", trigger: "change" }
+        ],
+        linkType: [
           { required: true, message: "请选择其中一个", trigger: "change" }
         ],
         startAt: [
@@ -300,6 +293,10 @@ export default {
         }
       });
     },
+    //广告内容
+    changeEditorTrain(e) {
+      this.formValidate.comments = e;
+    },
 
     handleSubmit(name) {
       if (this.formValidate.startAt < this.formValidate.endAt) {
@@ -344,5 +341,18 @@ export default {
   padding: 5px 20px;
   background: rgb(228, 228, 228);
   border: 1px solid #eee;
+}
+.first-pic{
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  border: 1px dashed #FF565A;
+  position: relative;
+}
+.cancel{
+  position: absolute;
+  top: 0;
+  right: -30px;
 }
 </style>

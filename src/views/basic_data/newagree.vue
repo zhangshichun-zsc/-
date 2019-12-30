@@ -18,7 +18,7 @@
             style="width:300px"
             :remote-method="remoteMethod1"
             :loading="loading1"
-
+            class="selec"
           >
             <Option
               v-for="(option, index) in options1"
@@ -31,13 +31,13 @@
         <FormItem label="乙方:" prop="partB">
           <Select
             v-model="formInline.partB"
-
             filterable
             remote
             placeholder="乙方名称"
             style="width:300px"
             :remote-method="remoteMethod2"
             :loading="loading2"
+             class="selec"
           >
             <Option
               v-for="(option, index) in options2"
@@ -67,10 +67,10 @@
         </FormItem>
 
         <FormItem label="协议时间:" prop="agTime">
+          <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select date and time(Excluding seconds)" style="width: 200px"></DatePicker> -->
            <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm"   @on-change="handleChange"  v-model="formInline.agTime"  placeholder="请选择协议时间" style="width: 300px"></DatePicker> -->
-
           <DatePicker
-            type="date"
+            type="datetime"
             placeholder="请选择协议时间"
             v-model="formInline.agTime"
             format="yyyy-MM-dd HH:mm:ss"
@@ -122,7 +122,7 @@
                   @change="uploadFile()"
                   multiple
                 />
-                <Icon type="md-cloud-upload" :size="50" color="#FF565A" />
+                <Icon type="md-cloud-upload" :size="40" color="#FF565A" />
               </div>
             </div>
 
@@ -140,10 +140,8 @@
 
 <script>
 import { upload } from "../../request/http";
-
 import {
   Agreementadd,
-  AgreementNewList,
   AgreementList,
   Agreementdet,
   Agreementmodify,
@@ -161,7 +159,7 @@ export default {
       typeList: [],
       locations: [],
       formInline: {
-        partA: null,
+        partA: '',
         partB: "",
         typeDicId:'',
         agTime: "",
@@ -194,7 +192,7 @@ export default {
         categoryId: [
           {
             required: true,
-            message: "请选择所属项目类型",
+            message: "请选择活动类型",
             trigger: "change",
             type: "number"
           }
@@ -311,7 +309,7 @@ export default {
                 item =>
                   item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
               );
-              console.log(this.options1)
+
             }, 300);
           }
         });
@@ -355,15 +353,12 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          if (Boolean(this.formInline.agPicA) == false) {
-            this.$Message.error("请上传附件");
-          } else {
             if (this.agreementId != null) {
               this.getAgreementmodify();
             } else {
               this.getAgreementadd();
             }
-          }
+
         } else {
           this.$Message.error("提交失败！");
         }
@@ -380,17 +375,7 @@ export default {
       });
     },
 
-    // //列表
-    // getAgreementNewList() {
-    //   AgreementNewList({
-    //     sysType: this.sysType
-    //   }).then(res => {
-    //     console.log(res);
-    //     if (res.code == 200) {
-    //       this.typeList = res.data;
-    //     }
-    //   });
-    // },
+
 
     //新增协议
     getAgreementadd() {
@@ -404,8 +389,6 @@ export default {
         return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
-      console.log(name,this.formInline.agTime,this.namebID,this.nameaID)
-
       let params = {
         sysId: this.sysId,
         // name: this.name,
@@ -454,7 +437,6 @@ export default {
           this.formInline.partB=res.data.orgNameB
           this.nameaID=res.data.partA
           this.namebID=res.data.partB
-          this.Times=res.data.agTime
         }
       });
     },
@@ -634,12 +616,12 @@ export default {
   .upload .file {
     width: 100%;
     height: 100%;
-    border: 1px dashed #dcdee2;
+    // border: 1px dashed #dcdee2;
     text-align: center;
     padding: 20px 0;
   }
   .upload .file:hover {
-    border: 1px dashed #ff565a;
+    // border: 1px  #ff565a;
   }
   .upload .file input {
     display: none;
@@ -649,13 +631,22 @@ export default {
     width: 150px;
   }
 }
-.ivu-select-input {
-  font-size: 16px;
+// .ivu-select-input {
+//  font-size: 18px !important;
+// }
+.ivu-select-large .ivu-select-input{
+ font-size: 18px !important;
+
 }
 
-.ivu-select-dropdown-list {
-  li {
-    font-size: 16px !important;
-  }
+// .ivu-select-dropdown-list {
+//   li {
+//     font-size: 16px !important;
+//   }
+// }
+
+.selec .ivu-select-selection input{
+  font-size: 16px !important;
 }
+
 </style>

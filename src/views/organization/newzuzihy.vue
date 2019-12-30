@@ -61,7 +61,14 @@
               />
             </FormItem>
             <FormItem label="图片:" prop="imgUrl">
-              <div class="start-waps">
+              <div
+                class="start-waps"
+                :style="
+                  formValidate.imgUrl
+                    ? 'height:150px;width:150px;'
+                    : 'height:150px;width:150px;border: 1px dashed #ff565a;'
+                "
+              >
                 <div
                   class="uploads"
                   v-if="formValidate.imgUrl == null"
@@ -89,6 +96,7 @@
                   />
                 </div>
                 <img
+                  v-show="formValidate.imgUrl"
                   :src="formValidate.imgUrl"
                   style="height:150px;width:150px;"
                 />
@@ -332,14 +340,15 @@ export default {
       let file = [];
       let str = this.formInline;
       if (str.agPicA) {
-        file.push(str.agPicA);
+        file.push(str.agPicA + "/" + str.nameA);
       }
       if (str.agPicB) {
-        file.push(str.agPicB);
+        file.push(str.agPicB + "/" + str.nameB);
       }
       if (str.agPicC) {
-        file.push(str.agPicC);
+        file.push(str.agPicC + "/" + str.nameC);
       }
+
       orgadd({
         sysId: this.$route.query.sysId,
         orgType: this.orgTypes,
@@ -528,7 +537,7 @@ export default {
 .scimg {
   position: absolute;
   top: 50%;
-  left: 100px;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 .delimg {
@@ -539,6 +548,7 @@ export default {
 .start-waps {
   position: relative;
   width: 150px;
+  height: 150px;
 }
 .file p {
   padding: 0.5rem;

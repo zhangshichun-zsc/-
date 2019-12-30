@@ -93,7 +93,7 @@ export default {
         {
           title: "是否启用",
           key: "status",
-          width: "100",
+          width: 120,
           align: "center",
           render: (h, params) => {
             return h("div", [

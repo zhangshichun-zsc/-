@@ -120,9 +120,12 @@ export default {
         },
         {
           title: "总预算/(元)",
-          key: "allBudget",
+          // key: "allBudget",
           align: "center",
-          width: 240
+          width: 240,
+          render:(h,params)=>{
+              return h('p',params.row.allBudget.toFixed(2))
+            }
         },
         {
           title: "预算来源",
@@ -274,7 +277,7 @@ export default {
       params = this.util.remove(params);
       projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("新增成功");
+          this.$Message.info(res.msg);
           this.getprojectsetlist();
           this.modal1 = false;
         } else {
@@ -311,6 +314,7 @@ export default {
     added() {
       this.$refs.formValidate.resetFields();
       this.categoryId = "";
+       this.text = "新增项目";
       this.modal1 = true;
       this.getbudgetlist();
     },
@@ -318,14 +322,12 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
-      this.getOffactivities();
+      this.getprojectsetlist();
     },
 
     // 查询结果按钮
     query(e) {
       this.data = [];
-      console.log(e);
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];

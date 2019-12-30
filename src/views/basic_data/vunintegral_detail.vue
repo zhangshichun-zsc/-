@@ -12,12 +12,12 @@
           <Select size="large" class="inpt" v-model="scoreRuleType">
             <Option
               v-for="item in list"
-              :value="item.scoreRuleId"
-              :key="item.scoreRuleId"
+              :value="item.typeFlag"
+              :key="item.typeFlag"
             >{{item.comments}}</Option>
           </Select>
         </div>
-         <div class="flex-center-start">
+        <div class="flex-center-start">
           <span>操作时间/时间段:</span>
           <DatePicker
             class="inpt"
@@ -46,7 +46,7 @@
             style="width: 200px;margin-left:10px"
             v-model="updateTimeStamp"
           ></DatePicker>
-        </div> -->
+        </div>-->
         <div class="flex-center-start">
           <Button class="table-btns" @click="query">查询</Button>
         </div>
@@ -104,25 +104,25 @@ export default {
         {
           title: "用户账号",
           key: "userAccount",
-          align:'center'
+          align: "center"
         },
         {
           title: "用户昵称",
           key: "nickName",
-          align:'center',
-          width:300,
+          align: "center",
+          width: 300
         },
         {
           title: "志愿者等级",
           key: "level",
-          align:'center',
-          width:300,
+          align: "center",
+          width: 300
         },
         {
           title: "可用积分",
           key: "sourceScore",
-          align:'center',
-          width:300,
+          align: "center",
+          width: 300
         }
       ],
       data1: [],
@@ -130,27 +130,31 @@ export default {
         {
           title: "积分来源",
           key: "scoreOrigin",
-          align:'center',
-
+          align: "center"
         },
         {
           title: "积分变化",
           key: "score",
-          align:'center',
-
+          align: "center"
         },
         {
           title: "时间",
           key: "updateAt",
-          align:'center',
-
-
+          align: "center"
+        },
+        {
+          title: "审批状态",
+          // key: "updateAt",
+          align: "center",
+          render: (h, params) => {
+            let states = ["待审批", "已拒绝", "审核通过"];
+            return h("p", states[params.row.auditFlag]);
+          }
         },
         {
           title: "备注",
           key: "comments",
-          align:'center',
-
+          align: "center"
         }
       ],
 
@@ -166,8 +170,8 @@ export default {
       sort: "asc",
 
       data2: [],
-      sysType:2,
-      sysTypes:'2,3',
+      sysType: 2,
+      sysTypes: "2,3",
       page: 1,
       size: 10,
       dataCount: 0,
@@ -177,9 +181,9 @@ export default {
       datas: "",
       list: [],
       Retract: true,
-      startAt:'',
-      endAt:'',
-      userId:this.$route.query.userId,
+      startAt: "",
+      endAt: "",
+      userId: this.$route.query.userId
     };
   },
 
@@ -208,10 +212,8 @@ export default {
       }).then(res => {
         console.log(res);
         if (res.code == 200) {
-           res.data.unshift({ scoreRuleId: "", comments: "全部" });
+          res.data.unshift({ typeFlag: "", comments: "全部" });
           this.list = res.data;
-
-
         }
       });
     },
@@ -219,8 +221,7 @@ export default {
     getintegralDet() {
       integralDet({
         sysType: this.sysType,
-        userId: this.userId,
-
+        userId: this.userId
       }).then(res => {
         if (res.code == 200) {
           this.data1 = Array.of(res.data);
@@ -231,23 +232,19 @@ export default {
     // 积分历史记录分页
     getintegralHistory() {
       let params = {
-         sysType: this.sysTypes,
+        sysType: this.sysTypes,
         userId: this.userId,
-
-         scoreRuleType:this.scoreRuleType,
-        startAt:this.startAt,
-        endAt:this.endAt,
+        scoreRuleType: this.scoreRuleType,
+        startAt: this.startAt,
+        endAt: this.endAt,
         page: {
           page: this.page,
           size: this.size,
           sort: "updateAt" + " " + this.sort
         }
-
-      }
-      params = this.util.remove(params)
-      integralHistory(
-        params
-      ).then(res => {
+      };
+      params = this.util.remove(params);
+      integralHistory(params).then(res => {
         if (res.code == 200) {
           this.data2 = res.data.list;
           this.dataCount = res.data.totalSize;
@@ -269,7 +266,6 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-
       this.getintegralHistory();
     },
     //选择内容
@@ -286,21 +282,20 @@ export default {
     },
     //查询
     query() {
-       if (this.startAt && this.endAt) {
+      if (this.startAt && this.endAt) {
         if (this.startAt <= this.endAt) {
-          this.startAt = this.startAt.split(' ')[0] + " 00:00:00";
-          this.endAt = this.endAt.split(' ')[0] + " 23:59:59";
-           this.page = 1;
-            this.getintegralHistory();
+          this.startAt = this.startAt.split(" ")[0] + " 00:00:00";
+          this.endAt = this.endAt.split(" ")[0] + " 23:59:59";
+          this.page = 1;
+          this.getintegralHistory();
         } else {
-           this.startAt=''
-          this.endAt=''
-          this.$Message.error('时间选择错误请重新选择')
+          this.startAt = "";
+          this.endAt = "";
+          this.$Message.error("时间选择错误请重新选择");
         }
-
-      }else{
-         this.page = 1;
-      this.getintegralHistory();
+      } else {
+        this.page = 1;
+        this.getintegralHistory();
       }
       // if (this.args.startAt && this.args.endAt) {
       //   if (this.args.startAt <= this.args.endAt) {
@@ -317,13 +312,11 @@ export default {
       //    this.page=1
       // this.getintegralHistory();
       // }
-
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-
 .integral-header {
   border: 1px solid #eee;
 }
@@ -354,7 +347,7 @@ export default {
   margin-left: 15px;
 }
 
-.po{
-  padding:0 10px;
+.po {
+  padding: 0 10px;
 }
 </style>

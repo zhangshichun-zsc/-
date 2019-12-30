@@ -41,7 +41,6 @@
               <Button type="error" size="large" @click="ok">确定</Button>
             </div>
         </Modal>
-
       </div>
       <div class="min-height">
         <Table
