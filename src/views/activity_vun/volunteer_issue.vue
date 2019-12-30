@@ -491,11 +491,11 @@ export default {
           let args = Object.assign(this.args, res.data)
           let add = !!args.memberGroupNum? true : false
           this.args = args
-          this.args.startAt = i==4?"":res.data.startAt + ':00'
-          this.args.endAt = i==4?"":res.data.endAt + ':00'
+          this.args.startAt = i==4?null:res.data.startAt + ':00'
+          this.args.endAt = i==4?null:res.data.endAt + ':00'
           this.image = res.data.picPath
-          this.zhaStart = i==4?"":res.data.enrollStarttime + ':00' || null,
-          this.zhaEnd = i==4?"":res.data.enrollEndtime + ':00' || null,
+          this.zhaStart = i==4?null:res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = i==4?null:res.data.enrollEndtime + ':00' || null,
           this.judge = res.data.result || '',
           this.isFeedback = ~~res.data.isFeedback || 0,
           this.isTrain = ~~res.data.isTrain || 0,
