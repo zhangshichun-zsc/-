@@ -219,19 +219,19 @@ export default {
         {
           title: "邮箱地址",
           key: "email",
-          width: "240",
+          width: "230",
           align: "center"
         },
         {
           title: "联系方式",
           key: "tel",
-          width: "140",
+          width: "150",
           align: "center"
         },
         {
           title: "最近登录时间",
           key: "login",
-          width: "180",
+          width: "200",
           align: "center",
           render: (h, params) => {
             return h("div", [
