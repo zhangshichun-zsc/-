@@ -52,7 +52,7 @@
         <Button @click="apply">设置常用报名项</Button>
       </p>
       <Row type="flex" justify="space-between" class-name="row20">
-        <i-col span="12">
+        <i-col span="11" push='1'>
           <div class="publish-content">
             <div class="active-publish">
               <ul>
@@ -152,7 +152,7 @@
             </div>
           </div>
         </i-col>
-        <i-col span="12">
+        <i-col span="11" push='1'>
           <div class="publish-content">
             <div class="active-publish">
               <ul>
@@ -933,9 +933,8 @@ export default {
       .active-publish {
         padding: 30px 0;
         ul {
-          padding-left: 70px;
           li {
-            margin: 20px;
+            margin: 20px 0;
             display: flex;
             align-items: center;
             .adr{

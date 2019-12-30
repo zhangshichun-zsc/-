@@ -4,7 +4,8 @@
   <div class="integral">
      <Modal
       v-model="modal4">
-      <img :src="showImg" alt="" class="showimg"/>
+      <img :src="showImg" alt="" class="showimg" v-if="showImg !== null"/>
+      <img :src="showImg2" class="showimg" alt="" v-if="showImg2 !== null"/>
     </Modal>
     <Modal v-model="modal5" title="取消理由"  @on-cancel='cancel'>
       <i-input placeholder="请输入取消理由" v-model="text" type="textarea" :row='4'/>
@@ -160,7 +161,8 @@ export default {
       modal2: false,
       modal3: false,
       modal4:false,
-      showImg:'',
+      showImg: null,
+      showImg2: null,
       fruit: ["苹果"],
       navigation1: {
         head: "活动管理(会员)"
@@ -431,6 +433,7 @@ export default {
                 click: () => {
                   this.modal4 = true
                   this.showImg = params.row.memQrCode
+                  this.showImg2 = params.row.voluQrCode
                 }
               }
             })
@@ -701,8 +704,8 @@ export default {
   font-size: 16px;
 }
 .showimg{
-    width: 100%;
-    height: auto;
+   width: 200px;
+   height: 200px;
 }
 .integral-header{
   padding: 20px;

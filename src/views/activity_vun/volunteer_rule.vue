@@ -123,12 +123,13 @@ export default {
         {
           title: "优先条件",
           key: "name",
+          width: 500,
           align: "center"
         },
         {
           title: "新增时间",
           key: "createAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -137,7 +138,7 @@ export default {
         {
           title: "最后修改时间",
           key: "updateAt",
-          width: 180,
+          width: 300,
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.createAt));
@@ -146,12 +147,13 @@ export default {
         {
           title: "最后操作人",
           key: "userName",
+          width: 300,
           align: "center"
         },
 
         {
           title: "是否启用",
-          width: 120,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [

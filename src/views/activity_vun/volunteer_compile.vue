@@ -71,7 +71,7 @@
       <Row class-name="row" v-if='args.zmType==2'>
         <i-col span='3'><span>是否审核：</span></i-col>
         <i-col span='4'>
-          <i-switch :value="args.isAudit" :true-value='1' :false-value='2' :disabled="isDisb" @on-change='changeAudit'/>
+          <i-switch v-model="args.isAudit" :true-value='1' :false-value='2' :disabled="isDisb || good.length !== 0"/>
         </i-col>
       </Row>
       <Row class-name="row">
@@ -297,7 +297,15 @@ export default {
       feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
       array:[],
       args:{
-        zmType:null,
+      }
+    }
+  },
+  watch:{
+    "args.zmType":function(val){
+      let args = {
+        userPositionName:this.userPositionName,
+        userPosition:this.userPosition,
+        zmType:val,
         roleId:2,
         isAutoChoose:2,
         isTrainMust:2,
@@ -307,6 +315,7 @@ export default {
         coActivityItemList:[],
         coActivityRuleParamList:[]
       }
+      this.args = args
     }
   },
 
@@ -329,14 +338,6 @@ export default {
     getAdr(){
       if(this.isDisb)return
       this.adr = !this.adr
-    },
-    changeAudit(e){
-      if (~~this.args.zmType === 2 && this.good.length !== 0) {
-        this.$Message.warning('您已设置优先条件，无法再次设置为报名需审核')
-        this.$set(this.args,"isAudit",2)
-        return
-      }
-      this.args.isAudit = e
     },
     signItem(){
       if(this.isEdit !== 2){

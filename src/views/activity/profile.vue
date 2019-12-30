@@ -1,8 +1,8 @@
 <!--活动概况(会员)-->
 <template>
   <div>
-    <Modal v-model="modal1" title="新增证书模板"  @on-cancel='cancel'>
-      <i-input placeholder="请输入内容" v-model="title" style="marginBottom:1rem;"/>
+    <Modal v-model="modal1" title="发送站内信"  @on-cancel='cancel'>
+      <i-input placeholder="请输入信息标题" v-model="title" style="marginBottom:1rem;"/>
       <i-input placeholder="请输入内容" v-model="msg" type="textarea" :row='4'/>
       <div slot="footer">
         <Button type="error" size="large" @click="success">确定</Button>
