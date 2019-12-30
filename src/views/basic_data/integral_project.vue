@@ -277,7 +277,7 @@ export default {
       params = this.util.remove(params);
       projectsetadd({ list: params }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("新增成功");
+          this.$Message.info(res.msg);
           this.getprojectsetlist();
           this.modal1 = false;
         } else {
@@ -322,14 +322,12 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getprojectsetlist();
     },
 
     // 查询结果按钮
     query(e) {
       this.data = [];
-      console.log(e);
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];

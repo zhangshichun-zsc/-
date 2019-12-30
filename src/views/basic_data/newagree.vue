@@ -68,7 +68,6 @@
 
         <FormItem label="协议时间:" prop="agTime">
           <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select date and time(Excluding seconds)" style="width: 200px"></DatePicker> -->
-
            <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm"   @on-change="handleChange"  v-model="formInline.agTime"  placeholder="请选择协议时间" style="width: 300px"></DatePicker> -->
           <DatePicker
             type="datetime"
