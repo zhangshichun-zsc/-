@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { formatDate, date1 } from '../../request/datatime'
+import { formatDate, formatDatea } from '../../request/datatime'
 import { approvaldet,programApproval } from '../../request/api'
 export default {
   data() {
@@ -128,13 +128,13 @@ export default {
           this.actlist = res.data.acitivitys
           this.actlist = res.data.acitivitys.map(item => {
             if (item.startAt) {
-              item.startAt = date1('Y-m-d', item.startAt)
-              item.endAt = date1('Y-m-d', item.endAt)
+              item.startAt = formatDatea(item.startAt)
+              item.endAt = formatDatea(item.endAt)
             }
             return item
           })
-          this.datas[0] = date1('Y-m-d', res.data.startTime)
-          this.datas[1] = date1('Y-m-d', res.data.endTime)
+          this.datas[0] = formatDatea(res.data.startTime)
+          this.datas[1] = formatDatea(res.data.endTime)
           console.log(this.datas)
         }
         console.log(res)

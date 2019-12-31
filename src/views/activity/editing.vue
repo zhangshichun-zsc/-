@@ -49,31 +49,14 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-picfm" v-if="batch.actCoverShowPic == null">
-                    <div
-                      class=""
-                      @click="
-                        () => {
-                          this.$refs.files.click();
-                        }
-                      "
-                    >
-                      <input
-                        type="file"
-                        accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP"
-                        ref="files"
-                        @change="uploadActFmFile()"
-                        style="display:none"
-                      />
-                      <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
+                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
+                    <div class="" @click="()=>{ this.$refs.filefm.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-picfm"  style="border:none" v-else>
-                    <img
-                      class="imgs"
-                      style="width:200px;height:200px"
-                      :src="batch.actCoverShowPic"
-                    />
+                  <div class="first-picfm" style="border:none" v-else>
+                    <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
@@ -81,31 +64,14 @@
               <li class="first-li">
                 <span class="first-span">主题图片</span>
                 <div>
-                  <div class="first-pic" v-if="batch.actShowPic == null">
-                    <div
-                      class=""
-                      @click="
-                        () => {
-                          this.$refs.files.click();
-                        }
-                      "
-                    >
-                      <input
-                        type="file"
-                        accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP"
-                        ref="files"
-                        @change="uploadActFile()"
-                        style="display:none"
-                      />
-                      <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
+                  <div class="first-pic" v-if='batch.actShowPic == null'>
+                    <div class="" @click="()=>{ this.$refs.filezt.click()}">
+                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
+                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-pic"  style="border:none" v-else>
-                    <img
-                      class="imgs"
-                      style="width:283px;height:188px"
-                      :src="batch.actShowPic"
-                    />
+                  <div class="first-pic" style="border:none" v-else>
+                    <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
@@ -166,7 +132,7 @@
                 <RadioGroup v-model="batch.actVehicle" @on-change="tripMode">
                   <Radio label="自驾">自驾</Radio>
                   <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" :true-value="tripSelf">自定义</Radio>
+                  <Radio label="自定义" :trueValue="tripSelf">自定义</Radio>
                 </RadioGroup>
               </li>
               <li v-if="tripSelf">
@@ -288,7 +254,7 @@
                   @on-change="releaseTime"
                 >
                   <Radio label="0">活动开始前一个月自动发布</Radio>
-                  <Radio label="1" :true-value="releaseTimeSelf">自定义</Radio>
+                  <Radio label="1" :trueValue="releaseTimeSelf">自定义</Radio>
                 </RadioGroup>
                 <Date-picker
                   :value="batch.releaseTime"
@@ -468,9 +434,17 @@ export default {
       });
     },
     save() {
-      this.batch.type = 2;
+      if(this.$route.query.dicId){
+        this.batch.type = 3;
+      }else{
+        this.batch.type = 2;
+      }
       projectEdit(this.batch).then(res => {
         console.log(res);
+        this.$Message.info(res.msg)
+        if(res.code==200){
+          this.$router.back()
+        }
       });
     },
     addbtn() {
@@ -505,7 +479,7 @@ export default {
       });
     },
     uploadActFmFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filefm.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -526,7 +500,7 @@ export default {
       });
     },
     uploadActFile() {
-      let file = this.$refs.files.files[0];
+      let file = this.$refs.filezt.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -534,8 +508,8 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           console.log(e);
-          this.batch.actShowPic = e.target.result;
-          this.batch.actPic = res.data;
+          this.$set(this.batch, "actShowPic", e.target.result);
+          this.$set(this.batch, "actPic", res.data);
         };
       });
     },
@@ -605,6 +579,7 @@ export default {
       console.log(val);
       this.batch.ownerUserName = val.name;
       this.batch.ownerUserTel = val.tel;
+      this.batch.ownerUserId = val.userId;
       this.addLeader = false;
     },
     //工作人员
@@ -612,6 +587,7 @@ export default {
       console.log(val);
       this.batch.workerIdList[this.workerIndex].ownerUserName = val.name;
       this.batch.workerIdList[this.workerIndex].ownerUserTel = val.tel;
+      this.batch.workerIdList[this.workerIndex].ownerUserId = val.userId;
       this.addWorker = false;
     },
     //添加工作人员

@@ -138,12 +138,12 @@ export default {
           tooltip: true,
           align: "center"
         },
-        {
-          title: "展示窗口",
-          key: "showLocationText",
-           width: 300,
-          align: "center"
-        },
+        // {
+        //   title: "展示窗口",
+        //   key: "showLocationText",
+        //    width: 300,
+        //   align: "center"
+        // },
         {
           title: "分类",
           key: "informationTypeText",
