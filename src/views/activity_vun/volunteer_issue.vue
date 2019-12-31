@@ -251,7 +251,7 @@
                 培训内容
               </i-col>
               <i-col span='3' push='2'>
-                <i-switch v-model="isTrain" :true-value='1' :false-value='0' :disabled='isDisb'/>
+                <i-switch v-model="isTrain" :true-value='1' :false-value='2' :disabled='isDisb'/>
               </i-col>
             </Row>
             <Row v-if='isTrain === 1'>
@@ -264,7 +264,7 @@
                 反馈内容
               </i-col>
               <i-col span='3' push='2'>
-                <i-switch v-model="isFeedback" :true-value='1' :false-value='0' :disabled='isDisb'/>
+                <i-switch v-model="isFeedback" :true-value='1' :false-value='2' :disabled='isDisb'/>
               </i-col>
             </Row>
             <Row v-if='isFeedback === 1'>
