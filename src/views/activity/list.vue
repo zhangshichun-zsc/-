@@ -168,7 +168,7 @@ export default {
           width:180
         }
       ],
-       Article: [
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -177,7 +177,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
       datax: [],
       sysType: 1,
       page: 1,

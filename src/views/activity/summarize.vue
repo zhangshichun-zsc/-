@@ -16,10 +16,10 @@
           <span>您可以上传有意思的活动照片</span>
           <span>上传图片(最多6张)</span>
         </p>
-        <div class="uploading-img" v-for='(item,i) in picList' :key='i'>
-          <div v-if="item.pic">
+        <div class="uploading-img" >
+          <div class="img" v-for='(item,i) in picList' :key='i'>
             <img class="imgs" :src="item"/>
-            <Icon src="" alt="" class="cancel" @click="cancelImg()"/>
+            <Icon type="ios-trash" :size='36' color="#FF565A" class="cancel" @click="cancelImg(i)"/>
           </div>
         </div>
         
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {activesum} from '@/request/api'
+import {activesum,orgimgdel} from '@/request/api'
 import wangeditor from '@/components/wangeditor';
 import { upload }from '@/request/http'
 
@@ -84,10 +84,10 @@ export default {
         }
       })
     },
-    cancelImg(){
-      orgimgdel({path:this.projectMsg.batchPic}).then(res => {
-        this.projectMsg.batchPicShow = null
-        this.projectMsg.batchPic = null
+    cancelImg(i){
+      orgimgdel({path:this.pics[i]}).then(res => {
+        this.$delete(this.picList,i)
+        this.$delete(this.pics,i)
         this.$Message.success('删除成功')
       })
     },
@@ -171,6 +171,22 @@ export default {
 }
 
 .uploading-img {
+  .img{
+    width: 150px;
+    height: 150px;
+    margin-right: 10px;
+    display: inline-block;
+    position: relative;
+    .imgs{
+      width: 100%;
+      height: 100%;
+    }
+    .cancel{
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
   ul {
     display: flex;
     justify-content: space-around;
