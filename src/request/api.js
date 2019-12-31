@@ -660,3 +660,6 @@ export const integralnum = p => get('/score/queryScoreRuleByTypeFlag', p) //-查
 export const integralset = p => posts('/score/updateScoreRule', p) //-设置积分数值
 
 export const programApproval = p => posts("/activity-manage/batch/audit/do", p) //立项审批
+
+
+export const deleteFile = p => posts("/org/detail/deleteFile", p) //删除附件
