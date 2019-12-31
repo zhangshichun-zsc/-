@@ -60,7 +60,7 @@ export default {
           this.data=res.data
 
         }
-        console.log(res)
+        // console.log(res)
       })
     },
 
@@ -84,7 +84,7 @@ export default {
       this.stateinput=this.data.filter(item=>{
         return item.score===null
       })
-      console.log(this.stateinput)
+      // console.log(this.stateinput)
       if(this.stateinput.length==0){
         this.getOffSubmission()
       }else{

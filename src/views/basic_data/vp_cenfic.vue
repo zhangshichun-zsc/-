@@ -105,8 +105,8 @@
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
           <Select class="inpt" style="width:100px" placeholder="排序方式" v-model="sort" @on-change="changeSort">
-            <Option value="create_at desc">升序</Option>
-            <Option value="create_at asc">降序</Option>
+            <Option value="create_at desc">倒序</Option>
+            <Option value="create_at asc">正序</Option>
           </Select>
         </div>
       </div>

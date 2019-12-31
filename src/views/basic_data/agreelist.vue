@@ -255,7 +255,7 @@ export default {
       Agreementpage(
        params
       ).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
@@ -272,7 +272,7 @@ export default {
           this.getAgreementpage();
           this.$Message.info(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -281,7 +281,7 @@ export default {
       AgreementList({
         sysType: 1
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           res.data.unshift({ dataKey: "0", dataValue: "全部" });
           this.typelist = res.data;
@@ -307,7 +307,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
+      // console.log(index);
       this.getAgreementpage();
     },
     //删除

@@ -212,7 +212,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
       arr:'',
       arrs:[],
       sysTypes:'2,3',
@@ -246,7 +246,7 @@ export default {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -268,7 +268,7 @@ export default {
         }else{
           this.$Message.info(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     //批量修改

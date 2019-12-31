@@ -132,6 +132,8 @@ export default {
       dataCount:0,
        arr:[],
       sysType:1,
+
+
     };
   },
   //事件监听
@@ -173,18 +175,14 @@ export default {
         inviteUserAccountId:this.$route.query.inviteUserAccountId,
       }).then(res => {
         if(res.code==200){
-          this.page = res.data.pageNum;
           this.dataCount = res.data.totalSize;
           this.data = res.data.list
-
         }
-        console.log(res);
       });
     },
       //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getBiInvitationList()
     },
 

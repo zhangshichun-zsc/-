@@ -228,7 +228,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
       arr: "",
       arrs: [],
       select:[],
