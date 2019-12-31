@@ -54,7 +54,7 @@
     <div class="lx-cont">
       <p class>
         <span class="first-span">新增活动立项</span>
-        <Button class @click="set">设置常用报名项</Button>
+        <Button class @click="set" disabled>设置常用报名项</Button>
       </p>
       <div class='lx-jd'>
         <div class>
@@ -323,9 +323,9 @@
                   <div><Button @click="addWorkers" class="font">添加</Button></div>
                   <div v-for="(item,index) in batch.workerIdList" class="li-flex-around" :key='index'>
                     <span class="tit">姓名</span>
-                    <Input v-model="item.ownerUserName" style="width: 150px" class="same-staff" @on-change='getWorkerList(item,index)' placeholder="输入姓名"></Input>
+                    <Input v-model="item.ownerUserName" style="width:150px" class="same-staff" @on-change='getWorkerList(item,index)' placeholder="输入姓名"></Input>
                     <span class="twoT">联系方式</span>
-                    <Input v-model="item.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
+                    <Input v-model="item.ownerUserTel" style="width:150px" class="same-staff" disabled></Input>
                      <Icon type="ios-trash"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
                   </div>
                   <div v-if='addWorker'>
@@ -353,31 +353,33 @@
               </li>
               <li class="first-li start">
                 <span class="first-span">招募角色</span>
-                <div>
+                <div style="flex:1">
                   <div class="flex-center-center"><Button @click="addRoles()" class="font">+新增招募角色</Button></div>
                   <div>
-                    <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource" :key='i'>
-                      <span>{{item.roleName}}</span>
-                      <span class="twoT">{{item.recruitNum}}</span>
-                      <Button @click="changeRoles(i)" class="font">详情</Button>
-                      <Icon type="ios-trash"   @click="deleteRole(i)" color='#FF565A' size='28' class="tit"/>
-                    </p>
+                    <Row type="flex" justify="space-between" v-for="(item,i) in batch.userConfList" class-name="li-flex-around lx-resource" :key='i'>
+                      <i-col span='5'>{{item.roleName}}</i-col>
+                      <i-col span='3'>{{item.recruitNum}}</i-col>
+                      <i-col span='5'><Button @click="changeRoles(i)" class="font">详情</Button></i-col>
+                      <i-col span='3'><Icon type="ios-trash"   @click="deleteRole(i)" color='#FF565A' size='28'/></i-col>
+                    </Row>
                   </div>
                 </div>
               </li>
               <li class="first-li start">
                 <span class="first-span">所需物资</span>
-                <div>
+                <div  style="flex:1">
                   <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物资</Button></div>
                   <div>
-                    <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource" :key='i'>
-                      <span>{{item.resourcesName}}</span>
-                      <Input v-model="item.num" style="width: 200px" placeholder="请输入数量" class="twoT"></Input>
-                      <span>
+                    <Row v-for="(item,i) in batch.actResList" class-name="li-flex-around lx-resource" :key='i' type="flex" justify="space-between">
+                      <i-col span='4'>{{item.resourcesName}}</i-col>
+                      <i-col span='8'>
+                        <Input v-model="item.num" placeholder="请输入数量"  class="twoT"></Input>
+                      </i-col>
+                      <i-col span='4'>
                         <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
                         <Icon type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
-                      </span>
-                    </p>
+                      </i-col>
+                    </Row>
                   </div>
                 </div>
               </li>

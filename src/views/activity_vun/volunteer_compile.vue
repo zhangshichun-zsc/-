@@ -303,8 +303,8 @@ export default {
   watch:{
     "args.zmType":function(val){
       let args = {
-        userPositionName:this.userPositionName,
-        userPosition:this.userPosition,
+        userPositionName:this.args.userPositionName,
+        userPosition:this.args.userPosition,
         zmType:val,
         roleId:2,
         isAutoChoose:2,

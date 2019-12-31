@@ -49,7 +49,7 @@
     <div class="content">
       <p class="content-head">
         <span>活动发布</span>
-        <Button @click="apply">设置常用报名项</Button>
+        <Button @click="apply" disabled>设置常用报名项</Button>
       </p>
       <Row type="flex" justify="space-between" class-name="row20">
         <i-col span="11" push='1'>
@@ -251,7 +251,7 @@
                 培训内容
               </i-col>
               <i-col span='3' push='2'>
-                <i-switch v-model="isTrain" :true-value='1' :false-value='0' :disabled='isDisb'/>
+                <i-switch v-model="isTrain" :true-value='1' :false-value='2' :disabled='isDisb'/>
               </i-col>
             </Row>
             <Row v-if='isTrain === 1'>
@@ -264,7 +264,7 @@
                 反馈内容
               </i-col>
               <i-col span='3' push='2'>
-                <i-switch v-model="isFeedback" :true-value='1' :false-value='0' :disabled='isDisb'/>
+                <i-switch v-model="isFeedback" :true-value='1' :false-value='2' :disabled='isDisb'/>
               </i-col>
             </Row>
             <Row v-if='isFeedback === 1'>

@@ -152,8 +152,7 @@
       </div>
       <div v-for="(item, m) in msg.evaluateList" :key="m" class-name="bott">
         <p class="item flex-between">
-          <span>评价对象:</span
-          ><span>{{ item.typeFlag == 5 ? "会员" : "现场负责人" }}</span>
+          <span>评价对象:</span><span>{{ seetypeFlag[item.typeFlag] }}</span>
         </p>
         <p class="item flex-between">
           <span>姓名:</span><span>{{ item.userName }}</span>
@@ -168,7 +167,7 @@
         <div class="item flex-between">
           <span>是否匿名</span>
           <i-switch
-            true-color="#13ce66"
+            true-color="#ff4949"
             false-color="#ff4949"
             disabled
             v-model="item.isAnonymous"
@@ -196,6 +195,14 @@ export default {
     return {
       navigation1: {
         head: "活动反馈详情(志愿者)"
+      },
+      seetypeFlag: {
+        1: "活动评论",
+        2: "举报",
+        3: "反馈",
+        4: "志愿者",
+        5: "会员",
+        6: "现场负责人"
       },
       seeModal: false,
       time: "请选择时间段",
@@ -238,7 +245,7 @@ export default {
 
           key: "tel",
           align: "center",
-          width: "140px"
+          width: "160px"
         },
         {
           title: "反馈时间",
@@ -303,15 +310,15 @@ export default {
       this.page = 1;
       let startAt = this.querys.startAt;
       let endAt = this.querys.endAt;
-      if (new Date(startAt).getTime() === new Date(endAt).getTime()) {
-        startAt = startAt + " 00:00:00";
-        endAt = endAt + " 23:59:59";
-      } else {
-        startAt = startAt + " 00:00:00";
-        endAt = endAt + " 00:00:00";
+      if (startAt) {
+        startAt = new Date(startAt).getTime();
+      }
+      if (endAt) {
+        endAt =
+          this.util.formatDate_time(new Date(endAt).getTime()) + " 23:59:59";
       }
       this.startAt = startAt;
-      this.endAt = endAt;
+      this.endAt = new Date(endAt).getTime();
       this.userName = this.querys.userName;
 
       this.getActivityuserpage();
