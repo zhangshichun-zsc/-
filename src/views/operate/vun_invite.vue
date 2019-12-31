@@ -121,7 +121,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
       top:[{name:'用户账号:',type:'input',value:''},{name:'用户昵称:',type:'input',value:''}],
       data: [],
        page:1,

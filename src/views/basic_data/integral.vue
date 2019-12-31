@@ -263,7 +263,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
 
       datax: [],
       sysType: 1,
@@ -282,7 +282,7 @@ export default {
       num: "",
       sysId: "1,3",
       power: "",
-      value3:2,
+
     };
   },
 

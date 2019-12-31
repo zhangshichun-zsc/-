@@ -182,7 +182,7 @@ export default {
         inviteUserAccountId: this.$route.query.inviteUserAccountId
       }).then(res => {
         if (res.code == 200) {
-          this.page = res.data.pageNum;
+
           this.dataCount = res.data.totalSize;
           this.data = res.data.list;
         }
@@ -192,7 +192,6 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
       this.getBiInvitationList();
     },
 

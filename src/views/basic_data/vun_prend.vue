@@ -186,7 +186,7 @@ export default {
       });
     },
     location() {
-      console.log(this.logoPic, this.officeSealPic);
+      // console.log(this.logoPic, this.officeSealPic);
       if (!this.logoPic || !this.officeSealPic) {
         this.$Message.warning("logo或者尾部照片没有选择");
         return;

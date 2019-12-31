@@ -46,11 +46,11 @@
               <Input v-model="oneRole.score" placeholder="请输入积分" style="width: 300px"></Input>
             </li>
             <li class="first-li">
-              <span class="first-span">岗位描述</span>
+              <span class="first-span">招募描述</span>
               <Input
                 type="textarea"
                 v-model="oneRole.positionComments"
-                placeholder="请输入岗位描述"
+                placeholder="请输入招募描述"
                 style="width: 300px;"
                 :rows='5'
               ></Input>
@@ -156,13 +156,13 @@
             </li>
             <li class="first-li" v-if="oneRole.zmType==2">
               <span class="first-span">需要审核</span>
-              <i-switch v-model="oneRole.isHaveSubsidy" :trueValue='1' :falseValue='2' />
+              <i-switch v-model="oneRole.isAudit" :trueValue='1' :falseValue='2' />
             </li>
             <li class="first-li" v-if="oneRole.zmType==2">
               <span class="first-span">是否自动筛选替补人员</span>
               <RadioGroup v-model="oneRole.isAutoChoose" class="font" size='large'>
-                <Radio label="0" :trueValue='0'>是</Radio>
-                <Radio label="1" :trueValue='1'>否</Radio>
+                <Radio label="0">是</Radio>
+                <Radio label="1">否</Radio>
               </RadioGroup>
             </li>
             <li class="first-li">
@@ -212,14 +212,22 @@
             </li>
             <li class="first-li">
               <span class="first-span">退款设置</span>
-              <div class="refund">
+              <!-- <div class="refund">
                 <p>
                   <i-switch v-model="oneRole.actRefund.refundRule" @on-change="refund" :falseValue='3' :trueValue='1 || 2' />
                   支持退款
                 </p>
-              </div>
+              </div> -->
+              <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
+                <Radio label="1">活动结束前均可退款</Radio>
+                <Radio label="2">
+                  活动开始前
+                  <Input v-model="oneRole.actRefund.refundDays" style="width: 80px" />天可退款
+                </Radio>
+                <Radio label="3">不可退款</Radio>
+              </RadioGroup>
             </li>
-            <li v-if="oneRole.actRefund.refundRule==1 || oneRole.actRefund.refundRule==2">
+            <!-- <li v-if="oneRole.actRefund.refundRule==1 || oneRole.actRefund.refundRule==2">
               <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
                 <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
                 <Radio label="2" :trueValue='2'>
@@ -227,7 +235,7 @@
                   <Input v-model="oneRole.actRefund.refundDays" style="width: 80px" />天可退款
                 </Radio>
               </RadioGroup>
-            </li>
+            </li> -->
             <li class="first-li">
               <span>限制设置</span>
             </li>
@@ -644,9 +652,9 @@ export default {
     },
     //招募类型
     getType(val) {
-      if (this.oneRole.roleName) {
-        this.$Message.warning('招募岗位，限制设置，报名项设置，优先设置已清空,请重新填写')
-      }
+      // if (this.oneRole.roleName) {
+      //   this.$Message.warning('招募岗位，限制设置，报名项设置，优先设置已清空,请重新填写')
+      // }
       this.oneRole.roleName = val.name;
       this.oneRole.roleId = val.roleId;
       this.oneRole.userPosition = '';
@@ -810,7 +818,6 @@ export default {
     },
     getLimits(e){
       console.log(e)
-      debugger
       let isAdd = true
       for(let i in this.oneRole.signRuleList){
         if(e.ruleId==2||e.ruleId==5||e.ruleId==6||e.ruleId==7){
