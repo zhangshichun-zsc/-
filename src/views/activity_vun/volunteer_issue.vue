@@ -49,7 +49,7 @@
     <div class="content">
       <p class="content-head">
         <span>活动发布</span>
-        <Button @click="apply">设置常用报名项</Button>
+        <Button @click="apply" disabled>设置常用报名项</Button>
       </p>
       <Row type="flex" justify="space-between" class-name="row20">
         <i-col span="11" push='1'>
