@@ -342,6 +342,7 @@ import { upload, orgimg } from "../../request/http";
 import Selsect from "@/components/selsect";
 import { formatDate } from "@/request/datatime";
 import {
+  deleteFile,
   orgdetails,
   orgmember,
   orgdelete,
@@ -764,7 +765,7 @@ export default {
     },
     // 删除附件
     canceltxt(pic, name) {
-      orgimgdel({ path: pic }).then(res => {
+      deleteFile({ fileUrl: pic }).then(res => {
         if (res.code == 200) {
           this.$Message.success("删除成功");
           if (name == this.formInline.nameA) {
