@@ -146,7 +146,7 @@ export default {
         linkUrl: "",
         picUrl: "",
         imgUrl: null,
-        linkType:1,
+        linkType:"1",
         comments:''
       },
       ruleValidate: {
@@ -233,7 +233,9 @@ export default {
         linkUrl: this.formValidate.linkUrl,
         remark: this.formValidate.remark,
         contentId: this.$route.query.contentId,
-        location: this.formValidate.location
+        location: this.formValidate.location,
+        linkType: this.formValidate.linkType,
+        comments: this.formValidate.comments
       })
         .then(res => {
           if (res.code == 200) {
@@ -262,6 +264,8 @@ export default {
           (this.formValidate.picUrl = list.picUrl),
           (this.formValidate.linkUrl = list.linkUrl),
           (this.formValidate.remark = list.remark);
+          (this.formValidate.linkType = list.linkType);
+          (this.formValidate.comments = list.comments);
         this.formValidate.imgUrl = list.picUrlShow;
       });
     },
