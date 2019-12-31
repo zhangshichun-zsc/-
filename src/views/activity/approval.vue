@@ -158,8 +158,8 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="2">批次招募</Radio>
-                  <Radio label="1" disabled>整体招募</Radio>
+                  <Radio :label="2">批次招募</Radio>
+                  <Radio :label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>
@@ -384,8 +384,8 @@
               <li class="first-li">
                 <span class="first-span">发布时间</span>
                 <RadioGroup v-model="batch.releaseTime" @on-change='releaseTime'>
-                  <Radio label="0">活动开始前一个月自动发布</Radio>
-                  <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
+                  <Radio :label="0">活动开始前一个月自动发布</Radio>
+                  <Radio :label="1" :true-value='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
                 <Date-picker :value="batch.releaseTime" :options="options" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
@@ -492,8 +492,8 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="2">批次招募</Radio>
-                  <Radio label="1" disabled>整体招募</Radio>
+                  <Radio :label="2">批次招募</Radio>
+                  <Radio :label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>

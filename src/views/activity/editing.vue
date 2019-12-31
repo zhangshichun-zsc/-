@@ -253,8 +253,8 @@
                   v-model="batch.releaseTime"
                   @on-change="releaseTime"
                 >
-                  <Radio label="0">活动开始前一个月自动发布</Radio>
-                  <Radio label="1" :trueValue="releaseTimeSelf">自定义</Radio>
+                  <Radio :label="0">活动开始前一个月自动发布</Radio>
+                  <Radio :label="1" :trueValue="releaseTimeSelf">自定义</Radio>
                 </RadioGroup>
                 <Date-picker
                   :value="batch.releaseTime"
@@ -311,6 +311,7 @@ import {
   leader,
   projectDetail,
   projectEdit,
+  activeNew,
   chooseTempalte,
   orgimgdel,
   zfmb
@@ -436,16 +437,23 @@ export default {
     save() {
       if(this.$route.query.dicId){
         this.batch.type = 3;
+        activeNew(this.batch).then(res => {
+          console.log(res);
+          this.$Message.info(res.msg)
+          if(res.code==200){
+            this.$router.back()
+          }
+        });
       }else{
         this.batch.type = 2;
+        projectEdit(this.batch).then(res => {
+          console.log(res);
+          this.$Message.info(res.msg)
+          if(res.code==200){
+            this.$router.back()
+          }
+        });
       }
-      projectEdit(this.batch).then(res => {
-        console.log(res);
-        this.$Message.info(res.msg)
-        if(res.code==200){
-          this.$router.back()
-        }
-      });
     },
     addbtn() {
       this.adds = !this.adds;

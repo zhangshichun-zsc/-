@@ -161,15 +161,15 @@
             <li class="first-li" v-if="oneRole.zmType==2">
               <span class="first-span">是否自动筛选替补人员</span>
               <RadioGroup v-model="oneRole.isAutoChoose" class="font" size='large'>
-                <Radio label="0">是</Radio>
-                <Radio label="1">否</Radio>
+                <Radio :label="0">是</Radio>
+                <Radio :label="1">否</Radio>
               </RadioGroup>
             </li>
             <li class="first-li">
               <span class="first-span">是否发放补助</span>
               <RadioGroup v-model="oneRole.isHaveSubsidy" class="font" size='large'>
-                <Radio label="1">是</Radio>
-                <Radio label="2">否</Radio>
+                <Radio :label="1">是</Radio>
+                <Radio :label="2">否</Radio>
               </RadioGroup>
             </li>
             <li class="first-li" v-if="oneRole.isHaveSubsidy==1">
@@ -179,11 +179,11 @@
                 <Radio label="2">物资</Radio>
               </RadioGroup>
             </li>
-            <li class="first-li" v-if="oneRole.subsidyType==1">
+            <li class="first-li" v-if="oneRole.isHaveSubsidy==1 && oneRole.subsidyType==1">
               <span class="first-span">补助金额</span>
               <Input placeholder="请输入补助金额" v-model="oneRole.subsidyCash" type="number" style="width:300px"></Input>
             </li>
-            <li class="first-li" v-if="oneRole.subsidyType==2">
+            <li class="first-li" v-if="oneRole.isHaveSubsidy==1 && oneRole.subsidyType==2">
               <span class="first-span">物资类型</span>
               <Select v-model="oneRole.resourcesName" style="width:150px;margin-right:10px">
                 <Option
@@ -971,8 +971,46 @@ export default {
       this.$emit("cancelEdit",false)
     },
     save(){
+      let l = this.oneRole.signRuleList?this.oneRole.signRuleList:[]
+      console.log(l)
+      for(let m in l){
+        if (l[m].ruleId == 21 || l[m].ruleId == 3){
+          if (this.age1 && this.age2) {
+            l[m].ruleValue = this.age1 + ',' + this.age2
+          } else if (this.age1) {
+            l[m].ruleValue = this.age1 + ','
+          } else if (this.age2) {
+            l[m].ruleValue = ',' + this.age2
+          }
+        }
+      }
+      for(let j=0;j<l.length;j++){
+        if (!l[j].ruleValue && (l[j].ruleId == 2 || l[j].ruleId == 3 || l[j].ruleId == 4 || l[j].ruleId == 5|| l[j].ruleId == 6 || l[j].ruleId == 7 || l[j].ruleId == 21 || l[j].ruleId == 22) ){
+          this.$Message.warning("限制设置有必填项尚未填写")
+          return
+        }else{
+
+        }
+      }
+      this.oneRole.signRuleList = l
+      let s = this.oneRole.itemList ? this.oneRole.itemList : []
+      for(let j=0;j<s.length;j++){
+        if ((s[j].type == 6 || s[j].type == 1) && !s[j].itemName && s[j].isNew == 1){
+          this.$Message.warning("报名项设置有必填项尚未填写")
+          return
+        } else if ((s[j].type == 3 || s[j].type == 4) && !s[j].itemName && s[j].isNew == 1){
+          this.$Message.warning("报名项设置有必填项尚未填写")
+          return
+        } else if ((s[j].type == 3 || s[j].type == 4) && s[j].itemName && s[j].isNew == 1) {
+          for (let p = 0; p < s[j].answer.length;p++){
+            if(s[j].answer[p].answer==''){
+              this.$Message.warning("报名项设置有必填项尚未填写")
+              return
+            }
+          }
+        }
+      }
       console.log(this.oneRole)
-      // delete this.oneRole.fkDetailList
       this.$emit("oneRole",this.oneRole)
     },
     changeEditorTrain(e){
