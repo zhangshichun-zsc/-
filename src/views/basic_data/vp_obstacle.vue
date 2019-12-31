@@ -220,7 +220,7 @@ export default {
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -267,7 +267,7 @@ export default {
             this.$Message.info("操作成功");
           }
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 

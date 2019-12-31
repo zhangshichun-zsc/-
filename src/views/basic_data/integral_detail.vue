@@ -172,7 +172,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
 
       data2: [],
       sysType:1,
@@ -231,7 +231,7 @@ export default {
         if (res.code == 200) {
           this.data1 = Array.of(res.data);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     // 积分历史记录分页
@@ -258,7 +258,7 @@ export default {
           this.data2 = res.data.list;
           this.dataCount = res.data.totalSize;
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     time(e) {
@@ -269,7 +269,7 @@ export default {
     //收起筛选
     Retractbtn() {
       this.Retract = !this.Retract;
-      console.log(11);
+      // console.log(11);
     },
 
     //分页功能
@@ -280,7 +280,7 @@ export default {
     },
     //选择内容
     handleSelectionChange(val) {
-      console.log(val);
+      // console.log(val);
       this.arrs = val;
     },
     startTimeChange(e) {

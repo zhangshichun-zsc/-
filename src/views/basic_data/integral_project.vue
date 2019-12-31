@@ -152,7 +152,7 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
+                    // console.log(e);
                     this.categoryId = params.row.categoryId;
                     if (e) {
                       this.validFlags = 1;
@@ -259,7 +259,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -283,7 +283,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -299,7 +299,7 @@ export default {
         if (res.code == 200) {
           this.$Message.info("操作成功");
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     //预算列表

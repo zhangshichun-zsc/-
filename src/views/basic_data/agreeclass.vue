@@ -125,15 +125,8 @@ export default {
         {
           title: "类别",
           align: "center",
-
           render: (h, params) => {
-            let type = "";
-            if (params.row.typeFlag == "16") {
-              type = "组织方可签署协议类型";
-            } else if (params.row.typeFlag == "47") {
-              type = "非组织方可签署协议类型";
-            }
-            return h("div", type);
+            return h("div", params.row.typeFlag==16?'组织方可签署协议类型':'非组织方可签署协议类型');
           }
         },
         {
@@ -149,7 +142,7 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
+                    // console.log(e);
                     if (e) {
                       this.valids = 2;
                     } else {
@@ -222,7 +215,7 @@ export default {
         if (res.code == 200) {
           this.data = res.data;
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -248,7 +241,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     //修改状态
@@ -266,14 +259,14 @@ export default {
           this.getAgreementclasslist();
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
     //图片上传
     uploadFile() {
       let file = this.$refs.files.files[0];
-      console.log(file);
+      // console.log(file);
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
@@ -304,7 +297,7 @@ export default {
     },
     //确认
     modalOk(name) {
-      console.log(11);
+      // console.log(11);
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getAgreementclassadd();

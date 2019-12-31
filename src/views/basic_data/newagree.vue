@@ -252,7 +252,7 @@ export default {
 
   methods: {
     jia(e) {
-      console.log(e)
+      // console.log(e)
       // console.log(e,this.options1,this.formInline.partA,this.list)
       // this.getnewAgreement()
     },
@@ -268,9 +268,9 @@ export default {
       newAgreement(params).then(res => {
         if (res.code == 200) {
             this.list = res.data;
-            console.log(this)
+            // console.log(this)
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -282,7 +282,7 @@ export default {
         if (res.code == 200) {
           this.typeList = res.data;
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -368,7 +368,7 @@ export default {
     //协议分页列表
     getAgreementList() {
       AgreementList({}).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           this.locations = res.data;
         }
@@ -421,7 +421,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -430,7 +430,7 @@ export default {
       Agreementdet({
         agreementId: this.agreementId
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           this.formInline = res.data;
           this.formInline.partA=res.data.orgNameA
@@ -453,7 +453,7 @@ export default {
         return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
-      console.log(name,this.formInline.agTime,this.namebID,this.nameaID)
+      // console.log(name,this.formInline.agTime,this.namebID,this.nameaID)
        this.formInline.agTime=this.Times
       let params = {
         agreementId: this.agreementId,
@@ -486,7 +486,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     handleChange(e) {

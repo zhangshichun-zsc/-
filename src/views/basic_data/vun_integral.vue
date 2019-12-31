@@ -257,7 +257,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
 
       data: [],
       sysType: 2,
@@ -306,7 +306,7 @@ export default {
       }else{
         this.formItem.addScore=e
       }
-      console.log(e)
+      // console.log(e)
     },
     //积分管理--积分分页
     getintegralpage() {
@@ -326,7 +326,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
      //审核权限
@@ -336,7 +336,7 @@ export default {
         sysId:this.sysId,
       }).then(res=>{
         this.power=res.data.power
-        console.log(res)
+        // console.log(res)
       })
     },
 
@@ -357,7 +357,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     //查询积分比例
@@ -369,7 +369,7 @@ export default {
            this.formValidate.serve=res.data.score
           this.scoreRuleId=res.data.scoreRuleId
         }
-        console.log(res)
+        // console.log(res)
       })
     },
 
@@ -382,7 +382,7 @@ export default {
         if(res.code==200){
           this.modal2=false
         }
-        console.log(res)
+        // console.log(res)
       })
     },
     set(e){
@@ -413,13 +413,13 @@ export default {
           return item.userId;
         })
         .toString();
-      console.log(this.arr);
+      // console.log(this.arr);
     },
 
      //收起筛选
     Retractbtn() {
       this.Retract = !this.Retract;
-      console.log(11);
+      // console.log(11);
     },
 
 
@@ -467,7 +467,7 @@ export default {
 
     //模态框
     modalOk2(name) {
-      console.log(11);
+      // console.log(11);
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getintegralset()

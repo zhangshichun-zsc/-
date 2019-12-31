@@ -172,7 +172,7 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
+                    // console.log(e);
                     this.getmodifystate(params.row.dicId, e);
                   }
                 }
@@ -296,7 +296,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -317,7 +317,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -326,7 +326,7 @@ export default {
       Offactivitedel({
         dicId: id
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.code == 200) {
           this.getOffactivities();
           this.$Message.info("删除成功");
@@ -349,7 +349,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     // 添加字典信息
@@ -368,7 +368,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -385,7 +385,7 @@ export default {
           this.$Message.error("名称不能为空");
         }
       });
-      console.log(this.dicId);
+      // console.log(this.dicId);
     },
     //取消
     canceltwo() {
@@ -407,7 +407,7 @@ export default {
 
     // 查询结果按钮
     query() {
-      console.log(this.createTimestamp);
+      // console.log(this.createTimestamp);
       this.page = 1;
       this.getOffactivities();
     }
