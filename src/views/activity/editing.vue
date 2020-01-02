@@ -613,7 +613,7 @@ export default {
     //新增招募角色
     addRoles() {
       let r = {
-        fkDetailList: [{ name: "反馈简介", type: 0 }],
+        fkDetailList: [{ name: "反馈简介", type: 0 },{ name: '上传图片', type: 9, context: 2 }],
         actRefund: {},
         signRuleList: [],
         itemList: [],
