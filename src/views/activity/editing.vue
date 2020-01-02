@@ -289,7 +289,7 @@
         <role
           :oneRoles="oneRole"
           @cancelEdit="cancelRole"
-          @oneRole="getRole"
+          @oneRoleMsg="getRole"
         ></role>
       </div>
 

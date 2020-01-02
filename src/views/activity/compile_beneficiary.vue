@@ -656,7 +656,7 @@ export default {
     },
     //招募类型
     getSignType() {
-      signType().then(res => {
+      signType({}).then(res => {
         if(res.code==200){
           this.signTypeList = res.data.roles;
         }
@@ -1023,7 +1023,7 @@ export default {
         }
       }
       console.log(this.oneRole)
-      this.$emit("oneRole",this.oneRole)
+      this.$emit("oneRoleMsg",this.oneRole)
     },
     changeEditorTrain(e){
       this.oneRole.trainComments = e
