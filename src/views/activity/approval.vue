@@ -530,13 +530,13 @@
       </div>
 
       <div v-if="selects" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-next" @click.native="nextOne()">下一步</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-next" @click.native="nextOne()" :disabled='disSubmit'>下一步</Button>
       </div>
 
       <div v-if="two" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-next" @click.native="nextTwo()">下一步</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-next" @click.native="nextTwo()" :disabled='disSubmit'>下一步</Button>
       </div>
 
       <div v-if="three" class="lx-flex-center lx-btn">
@@ -544,8 +544,8 @@
       </div>
 
       <div v-if="three" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-submit" @click.native="submit()">提交审核</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-submit" @click.native="submit()" :disabled='disSubmit'>提交审核</Button>
       </div>
 
       <!-- 弹出框 -->
@@ -648,6 +648,7 @@ import { upload } from "@/request/http";
 export default {
   data() {
     return {
+      disSubmit:false,
       projectMsg: {
         partnerList: [],
         actInfoList: []
@@ -1143,6 +1144,7 @@ export default {
 
     //提交
     submit() {
+      this.disSubmit = true
       console.log(this.projectMsg);
       if(this.isAgree){
         this.projectMsg.userId = this.userId;
@@ -1171,8 +1173,10 @@ export default {
           if (res.code == 200) {
             this.$Message.success(res.msg);
             this.$router.back()
+            this.disSubmit = false
           } else {
             this.$Message.error(res.msg);
+            this.disSubmit = false
           }
         });
       }else{
@@ -1181,6 +1185,7 @@ export default {
     },
     //提交
     draft() {
+      this.disSubmit = true
       console.log(this.projectMsg);
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
@@ -1207,8 +1212,10 @@ export default {
         if (res.code == 200) {
           this.$Message.success(res.msg);
           this.$router.back()
+          this.disSubmit = false
         } else {
           this.$Message.error(res.msg);
+          this.disSubmit = false
         }
       });
     },
