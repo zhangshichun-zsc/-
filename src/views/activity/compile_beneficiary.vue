@@ -307,7 +307,7 @@
                   <tr v-if="item.ruleId==22 || item.ruleId==4" class="role-tr">
                     <td>居住地区限制</td>
                     <td>
-                      <selects style="display:flex" @change='getSsq'></selects>
+                      <selects style="display:flex" @change='getSsq' :arr='region'></selects>
                     </td>
                     <td>
                       <Button @click.native="deleteLimits(index)">删除</Button>
@@ -621,6 +621,18 @@ export default {
     this.userId = this.$store.state.userId;
     if(this.oneRole.roleId){
       this.getTypes(this.oneRole)
+      for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
+        if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
+          let a = this.oneRole.signRuleList[p].ruleValue.split(",")
+          this.age1 = a[0]
+          this.age2 = a[1]
+        }
+        if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
+          let b = this.oneRole.signRuleList[p].ruleValue.split(",")
+          let val = getAreaAdress(b[0], b[1], b[2])
+          this.region = val
+        }
+      }
     }
     this.getSignType();
     this.getBatchItem();
