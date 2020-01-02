@@ -37,7 +37,12 @@
                   :key="item.dicId"
                 >{{ item.dicName }}</Option>
               </Select>
-
+            </FormItem>
+            <FormItem label="上线/下线" prop="isOnline">
+              <RadioGroup v-model="ContentData.isOnline" class="font">
+                <Radio label="1">上线</Radio>
+                <Radio label="0">下线</Radio>
+              </RadioGroup>
             </FormItem>
           </Form>
         </div>
@@ -192,10 +197,11 @@ export default {
         if(res.code==200){
           let lists= res.data
           this.ContentData.title = lists.title
-           this.ContentData.showLocation=Number(lists.showLocation)
-           this.ContentData.informationType=lists.informationType
-           this.ContentData.resume=lists.resume
-           this.url=lists.coverImg
+          this.ContentData.showLocation=Number(lists.showLocation)
+          this.ContentData.informationType=lists.informationType
+          this.ContentData.resume=lists.resume
+          this.ContentData.isOnline=lists.isOnline
+          this.url=lists.coverImg
           this.imgs=lists.coverImgPath
           this.editorContent=lists.content
 
@@ -205,13 +211,14 @@ export default {
     //质询编辑
     getAddressbatch(){
       Addressbatch({
-         informationId:this.informationId,
-          userId: this.$store.state.userId,
-         title: this.ContentData.title,
+        informationId:this.informationId,
+        userId: this.$store.state.userId,
+        title: this.ContentData.title,
         showLocation: this.ContentData.showLocation,
         resume: this.ContentData.resume,
         content: this.editorContent,
         informationType: this.ContentData.informationType,
+        isOnline: this.ContentData.isOnline,
         url: this.url,
       }).then(res=>{
         if(res.code==200){
@@ -233,6 +240,7 @@ export default {
         resume: this.ContentData.resume,
         content: this.editorContent,
         informationType: this.ContentData.informationType,
+        isOnline: this.ContentData.isOnline,
         url: this.url
       }).then(res => {
         if (res.code == 200) {
@@ -335,7 +343,6 @@ export default {
     .cancel{
       position: absolute;
       top: 0px;
-      right: 0px;
       z-index: 10;
     }
     .upload .file{
@@ -343,7 +350,7 @@ export default {
       height: 100%;
       border: 1px dashed #FF565A;
       text-align: center;
-      padding: 20px 0;
+      line-height: 140px;
     }
     // .upload .file:hover{
     //   border: 1px dashed #FF565A;
