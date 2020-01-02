@@ -294,7 +294,7 @@
                 <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
                   <Radio label="自驾">自驾</Radio>
                   <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" :true-value='tripSelf'>自定义</Radio>
+                  <Radio label="自定义" :checked="tripSelf">自定义</Radio>
                 </RadioGroup>
               </li>
               <li v-if="tripSelf">
@@ -822,6 +822,9 @@ export default {
         workerIdList: [{}]
       }
       this.batch = this.projectMsg.actInfoList[0]?this.projectMsg.actInfoList[0]:batch
+      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
+        this.tripSelf = true
+      }
     },
 
     //保存合作方
@@ -1110,8 +1113,9 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
-      console.log(this.pcNum)
-      console.log(this.batch)
+      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
+        this.tripSelf = true
+      }
       this.two = true;
       this.three = false;
       this.current = 1;
