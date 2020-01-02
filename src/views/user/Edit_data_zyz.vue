@@ -21,12 +21,9 @@
         </div>
         <div>
           <span class="itemizes">分类 </span>
-          <span
-            class="itemize"
-            v-for="item in parameOBJ.titleInfo.userRole.split(',')"
-            :key="item"
-            >{{ item }}</span
-          >
+          <span class="itemize" v-for="item in userRole" :key="item">{{
+            item
+          }}</span>
         </div>
         <div style="flex:2">
           <span class="itemizes">标签 </span>
@@ -437,6 +434,7 @@ export default {
           }
         }
       }, // 所有 的数据
+      userRole: [],
       getOBJ: {
         // 获取编辑详情的数据
         userId: this.$route.query.userId,
@@ -533,7 +531,7 @@ export default {
           this.province = res.data.basicInfo.info.proviceId;
           this.city = res.data.basicInfo.info.cityId;
           this.county = res.data.basicInfo.info.districtId;
-
+          this.userRole = res.data.titleInfo.userRole.split(",");
           this.parameOBJ = res.data;
         }
       });
