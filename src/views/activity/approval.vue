@@ -223,7 +223,7 @@
                     </div>
                   </div>
                   <div class="first-picfm" style="border:none" v-else>
-                    <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
+                    <img style="width:100%;height:100%" :src="batch.actCoverShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
@@ -238,14 +238,14 @@
                     </div>
                   </div>
                   <div class="first-pic" style="border:none" v-else>
-                    <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
+                    <img style="width:100%;height:100%"  :src="batch.actShowPic"/>
                     <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
             </ul>
           </Col>
-          <Col span='12'>
+          <Col span='14'>
             <ul>
               <li class="first-li">
                 <span class="first-span">活动时间</span>
@@ -282,12 +282,12 @@
               <li class="first-li">
                 <span class="first-span">活动地址</span>
                 <div style="flex:1">
-                   <Button @click="getAdr()" long>{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</Button>
+                   <Button @click="getAdr()">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</Button>
                 </div>
               </li>
               <li class="first-li">
                 <span class="first-span">详细地址</span>
-                <Input v-model="batch.addressSup" placeholder="请输入详细地址"></Input>
+                <Input v-model="batch.addressSup" placeholder="请输入详细地址" style="width:300px;"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
