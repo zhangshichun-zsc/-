@@ -158,7 +158,10 @@
               <ul>
                 <li class="flex-start">
                   <span>活动地址</span>
-                  <Button @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</Button>
+                  <div>
+                    <Button @click="getAdr" class="adr" long>{{ args.address == null?"点击选中地址":args.address}}</Button>
+                    <Input v-model="args.addressSup" placeholder="请输入详细地址" :disabled='isDisb'/>
+                  </div>
                 </li>
                 <li>
                   <span>现场负责人</span>
@@ -419,6 +422,7 @@ export default {
         cityId:null,
         districtId:null,
         address:null,
+        addressSup: null,
         xx:null,
         yy:null,
         ownerUserId:null,
@@ -944,6 +948,7 @@ export default {
             .adr{
               flex: 1;
               cursor: pointer;
+              margin-bottom: 10px;
             }
             .juge{
               width: 300px;
