@@ -14,11 +14,14 @@
                 <Input v-model.trim="formValidate.name" size="large" :maxlength=30 style="width: 220px"/>
               </FormItem>
               <FormItem label="金额:" prop="amount">
-                <InputNumber :min="0" :max="1000000000"  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
+                 <!-- <InputNumber :max="10" :min="1" v-model="formValidate.amount"></InputNumber> -->
+                <!-- <Input type="number" v-model.trim="formValidate.amount" size="large" :maxlength=3 style="width: 220px"/> -->
+
+                <InputNumber :min="0" :max="1000000000" :maxlength=10  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
-                <InputNumber :max="99" :min="1" v-model="formValidate.imonth" size="large"  style="width: 220px;"></InputNumber>
-               <Button  >月</Button>
+                <InputNumber :max="99" :min="1" @on-change="imonths" v-model="formValidate.imonth" size="large"  style="width: 220px;"></InputNumber>
+               <Button>月</Button>
               </FormItem>
               <FormItem label="会员包:" prop="packageFlag">
                 <RadioGroup v-model="formValidate.packageFlag" size="large">
@@ -27,8 +30,7 @@
                 </RadioGroup>
               </FormItem>
               <FormItem label="会费详情">
-                <wangeditor id="exccccc" :labels="editorContent" @change="btn"></wangeditor>
-
+                <wangeditor id="exccccc7" :labels='editorContent'  @change="btn"></wangeditor>
               </FormItem>
             </Form>
             <div slot="footer">
@@ -78,14 +80,16 @@
 <script>
 import wangeditor from "@/components/wangeditor";
 import basicdata from "@/components/basicdata";
+import { upload } from "@/request/http";
 
 import { formatDate } from "@/request/datatime";
 import { Costlist, Costadd, Costdels } from "@/request/api";
 
 export default {
-  name: "editor",
+
   data() {
     return {
+       name: "editor",
       editorContent: "",
       Newly: "新增会费",
       formValidate: {
@@ -106,7 +110,7 @@ export default {
             required: true,
             message: "输入格式不正确",
             trigger: "blur",
-            pattern: /^[a-z0-9]+$/,
+            // pattern: /^[a-z0-9]+$/,
             type: "number"
             // transform(value) {
             //   return Number(value);
@@ -118,11 +122,11 @@ export default {
             required: true,
             message: "输入格式不正确",
             trigger: "blur",
-            type: "number",
-            pattern: /^[a-z0-9]+$/,
-            transform(value) {
-              return Number(value);
-            }
+            // type: "number",
+            // pattern: /^[0-9]+(.[0-9]{1,3})?$/,
+            // transform(value) {
+            //   return Number(value);
+            // }
           }
         ]
       },
@@ -197,7 +201,7 @@ export default {
                 },
                 on: {
                   input: e => {
-                    console.log(e);
+                    // console.log(e);
                     this.duesId=params.row.duesId
                     if(e){
                       this.validFlags=1
@@ -232,7 +236,7 @@ export default {
                         return
                       }else{
                         this.modal1 = true;
-      this.Newly='编辑会费'
+                        this.Newly='编辑会费'
                         this.duesId=params.row.duesId
                         this.getCostdels()
                       }
@@ -275,9 +279,7 @@ export default {
       detail: "",
       list: "",
       validFlags:'',
-
       addstate:false,
-
     };
   },
   components: { basicdata, wangeditor },
@@ -308,7 +310,7 @@ export default {
           this.data = res.data.list;
           this.dataCount = res.data.totalSize;
         }
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -359,7 +361,7 @@ export default {
 
         }
 
-        console.log(res);
+        // console.log(res);
       });
     },
 
@@ -370,8 +372,27 @@ export default {
           this.formValidate=res.data
           this.editorContent=res.data.detail
         }
-        console.log(res);
+        // console.log(res);
       });
+    },
+
+    amounts(e){
+      console.log(e)
+    },
+    imonths(e){
+      if(e<0){
+         this.formValidate.imonth=1
+      }
+      if(e>99){
+         this.formValidate.imonth=99
+      }
+      // if(e>0&&e<=99){
+      //   this.formValidate.imonth=e
+      // }else{
+      //   // this.formValidate.imonth=99
+      // }
+
+      console.log(e)
     },
 
     //取消框
@@ -416,7 +437,6 @@ export default {
       this.name = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-
       this.getCostlist();
     },
 
