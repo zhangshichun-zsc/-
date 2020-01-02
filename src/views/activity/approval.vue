@@ -294,7 +294,7 @@
                 <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
                   <Radio label="自驾">自驾</Radio>
                   <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" :true-value='tripSelf'>自定义</Radio>
+                  <Radio label="自定义" :checked="tripSelf">自定义</Radio>
                 </RadioGroup>
               </li>
               <li v-if="tripSelf">
@@ -386,8 +386,8 @@
               <li class="first-li">
                 <span class="first-span">发布时间</span>
                 <RadioGroup v-model="batch.releaseTime" @on-change='releaseTime'>
-                  <Radio :label="0">活动开始前一个月自动发布</Radio>
-                  <Radio :label="1" :true-value='releaseTimeSelf'>自定义</Radio>
+                  <Radio label="0">活动开始前一个月自动发布</Radio>
+                  <Radio label="1" :trueValue='releaseTimeSelf'>自定义</Radio>
                 </RadioGroup>
                 <Date-picker :value="batch.releaseTime" :options="options" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
@@ -530,13 +530,13 @@
       </div>
 
       <div v-if="selects" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-next" @click.native="nextOne()">下一步</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-next" @click.native="nextOne()" :disabled='disSubmit'>下一步</Button>
       </div>
 
       <div v-if="two" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-next" @click.native="nextTwo()">下一步</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-next" @click.native="nextTwo()" :disabled='disSubmit'>下一步</Button>
       </div>
 
       <div v-if="three" class="lx-flex-center lx-btn">
@@ -544,8 +544,8 @@
       </div>
 
       <div v-if="three" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-submit" @click.native="submit()">提交审核</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-submit" @click.native="submit()" :disabled='disSubmit'>提交审核</Button>
       </div>
 
       <!-- 弹出框 -->
@@ -622,7 +622,7 @@
         </div>
       </div>
       <div class="" v-if="isAddRole">
-        <role :oneRoles="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
+        <role :oneRoles="oneRole" @cancelEdit="cancelRole" @oneRoleMsg='getRole'></role>
       </div>
 
     </div>
@@ -648,6 +648,7 @@ import { upload } from "@/request/http";
 export default {
   data() {
     return {
+      disSubmit:false,
       projectMsg: {
         partnerList: [],
         actInfoList: []
@@ -821,6 +822,9 @@ export default {
         workerIdList: [{}]
       }
       this.batch = this.projectMsg.actInfoList[0]?this.projectMsg.actInfoList[0]:batch
+      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
+        this.tripSelf = true
+      }
     },
 
     //保存合作方
@@ -1109,8 +1113,9 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
-      console.log(this.pcNum)
-      console.log(this.batch)
+      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
+        this.tripSelf = true
+      }
       this.two = true;
       this.three = false;
       this.current = 1;
@@ -1143,6 +1148,7 @@ export default {
 
     //提交
     submit() {
+      this.disSubmit = true
       console.log(this.projectMsg);
       if(this.isAgree){
         this.projectMsg.userId = this.userId;
@@ -1171,8 +1177,10 @@ export default {
           if (res.code == 200) {
             this.$Message.success(res.msg);
             this.$router.back()
+            this.disSubmit = false
           } else {
             this.$Message.error(res.msg);
+            this.disSubmit = false
           }
         });
       }else{
@@ -1181,6 +1189,7 @@ export default {
     },
     //提交
     draft() {
+      this.disSubmit = true
       console.log(this.projectMsg);
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
@@ -1207,8 +1216,10 @@ export default {
         if (res.code == 200) {
           this.$Message.success(res.msg);
           this.$router.back()
+          this.disSubmit = false
         } else {
           this.$Message.error(res.msg);
+          this.disSubmit = false
         }
       });
     },

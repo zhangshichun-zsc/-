@@ -410,7 +410,7 @@
               <table style="width:80%">
                 <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
                   <tr class="role-tr">
-                    <td>{{index+1}}.{{item.firstName}}</td>
+                    <td>{{index+1}}.{{item.ruleName}}</td>
                     <td>
                       <Button @click.native="sortFirst(index)">上移</Button>
                     </td>
@@ -656,7 +656,7 @@ export default {
     },
     //招募类型
     getSignType() {
-      signType().then(res => {
+      signType({}).then(res => {
         if(res.code==200){
           this.signTypeList = res.data.roles;
         }
@@ -948,7 +948,7 @@ export default {
       let isAdd = true
       if (n.length == 0) {
         m.ruleId = e.ruleId
-        m.firstName = e.name
+        m.ruleName = e.name
         n.push(m)
       } else {
         for (let i = 0; i < n.length; i++) {
@@ -958,7 +958,7 @@ export default {
         }
         if (isAdd) {
           m.ruleId = e.ruleId
-          m.firstName = e.name
+          m.ruleName = e.name
           n.push(m)
           this.yx = false
         } else {
@@ -1023,7 +1023,7 @@ export default {
         }
       }
       console.log(this.oneRole)
-      this.$emit("oneRole",this.oneRole)
+      this.$emit("oneRoleMsg",this.oneRole)
     },
     changeEditorTrain(e){
       this.oneRole.trainComments = e
