@@ -294,7 +294,7 @@ export default {
                   on: {
                     click: () => {
                       let state = params.row.status
-                      if(state !== 0 && state !== 3){
+                      if(state !== 1 && state !== 2){
                         this.$Message.error("不能操作")
                          return
                       }
@@ -317,7 +317,7 @@ export default {
                   on: {
                     click: () => {
                        let state = params.row.status
-                      if(state !== 0 && state !== 3){
+                      if(state !== 1 && state !== 2){
                         this.$Message.error("不能操作")
                          return
                       }
