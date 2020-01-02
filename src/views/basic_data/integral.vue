@@ -83,7 +83,7 @@
           </Form>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel">取消</Button>
-            <Button type="error" size="large" @click="modalOk('formItem')">确定</Button>
+            <Button type="error" size="large" @click="modalOk('formItem')"  :loading="loading">确定</Button>
           </div>
         </Modal>
       </div>
@@ -282,6 +282,8 @@ export default {
       num: "",
       sysId: "1,3",
       power: "",
+      loading:false,
+
 
     };
   },
@@ -352,6 +354,10 @@ export default {
         remark: this.formItem.remark,
         operationUserId: this.$store.state.userId
       }).then(res => {
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           this.modal1 = false;
           this.getintegralpage();
@@ -366,7 +372,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
+
       this.getintegralpage();
     },
 
@@ -415,6 +421,7 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading=true
           this.getintegralmodify();
         } else {
           this.$Message.error("必填项未填");

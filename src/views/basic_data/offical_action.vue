@@ -66,7 +66,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="canceltwo">取消</Button>
-              <Button type="error" size="large" @click="oktwo('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="oktwo('formValidate')" :loading="loading">确定</Button>
             </div>
           </Modal>
         </div>
@@ -263,7 +263,8 @@ export default {
       dicId: "",
       arr: [],
       text: "",
-      actTypelist: [{ name: "家长", value: 1 }, { name: "孩子", value: 2 }]
+      actTypelist: [{ name: "家长", value: 1 }, { name: "孩子", value: 2 }],
+      loading:false,
     };
   },
 
@@ -342,6 +343,10 @@ export default {
         dicName: this.formValidate.dicNamemod,
         actTypeFlag: this.formValidate.actTypeFlag
       }).then(res => {
+         //防止重复提交
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           this.getOffactivities();
           this.$Message.info("修改成功");
@@ -376,6 +381,7 @@ export default {
     oktwo(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading=true
           if (this.dicId != "") {
             this.getOffactivitemod();
           } else {

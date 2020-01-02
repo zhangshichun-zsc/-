@@ -21,7 +21,7 @@
 
         </ul>
       </div>
-       <p class="btns"><Button size='large'  class="table-btns" @click="Submission">提交</Button></p>
+       <p class="btns"><Button size='large'  class="table-btns" @click="Submission"  :loading="loading">提交</Button></p>
     </div>
     </div>
 
@@ -37,7 +37,8 @@ export default {
       },
       sysType:1,
       data:[],
-      stateinput:[]
+      stateinput:[],
+      loading:false,
     }
   },
 
@@ -57,8 +58,9 @@ export default {
         sysType:this.sysType
       }).then(res=>{
         if(res.code==200){
-          this.data=res.data
-
+          this.data=res.data.filter(item=>{
+            return item.scoreRuleId!=29
+          })
         }
         // console.log(res)
       })
@@ -69,6 +71,10 @@ export default {
       OffSubmission({
         list:this.data
       }).then(res=>{
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if(res.code==200){
           // this.getintegralrule()
            this.$router.push({name:'vun_integral'})
@@ -84,8 +90,8 @@ export default {
       this.stateinput=this.data.filter(item=>{
         return item.score===null
       })
-      // console.log(this.stateinput)
       if(this.stateinput.length==0){
+        this.loading=true
         this.getOffSubmission()
       }else{
         this.$Message.error("必填项未填!");

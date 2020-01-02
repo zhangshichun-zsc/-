@@ -260,7 +260,6 @@ export default {
         ];
       }
       Basicbatch({ list: this.list }).then(res => {
-
         //防止重复提交
         setTimeout(()=> {
           this.loading = false;
