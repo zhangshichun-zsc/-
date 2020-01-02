@@ -73,7 +73,7 @@
           </Form>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel">取消</Button>
-            <Button type="error" size="large" @click="modalOk('formItem')">确定</Button>
+            <Button type="error" size="large" @click="modalOk('formItem')"  :loading="loading1">确定</Button>
           </div>
         </Modal>
 
@@ -88,7 +88,7 @@
           </Form>
           <div slot="footer">
             <Button type="text" size="large" @click="modalCancel2">取消</Button>
-            <Button type="error" size="large" @click="modalOk2('formValidate')">确定</Button>
+            <Button type="error" size="large" @click="modalOk2('formValidate')"  :loading="loading2">确定</Button>
           </div>
         </Modal>
       </div>
@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { tablepage } from "@/request/mixin";
+// import { tablepage } from "@/request/mixin";
 import { integralpage, integralmodify,integralnum,integralset,approvalAuditScorePower} from "../../request/api";
 export default {
   data() {
@@ -278,6 +278,9 @@ export default {
       scoreRuleId:'',
        sysId:'1,3',
       power:'',
+      loading1:false,
+      loading2:false,
+
     };
   },
 
@@ -290,7 +293,7 @@ export default {
 
   },
 
-  mixins: [tablepage],
+  // mixins: [tablepage],
   created() {},
 
    //事件监听
@@ -350,6 +353,10 @@ export default {
         remark: this.formItem.remark,
         operationUserId: this.$store.state.userId
       }).then(res => {
+          //防止重复提交
+        setTimeout(()=> {
+          this.loading1 = false;
+        }, 500);
         if (res.code == 200) {
           this.modal1 = false;
           this.getintegralpage()
@@ -379,8 +386,13 @@ export default {
         scoreRuleId:this.scoreRuleId,
         score:this.formValidate.serve
       }).then(res=>{
+          //防止重复提交
+        setTimeout(()=> {
+          this.loading2 = false;
+        }, 500);
         if(res.code==200){
           this.modal2=false
+          this.$Message.info(res.msg);
         }
         // console.log(res)
       })
@@ -451,6 +463,7 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading1=true
         this.getintegralmodify();
 
         } else {
@@ -470,6 +483,7 @@ export default {
       // console.log(11);
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading2=true
           this.getintegralset()
 
 

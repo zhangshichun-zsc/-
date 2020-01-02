@@ -38,7 +38,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="cancel">取消</Button>
-              <Button type="error" size="large" @click="ok">确定</Button>
+              <Button type="error" size="large" @click="ok"  :loading="loading">确定</Button>
             </div>
           </Modal>
         </div>
@@ -229,7 +229,8 @@ export default {
       budgetlist: [],
       typeFlag: 1,
       text: "新增项目",
-      validFlags: ""
+      validFlags: "",
+      loading:false,
     };
   },
 
@@ -276,6 +277,10 @@ export default {
       ];
       params = this.util.remove(params);
       projectsetadd({ list: params }).then(res => {
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           this.$Message.info(res.msg);
           this.getprojectsetlist();
@@ -355,6 +360,7 @@ export default {
     ok() {
       this.$refs.formValidate.validate(valid => {
         if (valid) {
+           this.loading = true;
           this.getprojectsetadd();
         } else {
           this.$Message.error("必填项未填!");
