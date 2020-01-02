@@ -850,6 +850,7 @@ export default {
       if(i == 1){
         item.releaseTime = this.getTime()
       }
+      if(this.isEdit == 4) delete item.activityId
       let obj = filterNull(item)
       obj.title = obj.name
       saveActive(obj).then(res => {
