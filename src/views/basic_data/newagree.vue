@@ -57,7 +57,7 @@
           </Select>
         </FormItem>
         <FormItem label="活动类型:" prop="categoryId">
-          <Select v-model="formInline.categoryId" placeholder="请选择活动类型" style="width:300px">
+          <Select v-model="formInline.categoryId" placeholder="请选择活动类型" style="width:300px" multiple>
             <Option
               v-for="item in typeList"
               :value="item.dicId"
@@ -82,6 +82,7 @@
           <div class="flex-wrap-center">
             <p class="imgs" v-if="Boolean(formInline.nameA)">
               <span>{{formInline.nameA}}</span>
+              <a>
               <Icon
                 type="ios-trash"
                 class="cancel"
@@ -89,9 +90,11 @@
                 color="#FF565A"
                 @click="cancelImg(formInline.agPicA,formInline.nameA)"
               />
+              </a>
             </p>
             <p class="imgs" v-if="Boolean(formInline.nameB)">
               <span>{{formInline.nameB}}</span>
+               <a>
               <Icon
                 type="ios-trash"
                 class="cancel"
@@ -99,16 +102,21 @@
                 color="#FF565A"
                 @click="cancelImg(formInline.agPicB,formInline.nameB)"
               />
+               </a>
             </p>
             <p class="imgs" v-if="Boolean(formInline.nameC)">
               <span>{{formInline.nameC}}</span>
-              <Icon
+              <a>
+                 <Icon
                 type="ios-trash"
                 class="cancel"
                 size="24"
                 color="#FF565A"
                 @click="cancelImg(formInline.agPicC,formInline.nameC)"
               />
+
+              </a>
+
             </p>
           </div>
           <div class="start-wap">
@@ -194,7 +202,7 @@ export default {
             required: true,
             message: "请选择活动类型",
             trigger: "change",
-            type: "number"
+            type: "array"
           }
         ],
 
@@ -260,7 +268,6 @@ export default {
 
     //甲方名称
     getnewAgreement(e) {
-
       let  params = {
           orgType: this.orgType,
           orgName: e
@@ -347,10 +354,12 @@ export default {
         });
       } else {
         this.options2 = [];
+
       }
     },
 
     handleSubmit(name) {
+      console.log(this.formInline.categoryId)
       this.$refs[name].validate(valid => {
         if (valid) {
             if (this.agreementId != null) {
@@ -389,6 +398,7 @@ export default {
         return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
+      let categoryId= this.formInline.categoryId.toString()
       let params = {
         sysId: this.sysId,
         // name: this.name,
@@ -398,7 +408,7 @@ export default {
 
         actTypeDicId: this.actTypeDicId,
         batchId: this.batchId,
-        categoryId: this.formInline.categoryId,
+        categoryId: categoryId,
         partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
         agTime: this.formInline.agTime,
@@ -430,13 +440,17 @@ export default {
       Agreementdet({
         agreementId: this.agreementId
       }).then(res => {
-        // console.log(res);
         if (res.code == 200) {
-          this.formInline = res.data;
-          this.formInline.partA=res.data.orgNameA
-          this.formInline.partB=res.data.orgNameB
-          this.nameaID=res.data.partA
-          this.namebID=res.data.partB
+          let list = res.data
+          this.formInline = list;
+          this.formInline.partA=list.orgNameA
+          this.formInline.partB=list.orgNameB
+          this.nameaID=list.partA
+          this.namebID=list.partB
+           this.formInline.categoryId= list.categoryId.split(",").map(item => {
+                return Number(item);
+              });
+           console.log(this.formInline.categoryId)
         }
       });
     },
@@ -453,20 +467,15 @@ export default {
         return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
-      // console.log(name,this.formInline.agTime,this.namebID,this.nameaID)
-       this.formInline.agTime=this.Times
+      let categoryId=this.formInline.categoryId.toString()
       let params = {
         agreementId: this.agreementId,
         typeDicId: this.formInline.typeDicId,
-        categoryId: this.formInline.categoryId,
+        categoryId: categoryId,
           partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
          typeDicName:name.dataValue,
-        // partA: this.formInline.partA,
-        // partB: this.formInline.partB,
         agTime: this.formInline.agTime,
-        // agTime: this.data1,
-        // agFile: this.formInline.agFile,
         agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
         agPicC: this.formInline.agPicC,
@@ -474,7 +483,6 @@ export default {
         nameA: this.formInline.nameA,
         nameB: this.formInline.nameB,
         nameC: this.formInline.nameC
-        // name: this.formInline.name
       };
       this.params = this.util.remove(params);
       Agreementadd(this.params).then(res => {
@@ -490,9 +498,7 @@ export default {
       });
     },
     handleChange(e) {
-
         this.Times = e;
-
     },
 
     //图片上传
@@ -512,7 +518,6 @@ export default {
         reader.readAsDataURL(file);
         reader.onload = e => {
           this.texturl = e.target.result;
-
           if (Boolean(this.formInline.agPicA) == false) {
             this.formInline.agPicA = res.data;
             return;

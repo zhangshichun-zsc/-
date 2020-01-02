@@ -21,12 +21,9 @@
         </div>
         <div>
           <span class="itemizes">分类 </span>
-          <span
-            class="itemize"
-            v-for="item in parameOBJ.titleInfo.userRole.split(',')"
-            :key="item"
-            >{{ item}}</span
-          >
+          <span class="itemize" v-for="(item,index) in userRole" :key="item">{{
+            item
+          }}</span>
         </div>
         <div style="flex:2">
           <span class="itemizes">标签 </span>
@@ -453,7 +450,7 @@
                   style="padding:0; width:70%;"
                   class="disorderTypelist-item "
                   v-for="item in parameOBJ.memInfo.childsInfo.length > 0
-                    ? parameOBJ.memInfo.childsInfo[0].disorderType.split(',')
+                    ? (parameOBJ.memInfo.childsInfo[0].disorderType?parameOBJ.memInfo.childsInfo[0].disorderType.split(','):'')
                     : ['暂无']"
                 >
                   {{ item }}
@@ -1091,6 +1088,7 @@ export default {
         userId: this.$route.query.userId,
         sysType: "1"
       },
+      userRole:[],
       modallable: false, //设置标签
       userLabel: [],
       labelcheckout: [],
@@ -1274,6 +1272,10 @@ export default {
       Public.getVipUserInfo(parame).then(res => {
         if (res.code === 200) {
           let data = res.data.memInfo.vipotherInfo;
+
+          this.userRole =this.splitArr(res.data.titleInfo.userRole);
+  
+
           // 将 多选框的数据保存起来
           this.securityType = this.splitArr(data.securityType);
           this.supportType = this.splitArr(data.supportType);
@@ -1301,6 +1303,7 @@ export default {
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
             return item.labelId;
           });
+
 
           this.province = res.data.basicInfo.info.proviceId;
           this.city = res.data.basicInfo.info.cityId;
