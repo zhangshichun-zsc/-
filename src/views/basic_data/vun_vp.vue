@@ -15,7 +15,7 @@
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel">取消</Button>
-              <Button type="error" size="large" @click="modalOk('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="modalOk('formValidate')" :loading="loading">确定</Button>
             </div>
           </Modal>
         </div>
@@ -188,7 +188,8 @@ export default {
       list: [],
       text: "添加特长",
       states: "",
-      id: 0
+      id: 0,
+      loading:false,
     };
   },
 
@@ -257,6 +258,11 @@ export default {
         ];
       }
       Basicbatch({ list: this.list }).then(res => {
+         //防止重复提交
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
+
         if (res.code == 200) {
           this.getBasicsearch();
           this.modal1 = false;
@@ -301,6 +307,7 @@ export default {
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading=true
           if (this.id == 0) {
             this.getBasicbatch(1);
           } else {

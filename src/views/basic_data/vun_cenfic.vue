@@ -71,7 +71,7 @@
                 </Select>
               </FormItem>
               <FormItem label="模板名称" prop="title">
-                <Input v-model.trim="params.title" :maxlength=30 />
+                <Input v-model.trim="params.title" :maxlength="30" />
               </FormItem>
               <FormItem label="生效日期" prop="effectiveAt">
                 <Date-picker
@@ -86,8 +86,8 @@
               </FormItem>
             </Form>
             <div slot="footer">
-               <Button  size="large" @click="modal1=false">取消</Button>
-              <Button type="error" size="large" @click="success">确定</Button>
+              <Button size="large" @click="modal1=false">取消</Button>
+              <Button type="error" size="large" @click="success" :loading="loading">确定</Button>
             </div>
           </Modal>
         </div>
@@ -96,13 +96,25 @@
     <div class="integral-table">
       <div class="table-header flex-between">
         <div class="flex-center-start">
-         <Button class="table-btns" @click="modal1 = true">新增证书</Button>
+          <Button class="table-btns" @click="modal1 = true">新增证书</Button>
         </div>
         <div class="flex-center-end">
-          <Select class="inpt" style="width:100px;margin-right:10px" placeholder="显示条数" v-model="size" @on-change="changeNum">
+          <Select
+            class="inpt"
+            style="width:100px;margin-right:10px"
+            placeholder="显示条数"
+            v-model="size"
+            @on-change="changeNum"
+          >
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
-          <Select class="inpt" style="width:100px" placeholder="排序方式" v-model="sort" @on-change="changeSort">
+          <Select
+            class="inpt"
+            style="width:100px"
+            placeholder="排序方式"
+            v-model="sort"
+            @on-change="changeSort"
+          >
             <Option value="create_at desc">倒序</Option>
             <Option value="create_at asc">正序</Option>
           </Select>
@@ -113,7 +125,7 @@
         <Table border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
-         <Page
+        <Page
           :total="sumSize"
           show-elevator
           show-total
@@ -122,7 +134,6 @@
           :page-size="size"
           @on-change="changePage"
         />
-
       </div>
     </div>
   </div>
@@ -199,7 +210,7 @@ export default {
           title: "操作",
           key: "action",
           align: "center",
-          width:220,
+          width: 220,
           render: (h, params) => {
             return h("div", [
               h(
@@ -215,7 +226,7 @@ export default {
                       let ob = params.row;
                       this.$router.push({
                         name: "vun_prend",
-                        query: { certMouldId: ob.certMouldId, show: 0}
+                        query: { certMouldId: ob.certMouldId, show: 0 }
                       });
                     }
                   }
@@ -264,7 +275,8 @@ export default {
         disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;
         }
-      }
+      },
+      loading: false
     };
   },
 
@@ -276,7 +288,6 @@ export default {
     this.getList({});
     this.getVoteer();
   },
-
 
   methods: {
     getList({ startAt, endAt, orgName }) {
@@ -307,15 +318,13 @@ export default {
     query() {
       if (this.args.startAt && this.args.endAt) {
         if (this.args.startAt <= this.args.endAt) {
-          this.args.startAt = this.args.startAt.split(' ')[0] + " 00:00:00";
-          this.args.endAt = this.args.endAt.split(' ')[0] + " 23:59:59";
-
+          this.args.startAt = this.args.startAt.split(" ")[0] + " 00:00:00";
+          this.args.endAt = this.args.endAt.split(" ")[0] + " 23:59:59";
         } else {
-           this.args.startAt=''
-          this.args.endAt=''
-          this.$Message.error('时间选择错误请重新选择')
+          this.args.startAt = "";
+          this.args.endAt = "";
+          this.$Message.error("时间选择错误请重新选择");
         }
-
       }
       this.page = 1;
       this.getList(this.args);
@@ -358,7 +367,12 @@ export default {
     success() {
       this.$refs.formValidate.validate(valid => {
         if (valid) {
+          this.loading = true;
           updateBooks(this.params).then(res => {
+            //防止重复提交
+            setTimeout(() => {
+              this.loading = false;
+            }, 500);
             if (res.code == 200) {
               this.modal1 = false;
               this.$Message.success(res.msg);
@@ -396,8 +410,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
-
 .integral-header .integral-body {
   margin-bottom: 20px;
   padding: 20px;
@@ -411,9 +423,7 @@ export default {
 .integral-header .integral-body .flex-center-start {
   margin-right: 20px;
 }
-.po{
-  padding:0 10px;
+.po {
+  padding: 0 10px;
 }
-
-
 </style>

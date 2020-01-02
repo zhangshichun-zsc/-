@@ -130,7 +130,9 @@
                   @change="uploadFile()"
                   multiple
                 />
+                <a>
                 <Icon type="md-cloud-upload" :size="40" color="#FF565A" />
+                </a>
               </div>
             </div>
 
@@ -138,7 +140,7 @@
           </div>
         </FormItem>
         <div class="centers">
-          <Button align="center" class="button-red" @click="handleSubmit('formInline')">保存</Button>
+          <Button align="center" class="button-red" @click="handleSubmit('formInline')"  :loading="loading">保存</Button>
         </div>
       </Form>
       <br />
@@ -239,6 +241,7 @@ export default {
 
       nameaID: null,
       namebID: null,
+      loading:false,
     };
   },
 
@@ -362,6 +365,7 @@ export default {
       console.log(this.formInline.categoryId)
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading=true
             if (this.agreementId != null) {
               this.getAgreementmodify();
             } else {
@@ -423,6 +427,10 @@ export default {
       };
       this.params = this.util.remove(params);
       Agreementadd(params).then(res => {
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           this.$Message.success("添加成功!");
           this.$router.push({
@@ -486,6 +494,10 @@ export default {
       };
       this.params = this.util.remove(params);
       Agreementadd(this.params).then(res => {
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           this.$Message.success("编辑成功!");
           this.$router.push({
