@@ -146,7 +146,7 @@
             <li class="first-li">
               <span class="first-span">模式</span>
               <RadioGroup v-model="oneRole.zmType" class="font">
-                <Radio label="1" >先到先得</Radio>
+                <Radio label="1">先到先得</Radio>
                 <Radio label="2">预约型</Radio>
               </RadioGroup>
             </li>
@@ -164,6 +164,27 @@
                 <Radio :label="0">是</Radio>
                 <Radio :label="1">否</Radio>
               </RadioGroup>
+            </li>
+            <li class="first-li" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+              <span>优先设置</span>
+            </li>
+            <li class="role-table" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+              <table style="width:80%">
+                <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
+                  <tr class="role-tr">
+                    <td>{{index+1}}.{{item.ruleName}}</td>
+                    <td>
+                      <Button @click.native="sortFirst(index)">上移</Button>
+                    </td>
+                    <td>
+                      <Button @click.native="deleteFirst(index)">删除</Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0">
+              <Button @click="addyx" class="font">添加优先规则</Button>
             </li>
             <li class="first-li">
               <span class="first-span">是否发放补助</span>
@@ -212,12 +233,6 @@
             </li>
             <li class="first-li">
               <span class="first-span">退款设置</span>
-              <!-- <div class="refund">
-                <p>
-                  <i-switch v-model="oneRole.actRefund.refundRule" @on-change="refund" :falseValue='3' :trueValue='1 || 2' />
-                  支持退款
-                </p>
-              </div> -->
               <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
                 <Radio label="1">活动结束前均可退款</Radio>
                 <Radio label="2">
@@ -227,15 +242,6 @@
                 <Radio label="3">不可退款</Radio>
               </RadioGroup>
             </li>
-            <!-- <li v-if="oneRole.actRefund.refundRule==1 || oneRole.actRefund.refundRule==2">
-              <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
-                <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
-                <Radio label="2" :trueValue='2'>
-                  活动开始前
-                  <Input v-model="oneRole.actRefund.refundDays" style="width: 80px" />天可退款
-                </Radio>
-              </RadioGroup>
-            </li> -->
             <li class="first-li">
               <span>限制设置</span>
             </li>
@@ -402,27 +408,6 @@
             </li>
             <li class="lx-flex-center" style="padding:8px 0">
               <Button @click="addbmx" class="font">添加报名项</Button>
-            </li>
-            <li class="first-li">
-              <span>优先设置</span>
-            </li>
-            <li class="role-table">
-              <table style="width:80%">
-                <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
-                  <tr class="role-tr">
-                    <td>{{index+1}}.{{item.ruleName}}</td>
-                    <td>
-                      <Button @click.native="sortFirst(index)">上移</Button>
-                    </td>
-                    <td>
-                      <Button @click.native="deleteFirst(index)">删除</Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </li>
-            <li class="lx-flex-center" style="padding:8px 0">
-              <Button @click="addyx" class="font">添加优先规则</Button>
             </li>
           </ul>
         </Col>
@@ -621,18 +606,18 @@ export default {
     this.userId = this.$store.state.userId;
     if(this.oneRole.roleId){
       this.getTypes(this.oneRole)
-      for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
-        if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
-          let a = this.oneRole.signRuleList[p].ruleValue.split(",")
-          this.age1 = a[0]
-          this.age2 = a[1]
-        }
-        if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
-          let b = this.oneRole.signRuleList[p].ruleValue.split(",")
-          let val = getAreaAdress(b[0], b[1], b[2])
-          this.region = val
-        }
-      }
+      // for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
+      //   if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
+      //     let a = this.oneRole.signRuleList[p].ruleValue.split(",")
+      //     this.age1 = a[0]
+      //     this.age2 = a[1]
+      //   }
+      //   if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
+      //     let b = this.oneRole.signRuleList[p].ruleValue.split(",")
+      //     let val = getAreaAdress(b[0], b[1], b[2])
+      //     this.region = val
+      //   }
+      // }
     }
     this.getSignType();
     this.getBatchItem();
@@ -983,6 +968,30 @@ export default {
       this.$emit("cancelEdit",false)
     },
     save(){
+      if(this.oneRole.isHaveSubsidy==1){
+        if(!this.oneRole.subsidyType){
+          this.$Message.warning("请选择补助类型")
+          return
+        }else if(this.oneRole.subsidyType==1){
+          if(!this.oneRole.subsidyCash){
+            this.$Message.warning("请输入补助金额")
+            return
+          }
+        }else if(this.oneRole.subsidyType==2){
+          if(!this.oneRole.resourcesName){
+            this.$Message.warning("请选择补助物资")
+            return
+          }
+        }
+      }
+      if (this.oneRole.actRefund.refundRule==2){
+        if (!this.oneRole.actRefund.refundDays){
+          this.$Message.warning("请输入允许退款提前的天数")
+          return
+        }
+      }else if (this.oneRole.actRefund.refundRule==1 || this.oneRole.actRefund.refundRule==3){
+        this.oneRole.actRefund.refundDays = ''
+      }
       let l = this.oneRole.signRuleList?this.oneRole.signRuleList:[]
       console.log(l)
       for(let m in l){
