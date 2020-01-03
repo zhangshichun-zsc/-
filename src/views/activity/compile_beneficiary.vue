@@ -444,17 +444,17 @@
                   <span class="first-span">上传图片</span>
                   <i-switch v-model="item.context" :true-value="1" :false-value="2" />
                 </div>
-                <div class="role-tr" v-else-if="item.type === 1" style="width:90%">
+                <div class="role-tr" v-else-if="item.type == 1" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="role-tr" v-else-if="item.type === 6" style="width:90%">
+                <div class="role-tr" v-else-if="item.type == 6" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div v-else-if="item.type === 3" style="width:90%">
+                <div v-else-if="item.type == 3" style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
@@ -468,7 +468,7 @@
                     <Button @click="addSignIput(index)">+</Button>
                   </div>
                 </div>
-                <div v-else-if="item.type === 4 " style="width:90%">
+                <div v-else-if="item.type == 4 " style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
