@@ -165,14 +165,34 @@
                 <Radio :label="1">否</Radio>
               </RadioGroup>
             </li>
-            <li class="first-li" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+            <li class="first-li" v-if="oneRole.zmType==2 && oneRole.isAudit!=1">
               <span>优先设置</span>
             </li>
-            <li class="role-table" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+            <li class="role-table" v-if="oneRole.zmType==2 && oneRole.isAudit!=1">
               <table style="width:80%">
                 <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
                   <tr class="role-tr">
                     <td>{{index+1}}.{{item.ruleName}}</td>
+                    <td v-if='item.ruleId==20'>
+                      <Select v-model="item.ruleValueRemark">
+                        <Option
+                          v-for="(item,idx) in teamList"
+                          :value="item.name"
+                          :key="item.name"
+                          @click.native='getRuleValue1(item,idx,index)'
+                        >{{ item.name }}</Option>
+                      </Select>
+                    </td>
+                    <td v-if='item.ruleId==23 || item.ruleId==24'>
+                      <Select v-model="item.ruleValueRemark">
+                        <Option
+                          v-for="item in tcList"
+                          :value="item.name"
+                          :key="item.name"
+                          @click.native='getRuleValue2(item)'
+                        >{{ item.name }}</Option>
+                      </Select>
+                    </td>
                     <td>
                       <Button @click.native="sortFirst(index)">上移</Button>
                     </td>
@@ -183,7 +203,7 @@
                 </tbody>
               </table>
             </li>
-            <li class="lx-flex-center" style="padding:8px 0">
+            <li class="lx-flex-center" style="padding:8px 0" v-if="oneRole.zmType==2 && oneRole.isAudit!=1">
               <Button @click="addyx" class="font">添加优先规则</Button>
             </li>
             <li class="first-li">
@@ -519,11 +539,10 @@
          <div slot="footer"></div>
       </Modal>
       <Modal v-model="yx" title="优先项设置">
-       
-            <div>
-              <Button @click.native="getFirst(item)" class="btn" v-for="(item,index) in firstItemList" :key='index'>{{item.name}}</Button>
-            </div>
-         <div slot="footer"></div>
+        <div>
+          <Button @click.native="getFirst(item)" class="btn" v-for="(item,index) in firstItemList" :key='index'>{{item.name}}</Button>
+        </div>
+        <div slot="footer"></div>
       </Modal>
       <Modal v-model="fk" title="反馈项设置">
         <ul>
@@ -539,7 +558,7 @@
         <span></span>
         <div>
           <Button @click.native="cancel" shape="circle" size='large'>取消</Button>
-          <Button class="active" @click.native="save" shape="circle" size='large'>保存</Button>
+          <Button class="active" @click="save" shape="circle" size='large'>保存</Button>
         </div>
       </div>
     </div>
@@ -595,6 +614,9 @@ export default {
           return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      region:[],
+      teamList:[],
+      tcList:[]
     };
   },
   mounted() {
@@ -696,6 +718,13 @@ export default {
       }).then(res=>{
         if(res.code==200){
           this.firstItemList = res.data
+          for(let i in this.firstItemList){
+            if(this.firstItemList[i].ruleId == 20){
+              this.teamList = this.firstItemList[i].object
+            } else if (this.firstItemList[i].ruleId == 23 || this.firstItemList[i].ruleId == 24){
+              this.tcList = this.firstItemList[i].object
+            }
+          }
         }
       })
     },
@@ -731,8 +760,61 @@ export default {
       }).then(res=>{
         if(res.code==200){
           this.firstItemList = res.data
+          for(let i in this.firstItemList){
+            if(this.firstItemList[i].ruleId == 20){
+              this.teamList = this.firstItemList[i].object
+            } else if (this.firstItemList[i].ruleId == 23 || this.firstItemList[i].ruleId == 24){
+              this.tcList = this.firstItemList[i].object
+            }
+          }
         }
       })
+    },
+    getRuleValue1(e,i,ei){
+      console.log(e)
+      console.log(i)
+      console.log(ei)
+      let l = this.oneRole.choiceRuleList
+      let isAdd = true
+      for(let j in l){
+        if (l[j].ruleValue == this.teamList[i].orgId){
+          isAdd = false
+          this.$Message.warning('请勿选择重复的小组')
+          l[ei].ruleValue = ""
+          l[ei].ruleValueRemark = ""
+          delete l[ei].ruleValue
+          delete l[ei].ruleValueRemark
+        }
+      }
+      if(isAdd){
+        l[i].ruleValue = this.teamList[i].orgId
+        l[i].ruleValueRemark = this.teamList[i].name
+      }
+      this.oneRole.choiceRuleList = l
+      console.log(this.oneRole.choiceRuleList)
+    },
+    getRuleValue2(e,i,ei){
+      console.log(e)
+      console.log(i)
+      console.log(ei)
+      let l = this.oneRole.choiceRuleList
+      let isAdd = true
+      for(let j in l){
+        if (l[j].ruleValue == this.tcList[i].orgId){
+          isAdd = false
+          this.$Message.warning('请勿选择重复的特长')
+          l[ei].ruleValue = ""
+          l[ei].ruleValueRemark = ""
+          delete l[ei].ruleValue
+          delete l[ei].ruleValueRemark
+        }
+      }
+      if(isAdd){
+        l[i].ruleValue = this.tcList[i].orgId
+        l[i].ruleValueRemark = this.tcList[i].name
+      }
+      this.oneRole.choiceRuleList = l
+      console.log(this.oneRole.choiceRuleList)
     },
     //招募岗位
     getPost(val) {
@@ -943,7 +1025,9 @@ export default {
         n.push(m)
       } else {
         for (let i = 0; i < n.length; i++) {
-          if (n[i].ruleId == e.ruleId) {
+          if(e.ruleId==20||e.ruleId==23||e.ruleId==24){
+            isAdd = true
+          }else if (n[i].ruleId == e.ruleId) {
             isAdd = false
           }
         }
@@ -1035,6 +1119,36 @@ export default {
               return
             }
           }
+        }
+      }
+      let fd = []
+      if (this.oneRole.fkDetailList.length == 2 && this.oneRole.fkDetailList[1].context == 2 && (this.oneRole.fkDetailList[0].context == undefined || this.oneRole.fkDetailList[0].context == '')) {
+
+      } else {
+        fd = this.oneRole.fkDetailList
+        let isNew = true
+        for(let i in fd){
+          if (i > 1 && (fd[i].type == 1 || fd[i].type == 6)){
+            if (fd[i].context == '' || fd[i].context == null){
+              isNew = false
+            }
+          } else if (i > 1 && (fd[i].type == 3 || fd[i].type == 4)){
+            if (fd[i].context == '' || fd[i].context == null){
+              isNew = false
+            }else{
+              for(let j in fd[i].answer){
+                if (fd[i].answer[j].answer == "" || fd[i].answer[j].answer == null){
+                  isNew = false
+                }
+              }
+            }
+          }
+        }
+        if(isNew){
+         
+        }else{
+          this.$Message.warning("反馈内容有必填项尚未填写")
+          return
         }
       }
       console.log(this.oneRole)
