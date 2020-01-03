@@ -1,41 +1,45 @@
 {
-    "name": "xcx-management",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve --open",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
-    },
-    "dependencies": {
-        "axios": "^0.19.0",
-        "babel-polyfill": "^6.26.0",
-        "chu-tree-iview": "^1.1.2",
-        "core-js": "^2.6.5",
-        "echarts": "^4.2.1",
-        "iview": "^3.5.4",
-        "tinymce": "^5.0.14",
-        "v-charts": "^1.19.0",
-        "v-distpicker": "^1.2.1",
-        "vue": "^2.6.10",
-        "vue-quill-editor": "^3.0.6",
-        "vue-router": "^3.0.7",
-        "vuex": "^3.0.1",
-        "wangeditor": "^3.1.1"
-    },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^3.10.0",
-        "@vue/cli-plugin-eslint": "^3.10.0",
-        "@vue/cli-service": "^3.10.0",
-        "@vue/eslint-config-standard": "^4.0.0",
-        "autoprefixer": "^9.6.1",
-        "babel-eslint": "^10.0.1",
-        "eslint": "^5.16.0",
-        "eslint-plugin-vue": "^5.0.0",
-        "iview-loader": "^1.2.2",
-        "postcss-pxtorem": "^4.0.1",
-        "sass": "^1.18.0",
-        "sass-loader": "^7.1.0",
-        "vue-template-compiler": "^2.6.10"
-    }
+  "name": "xcx-management",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --open",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "deploy": "scp -r dist/* root@gogs.erguotou.me:/usr/share/nginx/xcx"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "babel-polyfill": "^6.26.0",
+    "chu-tree-iview": "^1.1.2",
+    "core-js": "^2.6.5",
+    "echarts": "^4.2.1",
+    "iview": "^3.5.4",
+    "tinymce": "^5.0.14",
+    "v-charts": "^1.19.0",
+    "v-distpicker": "^1.2.1",
+    "vue": "^2.6.10",
+    "vue-cropperjs": "^4.0.1",
+    "vue-quill-editor": "^3.0.6",
+    "vue-router": "^3.0.7",
+    "vuex": "^3.0.1",
+    "wangeditor": "^3.1.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.10.0",
+    "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-service": "^3.10.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "autoprefixer": "^9.6.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "iview-loader": "^1.2.2",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "postcss-pxtorem": "^4.0.1",
+    "sass": "^1.18.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.6.10"
+  }
 }

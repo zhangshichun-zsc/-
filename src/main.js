@@ -6,6 +6,7 @@ import Components from "./components";
 import store from "./store/index";
 import VDistpicker from "v-distpicker";
 import "babel-polyfill";
+import "./business_components";
 
 import util from "../src/request/util";
 import page from "./components/page";
@@ -34,7 +35,7 @@ router.beforeEach((to, from, next) => {
       // Message.error('身份过期请重新登陆')
       next();
     } else {
-       //初始化动态路由方法
+      //初始化动态路由方法
       //  initRouter(router, store);
       // Message.error('已退出登陆')
       next({

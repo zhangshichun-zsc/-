@@ -9,15 +9,15 @@ export const getAdressId = (provinces, cities, districts) => {
       let id = Object.keys(item)[0]
       let name = item[id]
       if (key === 'provinces' && name === provinces) {
-        adr.push(id) 
+        adr.push(id)
         break
       }
       if (key === 'cities' && name === cities) {
-        adr.push(id) 
+        adr.push(id)
         break
       }
       if (key === 'districts' && name === districts) {
-        adr.push(id) 
+        adr.push(id)
         break
       }
     }
@@ -54,16 +54,41 @@ export const getAreaAdress = (provinces, cities, districts) => {
 export const filterNull = (args) => {
   let obj = {}
   for (let key in args) {
-    if (args[key] !== null && args[key] !== ''&&args[key] !== undefined) {
-      if( Array.isArray(args[key]) && args[key].length !== 0){
+    if (args[key] !== null && args[key] !== '' && args[key] !== undefined) {
+      if (Array.isArray(args[key]) && args[key].length !== 0) {
         obj[key] = []
         for (let i = 0, len = args[key].length; i < len; i++) {
           obj[key].push(filterNull(args[key][i]))
         }
-      }else{
+      } else {
         obj[key] = args[key]
       }
     }
   }
   return obj
+}
+
+export function debounce(fn, delay) {
+  let timer
+  return function (...args) {
+    timer && clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+
+export function throttle(fn, delay) {
+  let timer
+  let lastArg
+  return function (...args) {
+    if (!timer) {
+      timer = setTimeout(() => {
+        fn.apply(this, lastArg || args)
+        timer = null
+      }, delay)
+    } else {
+      lastArg = args
+    }
+  }
 }
