@@ -98,21 +98,58 @@ export default {
         },
         {
           title: "活动类型",
-          key: "dicName",
+          // key: "dicName",
           align: "center",
-          width: 280
+          ellipsis: true,
+          width: 300,
+          // render: (h, params) => {
+          //   return h("div", [
+          //     h(
+          //       "span",
+          //       {
+          //         style: {
+          //           display: "inline-block",
+          //           width: "100%",
+          //           overflow: "hidden",
+          //           textOverflow: "ellipsis",
+          //           whiteSpace: "nowrap"
+          //         },
+          //         domProps: {
+          //           title: params.row.dicName
+          //         }
+          //       },
+          //       params.row.dicName
+          //     )
+          //   ]);
+          // }
+          render: (h, params) => {
+            return h('Tooltip', {
+              props: {
+                placement: 'top'
+              }
+            }, [
+                params.row.dicName,
+                h('span', {
+                  slot: 'content',             //slot属性
+                  style: {
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-all'
+                  }
+                }, params.row.dicName)
+              ])
+          }
         },
         {
           title: "协议时间",
           key: "createAt",
           width: 240,
-           align: "center",
-
+          align: "center"
         },
         {
           title: "附件名称",
           align: "center",
-          width: 700,
+          ellipsis: true,
+          width: 350,
           render: (h, params) => {
             return h("div", [
               h(
@@ -242,19 +279,17 @@ export default {
   methods: {
     //协议分页
     getAgreementpage() {
-      let params ={
-         page: {
+      let params = {
+        page: {
           page: this.page,
           size: this.size,
           sort: "createAt" + " " + this.sort
         },
         agreementObject: this.agreementObject,
         agreementType: this.agreementType
-      }
+      };
       params = this.util.remove(params);
-      Agreementpage(
-       params
-      ).then(res => {
+      Agreementpage(params).then(res => {
         // console.log(res);
         if (res.code == 200) {
           this.data = res.data.list;
@@ -307,7 +342,6 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      // console.log(index);
       this.getAgreementpage();
     },
     //删除
