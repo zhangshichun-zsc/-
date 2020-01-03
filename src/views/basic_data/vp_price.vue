@@ -341,16 +341,18 @@ export default {
           this.loading = false;
         }, 500);
         if(res.code==200){
+          this.getCostlist()
           if(e==0){
             this.modal1=false
             this.$Message.info('添加成功')
-             this.getCostlist()
+
           }else if(e==1){
             this.modal1=false
             this.$Message.info('修改成功')
-             this.getCostlist()
+
           }else if(e==2){
             this.$Message.info('操作成功')
+
           }
 
         }

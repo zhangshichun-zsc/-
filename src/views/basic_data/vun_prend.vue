@@ -5,15 +5,15 @@
     <div class="integral-header">
       <div class="integral-left">
         <div class="title">
-          <img v-if="headimg!=null" style=" width: 491px;" :src="headimg" alt />
-          <img v-if="headimg==null" style=" width: 491px;" src="../../assets/images/prend/4.png" />
+          <img class="imgtops"  v-if="headimg!=null"  :src="headimg" alt />
+          <img class="imgtops" v-if="headimg==null"  src="../../assets/images/prend/4.png" />
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
           <p class="texts">
             兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
             <!-- <Input v-model="value6" type="textarea" :rows="5" placeholder disabled /> -->
           </p>
-          <img v-if="footimg!=null" style=" width: 491px;" :src="footimg" alt class="fot" />
+          <img class="imgtops fot" v-if="footimg!=null"  :src="footimg" alt  />
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
           <div v-if="footimg==null" class="head">
             <img class="head-left" src="../../assets/images/prend/1.png" alt />
@@ -171,7 +171,8 @@ export default {
         head: "证书维护（志愿者）"
       },
       value8: "",
-      value6:"  兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！",
+      value6:
+        "  兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！",
       loading: false
     };
   },
@@ -371,9 +372,17 @@ export default {
     color: black;
   }
 }
-.texts{
-  margin-top:20px !important;margin-bottom:20px !important;height:160px;overflow-y:auto;border:1px solid black;
+.texts {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+  height: 160px;
+  overflow-y: auto;
+  border: 1px solid black;
   text-indent: 2em;
   text-align: left !important;
+}
+
+.imgtops{
+  width: 491px;
 }
 </style>
