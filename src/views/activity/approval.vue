@@ -681,7 +681,12 @@ export default {
         actResList: [],
         workerIdList: [{}]
       },
-      itemsList: [],
+      itemsList: {
+        org:{
+          propagandaTitle:'',
+          propagandaText:'',
+        }
+      },
       part: [],
       batchItemList: [],
       navigation1: {
