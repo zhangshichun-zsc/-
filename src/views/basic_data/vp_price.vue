@@ -6,7 +6,6 @@
     <div class="integral-table">
       <div class="table-header flex-between">
 
-
           <Button class="table-btns"  @click="add('formValidate')">新增会费</Button>
           <Modal v-model="modal1" :title=Newly class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -15,12 +14,11 @@
               </FormItem>
               <FormItem label="金额:" prop="amount">
                  <!-- <InputNumber :max="10" :min="1" v-model="formValidate.amount"></InputNumber> -->
-                <!-- <Input type="number" v-model.trim="formValidate.amount" size="large" :maxlength=3 style="width: 220px"/> -->
-
-                <InputNumber :min="0" :max="1000000000" :maxlength=10  v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
+                <InputNumber :min="0" :max="1000000000" @on-change="amounts" v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
-                <InputNumber :max="99" :min="1" @on-change="imonths" v-model="formValidate.imonth" size="large"  style="width: 220px;"></InputNumber>
+                <!-- <Input type="number" :maxlength='2' value="formValidate.imonth" @on-change="imonths" size="large"  style="width: 220px;"/> -->
+                <InputNumber :max="99" :min="1" @on-change="imonths" :maxlength='2'  v-model="formValidate.imonth" size="large"  style="width: 220px;"></InputNumber>
                <Button>月</Button>
               </FormItem>
               <FormItem label="会员包:" prop="packageFlag">
@@ -30,12 +28,12 @@
                 </RadioGroup>
               </FormItem>
               <FormItem label="会费详情">
-                <wangeditor id="exccccc7" :labels='editorContent'  @change="btn"></wangeditor>
+                <wangeditor id="exccccc7" :labels=editorContent  @change="btn"></wangeditor>
               </FormItem>
             </Form>
             <div slot="footer">
               <Button type="text" size="large" @click="modalCancel1">取消</Button>
-              <Button type="error" size="large" @click="handleSubmit('formValidate')">确定</Button>
+              <Button type="error" size="large" @click="handleSubmit('formValidate')"  :loading="loading">确定</Button>
             </div>
           </Modal>
         </div>
@@ -90,7 +88,7 @@ export default {
   data() {
     return {
        name: "editor",
-      editorContent: "",
+      editorContent:'',
       Newly: "新增会费",
       formValidate: {
         name: null,
@@ -122,7 +120,7 @@ export default {
             required: true,
             message: "输入格式不正确",
             trigger: "blur",
-            // type: "number",
+            type: "number",
             // pattern: /^[0-9]+(.[0-9]{1,3})?$/,
             // transform(value) {
             //   return Number(value);
@@ -152,18 +150,6 @@ export default {
           align: "center",
           width:200,
           render:(h,params)=>{
-            // let imonths
-
-            // if(params.row.imonth>12){
-            //   let year = Math.floor(params.row.imonth/12)
-            //   let imonth =params.row.imonth%12
-            //   console.log(year,imonth)
-            //   imonths=year+'年'+imonth+'月'
-
-            // }else{
-            //   imonths=params.row.imonth+'月'
-
-            // }
             return h('p',params.row.imonth+'月')
           }
         },
@@ -204,9 +190,11 @@ export default {
                     // console.log(e);
                     this.duesId=params.row.duesId
                     if(e){
+                      params.row.validFlag=1
                       this.validFlags=1
                       this.getCostadd(2)
                     }else{
+                      params.row.validFlag=0
                       this.validFlags=0
                       this.getCostadd(2)
                     }
@@ -280,6 +268,8 @@ export default {
       list: "",
       validFlags:'',
       addstate:false,
+      loading:false,
+
     };
   },
   components: { basicdata, wangeditor },
@@ -346,6 +336,10 @@ export default {
       Costadd({
         list: this.list
       }).then(res => {
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if(res.code==200){
           if(e==0){
             this.modal1=false
@@ -377,21 +371,25 @@ export default {
     },
 
     amounts(e){
-      console.log(e)
+      if(e<0){
+         this.formValidate.amount=1
+      }else{
+        this.formValidate.amount=e
+      }
+      // console.log(e)
     },
     imonths(e){
-      if(e<0){
-         this.formValidate.imonth=1
-      }
-      if(e>99){
-         this.formValidate.imonth=99
-      }
-      // if(e>0&&e<=99){
-      //   this.formValidate.imonth=e
+      // console.log(e,this.formValidate.imonth)
+      // if(e>99){
+      //   this.$set(this.formValidate,'imonth',99)
       // }else{
-      //   // this.formValidate.imonth=99
+      //   this.$set(this.formValidate,'imonth',e)
       // }
-
+      if(e==0||e<0){
+         this.formValidate.imonth=1
+      }else{
+        this.formValidate.imonth=e
+      }
       console.log(e)
     },
 
@@ -413,6 +411,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+           this.loading = true;
           if(this.duesId==''){//新增
             this.getCostadd(1)
           }else{            //编辑

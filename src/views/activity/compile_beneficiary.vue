@@ -146,7 +146,7 @@
             <li class="first-li">
               <span class="first-span">模式</span>
               <RadioGroup v-model="oneRole.zmType" class="font">
-                <Radio label="1" >先到先得</Radio>
+                <Radio label="1">先到先得</Radio>
                 <Radio label="2">预约型</Radio>
               </RadioGroup>
             </li>
@@ -164,6 +164,27 @@
                 <Radio :label="0">是</Radio>
                 <Radio :label="1">否</Radio>
               </RadioGroup>
+            </li>
+            <li class="first-li" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+              <span>优先设置</span>
+            </li>
+            <li class="role-table" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+              <table style="width:80%">
+                <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
+                  <tr class="role-tr">
+                    <td>{{index+1}}.{{item.ruleName}}</td>
+                    <td>
+                      <Button @click.native="sortFirst(index)">上移</Button>
+                    </td>
+                    <td>
+                      <Button @click.native="deleteFirst(index)">删除</Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+            <li class="lx-flex-center" style="padding:8px 0">
+              <Button @click="addyx" class="font">添加优先规则</Button>
             </li>
             <li class="first-li">
               <span class="first-span">是否发放补助</span>
@@ -198,7 +219,7 @@
             <li class="first-li">
               <span class="first-span">群二维码</span>
               <div>
-                <div class="first-pic" v-if='oneRole.qrCodeShow == null'>
+                <div class="first-pic" v-if='!oneRole.qrCodeShow'>
                   <div class="" @click="()=>{ this.$refs.filezt.click()}">
                     <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
                     <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -206,18 +227,12 @@
                 </div>
                 <div class="first-pic" style="border:none" v-else>
                   <img class="imgs" style="width:283px;height:188px" :src="oneRole.qrCodeShow"/>
-                  <Icon type="ios-trash" v-if='oneRole.qrCodeShow' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
+                  <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                 </div>
               </div>
             </li>
             <li class="first-li">
               <span class="first-span">退款设置</span>
-              <!-- <div class="refund">
-                <p>
-                  <i-switch v-model="oneRole.actRefund.refundRule" @on-change="refund" :falseValue='3' :trueValue='1 || 2' />
-                  支持退款
-                </p>
-              </div> -->
               <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
                 <Radio label="1">活动结束前均可退款</Radio>
                 <Radio label="2">
@@ -227,15 +242,6 @@
                 <Radio label="3">不可退款</Radio>
               </RadioGroup>
             </li>
-            <!-- <li v-if="oneRole.actRefund.refundRule==1 || oneRole.actRefund.refundRule==2">
-              <RadioGroup v-model="oneRole.actRefund.refundRule" vertical class="font"  size='large'>
-                <Radio label="1" :trueValue='1'>活动结束前均可退款</Radio>
-                <Radio label="2" :trueValue='2'>
-                  活动开始前
-                  <Input v-model="oneRole.actRefund.refundDays" style="width: 80px" />天可退款
-                </Radio>
-              </RadioGroup>
-            </li> -->
             <li class="first-li">
               <span>限制设置</span>
             </li>
@@ -403,27 +409,6 @@
             <li class="lx-flex-center" style="padding:8px 0">
               <Button @click="addbmx" class="font">添加报名项</Button>
             </li>
-            <li class="first-li">
-              <span>优先设置</span>
-            </li>
-            <li class="role-table">
-              <table style="width:80%">
-                <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
-                  <tr class="role-tr">
-                    <td>{{index+1}}.{{item.ruleName}}</td>
-                    <td>
-                      <Button @click.native="sortFirst(index)">上移</Button>
-                    </td>
-                    <td>
-                      <Button @click.native="deleteFirst(index)">删除</Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </li>
-            <li class="lx-flex-center" style="padding:8px 0">
-              <Button @click="addyx" class="font">添加优先规则</Button>
-            </li>
           </ul>
         </Col>
       </Row>
@@ -459,17 +444,17 @@
                   <span class="first-span">上传图片</span>
                   <i-switch v-model="item.context" :true-value="1" :false-value="2" />
                 </div>
-                <div class="role-tr" v-else-if="item.type === 1" style="width:90%">
+                <div class="role-tr" v-else-if="item.type == 1" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="role-tr" v-else-if="item.type === 6" style="width:90%">
+                <div class="role-tr" v-else-if="item.type == 6" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div v-else-if="item.type === 3" style="width:90%">
+                <div v-else-if="item.type == 3" style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
@@ -483,7 +468,7 @@
                     <Button @click="addSignIput(index)">+</Button>
                   </div>
                 </div>
-                <div v-else-if="item.type === 4 " style="width:90%">
+                <div v-else-if="item.type == 4 " style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
@@ -587,7 +572,10 @@ export default {
       isDisb:false,
       batchItemList:[],
       userId:1,
-      signLimitsList:[],
+      signLimitsList:[
+        {data:[]},
+        {data:[]}
+      ],
       signList: [
         { itemName: '单行文本', type: 1, isNew:1},
         { itemName: '多行文本', type: 6, isNew: 1},
@@ -632,6 +620,9 @@ export default {
           let val = getAreaAdress(b[0], b[1], b[2])
           this.region = val
         }
+      }
+      if(this.oneRole.fkDetailList.length<2){
+        this.oneRole.fkDetailList = [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }]
       }
     }
     this.getSignType();
@@ -983,6 +974,30 @@ export default {
       this.$emit("cancelEdit",false)
     },
     save(){
+      if(this.oneRole.isHaveSubsidy==1){
+        if(!this.oneRole.subsidyType){
+          this.$Message.warning("请选择补助类型")
+          return
+        }else if(this.oneRole.subsidyType==1){
+          if(!this.oneRole.subsidyCash){
+            this.$Message.warning("请输入补助金额")
+            return
+          }
+        }else if(this.oneRole.subsidyType==2){
+          if(!this.oneRole.resourcesName){
+            this.$Message.warning("请选择补助物资")
+            return
+          }
+        }
+      }
+      if (this.oneRole.actRefund.refundRule==2){
+        if (!this.oneRole.actRefund.refundDays){
+          this.$Message.warning("请输入允许退款提前的天数")
+          return
+        }
+      }else if (this.oneRole.actRefund.refundRule==1 || this.oneRole.actRefund.refundRule==3){
+        this.oneRole.actRefund.refundDays = ''
+      }
       let l = this.oneRole.signRuleList?this.oneRole.signRuleList:[]
       console.log(l)
       for(let m in l){

@@ -56,8 +56,8 @@
             >{{ item.dataValue }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="活动类型:" prop="categoryId">
-          <Select v-model="formInline.categoryId" placeholder="请选择活动类型" style="width:300px" multiple>
+        <FormItem label="活动类型:" prop="actTypeDicId">
+          <Select v-model="formInline.actTypeDicId" placeholder="请选择活动类型" style="width:300px" multiple>
             <Option
               v-for="item in typeList"
               :value="item.dicId"
@@ -173,7 +173,7 @@ export default {
         partB: "",
         typeDicId:'',
         agTime: "",
-        categoryId: "",
+        actTypeDicId: "",
         agFile: null,
         name: null,
         agPicA: null,
@@ -199,7 +199,7 @@ export default {
             type: "number"
           }
         ],
-        categoryId: [
+        actTypeDicId: [
           {
             required: true,
             message: "请选择活动类型",
@@ -362,7 +362,7 @@ export default {
     },
 
     handleSubmit(name) {
-      console.log(this.formInline.categoryId)
+      console.log(this.formInline.actTypeDicId)
       this.$refs[name].validate(valid => {
         if (valid) {
           this.loading=true
@@ -402,7 +402,7 @@ export default {
         return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
-      let categoryId= this.formInline.categoryId.toString()
+      let actTypeDicId= this.formInline.actTypeDicId.toString()
       let params = {
         sysId: this.sysId,
         // name: this.name,
@@ -412,7 +412,7 @@ export default {
 
         actTypeDicId: this.actTypeDicId,
         batchId: this.batchId,
-        categoryId: categoryId,
+        actTypeDicId: actTypeDicId,
         partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
         agTime: this.formInline.agTime,
@@ -455,10 +455,10 @@ export default {
           this.formInline.partB=list.orgNameB
           this.nameaID=list.partA
           this.namebID=list.partB
-           this.formInline.categoryId= list.categoryId.split(",").map(item => {
+           this.formInline.actTypeDicId= list.actTypeDicId.split(",").map(item => {
                 return Number(item);
               });
-           console.log(this.formInline.categoryId)
+           console.log(this.formInline.actTypeDicId)
         }
       });
     },
@@ -475,11 +475,11 @@ export default {
         return item.orgName==this.formInline.partB
       })
       this.formInline.agTime=this.Times
-      let categoryId=this.formInline.categoryId.toString()
+      let actTypeDicId=this.formInline.actTypeDicId.toString()
       let params = {
         agreementId: this.agreementId,
         typeDicId: this.formInline.typeDicId,
-        categoryId: categoryId,
+        actTypeDicId: actTypeDicId,
           partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
          typeDicName:name.dataValue,
