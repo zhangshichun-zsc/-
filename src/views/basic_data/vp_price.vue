@@ -15,7 +15,7 @@
               </FormItem>
               <FormItem label="金额:" prop="amount">
                  <!-- <InputNumber :max="10" :min="1" v-model="formValidate.amount"></InputNumber> -->
-                <InputNumber :min="0" :max="1000000000" v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
+                <InputNumber :min="0" :max="1000000000" @on-change="amounts" v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
                 <!-- <Input type="number" :maxlength='2' value="formValidate.imonth" @on-change="imonths" size="large"  style="width: 220px;"/> -->
@@ -89,7 +89,7 @@ export default {
   data() {
     return {
        name: "editor",
-      editorContent: "",
+      editorContent:'',
       Newly: "新增会费",
       formValidate: {
         name: null,
@@ -371,6 +371,11 @@ export default {
     },
 
     amounts(e){
+      if(e==0||e<0){
+         this.formValidate.amount=1
+      }else{
+        this.formValidate.amount=e
+      }
       console.log(e)
     },
     imonths(e){
@@ -380,11 +385,11 @@ export default {
       // }else{
       //   this.$set(this.formValidate,'imonth',e)
       // }
-      // if(e==0||e<0){
-      //    this.formValidate.imonth=1
-      // }else{
-      //   this.formValidate.imonth=e
-      // }
+      if(e==0||e<0){
+         this.formValidate.imonth=1
+      }else{
+        this.formValidate.imonth=e
+      }
       console.log(e)
     },
 
