@@ -49,7 +49,7 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
+                  <div class="first-picfm" v-if='batch.actCoverShowPic == null || !batch.actCoverShowPic'>
                     <div class="" @click="()=>{ this.$refs.filefm.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -64,7 +64,7 @@
               <li class="first-li">
                 <span class="first-span">主题图片</span>
                 <div>
-                  <div class="first-pic" v-if='batch.actShowPic == null'>
+                  <div class="first-pic" v-if='batch.actShowPic == null || !batch.actShowPic'>
                     <div class="" @click="()=>{ this.$refs.filezt.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -142,7 +142,7 @@
                 />
               </li>
               <li class="li-flex-between">
-                <span class="first-span">现场联系人</span>
+                <span class="first-span">现场负责人</span>
                 <div class="flex-center-start" style="flex:1">
                   <span class="tit">姓名</span>
                   <Input
@@ -158,7 +158,7 @@
                     class="same-staff"
                     disabled
                   />
-                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场联系人" v-if="addLeader">
+                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场负责人" v-if="addLeader">
                     <Option
                       v-for="(item, idx) in leaderList"
                       :value="item.name"
