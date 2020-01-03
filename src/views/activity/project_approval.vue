@@ -312,8 +312,12 @@ export default {
         userId:this.$store.state.userId
       })).then(res => {
         if(res.code==200){
-          this.datax = res.data.list;
           this.dataCount = res.data.totalSize;
+          let data = res.data.list
+          for(let item of data){
+            if(~~item.status !== 0 && ~~item.status !== 3)item._disabled = true
+          }
+          this.datax = data
         }
       });
     },
