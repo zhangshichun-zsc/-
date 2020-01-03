@@ -125,13 +125,14 @@ export default {
           render: (h, params) => {
             return h('Tooltip', {
               props: {
-                placement: 'top'
+                placement: 'bottom'
               }
             }, [
                 params.row.dicName,
                 h('span', {
                   slot: 'content',             //slot属性
                   style: {
+
                     whiteSpace: 'normal',
                     wordBreak: 'break-all'
                   }

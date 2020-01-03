@@ -125,7 +125,7 @@ export default {
             // transform(value) {
             //   return Number(value);
             // }
-          }
+          },
         ]
       },
       navigation1: {

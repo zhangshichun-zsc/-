@@ -9,8 +9,9 @@
           <img v-if="headimg==null" style=" width: 491px;" src="../../assets/images/prend/4.png" />
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
-          <p style="margin-top:20px;margin-bottom:20px;">
-            <Input v-model="value6" type="textarea" :rows="5" placeholder disabled />
+          <p class="texts">
+            兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
+            <!-- <Input v-model="value6" type="textarea" :rows="5" placeholder disabled /> -->
           </p>
           <img v-if="footimg!=null" style=" width: 491px;" :src="footimg" alt class="fot" />
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
@@ -170,8 +171,7 @@ export default {
         head: "证书维护（志愿者）"
       },
       value8: "",
-      value6:
-        "  为融爱融乐的心智障碍者融合服务提供了珍贵的__小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福",
+      value6:"  兹证明志愿者[*姓名*]于【*活动日期*】，参与了[*志愿机构*]志愿服务，出色地完成志愿服务工作，累计志愿服务【*志愿服务时长*】小时。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！",
       loading: false
     };
   },
@@ -370,5 +370,10 @@ export default {
   a {
     color: black;
   }
+}
+.texts{
+  margin-top:20px !important;margin-bottom:20px !important;height:160px;overflow-y:auto;border:1px solid black;
+  text-indent: 2em;
+  text-align: left !important;
 }
 </style>
