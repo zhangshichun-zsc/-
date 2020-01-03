@@ -376,7 +376,7 @@ export default {
       }else{
         this.formValidate.amount=e
       }
-      console.log(e)
+      // console.log(e)
     },
     imonths(e){
       // console.log(e,this.formValidate.imonth)
