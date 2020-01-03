@@ -47,7 +47,7 @@
             </DropdownMenu>
           </Dropdown>
           <div class="flex-center-start">
-            <Button class="table-btn" @click="add">添加活动</Button>
+            <!-- <Button class="table-btn" @click="add">添加活动</Button> -->
             <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
               <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
