@@ -134,42 +134,42 @@
         <p>活动总览</p>
         <ul>
           <li>
-            <span>已下架</span>
             <span class="hd-shu">{{
               !activityOverview.shelvesActivityCount
                 ? "0"
                 : activityOverview.shelvesActivityCount
             }}</span>
+            <span>已下架</span>
           </li>
           <li>
-            <span>已发布</span>
             <span class="hd-shu">{{
               activityOverview.releaseActivityCount || 0
             }}</span>
+            <span>已发布</span>
           </li>
           <li>
-            <span>进行中</span>
             <span class="hd-shu">{{
               activityOverview.ongoingActivityCount || 0
             }}</span>
+            <span>进行中</span>
           </li>
           <li>
-            <span>已结束</span>
             <span class="hd-shu">{{
               activityOverview.endActivityCount || 0
             }}</span>
+            <span>已结束</span>
           </li>
           <li>
-            <span>已取消</span>
             <span class="hd-shu">{{
               activityOverview.cancleActivityCount || 0
             }}</span>
+            <span>已取消</span>
           </li>
           <li>
-            <span>全部活动</span>
             <span class="hd-shu">{{
               activityOverview.totalActivityCount || 0
             }}</span>
+            <span>全部活动</span>
           </li>
         </ul>
       </div>
@@ -177,22 +177,22 @@
         <p>用户总览</p>
         <ul>
           <li>
-            <span>今日新增</span>
             <span class="hd-shu">{{ userOverview.todayUserCount || 0 }}</span>
+            <span>今日新增</span>
           </li>
           <li>
-            <span>昨日新增</span>
             <span class="hd-shu">{{
               userOverview.yesterdayUserCount || 0
             }}</span>
+            <span>昨日新增</span>
           </li>
           <li>
-            <span>本月新增</span>
             <span class="hd-shu">{{ userOverview.monthUserCount || 0 }}</span>
+            <span>本月新增</span>
           </li>
           <li>
-            <span>会员总数</span>
             <span class="hd-shu">{{ userOverview.totalUserCount || 0 }}</span>
+            <span>会员总数</span>
           </li>
         </ul>
       </div>

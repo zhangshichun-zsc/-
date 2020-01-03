@@ -189,7 +189,7 @@ export default {
       orgimg: "",
       type: "",
       list: [
-        { name: "组织方可签署协议类型", value: "47" }, //非组织方可签署协议类型
+        // { name: "非组织方可签署协议类型", value: "47" }, //非组织方可签署协议类型
         { name: "组织方可签署协议类型", value: "16" }
       ],
       file: "",
