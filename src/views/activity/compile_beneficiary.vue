@@ -572,7 +572,10 @@ export default {
       isDisb:false,
       batchItemList:[],
       userId:1,
-      signLimitsList:[],
+      signLimitsList:[
+        {data:[]},
+        {data:[]}
+      ],
       signList: [
         { itemName: '单行文本', type: 1, isNew:1},
         { itemName: '多行文本', type: 6, isNew: 1},
