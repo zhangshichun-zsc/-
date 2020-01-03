@@ -163,7 +163,7 @@
           </li>
           <li>
             <span class="hd-shu">{{ userOverview.totalUserCount }}</span>
-            <span>会员总数</span>
+            <span>志愿者总数</span>
           </li>
         </ul>
       </div>
