@@ -1190,6 +1190,7 @@ export default {
         });
       }else{
         this.$Message.warning('请先同意活动发布规则')
+        this.disSubmit = false
       }
     },
     //提交
