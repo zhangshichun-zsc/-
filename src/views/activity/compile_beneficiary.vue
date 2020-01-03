@@ -219,7 +219,7 @@
             <li class="first-li">
               <span class="first-span">群二维码</span>
               <div>
-                <div class="first-pic" v-if='oneRole.qrCodeShow == null'>
+                <div class="first-pic" v-if='!oneRole.qrCodeShow'>
                   <div class="" @click="()=>{ this.$refs.filezt.click()}">
                     <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
                     <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -227,7 +227,7 @@
                 </div>
                 <div class="first-pic" style="border:none" v-else>
                   <img class="imgs" style="width:283px;height:188px" :src="oneRole.qrCodeShow"/>
-                  <Icon type="ios-trash" v-if='oneRole.qrCodeShow' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
+                  <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                 </div>
               </div>
             </li>
@@ -609,18 +609,21 @@ export default {
     this.userId = this.$store.state.userId;
     if(this.oneRole.roleId){
       this.getTypes(this.oneRole)
-      // for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
-      //   if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
-      //     let a = this.oneRole.signRuleList[p].ruleValue.split(",")
-      //     this.age1 = a[0]
-      //     this.age2 = a[1]
-      //   }
-      //   if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
-      //     let b = this.oneRole.signRuleList[p].ruleValue.split(",")
-      //     let val = getAreaAdress(b[0], b[1], b[2])
-      //     this.region = val
-      //   }
-      // }
+      for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
+        if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
+          let a = this.oneRole.signRuleList[p].ruleValue.split(",")
+          this.age1 = a[0]
+          this.age2 = a[1]
+        }
+        if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
+          let b = this.oneRole.signRuleList[p].ruleValue.split(",")
+          let val = getAreaAdress(b[0], b[1], b[2])
+          this.region = val
+        }
+      }
+      if(this.oneRole.fkDetailList.length<2){
+        this.oneRole.fkDetailList = [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }]
+      }
     }
     this.getSignType();
     this.getBatchItem();

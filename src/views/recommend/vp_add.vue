@@ -93,7 +93,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="广告链接" prop="linkUrl" v-if='formValidate.linkType==1'>
-          <Input v-model="formValidate.linkUrl" />
+          <Input v-model="formValidate.linkUrl" placeholder="请输入广告链接,以http://开头(示例http://www.baidu.com)" />
         </FormItem>
         <FormItem label="广告内容" prop="comments" v-if='formValidate.linkType==0'>
           <wangeditor :labels="formValidate.comments" id="ed1" @change="changeEditorTrain"></wangeditor>
