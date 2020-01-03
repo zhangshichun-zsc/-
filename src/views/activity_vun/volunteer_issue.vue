@@ -190,30 +190,30 @@
                 </li>
                 <li>
                   <span>是否交保险</span>
-                  <RadioGroup v-model="args.isInsurance" :disabled='isDisb'>
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
+                  <RadioGroup v-model="args.isInsurance" >
+                    <Radio label="1" :disabled='isDisb'>是</Radio>
+                    <Radio label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否允许空降</span>
-                  <RadioGroup v-model="args.flyFlag" :disabled='isDisb'>
-                    <Radio :label="1">是</Radio>
-                    <Radio :label="2">否</Radio>
+                  <RadioGroup v-model="args.flyFlag">
+                    <Radio :label="1" :disabled='isDisb'>是</Radio>
+                    <Radio :label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否发放证书</span>
-                  <RadioGroup v-model="args.isNeedCertMould" :disabled='isDisb'>
-                    <Radio :label="1">是</Radio>
-                    <Radio :label="2">否</Radio>
+                  <RadioGroup v-model="args.isNeedCertMould">
+                    <Radio :label="1" :disabled='isDisb'>是</Radio>
+                    <Radio :label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否显示主办方小站</span>
-                  <RadioGroup v-model="args.isShowHolder" :disabled='isDisb'>
-                    <Radio :label="1">是</Radio>
-                    <Radio :label="2">否</Radio>
+                  <RadioGroup v-model="args.isShowHolder">
+                    <Radio :label="1" :disabled='isDisb'>是</Radio>
+                    <Radio :label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
@@ -366,6 +366,7 @@ import adress from'_c/map'
 import { upload }from '@/request/http'
 import { filterNull } from '@/libs/utils'
 import { stat, constants } from 'fs'
+import { isDate } from 'util';
 export default {
   data() {
     return {
@@ -474,6 +475,7 @@ export default {
     let isDisb = Number(isEdit) === 0 || Number(isEdit) === -1 || (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))? true : false
     this.isEdit = isEdit
     this.status = status
+    this.isDisb = isDisb
     this.activityId = this.$route.query.activityId
     this.initData()
     this.getRelse(isEdit)
@@ -507,6 +509,9 @@ export default {
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
           this.add = add
+          let arr = res.data.address.split("/")
+          this.args.address = arr[0] || null
+          this.args.addressSup = arr[1] || null
           if(i===4){
             this.args.status = 1
           }
