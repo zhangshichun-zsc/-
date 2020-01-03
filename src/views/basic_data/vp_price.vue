@@ -6,7 +6,6 @@
     <div class="integral-table">
       <div class="table-header flex-between">
 
-
           <Button class="table-btns"  @click="add('formValidate')">新增会费</Button>
           <Modal v-model="modal1" :title=Newly class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -270,6 +269,7 @@ export default {
       validFlags:'',
       addstate:false,
       loading:false,
+
     };
   },
   components: { basicdata, wangeditor },
@@ -371,7 +371,7 @@ export default {
     },
 
     amounts(e){
-      if(e==0||e<0){
+      if(e<0){
          this.formValidate.amount=1
       }else{
         this.formValidate.amount=e
