@@ -176,7 +176,7 @@
                 </li>
                 <li class="jobs">
                   <span>招募岗位</span>
-                  <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)" style="cursor: pointer;">
+                  <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)" style="cursor: pointer;margin-bottom:10px;">
                     <span>{{ item.userPositionName }}</span>
                     <span>{{ item.recruitNum }}人</span>
                     <span>
@@ -456,6 +456,7 @@ export default {
         isWorkAct:1,
         channel:2,
       },
+      status: 0,
       image:null,
       cover:null,
       once:false
@@ -469,7 +470,7 @@ export default {
 
   created() {
     let isEdit = this.$route.query.isEdit || 2
-    let status = this.$route.query.status || 0
+    let status = ~~this.$route.query.status || 0
     let isDisb = Number(isEdit) === 0 || Number(isEdit) === -1 || (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))? true : false
     this.isEdit = isEdit
     this.status = status
