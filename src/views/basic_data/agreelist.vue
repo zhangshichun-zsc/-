@@ -102,43 +102,42 @@ export default {
           align: "center",
           ellipsis: true,
           width: 300,
-          // render: (h, params) => {
-          //   return h("div", [
-          //     h(
-          //       "span",
-          //       {
-          //         style: {
-          //           display: "inline-block",
-          //           width: "100%",
-          //           overflow: "hidden",
-          //           textOverflow: "ellipsis",
-          //           whiteSpace: "nowrap"
-          //         },
-          //         domProps: {
-          //           title: params.row.dicName
-          //         }
-          //       },
-          //       params.row.dicName
-          //     )
-          //   ]);
-          // }
           render: (h, params) => {
-            return h('Tooltip', {
-              props: {
-                placement: 'bottom'
-              }
-            }, [
-                params.row.dicName,
-                h('span', {
-                  slot: 'content',             //slot属性
+            return h("div", [
+              h(
+                "span",
+                {
                   style: {
-
-                    whiteSpace: 'normal',
-                    wordBreak: 'break-all'
+                    display: "inline-block",
+                    width: "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  },
+                  domProps: {
+                    title: params.row.dicName
                   }
-                }, params.row.dicName)
-              ])
+                },
+                params.row.dicName
+              )
+            ]);
           }
+          // render: (h, params) => {
+          //   return h('Tooltip', {
+          //     props: {
+          //       placement: 'bottom'
+          //     }
+          //   }, [
+          //       params.row.dicName,
+          //       h('span', {
+          //         slot: 'content',             //slot属性
+          //         style: {
+          //           whiteSpace: 'normal',
+          //           wordBreak: 'break-all'
+          //         }
+          //       }, params.row.dicName)
+          //     ])
+          // }
         },
         {
           title: "协议时间",

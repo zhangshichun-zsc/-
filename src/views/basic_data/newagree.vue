@@ -362,7 +362,7 @@ export default {
     },
 
     handleSubmit(name) {
-      console.log(this.formInline.actTypeDicId)
+      // console.log(this.formInline.actTypeDicId)
       this.$refs[name].validate(valid => {
         if (valid) {
           this.loading=true
@@ -431,6 +431,7 @@ export default {
         setTimeout(()=> {
           this.loading = false;
         }, 500);
+        console.log(11)
         if (res.code == 200) {
           this.$Message.success("添加成功!");
           this.$router.push({
