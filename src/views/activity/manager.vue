@@ -60,7 +60,7 @@
           <Button class="table-btn">导出</Button>
           <Button class="table-btn"  @click="exportData(1)">导出受益方签到表</Button>
           <Button class="table-btn"  @click="exportData(2)">导出志愿者签到表</Button>
-          <Button class="table-btn" @click="addaction">添加活动</Button>
+          <!-- <Button class="table-btn" @click="addaction">添加活动</Button> -->
           <Select size="large" v-model="size"  style="width:150px" placeholder="显示条数" class="table-btn">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>

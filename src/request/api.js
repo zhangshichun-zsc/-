@@ -93,7 +93,7 @@ export const activeclose = p => posts('/activity-manage/work/act/close', p) //�
 
 export const activeset = p => posts('/activity-manage/has/act/mould/set', p) //活动管理-设置模板
 
-export const activeNew = p => posts('/activity-manage/act/mould/set', p) //活动管理-设置模板
+export const activeNew = p => posts('/activity-manage/act/mould/set', p) //新增模板
 
 export const activedown = p => posts('/activity-manage/work/act/down', p) //活动管理-活动下架
 

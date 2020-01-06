@@ -196,7 +196,6 @@ export default {
                   on: {
                     click: () => {
                       let state = ~~params.row.status
-                      console.log(state)
                       if(state !== 1){
                         this.$Message.error("不能操作")
                         return
