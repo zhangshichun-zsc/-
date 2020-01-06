@@ -586,7 +586,6 @@ export default {
         activityId: ids
       }).then(res => {
         if(res.code==200){
-
           this.$Message.info('设置成功')
         }else{
           this.$Message.error(res.msg)
