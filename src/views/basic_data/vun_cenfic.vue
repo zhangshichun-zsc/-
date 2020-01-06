@@ -262,7 +262,7 @@ export default {
       page: 1,
       size: 10,
       sort: "create_at desc",
-      sumSize: 10,
+      sumSize: 0,
       args: {
         startAt: null,
         endAt: null,
