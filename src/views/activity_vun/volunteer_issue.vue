@@ -524,6 +524,7 @@ export default {
           this.isTrain = ~~res.data.isTrain || 0,
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
+          this.judge = res.data.result
           this.add = add
           let arr = res.data.address.split("-")
           let i = (res.data.address).indexOf(res.data.addressSup)
