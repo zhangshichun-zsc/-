@@ -159,7 +159,7 @@
                 <li class="flex-start">
                   <span>活动地址</span>
                   <div>
-                    <Button @click="getAdr" class="adr" long>{{ args.address == null?"点击选中地址":args.address}}</Button>
+                    <div @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</div>
                     <Input v-model="args.addressSup" placeholder="请输入详细地址" :disabled='isDisb'/>
                   </div>
                 </li>
@@ -471,6 +471,14 @@ export default {
      next()
   },
   components: { wangeditor, adress },
+  watch:{
+    "args.orgId":function(val){
+      this.args.ownerUserId = null
+      this.args.ownerUserName = null
+      this.args.ownerUserTel = null
+      this.judge = ''
+    }
+  },
 
   created() {
     let isEdit = this.$route.query.isEdit || 2
@@ -518,8 +526,8 @@ export default {
           this.cover = res.data.coverPicPath,
           this.add = add
           let arr = res.data.address.split("-")
-          this.args.address = arr[0] || null
-          this.args.addressSup = arr[1] || ''
+          let i = (res.data.address).indexOf(res.data.addressSup)
+          this.args.address = (res.data.address).substr(0,i-1)
           if(i===4){
             this.args.status = 1
           }
@@ -962,6 +970,9 @@ export default {
             .adr{
               flex: 1;
               cursor: pointer;
+              white-space: pre-wrap;
+              border: 1px solid #dcdee2;
+              padding: 10px;
               margin-bottom: 10px;
             }
             .juge{

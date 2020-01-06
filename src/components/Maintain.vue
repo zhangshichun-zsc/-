@@ -82,7 +82,7 @@ export default {
       if(ble== 0 && this.from == 'editing'){
         this.$router.push({
           name: this.from,
-          query: { dicId:id,name}
+          query: { dicId:id,name,ble}
         })
       }else if(ble == 1 && this.from == 'editing'){
         this.$router.push({
