@@ -79,22 +79,24 @@ export default {
   methods: {
     train(id, name, ble,actMouldId) {
       this.modal1 = false
-      if(ble== 0 && this.from == 'editing'){  //新增活动模板
-        this.$router.push({
-          name: this.from,
-          query: { dicId:id,name}
-        })
-      }else if(ble == 1 && this.from == 'editing'){   //编辑活动模板
-        this.$router.push({
-          name: this.from,
-          query: { id, name, ble,actMouldId }
-        });
-      }else{
-        this.$router.push({
-          name: this.from,
-          query: { id, name, ble ,}
-        });
-      }
+      setTimeout(()=>{
+        if(ble== 0 && this.from == 'editing'){  //新增活动模板
+          this.$router.push({
+            name: this.from,
+            query: { dicId:id,name}
+          })
+        }else if(ble == 1 && this.from == 'editing'){   //编辑活动模板
+          this.$router.push({
+            name: this.from,
+            query: { id, name, ble,actMouldId }
+          });
+        }else{
+          this.$router.push({
+            name: this.from,
+            query: { id, name, ble ,}
+          });
+        }
+      },200)
     },
     more() {
       if (this.show === false) {
