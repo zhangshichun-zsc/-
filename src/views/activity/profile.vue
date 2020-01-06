@@ -381,6 +381,7 @@ export default {
       this.roleId = this.query.roleId
       this.userName = this.query.userName
       this.enrollStatus = this.query.enrollStatus
+      this.page = 1
       this.getMemberList()
     },
     //数据概况

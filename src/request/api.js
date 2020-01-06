@@ -646,7 +646,7 @@ export const getMatchingVoList = p => posts("/activity-manage/work/act/match/vol
 export const Matchingupdate = p => posts("/activity-manage/work/act/match/update", p)
 export const matchAdd = p => posts("/activity-manage/work/act/match/add", p)
 export const getDraft = p => posts("/volunteer-manager/queryInitiatalVolunteerActivity", p)
-
+export const updateQrCode = p =>posts("/activity-manage/work/act/qrcode/update",p)
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 
 export const Reportdeles = p => posts('/report-manage/deal-report', p) //举报管理--批量操作
