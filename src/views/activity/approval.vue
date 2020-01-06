@@ -291,13 +291,13 @@
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
-                <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
-                  <Radio label="自驾">自驾</Radio>
-                  <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" :checked="tripSelf">自定义</Radio>
+                <RadioGroup v-model="batch.vehicleCode" @on-change='tripMode'>
+                  <Radio label="1">自驾</Radio>
+                  <Radio label="2">大巴</Radio>
+                  <Radio label="3">自定义</Radio>
                 </RadioGroup>
               </li>
-              <li v-if="tripSelf">
+              <li v-if="batch.vehicleCode=='3'">
                 <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
               </li>
               <li class="first-li">
@@ -699,7 +699,6 @@ export default {
       three: false,
       adds: false,
       addbtns: true,
-      tripSelf: false,
       addLeader: false,
       addWorker: false,
       releaseTimeSelf: false,
@@ -827,9 +826,6 @@ export default {
         workerIdList: [{}]
       }
       this.batch = this.projectMsg.actInfoList[0]?this.projectMsg.actInfoList[0]:batch
-      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
-        this.tripSelf = true
-      }
     },
 
     //保存合作方
@@ -937,11 +933,11 @@ export default {
     },
     //出行方式
     tripMode(e) {
-      if (e == "自驾" || e == "大巴") {
-        this.tripSelf = false;
-        this.batch.actVehicle = e;
-      } else {
-        this.tripSelf = true;
+      if (e == "1") {
+        this.batch.actVehicle = "自驾"
+      }else if(e == "2"){
+        this.batch.actVehicle = "自驾"
+      }else {
         this.batch.actVehicle = "";
       }
     },
@@ -1118,9 +1114,6 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
-      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
-        this.tripSelf = true
-      }
       this.two = true;
       this.three = false;
       this.current = 1;

@@ -4,8 +4,31 @@
   <div class="integral">
      <Modal
       v-model="modal4">
-      <img :src="showImg" alt="" class="showimg" v-if="showImg !== null"/>
-      <img :src="showImg2" class="showimg" alt="" v-if="showImg2 !== null"/>
+      <p class="head">会员二维码</p>
+      <div class="start-wap">
+        <div class="upload shae" v-if='memQrCodeShow == null'>
+            <div class="file " @click="()=>{ this.$refs.filess.click()}">
+              <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile(0,$event)">
+              <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+            </div>
+        </div>
+        <img class="imgss" v-else :src="memQrCodeShow"/>
+        <Icon type="ios-trash" v-if='memQrCodeShow !== null' class="cancel" @click="cancelImg(0)" color='#FF565A' size='28'/>
+      </div>
+      <p class="head">志愿者二维码</p>
+      <div class="start-wap">
+        <div class="upload shae" v-if='voluQrCodeShow == null'>
+            <div class="file " @click="()=>{ this.$refs.files.click()}">
+              <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile(1,$event)">
+              <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
+            </div>
+        </div>
+        <img class="imgss" v-else :src="voluQrCodeShow"/>
+        <Icon type="ios-trash" v-if='voluQrCodeShow !== null' class="cancel" @click="cancelImg(1)" color='#FF565A' size='28'/>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" @click="updateQrcodeEvent">确定</Button>
+      </div>
     </Modal>
     <Modal v-model="modal5" title="取消理由"  @on-cancel='cancel'>
       <i-input placeholder="请输入取消理由" v-model="text" type="textarea" :row='4'/>
@@ -148,8 +171,11 @@ import {
   activecancel,
   activeclose,
   activeset,
-  activedown
+  activedown,
+  updateQrCode,
+  orgimgdel
 } from "../../request/api";
+import { upload }from '@/request/http'
 import { SERVER_URl } from '@/request/http.js'
 import { constants } from 'fs';
 export default {
@@ -161,8 +187,10 @@ export default {
       modal2: false,
       modal3: false,
       modal4:false,
-      showImg: null,
-      showImg2: null,
+      memQrCode: null,
+      voluQrCode: null,
+      memQrCodeShow: null,
+      voluQrCodeShow: null,
       fruit: ["苹果"],
       navigation1: {
         head: "活动管理(会员)"
@@ -432,8 +460,11 @@ export default {
               on: {
                 click: () => {
                   this.modal4 = true
-                  this.showImg = params.row.memQrCode
-                  this.showImg2 = params.row.voluQrCode
+                  this.memQrCode = params.row.memQrCode || null
+                  this.voluQrCode = params.row.voluQrCode || null 
+                  this.activityId = params.row.acitvityId
+                  this.memQrCodeShow = params.row.memQrCodeShow || null
+                  this.voluQrCodeShow = params.row.voluQrCodeShow || null
                 }
               }
             })
@@ -518,6 +549,57 @@ export default {
   },
 
   methods: {
+    updateQrcodeEvent(){
+      updateQrCode({activityId:this.activityId,memQrCode:this.memQrCode,voluQrCode:this.voluQrCode}).then(res => {
+        if(res.code == 200){
+           this.modal4 = false
+          this.$Message.success('修改成功')
+          this.getactiveManager()
+        }else{
+          this.$Message.error(res.msg)
+        }
+      })
+    },
+    uploadFile (i,e) {
+      let file = e.target.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
+      upload(dataForm).then(res => {
+        if(res.code == 200){
+          var reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = (e) => {
+            if(i === 0){
+              this.memQrCodeShow = e.target.result
+              this.memQrCode = res.data
+            }else{
+              this.voluQrCodeShow = e.target.result
+              this.voluQrCode = res.data
+            }
+          }
+        }else{
+          this.$Message.warning(res.msg)
+        }
+      })
+
+    },
+    cancelImg(i){
+      let path = i == 0?this.memQrCode:this.voluQrCode
+      orgimgdel({path}).then(res => {
+        if(res.code == 200){
+            if(i === 0){
+              this.memQrCodeShow =  null
+              this.memQrCode =  null
+            }else{
+              this.voluQrCodeShow = null
+              this.voluQrCode = null
+            }
+          this.$Message.success('删除成功')
+        }else{
+            this.$Message.warning(res.msg)
+        }
+      })
+    },
     changeSwitch(e){
       if(params.row.statusText !== "10"){
         this.activityId = params.row.acitvityId
@@ -586,7 +668,6 @@ export default {
         activityId: ids
       }).then(res => {
         if(res.code==200){
-
           this.$Message.info('设置成功')
         }else{
           this.$Message.error(res.msg)
@@ -673,6 +754,7 @@ export default {
       }
       this.name = this.query.name
       this.state = this.query.state
+      this.page = 1
       this.getactiveManager();
     },
 
@@ -698,6 +780,46 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.head{
+  padding: 20px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold; 
+}
+  .start-wap{
+    position: relative;
+    margin: 0 auto;
+    height: 150px;
+    width: 150px;
+    .imgss{
+      width: 100%;
+      height: 100%;
+    }
+    .upload{
+      width: 100%;
+      height: 100%;
+    }
+    .cancel{
+      position: absolute;
+      top: 0px;
+      right: -30px;
+      z-index: 10;
+    }
+    .upload .file{
+      width: 100%;
+      height: 100%;
+      border: 1px dashed #FF565A;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .upload .file input{
+      display: none;
+    }
+    .shae{
+      height: 150px;
+      width: 150px;
+    }
+  }
 .btn{
   background: #FF565A !important;
   color: #fff !important;
