@@ -165,13 +165,16 @@
                 </li>
                 <li>
                   <span>现场负责人</span>
-                  <div class="juge">
-                    <Input v-model="judge" placeholder="请输入" @on-change='changeInput' :disabled='isDisb'/>
-                    <div class="juge-drap" v-if="showJudge">
-                      <div class="drap-item" v-for="(item,index) in judgeList" :key='index' @click="getOwn(index)">
-                        {{ item.result }}
+                  <div>
+                    <div class="juge">
+                      <Input v-model="judge" placeholder="请输入" @on-change='changeInput' :disabled='isDisb' @on-blur='blurInput'/>
+                      <div class="juge-drap" v-if="showJudge">
+                        <div class="drap-item" v-for="(item,index) in judgeList" :key='index' @click="getOwn(index)">
+                          {{ item.result }}
+                        </div>
                       </div>
                     </div>
+                    <p style="margin-top:10px;color:#eee;">输入手机号和姓名获得查询结果填入其中</p>
                   </div>
                 </li>
                 <li class="jobs">
@@ -484,6 +487,11 @@ export default {
     console.log(111)
   },
   methods: {
+    blurInput(e){
+      if(!this.args.ownerUserId){
+        this.judge = ''
+      }
+    },
     showRule(){
       this.rule = true
     },
@@ -803,7 +811,7 @@ export default {
         if (this.single == false) {
           this.$Message.warning('你没有同意发布规则')
           return
-        } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.detail == null || this.args.ownerUserName == null) {
+        } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.detail == null ) {
           this.$Message.warning('活动内容填写不完整')
           return
         } else if (item.ownerUserId == null) {
