@@ -319,7 +319,7 @@ import { projectApproval } from "../../request/api";
 import role from "./compile_beneficiary.vue";
 import adress from "_c/map";
 import { orgimg } from "@/request/http";
-import { upload } from "@/request/http";
+import { upload,uploadCopy } from "@/request/http";
 export default {
   name: "editor",
   data() {
@@ -430,6 +430,12 @@ export default {
       }).then(res => {
         console.log(res);
         this.batch = res.data;
+        if(this.$route.query.ble===1){
+          this.batch.type = 2
+        }
+        if(this.$route.query.type){
+          this.batch.type = this.$route.query.type
+        }
       });
     },
     save() {
@@ -443,7 +449,6 @@ export default {
           }
         });
       }else{
-        this.batch.type = 2;
         projectEdit(this.batch).then(res => {
           console.log(res);
           this.$Message.info(res.msg)

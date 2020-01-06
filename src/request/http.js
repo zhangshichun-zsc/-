@@ -238,3 +238,20 @@ export const upload = (p, url = '/pic/upload') => {
   });
 };
 
+export const uploadCopy = (p, url = '/pic/copy-pic') => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, p, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data);
+      });
+  });
+};
+

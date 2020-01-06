@@ -79,12 +79,12 @@ export default {
   methods: {
     train(id, name, ble,actMouldId) {
       this.modal1 = false
-      if(ble== 0 && this.from == 'editing'){
+      if(ble== 0 && this.from == 'editing'){  //新增活动模板
         this.$router.push({
           name: this.from,
           query: { dicId:id,name}
         })
-      }else if(ble == 1 && this.from == 'editing'){
+      }else if(ble == 1 && this.from == 'editing'){   //编辑活动模板
         this.$router.push({
           name: this.from,
           query: { id, name, ble,actMouldId }
