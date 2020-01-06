@@ -272,7 +272,8 @@ export default {
           name: this.formValidate.name,
           typeFlag: this.typeFlag,
           allBudget: this.formValidate.allBudget,
-          orgId: this.formValidate.orgId
+          orgId: this.formValidate.orgId,
+          sysId:1,
         }
       ];
       params = this.util.remove(params);

@@ -481,7 +481,7 @@ export default {
         agreementId: this.agreementId,
         typeDicId: this.formInline.typeDicId,
         actTypeDicId: actTypeDicId,
-          partA: this.nameaID.orgId,
+        partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
          typeDicName:name.dataValue,
         agTime: this.formInline.agTime,
