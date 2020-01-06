@@ -15,6 +15,7 @@
 
 <script>
 import { getAdressId } from '@/libs/utils'
+import { constants } from 'fs';
 export default {
   name:'adress',
   data () {
@@ -56,7 +57,7 @@ export default {
               args.provinceId = arr[0]
               args.cityId = arr[1]
               args.districtId = arr[2]
-              args.address = loc.poiaddress
+              args.address = loc.poiaddress+`(${loc.poiname})`
               args.xx = loc.latlng.lat 
               args.yy = loc.latlng.lng
               args.province = obj.province
@@ -75,7 +76,6 @@ export default {
          this.$Message.warning('没有点击地址')
          return
       }
-      
       this.$emit('change',this.args)
       this.cancel()
     },
