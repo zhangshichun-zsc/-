@@ -64,7 +64,7 @@ import {
   Agreementpage,
   Agreementdel,
   Agreementadd,
-  AgreementList
+  AgreementList,
 } from "../../request/api";
 export default {
   data() {
@@ -179,6 +179,35 @@ export default {
                 },
                 params.row.nameC ? params.row.nameC : ""
               )
+            ]);
+          }
+        },
+          {
+          title: "有效状态",
+          // key: "status",
+           align: "center",
+          width:200,
+          render: (h, params) => {
+            return h("div", [
+              h("i-switch", {
+                props: {
+                  value: params.row.validFlag == 1
+                },
+                on: {
+                  input: e => {
+                    this.agreementId = params.row.agreementId;
+                    if (e) {
+
+                      // this.states = 1;
+                       this.getAgreementadd(1);
+                    } else {
+
+                      // this.states = 0;
+                      this.getAgreementadd(0);
+                    }
+                  }
+                }
+              })
             ]);
           }
         },
@@ -298,18 +327,35 @@ export default {
       });
     },
 
-    //删除协议
-    getAgreementdel() {
-      Agreementdel({
-        agreementId: this.agreementId
-      }).then(res => {
+    //修改状态接口
+    getAgreementadd(e) {
+      let params = {
+        agreementId:this.agreementId,
+        validFlag:e}
+      Agreementadd(params).then(res => {
         if (res.code == 200) {
-          this.getAgreementpage();
-          this.$Message.info(res.msg);
+          this.getAgreementpage()
+          this.$Message.success("操作成功!");
+        } else {
+          this.getAgreementpage()
+          this.$Message.error(res.msg);
         }
         // console.log(res);
       });
     },
+
+    // //删除协议
+    // getAgreementdel() {
+    //   Agreementdel({
+    //     agreementId: this.agreementId
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       this.getAgreementpage();
+    //       this.$Message.info(res.msg);
+    //     }
+    //     // console.log(res);
+    //   });
+    // },
 
     //协议分页列表
     getAgreementList() {
@@ -344,16 +390,16 @@ export default {
       this.page = index;
       this.getAgreementpage();
     },
-    //删除
-    delete(e) {
-      this.agreementId = e;
-      this.getAgreementdel();
-    },
+    // //删除
+    // delete(e) {
+    //   this.agreementId = e;
+    //   this.getAgreementdel();
+    // },
 
-    //查看
-    See() {
-      this.getAgreementpage();
-    }
+    // //查看
+    // See() {
+    //   this.getAgreementpage();
+    // }
   },
   mounted() {}
 };
