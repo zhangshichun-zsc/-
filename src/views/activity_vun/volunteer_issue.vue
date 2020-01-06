@@ -509,9 +509,9 @@ export default {
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
           this.add = add
-          let arr = res.data.address.split("/")
+          let arr = res.data.address.split("-")
           this.args.address = arr[0] || null
-          this.args.addressSup = arr[1] || null
+          this.args.addressSup = arr[1] || ''
           if(i===4){
             this.args.status = 1
           }
