@@ -7,9 +7,9 @@
         <FormItem label="甲方:" prop="partA">
           <!-- <Select v-model="formInline.partA" @change="jia(e)" filterable>
                 <Option v-for="item in list"  :value="item.orgId" :key="item.orgId">{{ item.orgName }}</Option>
-          </Select> -->
+          </Select>-->
           <Select
-          ref="select1"
+            ref="select1"
             v-model="formInline.partA"
             filterable
             remote
@@ -37,7 +37,7 @@
             style="width:300px"
             :remote-method="remoteMethod2"
             :loading="loading2"
-             class="selec"
+            class="selec"
           >
             <Option
               v-for="(option, index) in options2"
@@ -57,7 +57,12 @@
           </Select>
         </FormItem>
         <FormItem label="活动类型:" prop="actTypeDicId">
-          <Select v-model="formInline.actTypeDicId" placeholder="请选择活动类型" style="width:300px" multiple>
+          <Select
+            v-model="formInline.actTypeDicId"
+            placeholder="请选择活动类型"
+            style="width:300px"
+            multiple
+          >
             <Option
               v-for="item in typeList"
               :value="item.dicId"
@@ -68,7 +73,7 @@
 
         <FormItem label="协议时间:" prop="agTime">
           <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm" placeholder="Select date and time(Excluding seconds)" style="width: 200px"></DatePicker> -->
-           <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm"   @on-change="handleChange"  v-model="formInline.agTime"  placeholder="请选择协议时间" style="width: 300px"></DatePicker> -->
+          <!-- <DatePicker type="datetime" format="yyyy-MM-dd HH:mm"   @on-change="handleChange"  v-model="formInline.agTime"  placeholder="请选择协议时间" style="width: 300px"></DatePicker> -->
           <DatePicker
             type="datetime"
             placeholder="请选择协议时间"
@@ -83,40 +88,38 @@
             <p class="imgs" v-if="Boolean(formInline.nameA)">
               <span>{{formInline.nameA}}</span>
               <a>
-              <Icon
-                type="ios-trash"
-                class="cancel"
-                size="24"
-                color="#FF565A"
-                @click="cancelImg(formInline.agPicA,formInline.nameA)"
-              />
+                <Icon
+                  type="ios-trash"
+                  class="cancel"
+                  size="24"
+                  color="#FF565A"
+                  @click="cancelImg(formInline.agPicA,formInline.nameA)"
+                />
               </a>
             </p>
             <p class="imgs" v-if="Boolean(formInline.nameB)">
               <span>{{formInline.nameB}}</span>
-               <a>
-              <Icon
-                type="ios-trash"
-                class="cancel"
-                size="24"
-                color="#FF565A"
-                @click="cancelImg(formInline.agPicB,formInline.nameB)"
-              />
-               </a>
+              <a>
+                <Icon
+                  type="ios-trash"
+                  class="cancel"
+                  size="24"
+                  color="#FF565A"
+                  @click="cancelImg(formInline.agPicB,formInline.nameB)"
+                />
+              </a>
             </p>
             <p class="imgs" v-if="Boolean(formInline.nameC)">
               <span>{{formInline.nameC}}</span>
               <a>
-                 <Icon
-                type="ios-trash"
-                class="cancel"
-                size="24"
-                color="#FF565A"
-                @click="cancelImg(formInline.agPicC,formInline.nameC)"
-              />
-
+                <Icon
+                  type="ios-trash"
+                  class="cancel"
+                  size="24"
+                  color="#FF565A"
+                  @click="cancelImg(formInline.agPicC,formInline.nameC)"
+                />
               </a>
-
             </p>
           </div>
           <div class="start-wap">
@@ -131,7 +134,7 @@
                   multiple
                 />
                 <a>
-                <Icon type="md-cloud-upload" :size="40" color="#FF565A" />
+                  <Icon type="md-cloud-upload" :size="40" color="#FF565A" />
                 </a>
               </div>
             </div>
@@ -140,7 +143,12 @@
           </div>
         </FormItem>
         <div class="centers">
-          <Button align="center" class="button-red" @click="handleSubmit('formInline')"  :loading="loading">保存</Button>
+          <Button
+            align="center"
+            class="button-red"
+            @click="handleSubmit('formInline')"
+            :loading="loading"
+          >保存</Button>
         </div>
       </Form>
       <br />
@@ -169,9 +177,9 @@ export default {
       typeList: [],
       locations: [],
       formInline: {
-        partA: '',
+        partA: "",
         partB: "",
-        typeDicId:'',
+        typeDicId: "",
         agTime: "",
         actTypeDicId: "",
         agFile: null,
@@ -186,7 +194,7 @@ export default {
       },
       ruleInline: {
         partA: [
-          { required: true, message: "甲方名称不能为空", trigger: "change"}
+          { required: true, message: "甲方名称不能为空", trigger: "change" }
         ],
         partB: [
           { required: true, message: "乙方名称不能为空", trigger: "change" }
@@ -230,7 +238,7 @@ export default {
 
       model13: "",
       loading1: false,
-      options1:  [],
+      options1: [],
       list: [],
       orgType: 1,
 
@@ -241,7 +249,7 @@ export default {
 
       nameaID: null,
       namebID: null,
-      loading:false,
+      loading: false
     };
   },
 
@@ -249,14 +257,12 @@ export default {
 
   computed: {},
   mounted() {
-
     this.getAgreementtype();
     this.getAgreementList();
     if (this.agreementId != null) {
       this.navigation1.head = "编辑协议";
       this.getAgreementdet();
     }
-
   },
 
   created() {},
@@ -268,17 +274,16 @@ export default {
       // this.getnewAgreement()
     },
 
-
     //甲方名称
     getnewAgreement(e) {
-      let  params = {
-          orgType: this.orgType,
-          orgName: e
-        };
+      let params = {
+        orgType: this.orgType,
+        orgName: e
+      };
       newAgreement(params).then(res => {
         if (res.code == 200) {
-            this.list = res.data;
-            // console.log(this)
+          this.list = res.data;
+          // console.log(this)
         }
         // console.log(res);
       });
@@ -319,14 +324,12 @@ export default {
                 item =>
                   item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
               );
-
             }, 300);
           }
         });
       } else {
         this.options1 = [];
       }
-
     },
     //乙方
     remoteMethod2(query) {
@@ -349,7 +352,6 @@ export default {
               });
               this.options2 = list.filter(
                 item =>
-
                   item.orgName.toLowerCase().indexOf(query.toLowerCase()) > -1
               );
             }, 300);
@@ -357,7 +359,6 @@ export default {
         });
       } else {
         this.options2 = [];
-
       }
     },
 
@@ -365,13 +366,12 @@ export default {
       // console.log(this.formInline.actTypeDicId)
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.loading=true
-            if (this.agreementId != null) {
-              this.getAgreementmodify();
-            } else {
-              this.getAgreementadd();
-            }
-
+          this.loading = true;
+          if (this.agreementId != null) {
+            this.getAgreementmodify();
+          } else {
+            this.getAgreementadd();
+          }
         } else {
           this.$Message.error("提交失败！");
         }
@@ -388,27 +388,25 @@ export default {
       });
     },
 
-
-
     //新增协议
     getAgreementadd() {
-      let name= this.locations.find(item=>{
-        return item.dataKey==this.formInline.typeDicId
-      })
-      this.nameaID=this.list.find(item=>{
-        return item.orgName==this.formInline.partA
-      })
-       this.namebID=this.list2.find(item=>{
-        return item.orgName==this.formInline.partB
-      })
-      this.formInline.agTime=this.Times
-      let actTypeDicId= this.formInline.actTypeDicId.toString()
+      let name = this.locations.find(item => {
+        return item.dataKey == this.formInline.typeDicId;
+      });
+      this.nameaID = this.list.find(item => {
+        return item.orgName == this.formInline.partA;
+      });
+      this.namebID = this.list2.find(item => {
+        return item.orgName == this.formInline.partB;
+      });
+      this.formInline.agTime = this.Times;
+      let actTypeDicId = this.formInline.actTypeDicId.toString();
       let params = {
         sysId: this.sysId,
         // name: this.name,
         targetType: this.targetType,
         typeDicId: this.formInline.typeDicId,
-        typeDicName:name.dataValue,
+        typeDicName: name.dataValue,
 
         actTypeDicId: this.actTypeDicId,
         batchId: this.batchId,
@@ -427,11 +425,11 @@ export default {
       };
       this.params = this.util.remove(params);
       Agreementadd(params).then(res => {
-         //防止重复提交
-        setTimeout(()=> {
+        //防止重复提交
+        setTimeout(() => {
           this.loading = false;
         }, 500);
-        console.log(11)
+        console.log(11);
         if (res.code == 200) {
           this.$Message.success("添加成功!");
           this.$router.push({
@@ -450,40 +448,42 @@ export default {
         agreementId: this.agreementId
       }).then(res => {
         if (res.code == 200) {
-          let list = res.data
+          let list = res.data;
           this.formInline = list;
-          this.formInline.partA=list.orgNameA
-          this.formInline.partB=list.orgNameB
-          this.nameaID=list.partA
-          this.namebID=list.partB
-           this.formInline.actTypeDicId= list.actTypeDicId.split(",").map(item => {
-                return Number(item);
-              });
-           console.log(this.formInline.actTypeDicId)
+          this.formInline.partA = list.orgNameA;
+          this.formInline.partB = list.orgNameB;
+          this.nameaID = list.partA;
+          this.namebID = list.partB;
+          this.formInline.actTypeDicId = list.actTypeDicId
+            .split(",")
+            .map(item => {
+              return Number(item);
+            });
+          console.log(this.formInline.actTypeDicId);
         }
       });
     },
 
     //修改接口
     getAgreementmodify() {
-       let name= this.locations.find(item=>{
-        return item.dataKey==this.formInline.typeDicId
-      })
-      this.nameaID=this.list.find(item=>{
-        return item.orgName==this.formInline.partA
-      })
-       this.namebID=this.list2.find(item=>{
-        return item.orgName==this.formInline.partB
-      })
-      this.formInline.agTime=this.Times
-      let actTypeDicId=this.formInline.actTypeDicId.toString()
+      let name = this.locations.find(item => {
+        return item.dataKey == this.formInline.typeDicId;
+      });
+      this.nameaID = this.list.find(item => {
+        return item.orgName == this.formInline.partA;
+      });
+      this.namebID = this.list2.find(item => {
+        return item.orgName == this.formInline.partB;
+      });
+      this.formInline.agTime = this.Times;
+      let actTypeDicId = this.formInline.actTypeDicId.toString();
       let params = {
         agreementId: this.agreementId,
         typeDicId: this.formInline.typeDicId,
         actTypeDicId: actTypeDicId,
         partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
-         typeDicName:name.dataValue,
+        typeDicName: name.dataValue,
         agTime: this.formInline.agTime,
         agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
@@ -495,8 +495,8 @@ export default {
       };
       this.params = this.util.remove(params);
       Agreementadd(this.params).then(res => {
-         //防止重复提交
-        setTimeout(()=> {
+        //防止重复提交
+        setTimeout(() => {
           this.loading = false;
         }, 500);
         if (res.code == 200) {
@@ -511,7 +511,7 @@ export default {
       });
     },
     handleChange(e) {
-        this.Times = e;
+      this.Times = e;
     },
 
     //图片上传
@@ -652,9 +652,8 @@ export default {
 // .ivu-select-input {
 //  font-size: 18px !important;
 // }
-.ivu-select-large .ivu-select-input{
- font-size: 18px !important;
-
+.ivu-select-large .ivu-select-input {
+  font-size: 18px !important;
 }
 
 // .ivu-select-dropdown-list {
@@ -663,8 +662,7 @@ export default {
 //   }
 // }
 
-.selec .ivu-select-selection input{
+.selec .ivu-select-selection input {
   font-size: 16px !important;
 }
-
 </style>
