@@ -732,7 +732,7 @@ export default {
   created() {
     this.userId = this.$store.state.userId;
     if(this.$route.query.batchId){
-      if (this.$route.query.copy != 1){
+      if (this.$route.query.copy !== 1){
         this.batchId= this.$route.query.batchId
       }
       this.getDraftsDetail(this.$route.query.batchId)
@@ -1151,6 +1151,10 @@ export default {
       if(this.isAgree){
         this.projectMsg.userId = this.userId;
         this.projectMsg.is_draft = 2;
+        if (this.$route.query.copy === 1){
+          this.projectMsg.batchId = ''
+          delete this.projectMsg.batchId
+        }
         projectApproval({
           actInfoList: this.projectMsg.actInfoList,
           batchName: this.projectMsg.batchName,
@@ -1192,6 +1196,10 @@ export default {
       console.log(this.projectMsg);
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
+      if (this.$route.query.copy === 1){
+        this.projectMsg.batchId = ''
+        delete this.projectMsg.batchId
+      }
       projectApproval({
         actInfoList: this.projectMsg.actInfoList,
         batchName: this.projectMsg.batchName,

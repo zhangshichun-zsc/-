@@ -197,9 +197,7 @@ export function posts(url, params) {
       .catch(err => {
         reject(err.data);
       })
-      .catch(err => {
-        reject(err.data);
-      });
+
   });
 }
 
