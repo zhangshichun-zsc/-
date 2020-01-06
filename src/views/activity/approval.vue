@@ -643,7 +643,7 @@ import {
 
 import role from "./compile_beneficiary.vue";
 import adress from "_c/map";
-import { upload } from "@/request/http";
+import { upload,uploadCopy } from "@/request/http";
 
 export default {
   data() {

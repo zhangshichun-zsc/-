@@ -114,14 +114,14 @@ export default {
       if(i === 1){
         this.$router.push({
           name: "editing",
-          query: { dicId:id,name}
+          query: { id:id,type:2 }
         });
       }
     },
     add(){
       this.$router.push({
         name: 'editing',
-        // query: { id:this.list.activityId, name:this.list.activityName, actMouldId:this.list.actMouldId }
+        query: { id:this.actlist[this.actlist.length-1].activityId,type:1}
       });
     },
     //活动详情
