@@ -152,7 +152,7 @@
             </div>
           </div>
         </i-col>
-        <i-col span="11" push='1'>
+        <i-col span="11">
           <div class="publish-content">
             <div class="active-publish">
               <ul>
@@ -968,7 +968,8 @@ export default {
             display: flex;
             align-items: center;
             .adr{
-              flex: 1;
+              width: 400px;
+              line-height: 25px;
               cursor: pointer;
               white-space: pre-wrap;
               border: 1px solid #dcdee2;
