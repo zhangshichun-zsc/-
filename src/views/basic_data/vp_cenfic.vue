@@ -13,7 +13,6 @@
             <Icon type="ios-arrow-down" />
             <span>收起筛选</span>
           </div>
-
         </div>
       </div>-->
       <div class="flex-center-start integral-body">
@@ -399,7 +398,7 @@ export default {
     changeNum(e) {
       this.size = e;
       this.page = 1;
-      this.getList();
+      this.getList({});
     },
     changeSort(e) {
       this.sort = e;

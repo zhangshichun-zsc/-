@@ -81,7 +81,6 @@
 
 <script>
 import { upload } from "../../request/http";
-
 import { orgimg } from "../../request/http";
 import {
   Agreementclasslist,
@@ -126,14 +125,13 @@ export default {
           title: "类别",
           align: "center",
           render: (h, params) => {
-            return h("div", params.row.typeFlag==16?'组织方可签署协议类型':'非组织方可签署协议类型');
+            return h("div", params.row.typeFlag==16?'组织方可签署协议类型':'组织方可签署协议类型');
           }
         },
         {
           title: "是否显示",
           key: "status",
-           align: "center",
-
+          align: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
@@ -191,10 +189,11 @@ export default {
       orgimg: "",
       type: "",
       list: [
-        { name: "非组织方可签署协议类型", value: "47" },
+        // { name: "非组织方可签署协议类型", value: "47" }, //非组织方可签署协议类型
         { name: "组织方可签署协议类型", value: "16" }
       ],
-      file: ""
+      file: "",
+      loading:false,
     };
   },
 
@@ -234,6 +233,10 @@ export default {
         pic: this.file,
         valid: addtype
       }).then(res => {
+         //防止重复提交
+        setTimeout(()=> {
+          this.loading = false;
+        }, 500);
         if (res.code == 200) {
           this.modal1 = false;
           this.getAgreementclasslist();
@@ -300,6 +303,7 @@ export default {
       // console.log(11);
       this.$refs[name].validate(valid => {
         if (valid) {
+          this.loading=true
           this.getAgreementclassadd();
         } else {
           this.$Message.error("必填项未填!");

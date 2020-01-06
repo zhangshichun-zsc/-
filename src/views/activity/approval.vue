@@ -132,7 +132,7 @@
               <li class="first-li">
                 <span class="first-span">主题图片</span>
                 <div>
-                  <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
+                  <div class="first-pic" v-if='!projectMsg.batchPicShow'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -140,7 +140,7 @@
                   </div>
                   <div class="first-pic" style="border:none" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
-                    <Icon type="ios-trash" v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -216,7 +216,7 @@
               <li class="first-li">
                 <span class="first-span">封面图片</span>
                 <div>
-                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
+                  <div class="first-picfm" v-if='!batch.actCoverShowPic'>
                     <div class="" @click="()=>{ this.$refs.filefm.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -224,22 +224,22 @@
                   </div>
                   <div class="first-picfm" style="border:none" v-else>
                     <img style="width:100%;height:100%" :src="batch.actCoverShowPic"/>
-                    <Icon type="ios-trash" v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
                 <div>
-                  <div class="first-pic" v-if='batch.actShowPic == null'>
+                  <div class="first-pic" v-if='!batch.actShowPic'>
                     <div class="" @click="()=>{ this.$refs.filezt.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
                   <div class="first-pic" style="border:none" v-else>
-                    <img style="width:100%;height:100%"  :src="batch.actShowPic"/>
-                    <Icon type="ios-trash" v-if='batch.actShowPic' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
+                    <img style="width:100%;height:100%" :src="batch.actShowPic"/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -291,30 +291,30 @@
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
-                <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
-                  <Radio label="自驾">自驾</Radio>
-                  <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" :checked="tripSelf">自定义</Radio>
+                <RadioGroup v-model="batch.vehicleCode" @on-change='tripMode'>
+                  <Radio label="1">自驾</Radio>
+                  <Radio label="2">大巴</Radio>
+                  <Radio label="3">自定义</Radio>
                 </RadioGroup>
               </li>
-              <li v-if="tripSelf">
+              <li v-if="batch.vehicleCode=='3'">
                 <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
               </li>
               <li class="first-li">
-                <span class="first-span">现场联系人</span>
+                <span class="first-span">现场负责人</span>
                 <div class="flex-center-start" style="flex:1">
                   <span class="tit">姓名</span>
                   <Input v-model="batch.ownerUserName" style="width: 150px" class="same-staff" @on-change='getLeaderList' placeholder="输入姓名"></Input>
                   <span class="twoT">联系方式</span>
                   <Input v-model="batch.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
-                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场联系人" v-if='addLeader'>
-                  <Option
-                    v-for="(item,idx) in leaderList"
-                    :value="item.name"
-                    :key="idx"
-                    @click.native="getLeader(item)"
-                  >{{ item.name }} {{item.tel}}</Option>
-                </Select>
+                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场负责人" v-if='addLeader'>
+                    <Option
+                      v-for="(item,idx) in leaderList"
+                      :value="item.name"
+                      :key="idx"
+                      @click.native="getLeader(item)"
+                    >{{ item.name }} {{item.tel}}</Option>
+                  </Select>
                 </div>
               </li>
               <li class="first-li start">
@@ -468,7 +468,7 @@
               <li class="first-li">
                 <span class="first-span">主题图片</span>
                 <div>
-                  <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
+                  <div class="first-pic" v-if='!projectMsg.batchPicShow'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -476,7 +476,7 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
-                    <Icon type="ios-trash" v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -564,7 +564,7 @@
             <li class="first-li">
                 <span class="first-span">图片</span>
                 <div>
-                  <div class="first-pic" v-if='partner.partPicShow == null'>
+                  <div class="first-pic" v-if='!partner.partPicShow'>
                       <div class="" @click="()=>{ this.$refs.filepar.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filepar" @change="uploadPartnerFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -572,7 +572,7 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="partner.partPicShow"/>
-                    <Icon type="ios-trash" v-if='partner.partPicShow' class="cancel" @click="cancelPartnerImg()" color='#FF565A' size='26'/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelPartnerImg()" color='#FF565A' size='26'/>
                   </div>
                 </div>
               </li>
@@ -681,7 +681,12 @@ export default {
         actResList: [],
         workerIdList: [{}]
       },
-      itemsList: [],
+      itemsList: {
+        org:{
+          propagandaTitle:'',
+          propagandaText:'',
+        }
+      },
       part: [],
       batchItemList: [],
       navigation1: {
@@ -694,7 +699,6 @@ export default {
       three: false,
       adds: false,
       addbtns: true,
-      tripSelf: false,
       addLeader: false,
       addWorker: false,
       releaseTimeSelf: false,
@@ -822,9 +826,6 @@ export default {
         workerIdList: [{}]
       }
       this.batch = this.projectMsg.actInfoList[0]?this.projectMsg.actInfoList[0]:batch
-      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
-        this.tripSelf = true
-      }
     },
 
     //保存合作方
@@ -932,11 +933,11 @@ export default {
     },
     //出行方式
     tripMode(e) {
-      if (e == "自驾" || e == "大巴") {
-        this.tripSelf = false;
-        this.batch.actVehicle = e;
-      } else {
-        this.tripSelf = true;
+      if (e == "1") {
+        this.batch.actVehicle = "自驾"
+      }else if(e == "2"){
+        this.batch.actVehicle = "自驾"
+      }else {
         this.batch.actVehicle = "";
       }
     },
@@ -1113,9 +1114,6 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
-      if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
-        this.tripSelf = true
-      }
       this.two = true;
       this.three = false;
       this.current = 1;
@@ -1185,6 +1183,7 @@ export default {
         });
       }else{
         this.$Message.warning('请先同意活动发布规则')
+        this.disSubmit = false
       }
     },
     //提交

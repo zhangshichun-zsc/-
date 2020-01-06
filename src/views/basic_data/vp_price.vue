@@ -6,7 +6,6 @@
     <div class="integral-table">
       <div class="table-header flex-between">
 
-
           <Button class="table-btns"  @click="add('formValidate')">新增会费</Button>
           <Modal v-model="modal1" :title=Newly class="modals"  width="700">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -15,7 +14,7 @@
               </FormItem>
               <FormItem label="金额:" prop="amount">
                  <!-- <InputNumber :max="10" :min="1" v-model="formValidate.amount"></InputNumber> -->
-                <InputNumber :min="0" :max="1000000000" v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
+                <InputNumber :min="0" :max="1000000000" @on-change="amounts" v-model="formValidate.amount" size="large"  style="width: 220px"></InputNumber> <Button >元</Button>
               </FormItem>
               <FormItem label="会费期限:" prop="imonth">
                 <!-- <Input type="number" :maxlength='2' value="formValidate.imonth" @on-change="imonths" size="large"  style="width: 220px;"/> -->
@@ -89,7 +88,7 @@ export default {
   data() {
     return {
        name: "editor",
-      editorContent: "",
+      editorContent:'',
       Newly: "新增会费",
       formValidate: {
         name: null,
@@ -126,7 +125,7 @@ export default {
             // transform(value) {
             //   return Number(value);
             // }
-          }
+          },
         ]
       },
       navigation1: {
@@ -270,6 +269,7 @@ export default {
       validFlags:'',
       addstate:false,
       loading:false,
+
     };
   },
   components: { basicdata, wangeditor },
@@ -341,16 +341,18 @@ export default {
           this.loading = false;
         }, 500);
         if(res.code==200){
+          this.getCostlist()
           if(e==0){
             this.modal1=false
             this.$Message.info('添加成功')
-             this.getCostlist()
+
           }else if(e==1){
             this.modal1=false
             this.$Message.info('修改成功')
-             this.getCostlist()
+
           }else if(e==2){
             this.$Message.info('操作成功')
+
           }
 
         }
@@ -371,7 +373,12 @@ export default {
     },
 
     amounts(e){
-      console.log(e)
+      if(e<0){
+         this.formValidate.amount=1
+      }else{
+        this.formValidate.amount=e
+      }
+      // console.log(e)
     },
     imonths(e){
       // console.log(e,this.formValidate.imonth)
@@ -380,11 +387,11 @@ export default {
       // }else{
       //   this.$set(this.formValidate,'imonth',e)
       // }
-      // if(e==0||e<0){
-      //    this.formValidate.imonth=1
-      // }else{
-      //   this.formValidate.imonth=e
-      // }
+      if(e==0||e<0){
+         this.formValidate.imonth=1
+      }else{
+        this.formValidate.imonth=e
+      }
       console.log(e)
     },
 

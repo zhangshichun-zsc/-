@@ -115,6 +115,7 @@ import {
   Matchingupdate,
   matchAdd
 } from "../../request/api";
+import { constants } from 'fs';
 export default {
   data() {
     return {
@@ -194,8 +195,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      let state = params.row.status
-                      if(state !== 0){
+                      let state = ~~params.row.status
+                      if(state !== 1){
                         this.$Message.error("不能操作")
                         return
                       }
@@ -672,7 +673,7 @@ export default {
           this.columns = this.columns1;
           let data = res.data
           for(let item of data){
-            if(~~item.status !== 0)item._disabled = true
+            if(~~item.status !== 1)item._disabled = true
           }
           this.datax = data
         }

@@ -50,9 +50,9 @@
       <Row class-name="row">
         <i-col span='3'><span>模式</span></i-col>
         <i-col span='4'>
-          <RadioGroup v-model="args.zmType" :disabled="isDisb">
-            <Radio label="1">先到先得</Radio>
-            <Radio label="2">预约型</Radio>
+          <RadioGroup v-model="args.zmType">
+            <Radio label="1" :disabled='isDisb'>先到先得</Radio>
+            <Radio label="2" :disabled='isDisb'>预约型</Radio>
           </RadioGroup>
         </i-col>
       </Row>

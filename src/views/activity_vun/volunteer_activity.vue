@@ -586,6 +586,7 @@ export default {
       }
       this.name = this.query.name
       this.status = this.query.status
+      this.page = 1
       this.getactiveManager();
     },
 

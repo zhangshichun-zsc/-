@@ -165,14 +165,34 @@
                 <Radio :label="1">否</Radio>
               </RadioGroup>
             </li>
-            <li class="first-li" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+            <li class="first-li" v-if="oneRole.zmType==2 && oneRole.isAudit!=1">
               <span>优先设置</span>
             </li>
-            <li class="role-table" v-if="oneRole.zmType==2 && oneRole.isAudit==2">
+            <li class="role-table" v-if="oneRole.zmType==2 && oneRole.isAudit!=1">
               <table style="width:80%">
                 <tbody v-for="(item,index) in oneRole.choiceRuleList" class="role-table">
                   <tr class="role-tr">
                     <td>{{index+1}}.{{item.ruleName}}</td>
+                    <td v-if='item.ruleId==20'>
+                      <Select v-model="item.ruleValueRemark">
+                        <Option
+                          v-for="(item,idx) in teamList"
+                          :value="item.name"
+                          :key="item.name"
+                          @click.native='getRuleValue1(item,idx,index)'
+                        >{{ item.name }}</Option>
+                      </Select>
+                    </td>
+                    <td v-if='item.ruleId==23 || item.ruleId==24'>
+                      <Select v-model="item.ruleValueRemark">
+                        <Option
+                          v-for="item in tcList"
+                          :value="item.name"
+                          :key="item.name"
+                          @click.native='getRuleValue2(item)'
+                        >{{ item.name }}</Option>
+                      </Select>
+                    </td>
                     <td>
                       <Button @click.native="sortFirst(index)">上移</Button>
                     </td>
@@ -183,7 +203,7 @@
                 </tbody>
               </table>
             </li>
-            <li class="lx-flex-center" style="padding:8px 0">
+            <li class="lx-flex-center" style="padding:8px 0" v-if="oneRole.zmType==2 && oneRole.isAudit!=1">
               <Button @click="addyx" class="font">添加优先规则</Button>
             </li>
             <li class="first-li">
@@ -219,7 +239,7 @@
             <li class="first-li">
               <span class="first-span">群二维码</span>
               <div>
-                <div class="first-pic" v-if='oneRole.qrCodeShow == null'>
+                <div class="first-pic" v-if='!oneRole.qrCodeShow'>
                   <div class="" @click="()=>{ this.$refs.filezt.click()}">
                     <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
                     <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -227,7 +247,7 @@
                 </div>
                 <div class="first-pic" style="border:none" v-else>
                   <img class="imgs" style="width:283px;height:188px" :src="oneRole.qrCodeShow"/>
-                  <Icon type="ios-trash" v-if='oneRole.qrCodeShow' class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
+                  <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                 </div>
               </div>
             </li>
@@ -444,17 +464,17 @@
                   <span class="first-span">上传图片</span>
                   <i-switch v-model="item.context" :true-value="1" :false-value="2" />
                 </div>
-                <div class="role-tr" v-else-if="item.type === 1" style="width:90%">
+                <div class="role-tr" v-else-if="item.type == 1" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div class="role-tr" v-else-if="item.type === 6" style="width:90%">
+                <div class="role-tr" v-else-if="item.type == 6" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入多行文本标题" v-model="item.context" :disabled="isDisb" />
                   <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
                   <span @click="deleItem(index)" v-if="!isDisb">删除</span>
                 </div>
-                <div v-else-if="item.type === 3" style="width:90%">
+                <div v-else-if="item.type == 3" style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入单选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
@@ -468,7 +488,7 @@
                     <Button @click="addSignIput(index)">+</Button>
                   </div>
                 </div>
-                <div v-else-if="item.type === 4 " style="width:90%">
+                <div v-else-if="item.type == 4 " style="width:90%">
                   <div class="role-trs">
                     <i-input style="width:60%" placeholder="请输入多选标题" v-model="item.context" :disabled="isDisb" />
                     <Checkbox v-model="item.isMust" :true-value='1'>是否必填</Checkbox>
@@ -519,11 +539,10 @@
          <div slot="footer"></div>
       </Modal>
       <Modal v-model="yx" title="优先项设置">
-       
-            <div>
-              <Button @click.native="getFirst(item)" class="btn" v-for="(item,index) in firstItemList" :key='index'>{{item.name}}</Button>
-            </div>
-         <div slot="footer"></div>
+        <div>
+          <Button @click.native="getFirst(item)" class="btn" v-for="(item,index) in firstItemList" :key='index'>{{item.name}}</Button>
+        </div>
+        <div slot="footer"></div>
       </Modal>
       <Modal v-model="fk" title="反馈项设置">
         <ul>
@@ -539,7 +558,7 @@
         <span></span>
         <div>
           <Button @click.native="cancel" shape="circle" size='large'>取消</Button>
-          <Button class="active" @click.native="save" shape="circle" size='large'>保存</Button>
+          <Button class="active" @click="save" shape="circle" size='large'>保存</Button>
         </div>
       </div>
     </div>
@@ -572,7 +591,10 @@ export default {
       isDisb:false,
       batchItemList:[],
       userId:1,
-      signLimitsList:[],
+      signLimitsList:[
+        {data:[]},
+        {data:[]}
+      ],
       signList: [
         { itemName: '单行文本', type: 1, isNew:1},
         { itemName: '多行文本', type: 6, isNew: 1},
@@ -592,6 +614,9 @@ export default {
           return  date && date.valueOf() < Date.now() - 86400000
         }
       },
+      region:[],
+      teamList:[],
+      tcList:[]
     };
   },
   mounted() {
@@ -606,18 +631,21 @@ export default {
     this.userId = this.$store.state.userId;
     if(this.oneRole.roleId){
       this.getTypes(this.oneRole)
-      // for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
-      //   if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
-      //     let a = this.oneRole.signRuleList[p].ruleValue.split(",")
-      //     this.age1 = a[0]
-      //     this.age2 = a[1]
-      //   }
-      //   if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
-      //     let b = this.oneRole.signRuleList[p].ruleValue.split(",")
-      //     let val = getAreaAdress(b[0], b[1], b[2])
-      //     this.region = val
-      //   }
-      // }
+      for (let p = 0; p < this.oneRole.signRuleList.length; p++) {
+        if (this.oneRole.signRuleList[p].ruleId == 21 || this.oneRole.signRuleList[p].ruleId == 3) {
+          let a = this.oneRole.signRuleList[p].ruleValue.split(",")
+          this.age1 = a[0]
+          this.age2 = a[1]
+        }
+        if (this.oneRole.signRuleList[p].ruleId == 22 || this.oneRole.signRuleList[p].ruleId == 4) {
+          let b = this.oneRole.signRuleList[p].ruleValue.split(",")
+          let val = getAreaAdress(b[0], b[1], b[2])
+          this.region = val
+        }
+      }
+      if(this.oneRole.fkDetailList.length<2){
+        this.oneRole.fkDetailList = [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }]
+      }
     }
     this.getSignType();
     this.getBatchItem();
@@ -690,6 +718,13 @@ export default {
       }).then(res=>{
         if(res.code==200){
           this.firstItemList = res.data
+          for(let i in this.firstItemList){
+            if(this.firstItemList[i].ruleId == 20){
+              this.teamList = this.firstItemList[i].object
+            } else if (this.firstItemList[i].ruleId == 23 || this.firstItemList[i].ruleId == 24){
+              this.tcList = this.firstItemList[i].object
+            }
+          }
         }
       })
     },
@@ -725,8 +760,61 @@ export default {
       }).then(res=>{
         if(res.code==200){
           this.firstItemList = res.data
+          for(let i in this.firstItemList){
+            if(this.firstItemList[i].ruleId == 20){
+              this.teamList = this.firstItemList[i].object
+            } else if (this.firstItemList[i].ruleId == 23 || this.firstItemList[i].ruleId == 24){
+              this.tcList = this.firstItemList[i].object
+            }
+          }
         }
       })
+    },
+    getRuleValue1(e,i,ei){
+      console.log(e)
+      console.log(i)
+      console.log(ei)
+      let l = this.oneRole.choiceRuleList
+      let isAdd = true
+      for(let j in l){
+        if (l[j].ruleValue == this.teamList[i].orgId){
+          isAdd = false
+          this.$Message.warning('请勿选择重复的小组')
+          l[ei].ruleValue = ""
+          l[ei].ruleValueRemark = ""
+          delete l[ei].ruleValue
+          delete l[ei].ruleValueRemark
+        }
+      }
+      if(isAdd){
+        l[i].ruleValue = this.teamList[i].orgId
+        l[i].ruleValueRemark = this.teamList[i].name
+      }
+      this.oneRole.choiceRuleList = l
+      console.log(this.oneRole.choiceRuleList)
+    },
+    getRuleValue2(e,i,ei){
+      console.log(e)
+      console.log(i)
+      console.log(ei)
+      let l = this.oneRole.choiceRuleList
+      let isAdd = true
+      for(let j in l){
+        if (l[j].ruleValue == this.tcList[i].orgId){
+          isAdd = false
+          this.$Message.warning('请勿选择重复的特长')
+          l[ei].ruleValue = ""
+          l[ei].ruleValueRemark = ""
+          delete l[ei].ruleValue
+          delete l[ei].ruleValueRemark
+        }
+      }
+      if(isAdd){
+        l[i].ruleValue = this.tcList[i].orgId
+        l[i].ruleValueRemark = this.tcList[i].name
+      }
+      this.oneRole.choiceRuleList = l
+      console.log(this.oneRole.choiceRuleList)
     },
     //招募岗位
     getPost(val) {
@@ -937,7 +1025,9 @@ export default {
         n.push(m)
       } else {
         for (let i = 0; i < n.length; i++) {
-          if (n[i].ruleId == e.ruleId) {
+          if(e.ruleId==20||e.ruleId==23||e.ruleId==24){
+            isAdd = true
+          }else if (n[i].ruleId == e.ruleId) {
             isAdd = false
           }
         }
@@ -1029,6 +1119,36 @@ export default {
               return
             }
           }
+        }
+      }
+      let fd = []
+      if (this.oneRole.fkDetailList.length == 2 && this.oneRole.fkDetailList[1].context == 2 && (this.oneRole.fkDetailList[0].context == undefined || this.oneRole.fkDetailList[0].context == '')) {
+
+      } else {
+        fd = this.oneRole.fkDetailList
+        let isNew = true
+        for(let i in fd){
+          if (i > 1 && (fd[i].type == 1 || fd[i].type == 6)){
+            if (fd[i].context == '' || fd[i].context == null){
+              isNew = false
+            }
+          } else if (i > 1 && (fd[i].type == 3 || fd[i].type == 4)){
+            if (fd[i].context == '' || fd[i].context == null){
+              isNew = false
+            }else{
+              for(let j in fd[i].answer){
+                if (fd[i].answer[j].answer == "" || fd[i].answer[j].answer == null){
+                  isNew = false
+                }
+              }
+            }
+          }
+        }
+        if(isNew){
+         
+        }else{
+          this.$Message.warning("反馈内容有必填项尚未填写")
+          return
         }
       }
       console.log(this.oneRole)

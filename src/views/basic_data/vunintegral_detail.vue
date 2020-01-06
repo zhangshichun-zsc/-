@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { tablepage } from "@/request/mixin";
+// import { tablepage } from "@/request/mixin";
 import { formatDate } from "@/request/datatime";
 import { integralDet, integralHistory, integralrule } from "@/request/api";
 export default {
@@ -188,7 +188,7 @@ export default {
   },
 
   components: {},
-  mixins: [tablepage],
+  // mixins: [tablepage],
   computed: {},
 
   //事件监听
@@ -252,6 +252,10 @@ export default {
         // console.log(res);
       });
     },
+    exportData(){
+
+    },
+
     time(e) {
       let start = e;
       let end = e[1];

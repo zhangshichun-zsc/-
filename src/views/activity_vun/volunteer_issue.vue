@@ -176,7 +176,7 @@
                 </li>
                 <li class="jobs">
                   <span>招募岗位</span>
-                  <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)" style="cursor: pointer;">
+                  <p v-for="(item,index) in args.coActivityUserConfParamList" :key='index' @click.stop="jump(index)" style="cursor: pointer;margin-bottom:10px;">
                     <span>{{ item.userPositionName }}</span>
                     <span>{{ item.recruitNum }}人</span>
                     <span>
@@ -190,30 +190,30 @@
                 </li>
                 <li>
                   <span>是否交保险</span>
-                  <RadioGroup v-model="args.isInsurance" :disabled='isDisb'>
-                    <Radio label="1">是</Radio>
-                    <Radio label="2">否</Radio>
+                  <RadioGroup v-model="args.isInsurance" >
+                    <Radio label="1" :disabled='isDisb'>是</Radio>
+                    <Radio label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否允许空降</span>
-                  <RadioGroup v-model="args.flyFlag" :disabled='isDisb'>
-                    <Radio :label="1">是</Radio>
-                    <Radio :label="2">否</Radio>
+                  <RadioGroup v-model="args.flyFlag">
+                    <Radio :label="1" :disabled='isDisb'>是</Radio>
+                    <Radio :label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否发放证书</span>
-                  <RadioGroup v-model="args.isNeedCertMould" :disabled='isDisb'>
-                    <Radio :label="1">是</Radio>
-                    <Radio :label="2">否</Radio>
+                  <RadioGroup v-model="args.isNeedCertMould">
+                    <Radio :label="1" :disabled='isDisb'>是</Radio>
+                    <Radio :label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否显示主办方小站</span>
-                  <RadioGroup v-model="args.isShowHolder" :disabled='isDisb'>
-                    <Radio :label="1">是</Radio>
-                    <Radio :label="2">否</Radio>
+                  <RadioGroup v-model="args.isShowHolder">
+                    <Radio :label="1" :disabled='isDisb'>是</Radio>
+                    <Radio :label="2" :disabled='isDisb'>否</Radio>
                   </RadioGroup>
                 </li>
                 <li>
@@ -366,6 +366,7 @@ import adress from'_c/map'
 import { upload }from '@/request/http'
 import { filterNull } from '@/libs/utils'
 import { stat, constants } from 'fs'
+import { isDate } from 'util';
 export default {
   data() {
     return {
@@ -456,6 +457,7 @@ export default {
         isWorkAct:1,
         channel:2,
       },
+      status: 0,
       image:null,
       cover:null,
       once:false
@@ -469,10 +471,11 @@ export default {
 
   created() {
     let isEdit = this.$route.query.isEdit || 2
-    let status = this.$route.query.status || 0
+    let status = ~~this.$route.query.status || 0
     let isDisb = Number(isEdit) === 0 || Number(isEdit) === -1 || (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))? true : false
     this.isEdit = isEdit
     this.status = status
+    this.isDisb = isDisb
     this.activityId = this.$route.query.activityId
     this.initData()
     this.getRelse(isEdit)
@@ -506,6 +509,9 @@ export default {
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
           this.add = add
+          let arr = res.data.address.split("-")
+          this.args.address = arr[0] || null
+          this.args.addressSup = arr[1] || ''
           if(i===4){
             this.args.status = 1
           }

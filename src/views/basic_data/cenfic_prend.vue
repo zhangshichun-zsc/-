@@ -5,14 +5,19 @@
     <div class="integral-header">
       <div class="integral-left">
         <div class="title">
-          <img v-if="headimg!=null" style=" width: 488px;" :src="headimg" alt />
-          <img v-if="headimg==null" style=" width: 488px;" src="../../assets/images/prend/4.png" />
+          <img class="imgtops" v-if="headimg!=null" style="" :src="headimg" alt />
+          <img class="imgtops" v-if="headimg==null" style="" src="../../assets/images/prend/4.png" />
           <p>志愿服务证明</p>
           <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
-          <p style="margin-top:20px;margin-bottom:20px;">
+          <div class="texts">
+            <h1>感谢 [*姓名*]</h1>
+            <h1>于__年__月__日至__年__月__日</h1>
+            <p>为[*组织名称*] 的心智障碍者融合服务提供了珍贵的【*志愿服务时长*】小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p>
+          </div>
+          <!-- <p style="margin-top:20px;margin-bottom:20px;">
             <Input v-model="value6" type="textarea" :rows="5" placeholder disabled />
-          </p>
-          <img v-if="footimg!=null" style=" width: 488px;" :src="footimg" alt class="fot" />
+          </p>-->
+          <img class="imgtops fot" v-if="footimg!=null"  :src="footimg" alt  />
           <!-- <Input v-model="value8" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." /> -->
           <div v-if="footimg==null" class="head">
             <img class="head-left" src="../../assets/images/prend/1.png" alt />
@@ -171,7 +176,7 @@ export default {
       },
       value8: "",
       value6:
-        "  为融爱融乐的心智障碍者融合服务提供了珍贵的__小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福",
+        "   感谢 [*姓名*]于    年    月      日至    年    月    日为[*   *] 的心智障碍者融合服务提供了珍贵的【*志愿服务时长*】小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！",
       loading: false
     };
   },
@@ -370,5 +375,27 @@ export default {
   a {
     color: black;
   }
+}
+.texts {
+  width: 80%;
+  margin: 0 auto;
+  line-height: 1.8rem;
+  font-size: 1rem;
+  h1 {
+    text-align: center;
+  }
+  p {
+    width: 100% !important;
+    text-indent: 2em;
+    text-align: left !important;
+  }
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+  height: 160px;
+  overflow-y: auto;
+  border: 1px solid black;
+}
+.imgtops{
+  width: 491px;
 }
 </style>
