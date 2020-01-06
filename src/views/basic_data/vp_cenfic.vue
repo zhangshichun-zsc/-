@@ -275,7 +275,7 @@ export default {
       volun: [
         { orgName: "北京市海淀区融爱融乐心智障碍者家庭支持中心", orgId: 1 }
       ],
-      sumSize: 10,
+      sumSize: 0,
       page: 1,
       numList: [10, 15, 20],
       options: {
