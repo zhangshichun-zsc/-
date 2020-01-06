@@ -129,17 +129,14 @@
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
-                <RadioGroup v-model="batch.actVehicle" @on-change="tripMode">
-                  <Radio label="自驾">自驾</Radio>
-                  <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" v-model="tripSelf">自定义</Radio>
+                <RadioGroup v-model="batch.vehicleCode" @on-change='tripMode'>
+                  <Radio label="1">自驾</Radio>
+                  <Radio label="2">大巴</Radio>
+                  <Radio label="3">自定义</Radio>
                 </RadioGroup>
               </li>
-              <li v-if="tripSelf">
-                <Input
-                  v-model="batch.actVehicle"
-                  placeholder="请输入出行方式"
-                />
+              <li v-if="batch.vehicleCode=='3'">
+                <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
               </li>
               <li class="li-flex-between">
                 <span class="first-span">现场负责人</span>
@@ -340,7 +337,6 @@ export default {
       },
       adds: false,
       addbtns: true,
-      tripSelf: false,
       addLeader: false,
       addWorker: false,
       releaseTimeSelf: false,
@@ -434,9 +430,6 @@ export default {
       }).then(res => {
         console.log(res);
         this.batch = res.data;
-        if(this.batch.actVehicle && this.batch.actVehicle!='自驾' && this.batch.actVehicle!='大巴'){
-          this.tripSelf = true
-        }
       });
     },
     save() {
@@ -564,11 +557,11 @@ export default {
     },
     //出行方式
     tripMode(e) {
-      if (e == "自驾" || e == "大巴") {
-        this.tripSelf = false;
-        this.batch.actVehicle = e;
-      } else {
-        this.tripSelf = true;
+      if (e == "1") {
+        this.batch.actVehicle = "自驾"
+      }else if(e == "2"){
+        this.batch.actVehicle = "自驾"
+      }else {
         this.batch.actVehicle = "";
       }
     },
