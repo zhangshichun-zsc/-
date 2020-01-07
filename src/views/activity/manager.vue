@@ -702,7 +702,6 @@ export default {
     modalCancel(){
       this.datax=[]
       this.getactiveManager()
-      // this.$set(this.datax[this.index],"statusText",1)
       this.addstate=false
     },
 

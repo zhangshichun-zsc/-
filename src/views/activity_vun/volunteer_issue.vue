@@ -824,7 +824,7 @@ export default {
           this.$Message.warning('活动内容填写不完整')
           return
         } else if (item.ownerUserId == null) {
-          this.$Message.warning('现在负责人没有对应的归属团队')
+          this.$Message.warning('请选择现场负责人')
           return
         }else if(this.isFeedback == 1){
           for(let val of this.feed){

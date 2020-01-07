@@ -412,7 +412,7 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "asc",
-      datax: [],
+      datax: [{status:10}],
       sysType: 1,
       page: 1,
       size: 10,
@@ -493,7 +493,6 @@ export default {
         // 活动下架
     getactivedown(ids) {
       ids = Array.of(ids);
-      console.log(ids)
       activedown({
         activityId: ids
       }).then(res => {
@@ -504,12 +503,12 @@ export default {
         }else{
           this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
         //取消
     modalCancel(){
-      this.$set(this.datax[this.index],"status",1)
+      this.datax = []
+      this.getactiveManager()
       this.addstate=false
     },
 
