@@ -341,7 +341,7 @@
                 <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb"/>
               </i-col>        
           </Row>
-          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2">
+          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2 || isEdit == 4">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -482,7 +482,7 @@ export default {
     this.isDisb = isDisb
     this.activityId = this.$route.query.activityId
     this.initData()
-    this.getRelse(isEdit)
+    this.getRelse()
   },
   beforeDestroy(){
     console.log(111)
@@ -506,7 +506,7 @@ export default {
       if(this.isDisb)return
       this.adr = !this.adr
     },
-    getRelse(i){
+    getRelse(){
       let data = JSON.parse(sessionStorage.getItem('data'))
       if(!this.activityId || !!data)return
       getActiveRelse({activityId:this.activityId}).then(res => {
@@ -528,7 +528,7 @@ export default {
           let arr = res.data.address.split("-")
           let i = (res.data.address).indexOf(res.data.addressSup)
           this.args.address = (res.data.address).substr(0,i-1)
-          if(i===4){
+          if(this.isEdit===4){
             this.args.status = 1
           }
           this.separation()
