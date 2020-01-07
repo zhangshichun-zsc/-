@@ -310,6 +310,7 @@ import {
   leader,
   projectDetail,
   projectEdit,
+  mouldEdit,
   activeNew,
   chooseTempalte,
   orgimgdel,
@@ -430,15 +431,10 @@ export default {
       }).then(res => {
         console.log(res);
         this.batch = res.data;
-        if(this.$route.query.ble===1){
-          this.batch.type = 2
-        }
-        if(this.$route.query.type){
-          this.batch.type = this.$route.query.type
-        }
       });
     },
     save() {
+      debugger
       if(this.$route.query.dicId){
         this.batch.type = 3;
         activeNew(this.batch).then(res => {
@@ -449,13 +445,25 @@ export default {
           }
         });
       }else{
-        projectEdit(this.batch).then(res => {
-          console.log(res);
-          this.$Message.info(res.msg)
-          if(res.code==200){
-            this.$router.back()
-          }
-        });
+        if(this.$route.query.ble===1){
+          this.batch.type = 2
+          mouldEdit(this.batch).then(res => {
+            console.log(res);
+            this.$Message.info(res.msg)
+            if(res.code==200){
+              this.$router.back()
+            }
+          });
+        }else{
+          this.batch.type = this.$route.query.type
+          projectEdit(this.batch).then(res => {
+            console.log(res);
+            this.$Message.info(res.msg)
+            if(res.code==200){
+              this.$router.back()
+            }
+          });
+        }
       }
     },
     addbtn() {

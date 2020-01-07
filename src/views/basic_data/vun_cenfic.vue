@@ -318,8 +318,6 @@ export default {
     query() {
       if (this.args.startAt && this.args.endAt) {
         if (this.args.startAt <= this.args.endAt) {
-          this.args.startAt = this.args.startAt.split(" ")[0] + " 00:00:00";
-          this.args.endAt = this.args.endAt.split(" ")[0] + " 23:59:59";
         } else {
           this.args.startAt = "";
           this.args.endAt = "";
@@ -337,11 +335,21 @@ export default {
     //   this.open = false;
     // },
     startTimeChange(e) {
-      this.args.startAt = e;
+       if(e){
+        this.args.startAt = e+ " 00:00:00";
+      }else{
+        this.args.startAt = e
+      }
+
     },
 
     endTimeChange(e) {
-      this.args.endAt = e;
+       if(e){
+        this.args.endAt = e+ " 23:59:59";
+      }else{
+        this.args.endAt = e
+      }
+
     },
     // handleChange(e) {
     //   let start = e[0];
