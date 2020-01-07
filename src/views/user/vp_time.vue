@@ -282,8 +282,8 @@ export default {
       dataCount: 0,
       page: 1,
       top: [
-        { name: "用户账号：", type: "input", value: "" },
-        { name: "修改人：", type: "input", value: "" }
+        { name: "用户账号:", type: "input", value: "" },
+        { name: "修改人:", type: "input", value: "" }
       ],
       isModel: false,
       refuseValue: "",
@@ -318,7 +318,7 @@ export default {
     //分页功能
     changepages(index) {
       this.page = index;
-      console.log(index);
+      // console.log(index);
     },
     query(e) {
       let arr = this.paramsObj;
