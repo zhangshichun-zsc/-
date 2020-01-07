@@ -474,7 +474,7 @@ export default {
   components: { wangeditor, adress },
 
   created() {
-    let isEdit = this.$route.query.isEdit || 2
+    let isEdit = ~~this.$route.query.isEdit || 2
     let status = ~~this.$route.query.status || 0
     let isDisb = Number(isEdit) === 0 || Number(isEdit) === -1 || (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))? true : false
     this.isEdit = isEdit
@@ -508,18 +508,17 @@ export default {
     },
     getRelse(i){
       let data = JSON.parse(sessionStorage.getItem('data'))
-      console.log(data)
       if(!this.activityId || !!data)return
       getActiveRelse({activityId:this.activityId}).then(res => {
         if(res.code == 200){
           let args = Object.assign(this.args, res.data)
           let add = !!args.memberGroupNum? true : false
           this.args = args
-          this.args.startAt = i==4?null:res.data.startAt + ':00'
-          this.args.endAt = i==4?null:res.data.endAt + ':00'
+          this.args.startAt = this.isEdit==4?null:res.data.startAt + ':00'
+          this.args.endAt = this.isEdit==4?null:res.data.endAt + ':00'
           this.image = res.data.picPath
-          this.zhaStart = i==4?null:res.data.enrollStarttime + ':00' || null,
-          this.zhaEnd = i==4?null:res.data.enrollEndtime + ':00' || null,
+          this.zhaStart = this.isEdit==4?null:res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = this.isEdit==4?null:res.data.enrollEndtime + ':00' || null,
           this.judge = res.data.result || '',
           this.isFeedback = ~~res.data.isFeedback || 0,
           this.isTrain = ~~res.data.isTrain || 0,
@@ -550,8 +549,7 @@ export default {
         }
         if(~~this.isEdit === 4){
           item.setTime = ''
-        }else{
-          console.log(item.setTime)
+        }else if(!!item.setTime){
           item.setTime = item.setTime + ':00'
         }
       }
