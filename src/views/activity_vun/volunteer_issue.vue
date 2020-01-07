@@ -352,8 +352,8 @@
       <Row class-name="row20">
         <i-col push='18' span='6'>
           <div class="btns">
-            <Button @click="sumbmit(8)" shape="circle" size='large' class="left">存为草稿</Button>
-            <Button @click="sumbmit(1)" shape="circle" size='large' class="right">提交申请</Button>
+            <Button @click="sumbmit(8)" shape="circle" size='large' class="left" v-if=" isEdit == 2 || isEdit == 3">存为草稿</Button>
+            <Button @click="sumbmit(1)" shape="circle" size='large' class="right">{{isEdit ==1?"保存":"发布"}}</Button>
           </div>
         </i-col>
       </Row>
