@@ -256,16 +256,16 @@ export default {
 
     },
 
-    time(e) {
-      let start = e;
-      let end = e[1];
-      this.updateTimeStamp = start + " 00:00:00";
-    },
-    //收起筛选
-    Retractbtn() {
-      this.Retract = !this.Retract;
-      // console.log(11);
-    },
+    // time(e) {
+    //   let start = e;
+    //   let end = e[1];
+    //   this.updateTimeStamp = start + " 00:00:00";
+    // },
+    // //收起筛选
+    // Retractbtn() {
+    //   this.Retract = !this.Retract;
+    //   // console.log(11);
+    // },
 
     //分页功能
     changepages(index) {
@@ -278,44 +278,29 @@ export default {
       this.arrs = val;
     },
     startTimeChange(e) {
-      this.startAt = e;
+      if(e){
+      this.startAt = e+ " 00:00:00";
+
+      }
     },
 
     endTimeChange(e) {
-      this.endAt = e;
+      if(e){
+        this.endAt = e+ " 23:59:59";
+      }
     },
     //查询
     query() {
-      if (this.startAt && this.endAt) {
-        if (this.startAt <= this.endAt) {
-          this.startAt = this.startAt.split(" ")[0] + " 00:00:00";
-          this.endAt = this.endAt.split(" ")[0] + " 23:59:59";
-          this.page = 1;
-          this.getintegralHistory();
-        } else {
+      // if (this.startAt && this.endAt) {
+        if (this.startAt && this.endAt&&this.startAt > this.endAt) {
           this.startAt = "";
           this.endAt = "";
           this.$Message.error("时间选择错误请重新选择");
+          return
         }
-      } else {
+      // }
         this.page = 1;
         this.getintegralHistory();
-      }
-      // if (this.args.startAt && this.args.endAt) {
-      //   if (this.args.startAt <= this.args.endAt) {
-      //     this.args.startAt = this.args.startAt + " 00:00:00";
-      //     this.args.endAt = this.args.endAt + " 23:59:59";
-
-      //   } else {
-      //      this.args.startAt=''
-      //     this.args.endAt=''
-      //     this.$Message.error('时间选择错误请重新选择')
-      //   }
-
-      // }else{
-      //    this.page=1
-      // this.getintegralHistory();
-      // }
     }
   }
 };

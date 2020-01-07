@@ -275,7 +275,7 @@ export default {
       volun: [
         { orgName: "北京市海淀区融爱融乐心智障碍者家庭支持中心", orgId: 1 }
       ],
-      sumSize: 10,
+      sumSize: 0,
       page: 1,
       numList: [10, 15, 20],
       options: {
@@ -318,12 +318,11 @@ export default {
     query() {
       if (this.args.startAt && this.args.endAt) {
         if (this.args.startAt <= this.args.endAt) {
-          this.args.startAt = this.args.startAt.split(" ")[0] + " 00:00:00";
-          this.args.endAt = this.args.endAt.split(" ")[0] + " 23:59:59";
         } else {
           this.args.startAt = "";
           this.args.endAt = "";
           this.$Message.error("时间选择错误请重新选择");
+          return
         }
       }
       this.page = 1;
@@ -331,11 +330,21 @@ export default {
     },
 
     startTimeChange(e) {
-      this.args.startAt = e;
+      if(e){
+        this.args.startAt = e+ " 00:00:00";
+      }else{
+        this.args.startAt = e
+      }
+
     },
 
     endTimeChange(e) {
-      this.args.endAt = e;
+      if(e){
+        this.args.endAt = e+ " 23:59:59";
+      }else{
+        this.args.endAt = e
+      }
+
     },
     // successOk() {
     //   if (!this.args.startAt && !this.args.endAt) {

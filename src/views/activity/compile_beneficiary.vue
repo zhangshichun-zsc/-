@@ -1082,6 +1082,7 @@ export default {
       }else if (this.oneRole.actRefund.refundRule==1 || this.oneRole.actRefund.refundRule==3){
         this.oneRole.actRefund.refundDays = ''
       }
+      //限制项填写校验
       let l = this.oneRole.signRuleList?this.oneRole.signRuleList:[]
       console.log(l)
       for(let m in l){
@@ -1104,6 +1105,17 @@ export default {
         }
       }
       this.oneRole.signRuleList = l
+      //优先设置填写校验
+      if(oneRole.zmType==2 && oneRole.isAudit!=1){
+        let first = this.oneRole.choiceRuleList
+        for(let i=0;i<first.length;i++){
+          if( (first[i].ruleId==20||first[i].ruleId==23||first[i].ruleId==24) && !first[i].ruleValueRemark ){
+            this.$Message.warning("优先设置有必填项尚未填写")
+            return
+          }
+        }
+      }
+      //报名项填写校验
       let s = this.oneRole.itemList ? this.oneRole.itemList : []
       for(let j=0;j<s.length;j++){
         if ((s[j].type == 6 || s[j].type == 1) && !s[j].itemName && s[j].isNew == 1){

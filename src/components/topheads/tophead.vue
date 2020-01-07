@@ -22,7 +22,7 @@
           <Form class="flexs" inline  v-if="Retract==true">
             <div v-for="(item,index) in top" :key="index">
               <FormItem :label=item.name prop="name" v-if="item.type=='input'">
-                <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name"/>
+                <Input style="width:150px" type="text" v-model="item.value" :placeholder="item.name.replace(':','')"/>
               </FormItem>
               <FormItem :label=item.name prop="list" v-if="item.type=='select'">
                 <Select style="width:150px" v-model="item.value">
@@ -107,7 +107,9 @@ export default {
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    console.log(this.top)
+  },
 
   methods: {
     databtn(e){

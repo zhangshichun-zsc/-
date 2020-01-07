@@ -308,6 +308,12 @@ export default {
   methods: {
     //协议分页
     getAgreementpage() {
+      let agreementType
+      if(this.agreementType==0){
+       agreementType=''
+      }else{
+        agreementType=this.agreementType
+      }
       let params = {
         page: {
           page: this.page,
@@ -315,7 +321,7 @@ export default {
           sort: "createAt" + " " + this.sort
         },
         agreementObject: this.agreementObject,
-        agreementType: this.agreementType
+        agreementType: agreementType
       };
       params = this.util.remove(params);
       Agreementpage(params).then(res => {
@@ -364,8 +370,8 @@ export default {
       }).then(res => {
         // console.log(res);
         if (res.code == 200) {
-          res.data.unshift({ dataKey: "0", dataValue: "全部" });
-          this.typelist = res.data;
+          // res.data.unshift({ dataKey: "0", dataValue: "全部" });
+          this.typelist = [{dataKey: 0, dataValue: "全部"},...res.data];
         }
       });
     },
@@ -373,9 +379,6 @@ export default {
     //查询
     query(e) {
       this.page = 1;
-      if (this.agreementType == 0) {
-        this.agreementType = "";
-      }
       this.getAgreementpage();
     },
 

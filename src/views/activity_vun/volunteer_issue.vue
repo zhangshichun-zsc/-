@@ -213,42 +213,29 @@
             </div>
           </div>
         </i-col>
-        <i-col span="11" push="1">
+        <i-col span="11">
           <div class="publish-content">
             <div class="active-publish">
               <ul>
                 <li class="flex-start">
                   <span>活动地址</span>
                   <div>
-                    <Button @click="getAdr" class="adr" long>{{
-                      args.address == null ? "点击选中地址" : args.address
-                    }}</Button>
-                    <Input
-                      v-model="args.addressSup"
-                      placeholder="请输入详细地址"
-                      :disabled="isDisb"
-                    />
+                    <Button @click="getAdr" class="adr">{{ args.address == null?"点击选中地址":args.address}}</Button>
+                    <Input v-model="args.addressSup" placeholder="请输入详细地址" :disabled='isDisb'/>
                   </div>
                 </li>
                 <li>
                   <span>现场负责人</span>
-                  <div class="juge">
-                    <Input
-                      v-model="judge"
-                      placeholder="请输入"
-                      @on-change="changeInput"
-                      :disabled="isDisb"
-                    />
-                    <div class="juge-drap" v-if="showJudge">
-                      <div
-                        class="drap-item"
-                        v-for="(item, index) in judgeList"
-                        :key="index"
-                        @click="getOwn(index)"
-                      >
-                        {{ item.result }}
+                  <div>
+                    <div class="juge">
+                      <Input v-model="judge" placeholder="请输入" @on-change='changeInput' :disabled='isDisb' @on-blur='blurInput'/>
+                      <div class="juge-drap" v-if="showJudge">
+                        <div class="drap-item" v-for="(item,index) in judgeList" :key='index' @click="getOwn(index)">
+                          {{ item.result }}
+                        </div>
                       </div>
                     </div>
+                    <p style="margin-top:10px;color:#eee;">输入手机号和姓名获得查询结果填入其中</p>
                   </div>
                 </li>
                 <li class="jobs">
@@ -718,6 +705,14 @@ export default {
     next();
   },
   components: { wangeditor, adress },
+  watch:{
+    "args.orgId":function(val){
+      this.args.ownerUserId = null
+      this.args.ownerUserName = null
+      this.args.ownerUserTel = null
+      this.judge = ''
+    }
+  },
 
   created() {
     let isEdit = this.$route.query.isEdit || 2;
@@ -739,44 +734,42 @@ export default {
     console.log(111);
   },
   methods: {
-    showRule() {
-      this.rule = true;
+    blurInput(e){
+      if(!this.args.ownerUserId){
+        this.judge = ''
+      }
+    },
+    showRule(){
+      this.rule = true
     },
     getAdr() {
       if (this.isDisb) return;
       this.adr = !this.adr;
     },
-    getRelse(i) {
-      if (!this.activityId) return;
-      getActiveRelse({ activityId: this.activityId }).then(res => {
-        if (res.code == 200) {
-          console.log(res);
-
-          let args = Object.assign(this.args, res.data);
-          let add = !!args.memberGroupNum ? true : false;
-          this.args = args;
-          this.args.startAt = i == 4 ? null : res.data.startAt + ":00";
-          this.args.endAt = i == 4 ? null : res.data.endAt + ":00";
-          this.zhaStart =
-            i == 4 ? null : res.data.enrollStarttime + ":00" || null;
-          this.zhaEnd = i == 4 ? null : res.data.enrollEndtime + ":00" || null;
-          this.args.enrollStarttime = this.zhaStart;
-          this.args.enrollEndtime = this.zhaEnd;
-
-          this.judge = res.data.result || "";
-          this.isFeedback = ~~res.data.isFeedback || 0;
-          this.isTrain = ~~res.data.isTrain || 0;
-          this.orgName = res.data.orgName;
-          this.cover = [res.data.coverPic];
-          this.image = [res.data.pic];
-          this.imageMap = { [res.data.pic]: res.data.picPath };
-          this.coverMap = { [res.data.coverPic]: res.data.coverPicPath };
-          this.add = add;
-          let arr = res.data.address.split("-");
-          this.args.address = arr[0] || null;
-          this.args.addressSup = arr[1] || "";
-          if (i === 4) {
-            this.args.status = 1;
+    getRelse(i){
+      if(!this.activityId)return
+      getActiveRelse({activityId:this.activityId}).then(res => {
+        if(res.code == 200){
+          let args = Object.assign(this.args, res.data)
+          let add = !!args.memberGroupNum? true : false
+          this.args = args
+          this.args.startAt = i==4?null:res.data.startAt + ':00'
+          this.args.endAt = i==4?null:res.data.endAt + ':00'
+          this.image = res.data.picPath
+          this.zhaStart = i==4?null:res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = i==4?null:res.data.enrollEndtime + ':00' || null,
+          this.judge = res.data.result || '',
+          this.isFeedback = ~~res.data.isFeedback || 0,
+          this.isTrain = ~~res.data.isTrain || 0,
+          this.orgName = res.data.orgName,
+          this.cover = res.data.coverPicPath,
+          this.judge = res.data.result
+          this.add = add
+          let arr = res.data.address.split("-")
+          let i = (res.data.address).indexOf(res.data.addressSup)
+          this.args.address = (res.data.address).substr(0,i-1)
+          if(i===4){
+            this.args.status = 1
           }
           this.separation();
           this.filter();
@@ -1056,29 +1049,11 @@ export default {
       let item = this.args;
       if (i == 1) {
         if (this.single == false) {
-          this.$Message.warning("你没有同意发布规则");
-          return;
-        } else if (
-          item.name == null ||
-          item.coverPic == null ||
-          item.pic == null ||
-          item.orgId == null ||
-          item.startAt == null ||
-          item.endAt == null ||
-          this.zhaStart == null ||
-          this.zhaEnd == null ||
-          item.address == null ||
-          item.coActivityUserConfParamList.length == 0 ||
-          item.isInsurance == null ||
-          item.flyFlag == null ||
-          item.isNeedCertMould == null ||
-          item.isShowHolder == null ||
-          item.coActCatTypeList[0].typeDicId == null ||
-          item.detail == null ||
-          this.args.ownerUserName == null
-        ) {
-          this.$Message.warning("活动内容填写不完整");
-          return;
+          this.$Message.warning('你没有同意发布规则')
+          return
+        } else if (item.name == null || item.coverPic == null ||item.pic == null || item.orgId == null || item.startAt == null || item.endAt == null || this.zhaStart == null || this.zhaEnd == null || item.address == null || item.coActivityUserConfParamList.length == 0 || item.isInsurance == null || item.flyFlag == null || item.isNeedCertMould == null || item.isShowHolder == null || item.coActCatTypeList[0].typeDicId == null || item.detail == null ) {
+          this.$Message.warning('活动内容填写不完整')
+          return
         } else if (item.ownerUserId == null) {
           this.$Message.warning("现在负责人没有对应的归属团队");
           return;
@@ -1214,44 +1189,39 @@ export default {
     span {
       margin: 0 10px;
     }
-    button {
-      border: 1px solid black;
-      margin-left: 10px;
-    }
-  }
-  //活动发布内容
-  .publish-content {
-    background: #ffffff;
-    .active-publish {
-      padding: 30px 0;
-      ul {
-        li {
-          margin: 20px 0;
-          display: flex;
-          align-items: center;
-          .adr {
-            flex: 1;
-            cursor: pointer;
-            margin-bottom: 10px;
-          }
-          .juge {
-            width: 300px;
-            position: relative;
-            .juge-drap {
-              position: absolute;
-              z-index: 100;
-              top: 46px;
-              left: 0;
-              width: 100%;
-              max-height: 310px;
-              overflow-y: scroll;
-              background: #fff;
-              box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-              .drap-item {
-                height: 50px;
-                line-height: 50px;
-                text-align: center;
-                border-bottom: 1px solid #eee;
+    //活动发布内容
+    .publish-content {
+      background: #ffffff;
+      .active-publish {
+        padding: 30px 0;
+        ul {
+          li {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            .adr{
+              flex: 1;
+              margin-bottom: 10px;
+            }
+            .juge{
+              width: 300px;
+              position: relative;
+              .juge-drap{
+                position: absolute;
+                z-index: 100;
+                top: 46px;
+                left: 0;
+                width: 100%;
+                max-height: 310px;
+                overflow-y: scroll;
+                background: #fff;
+                box-shadow: 0px 1px 6px rgba(0,0,0,0.2);
+                .drap-item{
+                  height: 50px;
+                  line-height: 50px;
+                  text-align: center;
+                  border-bottom: 1px solid #eee;
+                }
               }
             }
           }

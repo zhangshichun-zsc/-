@@ -60,6 +60,7 @@
             <li>{{item.pay}}</li>
           </ul>
         </div>
+         <Button class="button-red" @click="add" v-if='list.isOwner'>新增立项批次</Button>
       </div>
       <div class="btn" v-if='statusText=="待审核"'>
         <Button class="table-btn" @click="adopt(3)">拒绝</Button>
@@ -113,9 +114,15 @@ export default {
       if(i === 1){
         this.$router.push({
           name: "editing",
-          query: { dicId:id,name}
+          query: { id:id,type:2 }
         });
       }
+    },
+    add(){
+      this.$router.push({
+        name: 'editing',
+        query: { id:this.actlist[this.actlist.length-1].activityId,type:1}
+      });
     },
     //活动详情
     getapprovaldet() {

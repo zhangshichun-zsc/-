@@ -102,36 +102,23 @@ export default {
 
   methods: {
     startTimeChange(e) {
-      this.search.createTimestamp[0] = e;
-      // if(this.search.createTimestamp[1]==''){
-      //   return
-      // }
-      // this.end = {
-      //   disabledDate: date => {
-      //     let startTime =
-      //       this.search.createTimestamp[0] != ""
-      //         ? new Date(this.search.createTimestamp[0]).valueOf() -
-      //           1 * 24 * 60 * 60 * 1000
-      //         : "";
-      //     // console.log(startTime)
-      //     return date && date.valueOf() < startTime;
-      //   }
-      // };
-      console.log(e);
+      if(e){
+      this.search.createTimestamp[0] = e+ " 00:00:00";;
+      }else{
+        this.search.createTimestamp[0]=''
+      }
+
+      console.log(e,this.search.createTimestamp[0]);
     },
 
     endTimeChange(e) {
-      this.search.createTimestamp[1] = e;
-      // let endTime =
-      //   this.search.createTimestamp[1] != ""
-      //     ? new Date(this.search.createTimestamp[1]).valueOf()
-      //     : "";
-      // this.set = {
-      //   disabledDate(date) {
-      //     return date && date.valueOf() > endTime;
-      //   }
-      // };
-      console.log(e);
+      if(e){
+         this.search.createTimestamp[1] = e+ " 23:59:59";
+      }else{
+         this.search.createTimestamp[1] = ''
+      }
+
+      console.log(e,this.search.createTimestamp[1]);
     },
 
 
@@ -139,16 +126,15 @@ export default {
     query() {
       if (this.search.createTimestamp[0] && this.search.createTimestamp[1]) {
         if (this.search.createTimestamp[0] <= this.search.createTimestamp[1]) {
-          this.search.createTimestamp[0] =
-            this.search.createTimestamp[0].split(" ")[0] + " 00:00:00";
-          this.search.createTimestamp[1] =
-            this.search.createTimestamp[1].split(" ")[0] + " 23:59:59";
+
         } else {
-          this.search.createTimestamp=["", ""]
+          // console.log(this.search)
+          this.search.createTimestamp=["",""]
           this.$Message.error('时间选择错误请重新选择')
+          return
         }
       }
-      console.log(this.search);
+      // console.log(this.search);
       this.$emit("query", this.search);
     }
     // //收起筛选

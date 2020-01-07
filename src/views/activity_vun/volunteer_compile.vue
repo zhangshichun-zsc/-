@@ -301,21 +301,24 @@ export default {
     }
   },
   watch:{
-    "args.zmType":function(val){
-      let args = {
-        userPositionName:this.args.userPositionName,
-        userPosition:this.args.userPosition,
-        zmType:val,
-        roleId:2,
-        isAutoChoose:2,
-        isTrainMust:2,
-        subsidyCash:0,
-        subsidyType:0,
-        sysId:2,
-        coActivityItemList:[],
-        coActivityRuleParamList:[]
-      }
-      this.args = args
+    "args.zmType":{
+       handler:function(val){
+        let args = {
+          userPositionName:this.args.userPositionName,
+          userPosition:this.args.userPosition,
+          zmType:val,
+          roleId:2,
+          isAutoChoose:2,
+          isTrainMust:2,
+          subsidyCash:0,
+          subsidyType:0,
+          sysId:2,
+          coActivityItemList:[],
+          coActivityRuleParamList:[]
+        }
+        this.args = args
+      },
+      immediate: true
     }
   },
 
@@ -399,7 +402,9 @@ export default {
     },
     addItem(item,isNewItem,index){
       let itemList = this.args.coActivityItemList
+      console.log(itemList)
       if(isNewItem == 0){
+        console.log(item.name,itemList)
         let isShow = this.forDisable(item.name,itemList,'itemName',[])
         if(!isShow)return
       }

@@ -54,7 +54,7 @@
       <div class="table-header flex-between">
         <div>
           <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status">全选</Checkbox>
+            <Checkbox v-model="status" :disabled='allD'>全选</Checkbox>
           </Button>
           <Button class="table-btn" @click="operation(2)">通过</Button>
           <Button class="table-btn" @click="modal1 = true">拒绝</Button>
@@ -99,6 +99,7 @@ import { formatDate } from "../../request/datatime";
 import {date1} from '@/request/datatime.js'
 import { pendingApp, approvalpage } from "@/request/api";
 import { filterNull } from '@/libs/utils'
+import { constants } from 'fs';
 export default {
   data() {
     return {
@@ -106,6 +107,7 @@ export default {
       navigation1: {
         head: "活动立项管理"
       },
+      allD:false,
       cityList: [
         {
           value: "0",
@@ -314,9 +316,13 @@ export default {
         if(res.code==200){
           this.dataCount = res.data.totalSize;
           let data = res.data.list
+          let len = data.length
+          let num = 0
           for(let item of data){
-            if(~~item.status !== 0 && ~~item.status !== 3)item._disabled = true
+            if(~~item.status !== 0 && ~~item.status !== 3){item._disabled = true;num++;}
           }
+          console.log(len,num)
+          this.allD = len == num?true:false
           this.datax = data
         }
       });
@@ -344,6 +350,7 @@ export default {
       }
       this.batchName = this.query.batchName
       this.statu = this.query.statu
+      this.page = 1
       this.getapprovalpage();
     },
     handleChange(name,e){

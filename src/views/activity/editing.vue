@@ -310,6 +310,7 @@ import {
   leader,
   projectDetail,
   projectEdit,
+  mouldEdit,
   activeNew,
   chooseTempalte,
   orgimgdel,
@@ -319,7 +320,7 @@ import { projectApproval } from "../../request/api";
 import role from "./compile_beneficiary.vue";
 import adress from "_c/map";
 import { orgimg } from "@/request/http";
-import { upload } from "@/request/http";
+import { upload,uploadCopy } from "@/request/http";
 export default {
   name: "editor",
   data() {
@@ -433,6 +434,7 @@ export default {
       });
     },
     save() {
+      debugger
       if(this.$route.query.dicId){
         this.batch.type = 3;
         activeNew(this.batch).then(res => {
@@ -443,14 +445,25 @@ export default {
           }
         });
       }else{
-        this.batch.type = 2;
-        projectEdit(this.batch).then(res => {
-          console.log(res);
-          this.$Message.info(res.msg)
-          if(res.code==200){
-            this.$router.back()
-          }
-        });
+        if(this.$route.query.ble===1){
+          this.batch.type = 2
+          mouldEdit(this.batch).then(res => {
+            console.log(res);
+            this.$Message.info(res.msg)
+            if(res.code==200){
+              this.$router.back()
+            }
+          });
+        }else{
+          this.batch.type = this.$route.query.type
+          projectEdit(this.batch).then(res => {
+            console.log(res);
+            this.$Message.info(res.msg)
+            if(res.code==200){
+              this.$router.back()
+            }
+          });
+        }
       }
     },
     addbtn() {
