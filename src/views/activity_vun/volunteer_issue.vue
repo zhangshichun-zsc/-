@@ -88,7 +88,7 @@
                 </li>
                 <li>
                   <span>活动归属团队</span>
-                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))'>
+                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))' @on-change='changeTeam'>
                     <Option
                       v-for="(item,index) in orgList"
                       :value="item.orgId"
@@ -341,7 +341,7 @@
                 <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb"/>
               </i-col>        
           </Row>
-          <Row class-name="row20" type="flex" justify="center">
+          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -463,7 +463,8 @@ export default {
       status: 0,
       image:null,
       cover:null,
-      once:false
+      once:false,
+      isAct:false
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -471,14 +472,6 @@ export default {
      next()
   },
   components: { wangeditor, adress },
-  watch:{
-    "args.orgId":function(val){
-      this.args.ownerUserId = null
-      this.args.ownerUserName = null
-      this.args.ownerUserTel = null
-      this.judge = ''
-    }
-  },
 
   created() {
     let isEdit = this.$route.query.isEdit || 2
@@ -495,6 +488,12 @@ export default {
     console.log(111)
   },
   methods: {
+    changeTeam(e){
+      this.args.ownerUserId = null
+      this.args.ownerUserName = null
+      this.args.ownerUserTel = null
+      this.judge = ''
+    },
     blurInput(e){
       if(!this.args.ownerUserId){
         this.judge = ''
@@ -508,7 +507,9 @@ export default {
       this.adr = !this.adr
     },
     getRelse(i){
-      if(!this.activityId)return
+      let data = JSON.parse(sessionStorage.getItem('data'))
+      console.log(data)
+      if(!this.activityId || !!data)return
       getActiveRelse({activityId:this.activityId}).then(res => {
         if(res.code == 200){
           let args = Object.assign(this.args, res.data)
@@ -524,7 +525,6 @@ export default {
           this.isTrain = ~~res.data.isTrain || 0,
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
-          this.judge = res.data.result
           this.add = add
           let arr = res.data.address.split("-")
           let i = (res.data.address).indexOf(res.data.addressSup)
@@ -548,8 +548,11 @@ export default {
         if (item.coActivityRuleParamList){
           this.forlist(item.coActivityRuleParamList)
         }
-        if(this.isEdit === 4){
+        if(~~this.isEdit === 4){
           item.setTime = ''
+        }else{
+          console.log(item.setTime)
+          item.setTime = item.setTime + ':00'
         }
       }
       this.args.coActivityUserConfParamList = list
