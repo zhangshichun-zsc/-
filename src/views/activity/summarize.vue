@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {activesum,orgimgdel} from '@/request/api'
+import {activesum,orgimgdel,getActiveSumm} from '@/request/api'
 import wangeditor from '@/components/wangeditor';
 import { upload }from '@/request/http'
 
@@ -68,9 +68,24 @@ export default {
   created() {
     this.userId = this.$store.state.userId,
     this.activityName = this.$route.query.activityName
+    this.activityId = this.$route.query.acitvityId
+    this.showCont()
   },
 
   methods: {
+    showCont(){
+      getActiveSumm({activityId:this.activityId}).then(res => {
+        this.text = res.data.text
+        let picList = []
+        let pics = []
+        for(let item of res.data.pics){
+          picList.push(item.picShow)
+          pics.push(item.pic)
+        }
+        this.picList = picList
+        this.pics = pics
+      })
+    },
     uploadFile() {
       let file = this.$refs.files.files[0]
       const dataForm = new FormData()

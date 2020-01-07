@@ -336,8 +336,8 @@
       <Row class-name="row20">
         <i-col push="18" span="6">
           <div class="btns">
-            <Button @click="sumbmit(8)" shape="circle" size="large" class="left">存为草稿</Button>
-            <Button @click="sumbmit(1)" shape="circle" size="large" class="right">提交申请</Button>
+            <Button @click="sumbmit(8)" shape="circle" size='large' class="left" v-if=" isEdit == 2 || isEdit == 3">存为草稿</Button>
+            <Button @click="sumbmit(1)" shape="circle" size='large' class="right">{{isEdit ==1?"保存":"发布"}}</Button>
           </div>
         </i-col>
       </Row>
@@ -855,7 +855,7 @@ export default {
           this.$Message.warning('活动内容填写不完整')
           return
         } else if (item.ownerUserId == null) {
-          this.$Message.warning('现在负责人没有对应的归属团队')
+          this.$Message.warning('请选择现场负责人')
           return
         } else if (this.isFeedback == 1) {
           for (let val of this.feed) {
