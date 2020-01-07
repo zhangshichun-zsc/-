@@ -1,27 +1,33 @@
 <!-- 邀请好友查询(会员) -->
 <template>
   <div class="integral">
-    <Tophead :navigation1=navigation1 :top=top @query="query"></Tophead>
+    <Tophead :navigation1="navigation1" :top="top" @query="query"></Tophead>
 
     <div class="integral-table">
       <div class="table-header flex-between" style="padding:10px;">
-         <div>
+        <div>
           <Icon type="ios-list" size="30" />
           <span>数据列表</span>
         </div>
-        <div class="flex-center-end" >
-                  <Button  @click="exportData" disabled>导出数据</Button>
-                  <Select v-model="size" style="width:120px;margin:0 10px" placeholder="显示条数" class="space">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            </div>
+        <div class="flex-center-end">
+          <Button @click="Promise的基本用法" disabled>导出数据</Button>
+          <Select v-model="size" style="width:120px;margin:0 10px" placeholder="显示条数" class="space">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </div>
       </div>
       <div style="padding:0 10px;background:white">
-       <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
-       </div>
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="data"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
+      </div>
       <div class="pages">
         <Page
           :total="dataCount"
@@ -32,68 +38,67 @@
           :page-size="size"
           @on-change="changepages"
         />
-    </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {tablepage} from '@/request/mixin'
-import {InvitationList} from '@/request/api'
+// import {tablepage} from '@/request/mixin'
+import { InvitationList } from "@/request/api";
 export default {
   data() {
     return {
-        navigation1: {
-        head: "邀请好友查询(会员)",
-       },
+      navigation1: {
+        head: "邀请好友查询(会员)"
+      },
       columns: [
         {
           title: "用户账号",
           key: "userAccount",
           align: "center",
-          width:200
+          width: 200
         },
         {
           title: "用户昵称",
           key: "nickname",
-         align: "center",
-         width:300,
+          align: "center",
+          width: 300
         },
         {
           title: "用户分类",
           key: "userTypeText",
-          width:300,
-         align: "center"
+          width: 300,
+          align: "center"
         },
         {
           title: "邀请好友",
           key: "inviteUserNum",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "成功参与活动好友",
           key: "actJoinedNum",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "成功邀请团队注册",
           key: "inviteOrgNum",
-          width:200,
+          width: 200,
           align: "center"
         },
         {
           title: "积分奖励",
           key: "sumScore",
           align: "center",
-          width:200,
+          width: 200
         },
         {
           title: "操作",
           key: "action",
-          width:200,
+          width: 200,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -106,7 +111,13 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ name: 'vp_detail',query:{ memberId:params.row.memberId,inviteUserAccountId:params.row.userAccountId} })
+                      this.$router.push({
+                        name: "vp_detail",
+                        query: {
+                          memberId: params.row.memberId,
+                          inviteUserAccountId: params.row.userAccountId
+                        }
+                      });
                     }
                   }
                 },
@@ -116,7 +127,7 @@ export default {
           }
         }
       ],
-       Article: [
+      Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
         { value: 20, label: 20 }
@@ -126,21 +137,24 @@ export default {
         { value: "desc", label: "倒序" }
       ],
       sort: "desc",
-      top:[{name:'用户账号:',type:'input',value:''},{name:'用户昵称:',type:'input',value:''}],
+      top: [
+        { name: "用户账号:", type: "input", value: "" },
+        { name: "用户昵称:", type: "input", value: "" }
+      ],
       data: [],
-       page:1,
-      size:10,
+      page: 1,
+      size: 10,
 
-      dataCount:0,
-      arrs:[],
-      sysType:1,
-      info:'',
-      nickname:'',
-      inviteUserAccountId:1
+      dataCount: 0,
+      arrs: [],
+      sysType: 1,
+      info: "",
+      nickname: "",
+      inviteUserAccountId: 1
     };
   },
 
-  mixins:[tablepage],
+  // mixins:[tablepage],
   components: {},
   //事件监听
   watch: {
@@ -148,55 +162,57 @@ export default {
     sort: "getInvitationList"
   },
   computed: {},
-  mounted(){
-    this.getInvitationList()
+  mounted() {
+    this.getInvitationList();
   },
 
-  created() {
-  },
+  created() {},
 
   methods: {
     //查询
-    query(e){
-      this.page=1
-      this.info=e[0].value
-      this.nickname=e[1].value
-this.getInvitationList()
+    query(e) {
+      this.page = 1;
+      this.info = e[0].value;
+      this.nickname = e[1].value;
+      this.getInvitationList();
     },
 
     // 邀请好友分页
-    getInvitationList(){
+    getInvitationList() {
       InvitationList({
-        page:{page: this.page,size: this.size, sort: "createAt" + " " + this.sort},
-        sysType:this.sysType,
-        info:this.info,
-        nickname:this.nickname,
-      }).then(res=>{
-        if(res.code==200){
+        page: {
+          page: this.page,
+          size: this.size,
+          sort: "createAt" + " " + this.sort
+        },
+        sysType: this.sysType,
+        info: this.info,
+        nickname: this.nickname
+      }).then(res => {
+        if (res.code == 200) {
           this.dataCount = res.data.totalSize;
-          this.data = res.data.list
+          this.data = res.data.list;
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
 
-      //分页功能
+    //分页功能
     changepages(index) {
       this.page = index;
-      this.getInvitationList()
+      this.getInvitationList();
     },
+    exportData() {},
 
-     //选择内容
-    handleSelectionChange(val){
-      console.log(val)
-      this.arrs=val
-    },
-
+    //选择内容
+    handleSelectionChange(val) {
+      console.log(val);
+      this.arrs = val;
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-
 .integral-header .integral-top {
   padding: 15px 10px;
   background: white;
@@ -218,12 +234,12 @@ this.getInvitationList()
 .table-header {
   padding: 5px 20px;
   background: white;
-  border-radius:  10px 10px 0 0;
+  border-radius: 10px 10px 0 0;
 }
 .table-header .table-btn {
   margin-left: 15px;
 }
-.integral-table{
+.integral-table {
   border-radius: 10px 10px 0 0;
 }
 .integral-table .pages {
