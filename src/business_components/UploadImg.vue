@@ -39,7 +39,7 @@
       >
         <template v-if="item.status === 'finished'">
           <img :src="item.previewUrl" />
-          <div class="upload-list-item-cover">
+          <div class="upload-list-item-cover" v-if="disabled ? false : true">
             <Icon
               type="ios-eye-outline"
               @click.native="handleView(item.previewUrl)"
@@ -117,6 +117,10 @@ export default {
     },
     displayHeight: {
       type: Number
+    },
+    // // 禁用编辑
+    disabled: {
+      type: Boolean
     }
   },
   data() {
@@ -344,8 +348,11 @@ export default {
     // width: 104px;
     // height: 104px;
     // line-height: 104px;
-    margin-right: 16px;
+
+    // margin-right: 16px;
+    margin: 0 auto;
     margin-bottom: 16px;
+
     .ivu-upload {
       height: 100%;
     }
