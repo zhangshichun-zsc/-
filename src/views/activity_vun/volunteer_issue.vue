@@ -114,10 +114,12 @@
                 </li>
                 <li>
                   <span>活动归属团队</span>
-                  <Select v-model="args.orgId" style="width:300px" placement="bottom" :disabled="
-                      isDisb || (!isDisb && (status === 1 || status === 2))
-                    ">
-                    <Option v-for="(item, index) in orgList" :value="item.orgId" :key="index">{{ item.orgName }}</Option>
+                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))' @on-change='changeTeam'>
+                    <Option
+                      v-for="(item,index) in orgList"
+                      :value="item.orgId"
+                      :key="index"
+                    >{{ item.orgName }}</Option>
                   </Select>
                 </li>
                 <li class="flex-start">
@@ -325,7 +327,7 @@
               <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb" />
             </i-col>
           </Row>
-          <Row class-name="row20" type="flex" justify="center">
+          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2 || isEdit == 4">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -468,7 +470,11 @@ export default {
       image: [],
       coverMap: {},
       imageMap: {},
-      once: false
+      once: false,
+      image:null,
+      cover:null,
+      once:false,
+      isAct:false
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -498,7 +504,7 @@ export default {
   },
 
   created() {
-    let isEdit = this.$route.query.isEdit || 2
+    let isEdit = ~~this.$route.query.isEdit || 2
     let status = ~~this.$route.query.status || 0
     let isDisb =
       Number(isEdit) === 0 ||
@@ -511,14 +517,20 @@ export default {
     this.isDisb = isDisb
     this.activityId = this.$route.query.activityId
     this.initData()
-    this.getRelse(isEdit)
+    this.getRelse()
   },
   beforeDestroy() {
     console.log(111)
   },
   methods: {
-    blurInput(e) {
-      if (!this.args.ownerUserId) {
+    changeTeam(e){
+      this.args.ownerUserId = null
+      this.args.ownerUserName = null
+      this.args.ownerUserTel = null
+      this.judge = ''
+    },
+    blurInput(e){
+      if(!this.args.ownerUserId){
         this.judge = ''
       }
     },
@@ -529,32 +541,31 @@ export default {
       if (this.isDisb) return
       this.adr = !this.adr
     },
-    getRelse(i) {
-      //  TODO 获取编辑的数据
-      if (!this.activityId) return
-      getActiveRelse({ activityId: this.activityId }).then(res => {
-        if (res.code == 200) {
+    getRelse(){
+      let data = JSON.parse(sessionStorage.getItem('data'))
+      if(!this.activityId || !!data)return
+      getActiveRelse({activityId:this.activityId}).then(res => {
+        if(res.code == 200){
           let args = Object.assign(this.args, res.data)
           let add = !!args.memberGroupNum ? true : false
           this.args = args
-          this.args.startAt = i == 4 ? null : res.data.startAt + ':00'
-          this.args.endAt = i == 4 ? null : res.data.endAt + ':00'
-
-          this.zhaStart = i == 4 ? null : res.data.enrollStarttime + ':00' || null
-          this.zhaEnd = i == 4 ? null : res.data.enrollEndtime + ':00' || null
-          this.judge = res.data.result || ''
-          this.isFeedback = ~~res.data.isFeedback || 0
-          this.isTrain = ~~res.data.isTrain || 0((this.orgName = res.data.orgName))
+          this.args.startAt = this.isEdit==4?null:res.data.startAt + ':00'
+          this.args.endAt = this.isEdit==4?null:res.data.endAt + ':00'
+          this.zhaStart = this.isEdit==4?null:res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = this.isEdit==4?null:res.data.enrollEndtime + ':00' || null,
+          this.judge = res.data.result || '',
+          this.isFeedback = ~~res.data.isFeedback || 0,
+          this.isTrain = ~~res.data.isTrain || 0,
+          this.orgName = res.data.orgName,
+          this.add = add
           this.cover = [res.data.coverPic]
           this.coverMap = { [res.data.coverPic]: res.data.coverPicPath }
           this.image = [res.data.pic]
           this.imageMap = { [res.data.pic]: res.data.picPath }
-          this.judge = res.data.result
-          this.add = add
-          let arr = res.data.address.split('-')
-          let i = res.data.address.indexOf(res.data.addressSup)
-          this.args.address = res.data.address.substr(0, i - 1)
-          if (i === 4) {
+          let arr = res.data.address.split("-")
+          let i = (res.data.address).indexOf(res.data.addressSup)
+          this.args.address = (res.data.address).substr(0,i-1)
+          if(this.isEdit===4){
             this.args.status = 1
           }
           this.separation()
@@ -573,8 +584,10 @@ export default {
         if (item.coActivityRuleParamList) {
           this.forlist(item.coActivityRuleParamList)
         }
-        if (this.isEdit === 4) {
+        if(~~this.isEdit === 4){
           item.setTime = ''
+        }else if(!!item.setTime){
+          item.setTime = item.setTime + ':00'
         }
       }
       this.args.coActivityUserConfParamList = list
