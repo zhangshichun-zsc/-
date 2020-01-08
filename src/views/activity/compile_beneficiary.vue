@@ -462,7 +462,7 @@
                 </div>
                 <div class="role-tr" v-else-if="item.type == 9 " style="width:90%">
                   <span class="first-span">上传图片</span>
-                  <i-switch v-model="item.context" :true-value="1" :false-value="2" />
+                  <i-switch v-model="~~item.context" :true-value="1" :false-value="2" />
                 </div>
                 <div class="role-tr" v-else-if="item.type == 1" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
