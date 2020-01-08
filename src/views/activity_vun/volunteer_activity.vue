@@ -605,9 +605,9 @@ export default {
     },
 
     //全选按钮
-    chackall() {
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
+    chackall(e) {
+      this.state = !this.state;
+      this.$refs.selection.selectAll(this.state);
     }
   }
 };

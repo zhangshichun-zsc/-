@@ -88,7 +88,7 @@
                 </li>
                 <li>
                   <span>活动归属团队</span>
-                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))'>
+                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))' @on-change='changeTeam'>
                     <Option
                       v-for="(item,index) in orgList"
                       :value="item.orgId"
@@ -341,7 +341,7 @@
                 <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb"/>
               </i-col>        
           </Row>
-          <Row class-name="row20" type="flex" justify="center">
+          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2 || isEdit == 4">
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -463,7 +463,8 @@ export default {
       status: 0,
       image:null,
       cover:null,
-      once:false
+      once:false,
+      isAct:false
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -471,17 +472,9 @@ export default {
      next()
   },
   components: { wangeditor, adress },
-  watch:{
-    "args.orgId":function(val){
-      this.args.ownerUserId = null
-      this.args.ownerUserName = null
-      this.args.ownerUserTel = null
-      this.judge = ''
-    }
-  },
 
   created() {
-    let isEdit = this.$route.query.isEdit || 2
+    let isEdit = ~~this.$route.query.isEdit || 2
     let status = ~~this.$route.query.status || 0
     let isDisb = Number(isEdit) === 0 || Number(isEdit) === -1 || (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))? true : false
     this.isEdit = isEdit
@@ -489,12 +482,18 @@ export default {
     this.isDisb = isDisb
     this.activityId = this.$route.query.activityId
     this.initData()
-    this.getRelse(isEdit)
+    this.getRelse()
   },
   beforeDestroy(){
     console.log(111)
   },
   methods: {
+    changeTeam(e){
+      this.args.ownerUserId = null
+      this.args.ownerUserName = null
+      this.args.ownerUserTel = null
+      this.judge = ''
+    },
     blurInput(e){
       if(!this.args.ownerUserId){
         this.judge = ''
@@ -507,29 +506,29 @@ export default {
       if(this.isDisb)return
       this.adr = !this.adr
     },
-    getRelse(i){
-      if(!this.activityId)return
+    getRelse(){
+      let data = JSON.parse(sessionStorage.getItem('data'))
+      if(!this.activityId || !!data)return
       getActiveRelse({activityId:this.activityId}).then(res => {
         if(res.code == 200){
           let args = Object.assign(this.args, res.data)
           let add = !!args.memberGroupNum? true : false
           this.args = args
-          this.args.startAt = i==4?null:res.data.startAt + ':00'
-          this.args.endAt = i==4?null:res.data.endAt + ':00'
+          this.args.startAt = this.isEdit==4?null:res.data.startAt + ':00'
+          this.args.endAt = this.isEdit==4?null:res.data.endAt + ':00'
           this.image = res.data.picPath
-          this.zhaStart = i==4?null:res.data.enrollStarttime + ':00' || null,
-          this.zhaEnd = i==4?null:res.data.enrollEndtime + ':00' || null,
+          this.zhaStart = this.isEdit==4?null:res.data.enrollStarttime + ':00' || null,
+          this.zhaEnd = this.isEdit==4?null:res.data.enrollEndtime + ':00' || null,
           this.judge = res.data.result || '',
           this.isFeedback = ~~res.data.isFeedback || 0,
           this.isTrain = ~~res.data.isTrain || 0,
           this.orgName = res.data.orgName,
           this.cover = res.data.coverPicPath,
-          this.judge = res.data.result
           this.add = add
           let arr = res.data.address.split("-")
           let i = (res.data.address).indexOf(res.data.addressSup)
           this.args.address = (res.data.address).substr(0,i-1)
-          if(i===4){
+          if(this.isEdit===4){
             this.args.status = 1
           }
           this.separation()
@@ -548,8 +547,10 @@ export default {
         if (item.coActivityRuleParamList){
           this.forlist(item.coActivityRuleParamList)
         }
-        if(this.isEdit === 4){
+        if(~~this.isEdit === 4){
           item.setTime = ''
+        }else if(!!item.setTime){
+          item.setTime = item.setTime + ':00'
         }
       }
       this.args.coActivityUserConfParamList = list
