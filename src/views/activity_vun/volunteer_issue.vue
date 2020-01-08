@@ -98,41 +98,118 @@
               <ul>
                 <li>
                   <span>活动名称</span>
-                  <Input v-model="args.name" placeholder="请输入名称" style="width: 300px" :disabled="isDisb" />
+                  <Input
+                    v-model="args.name"
+                    placeholder="请输入名称"
+                    style="width: 300px"
+                    :disabled="isDisb"
+                  />
                 </li>
                 <li class="start">
                   <span>封面图片</span>
                   <div class="start-wap start-firt">
-                    <UploadImg :picMap="coverMap" :max="1" v-model="cover" :display-width="120" :display-height="120" :crop-width="128" :crop-height="128" :disabled="cover.length !== 0 && isDisb" ref="refCover"></UploadImg>
+                    <UploadImg
+                      :picMap="coverMap"
+                      :max="1"
+                      v-model="cover"
+                      :display-width="120"
+                      :display-height="120"
+                      :crop-width="128"
+                      :crop-height="128"
+                      :disabled="cover.length !== 0 && isDisb"
+                      ref="refCover"
+                    ></UploadImg>
                   </div>
                 </li>
                 <li class="start">
                   <span>活动图片</span>
                   <div class="start-wap">
-                    <UploadImg :picMap="imageMap" :max="1" v-model="image" :display-width="300" :crop-width="750" :crop-height="320" :disabled="image.length !== 0 && isDisb" ref="refImags"></UploadImg>
+                    <UploadImg
+                      :picMap="imageMap"
+                      :max="1"
+                      v-model="image"
+                      :display-width="300"
+                      :crop-width="750"
+                      :crop-height="320"
+                      :disabled="image.length !== 0 && isDisb"
+                      ref="refImags"
+                    ></UploadImg>
                   </div>
                 </li>
                 <li>
                   <span>活动归属团队</span>
-                  <Select v-model="args.orgId" style="width:300px" placement='bottom'  :disabled='isDisb || (!isDisb && (status === 1 || status === 2))' @on-change='changeTeam'>
+                  <Select
+                    v-model="args.orgId"
+                    style="width:300px"
+                    placement="bottom"
+                    :disabled="
+                      isDisb || (!isDisb && (status === 1 || status === 2))
+                    "
+                    @on-change="changeTeam"
+                  >
                     <Option
-                      v-for="(item,index) in orgList"
+                      v-for="(item, index) in orgList"
                       :value="item.orgId"
                       :key="index"
-                    >{{ item.orgName }}</Option>
+                      >{{ item.orgName }}</Option
+                    >
                   </Select>
                 </li>
                 <li class="flex-start">
                   <span>活动时间</span>
-                  <DatePicker :value="args.startAt" type="datetime" :options="options" placeholder="开始时间" :disabled="isDisb" confirm style="width: 150px" @on-change="handleChange(0, 'startAt', $event)" @on-open-change="successOk(0, $event)" format="yyyy-MM-dd HH:mm" />
+                  <DatePicker
+                    :value="args.startAt"
+                    type="datetime"
+                    :options="options"
+                    placeholder="开始时间"
+                    :disabled="isDisb"
+                    confirm
+                    style="width: 150px"
+                    @on-change="handleChange(0, 'startAt', $event)"
+                    @on-open-change="successOk(0, $event)"
+                    format="yyyy-MM-dd HH:mm"
+                  />
                   <i>&nbsp;~&nbsp;</i>
-                  <DatePicker :value="args.endAt" type="datetime" :options="options" :disabled="isDisb" placeholder="结束时间" @on-change="handleChange(0, 'endAt', $event)" @on-open-change="successOk(1, $event)" confirm style="width: 150px" format="yyyy-MM-dd HH:mm" />
+                  <DatePicker
+                    :value="args.endAt"
+                    type="datetime"
+                    :options="options"
+                    :disabled="isDisb"
+                    placeholder="结束时间"
+                    @on-change="handleChange(0, 'endAt', $event)"
+                    @on-open-change="successOk(1, $event)"
+                    confirm
+                    style="width: 150px"
+                    format="yyyy-MM-dd HH:mm"
+                  />
                 </li>
                 <li class="flex-start">
                   <span>招募时间</span>
-                  <DatePicker :value="zhaStart" type="datetime" :options="options" :disabled="isDisb" placeholder="开始时间" confirm style="width: 150px" @on-change="handleChange(1, 'zhaStart', $event)" @on-open-change="successOk(2, $event)" format="yyyy-MM-dd HH:mm" />
+                  <DatePicker
+                    :value="zhaStart"
+                    type="datetime"
+                    :options="options"
+                    :disabled="isDisb"
+                    placeholder="开始时间"
+                    confirm
+                    style="width: 150px"
+                    @on-change="handleChange(1, 'zhaStart', $event)"
+                    @on-open-change="successOk(2, $event)"
+                    format="yyyy-MM-dd HH:mm"
+                  />
                   <i>&nbsp;~&nbsp;</i>
-                  <DatePicker :value="zhaEnd" :disabled="isDisb" type="datetime" :options="options" placeholder="结束时间" @on-change="handleChange(1, 'zhaEnd', $event)" @on-open-change="successOk(3, $event)" confirm style="width: 150px" format="yyyy-MM-dd HH:mm" />
+                  <DatePicker
+                    :value="zhaEnd"
+                    :disabled="isDisb"
+                    type="datetime"
+                    :options="options"
+                    placeholder="结束时间"
+                    @on-change="handleChange(1, 'zhaEnd', $event)"
+                    @on-open-change="successOk(3, $event)"
+                    confirm
+                    style="width: 150px"
+                    format="yyyy-MM-dd HH:mm"
+                  />
                 </li>
               </ul>
             </div>
@@ -148,16 +225,31 @@
                     <Button @click="getAdr" class="adr">{{
                       args.address == null ? "点击选中地址" : args.address
                     }}</Button>
-                    <Input v-model="args.addressSup" placeholder="请输入详细地址" :disabled="isDisb" />
+                    <Input
+                      v-model="args.addressSup"
+                      placeholder="请输入详细地址"
+                      :disabled="isDisb"
+                    />
                   </div>
                 </li>
                 <li>
                   <span>现场负责人</span>
                   <div>
                     <div class="juge">
-                      <Input v-model="judge" placeholder="请输入" @on-change="changeInput" :disabled="isDisb" @on-blur="blurInput" />
+                      <Input
+                        v-model="judge"
+                        placeholder="请输入"
+                        @on-change="changeInput"
+                        :disabled="isDisb"
+                        @on-blur="blurInput"
+                      />
                       <div class="juge-drap" v-if="showJudge">
-                        <div class="drap-item" v-for="(item, index) in judgeList" :key="index" @click="getOwn(index)">
+                        <div
+                          class="drap-item"
+                          v-for="(item, index) in judgeList"
+                          :key="index"
+                          @click="getOwn(index)"
+                        >
                           {{ item.result }}
                         </div>
                       </div>
@@ -169,17 +261,28 @@
                 </li>
                 <li class="jobs">
                   <span>招募岗位</span>
-                  <p v-for="(item, index) in args.coActivityUserConfParamList" :key="index" @click.stop="jump(index)" style="cursor: pointer;margin-bottom:10px;">
+                  <p
+                    v-for="(item, index) in args.coActivityUserConfParamList"
+                    :key="index"
+                    @click.stop="jump(index)"
+                    style="cursor: pointer;margin-bottom:10px;"
+                  >
                     <span>{{ item.userPositionName }}</span>
                     <span>{{ item.recruitNum }}人</span>
                     <span>
                       详情
-                      <Icon type="ios-trash" @click.stop="deletUserPost(index)" v-if="!isDisb" />
+                      <Icon
+                        type="ios-trash"
+                        @click.stop="deletUserPost(index)"
+                        v-if="!isDisb"
+                      />
                     </span>
                   </p>
                 </li>
                 <li>
-                  <Button @click="jump(-1)" v-if="!isDisb">+新增招募角色</Button>
+                  <Button @click="jump(-1)" v-if="!isDisb"
+                    >+新增招募角色</Button
+                  >
                 </li>
                 <li>
                   <span>是否交保险</span>
@@ -211,14 +314,31 @@
                 </li>
                 <li>
                   <span>活动分类</span>
-                  <Select v-model="args.coActCatTypeList[0].typeDicId" style="width:300px" :label-in-value="true" @on-change="changeSelect" :disabled="isDisb">
-                    <Option v-for="(item, index) in array" :value="item.dicId" :key="index">{{ item.name }}</Option>
+                  <Select
+                    v-model="args.coActCatTypeList[0].typeDicId"
+                    style="width:300px"
+                    :label-in-value="true"
+                    @on-change="changeSelect"
+                    :disabled="isDisb"
+                  >
+                    <Option
+                      v-for="(item, index) in array"
+                      :value="item.dicId"
+                      :key="index"
+                      >{{ item.name }}</Option
+                    >
                   </Select>
                 </li>
                 <li class="active-cost">
                   <span>活动费用</span>
                   <div class="cost">
-                    <Input v-model="args.pay" placeholder="请输入" style="width: 300px" type="number" :disabled="isDisb" />
+                    <Input
+                      v-model="args.pay"
+                      placeholder="请输入"
+                      style="width: 300px"
+                      type="number"
+                      :disabled="isDisb"
+                    />
                     <p>此活动费用仅供参考，无需缴费</p>
                   </div>
                 </li>
@@ -232,7 +352,12 @@
           活动详情
         </i-col>
         <i-col span="16" push="1">
-          <wangeditor id="wange" :labels="args.detail" @change="changeEditor" :disabled="status == 3 || status == 4 ? false : isDisb" />
+          <wangeditor
+            id="wange"
+            :labels="args.detail"
+            @change="changeEditor"
+            :disabled="status == 3 || status == 4 ? false : isDisb"
+          />
         </i-col>
       </Row>
       <Row class-name="row20">
@@ -243,11 +368,21 @@
                 培训内容
               </i-col>
               <i-col span="3" push="2">
-                <i-switch v-model="isTrain" :true-value="1" :false-value="2" :disabled="isDisb" />
+                <i-switch
+                  v-model="isTrain"
+                  :true-value="1"
+                  :false-value="2"
+                  :disabled="isDisb"
+                />
               </i-col>
             </Row>
             <Row v-if="isTrain === 1">
-              <wangeditor :labels="train" id="ed1" @change="changeEditorTrain" :disabled="isDisb" />
+              <wangeditor
+                :labels="train"
+                id="ed1"
+                @change="changeEditorTrain"
+                :disabled="isDisb"
+              />
             </Row>
           </Row>
           <Row class-name="row20">
@@ -256,59 +391,136 @@
                 反馈内容
               </i-col>
               <i-col span="3" push="2">
-                <i-switch v-model="isFeedback" :true-value="1" :false-value="2" :disabled="isDisb" />
+                <i-switch
+                  v-model="isFeedback"
+                  :true-value="1"
+                  :false-value="2"
+                  :disabled="isDisb"
+                />
               </i-col>
             </Row>
             <Row v-if="isFeedback === 1">
               <Row v-for="(item, index) in feed" :key="index">
-                <Row v-if="index == 0" class-name="row10" type="flex" justify="space-between">
+                <Row
+                  v-if="index == 0"
+                  class-name="row10"
+                  type="flex"
+                  justify="space-between"
+                >
                   <i-col span="5">反馈简介</i-col>
                   <i-col span="16">
-                    <i-input placeholder="请输入反馈内容" v-model="item.detailText" type="textarea" :disabled="isDisb" :row="4" />
+                    <i-input
+                      placeholder="请输入反馈内容"
+                      v-model="item.detailText"
+                      type="textarea"
+                      :disabled="isDisb"
+                      :row="4"
+                    />
                   </i-col>
                 </Row>
-                <Row v-else-if="~~item.typeFlag === 9" class-name="row10" type="flex" justify="space-between">
+                <Row
+                  v-else-if="~~item.typeFlag === 9"
+                  class-name="row10"
+                  type="flex"
+                  justify="space-between"
+                >
                   <i-col span="5">是否上传图片</i-col>
                   <i-col span="16">
-                    <i-switch :disabled="isDisb" :true-value="1" :false-value="0" v-model="item.detailText" />
+                    <i-switch
+                      :disabled="isDisb"
+                      :true-value="1"
+                      :false-value="0"
+                      v-model="item.detailText"
+                    />
                   </i-col>
                 </Row>
-                <Row v-else-if="~~item.typeFlag === 1 || ~~item.typeFlag === 6" class-name="row10" type="flex" justify="space-between">
+                <Row
+                  v-else-if="~~item.typeFlag === 1 || ~~item.typeFlag === 6"
+                  class-name="row10"
+                  type="flex"
+                  justify="space-between"
+                >
                   <i-col span="5">
-                    <i-input placeholder="标题" v-model="item.detailText" :disabled="isDisb" />
+                    <i-input
+                      placeholder="标题"
+                      v-model="item.detailText"
+                      :disabled="isDisb"
+                    />
                   </i-col>
                   <i-col span="4">
-                    <i-switch :disabled="isDisb" :true-value="1" :false-value="0" v-model="item.isMust" />
+                    <i-switch
+                      :disabled="isDisb"
+                      :true-value="1"
+                      :false-value="0"
+                      v-model="item.isMust"
+                    />
                     <span>必填</span>
                   </i-col>
                   <i-col span="2">
-                    <Icon type="ios-trash" @click="deleItem(index, null)" v-if="!isDisb" color="#FF565A" size="28" />
+                    <Icon
+                      type="ios-trash"
+                      @click="deleItem(index, null)"
+                      v-if="!isDisb"
+                      color="#FF565A"
+                      size="28"
+                    />
                   </i-col>
                 </Row>
                 <Row v-else-if="~~item.typeFlag === 3 || ~~item.typeFlag === 4">
                   <Row type="flex" justify="space-between" class-name="row10">
                     <i-col span="5">
-                      <i-input placeholder="请输入标题" v-model="item.detailText" :disabled="isDisb" />
+                      <i-input
+                        placeholder="请输入标题"
+                        v-model="item.detailText"
+                        :disabled="isDisb"
+                      />
                     </i-col>
                     <i-col span="4">
-                      <i-switch :disabled="isDisb" :true-value="1" :false-value="0" v-model="item.isMust" />
+                      <i-switch
+                        :disabled="isDisb"
+                        :true-value="1"
+                        :false-value="0"
+                        v-model="item.isMust"
+                      />
                       <span>必填</span>
                     </i-col>
                     <i-col span="2">
-                      <Icon type="ios-trash" @click="deleItem(index, null)" v-if="!isDisb" color="#FF565A" size="28" />
+                      <Icon
+                        type="ios-trash"
+                        @click="deleItem(index, null)"
+                        v-if="!isDisb"
+                        color="#FF565A"
+                        size="28"
+                      />
                     </i-col>
                   </Row>
                   <Row v-for="(val, i) in item.arr" :key="i" class-name="row10">
                     <i-col span="5">
-                      <i-input :placeholder="`输入选项${i + 1}`" v-model="val.value" :disabled="isDisb" />
+                      <i-input
+                        :placeholder="`输入选项${i + 1}`"
+                        v-model="val.value"
+                        :disabled="isDisb"
+                      />
                     </i-col>
                     <i-col span="2" push="2">
-                      <Icon type="ios-trash" @click="deleItem(index, i)" v-if="!isDisb" color="#FF565A" size="28" />
+                      <Icon
+                        type="ios-trash"
+                        @click="deleItem(index, i)"
+                        v-if="!isDisb"
+                        color="#FF565A"
+                        size="28"
+                      />
                     </i-col>
                   </Row>
                   <Row>
                     <i-col push="8" span="2">
-                      <Button type="primary" ghost @click="addSignIput(index)" v-if="!isDisb">+</Button>
+                      <Button
+                        type="primary"
+                        ghost
+                        @click="addSignIput(index)"
+                        v-if="!isDisb"
+                        >+</Button
+                      >
                     </i-col>
                   </Row>
                 </Row>
@@ -316,7 +528,13 @@
               <Row v-if="!isDisb">
                 <i-col span="3">新增反馈项</i-col>
                 <i-col span="19" push="2">
-                  <Button class="btn" v-for="(item, index) in feedList" :key="index" @click="addItem(item.type)">{{ item.name }}</Button>
+                  <Button
+                    class="btn"
+                    v-for="(item, index) in feedList"
+                    :key="index"
+                    @click="addItem(item.type)"
+                    >{{ item.name }}</Button
+                  >
                 </i-col>
               </Row>
             </Row>
@@ -324,10 +542,19 @@
           <Row class-name="row20">
             <i-col span="3">受益群体人数</i-col>
             <i-col span="5" push="2">
-              <Input v-model="args.memberGroupNum" placeholder="输入受益群体人数" :disabled="isDisb" />
+              <Input
+                v-model="args.memberGroupNum"
+                placeholder="输入受益群体人数"
+                :disabled="isDisb"
+              />
             </i-col>
           </Row>
-          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2 || isEdit == 4">
+          <Row
+            class-name="row20"
+            type="flex"
+            justify="center"
+            v-if="isEdit == 1 || isEdit == 2 || isEdit == 4"
+          >
             <Radio v-model="single">
               我同意
               <a @click="showRule">《活动发布规则》</a>
@@ -338,8 +565,21 @@
       <Row class-name="row20">
         <i-col push="18" span="6">
           <div class="btns">
-            <Button @click="sumbmit(8)" shape="circle" size='large' class="left" v-if=" isEdit == 2 || isEdit == 3">存为草稿</Button>
-            <Button @click="sumbmit(1)" shape="circle" size='large' class="right">{{isEdit ==1?"保存":"发布"}}</Button>
+            <Button
+              @click="sumbmit(8)"
+              shape="circle"
+              size="large"
+              class="left"
+              v-if="isEdit == 2 || isEdit == 3"
+              >存为草稿</Button
+            >
+            <Button
+              @click="sumbmit(1)"
+              shape="circle"
+              size="large"
+              class="right"
+              >{{ isEdit == 1 ? "保存" : "发布" }}</Button
+            >
           </div>
         </i-col>
       </Row>
@@ -357,33 +597,33 @@ import {
   orgimgdel,
   saveActive,
   getActiveRelse
-} from '@/request/api'
-import { getAdressId } from '@/libs/utils'
-import wangeditor from '_c/wangeditor'
-import adress from '_c/map'
-import { upload } from '@/request/http'
-import { filterNull } from '@/libs/utils'
-import { stat, constants } from 'fs'
-import { isDate } from 'util'
+} from "@/request/api";
+import { getAdressId } from "@/libs/utils";
+import wangeditor from "_c/wangeditor";
+import adress from "_c/map";
+import { upload } from "@/request/http";
+import { filterNull } from "@/libs/utils";
+import { stat, constants } from "fs";
+import { isDate } from "util";
 export default {
   data() {
     return {
       options: {
         disabledDate(date) {
-          return date && date.valueOf() < Date.now() - 86400000
+          return date && date.valueOf() < Date.now() - 86400000;
         }
       },
       rule: false,
       navigation1: {
-        head: '志愿者活动发布(志愿者)'
+        head: "志愿者活动发布(志愿者)"
       },
       single: false,
       adr: false,
       feedList: [
-        { name: '单行文本', type: 1 },
-        { name: '多行文本', type: 6 },
-        { name: '单选问题', type: 3 },
-        { name: '多选问题', type: 4 }
+        { name: "单行文本", type: 1 },
+        { name: "多行文本", type: 6 },
+        { name: "单选问题", type: 3 },
+        { name: "多选问题", type: 4 }
       ],
       isDisb: false,
       feed: [
@@ -407,16 +647,34 @@ export default {
       train: null,
       isFeedback: 0,
       isTrain: 0,
-      actveType: '',
+      actveType: "",
       array: [],
-      judge: '',
+      judge: "",
       judgeList: [],
       showJudge: false,
       zhaStart: null,
       zhaEnd: null,
       isEdit: 2,
       orgList: [],
-      ab: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q'],
+      ab: [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q"
+      ],
       args: {
         isNeedCertMould: null,
         name: null,
@@ -471,168 +729,166 @@ export default {
       coverMap: {},
       imageMap: {},
       once: false,
-      image:null,
-      cover:null,
-      once:false,
-      isAct:false
-    }
+      isAct: false
+    };
   },
   beforeRouteLeave(to, from, next) {
-    if (to.name !== 'volunteer_compile') sessionStorage.removeItem('data')
-    next()
+    if (to.name !== "volunteer_compile") sessionStorage.removeItem("data");
+    next();
   },
   components: { wangeditor, adress },
-  watch: {
-    'args.orgId': function(val) {
-      this.args.ownerUserId = null
-      this.args.ownerUserName = null
-      this.args.ownerUserTel = null
-      this.judge = ''
-    },
-    cover: {
-      handler(newValue, oldValue) {
-        this.args.coverPic = newValue[0] || null
-      },
-      deep: true
-    },
-    image: {
-      handler(newValue, oldValue) {
-        this.args.pic = newValue[0] || null
-      },
-      deep: true
-    }
-  },
 
   created() {
-    let isEdit = ~~this.$route.query.isEdit || 2
-    let status = ~~this.$route.query.status || 0
+    let isEdit = ~~this.$route.query.isEdit || 2;
+    let status = ~~this.$route.query.status || 0;
     let isDisb =
       Number(isEdit) === 0 ||
       Number(isEdit) === -1 ||
       (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))
         ? true
-        : false
-    this.isEdit = isEdit
-    this.status = status
-    this.isDisb = isDisb
-    this.activityId = this.$route.query.activityId
-    this.initData()
-    this.getRelse()
+        : false;
+    this.isEdit = isEdit;
+    this.status = status;
+    this.isDisb = isDisb;
+    this.activityId = this.$route.query.activityId;
+    this.initData();
+    this.getRelse();
   },
   beforeDestroy() {
-    console.log(111)
+    console.log(111);
+  },
+  watch: {
+    cover: {
+      handler(newValue, oldValue) {
+        this.args.coverPic = newValue[0] || null;
+      },
+      deep: true
+    },
+    image: {
+      handler(newValue, oldValue) {
+        this.args.pic = newValue[0] || null;
+      },
+      deep: true
+    }
   },
   methods: {
-    changeTeam(e){
-      this.args.ownerUserId = null
-      this.args.ownerUserName = null
-      this.args.ownerUserTel = null
-      this.judge = ''
+    changeTeam(e) {
+      this.args.ownerUserId = null;
+      this.args.ownerUserName = null;
+      this.args.ownerUserTel = null;
+      this.judge = "";
     },
-    blurInput(e){
-      if(!this.args.ownerUserId){
-        this.judge = ''
+    blurInput(e) {
+      if (!this.args.ownerUserId) {
+        this.judge = "";
       }
     },
     showRule() {
-      this.rule = true
+      this.rule = true;
     },
     getAdr() {
-      if (this.isDisb) return
-      this.adr = !this.adr
+      if (this.isDisb) return;
+      this.adr = !this.adr;
     },
-    getRelse(){
-      let data = JSON.parse(sessionStorage.getItem('data'))
-      if(!this.activityId || !!data)return
-      getActiveRelse({activityId:this.activityId}).then(res => {
-        if(res.code == 200){
-          let args = Object.assign(this.args, res.data)
-          let add = !!args.memberGroupNum ? true : false
-          this.args = args
-          this.args.startAt = this.isEdit==4?null:res.data.startAt + ':00'
-          this.args.endAt = this.isEdit==4?null:res.data.endAt + ':00'
-          this.zhaStart = this.isEdit==4?null:res.data.enrollStarttime + ':00' || null,
-          this.zhaEnd = this.isEdit==4?null:res.data.enrollEndtime + ':00' || null,
-          this.judge = res.data.result || '',
-          this.isFeedback = ~~res.data.isFeedback || 0,
-          this.isTrain = ~~res.data.isTrain || 0,
-          this.orgName = res.data.orgName,
-          this.add = add
-          this.cover = [res.data.coverPic]
-          this.coverMap = { [res.data.coverPic]: res.data.coverPicPath }
-          this.image = [res.data.pic]
-          this.imageMap = { [res.data.pic]: res.data.picPath }
-          let arr = res.data.address.split("-")
-          let i = (res.data.address).indexOf(res.data.addressSup)
-          this.args.address = (res.data.address).substr(0,i-1)
-          if(this.isEdit===4){
-            this.args.status = 1
+    getRelse() {
+      let data = JSON.parse(sessionStorage.getItem("data"));
+      if (!this.activityId || !!data) return;
+      getActiveRelse({ activityId: this.activityId }).then(res => {
+        if (res.code == 200) {
+          let args = Object.assign(this.args, res.data);
+          let add = !!args.memberGroupNum ? true : false;
+          this.args = args;
+          this.args.startAt =
+            this.isEdit == 4 ? null : res.data.startAt + ":00";
+          this.args.endAt = this.isEdit == 4 ? null : res.data.endAt + ":00";
+          this.zhaStart =
+            this.isEdit == 4 ? null : res.data.enrollStarttime + ":00" || null;
+          this.zhaEnd =
+            this.isEdit == 4 ? null : res.data.enrollEndtime + ":00" || null;
+          this.judge = res.data.result || "";
+          this.isFeedback = ~~res.data.isFeedback || 0;
+          this.isTrain = ~~res.data.isTrain || 0;
+          this.orgName = res.data.orgName;
+          this.add = add;
+
+          // TODo 图片赋值
+          this.cover = [res.data.coverPic];
+          this.coverMap = { [res.data.coverPic]: res.data.coverPicPath };
+          this.image = [res.data.pic];
+          this.imageMap = { [res.data.pic]: res.data.picPath };
+          // END
+
+          let arr = res.data.address.split("-");
+          let i = res.data.address.indexOf(res.data.addressSup);
+          this.args.address = res.data.address.substr(0, i - 1);
+          if (this.isEdit === 4) {
+            this.args.status = 1;
           }
-          this.separation()
-          this.filter()
+          this.separation();
+          this.filter();
         } else {
-          this.$Message.error(res.msg)
+          this.$Message.error(res.msg);
         }
-      })
+      });
     },
     filter() {
-      let list = this.args.coActivityUserConfParamList
+      let list = this.args.coActivityUserConfParamList;
       for (let item of list) {
         if (item.coActivityItemList) {
-          this.forlist(item.coActivityItemList)
+          this.forlist(item.coActivityItemList);
         }
         if (item.coActivityRuleParamList) {
-          this.forlist(item.coActivityRuleParamList)
+          this.forlist(item.coActivityRuleParamList);
         }
-        if(~~this.isEdit === 4){
-          item.setTime = ''
-        }else if(!!item.setTime){
-          item.setTime = item.setTime + ':00'
+        if (~~this.isEdit === 4) {
+          item.setTime = "";
+        } else if (!!item.setTime) {
+          item.setTime = item.setTime + ":00";
         }
       }
-      this.args.coActivityUserConfParamList = list
+      this.args.coActivityUserConfParamList = list;
     },
     forlist(list) {
       for (let val of list) {
         if (val.actUserConfId || val.activityId || val.activityRuleId) {
-          delete val.actUserConfId
-          delete val.activityId
-          delete val.activityRuleId
+          delete val.actUserConfId;
+          delete val.activityId;
+          delete val.activityRuleId;
         }
         if (val.activityItemId) {
-          delete val.activityItemId
+          delete val.activityItemId;
         }
       }
     },
     separation() {
-      let args = this.args
-      ;(this.train = args.trainComments || null), (this.feed = args.coDetailList)
-      this.spliced()
+      let args = this.args;
+      (this.train = args.trainComments || null),
+        (this.feed = args.coDetailList);
+      this.spliced();
     },
     spliced() {
       if (this.isEdit !== 2) {
-        let itemList = this.feed
+        let itemList = this.feed;
         for (let item of itemList) {
           if (
             (~~item.targetType === 3 || ~~item.targetType === 4) &&
-            typeof item.arr[0] !== 'object'
+            typeof item.arr[0] !== "object"
           ) {
-            let arr = []
-            let list = item.arr
+            let arr = [];
+            let list = item.arr;
             for (let m = 0, len = list.length; m < len; m++) {
-              arr.push({ value: list[m] })
+              arr.push({ value: list[m] });
             }
-            item.arr = arr
+            item.arr = arr;
           }
         }
-        this.feed = itemList
+        this.feed = itemList;
       }
     },
     deletUserPost(i) {
-      this.$delete(this.args.coActivityUserConfParamList, i)
+      this.$delete(this.args.coActivityUserConfParamList, i);
     },
     jump(i) {
-      // TODO 跳转前保存
       let data = {
         isFeedback: this.isFeedback,
         isTrain: this.isTrain,
@@ -644,40 +900,43 @@ export default {
         judge: this.judge,
         train: this.train,
         feed: this.feed,
+
+        // TODO 图片
         coverPicPath: this.$refs.refCover.imgList[0].previewUrl,
         cover: this.$refs.refCover.imgList[0].url,
         image: this.$refs.refImags.imgList[0].url,
         picPath: this.$refs.refImags.imgList[0].previewUrl
-      }
-      sessionStorage.setItem('data', JSON.stringify(data))
-      this.$router.push({ name: 'volunteer_compile', query: { i } })
+        // END
+      };
+      sessionStorage.setItem("data", JSON.stringify(data));
+      this.$router.push({ name: "volunteer_compile", query: { i } });
     },
     deleItem(i, m) {
-      let feed = this.feed
+      let feed = this.feed;
       if (m !== null) {
-        let arr = feed[i].arr
+        let arr = feed[i].arr;
         if (arr.length > 2) {
-          arr.splice(m, 1)
+          arr.splice(m, 1);
         } else {
-          this.$Message.warning('必须留两个')
-          return
+          this.$Message.warning("必须留两个");
+          return;
         }
       } else {
-        feed.splice(i, 1)
+        feed.splice(i, 1);
       }
       for (let i = 0, len = feed.length; i < len; i++) {
-        feed[i].sort = i + 1
+        feed[i].sort = i + 1;
       }
-      this.feed = feed
+      this.feed = feed;
     },
     addSignIput(i) {
-      let feed = this.feed
-      let arr = feed[i].arr
-      arr.push({ value: null })
-      this.feed = feed
+      let feed = this.feed;
+      let arr = feed[i].arr;
+      arr.push({ value: null });
+      this.feed = feed;
     },
     addItem(type) {
-      let feed = this.feed
+      let feed = this.feed;
       let args = {
         sysId: 2,
         typeFlag: type,
@@ -685,67 +944,68 @@ export default {
         detailText: null,
         sort: feed.length + 1,
         isMust: 0
-      }
+      };
       if (type === 4 || type === 3) {
-        args.arr = [{ value: null }, { value: null }, { value: null }]
+        args.arr = [{ value: null }, { value: null }, { value: null }];
       }
-      feed.push(args)
-      this.feed = feed
+      feed.push(args);
+      this.feed = feed;
     },
     changeEditor(html) {
-      this.args.detail = html
+      this.args.detail = html;
     },
     changeEditorTrain(html) {
-      this.train = html
+      this.train = html;
     },
     initData() {
-      // TODO 展示保存的数据
-      this.userId = localStorage.getItem('userId')
-      let data = JSON.parse(sessionStorage.getItem('data'))
+      this.userId = localStorage.getItem("userId");
+      let data = JSON.parse(sessionStorage.getItem("data"));
       if (data) {
-        this.args = data.args
-        this.isDisb = data.isDisb
-        this.zhaStart = data.zhaStart
-        this.zhaEnd = data.zhaEnd
-        this.judge = data.judge
-        this.isFeedback = data.isFeedback
-        this.isTrain = data.isTrain
-        this.train = data.train
-        this.feed = data.feed
-        this.cover = [data.cover]
-        this.coverMap = { [data.cover]: data.coverPicPath }
-        this.image = [data.image]
-        this.imageMap = { [data.image]: data.picPath }
+        this.args = data.args;
+        this.isDisb = data.isDisb;
+        this.zhaStart = data.zhaStart;
+        this.zhaEnd = data.zhaEnd;
+        this.judge = data.judge;
+        this.isFeedback = data.isFeedback;
+        this.isTrain = data.isTrain;
+        this.train = data.train;
+        this.feed = data.feed;
+
+        // TODO 图片
+        this.cover = [data.cover];
+        this.coverMap = { [data.cover]: data.coverPicPath };
+        this.image = [data.image];
+        this.imageMap = { [data.image]: data.picPath };
+        // END
       }
       getOrgTeam({}).then(res => {
-        this.orgList = res.data
-      })
+        this.orgList = res.data;
+      });
       getActiveType({ typeFlag: 7 }).then(res => {
-        this.array = res.data
-      })
+        this.array = res.data;
+      });
     },
-
     changeInput(e) {
       if (!this.args.orgId) {
-        this.$Message.info('需要选择团队归属')
-        return
+        this.$Message.info("需要选择团队归属");
+        return;
       }
-      let param = this.judge
+      let param = this.judge;
       getOrgId({ orgId: this.args.orgId, param }).then(res => {
-        this.judgeList = res.data
-        this.showJudge = res.data.length == 0 ? false : true
-        this.args.ownerUserId = null
-        this.args.ownerUserName = null
-        this.args.ownerUserTel = null
-      })
+        this.judgeList = res.data;
+        this.showJudge = res.data.length == 0 ? false : true;
+        this.args.ownerUserId = null;
+        this.args.ownerUserName = null;
+        this.args.ownerUserTel = null;
+      });
     },
     getOwn(i) {
-      let item = this.judgeList[i]
-      ;(this.judge = item.result),
+      let item = this.judgeList[i];
+      (this.judge = item.result),
         (this.args.ownerUserId = item.userId),
         (this.args.ownerUserName = item.userName),
         (this.args.ownerUserTel = item.tel),
-        (this.showJudge = false)
+        (this.showJudge = false);
     },
     changeSelect(e) {
       this.args.coActCatTypeList = [
@@ -754,100 +1014,105 @@ export default {
           typeDicName: e.label,
           typeFlag: 3
         }
-      ]
+      ];
     },
     getMap(e) {
-      this.args.provinceId = e.provinceId
-      this.args.cityId = e.cityId
-      this.args.districtId = e.districtId
-      this.args.xx = e.xx
-      this.args.yy = e.yy
-      this.$set(this.args, 'address', e.address)
+      this.args.provinceId = e.provinceId;
+      this.args.cityId = e.cityId;
+      this.args.districtId = e.districtId;
+      this.args.xx = e.xx;
+      this.args.yy = e.yy;
+      this.$set(this.args, "address", e.address);
     },
     successOk(m, e) {
-      if (e) return
+      if (e) return;
       if (m == 0 || m == 1) {
         if (m == 0 && !!this.args.startAt) {
-          console.log(new Date(this.args.startAt).getTime() >= new Date().getTime())
+          console.log(
+            new Date(this.args.startAt).getTime() >= new Date().getTime()
+          );
           if (new Date(this.args.startAt).getTime() < new Date().getTime()) {
-            this.$Message.warning('活动开始时间要晚于当前时间')
-            this.$set(this.args, 'startAt', '')
+            this.$Message.warning("活动开始时间要晚于当前时间");
+            this.$set(this.args, "startAt", "");
           } else if (
             !!this.args.endAt &&
-            new Date(this.args.startAt).getTime() >= new Date(this.args.endAt).getTime()
+            new Date(this.args.startAt).getTime() >=
+              new Date(this.args.endAt).getTime()
           ) {
-            this.$Message.warning('活动开始时间要早于活动结束时间')
-            this.$set(this.args, 'startAt', '')
+            this.$Message.warning("活动开始时间要早于活动结束时间");
+            this.$set(this.args, "startAt", "");
           } else if (
             !!this.zhaEnd &&
-            new Date(this.args.startAt).getTime() <= new Date(this.zhaEnd).getTime()
+            new Date(this.args.startAt).getTime() <=
+              new Date(this.zhaEnd).getTime()
           ) {
-            this.$Message.warning('活动开始时间要晚于招募结束时间')
-            this.$set(this.args, 'startAt', '')
+            this.$Message.warning("活动开始时间要晚于招募结束时间");
+            this.$set(this.args, "startAt", "");
           }
         } else if (m == 1 && !!this.args.endAt) {
           if (new Date(this.args.endAt).getTime() < new Date().getTime()) {
-            this.$Message.warning('活动结束时间要晚于当前时间')
-            this.$set(this.args, 'endAt', '')
+            this.$Message.warning("活动结束时间要晚于当前时间");
+            this.$set(this.args, "endAt", "");
           } else if (
             !!this.args.startAt &&
-            new Date(this.args.startAt).getTime() >= new Date(this.args.endAt).getTime()
+            new Date(this.args.startAt).getTime() >=
+              new Date(this.args.endAt).getTime()
           ) {
-            this.$Message.warning('活动开始时间要早于活动结束时间')
-            this.$set(this.args, 'endAt', '')
+            this.$Message.warning("活动开始时间要早于活动结束时间");
+            this.$set(this.args, "endAt", "");
           }
         }
       } else {
         if (m == 2 && !!this.zhaStart) {
           if (new Date(this.zhaStart).getTime() < new Date().getTime()) {
-            this.$Message.warning('招募开始时间要晚于当前时间')
-            this.zhaStart = ''
+            this.$Message.warning("招募开始时间要晚于当前时间");
+            this.zhaStart = "";
           } else if (
             !!this.zhaEnd &&
             new Date(this.zhaStart).getTime() >= new Date(this.zhaEnd).getTime()
           ) {
-            this.$Message.warning('活动开始时间要早于活动结束时间')
-            this.zhaStart = ''
+            this.$Message.warning("活动开始时间要早于活动结束时间");
+            this.zhaStart = "";
           }
         } else if (m == 3 && !!this.zhaEnd) {
           if (new Date(this.zhaEnd).getTime() < new Date().getTime()) {
-            this.$Message.warning('招募结束时间要晚于当前时间')
-            this.zhaEnd = ''
+            this.$Message.warning("招募结束时间要晚于当前时间");
+            this.zhaEnd = "";
           } else if (
             !!this.zhaStart &&
             new Date(this.zhaStart).getTime() >= new Date(this.zhaEnd).getTime()
           ) {
-            this.$Message.warning('活动开始时间要早于活动结束时间')
-            this.zhaEnd = ''
+            this.$Message.warning("活动开始时间要早于活动结束时间");
+            this.zhaEnd = "";
           } else if (
             !!this.args.startAt &&
-            new Date(this.args.startAt).getTime() <= new Date(this.zhaEnd).getTime()
+            new Date(this.args.startAt).getTime() <=
+              new Date(this.zhaEnd).getTime()
           ) {
-            this.$Message.warning('活动开始时间要晚于招募结束时间')
-            this.zhaEnd = ''
+            this.$Message.warning("活动开始时间要晚于招募结束时间");
+            this.zhaEnd = "";
           }
         }
       }
     },
     handleChange(i, name, e) {
-      let time = e
+      let time = e;
       if (time) {
-        time = time + ':00'
+        time = time + ":00";
       }
       if (i === 0) {
-        this.args[name] = time
+        this.args[name] = time;
       } else {
-        this[name] = time
+        this[name] = time;
       }
     },
     sumbmit(i) {
-      let item = this.args
+      let item = this.args;
       if (i == 1) {
         if (this.single == false) {
-          this.$Message.warning('你没有同意发布规则')
-          return
+          this.$Message.warning("你没有同意发布规则");
+          return;
         } else if (
-          // TODO 需要修改 两张图片的判断条件
           item.name == null ||
           item.coverPic == null ||
           item.pic == null ||
@@ -865,125 +1130,128 @@ export default {
           item.coActCatTypeList[0].typeDicId == null ||
           item.detail == null
         ) {
-          this.$Message.warning('活动内容填写不完整')
-          return
+          this.$Message.warning("活动内容填写不完整");
+          return;
         } else if (item.ownerUserId == null) {
-          this.$Message.warning('请选择现场负责人')
-          return
+          this.$Message.warning("请选择现场负责人");
+          return;
         } else if (this.isFeedback == 1) {
           for (let val of this.feed) {
-            if (val.detailText === '' || val.detailText === null) {
-              this.$Message.warning('你已经勾选反馈，必须完善反馈项')
-              return
+            if (val.detailText === "" || val.detailText === null) {
+              this.$Message.warning("你已经勾选反馈，必须完善反馈项");
+              return;
             } else if (val.arr) {
               for (let em of val.arr) {
-                if (em.value === '' || em.value === null) {
-                  this.$Message.warning('你已经勾选反馈，选项没完善')
-                  return
+                if (em.value === "" || em.value === null) {
+                  this.$Message.warning("你已经勾选反馈，选项没完善");
+                  return;
                 }
               }
             }
           }
         } else if (this.isTrain == 1) {
           if (!this.train) {
-            this.$Message.warning('你已经勾选培训，必须完善')
-            return
+            this.$Message.warning("你已经勾选培训，必须完善");
+            return;
           }
         }
       } else {
         if (item.name == null) {
-          this.$Message.warning('至少填写活动名称')
-          return
+          this.$Message.warning("至少填写活动名称");
+          return;
         }
-        if (this.isFeedback == 1 && item.coActivityUserConfParamList.length == 0) {
-          this.$Message.warning('反馈填写，岗位必须填写')
-          return
+        if (
+          this.isFeedback == 1 &&
+          item.coActivityUserConfParamList.length == 0
+        ) {
+          this.$Message.warning("反馈填写，岗位必须填写");
+          return;
         }
         if (this.isTrain == 1 && item.coActivityUserConfParamList.length == 0) {
-          this.$Message.warning('培训填写，岗位必须填写')
-          return
+          this.$Message.warning("培训填写，岗位必须填写");
+          return;
         }
       }
-      if (this.once) return
-      this.once = true
-      let list = item.coActivityUserConfParamList
+      if (this.once) return;
+      this.once = true;
+      let list = item.coActivityUserConfParamList;
       for (let i = 0, len = list.length; i < len; i++) {
-        list[i].coActivityItemList = this.dealSelect(list[i].coActivityItemList)
+        list[i].coActivityItemList = this.dealSelect(
+          list[i].coActivityItemList
+        );
       }
-      this.dealData(list, item.startAt)
-      item.coActivityUserConfParamList = list
+      this.dealData(list, item.startAt);
+      item.coActivityUserConfParamList = list;
       if (this.isEdit !== 1) {
-        item.status = i
+        item.status = i;
       } else {
-        item.activityId = this.activityId
+        item.activityId = this.activityId;
       }
-      item.userId = this.userId
+      item.userId = this.userId;
       if (i == 1) {
-        item.releaseTime = this.getTime()
+        item.releaseTime = this.getTime();
       }
-      if (this.isEdit == 4) delete item.activityId
-      let obj = filterNull(item)
-      obj.title = obj.name
-      console.log(obj)
-
+      if (this.isEdit == 4) delete item.activityId;
+      let obj = filterNull(item);
+      obj.title = obj.name;
       saveActive(obj).then(res => {
-        this.once = false
+        this.once = false;
         if (res.code == 200) {
-          this.$router.replace({ name: 'volunteer_activity' })
-          sessionStorage.removeItem('data')
-          this.$Message.success('发布成功')
+          this.$router.replace({ name: "volunteer_activity" });
+          sessionStorage.removeItem("data");
+          this.$Message.success("发布成功");
         } else {
-          this.$Message.warning(res.msg)
+          this.$Message.warning(res.msg);
         }
-      })
+      });
     },
     dealData(list, startAt) {
-      let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : []
-      let train = this.isTrain == 1 ? this.train : null
-      let zhaStart = this.zhaStart
-      let zhaEnd = this.zhaEnd
+      let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : [];
+      let train = this.isTrain == 1 ? this.train : null;
+      let zhaStart = this.zhaStart;
+      let zhaEnd = this.zhaEnd;
       for (let i = 0, len = list.length; i < len; i++) {
-        list[i].isFeedback = this.isFeedback
-        list[i].isTrain = this.isTrain
-        list[i].coDetailList = ls
-        list[i].trainComments = train
-        list[i].enrollEndtime = zhaEnd
-        list[i].enrollStarttime = zhaStart
-        list[i].outrollStarttime = zhaStart
-        list[i].outrollEndtime = startAt
+        list[i].isFeedback = this.isFeedback;
+        list[i].isTrain = this.isTrain;
+        list[i].coDetailList = ls;
+        list[i].trainComments = train;
+        list[i].enrollEndtime = zhaEnd;
+        list[i].enrollStarttime = zhaStart;
+        list[i].outrollStarttime = zhaStart;
+        list[i].outrollEndtime = startAt;
       }
     },
     dealSelect(list) {
       if (list.length !== 0) {
         for (let i = 0, len = list.length; i < len; i++) {
           if (list[i].arr) {
-            let arr = list[i].arr
-            let ar = this.ab
+            let arr = list[i].arr;
+            let ar = this.ab;
             for (let m = 0, len = arr.length; m < len; m++) {
-              list[i][`answer${ar[m]}`] = arr[m].value
+              list[i][`answer${ar[m]}`] = arr[m].value;
             }
           }
         }
-        return list
+        return list;
       } else {
-        return []
+        return [];
       }
     },
     getTime() {
-      const date = new Date()
-      const year = date.getFullYear()
-      const month = date.getMonth() + 1
-      const day = date.getDate()
-      const hour = date.getHours()
-      const mine = date.getMinutes()
-      const ss = date.getSeconds()
-      return `${year}-${month}-${day} ${hour}:${mine}:00`
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hour = date.getHours();
+      const mine = date.getMinutes();
+      const ss = date.getSeconds();
+      return `${year}-${month}-${day} ${hour}:${mine}:00`;
     },
     apply() {
-      this.$router.push({ name: 'volunteer_apply', params: { sysId: '2,3' } })
+      this.$router.push({ name: "volunteer_apply", params: { sysId: "2,3" } });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .content {
