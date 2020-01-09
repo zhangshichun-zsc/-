@@ -70,6 +70,7 @@
               @click="Jump(index)"
               v-for="(item, index) in Jumplist"
               :key="index"
+              class="icon_box"
             >
               <div>
                 <img
@@ -83,9 +84,6 @@
                 <a class="name-btn" href="javascript:;">{{ item.name }}</a>
               </div>
             </li>
-            <!-- <li @click="modal1 = true">
-              <a>快捷入口管理</a>
-            </li> -->
           </ul>
         </div>
       </div>
@@ -851,5 +849,8 @@ export default {
   top: 0;
   right: 80px;
   width: 200px;
+}
+.icon_box:hover {
+  cursor: pointer;
 }
 </style>

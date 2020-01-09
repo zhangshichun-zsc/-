@@ -50,7 +50,7 @@
       <Row class-name="row">
         <i-col span='3'><span>模式</span></i-col>
         <i-col span='4'>
-          <RadioGroup v-model="args.zmType">
+          <RadioGroup v-model="args.zmType" @on-change='changeTeam'>
             <Radio label="1" :disabled='isDisb'>先到先得</Radio>
             <Radio label="2" :disabled='isDisb'>预约型</Radio>
           </RadioGroup>
@@ -247,7 +247,18 @@
       <Row class-name="row">
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
-           <DatePicker  size="large" placeholder="请输入" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"  :options="options" />
+           <DatePicker  size="large" placeholder="请输入" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"  :options="options"/>
+             <DatePicker
+                   :value='args.setTime'
+                   type="datetime"
+                   :options="options"
+                   :disabled='isDisb'
+                   placeholder="开始时间"
+                   confirm
+                   style="width: 150px"
+                   @on-change="handleChange(1,'zhaStart',$event)"
+                   @on-open-change="successOk(2,$event)"
+                   format="yyyy-MM-dd HH:mm"/>
         </i-col>
       </Row>
       <Row class-name="row">
@@ -277,7 +288,7 @@ export default {
       navigation1: {
         head: "志愿者编辑招募报名项(志愿者)"
       },
-       options: {
+      options: {
         disabledDate (date) {
           return  date && date.valueOf() < Date.now() - 86400000
         }
@@ -297,28 +308,18 @@ export default {
       feedList:[{name:'单行文本',type:1},{name:'多行文本',type:6 },{name:'单选问题',type:3},{name:'多选问题',type:4}],
       array:[],
       args:{
+        userPositionName:null,
+        userPosition:null,
+        zmType:null,
+        roleId:2,
+        isAutoChoose:2,
+        isTrainMust:2,
+        subsidyCash:0,
+        subsidyType:0,
+        sysId:2,
+        coActivityItemList:[],
+        coActivityRuleParamList:[]
       }
-    }
-  },
-  watch:{
-    "args.zmType":{
-       handler:function(val){
-        let args = {
-          userPositionName:this.args.userPositionName,
-          userPosition:this.args.userPosition,
-          zmType:val,
-          roleId:2,
-          isAutoChoose:2,
-          isTrainMust:2,
-          subsidyCash:0,
-          subsidyType:0,
-          sysId:2,
-          coActivityItemList:[],
-          coActivityRuleParamList:[]
-        }
-        this.args = args
-      },
-      immediate: true
     }
   },
 
@@ -334,6 +335,22 @@ export default {
   },
 
   methods: {
+  changeTeam(val){
+     let args = {
+      userPositionName:this.args.userPositionName,
+      userPosition:this.args.userPosition,
+      zmType:val,
+      roleId:2,
+      isAutoChoose:2,
+      isTrainMust:2,
+      subsidyCash:0,
+      subsidyType:0,
+      sysId:2,
+      coActivityItemList:[],
+      coActivityRuleParamList:[]
+    }
+    this.args = args
+    },
     showModal(index){
       this.modal = true
       this.state = index
@@ -532,7 +549,8 @@ export default {
        this.isDisb = data.isDisb
        this.isEdit = data.isEdit
        if(this.i !== -1){
-          this.args = Object.assign(this.args,data.args.coActivityUserConfParamList[this.i])
+          let args = Object.assign(this.args,data.args.coActivityUserConfParamList[this.i])
+          this.args = args
           this.forList()
           this.signItem()
        }
@@ -656,6 +674,7 @@ export default {
       args.coActivityRuleParamList = [...limit,...this.good]
       if(this.i !== -1){
         data.args.coActivityUserConfParamList[this.i] = args
+        console.log(data.args.coActivityUserConfParamList[this.i],args)
       }else{
         let arr = data.args.coActivityUserConfParamList
         arr.push(args)

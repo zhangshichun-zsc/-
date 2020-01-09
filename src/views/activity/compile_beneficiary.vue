@@ -462,7 +462,7 @@
                 </div>
                 <div class="role-tr" v-else-if="item.type == 9 " style="width:90%">
                   <span class="first-span">上传图片</span>
-                  <i-switch v-model="item.context" :true-value="1" :false-value="2" />
+                  <i-switch v-model="~~item.context" :true-value="1" :false-value="2" />
                 </div>
                 <div class="role-tr" v-else-if="item.type == 1" style="width:90%">
                   <i-input style="width:60%" placeholder="请输入单文本标题" v-model="item.context" :disabled="isDisb" />
@@ -1106,7 +1106,7 @@ export default {
       }
       this.oneRole.signRuleList = l
       //优先设置填写校验
-      if(oneRole.zmType==2 && oneRole.isAudit!=1){
+      if(this.oneRole.zmType==2 && this.oneRole.isAudit!=1){
         let first = this.oneRole.choiceRuleList
         for(let i=0;i<first.length;i++){
           if( (first[i].ruleId==20||first[i].ruleId==23||first[i].ruleId==24) && !first[i].ruleValueRemark ){
@@ -1133,6 +1133,7 @@ export default {
           }
         }
       }
+      //反馈填写校验
       let fd = []
       if (this.oneRole.fkDetailList.length == 2 && this.oneRole.fkDetailList[1].context == 2 && (this.oneRole.fkDetailList[0].context == undefined || this.oneRole.fkDetailList[0].context == '')) {
 

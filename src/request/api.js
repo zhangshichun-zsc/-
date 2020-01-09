@@ -589,7 +589,7 @@ export const signPost = p => posts('/activity-manage/apply/sign/jobs', p) //招�
 export const projectDetail = p => posts('/activity-manage/apply/act/id', p) //编辑活动详情
 
 export const projectEdit = p => posts('/activity-manage/act/update/id', p) //编辑活动保存
-export const mouldEdit = p => posts('/activity-manage/act/mould/update', p) //编辑活动模板保存
+export const mouldEdit = p => postdel('/activity-manage/act/mould/update', p) //编辑活动模板保存
 
 export const mouldList = p => get('/activity-manage/act/mould/list', p) //活动模板列表
 export const signLimits = p => posts('/activity-manage/apply/sign/limits', p) //限制设置
@@ -648,6 +648,7 @@ export const Matchingupdate = p => posts("/activity-manage/work/act/match/update
 export const matchAdd = p => posts("/activity-manage/work/act/match/add", p)
 export const getDraft = p => posts("/volunteer-manager/queryInitiatalVolunteerActivity", p)
 export const updateQrCode = p =>posts("/activity-manage/work/act/qrcode/update",p)
+export const getActiveSumm = p => posts("/activity-manage/act/sum/get",p)
 //  编译报错，不知道这个接口发生了什么。 先 恢复一下啊 statr
 
 export const Reportdeles = p => posts('/report-manage/deal-report', p) //举报管理--批量操作

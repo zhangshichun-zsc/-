@@ -152,53 +152,14 @@
               />
             </FormItem>
             <FormItem label="图片:" prop="orgPicShow">
-              <div
-                class="file"
-                style="height:150px;"
-                @click="
-                  () => {
-                    if (!BasicDate.orgPicShow) {
-                      this.$refs.files.click();
-                    }
-                  }
-                "
-              >
-                <input
-                  style="display:none; width:0; hidht:0;"
-                  type="file"
-                  accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                  ref="files"
-                  @change="uploadFile()"
-                  multiple
-                />
-                <div
-                  class="fileContent"
-                  :style="
-                    BasicDate.orgPicShow
-                      ? 'height:150px;width:150px;'
-                      : 'height:150px;width:150px;border: 1px dashed #ff565a;'
-                  "
-                >
-                  <Icon
-                    v-show="!BasicDate.orgPicShow"
-                    type="md-cloud-upload"
-                    class="updataimg-icon"
-                    :size="20"
-                  />
-                  <img
-                    v-show="BasicDate.orgPicShow"
-                    :src="BasicDate.orgPicShow"
-                    style="height:150px;width:150px;"
-                  />
-                  <Icon
-                    type="ios-trash"
-                    v-if="BasicDate.orgPicShow != null"
-                    class="cancel"
-                    :size="20"
-                    @click="cancelImg()"
-                  />
-                </div>
-              </div>
+              <UploadImg
+                :picMap="picMap"
+                :max="1"
+                v-model="BasicDate.picUrl"
+                :display-width="120"
+                :crop-width="120"
+                :crop-height="120"
+              ></UploadImg>
             </FormItem>
             <FormItem label="详情:" prop="orgName">
               <Input
@@ -331,7 +292,6 @@
           @click="handleSubmit('BasicDate')"
           >保存</a
         >
-        <!-- <Button @click="handleSubmit('BasicDate')">保存</Button> -->
       </div>
     </div>
   </div>
@@ -417,23 +377,6 @@ export default {
                 },
                 "查看"
               )
-              // h(
-              //   "span",
-              //   {
-              //     style: {
-              //       marginRight: "5px",
-              //       marginLeft: "5px",
-              //       color: "#FF565A",
-              //       cursor: "pointer"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.getorgdelete(params.row.orgUserId);
-              //       }
-              //     }
-              //   },
-              //   del
-              // )
             ]);
           }
         }
@@ -488,6 +431,7 @@ export default {
         orgName: "",
         orgPicShow: "",
         orgPic: "",
+        picUrl: [],
         remark: "",
         wx: "",
         text: "",
@@ -505,7 +449,8 @@ export default {
       statistics: [],
       province: "0",
       county: "0",
-      city: "0"
+      city: "0",
+      picMap: {}
     };
   },
   computed: {},
@@ -518,9 +463,6 @@ export default {
   },
 
   methods: {
-    upload(e) {
-      console.log(e);
-    },
     onall(e) {
       let str = this.$route.query.status === 1 ? "(志愿者)" : "(会员)";
       this.num = e;
@@ -559,18 +501,116 @@ export default {
       });
     },
 
-    //删除
-    getorgdelete(id) {
-      orgdelete({
-        orgUserId: id
+    // 组织成员分页
+    getorgmember() {
+      orgmember({
+        orgId: this.$route.query.orgId,
+        page: { page: this.page, size: this.size }
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("删除成功");
-          this.getorgmember();
+          this.dataCount = res.data.totalSize;
+          this.data1 = res.data.list;
         }
-        console.log(res);
       });
     },
+    //编辑组织资料
+    getorgedit() {
+      orgedit({
+        orgId: this.$route.query.orgId
+      }).then(res => {
+        console.log(res);
+
+        if (res.code == 200) {
+          this.BasicDate = { ...res.data, picUrl: [res.data.orgPic] };
+          this.province = res.data.provinceId;
+          this.city = res.data.cityId;
+          this.county = res.data.districtId;
+          this.picMap = {
+            [res.data.orgPic]: res.data.orgPicShow
+          };
+          if (res.data.fileList && res.data.fileList.length > 0) {
+            let arr = [];
+
+            res.data.fileList.forEach((item, index) => {
+              if (index == 0) {
+                this.formInline.nameA = item.fileName;
+                this.formInline.agPicA = item.fileUrl;
+                this.formInline.fileUrlShowA = item.fileUrlShow;
+                this.formInline.flagA = true;
+              }
+              if (index == 1) {
+                this.formInline.nameB = item.fileName;
+                this.formInline.fileUrlShowB = item.fileUrlShow;
+                this.formInline.flagB = true;
+                this.formInline.agPicB = item.fileUrl;
+              }
+              if (index == 2) {
+                this.formInline.nameC = item.fileName;
+                this.formInline.fileUrlShowC = item.fileUrlShow;
+                this.formInline.flagC = true;
+                this.formInline.agPicC = item.fileUrl;
+              }
+            });
+          }
+        } else {
+        }
+      });
+    },
+
+    //编辑修改组织
+    getorgemod() {
+      let file = [];
+      let str = this.formInline;
+      if (str.agPicA) {
+        file.push(str.agPicA + "/" + str.nameA);
+      }
+      if (str.agPicB) {
+        file.push(str.agPicB + "/" + str.nameB);
+      }
+      if (str.agPicC) {
+        file.push(str.agPicC + "/" + str.nameC);
+      }
+
+      let obj = {
+        orgId: this.$route.query.orgId,
+        orgName: this.BasicDate.orgName,
+        address: this.BasicDate.address,
+        remark: this.BasicDate.remark,
+        orgPic: this.picUrl ? this.picUrl : this.BasicDate.orgPic,
+        ownerUserName: this.BasicDate.contactUserName,
+        ownerUserPhone: this.BasicDate.contactUserPhone,
+        description: this.BasicDate.description,
+        wx: this.BasicDate.wx,
+        provinceId: this.province,
+        cityId: this.city,
+        districtId: this.county,
+        fileList: file.toString() === "" ? "" : file.toString()
+      };
+      console.log(obj);
+
+      // orgemod(obj).then(res => {
+      //   if (res.code == 200) {
+      //     this.$Message.success("编辑成功");
+      //   } else {
+      //     this.$Message.error(res.msg);
+      //   }
+      //   console.log(res);
+      // });
+    },
+
+    //省市区
+    idsactive(res) {
+      if (res[0]) {
+        this.province = res[0];
+      }
+      if (res[1]) {
+        this.city = res[1];
+      }
+      if (res[2]) {
+        this.county = res[2];
+      }
+    },
+
     //附件上传
     uploadFiles() {
       let file = this.$refs.filess.files[0];
@@ -615,154 +655,6 @@ export default {
         }
       });
     },
-    // 组织成员分页
-    getorgmember() {
-      orgmember({
-        orgId: this.$route.query.orgId,
-        page: { page: this.page, size: this.size }
-      }).then(res => {
-        if (res.code == 200) {
-          this.dataCount = res.data.totalSize;
-          this.data1 = res.data.list;
-        }
-        console.log(res);
-      });
-    },
-    //编辑组织资料
-    getorgedit() {
-      orgedit({
-        orgId: this.$route.query.orgId
-      }).then(res => {
-        if (res.code == 200) {
-          this.BasicDate = res.data;
-          this.province = res.data.provinceId;
-          this.city = res.data.cityId;
-          this.county = res.data.districtId;
-
-          if (res.data.fileList && res.data.fileList.length > 0) {
-            let arr = [];
-
-            res.data.fileList.forEach((item, index) => {
-              if (index == 0) {
-                this.formInline.nameA = item.fileName;
-                this.formInline.agPicA = item.fileUrl;
-                this.formInline.fileUrlShowA = item.fileUrlShow;
-                this.formInline.flagA = true;
-              }
-              if (index == 1) {
-                this.formInline.nameB = item.fileName;
-                this.formInline.fileUrlShowB = item.fileUrlShow;
-                this.formInline.flagB = true;
-                this.formInline.agPicB = item.fileUrl;
-              }
-              if (index == 2) {
-                this.formInline.nameC = item.fileName;
-                this.formInline.fileUrlShowC = item.fileUrlShow;
-                this.formInline.flagC = true;
-                this.formInline.agPicC = item.fileUrl;
-              }
-            });
-          }
-        } else {
-        }
-        console.log(res);
-      });
-    },
-
-    //编辑修改组织
-    getorgemod() {
-      let file = [];
-      let str = this.formInline;
-      if (str.agPicA) {
-        file.push(str.agPicA + "/" + str.nameA);
-      }
-      if (str.agPicB) {
-        file.push(str.agPicB + "/" + str.nameB);
-      }
-      if (str.agPicC) {
-        file.push(str.agPicC + "/" + str.nameC);
-      }
-
-      orgemod({
-        orgId: this.$route.query.orgId,
-        orgName: this.BasicDate.orgName,
-        address: this.BasicDate.address,
-        remark: this.BasicDate.remark,
-        orgPic: this.picUrl ? this.picUrl : this.BasicDate.orgPic,
-        ownerUserName: this.BasicDate.contactUserName,
-        ownerUserPhone: this.BasicDate.contactUserPhone,
-        description: this.BasicDate.description,
-        wx: this.BasicDate.wx,
-        provinceId: this.province,
-        cityId: this.city,
-        districtId: this.county,
-        fileList: file.toString() === "" ? "" : file.toString()
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("编辑成功");
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res);
-      });
-    },
-
-    //省市区
-    idsactive(res) {
-      console.log(res);
-      if (res[0]) {
-        this.province = res[0];
-      }
-      if (res[1]) {
-        this.city = res[1];
-      }
-      if (res[2]) {
-        this.county = res[2];
-      }
-    },
-
-    //删除附件
-    getorgimgdel(e) {
-      let removeid = "";
-      removeid = this.BasicDate.text;
-      orgimgdel({
-        path: removeid
-      }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功");
-        } else {
-          this.$Message.error(res.msg);
-        }
-        console.log(res);
-      });
-    },
-
-    //图片上传
-    uploadFile() {
-      let file = this.$refs.files.files[0];
-      const dataForm = new FormData();
-      dataForm.append("file", file);
-      upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.BasicDate.orgPicShow = e.target.result;
-          this.picUrl = res.data;
-        };
-      });
-    },
-    //删除图片
-    cancelImg() {
-      orgimgdel({ path: this.picUrl }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功");
-          this.picUrl = null;
-          this.BasicDate.orgPicShow = null;
-        } else {
-          this.$Message.success(res.msg);
-        }
-      });
-    },
     // 删除附件
     canceltxt(pic, name) {
       deleteFile({ fileUrl: pic }).then(res => {
@@ -786,26 +678,6 @@ export default {
           this.$Message.success(res.msg);
         }
       });
-    },
-    //上传附件
-    handleSuccesstext(res, file) {
-      if (res.code == 200) {
-        let obj = [{ fileUrl: res.data, fileName: file.name }];
-        this.BasicDate.fileList = this.BasicDate.fileList.concat(obj);
-        this.$Message.success("上传成功");
-        this.percent = 100;
-      } else {
-        this.percent = 0;
-        this.$Message.error(res.msg);
-      }
-      console.log(res, file.name);
-    },
-
-    //删除附件
-    removetext(e) {
-      this.BasicDate.fileList.splice(e, 1);
-      this.BasicDate.text = this.BasicDate.fileList[e].fileUrl;
-      this.getorgimgdel(1);
     },
 
     //下载

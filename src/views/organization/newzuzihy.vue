@@ -60,55 +60,15 @@
                 style="width: 220px"
               />
             </FormItem>
-            <FormItem label="图片:" prop="imgUrl">
-              <div
-                class="start-waps"
-                :style="
-                  formValidate.imgUrl
-                    ? 'height:150px;width:150px;'
-                    : 'height:150px;width:150px;border: 1px dashed #ff565a;'
-                "
-              >
-                <div
-                  class="uploads"
-                  v-if="formValidate.imgUrl == null"
-                  @click="
-                    () => {
-                      this.$refs.files.click();
-                    }
-                  "
-                >
-                  <div class="fileimg">
-                    <input
-                      style=" display:none;"
-                      type="file"
-                      accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                      ref="files"
-                      @change="uploadFile()"
-                      multiple
-                    />
-                  </div>
-                  <Icon
-                    class="scimg"
-                    type="md-cloud-upload"
-                    :size="20"
-                    color="#FF565A"
-                  />
-                </div>
-                <img
-                  v-show="formValidate.imgUrl"
-                  :src="formValidate.imgUrl"
-                  style="height:150px;width:150px;"
-                />
-                <Icon
-                  type="ios-trash"
-                  v-if="formValidate.imgUrl != null"
-                  class="delimg"
-                  :size="26"
-                  color="#FF565A"
-                  @click="cancelImg()"
-                />
-              </div>
+            <FormItem label="图片:" prop="picUrl">
+              <UploadImg
+                :picMap="picMap"
+                :max="1"
+                v-model="formValidate.picUrl"
+                :display-width="120"
+                :crop-width="120"
+                :crop-height="120"
+              ></UploadImg>
             </FormItem>
             <FormItem label="详情:" prop="description">
               <Input
@@ -244,6 +204,7 @@ export default {
         address: "",
         contactUserName: "",
         contactUserPhone: "",
+        wechatOfficeAccount: "",
         description: "",
         orgName: "",
         orgPicShow: "",
@@ -252,8 +213,7 @@ export default {
         wx: "",
         text: "",
         fileList: [],
-        picUrl: null,
-        imgUrl: null,
+        picUrl: [],
         description: "",
         province: "",
         city: "",
@@ -267,7 +227,14 @@ export default {
         contactUserName: [
           { required: true, message: "联系人不能为空", trigger: "blur" }
         ],
-        imgUrl: [{ required: true, message: "图片不能为空", trigger: "blur" }],
+        picUrl: [
+          {
+            required: true,
+            message: "图片不能为空",
+            trigger: "blur",
+            type: "array"
+          }
+        ],
         contactUserPhone: [
           { required: true, message: "联系电话不能为空", trigger: "blur" }
         ],
@@ -305,7 +272,8 @@ export default {
         nameA: null,
         nameB: null,
         nameC: null
-      }
+      },
+      picMap: {}
     };
   },
   components: { Selsect },
@@ -320,7 +288,6 @@ export default {
             return res.dataKey != 448;
           });
         }
-        console.log(res);
       });
     },
 
@@ -348,8 +315,7 @@ export default {
       if (str.agPicC) {
         file.push(str.agPicC + "/" + str.nameC);
       }
-
-      orgadd({
+      let obj = {
         sysId: this.$route.query.sysId,
         orgType: this.orgTypes,
         orgName: this.formValidate.orgName,
@@ -361,10 +327,11 @@ export default {
         remark: this.value,
         contactUserName: this.formValidate.contactUserName,
         contactUserPhone: this.formValidate.contactUserPhone,
-        orgPic: this.formValidate.orgPic,
+        orgPic: this.formValidate.picUrl.toString(),
         file: file.toString(),
         description: this.formValidate.description
-      }).then(res => {
+      };
+      orgadd(obj).then(res => {
         if (res.code == 200) {
           this.$router.back();
           this.$Message.success(res.msg);
@@ -378,35 +345,8 @@ export default {
       this.formValidate.provinceId = e[0];
       this.cityId = e[1];
       this.districtId = e[2];
-      console.log(e);
     },
 
-    //图片上传
-    uploadFile() {
-      let file = this.$refs.files.files[0];
-      const dataForm = new FormData();
-      dataForm.append("file", file);
-      upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.formValidate.imgUrl = e.target.result;
-          this.formValidate.orgPic = res.data;
-        };
-      });
-    },
-    //删除图片
-    cancelImg() {
-      orgimgdel({ path: this.formValidate.picUrl }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功");
-          this.formValidate.picUrl = null;
-          this.formValidate.imgUrl = null;
-        } else {
-          this.$Message.success(res.msg);
-        }
-      });
-    },
     // 删除附件
     canceltxt(pic, name) {
       orgimgdel({ path: pic }).then(res => {
@@ -434,10 +374,6 @@ export default {
 
     //表单提交
     handleSubmit(name) {
-      if (!this.formValidate.orgPic) {
-        this.$Message.error("图片未上传！");
-        return;
-      }
       this.$refs[name].validate(valid => {
         if (valid) {
           this.getorgadd();
@@ -447,11 +383,6 @@ export default {
       });
     },
 
-    //附件上传
-    handleSuccess(res, file) {
-      this.file = res.data;
-      console.log(res, file);
-    },
     //附件上传
     uploadFiles() {
       let file = this.$refs.filess.files[0];

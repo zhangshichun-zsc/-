@@ -411,7 +411,7 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
+      sort: "desc",
       datax: [],
       sysType: 1,
       page: 1,
@@ -493,7 +493,6 @@ export default {
         // 活动下架
     getactivedown(ids) {
       ids = Array.of(ids);
-      console.log(ids)
       activedown({
         activityId: ids
       }).then(res => {
@@ -504,12 +503,12 @@ export default {
         }else{
           this.$Message.error(res.msg)
         }
-        console.log(res);
       });
     },
         //取消
     modalCancel(){
-      this.$set(this.datax[this.index],"status",1)
+      this.datax = []
+      this.getactiveManager()
       this.addstate=false
     },
 
@@ -606,9 +605,9 @@ export default {
     },
 
     //全选按钮
-    chackall() {
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
+    chackall(e) {
+      this.state = !this.state;
+      this.$refs.selection.selectAll(this.state);
     }
   }
 };

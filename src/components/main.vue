@@ -430,8 +430,6 @@ export default {
   //保存储存的信息
   created() {
     this.active = window.sessionStorage.getItem("active");
-    // this.routelist = window.sessionStorage.getItem('routelist')
-    // console.log(this.routelist)
   },
   beforeRouteLeave(to, from, next) {
     if (to.name === from.name) return;
@@ -441,7 +439,6 @@ export default {
       "login",
       "profile",
       "user_details_hy",
-      "grouplisthy",
       "detailshy",
       "personnel_details",
       "feedDetail",

@@ -60,6 +60,7 @@
               @click="Jump(index)"
               v-for="(item, index) in Jumplist"
               :key="index"
+              class="icon-box"
             >
               <div>
                 <img
@@ -738,5 +739,8 @@ export default {
   top: 0;
   right: 80px;
   width: 200px;
+}
+.icon_box:hover {
+  cursor: pointer;
 }
 </style>

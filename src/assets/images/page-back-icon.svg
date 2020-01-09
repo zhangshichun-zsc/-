@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-back</title>
+    <desc>Created with Sketch.</desc>
+    <g id="后台管理系统切图版11.28-html" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页-" transform="translate(-334.000000, -87.000000)">
+            <g id="Group-20" transform="translate(320.000000, 81.000000)">
+                <g id="Group-43" transform="translate(14.000000, 6.000000)">
+                    <rect id="Rectangle" x="0" y="0" width="21" height="21"></rect>
+                    <path d="M7.18045112,3 L8.64661653,4.46616541 L6.88721803,6.22556391 L13.7293233,6.22556391 C16.4661654,6.22556391 18.6165413,8.37593985 18.6165413,11.112782 C18.6165413,13.8496241 16.4661654,16 13.7293233,16 L4.93233083,16 L4.93233083,14.0451128 L13.7293233,14.0451128 C15.3909774,14.0451128 16.6616541,12.7744361 16.6616541,11.112782 C16.6616541,9.45112784 15.3909774,8.18045114 13.7293233,8.18045114 L2,8.18045114 L7.18045112,3 Z" id="Path" fill="#FD585E"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

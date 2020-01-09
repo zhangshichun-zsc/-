@@ -434,7 +434,6 @@ export default {
       });
     },
     save() {
-      debugger
       if(this.$route.query.dicId){
         this.batch.type = 3;
         activeNew(this.batch).then(res => {
@@ -774,6 +773,7 @@ export default {
   border: 1px solid;
   position: relative;
   border: 1px dashed #FF565A;
+  cursor: pointer;
 }
 .first-picfm {
   width: 200px;
@@ -783,6 +783,7 @@ export default {
   border: 1px solid;
   position: relative;
   border: 1px dashed #FF565A;
+  cursor: pointer;
 }
 .cancel {
   position: absolute;

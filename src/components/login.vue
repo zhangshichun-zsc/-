@@ -80,7 +80,6 @@ export default {
   },
   mounted() {},
   methods: {
-
     getlogin() {
       login({
         loginName: this.formValidate.user,
@@ -95,41 +94,33 @@ export default {
            * ! 将数据保存在vux中
            */
           this.$store.commit("setToken", { ...res.data });
-
-          this.$router.push({ name: "index" });
-
-          // this.gethomepage()
+          this.gethomepage(res.data.userId);
         } else {
           this.$Message.info("密码或账号不正确!");
         }
       });
     },
-
-    gethomepage() {
+    gethomepage(userId) {
       homepage({
-        userId: localStorage.getItem("userId")
+        userId
       }).then(res => {
         if (res.code == 200) {
-          // this.routelist = res.data
-          window.sessionStorage.setItem("routelist", res.data);
+          if (res.data.length > 0) {
+            let pathUrl = res.data[0].list[0].url;
+            this.$router.push({ name: pathUrl });
+          } else {
+            this.$Message.error("该账号无任何权限，请联系系统管理员！");
+          }
         }
-        console.log(res);
       });
     },
 
     handleSubmit() {
       if (this.formValidate.user && this.formValidate.password) {
         this.getlogin();
-        // this.get()
       } else {
         this.$Message.error("请输入密码或账号!");
       }
-
-      // if (valid) {
-      //   this.getlogin();
-      // } else {
-      //   this.$Message.error("请输入密码或账号!");
-      // }
     }
   }
 };
