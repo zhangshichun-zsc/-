@@ -17,6 +17,7 @@ export default new Vuex.Store({
     activityType: [],
     deplist: [],
 
+
     // 菜单
     menuList: [],
     //活动状态
