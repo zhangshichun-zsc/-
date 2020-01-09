@@ -270,12 +270,16 @@ export default {
     uploadFile() {
       let file = this.$refs.files.files[0];
       // console.log(file);
+      // let dataForm={
+      //   // file:file
+      // }
       const dataForm = new FormData();
       dataForm.append("file", file);
       upload(dataForm).then(res => {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = e => {
+          // console.log(reader,e)
           this.formItem.imgs = e.target.result;
           this.file = res.data;
         };

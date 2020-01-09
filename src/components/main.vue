@@ -506,12 +506,12 @@ export default {
         if (res.code == 200) {
           this.$store.commit("clearToken");
           this.$router.push({ name: "login" });
-          console.log(this.$store.state.token);
+          // console.log(this.$store.state.token);
           this.$Message.info("退出成功");
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+        // console.log(res);
       });
     },
     home() {
