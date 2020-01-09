@@ -35,7 +35,7 @@
 
 <script>
 import { login, homepage } from "../request/api";
-import { axios } from "axios";
+
 export default {
   data() {
     return {
@@ -80,24 +80,6 @@ export default {
   },
   mounted() {},
   methods: {
-    //     get(){
-    //       axios({
-    //     url: 'http://192.168.0.5:8084/rhzg-web/backstage/backstageLojin',
-    //       method: 'GET',
-    //     params: {
-    //        loginName: this.formValidate.user,
-    //         loginPwd: this.formValidate.password
-    //     },
-    //     xhrFields: {
-    //           withCredentials: true
-    //      },
-    //      crossDomain: true,
-
-    // }).then( res => {
-    //     console.log(res)
-    // })
-
-    //     },
 
     getlogin() {
       login({

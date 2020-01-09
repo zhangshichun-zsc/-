@@ -203,7 +203,6 @@ export default {
       this.i = e;
     },
     uploadFile(img, src, e) {
-      console.log(e)
       let file = e.target.files[0];
       const dataForm = new FormData();
       dataForm.append("file", file);
