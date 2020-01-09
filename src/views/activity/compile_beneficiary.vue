@@ -1106,7 +1106,7 @@ export default {
       }
       this.oneRole.signRuleList = l
       //优先设置填写校验
-      if(oneRole.zmType==2 && oneRole.isAudit!=1){
+      if(this.oneRole.zmType==2 && this.oneRole.isAudit!=1){
         let first = this.oneRole.choiceRuleList
         for(let i=0;i<first.length;i++){
           if( (first[i].ruleId==20||first[i].ruleId==23||first[i].ruleId==24) && !first[i].ruleValueRemark ){
@@ -1133,6 +1133,7 @@ export default {
           }
         }
       }
+      //反馈填写校验
       let fd = []
       if (this.oneRole.fkDetailList.length == 2 && this.oneRole.fkDetailList[1].context == 2 && (this.oneRole.fkDetailList[0].context == undefined || this.oneRole.fkDetailList[0].context == '')) {
 

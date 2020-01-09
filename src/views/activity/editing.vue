@@ -434,7 +434,6 @@ export default {
       });
     },
     save() {
-      debugger
       if(this.$route.query.dicId){
         this.batch.type = 3;
         activeNew(this.batch).then(res => {
