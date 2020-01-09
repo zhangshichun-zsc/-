@@ -411,8 +411,8 @@ export default {
         { value: "asc", label: "正序" },
         { value: "desc", label: "倒序" }
       ],
-      sort: "asc",
-      datax: [{status:10}],
+      sort: "desc",
+      datax: [],
       sysType: 1,
       page: 1,
       size: 10,

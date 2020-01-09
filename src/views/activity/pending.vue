@@ -190,7 +190,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -213,7 +213,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -289,7 +289,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
+                     color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -376,6 +376,10 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("span",{
+              style: {
+                color: "#FF565A",
+                cursor: "pointer"
+              },
                on: {
                   click: () => {
                     let state = params.row.status
@@ -438,7 +442,7 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {
@@ -460,7 +464,7 @@ export default {
                   style: {
                     marginRight: "5px",
                     marginLeft: "5px",
-                    color: "green",
+                    color: "#FF565A",
                     cursor: "pointer"
                   },
                   on: {

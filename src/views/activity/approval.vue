@@ -1393,6 +1393,7 @@ export default {
   line-height: 200px;
   border: 1px dashed #FF565A;
   position: relative;
+  cursor: pointer;
 }
 .first-picfm{
   width: 200px;
@@ -1401,6 +1402,7 @@ export default {
   line-height: 200px;
   border: 1px dashed #FF565A;
   position: relative;
+  cursor: pointer;
 }
 .cancel{
   position: absolute;

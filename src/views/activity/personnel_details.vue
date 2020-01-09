@@ -82,7 +82,7 @@
               <tr>
                 <td>{{ msg.feedStatus==1?"已反馈":"未反馈"}}</td>
                 <td>{{msg.feedAt}}</td>
-                <td @click="jump">详情</td>
+                <td @click="jump" style="cursor:'pointer'">详情</td>
               </tr>
             </table>
           </li>
