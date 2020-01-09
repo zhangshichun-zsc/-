@@ -236,14 +236,10 @@ export const upload = (p, url = '/pic/upload') => {
   });
 };
 
-export const uploadCopy = (p, url = '/pic/copy-pic') => {
+export const uploadCopy = (params, url = '/pic/copy-pic') => {
   return new Promise((resolve, reject) => {
     axios
-      .post(url, p, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      })
+      .get(url,  { params: params })
       .then(res => {
         resolve(res.data);
       })
