@@ -43,10 +43,12 @@
             <Icon
               type="ios-eye-outline"
               @click.native="handleView(item.previewUrl)"
+              size="20"
             ></Icon>
             <Icon
               type="ios-trash-outline"
               @click.native="handleRemove(item.url)"
+              size="20"
             ></Icon>
           </div>
         </template>
