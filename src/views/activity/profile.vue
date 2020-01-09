@@ -247,7 +247,8 @@ export default {
                 "span",
                 {
                   style: {
-                    color: "#FF565A"
+                    color: "#FF565A",
+                    cursor: "pointer"
                   },
                   on: {
                     click: () => {
@@ -273,7 +274,7 @@ export default {
                 "span",
                 {
                   style: {
-
+                    cursor: "pointer",
                     color: "#FF565A"
                   },
                   on: {

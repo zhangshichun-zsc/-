@@ -193,7 +193,8 @@ export default {
                 {
                   clssName: "action",
                   style: {
-                    color: "#FF565A"
+                    color: "#FF565A",
+                    cursor: "pointer"
                   },
                   on: {
                     click: () => {
@@ -211,7 +212,8 @@ export default {
                 {
                   style: {
                     marginLeft: "20px",
-                    color: "#FF565A"
+                    color: "#FF565A",
+                    cursor: "pointer"
                   },
                   on: {
                     click: () => {
