@@ -40,22 +40,24 @@
 
         <FormItem label="开始时间" prop="startAt">
           <FormItem prop="startAt">
-            <DatePicker
+            <XDatePicker
               icon="ios-clock-outline"
-              type="date"
-              placeholder="请选择时间"
+              type="datetime"
               v-model="formValidate.startAt"
-            ></DatePicker>
+              placeholder="请选择时间"
+              format="yyyy-MM-dd HH:mm"
+            ></XDatePicker>
           </FormItem>
         </FormItem>
         <FormItem label="结束时间" prop="endAt">
           <FormItem prop="endAt">
-            <DatePicker
+            <XDatePicker
               icon="ios-clock-outline"
-              type="date"
-              placeholder="请选择时间"
+              type="datetime"
               v-model="formValidate.endAt"
-            ></DatePicker>
+              placeholder="请选择时间"
+              format="yyyy-MM-dd HH:mm"
+            ></XDatePicker>
           </FormItem>
         </FormItem>
         <FormItem label="上线/下线" prop="status">
@@ -122,6 +124,7 @@
 <script>
 import { formatDate } from "../../request/datatime";
 import { upload } from "../../request/http";
+import XDatePicker from "@/business_components/XDatePicker.vue";
 import {
   AddAdvertising,
   AdvertisingList,
@@ -199,6 +202,8 @@ export default {
       picMap: {}
     };
   },
+  component: { XDatePicker },
+
   mounted() {
     this.getAdvertisingList();
 
@@ -265,8 +270,8 @@ export default {
           title: list.title,
           location: Number(list.location),
           status: list.status,
-          startAt: list.startAt,
-          endAt: list.endAt,
+          startAt: new Date(list.startAt),
+          endAt: new Date(list.endAt),
           picUrl: [list.picUrl],
           linkUrl: list.linkUrl,
           remark: list.remark,
@@ -300,6 +305,9 @@ export default {
 
     history() {
       this.$router.go(-1);
+    },
+    onDateRangeChange(date) {
+      console.log(date);
     }
   }
 };

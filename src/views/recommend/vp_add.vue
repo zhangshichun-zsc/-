@@ -40,22 +40,24 @@
 
         <FormItem label="开始时间" prop="startAt">
           <FormItem prop="startAt">
-            <DatePicker
+            <XDatePicker
               icon="ios-clock-outline"
-              type="date"
-              placeholder="请选择时间"
+              type="datetime"
               v-model="formValidate.startAt"
-            ></DatePicker>
+              placeholder="请选择时间"
+              format="yyyy-MM-dd HH:mm"
+            ></XDatePicker>
           </FormItem>
         </FormItem>
         <FormItem label="结束时间" prop="endAt">
           <FormItem prop="endAt">
-            <DatePicker
+            <XDatePicker
               icon="ios-clock-outline"
-              type="date"
-              placeholder="请选择时间"
+              type="datetime"
               v-model="formValidate.endAt"
-            ></DatePicker>
+              placeholder="请选择时间"
+              format="yyyy-MM-dd HH:mm"
+            ></XDatePicker>
           </FormItem>
         </FormItem>
         <FormItem label="上线/下线" prop="status">
@@ -122,6 +124,7 @@
 <script>
 import { formatDate } from "../../request/datatime";
 import { upload } from "../../request/http";
+import XDatePicker from "@/business_components/XDatePicker.vue";
 import {
   AddAdvertising,
   AdvertisingList,
@@ -129,6 +132,7 @@ import {
   orgimgdel
 } from "../../request/api";
 export default {
+  component: { XDatePicker },
   data() {
     return {
       navigation1: {
@@ -269,8 +273,8 @@ export default {
           title: list.title,
           location: Number(list.location),
           status: list.status,
-          startAt: list.startAt,
-          endAt: list.endAt,
+          startAt: new Date(list.startAt),
+          endAt: new Date(list.endAt),
           picUrl: [list.picUrl],
           linkUrl: list.linkUrl,
           remark: list.remark,
@@ -280,17 +284,6 @@ export default {
 
         this.picMap = { [list.picUrl]: list.picUrlShow };
         this.formValidate = formValidate;
-        // (this.formValidate.title = list.title),
-        //   (this.formValidate.location = Number(list.location)),
-        //   (this.formValidate.startAt = list.startAt);
-        // this.formValidate.endAt = list.endAt;
-        // (this.formValidate.status = list.status),
-        //   (this.formValidate.picUrl = list.picUrl),
-        //   (this.formValidate.linkUrl = list.linkUrl),
-        //   (this.formValidate.remark = list.remark);
-        // this.formValidate.linkType = list.linkType;
-        // this.formValidate.comments = list.comments;
-        // this.formValidate.imgUrl = list.picUrlShow;
       });
     },
 
