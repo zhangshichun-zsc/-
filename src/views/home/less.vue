@@ -11,55 +11,14 @@
           :label-width="120"
         >
           <FormItem label="上传头像">
-            <div class="start-wap">
-              <!-- v-if="imgUrl == null" -->
-              <div
-                class="upload"
-                @click="
-                  () => {
-                    this.$refs.files.click();
-                  }
-                "
-              >
-                <div class="file">
-                  <input
-                    style="display:none; width:0; hidht:0"
-                    type="file"
-                    accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                    ref="files"
-                    @change="uploadFile()"
-                    multiple
-                  />
-                  <div
-                    class="updataimg"
-                    :style="
-                      imgUrl
-                        ? 'height:104px;width:104px;'
-                        : 'height:104px;width:104px;border: 1px dashed #ff565a;'
-                    "
-                  >
-                    <Icon
-                      v-show="!imgUrl"
-                      type="md-cloud-upload"
-                      class="updataimg-icon"
-                      :size="20"
-                    />
-                    <img
-                      v-show="imgUrl"
-                      :src="imgUrl || null"
-                      style="height:104px;width:104px;"
-                    />
-                    <Icon
-                      type="ios-trash"
-                      v-show="imgUrl !== ''"
-                      class="cancel"
-                      :size="20"
-                      @click.stop.prevent="cancelImg()"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <UploadImg
+              :picMap="picMap"
+              :max="1"
+              v-model="picUrl"
+              :display-width="120"
+              :crop-width="120"
+              :crop-height="120"
+            ></UploadImg>
           </FormItem>
 
           <FormItem label="用户名">
@@ -132,7 +91,6 @@ export default {
         newPassword: "",
         confirm: ""
       },
-      uploadpath: "",
       ruleValidate: {
         oldPassword: [
           {
@@ -146,9 +104,8 @@ export default {
         ],
         confirm: [{ required: true, validator: confirm, trigger: "blur" }]
       },
-
-      picUrl: "",
-      imgUrl: "",
+      picUrl: [],
+      picMap: {},
       formFlag: true
     };
   },
@@ -166,12 +123,13 @@ export default {
     // 获取当前账号的 头像姓名
     getUserInfo() {
       let userId = this.$store.state.userId;
-
       if (!userId) {
         this.$router.push({ name: "login" });
       }
       queryUserDetail({ userId: userId }).then(res => {
         this.formValidate.name = res.data.userName;
+        this.picMap = { [res.data.avatar]: res.data.avatarPath };
+        this.picUrl = [res.data.avatar];
       });
     },
     //提交
@@ -180,7 +138,7 @@ export default {
         userId: this.$store.state.userId,
         oldPassword: this.formValidate.oldPassword,
         newPassword: this.formValidate.newPassword,
-        picUrl: this.picUrl
+        picUrl: this.picUrl.toString()
       }).then(res => {
         if (res.code == 200) {
           this.$Message.success("修改成功!");
@@ -212,33 +170,6 @@ export default {
     },
     handleReset(name) {
       this.$refs[name].resetFields();
-    },
-
-    //图片上传
-    uploadFile() {
-      let file = this.$refs.files.files[0];
-      const dataForm = new FormData();
-      dataForm.append("file", file);
-      upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.imgUrl = e.target.result;
-          this.picUrl = res.data;
-        };
-      });
-    },
-    //删除图片
-    cancelImg() {
-      orgimgdel({ path: this.picUrl }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功");
-          this.picUrl = "";
-          this.imgUrl = "";
-        } else {
-          this.$Message.success(res.msg);
-        }
-      });
     }
   }
 };

@@ -8,14 +8,6 @@
           <Icon type="ios-search-outline" />
           <span>添加广告</span>
         </div>
-        <!-- <div>
-          <Button size="small">
-            <Icon type="md-refresh" size="10" />刷新
-          </Button>
-          <Button @click="history" size="small">
-            <Icon type="ios-arrow-back" size="10" />返回
-          </Button>
-        </div> -->
       </div>
     </div>
     <div class="integral-table">
@@ -72,19 +64,15 @@
             <Radio label="0">下线</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="广告图片" prop="imgUrl">
-          <div class="start-wap">
-            <div class="first-pic" v-if='formValidate.imgUrl == null'>
-              <div class="" @click="()=>{ this.$refs.files.click()}">
-                <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
-                <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
-              </div>
-            </div>
-            <div class="first-pic" style="border:none" v-else>
-              <img class="imgs" style="width:283px;height:188px" :src="formValidate.imgUrl"/>
-              <Icon type="ios-trash" v-if='formValidate.imgUrl' class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
-            </div>
-          </div>
+        <FormItem label="广告图片" prop="picUrl">
+          <UploadImg
+            :picMap="picMap"
+            :max="1"
+            v-model="formValidate.picUrl"
+            :display-width="240"
+            :crop-width="750"
+            :crop-height="320"
+          ></UploadImg>
         </FormItem>
         <FormItem label="是否跳转外部链接" prop="linkType">
           <RadioGroup v-model="formValidate.linkType">
@@ -92,11 +80,26 @@
             <Radio label="0">否</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="广告链接" prop="linkUrl" v-if='formValidate.linkType==1'>
-          <Input v-model="formValidate.linkUrl" placeholder="请输入广告链接,以http://开头(示例http://www.baidu.com)" />
+        <FormItem
+          label="广告链接"
+          prop="linkUrl"
+          v-if="formValidate.linkType == 1"
+        >
+          <Input
+            v-model="formValidate.linkUrl"
+            placeholder="请输入广告链接,以http://开头(示例http://www.baidu.com)"
+          />
         </FormItem>
-        <FormItem label="广告内容" prop="comments" v-if='formValidate.linkType==0'>
-          <wangeditor :labels="formValidate.comments" id="ed1" @change="changeEditorTrain"></wangeditor>
+        <FormItem
+          label="广告内容"
+          prop="comments"
+          v-if="formValidate.linkType == 0"
+        >
+          <wangeditor
+            :labels="formValidate.comments"
+            id="ed1"
+            @change="changeEditorTrain"
+          ></wangeditor>
         </FormItem>
         <FormItem label="广告备注">
           <Input
@@ -144,19 +147,23 @@ export default {
         endAt: "",
         remark: "",
         linkUrl: "",
-        picUrl: "",
-        imgUrl: null,
-        linkType:"1",
-        comments:''
+        picUrl: [],
+
+        linkType: "1",
+        comments: ""
       },
       ruleValidate: {
         title: [
           { required: true, message: "广告名称不能为空", trigger: "blur" }
         ],
-        // linkUrl: [
-        //   { required: true, message: "广告链接不能为空", trigger: "blur" }
-        // ],
-        imgUrl: [{ required: true, message: "图片不能为空", trigger: "blur" }],
+        picUrl: [
+          {
+            required: true,
+            message: "图片不能为空",
+            trigger: "blur",
+            type: "array"
+          }
+        ],
         location: [
           {
             required: true,
@@ -189,7 +196,8 @@ export default {
         ]
       },
       data: [],
-      sysid: 1
+      sysid: 1,
+      picMap: {}
     };
   },
   mounted() {
@@ -223,20 +231,22 @@ export default {
       this.data1 = this.formValidate.startAt.getTime();
       this.data2 = this.formValidate.endAt.getTime();
 
-      AddAdvertising({
+      let obj = {
         sysId: this.sysid,
         title: this.formValidate.title,
         startAt: this.data1,
         endAt: this.data2,
         status: this.formValidate.status,
-        picUrl: this.formValidate.picUrl,
+        picUrl: this.formValidate.picUrl.toString(),
         linkUrl: this.formValidate.linkUrl,
         remark: this.formValidate.remark,
         contentId: this.$route.query.contentId,
         location: this.formValidate.location,
         linkType: this.formValidate.linkType,
         comments: this.formValidate.comments
-      })
+      };
+
+      AddAdvertising(obj)
         .then(res => {
           if (res.code == 200) {
             this.$Message.success("提交成功!");
@@ -254,49 +264,36 @@ export default {
       AdvertisingDetails({
         contentId: this.$route.query.contentId
       }).then(res => {
-        console.log(res);
         let list = res.data;
-        (this.formValidate.title = list.title),
-          (this.formValidate.location = Number(list.location)),
-          (this.formValidate.startAt = list.startAt);
-        this.formValidate.endAt = list.endAt;
-        (this.formValidate.status = list.status),
-          (this.formValidate.picUrl = list.picUrl),
-          (this.formValidate.linkUrl = list.linkUrl),
-          (this.formValidate.remark = list.remark);
-          (this.formValidate.linkType = list.linkType);
-          (this.formValidate.comments = list.comments);
-        this.formValidate.imgUrl = list.picUrlShow;
-      });
-    },
-    //图片上传
-    uploadFile() {
-      let file = this.$refs.files.files[0];
-      console.log(file);
-      const dataForm = new FormData();
-      dataForm.append("file", file);
-      upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.formValidate.imgUrl = e.target.result;
-          this.formValidate.picUrl = res.data;
+        let formValidate = {
+          title: list.title,
+          location: Number(list.location),
+          status: list.status,
+          startAt: list.startAt,
+          endAt: list.endAt,
+          picUrl: [list.picUrl],
+          linkUrl: list.linkUrl,
+          remark: list.remark,
+          linkType: list.linkType,
+          comments: list.comments
         };
+
+        this.picMap = { [list.picUrl]: list.picUrlShow };
+        this.formValidate = formValidate;
+        // (this.formValidate.title = list.title),
+        //   (this.formValidate.location = Number(list.location)),
+        //   (this.formValidate.startAt = list.startAt);
+        // this.formValidate.endAt = list.endAt;
+        // (this.formValidate.status = list.status),
+        //   (this.formValidate.picUrl = list.picUrl),
+        //   (this.formValidate.linkUrl = list.linkUrl),
+        //   (this.formValidate.remark = list.remark);
+        // this.formValidate.linkType = list.linkType;
+        // this.formValidate.comments = list.comments;
+        // this.formValidate.imgUrl = list.picUrlShow;
       });
     },
-    //删除图片
-    cancelImg() {
-      console.log(this.formValidate.picUrl);
-      orgimgdel({ path: this.formValidate.picUrl }).then(res => {
-        if (res.code == 200) {
-          this.$Message.success("删除成功");
-          this.formValidate.picUrl = "";
-          this.formValidate.imgUrl = null;
-        } else {
-          this.$Message.error(res.msg);
-        }
-      });
-    },
+
     //广告内容
     changeEditorTrain(e) {
       this.formValidate.comments = e;
@@ -307,9 +304,7 @@ export default {
         this.$refs[name].validate(valid => {
           if (valid) {
             this.getadd();
-            console.log(this.formValidate);
           } else {
-            console.log(this.formValidate);
             this.$Message.error("必填项未填！");
           }
         });
@@ -346,15 +341,15 @@ export default {
   background: rgb(228, 228, 228);
   border: 1px solid #eee;
 }
-.first-pic{
+.first-pic {
   width: 300px;
   height: 200px;
   text-align: center;
   line-height: 200px;
-  border: 1px dashed #FF565A;
+  border: 1px dashed #ff565a;
   position: relative;
 }
-.cancel{
+.cancel {
   position: absolute;
   top: 0;
   right: -30px;
