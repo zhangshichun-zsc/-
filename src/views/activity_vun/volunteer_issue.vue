@@ -876,6 +876,16 @@ export default {
       this.$delete(this.args.coActivityUserConfParamList, i);
     },
     jump(i) {
+      let coverPicPath = ''
+      let cover = ''
+      let image = ''
+      let picPath = ''
+      if(this.$refs.refCover.imgList.length>0){
+          coverPicPath = this.$refs.refCover.imgList[0].previewUrl
+          cover: this.$refs.refCover.imgList[0].url
+        image: this.$refs.refImags.imgList[0].url
+        picPath: this.$refs.refImags.imgList[0].previewUrl
+      }
       let data = {
         isFeedback: this.isFeedback,
         isTrain: this.isTrain,
@@ -887,12 +897,11 @@ export default {
         judge: this.judge,
         train: this.train,
         feed: this.feed,
-
         // TODO 图片
-        coverPicPath: this.$refs.refCover.imgList[0].previewUrl,
-        cover: this.$refs.refCover.imgList[0].url,
-        image: this.$refs.refImags.imgList[0].url,
-        picPath: this.$refs.refImags.imgList[0].previewUrl
+        coverPicPath,
+        cover,
+        image,
+        picPath
         // END
       };
       sessionStorage.setItem("data", JSON.stringify(data));
