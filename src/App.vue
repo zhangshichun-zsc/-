@@ -39,6 +39,19 @@ export default {
 .selec .ivu-select-selection input{
   font-size: 16px;
 }
+.shuru .ivu-input{
+  font-size: 16px !important;
+}
+.gg-xz .ivu-select-placeholder{
+  font-size: 16px !important;
+}
+.gg-xz .ivu-select-selected-value{
+  font-size: 16px !important;
+}
+.asd .ivu-radio-wrapper{
+  font-size: 16px !important;
+}
+
 
 // //  隐藏滚动条的样式
 // ::-webkit-scrollbar {

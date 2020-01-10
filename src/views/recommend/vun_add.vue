@@ -17,17 +17,17 @@
         :rules="ruleValidate"
         :label-width="100"
       >
-        <FormItem label="广告名称" prop="title">
+        <FormItem label="广告名称" prop="title" class="shuru">
           <Input
             v-model="formValidate.title"
             placeholder="广告名称"
-            style="width:300px"
+            style="width:300px;"
           />
           <span style="color: #9EA7B4;font-size: 12px;margin-left: 0.5rem;"
             >广告名称只是作为辨别多个广告条目之用，并不显示在广告中</span
           >
         </FormItem>
-        <FormItem label="广告位置" prop="location">
+        <FormItem label="广告位置" prop="location" class="gg-xz">
           <Select v-model="formValidate.location" style="width:300px">
             <Option
               :value="item.dicCode"
@@ -60,7 +60,7 @@
             ></XDatePicker>
           </FormItem>
         </FormItem>
-        <FormItem label="上线/下线" prop="status">
+        <FormItem label="上线/下线" prop="status" class="asd">
           <RadioGroup v-model="formValidate.status">
             <Radio label="1">上线</Radio>
             <Radio label="0">下线</Radio>
@@ -76,7 +76,7 @@
             :crop-height="320"
           ></UploadImg>
         </FormItem>
-        <FormItem label="是否跳转外部链接" prop="linkType">
+        <FormItem label="是否跳转外部链接" prop="linkType" class="asd">
           <RadioGroup v-model="formValidate.linkType">
             <Radio label="1">是</Radio>
             <Radio label="0">否</Radio>
@@ -86,6 +86,7 @@
           label="广告链接"
           prop="linkUrl"
           v-if="formValidate.linkType == 1"
+          class="shuru"
         >
           <Input
             v-model="formValidate.linkUrl"
@@ -346,5 +347,10 @@ export default {
   position: absolute;
   top: 0;
   right: -30px;
+}
+.asd{
+  .ivu-radio-wrapper{
+    font-size: 16px !important;
+  }
 }
 </style>
