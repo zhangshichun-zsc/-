@@ -157,20 +157,20 @@
                 </li>
                 <li class="flex-start">
                   <span>活动时间</span>
-                  <DatePicker
+                  <XDatePicker
                     :value="args.startAt"
                     type="datetime"
                     :options="options"
                     placeholder="开始时间"
                     :disabled="isDisb"
                     confirm
-                    style="width: 150px"
+                    style="width: 170px"
                     @on-change="handleChange(0, 'startAt', $event)"
                     @on-open-change="successOk(0, $event)"
                     format="yyyy-MM-dd HH:mm"
-                  />
+                  ></XDatePicker>
                   <i>&nbsp;~&nbsp;</i>
-                  <DatePicker
+                  <XDatePicker
                     :value="args.endAt"
                     type="datetime"
                     :options="options"
@@ -179,26 +179,27 @@
                     @on-change="handleChange(0, 'endAt', $event)"
                     @on-open-change="successOk(1, $event)"
                     confirm
-                    style="width: 150px"
+                    style="width: 170px"
                     format="yyyy-MM-dd HH:mm"
-                  />
+                  ></XDatePicker>
                 </li>
                 <li class="flex-start">
                   <span>招募时间</span>
-                  <DatePicker
+
+                  <XDatePicker
                     :value="zhaStart"
                     type="datetime"
                     :options="options"
                     :disabled="isDisb"
                     placeholder="开始时间"
                     confirm
-                    style="width: 150px"
+                    style="width: 170px"
                     @on-change="handleChange(1, 'zhaStart', $event)"
                     @on-open-change="successOk(2, $event)"
                     format="yyyy-MM-dd HH:mm"
-                  />
+                  ></XDatePicker>
                   <i>&nbsp;~&nbsp;</i>
-                  <DatePicker
+                  <XDatePicker
                     :value="zhaEnd"
                     :disabled="isDisb"
                     type="datetime"
@@ -207,9 +208,9 @@
                     @on-change="handleChange(1, 'zhaEnd', $event)"
                     @on-open-change="successOk(3, $event)"
                     confirm
-                    style="width: 150px"
+                    style="width: 170px"
                     format="yyyy-MM-dd HH:mm"
-                  />
+                  ></XDatePicker>
                 </li>
               </ul>
             </div>
@@ -565,8 +566,21 @@
       <Row class-name="row20">
         <i-col push="18" span="6">
           <div class="btns">
-            <Button @click="sumbmit(8)" shape="circle" size='large' class="left" v-if=" isEdit == 2 || isEdit == 3">存为草稿</Button>
-            <Button @click="sumbmit(1)" shape="circle" size='large' class="right">{{isEdit ==1?"保存活动":"发布活动"}}</Button>
+            <Button
+              @click="sumbmit(8)"
+              shape="circle"
+              size="large"
+              class="left"
+              v-if="isEdit == 2 || isEdit == 3"
+              >存为草稿</Button
+            >
+            <Button
+              @click="sumbmit(1)"
+              shape="circle"
+              size="large"
+              class="right"
+              >{{ isEdit == 1 ? "保存活动" : "发布活动" }}</Button
+            >
           </div>
         </i-col>
       </Row>
@@ -587,6 +601,7 @@ import {
 } from "@/request/api";
 import { getAdressId } from "@/libs/utils";
 import wangeditor from "_c/wangeditor";
+import XDatePicker from "@/business_components/XDatePicker.vue";
 import adress from "_c/map";
 import { upload } from "@/request/http";
 import { filterNull } from "@/libs/utils";
@@ -723,7 +738,7 @@ export default {
     if (to.name !== "volunteer_compile") sessionStorage.removeItem("data");
     next();
   },
-  components: { wangeditor, adress },
+  components: { wangeditor, adress, XDatePicker },
 
   created() {
     let isEdit = ~~this.$route.query.isEdit || 2;
@@ -876,15 +891,17 @@ export default {
       this.$delete(this.args.coActivityUserConfParamList, i);
     },
     jump(i) {
-      let coverPicPath = ''
-      let cover = ''
-      let image = ''
-      let picPath = ''
-      if(this.$refs.refCover.imgList.length>0){
-          coverPicPath = this.$refs.refCover.imgList[0].previewUrl
-          cover: this.$refs.refCover.imgList[0].url
-        image: this.$refs.refImags.imgList[0].url
-        picPath: this.$refs.refImags.imgList[0].previewUrl
+      let coverPicPath = "";
+      let cover = "";
+      let image = "";
+      let picPath = "";
+      if (this.$refs.refCover.imgList.length > 0) {
+        coverPicPath = this.$refs.refCover.imgList[0].previewUrl;
+        cover: this.$refs.refCover.imgList[0].url; 
+      }
+      if(this.$refs.refImags.imgList.length > 0){
+        image: this.$refs.refImags.imgList[0].url;
+        picPath: this.$refs.refImags.imgList[0].previewUrl;
       }
       let data = {
         isFeedback: this.isFeedback,
