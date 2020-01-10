@@ -1,6 +1,6 @@
 <template>
   <div id="wangeditor">
-    <div :id="id" v-html="excontent"></div>
+    <div :id="id"></div>
   </div>
 </template>
 
@@ -34,12 +34,16 @@ export default {
     return {
       excontent: '',
       editor: '',
-      info: ''
+      info: '',
+      isChange:false
     }
   },
   watch: {
     labels(val){
+      if(!this.isChange){
        this.editor.txt.html(val)
+      }
+      this.isChange = false
     },
     disabled(val){
       this.editor.$textElem.attr(this.id, val)
@@ -147,6 +151,7 @@ export default {
     }
     this.editor.customConfig.onchange = html => {
       // html 即变化之后的内容
+      this.isChange = true
       this.content = html
       this.$emit('change', html)
     }
