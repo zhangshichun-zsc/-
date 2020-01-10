@@ -46,7 +46,7 @@ export default {
       this.isChange = false
     },
     disabled(val){
-      this.editor.$textElem.attr('contenteditable', val)
+      this.editor.$textElem.attr('contenteditable', !this.disabled)
     }
   },
   props: ['labels', 'id', 'disabled'],
@@ -160,7 +160,6 @@ export default {
 
     // 获取富文本内容
     this.editor.txt.html(this.labels)
-    this.editor.$textElem.attr('contenteditable', true)
   },
   methods: {
     updata() {
