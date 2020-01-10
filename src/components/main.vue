@@ -457,21 +457,20 @@ export default {
       "pending"
     ];
 
-    //  选中的菜单项
-    this.active = to.name;
-    this.updateActive();
-
-    // end
     // 总菜单
     let menuList = this.$store.state.menuList;
 
     if (whiteList.includes(to.name, 0)) {
+      this.active = to.name;
+      this.updateActive();
       return next();
     }
 
     if (!menuList.includes(toName, 0)) {
       this.$Message.error("此账号无该权限！");
     } else {
+      this.active = to.name;
+      this.updateActive();
       next();
     }
   },
