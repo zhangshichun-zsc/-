@@ -3,18 +3,6 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <!-- <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-        </div>
-      </div>-->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>组织:</span>
@@ -108,7 +96,7 @@
         <div class="flex-center-end">
           <Select
             class="inpt"
-            style="width:100px;margin-right:10px"
+
             placeholder="显示条数"
             v-model="size"
             @on-change="changeNum"
@@ -117,7 +105,7 @@
           </Select>
           <Select
             class="inpt"
-            style="width:100px"
+
             placeholder="排序方式"
             v-model="sort"
             @on-change="changeSort"
