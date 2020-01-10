@@ -248,17 +248,6 @@
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
            <DatePicker  size="large" placeholder="请输入" :value="args.setTime" type='datetime' @on-change="changeDate" :disabled="isDisb"  :options="options"/>
-             <DatePicker
-                   :value='args.setTime'
-                   type="datetime"
-                   :options="options"
-                   :disabled='isDisb'
-                   placeholder="开始时间"
-                   confirm
-                   style="width: 150px"
-                   @on-change="handleChange(1,'zhaStart',$event)"
-                   @on-open-change="successOk(2,$event)"
-                   format="yyyy-MM-dd HH:mm"/>
         </i-col>
       </Row>
       <Row class-name="row">

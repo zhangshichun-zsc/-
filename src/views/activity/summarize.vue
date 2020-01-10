@@ -8,7 +8,7 @@
     <div class="content">
       <div class="summarize">
         <p>本次活动总结</p>
-         <wangeditor id="excccc2" :labels='text'  @change="btns"></wangeditor>
+         <wangeditor id="excccc2" :labels='text'  @change="btns" :disabled='isDisa'></wangeditor>
 
       </div>
       <div class="activity-content">
@@ -19,11 +19,11 @@
         <div class="uploading-img" >
           <div class="img" v-for='(item,i) in picList' :key='i'>
             <img class="imgs" :src="item"/>
-            <Icon type="ios-trash" :size='36' color="#FF565A" class="cancel" @click="cancelImg(i)"/>
+            <Icon type="ios-trash" :size='36' color="#FF565A" class="cancel" @click="cancelImg(i)" v-if="!isDisa"/>
           </div>
         </div>
         
-        <div v-if='picList.length<6'  @click="()=>{ this.$refs.files.click()}">
+        <div v-if='picList.length<6&&!isDisa'  @click="()=>{ this.$refs.files.click()}">
           <div class="upload" >
             <div class="file flex-center-center">
               <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="btn">
+        <div class="btn" v-if="!isDisa">
           <Button class="button-red" @click="getactivesum">提交</Button>
         </div>
       </div>
@@ -57,7 +57,8 @@ export default {
       userId:1,
       activityId:1,
       text:'',
-      activityName:''
+      activityName:'',
+      isDisa:false
     };
   },
 
@@ -75,15 +76,20 @@ export default {
   methods: {
     showCont(){
       getActiveSumm({activityId:this.activityId}).then(res => {
-        this.text = res.data.text
-        let picList = []
-        let pics = []
-        for(let item of res.data.pics){
-          picList.push(item.picShow)
-          pics.push(item.pic)
+        if(res.data){
+          this.isDisa = true
+          this.text = res.data.text
+          let picList = []
+          let pics = []
+          for(let item of res.data.pics){
+            picList.push(item.picShow)
+            pics.push(item.pic)
+          }
+          this.picList = picList
+          this.pics = pics
+        }else{
+          this.isDisa = false
         }
-        this.picList = picList
-        this.pics = pics
       })
     },
     uploadFile() {

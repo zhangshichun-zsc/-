@@ -703,7 +703,7 @@ export default {
           render: (h, params) => {
             return h('div', [
               h(
-                'span',
+                'a',
                 {
                   clssName: 'action',
                   style: {
@@ -723,7 +723,7 @@ export default {
                 '查看'
               ),
               h(
-                'span',
+                'a',
                 {
                   style: {
                     marginRight: '5px',
