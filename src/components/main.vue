@@ -26,30 +26,21 @@
                     <Icon title="常用菜单" type="ios-menu-outline" size="26" />
                   </span>
                   <DropdownMenu slot="list" style="width:300px" class="drop">
-                    <DropdownItem
-                      style="display:flex;justify-content: space-between"
-                    >
+                    <DropdownItem style="display:flex;justify-content: space-between">
                       <p style="color:gray">常用菜单</p>
                       <p style="color:green" @click="modal2 = true">菜单管理</p>
                     </DropdownItem>
-                    <DropdownItem
-                      divided
-                      style="display:flex;justify-content: space-around"
-                    >
+                    <DropdownItem divided style="display:flex;justify-content: space-around">
                       <p @click="manger">活动管理</p>
                       <p @click="group">机构列表</p>
                       <p @click="order">订单列表</p>
                     </DropdownItem>
-                    <DropdownItem
-                      style="display:flex;justify-content: space-around"
-                    >
+                    <DropdownItem style="display:flex;justify-content: space-around">
                       <p @click="user">用户列表</p>
                       <p @click="approval">活动立项</p>
                       <p @click="adlist">广告列表</p>
                     </DropdownItem>
-                    <DropdownItem
-                      style="display:flex;justify-content: space-around"
-                    >
+                    <DropdownItem style="display:flex;justify-content: space-around">
                       <p>专题列表</p>
                       <p @click="department">部门管理</p>
                       <p @click="member">成员管理</p>
@@ -59,20 +50,16 @@
 
                 <Dropdown prop="transfer:true">
                   <span title="账户信息">
-                    <img
-                      class="userimg"
-                      v-if="userInfo.userimg"
-                      :src="userInfo.userimg"
-                    />
+                    <img class="userimg" v-if="userInfo.userimg" :src="userInfo.userimg" />
                     <Icon v-else type="ios-contact-outline" size="26" />
                     {{ userInfo.name }}
                   </span>
                   <DropdownMenu slot="list">
-                    <DropdownItem
-                      style="display:flex;justify-content: space-between"
-                    >
+                    <DropdownItem style="display:flex;justify-content: space-between">
                       <!-- <p>账户信息</p> -->
-                      <p><a style="" @click="less">账户设置</a></p>
+                      <p>
+                        <a style @click="less">账户设置</a>
+                      </p>
                     </DropdownItem>
                     <!-- <DropdownItem divided
                       >• 所在部门：IT系统管理部</DropdownItem
@@ -81,22 +68,16 @@
                     <DropdownItem
                       >• 登录地区：北京市 (IP：1.1.1.1)</DropdownItem
                     >
-                    <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem> -->
+                    <DropdownItem>• 上次登录：2019-06-31 14:36:21</DropdownItem>-->
                   </DropdownMenu>
                 </Dropdown>
 
-                <Modal
-                  v-model="modal2"
-                  width="800px"
-                  class="vertical-center-modal"
-                >
+                <Modal v-model="modal2" width="800px" class="vertical-center-modal">
                   <p slot="header">
                     <span>常用菜单设置</span>
                   </p>
                   <p slot="header" style="color:#ccc;font-weight:normal">
-                    <span
-                      >通过点击勾选可添加菜单为管理常用操作项，最多添加9个</span
-                    >
+                    <span>通过点击勾选可添加菜单为管理常用操作项，最多添加9个</span>
                   </p>
                   <div class="cai">
                     <ul>
@@ -300,7 +281,7 @@
                       <p>（10）</p>
                     </DropdownItem>
                   </DropdownMenu>
-                </Dropdown> -->
+                </Dropdown>-->
 
                 <span>
                   <Icon
@@ -315,12 +296,8 @@
                 <Modal v-model="modal1" title="退出确认" class-name="out-modal">
                   <h4>确定要退出登录吗？</h4>
                   <div slot="footer">
-                    <Button type="text" size="large" @click="modalOk(0)"
-                      >取消</Button
-                    >
-                    <Button type="error" size="large" @click="modalOk(1)"
-                      >确定</Button
-                    >
+                    <Button type="text" size="large" @click="modalOk(0)">取消</Button>
+                    <Button type="error" size="large" @click="modalOk(1)">确定</Button>
                   </div>
                 </Modal>
               </div>
@@ -352,12 +329,7 @@
               ref="child"
               accordion
             >
-              <Submenu
-                :name="index + 1"
-                id="top"
-                v-for="(item, index) in routelist"
-                :key="index"
-              >
+              <Submenu :name="index + 1" id="top" v-for="(item, index) in routelist" :key="index">
                 <template slot="title">
                   <img
                     class="icon-img"
@@ -371,8 +343,7 @@
                   <span
                     class="prenName"
                     style="line-height: 14px;font-size: 16px;"
-                    >{{ item.parentName }}</span
-                  >
+                  >{{ item.parentName }}</span>
                 </template>
                 <Menu-item
                   :name="`${index + 1}-${keys + 1}`"
@@ -383,9 +354,7 @@
                 >
                   <!--  style="padding-left:10px" -->
                   <Icon type="md-arrow-dropright" />
-                  <span style="font-size: 14px;color: #1b2331">
-                    {{ value.name }}</span
-                  >
+                  <span style="font-size: 14px;color: #1b2331">{{ value.name }}</span>
                 </Menu-item>
               </Submenu>
             </Menu>
