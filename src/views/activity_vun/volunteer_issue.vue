@@ -174,7 +174,7 @@
                         </div>
                       </div>
                     </div>
-                    <p style="margin-top:10px;color:#eee;">输入手机号和姓名获得查询结果填入其中</p>
+                    <p style="margin-top:10px;color:#666;">输入手机号和姓名获得查询结果填入其中</p>
                   </div>
                 </li>
                 <li class="jobs">

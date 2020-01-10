@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="btn">
+        <div class="btn" v-if="!isDisa">
           <Button class="button-red" @click="getactivesum">提交</Button>
         </div>
       </div>
