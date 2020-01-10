@@ -346,14 +346,15 @@
             <!-- <div class="toggle-button">|||</div> -->
             <Menu
               :active-name="active"
-              :open-names="['1']"
+              :open-names="openNames"
               theme="dark"
               width="auto"
               ref="child"
               accordion
             >
               <Submenu
-                :name="index + 1"
+                ref="submenuList"
+                :name="index"
                 id="top"
                 v-for="(item, index) in routelist"
                 :key="index"
@@ -367,21 +368,20 @@
                         : 'https://rhzgtest.co-inclusion.org/app/menu_icon/content.svg'
                     "
                   />
-                  <!-- <Icon v-else type="ios-bookmark" /> -->
+
                   <span
                     class="prenName"
                     style="line-height: 14px;font-size: 16px;"
-                    >{{ item.parentName }}</span
-                  >
+                    >{{ item.parentName }}
+                  </span>
                 </template>
                 <Menu-item
-                  :name="`${index + 1}-${keys + 1}`"
+                  :name="value.url"
                   v-for="(value, keys) in item.list"
-                  :key="keys"
+                  :key="value.url"
                   :to="{ name: value.url }"
-                  @click.native="savestate(`${index + 1}-${keys + 1}`)"
                 >
-                  <!--  style="padding-left:10px" -->
+                  <!-- @click.native="savestate(`${index + 1}-${keys + 1}`)" -->
                   <Icon type="md-arrow-dropright" />
                   <span style="font-size: 14px;color: #1b2331">
                     {{ value.name }}</span
@@ -411,10 +411,10 @@ export default {
       modal1: false,
       modal2: false,
       active: "",
+      openNames: ["1"],
       token: "",
       list: function() {
         this.routelist = sessionStorage.getItem("routelist");
-        console.log(this.routelist, sessionStorage.getItem("routelist"));
       },
       userInfo: {
         name: "",
@@ -427,6 +427,14 @@ export default {
 
   computed: {},
 
+  watch: {
+    routelist(newValue, odlValue) {
+      if (newValue.length > 0) {
+        this.active = this.$route.name;
+        this.updateActive();
+      }
+    }
+  },
   //保存储存的信息
   created() {
     this.active = window.sessionStorage.getItem("active");
@@ -449,6 +457,11 @@ export default {
       "pending"
     ];
 
+    //  选中的菜单项
+    this.active = to.name;
+    this.updateActive();
+
+    // end
     // 总菜单
     let menuList = this.$store.state.menuList;
 
@@ -482,7 +495,6 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.routelist = res.data;
-
           // 将 当前用户的菜单保存到 vueX 中
           let arr = [];
           res.data.forEach(item => {
@@ -509,6 +521,21 @@ export default {
           this.$Message.error(res.msg);
         }
         // console.log(res);
+      });
+    },
+    updateActive() {
+      this.$nextTick(() => {
+        this.$refs.child.updateOpened();
+        this.$refs.child.updateActiveName();
+        this.$nextTick(() => {
+          this.$refs.submenuList.forEach((item, index) => {
+            if (item.active) {
+              this.$refs.submenuList[item.name].opened = true;
+            } else {
+              this.$refs.submenuList[item.name].opened = false;
+            }
+          });
+        });
       });
     },
     home() {
@@ -561,7 +588,6 @@ export default {
     }
   },
   mounted() {
-    // this.gethomepage()
     this.getUserInfo();
   }
 };
