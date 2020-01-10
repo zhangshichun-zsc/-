@@ -219,7 +219,7 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "span",
+                "a",
                 {
                   clssName: "action",
                   style: {
@@ -239,7 +239,7 @@ export default {
                 "编辑"
               ),
               h(
-                "span",
+                "a",
                 {
                   style: {
                     marginRight: "5px",

@@ -22,13 +22,13 @@
             :model="ContentData"
             :rules="RuleDate"
           >
-            <FormItem label="资讯标题:" prop="title">
+            <FormItem label="资讯标题:" prop="title" class="shuru">
               <Input style="width: 15rem" v-model="ContentData.title" />
             </FormItem>
-            <FormItem label="资讯描述:" prop="resume">
+            <FormItem label="资讯描述:" prop="resume" class="shuru">
               <Input style="width: 15rem" v-model="ContentData.resume" />
             </FormItem>
-            <FormItem label="资讯分类:" prop="informationType">
+            <FormItem label="资讯分类:" prop="informationType" class="gg-xz">
               <Select
                 v-model="ContentData.informationType"
                 style="width:200px"
@@ -42,7 +42,7 @@
                 >
               </Select>
             </FormItem>
-            <FormItem label="上线/下线" prop="isOnline">
+            <FormItem label="上线/下线" prop="isOnline" class="asd">
               <RadioGroup v-model="ContentData.isOnline" class="font">
                 <Radio label="1">上线</Radio>
                 <Radio label="0">下线</Radio>
