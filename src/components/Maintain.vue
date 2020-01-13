@@ -2,40 +2,42 @@
 <template>
   <div>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="head">
-      <!-- <p>培训模板</p> -->
-      <p>
-        <Button class="table-btn" @click="modal1 = true">新增模板</Button>
-      </p>
-      <Modal v-model="modal1" title="新增模板">
-        <p class="title">请选择分类</p>
-        <div class="tabs">
-          <Button
-            class="btn"
-            v-for="(item, index) in arr"
-            :key="index"
-            @click="train(item.dicId,item.dicName,0,null)"
-            >{{ item.dicName }}</Button
-          >
-        </div>
-        <div class="footer"></div>
-      </Modal>
-    </div>
-    <div class="content">
-      <ul>
-        <li v-for="(item, index) in list" :key="index">
-          <p class="content-head">{{ item.dicName }}</p>
-          <div class="wap">
+    <div class="wap">
+      <div class="head">
+        <!-- <p>培训模板</p> -->
+        <p>
+          <Button class="table-btn" @click="modal1 = true">新增模板</Button>
+        </p>
+        <Modal v-model="modal1" title="新增模板">
+          <p class="title">请选择分类</p>
+          <div class="tabs">
             <Button
-              @click="train(i[id], i[name], 1,i.actMouldId)"
-              v-for="(i, m) in item.mouldList"
-              :key="m"
               class="btn"
-              >{{ i[name] }}</Button
+              v-for="(item, index) in arr"
+              :key="index"
+              @click="train(item.dicId,item.dicName,0,null)"
+              >{{ item.dicName }}</Button
             >
           </div>
-        </li>
-      </ul>
+          <div class="footer"></div>
+        </Modal>
+      </div>
+      <div class="content">
+        <ul>
+          <li v-for="(item, index) in list" :key="index">
+            <p class="content-head">{{ item.dicName }}</p>
+            <div class="wap">
+              <Button
+                @click="train(i[id], i[name], 1,i.actMouldId)"
+                v-for="(i, m) in item.mouldList"
+                :key="m"
+                class="btn"
+                >{{ i[name] }}</Button
+              >
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -115,6 +117,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.wap{
+  border-radius: 20px;
+  background: #fff;
+  padding: 20px;
+  overflow: hidden;
+}
 .head {
   display: flex;
   height: 50px;

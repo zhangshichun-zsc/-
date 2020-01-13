@@ -3,79 +3,80 @@
 <template>
   <div class="list">
     <Navigation :labels="navigation1"></Navigation>
-    <div class="all">
-      <span
-        v-for="(item,index) in list"
-        :key="index"
-        :class="{active:num==index}"
-        @click="onall(index)"
-      >
-        {{item}}
-      </span>
-    </div>
-    <div class="name flex-between">
-      <div class="flex-center-start">
-        <span>活动名称:</span>
-        <i-input :value.sync="value" placeholder="活动名称" style="width: 180px" v-model="activityName"></i-input>
-        <span>姓名:</span>
-        <i-input :value.sync="value" placeholder="姓名" style="width: 180px" v-model="userName"></i-input>
-        <span>手机号:</span>
-        <i-input :value.sync="value" placeholder="手机号" style="width: 180px" v-model="userTel"></i-input>
-        <span>受益方:</span>
-        <Select v-model="types" style="width:180px">
-          <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
+    <div class="wap">
+      <div class="all">
+        <span
+          v-for="(item,index) in list"
+          :key="index"
+          :class="{active:num==index}"
+          @click="onall(index)"
+        >
+          {{item}}
+        </span>
       </div>
-      <Button class="button-red" @click="query">查询</Button>
-    </div>
-    <div class="integral-table">
-      <div class="table-header flex-between" style="display:flex">
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-        <div class="flex-center-end">
-          <Button class="table-btn" @click="exportData">导出</Button>
-          <Dropdown style="margin-left: 10px">
-            <Button class="table-btn">
-              群发消息
-              <Icon type="ios-arrow-down"></Icon>
-            </Button>
-            <DropdownMenu slot="list">
-              <DropdownItem>微信消息</DropdownItem>
-              <DropdownItem>短信</DropdownItem>
-              <DropdownItem>站内信</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-          <div class="flex-center-start">
-            <!-- <Button class="table-btn" @click="add">添加活动</Button> -->
-            <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
-              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select class="table-btn" placeholder="排序方式" style="width: 150px;" v-model="sort" size="large">
-              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-         </div>
+      <div class="name flex-between">
+        <div class="flex-center-start">
+          <span>活动名称:</span>
+          <i-input :value.sync="value" placeholder="活动名称" style="width: 180px" v-model="activityName"></i-input>
+          <span>姓名:</span>
+          <i-input :value.sync="value" placeholder="姓名" style="width: 180px" v-model="userName"></i-input>
+          <span>手机号:</span>
+          <i-input :value.sync="value" placeholder="手机号" style="width: 180px" v-model="userTel"></i-input>
+          <span>受益方:</span>
+          <Select v-model="types" style="width:180px">
+            <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
+        <Button class="button-red" @click="query">查询</Button>
       </div>
-      <Table
-        ref="selection"
-        border
-        :columns="columns"
-        :data="datax"
-        @on-selection-change="handleSelectionChange"
-      ></Table>
+      <div class="integral-table">
+        <div class="table-header flex-between" style="display:flex">
+            <Button @click="chackall()" style="border:0px;">
+              <Checkbox v-model="status"></Checkbox>全选
+            </Button>
+          <div class="flex-center-end">
+            <Button class="table-btn" @click="exportData">导出</Button>
+            <Dropdown style="margin-left: 10px">
+              <Button class="table-btn">
+                群发消息
+                <Icon type="ios-arrow-down"></Icon>
+              </Button>
+              <DropdownMenu slot="list">
+                <DropdownItem>微信消息</DropdownItem>
+                <DropdownItem>短信</DropdownItem>
+                <DropdownItem>站内信</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <div class="flex-center-start">
+              <!-- <Button class="table-btn" @click="add">添加活动</Button> -->
+              <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
+                <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+              <Select class="table-btn" placeholder="排序方式" style="width: 150px;" v-model="sort" size="large">
+                <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+          </div>
+          </div>
+        </div>
+        <Table
+          ref="selection"
+          border
+          :columns="columns"
+          :data="datax"
+          @on-selection-change="handleSelectionChange"
+        ></Table>
 
-      <Page
-        :total="dataCount"
-        show-elevator
-        show-total
-        size="small"
-        class="pages"
-        :page-size="size"
-        @on-change="changepages"
-      />
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          class="pages"
+          :page-size="size"
+          @on-change="changepages"
+        />
+      </div>
     </div>
-
   </div>
 </template>
 
@@ -297,11 +298,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wap{
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+}
 .list {
   .all {
     padding: 20px;
     background: #ffffff;
-    margin-top: 20px;
     span {
       display: inline-block;
       height: 40;

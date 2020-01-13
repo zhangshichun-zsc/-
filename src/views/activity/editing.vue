@@ -430,7 +430,24 @@ export default {
         activityId: this.$route.query.id
       }).then(res => {
         console.log(res);
+        console.log(this.$route.query.type);
         this.batch = res.data;
+        if(this.$route.query.type===1){
+          delete this.batch.startT
+          delete this.batch.endT
+          delete this.batch.releaseTime
+          this.uploadActFmFilefz(this.batch.actCoverPic)
+          this.uploadActFilefz(this.batch.actPic)
+          for(let oi in this.batch.userConfList){
+            delete this.batch.userConfList[oi].enrollStarttime
+            delete this.batch.userConfList[oi].enrollEndtime
+            delete this.batch.userConfList[oi].outrollStarttime
+            delete this.batch.userConfList[oi].outrollEndtime
+            delete this.batch.userConfList[oi].setTime
+            delete this.batch.userConfList[oi].qrCodeShow
+            delete this.batch.userConfList[oi].qrCode
+          }
+        }
       });
     },
     save() {
@@ -510,6 +527,12 @@ export default {
         };
       });
     },
+    uploadActFmFilefz(path) {
+      uploadCopy({path:path}).then(res => {
+        this.$set(this.batch, "actCoverShowPic", res.data.relPath);
+        this.$set(this.batch, "actCoverPic", res.data.path);
+      });
+    },
     cancelActFmImg() {
       orgimgdel({ path: this.batch.actPic }).then(res => {
         this.batch.actCoverShowPic = null;
@@ -529,6 +552,12 @@ export default {
           this.$set(this.batch, "actShowPic", e.target.result);
           this.$set(this.batch, "actPic", res.data);
         };
+      });
+    },
+    uploadActFilefz(path) {
+      uploadCopy({path:path}).then(res => {
+        this.$set(this.batch, "actShowPic", res.data.relPath);
+        this.$set(this.batch, "actPic", res.data.path);
       });
     },
     cancelActImg() {

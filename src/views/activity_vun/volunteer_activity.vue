@@ -20,115 +20,117 @@
       </div>
     </Modal>
     <Navigation :labels="navigation1"></Navigation>
-    <div class="integral-header">
-      <div class="flex-center-start integral-body">
-        <div class="flex-center-start">
-          <span class="names">活动名称:</span>
-          <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
-        </div>
-        <div class="flex-center-start">
-          <span class="names">活动状态:</span>
-          <Select v-model="query.status" size='large' class="inpt">
-            <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </div>
-        <div class="flex-center-start">
-          <span class="names">活动日期:</span>
-          <div>
-             <Date-picker
-             type="date"
-              placeholder="选择日期"
-              style="width: 200px"
-              @on-change="handleChange('startT',$event)"
-            ></Date-picker>
-            <span>~</span>
-            <Date-picker
-             type="date"
-              placeholder="选择日期"
-              style="width: 200px"
-              @on-change="handleChange('endT',$event)"
-            ></Date-picker>
+    <div class="wap">
+      <div class="integral-header">
+        <div class="flex-center-start integral-body">
+          <div class="flex-center-start">
+            <span class="names">活动名称:</span>
+            <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
+          </div>
+          <div class="flex-center-start">
+            <span class="names">活动状态:</span>
+            <Select v-model="query.status" size='large' class="inpt">
+              <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            </Select>
+          </div>
+          <div class="flex-center-start">
+            <span class="names">活动日期:</span>
+            <div>
+              <Date-picker
+              type="date"
+                placeholder="选择日期"
+                style="width: 200px"
+                @on-change="handleChange('startT',$event)"
+              ></Date-picker>
+              <span>~</span>
+              <Date-picker
+              type="date"
+                placeholder="选择日期"
+                style="width: 200px"
+                @on-change="handleChange('endT',$event)"
+              ></Date-picker>
+            </div>
+          </div>
+          <div class="flex-center-start">
+            <Button class="button-red" @click="result">查询</Button>
           </div>
         </div>
-        <div class="flex-center-start">
-          <Button class="button-red" @click="result">查询</Button>
-        </div>
       </div>
-    </div>
-    <div class="integral-table">
-      <div class="table-header flex-between">
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="state">全选</Checkbox>
-          </Button>
-          <div>
-          <Button class="table-btn" @click="exportData" disabled>导出</Button>
-          <!-- <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button> -->
-          <!-- <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button> -->
-          <Button class="table-btn" @click="draft">草稿箱</Button>
-          <Button class="table-btn" @click="addaction">添加活动</Button>
-          <Select v-model="size"  class="table-btn" style="width: 150px;" placeholder="显示条数" size="large">
-            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Select placeholder="排序方式" class="table-btn" style="width: 150px;" v-model="sort" size="large">
-            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+      <div class="integral-table">
+        <div class="table-header flex-between">
+            <Button @click="chackall()" style="border:0px;">
+              <Checkbox v-model="state">全选</Checkbox>
+            </Button>
+            <div>
+            <Button class="table-btn" @click="exportData" disabled>导出</Button>
+            <!-- <Button class="table-btn" @click="modal1 = true">导出受益方签到表</Button> -->
+            <!-- <Button class="table-btn" @click="modal1 = true">导出志愿者签到表</Button> -->
+            <Button class="table-btn" @click="draft">草稿箱</Button>
+            <Button class="table-btn" @click="addaction">添加活动</Button>
+            <Select v-model="size"  class="table-btn" style="width: 150px;" placeholder="显示条数" size="large">
+              <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <Select placeholder="排序方式" class="table-btn" style="width: 150px;" v-model="sort" size="large">
+              <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+          </div>
         </div>
-      </div>
-      <div class="table">
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="datax"
-          @on-selection-change="handleSelectionChange"
-        ></Table>
-          <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
-            <div class="popup">
-              <p class="popup-head">
-                <span>目前导出字段顺序</span>
-                <span class="popup-head-tit">拖拽调整列显示顺序</span>
-              </p>
-              <div class="popup-content">
-                <p>
-                  <span>序号</span>
-                  <span>姓名</span>
-                  <span>性别</span>
-                  <span>手机号码</span>
-                  <span>身份证号</span>
-                  <span>年龄</span>
-                  <span>孩子姓名</span>
+        <div class="table">
+          <Table
+            ref="selection"
+            border
+            :columns="columns"
+            :data="datax"
+            @on-selection-change="handleSelectionChange"
+          ></Table>
+            <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
+              <div class="popup">
+                <p class="popup-head">
+                  <span>目前导出字段顺序</span>
+                  <span class="popup-head-tit">拖拽调整列显示顺序</span>
                 </p>
-                <p>
-                  <span>孩子性别</span>
-                  <span>孩子年龄</span>
-                  <span>签名（孩子）</span>
-                  <span>签名(家长)</span>
-                  <span>障碍类型</span>
-                </p>
-              </div>
-              <div class="bft">
-                <p>备选字段</p>
-                <div class="bft-tab">
-                  <CheckboxGroup v-model="fruit">
-                    <Checkbox label="香蕉">序号</Checkbox>
-                    <Checkbox label="苹果">姓名</Checkbox>
-                    <Checkbox label="西瓜">障碍类型</Checkbox>
-                  </CheckboxGroup>
+                <div class="popup-content">
+                  <p>
+                    <span>序号</span>
+                    <span>姓名</span>
+                    <span>性别</span>
+                    <span>手机号码</span>
+                    <span>身份证号</span>
+                    <span>年龄</span>
+                    <span>孩子姓名</span>
+                  </p>
+                  <p>
+                    <span>孩子性别</span>
+                    <span>孩子年龄</span>
+                    <span>签名（孩子）</span>
+                    <span>签名(家长)</span>
+                    <span>障碍类型</span>
+                  </p>
+                </div>
+                <div class="bft">
+                  <p>备选字段</p>
+                  <div class="bft-tab">
+                    <CheckboxGroup v-model="fruit">
+                      <Checkbox label="香蕉">序号</Checkbox>
+                      <Checkbox label="苹果">姓名</Checkbox>
+                      <Checkbox label="西瓜">障碍类型</Checkbox>
+                    </CheckboxGroup>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Modal>
+            </Modal>
+        </div>
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          class="pages"
+          size="small"
+          style="margin: auto"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
-      <Page
-        :total="dataCount"
-        show-elevator
-        show-total
-        class="pages"
-        size="small"
-        style="margin: auto"
-        :page-size="size"
-        @on-change="changepages"
-      />
     </div>
   </div>
 </template>
@@ -613,6 +615,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.wap{
+  padding: 20px 0;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+}
 .integral-header .integral-top {
   padding: 10px;
   background: white;

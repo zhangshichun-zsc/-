@@ -1362,10 +1362,12 @@ export default {
   margin: 0 15px;
 }
 .lx-content {
-  background-color: #fff;
+ 
 }
 .lx-cont{
   padding: 30px;
+  background-color: #fff;
+  border-radius: 20px;
 }
 .first-li{
   display: flex;
