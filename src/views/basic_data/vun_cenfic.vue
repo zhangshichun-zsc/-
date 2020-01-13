@@ -100,8 +100,8 @@
         </div>
         <div class="flex-center-end">
           <Select
-            class="inpt"
-            style="width:100px;margin-right:10px"
+            class="inpt sort"
+
             placeholder="显示条数"
             v-model="size"
             @on-change="changeNum"
@@ -109,8 +109,8 @@
             <Option :value="item" v-for="(item,index) in numList" :key="index">{{ item }}</Option>
           </Select>
           <Select
-            class="inpt"
-            style="width:100px"
+            class="inpt sort"
+
             placeholder="排序方式"
             v-model="sort"
             @on-change="changeSort"
@@ -433,5 +433,8 @@ export default {
 }
 .po {
   padding: 0 10px;
+}
+.sort{
+   width:100px;margin-right:10px;
 }
 </style>
