@@ -262,7 +262,12 @@
       <Row class-name="row">
         <i-col span='3'><span>集合地址</span></i-col>
         <i-col span='4'>
-           <Button @click="getAdr" size='large'>{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+           <Button @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+            <Input
+              v-model="args.addressSup"
+              placeholder="请输入详细地址"
+              :disabled="isDisb"
+            />
         </i-col>
       </Row>
       <Row>
