@@ -248,15 +248,15 @@
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
            <XDatePicker
-                    size="large"
-                    placeholder="请输入"
-                    :value="args.setTime"
-                    type="datetime"
-                    @on-change="changeDate"
-                    :disabled="isDisb"
-                    :options="options"
-                    format="yyyy-MM-dd HH:mm"
-                  ></XDatePicker>
+            size="large"
+            placeholder="请输入"
+            :value="args.setTime"
+            type="datetime"
+            @on-change="changeDate"
+            :disabled="isDisb"
+            :options="options"
+            format="yyyy-MM-dd HH:mm"
+          ></XDatePicker>
         </i-col>
       </Row>
       <Row class-name="row">
@@ -397,7 +397,7 @@ export default {
       this.$set(this.limit[i],'ruleValue',e.join(','))
     },
     changeDate(e,m){
-      this.args.setTime = e
+      this.args.setTime = e + ":00"
     },
     changePos(e){
       this.args.userPositionName = e.label

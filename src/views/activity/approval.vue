@@ -142,6 +142,7 @@
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
+      
                 </div>
               </li>
               <li class="first-li">
