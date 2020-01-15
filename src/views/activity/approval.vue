@@ -131,7 +131,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-pic" v-if='!projectMsg.batchPicShow'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
@@ -142,7 +142,17 @@
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="proPic"
+                  :max="1"
+                  v-model="proList"
+                  :display-width="300"
+                  :display-height="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refCover"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">小组归属</span>
@@ -215,7 +225,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">封面图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-picfm" v-if='!batch.actCoverShowPic'>
                     <div class="" @click="()=>{ this.$refs.filefm.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
@@ -226,11 +236,21 @@
                     <img style="width:100%;height:100%" :src="batch.actCoverShowPic"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="fmPic"
+                  :max="1"
+                  v-model="fmList"
+                  :display-width="120"
+                  :display-height="120"
+                  :crop-width="128"
+                  :crop-height="128"
+                  ref="refFm"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-pic" v-if='!batch.actShowPic'>
                     <div class="" @click="()=>{ this.$refs.filezt.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
@@ -241,7 +261,17 @@
                     <img style="width:100%;height:100%" :src="batch.actShowPic"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="ztPic"
+                  :max="1"
+                  v-model="ztList"
+                  :display-width="300"
+                  :display-height="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refZt"
+                ></UploadImg>
               </li>
             </ul>
           </Col>
@@ -385,11 +415,11 @@
               </li>
               <li class="first-li">
                 <span class="first-span">发布时间</span>
-                <RadioGroup v-model="batch.releaseTime" @on-change='releaseTime'>
-                  <Radio label="0">活动开始前一个月自动发布</Radio>
-                  <Radio label="1" :trueValue='releaseTimeSelf'>自定义</Radio>
+                <RadioGroup v-model="releaseTimeSelf" @on-change='releaseTime'>
+                  <Radio :label="0">活动开始前一个月自动发布</Radio>
+                  <Radio :label="1">自定义</Radio>
                 </RadioGroup>
-                <Date-picker :value="batch.releaseTime" :options="options" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker :value="batch.releaseTime" :options="options" v-if='~~releaseTimeSelf==1' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
@@ -467,7 +497,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-pic" v-if='!projectMsg.batchPicShow'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
@@ -478,7 +508,17 @@
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="proPic"
+                  :max="1"
+                  v-model="proList"
+                  :display-width="300"
+                  :display-height="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refCover"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">小组归属</span>
@@ -563,7 +603,7 @@
             </li>
             <li class="first-li">
                 <span class="first-span">图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-pic" v-if='!partner.partPicShow'>
                       <div class="" @click="()=>{ this.$refs.filepar.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filepar" @change="uploadPartnerFile()" style="display:none" >
@@ -574,7 +614,17 @@
                     <img class="imgs" style="width:283px;height:188px" :src="partner.partPicShow"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelPartnerImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="hzPic"
+                  :max="1"
+                  v-model="hzList"
+                  :display-width="300"
+                  :display-height="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refHz"
+                ></UploadImg>
               </li>
             <li>
               <p style="padding:10px 0">协议</p>
@@ -701,7 +751,7 @@ export default {
       addbtns: true,
       addLeader: false,
       addWorker: false,
-      releaseTimeSelf: false,
+      releaseTimeSelf: '',
       isAddRole: false,
       userId: 1,
       oneRole: {},
@@ -721,11 +771,62 @@ export default {
           return  date && date.valueOf() < Date.now() - 86400000
         }
       },
-      isAgree:false
+      isAgree:false,
+      proList: [],
+      proPic: {},
+      ztList: [],
+      ztPic: {},
+      fmList: [],
+      fmPic: {},
+      hzList: [],
+      hzPic: {},
     };
   },
 
   components: { role, adress },
+  watch: {
+    proList: {
+      handler(newValue, oldValue) {
+        this.projectMsg.batchPic = newValue[0] || null;
+        console.log(this.projectMsg)
+        if (this.$refs.refCover.imgList.length > 0) {
+          this.projectMsg.batchPicShow = this.$refs.refCover.imgList[0].previewUrl;
+          this.projectMsg.batchPic = this.$refs.refCover.imgList[0].url;
+        }
+      },
+      deep: true
+    },
+    ztList: {
+      handler(newValue, oldValue) {
+        this.batch.actPic = newValue[0] || null;
+        if (this.$refs.refZt.imgList.length > 0) {
+          this.batch.actShowPic = this.$refs.refZt.imgList[0].previewUrl;
+          this.batch.actPic = this.$refs.refZt.imgList[0].url;
+        }
+      },
+      deep: true
+    },
+    fmList: {
+      handler(newValue, oldValue) {
+        this.batch.actCoverPic = newValue[0] || null;
+        if (this.$refs.refFm.imgList.length > 0) {
+          this.batch.actCoverShowPic = this.$refs.refFm.imgList[0].previewUrl;
+          this.batch.actCoverPic = this.$refs.refFm.imgList[0].url;
+        }
+      },
+      deep: true
+    },
+    hzList: {
+      handler(newValue, oldValue) {
+        this.partner.partPic = newValue[0] || null;
+        if (this.$refs.refHz.imgList.length > 0) {
+          this.partner.partPicShow = this.$refs.refHz.imgList[0].previewUrl;
+          this.partner.partPic = this.$refs.refHz.imgList[0].url;
+        }
+      },
+      deep: true
+    }
+  },
 
   computed: {},
 
@@ -753,6 +854,8 @@ export default {
       }).then(res=>{
         console.log(res)
         this.projectMsg = res.data
+        this.proList = [this.projectMsg.batchPic];
+        this.proPic = { [this.projectMsg.batchPic]: this.projectMsg.batchPicShow };
       })
     },
     //立项前置项查询
@@ -785,6 +888,8 @@ export default {
       if (e >= 0) {
         this.partnerIndex = e;
         this.partner = this.projectMsg.partnerList[e];
+        this.hzList = [this.partner.partPic];
+        this.hzPic = { [this.partner.partPic]: this.partner.partPicShow };
       } else {
         let p = {
           partName: "",
@@ -854,7 +959,15 @@ export default {
     nextTwo() {
       console.log(this.batch);
       console.log(this.pcNum);
+      if(~~this.releaseTimeSelf==0){
+        this.batch.releaseTime = 0
+      }else if(~~this.releaseTimeSelf==1 && !this.batch.releaseTime){
+        this.$Message.warning('请选择发布时间')
+        return
+      }
       this.projectMsg.actInfoList[this.pcNum] = this.batch;
+      this.proList = [this.projectMsg.batchPic];
+      this.proPic = { [this.projectMsg.batchPic]: this.projectMsg.batchPicShow };
       console.log(this.projectMsg);
       this.two = false;
       this.three = true;
@@ -1084,12 +1197,10 @@ export default {
     //发布时间
     releaseTime(e) {
       console.log(e);
-      if (e == 1) {
-        this.releaseTimeSelf = true;
-      } else {
-        this.releaseTimeSelf = false;
+      if (~~e == 0) {
+        delete this.batch.releaseTime
       }
-      this.batch.releaseTime = e;
+      this.releaseTimeSelf = e;
     },
     //自定义发布时间
     getReleaseTime(e) {
@@ -1114,6 +1225,10 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
+      this.fmList = [this.batch.actCoverPic];
+      this.fmPic = { [this.batch.actCoverPic]: this.batch.actCoverShowPic };
+      this.ztList = [this.batch.actPic];
+      this.ztPic = { [this.batch.actPic]: this.batch.actShowPic };
       this.two = true;
       this.three = false;
       this.current = 1;
@@ -1293,6 +1408,8 @@ export default {
       uploadCopy({path:path}).then(res => {
         this.$set(this.batch, "actCoverShowPic", res.data.relPath);
         this.$set(this.batch, "actCoverPic", res.data.path);
+        this.fmList = [this.batch.actCoverPic];
+        this.fmPic = { [this.batch.actCoverPic]: this.batch.actCoverShowPic };
       });
     },
     cancelActFmImg() {
@@ -1313,6 +1430,8 @@ export default {
           console.log(e);
           this.$set(this.batch, "actShowPic", e.target.result);
           this.$set(this.batch, "actPic", res.data);
+          this.ztList = [this.batch.actPic];
+          this.ztPic = { [this.batch.actPic]: this.batch.actShowPic };
         };
       });
     },

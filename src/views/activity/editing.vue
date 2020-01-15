@@ -48,7 +48,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">封面图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-picfm" v-if='!batch.actCoverShowPic'>
                     <div class="" @click="()=>{ this.$refs.filefm.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
@@ -59,11 +59,21 @@
                     <img style="width:100%;height:100%" :src="batch.actCoverShowPic"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="fmPic"
+                  :max="1"
+                  v-model="fmList"
+                  :display-width="120"
+                  :display-height="120"
+                  :crop-width="128"
+                  :crop-height="128"
+                  ref="refFm"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
+                <!-- <div>
                   <div class="first-pic" v-if='!batch.actShowPic'>
                     <div class="" @click="()=>{ this.$refs.filezt.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
@@ -74,7 +84,17 @@
                     <img style="width:100%;height:100%" :src="batch.actShowPic"/>
                     <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  :picMap="ztPic"
+                  :max="1"
+                  v-model="ztList"
+                  :display-width="300"
+                  :display-height="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refCover"
+                ></UploadImg>
               </li>
             </ul>
           </Col>
@@ -249,15 +269,15 @@
               <li class="first-li">
                 <span class="first-span">发布时间</span>
                 <RadioGroup
-                  v-model="batch.releaseTime"
+                  v-model="releaseTimeSelf"
                   @on-change="releaseTime"
                 >
                   <Radio :label="0">活动开始前一个月自动发布</Radio>
-                  <Radio :label="1" :trueValue="releaseTimeSelf">自定义</Radio>
+                  <Radio :label="1">自定义</Radio>
                 </RadioGroup>
                 <Date-picker
                   :value="batch.releaseTime"
-                  v-if="releaseTimeSelf"
+                  v-if="~~releaseTimeSelf==1"
                   type="datetime"
                   :editable="false"
                   format="yyyy-MM-dd HH:mm"
@@ -340,7 +360,7 @@ export default {
       addbtns: true,
       addLeader: false,
       addWorker: false,
-      releaseTimeSelf: false,
+      releaseTimeSelf: '',
       isAddRole: false,
       editor1: "",
       templateList: [],
@@ -350,7 +370,11 @@ export default {
         }
       },
       showZf:false,
-      isZf:false
+      isZf:false,
+      ztList: [],
+      ztPic: {},
+      fmList: [],
+      fmPic: {},
     };
   },
 
@@ -448,9 +472,22 @@ export default {
             delete this.batch.userConfList[oi].qrCode
           }
         }
+        if(this.batch.releaseTime){
+          this.releaseTimeSelf = 1
+        }
+        this.fmList = [res.data.actCoverPic];
+        this.fmPic = { [res.data.actCoverPic]: res.data.actCoverShowPic };
+        this.ztList = [res.data.actPic];
+        this.ztPic = { [res.data.actPic]: res.data.actShowPic };
       });
     },
     save() {
+      if(~~this.releaseTimeSelf==0){
+        this.batch.releaseTime = 0
+      }else if(~~this.releaseTimeSelf==1 && !this.batch.releaseTime){
+        this.$Message.warning('请选择发布时间')
+        return
+      }
       if(this.$route.query.dicId){
         this.batch.type = 3;
         activeNew(this.batch).then(res => {
@@ -717,12 +754,10 @@ export default {
     //发布时间
     releaseTime(e) {
       console.log(e);
-      if (e == 1) {
-        this.releaseTimeSelf = true;
-      } else {
-        this.releaseTimeSelf = false;
+      if (~~e == 0) {
+        delete this.batch.releaseTime
       }
-      this.batch.releaseTime = e;
+      this.releaseTimeSelf = e;
     },
     //自定义发布时间
     getReleaseTime(e) {
