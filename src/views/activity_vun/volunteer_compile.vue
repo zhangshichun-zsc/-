@@ -248,21 +248,26 @@
         <i-col span='3'><span>集合时间</span></i-col>
         <i-col span='4'>
            <XDatePicker
-                    size="large"
-                    placeholder="请输入"
-                    :value="args.setTime"
-                    type="datetime"
-                    @on-change="changeDate"
-                    :disabled="isDisb"
-                    :options="options"
-                    format="yyyy-MM-dd HH:mm"
-                  ></XDatePicker>
+            size="large"
+            placeholder="请输入"
+            :value="args.setTime"
+            type="datetime"
+            @on-change="changeDate"
+            :disabled="isDisb"
+            :options="options"
+            format="yyyy-MM-dd HH:mm"
+          ></XDatePicker>
         </i-col>
       </Row>
       <Row class-name="row">
         <i-col span='3'><span>集合地址</span></i-col>
         <i-col span='4'>
-           <Button @click="getAdr" size='large'>{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+           <Button @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+            <Input
+              v-model="args.addressSup"
+              placeholder="请输入详细地址"
+              :disabled="isDisb"
+            />
         </i-col>
       </Row>
       <Row>
@@ -397,7 +402,7 @@ export default {
       this.$set(this.limit[i],'ruleValue',e.join(','))
     },
     changeDate(e,m){
-      this.args.setTime = e
+      this.args.setTime = e + ":00"
     },
     changePos(e){
       this.args.userPositionName = e.label
