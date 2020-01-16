@@ -239,7 +239,7 @@ export const upload = (p, url = '/pic/upload') => {
 export const uploadCopy = (params, url = '/pic/copy-pic') => {
   return new Promise((resolve, reject) => {
     axios
-      .get(url,  { params: params })
+      .get(url, { params: params })
       .then(res => {
         resolve(res.data);
       })

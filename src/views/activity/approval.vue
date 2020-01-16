@@ -144,11 +144,11 @@
                   </div>
                 </div> -->
                 <UploadImg
+                  style="width: auto;"
                   :picMap="proPic"
                   :max="1"
                   v-model="proList"
                   :display-width="300"
-                  :display-height="300"
                   :crop-width="750"
                   :crop-height="320"
                   ref="refCover"
@@ -238,6 +238,7 @@
                   </div>
                 </div> -->
                 <UploadImg
+                  style="width: auto;"
                   :picMap="fmPic"
                   :max="1"
                   v-model="fmList"
@@ -263,11 +264,11 @@
                   </div>
                 </div> -->
                 <UploadImg
+                  style="width: auto;"
                   :picMap="ztPic"
                   :max="1"
                   v-model="ztList"
                   :display-width="300"
-                  :display-height="300"
                   :crop-width="750"
                   :crop-height="320"
                   ref="refZt"
@@ -510,11 +511,11 @@
                   </div>
                 </div> -->
                 <UploadImg
+                  style="width: auto;"
                   :picMap="proPic"
                   :max="1"
                   v-model="proList"
                   :display-width="300"
-                  :display-height="300"
                   :crop-width="750"
                   :crop-height="320"
                   ref="refCover"
@@ -616,11 +617,11 @@
                   </div>
                 </div> -->
                 <UploadImg
+                  style="width: auto;"
                   :picMap="hzPic"
                   :max="1"
                   v-model="hzList"
                   :display-width="300"
-                  :display-height="300"
                   :crop-width="750"
                   :crop-height="320"
                   ref="refHz"
