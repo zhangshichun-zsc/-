@@ -272,10 +272,10 @@
       </Row>
       <Row>
         <i-col span='1' push='5'>
-          <Button shape="circle" size='large' @click="()=>{this.$router.back()}" style="width:150px;" class="success">返回</Button>
-        </i-col>
-        <i-col  span='1' push='1'>
            <Button shape="circle" size='large' @click="success()" style="width:150px;" class="success">完成</Button>
+        </i-col>
+        <i-col  span='1' push='2'>
+          <Button shape="circle" size='large' @click="()=>{this.$router.back()}" style="width:150px;" class="success">返回</Button>
         </i-col>
       </Row>
     </div>
