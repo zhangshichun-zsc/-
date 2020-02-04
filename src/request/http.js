@@ -249,3 +249,7 @@ export const uploadCopy = (params, url = '/pic/copy-pic') => {
   });
 };
 
+// 获取上传文件的地址，已携带token
+export function getFileUploadUrl() {
+  return `${SERVER_URl}/pic/upload?token=${store.state.token}`
+}

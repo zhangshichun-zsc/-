@@ -15,6 +15,7 @@ import topheads from "./components/topheads";
 import number from "./components/number";
 import iView, { Message, Modal } from "iview";
 import './directives'
+import './assets/css/helper.scss';
 import "./assets/css/dist/styles/iview.css";
 import "./libs/style.scss";
 import "./libs/rest.css";
