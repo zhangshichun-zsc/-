@@ -117,7 +117,7 @@
                       :display-height="120"
                       :crop-width="128"
                       :crop-height="128"
-                      :disabledTwo="cover && isDisb"
+                      :disabled="cover && isDisb"
                       ref="refCover"
                     ></UploadImg>
                   </div>
@@ -133,7 +133,7 @@
                       :display-width="300"
                       :crop-width="750"
                       :crop-height="320"
-                      :disabledTwo="image && isDisb"
+                      :disabled="image && isDisb"
                       ref="refImags"
                     ></UploadImg>
                   </div>

@@ -114,8 +114,7 @@ export default {
     placeholder: {
       type: String
     },
-    disabled: Boolean,
-    disabledTwo:Boolean
+    disabled: Boolean
   },
   data() {
     return {
