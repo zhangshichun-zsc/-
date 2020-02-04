@@ -10,9 +10,10 @@
             preview=".xcx-edit-img-preview"
             :crop="crop"
             :ready="ready"
-            :viewMode="2"
+            :viewMode="1"
             :cropBoxResizable="cropResizable"
-            :dragMode="cropResizable ? 'crop' : 'move'"
+            :dragMode="cropResizable?'crop':'move'"
+            style="max-height: 360px"
           />
         </div>
         <div class="actions-box">
@@ -25,59 +26,29 @@
           </Tooltip> -->
           <!-- 放大缩小图片 -->
           <ButtonGroup class="actions-item">
-            <Button size="large" type="primary" @click.prevent="zoom(0.2)"
-              >放大</Button
-            >
-            <Button size="large" type="primary" @click.prevent="zoom(-0.2)"
-              >缩小</Button
-            >
+            <Button size="large" type="primary" @click.prevent="zoom(0.1)">放大</Button>
+            <Button size="large" type="primary" @click.prevent="zoom(-0.1)">缩小</Button>
           </ButtonGroup>
           <!-- 上下左右调整图片 -->
           <ButtonGroup class="actions-item">
-            <Button size="large" type="primary" @click.prevent="move(-10, 0)"
-              >左移</Button
-            >
-            <Button size="large" type="primary" @click.prevent="move(10, 0)"
-              >右移</Button
-            >
-            <Button size="large" type="primary" @click.prevent="move(0, -10)"
-              >上移</Button
-            >
-            <Button size="large" type="primary" @click.prevent="move(0, 10)"
-              >下移</Button
-            >
+            <Button size="large" type="primary" @click.prevent="move(-10, 0)">左移</Button>
+            <Button size="large" type="primary" @click.prevent="move(10, 0)">右移</Button>
+            <Button size="large" type="primary" @click.prevent="move(0, -10)">上移</Button>
+            <Button size="large" type="primary" @click.prevent="move(0, 10)">下移</Button>
           </ButtonGroup>
           <!-- 旋转图片 -->
           <ButtonGroup class="actions-item">
-            <Button
-              size="large"
-              class="icon-rotate"
-              type="primary"
-              @click.prevent="rotate(-90)"
-              >左旋转</Button
-            >
-            <Button size="large" type="primary" @click.prevent="rotate(90)"
-              >右旋转</Button
-            >
+            <Button size="large" class="icon-rotate" type="primary" @click.prevent="rotate(-90)">左旋转</Button>
+            <Button size="large" type="primary" @click.prevent="rotate(90)">右旋转</Button>
           </ButtonGroup>
           <!-- 镜像翻转 -->
           <ButtonGroup class="actions-item">
-            <Button size="large" type="primary" @click.prevent="flipX"
-              >左右镜像</Button
-            >
-            <Button
-              size="large"
-              class="icon-rotate"
-              type="primary"
-              @click.prevent="flipY"
-              >上下镜像</Button
-            >
+            <Button size="large" type="primary" @click.prevent="flipX">左右镜像</Button>
+            <Button size="large" class="icon-rotate" type="primary" @click.prevent="flipY">上下镜像</Button>
           </ButtonGroup>
           <!-- 重置 -->
           <ButtonGroup class="actions-item">
-            <Button size="large" type="primary" @click.prevent="reset"
-              >重置</Button
-            >
+            <Button size="large" type="primary" @click.prevent="reset">重置</Button>
           </ButtonGroup>
           <!-- 重新选择 -->
           <!-- <Upload class="actions-item" action="/" :before-upload="beforeUpload">
@@ -97,21 +68,20 @@
         class="btn-primary"
         shape="circle"
         @click="editFinsh"
-        >裁剪完成</Button
-      >
+      >裁剪完成</Button>
     </div>
   </div>
 </template>
 
 <script>
-import VueCropper from "vue-cropperjs";
-import "cropperjs/dist/cropper.css";
-import { uploadMixin } from "./mixins";
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
+import { uploadMixin } from './mixins'
 
 export default {
   mixins: [uploadMixin],
   components: {
-    VueCropper
+    VueCropper,
   },
   props: {
     // 所编辑图片地址
@@ -127,21 +97,21 @@ export default {
     // 所保存图片类型
     type: {
       type: String,
-      default: "image/jpeg"
+      default: 'image/jpeg'
     }
   },
   watch: {
     url(v) {
-      if (v) {
+      if(v){
         this.$nextTick(() => {
-          this.$refs.cropper.replace(this.url, false);
-        });
+          this.$refs.cropper.replace(this.url, false)
+        })
       }
     }
   },
   data() {
     return {
-      cropImg: "",
+      cropImg: '',
       data: null,
       options: {},
       loading: false
@@ -149,35 +119,32 @@ export default {
   },
   computed: {
     // 裁剪框是否可调整大小，可根据业务自由调整
-    cropResizable: function() {
+    cropResizable: function () {
       if (this.resizable !== undefined) {
-        return this.resizable;
+        return this.resizable
       }
-      return !(this.cropWidth && this.cropHeight);
+      return !(this.cropWidth && this.cropHeight)
     }
   },
   methods: {
     beforeUpload() {
-      return false;
+      return false
     },
     ready(e) {
       // 当设置了裁剪大小宽高后，重新设置crop大小及比例
-      if (this.cropWidth && this.cropHeight) {
-        const data = this.$refs.cropper.getCanvasData();
-        this.$refs.cropper.setAspectRatio(this.cropWidth / this.cropHeight);
-        const sizeRatio = data.width / data.naturalWidth;
-        this.$refs.cropper.setCropBoxData({
-          width: this.cropWidth * sizeRatio,
-          height: this.cropHeight * sizeRatio
-        });
+      if(this.cropWidth && this.cropHeight){
+        const data = this.$refs.cropper.getCanvasData()
+        this.$refs.cropper.setAspectRatio(this.cropWidth/this.cropHeight)
+        const sizeRatio = data.width / data.naturalWidth
+        this.$refs.cropper.setCropBoxData({ width: this.cropWidth * sizeRatio, height: this.cropHeight * sizeRatio });
       }
     },
     crop(e) {
-      this.options = e.detail;
+      this.options = e.detail
     },
     // 切换拖动模式
     setDragMode(mode) {
-      this.$refs.cropper.setDragMode(mode);
+      this.$refs.cropper.setDragMode(mode)
     },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
@@ -185,12 +152,12 @@ export default {
     },
     // 镜像翻转
     flipX() {
-      const X = this.options.scaleX || -1;
-      this.$refs.cropper.cropper.scaleX(-X);
+      const X = this.options.scaleX || -1
+      this.$refs.cropper.cropper.scaleX(-X)
     },
     flipY() {
-      const Y = this.options.scaleY || -1;
-      this.$refs.cropper.cropper.scaleY(-Y);
+      const Y = this.options.scaleY || -1
+      this.$refs.cropper.cropper.scaleY(-Y)
     },
     // 移动
     move(offsetX, offsetY) {
@@ -198,7 +165,9 @@ export default {
     },
     // 重置
     reset() {
+      const { width, height } = this.$refs.cropper.getCropBoxData()
       this.$refs.cropper.reset();
+      this.$refs.cropper.setCropBoxData({ width, height });
     },
     // 旋转
     rotate(deg) {
@@ -209,31 +178,31 @@ export default {
       this.$refs.cropper.relativeZoom(percent);
     },
     editFinsh() {
-      this.loading = true;
-      this.$refs.cropper.getCroppedCanvas().toBlob(blob => {
-        const file = new File([blob], this.imgName, {
-          type: this.type,
-          lastModified: Date.now()
-        });
-        this.$emit("change", file);
-        this.loading = false;
-      });
+      this.loading = true
+      const data = {}
+      if (this.cropWidth) data.width = this.cropWidth
+      if (this.cropHeight) data.height = this.cropHeight
+      this.$refs.cropper.getCroppedCanvas(data).toBlob(blob => {
+        const file = new File([blob], this.imgName, { type: this.type, lastModified: Date.now() });
+        this.$emit('change', file)
+        this.loading = false
+      })
     }
   },
   mounted() {}
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .actions-box {
   margin-top: 16px;
-  .actions-item {
+  .actions-item{
     margin-right: 20px;
     margin-bottom: 8px;
-    .icon-rotate {
-      .ivu-icon {
-        transform: rotate(90deg) !important;
+    .icon-rotate{
+      .ivu-icon{
+        transform: rotate(90deg)!important;
       }
     }
   }
@@ -251,32 +220,33 @@ export default {
 .cropped-image img {
   max-width: 100%;
 }
-.cropper-box {
+.cropper-box{
   width: 100%;
   max-height: 600px;
 }
-.img-preview-box {
+.img-preview-box{
   margin-left: 32px;
-  .xcx-edit-img-preview {
+  .xcx-edit-img-preview{
     width: 100%;
     height: 400px;
     overflow: hidden;
-    img {
+    img{
       max-width: 100%;
     }
   }
 }
-.flex-end {
+.flex-end{
   display: flex;
   justify-content: flex-end;
   padding-top: 8px;
-  .btn-primary {
+  .btn-primary{
     width: 110px;
     height: 32px;
     padding: 0;
-    border: 1px solid #ff565a !important;
-    color: #fff !important;
-    background: #ff565a !important;
+    border: 1px solid #FF565A !important;
+    color: #FFF !important;
+    line-height: 30px;
+    background: #FF565A !important;
     border-radius: 15px;
   }
 }

@@ -1,5 +1,6 @@
 <script>
 import { throttle } from "@/libs/utils";
+import deepFind from 'lodash.find'
 
 export default {
   props: {
@@ -138,10 +139,38 @@ export default {
         });
       }
     },
-    // 清空选择
+    // 选择
     setSelections(e) {
       this.selections = e;
       this.$emit("on-selection-change", e);
+      this.updateSelectionClasss();
+    },
+    // 更新选中行class
+    updateSelectionClasss(e) {
+      this.$nextTick(() => {
+        const $tableRows = this.$refs.table.$el.querySelectorAll('.ivu-table-body tr.ivu-table-row');
+        const $fixedLeftTableRows = this.$refs.table.$el.querySelectorAll('.ivu-table-fixed tr.ivu-table-row');
+        const $fixedRightTableRows = this.$refs.table.$el.querySelectorAll('.ivu-table-fixed-right tr.ivu-table-row');
+        this.dataSource.forEach((row, index) => {
+          if (deepFind(this.selections, row)) {
+            $tableRows[index].setAttribute('selected', true);
+            if ($fixedLeftTableRows) {
+              $fixedLeftTableRows[index].setAttribute('selected', true);
+            }
+            if ($fixedRightTableRows) {
+              $fixedRightTableRows[index].setAttribute('selected', true);
+            }
+          } else {
+            $tableRows[index].removeAttribute('selected');
+            if ($fixedLeftTableRows) {
+              $fixedLeftTableRows[index].removeAttribute('selected');
+            }
+            if ($fixedRightTableRows) {
+              $fixedRightTableRows[index].removeAttribute('selected');
+            }
+          }
+        });
+      });
     },
     // 清空状态
     reset() {
@@ -498,6 +527,15 @@ export default {
         & + .ivu-btn-small {
           margin-left: 12px;
         }
+      }
+      tr.ivu-table-row-hover td {
+        background: #f8edee;
+      }
+      tr[selected] td {
+        background: #ffdadb;
+      }
+      tr[selected].ivu-table-row-hover td {
+        background: #ffafb1;
       }
     }
     .ivu-table-sort i.on {

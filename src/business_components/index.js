@@ -6,7 +6,8 @@ const components = {
   UploadImg: () => import("./UploadImg.vue"),
   CommonDetailsModal: () => import("./common_details/CommonDetailsModal"),
   EditImg: () => import("./EditImg.vue"),
-  XDatePicker: () => import('./XDatePicker.vue')
+  XDatePicker: () => import('./XDatePicker.vue'),
+  FileUploader: () => import('./FileUploader.vue')
 }
 
 Object.keys(components).forEach(key => {

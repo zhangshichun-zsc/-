@@ -14,12 +14,12 @@ import head from "./components/head";
 import topheads from "./components/topheads";
 import number from "./components/number";
 import iView, { Message, Modal } from "iview";
+import './directives'
 import "./assets/css/dist/styles/iview.css";
 import "./libs/style.scss";
 import "./libs/rest.css";
 import "./libs/rem.js";
 import chuView from 'chu-tree-iview'
-
 
 Vue.prototype.$Message = Message;
 Vue.prototype.$Modal = Modal

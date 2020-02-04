@@ -2,8 +2,8 @@
 export default {
   methods: {
     onChange(formatedDate, date) {
-      if (this.$attrs.type === 'datetime' || this.$attrs.type === 'datetimerange')
-      this.$refs.picker.onSelectionModeChange('time')
+      if (date === 'date' && (this.$attrs.type === 'datetime' || this.$attrs.type === 'datetimerange'))
+      this.$refs.picker.$refs.drop.$children[0].handleToggleTime()
       this.$emit('on-change', formatedDate, date)
     }
   },
