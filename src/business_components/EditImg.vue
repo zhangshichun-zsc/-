@@ -241,7 +241,6 @@ export default {
   padding-top: 8px;
   .btn-primary{
     width: 110px;
-    height: 32px;
     padding: 0;
     border: 1px solid #FF565A !important;
     color: #FFF !important;

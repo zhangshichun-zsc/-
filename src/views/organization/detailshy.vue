@@ -152,10 +152,11 @@
               />
             </FormItem>
             <FormItem label="图片:" prop="orgPicShow">
+              <!-- :picMap="picMap" -->
               <UploadImg
-                :picMap="picMap"
                 :max="1"
                 v-model="BasicDate.picUrl"
+                :full-url.sync="picMap"
                 :display-width="120"
                 :crop-width="120"
                 :crop-height="120"
@@ -431,7 +432,7 @@ export default {
         orgName: "",
         orgPicShow: "",
         orgPic: "",
-        picUrl: [],
+        picUrl: '',
         remark: "",
         wx: "",
         text: "",
@@ -450,7 +451,7 @@ export default {
       province: "0",
       county: "0",
       city: "0",
-      picMap: {}
+      picMap: ''
     };
   },
   computed: {},
@@ -521,13 +522,12 @@ export default {
         console.log(res);
 
         if (res.code == 200) {
-          this.BasicDate = { ...res.data, picUrl: [res.data.orgPic] };
+          this.BasicDate = { ...res.data, picUrl: res.data.orgPic };
           this.province = res.data.provinceId;
           this.city = res.data.cityId;
           this.county = res.data.districtId;
-          this.picMap = {
-            [res.data.orgPic]: res.data.orgPicShow
-          };
+          this.picMap = res.data.orgPicShow;
+      
           if (res.data.fileList && res.data.fileList.length > 0) {
             let arr = [];
 

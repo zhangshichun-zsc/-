@@ -84,10 +84,11 @@
           </div>
         </div>
         <div class="con-right">
+          <!-- :picMap="picMap" -->
           <UploadImg
-            :picMap="picMap"
             :max="1"
             v-model="picUrl"
+             :full-url.sync= "picMap"
             :display-width="240"
             :crop-width="750"
             :crop-height="320"
@@ -157,8 +158,8 @@ export default {
       sysId: 2,
       typelist: [],
       showlist: [],
-      picUrl: [],
-      picMap: {},
+      picUrl: "",
+      picMap: "",
       url: "",
       modal1: false,
       informationId: this.$route.query.informationId
@@ -200,8 +201,8 @@ export default {
           this.ContentData.informationType = lists.informationType;
           this.ContentData.resume = lists.resume;
           this.ContentData.isOnline = lists.isOnline;
-          this.picUrl = [lists.coverImg];
-          this.picMap = { [lists.coverImg]: lists.coverImgPath };
+          this.picUrl = lists.coverImg;
+          this.picMap =  lists.coverImgPath ;
           this.editorContent = lists.content;
         }
       });

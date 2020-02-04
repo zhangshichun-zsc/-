@@ -11,8 +11,9 @@
           :label-width="120"
         >
           <FormItem label="上传头像">
+            <!-- :picMap="picMap" -->
             <UploadImg
-              :picMap="picMap"
+              :full-url.sync="picMap"
               :max="1"
               v-model="picUrl"
               :display-width="120"
@@ -104,8 +105,8 @@ export default {
         ],
         confirm: [{ required: true, validator: confirm, trigger: "blur" }]
       },
-      picUrl: [],
-      picMap: {},
+      picUrl: '',
+      picMap: '',
       formFlag: true
     };
   },
@@ -128,8 +129,8 @@ export default {
       }
       queryUserDetail({ userId: userId }).then(res => {
         this.formValidate.name = res.data.userName;
-        this.picMap = { [res.data.avatar]: res.data.avatarPath };
-        this.picUrl = [res.data.avatar];
+        this.picMap =  res.data.avatarPath ;
+        this.picUrl = res.data.avatar;
       });
     },
     //提交

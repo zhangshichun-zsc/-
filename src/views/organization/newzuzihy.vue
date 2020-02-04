@@ -61,8 +61,9 @@
               />
             </FormItem>
             <FormItem label="图片:" prop="picUrl">
+              <!-- :picMap="picMap" -->
               <UploadImg
-                :picMap="picMap"
+                :full-url.sync="picMap"
                 :max="1"
                 v-model="formValidate.picUrl"
                 :display-width="120"
@@ -213,7 +214,7 @@ export default {
         wx: "",
         text: "",
         fileList: [],
-        picUrl: [],
+        picUrl: '',
         description: "",
         province: "",
         city: "",
@@ -232,7 +233,7 @@ export default {
             required: true,
             message: "图片不能为空",
             trigger: "blur",
-            type: "array"
+            type: "string"
           }
         ],
         contactUserPhone: [
@@ -273,7 +274,7 @@ export default {
         nameB: null,
         nameC: null
       },
-      picMap: {}
+      picMap: ''
     };
   },
   components: { Selsect },

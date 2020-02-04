@@ -108,15 +108,16 @@
                 <li class="start">
                   <span>封面图片</span>
                   <div class="start-wap start-firt">
+                     <!-- :picMap="coverMap" -->
                     <UploadImg
-                      :picMap="coverMap"
                       :max="1"
                       v-model="cover"
+                      :full-url.sync="coverMap"
                       :display-width="120"
                       :display-height="120"
                       :crop-width="128"
                       :crop-height="128"
-                      :disabled="cover.length !== 0 && isDisb"
+                      :disabledTwo="cover && isDisb"
                       ref="refCover"
                     ></UploadImg>
                   </div>
@@ -124,14 +125,15 @@
                 <li class="start">
                   <span>活动图片</span>
                   <div class="start-wap">
+                    <!-- :picMap="imageMap" -->
                     <UploadImg
-                      :picMap="imageMap"
                       :max="1"
                       v-model="image"
+                      :full-url.sync="imageMap"
                       :display-width="300"
                       :crop-width="750"
                       :crop-height="320"
-                      :disabled="image.length !== 0 && isDisb"
+                      :disabledTwo="image && isDisb"
                       ref="refImags"
                     ></UploadImg>
                   </div>
@@ -748,10 +750,10 @@ export default {
         channel: 2
       },
       status: 0,
-      cover: [],
-      image: [],
-      coverMap: {},
-      imageMap: {},
+      cover: '',
+      image: '',
+      coverMap: '',
+      imageMap: '',
       once: false,
       isAct: false
     };
@@ -764,13 +766,15 @@ export default {
   watch: {
     cover: {
       handler(newValue, oldValue) {
-        this.args.coverPic = newValue[0] || null;
+        console.log(newValue);
+        
+        this.args.coverPic = newValue || null;
       },
       deep: true
     },
     image: {
       handler(newValue, oldValue) {
-        this.args.pic = newValue[0] || null;
+        this.args.pic = newValue || null;
       },
       deep: true
     }
@@ -835,10 +839,10 @@ export default {
           this.orgName = res.data.orgName;
 
           // TODo 图片赋值
-          this.cover = [res.data.coverPic];
-          this.coverMap = { [res.data.coverPic]: res.data.coverPicPath };
-          this.image = [res.data.pic];
-          this.imageMap = { [res.data.pic]: res.data.picPath };
+          this.cover = res.data.coverPic;
+          this.coverMap = res.data.coverPicPath ;
+          this.image = res.data.pic;
+          this.imageMap = res.data.picPath ;
           // END
 
           this.add = add;
@@ -1004,10 +1008,10 @@ export default {
         this.zhaEnd = data.zhaEnd;
         this.judge = data.judge;
         // TODO 图片
-        this.cover = [data.cover];
-        this.coverMap = { [data.cover]: data.coverPicPath };
-        this.image = [data.image];
-        this.imageMap = { [data.image]: data.picPath };
+        this.cover = data.cover;
+        this.coverMap = data.coverPicPath ;
+        this.image = data.image;
+        this.imageMap = data.picPath ;
         // END
         this.isFeedback = data.isFeedback;
         this.isTrain = data.isTrain;

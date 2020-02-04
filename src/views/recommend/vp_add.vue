@@ -67,10 +67,11 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="广告图片" prop="picUrl">
+          <!--  :picMap="picMap" -->
           <UploadImg
-            :picMap="picMap"
             :max="1"
             v-model="formValidate.picUrl"
+            :full-url.sync="picMap"
             :display-width="240"
             :crop-width="750"
             :crop-height="320"
@@ -152,7 +153,7 @@ export default {
         endAt: "",
         remark: "",
         linkUrl: "",
-        picUrl: [],
+        picUrl: '',
 
         linkType: "1",
         comments: ""
@@ -166,7 +167,7 @@ export default {
             required: true,
             message: "图片不能为空",
             trigger: "blur",
-            type: "array"
+            type: "string"
           }
         ],
         location: [
@@ -202,7 +203,7 @@ export default {
       },
       data: [],
       sysid: 1,
-      picMap: {}
+      picMap: ''
     };
   },
   mounted() {
@@ -276,14 +277,14 @@ export default {
           status: list.status,
           startAt: new Date(list.startAt),
           endAt: new Date(list.endAt),
-          picUrl: [list.picUrl],
+          picUrl: list.picUrl,
           linkUrl: list.linkUrl,
           remark: list.remark,
           linkType: list.linkType,
           comments: list.comments
         };
 
-        this.picMap = { [list.picUrl]: list.picUrlShow };
+        this.picMap = list.picUrlShow ;
         this.formValidate = formValidate;
       });
     },

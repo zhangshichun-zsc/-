@@ -39,12 +39,14 @@
               :display-width="320"
               :ratio="868/240"
               resizable /> -->
-            <UploadImg :max="1"
+            <UploadImg 
+              :max="1"
               v-model="form.batchPic"
               :full-url.sync="form.batchPicShow"
               placeholder="请上传主题图片"
               :display-width="320"
-              :crop-width="750" :crop-height="320" />
+              :crop-width="750" 
+              :crop-height="320" />
           </FormItem>
           <FormItem label="小组归属" prop="orgId">
             <Select v-model="form.orgId" placeholder="请选择小组归属">
