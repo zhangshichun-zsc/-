@@ -1,0 +1,149 @@
+div.survey-item{
+  input[disabled]{
+    background-color: #fff;
+    cursor: default;
+  }
+  textarea[disabled]{
+    background-color: #fff;
+    cursor: default;
+    resize: none;
+  }
+  textarea{
+    resize: none;
+  }
+  .item-radio{
+    .ivu-radio-wrapper-disabled{
+      cursor: default;
+    }
+    .ivu-radio-disabled{
+      cursor: default;
+      .ivu-radio-inner {
+        border-color: #dcdee2;
+        background-color: #f3f3f3;
+    }
+    }
+
+  }
+}
+div.select-item-conatiner{
+  .upload-icon{
+    font-size:30px;
+  }
+}
+
+// 上传图片
+.uploader-container{
+  position: relative;
+  width: 80px;
+  height: 80px;
+  .upload-icon{
+      // position: absolute;
+      width: 80px;
+      height: 80px;
+      font-size: 50px;
+      display: inline-block;
+  }
+  input.uploader-btn{
+      opacity: 0;
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 10;
+      width: 100%;
+  }
+}
+
+// 预览图片
+.content-head{
+
+}
+.survey-content{
+  .survey-item{
+    margin-bottom: 16px;
+    .survey-order{
+      &::before{
+        content: '*';
+        display: inline-block;
+        margin-right: 0.2rem;
+        line-height: 1;
+        font-family: SimSun;
+        font-size: 0.6rem;
+        color: transparent;
+      }
+      &.isMust:before{
+        content: '*';
+        display: inline-block;
+        margin-right: 0.2rem;
+        line-height: 1;
+        font-family: SimSun;
+        font-size: 0.6rem;
+        color: #ed4014;
+      }
+  }
+}
+}
+//富文本编辑器
+.richText-container{
+  height: auto;
+  div.w-e-toolbar{
+    display: flex;
+    flex-wrap: wrap;
+  }
+} 
+.preview-modal{
+  .ivu-modal-header{
+    border-bottom: none;
+  }
+  .ivu-modal-header-inner{
+    text-align: center;
+    font-size: 1rem;
+  }
+  .ivu-modal-body{
+    padding: 0 .8rem;
+    .content-head{
+      margin-bottom: .5rem;
+    }
+    .answer-box{
+      margin-top: .5rem;
+      width: 100%;
+    }
+    .survey-order,.survey-item-name{
+      font-weight: bold;
+      font-size: .8rem;
+    }
+    .ivu-radio-wrapper,.ivu-checkbox-wrapper{
+      display: block;
+      font-size: .8rem;
+      line-height: 1.4rem;
+    }
+  }
+  // 标题
+  .content-head{
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 34px;
+    border-bottom: 1px solid #eee;
+    padding: 20px 10px;
+    margin-bottom: 20px;
+  }
+  // 简介
+  .content-intro{
+    font-size: 16px;
+    line-height: 30px;
+    padding: 0 10px;
+    margin-bottom: 20px;
+  }
+  .survey-item-name,.survey-order{
+    font-weight: bold;
+  }
+  .ivu-radio-wrapper,.ivu-checkbox-group-item{
+    display: block;
+    margin-top: 0;
+    &:not(:last-child){
+      margin-bottom: 10px;
+    }
+  }
+}

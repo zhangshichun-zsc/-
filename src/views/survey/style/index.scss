@@ -1,0 +1,177 @@
+.survey-modal{
+  .ivu-modal-body{
+    .ivu-form-item-content{
+      width: 16rem;
+      box-sizing: border-box;
+    }
+  }
+}
+
+// 查询按钮
+.btn-wrapper .ivu-btn:not([disabled]):hover{
+  background: #ff565a;
+  color: #fff;
+}
+
+// 勋章列表
+// 页面头部form表单
+.btn-wrapper{
+  padding: 10px 20px;
+  display: flex;
+  background: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.btn-box{
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  padding: 10px 0;
+  .label{
+    white-space: nowrap;
+    margin-right: 8px;
+  }
+}
+// 输入框
+input.ivu-input{
+  width: 100%;
+  height: 32px;
+  line-height: 32px;
+}
+div.ivu-select{
+  width: 12rem;
+  .ivu-select-selection{
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    div{
+      height: 32px;
+      line-height: 32px;
+    }
+    span.ivu-select-placeholder{
+      display: inline-block;
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+}
+div.basis {
+  margin: 0; 
+  padding: .2rem 1rem;
+  background: #fff;
+  .table-header{
+    margin-bottom: .1rem;
+  }
+}
+
+//
+.insertLine{
+  margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  .insertPartText{
+    display: inline-block;
+  }
+}
+.add-modal .img-box{
+  margin-bottom: .2rem !important;
+}
+.ivu-form div.ivu-form-item{
+  margin-bottom: 1.2rem;
+  &.inline-item{
+    display: inline-block;
+  }
+  .rule-value{
+    display: inline-block;
+    margin-left: 1.5rem
+  }
+  .ivu-select{
+    display: inline-block;
+    width: auto;
+    .ivu-select-selection{
+      width: 12rem;
+    }
+  }
+  .rule-text{
+    margin: 0 10px;
+  }
+  .value-text{
+    margin-left: 10px;
+  }
+  .ivu-input-wrapper{
+    display: inline-block;
+  }
+}
+
+div.ivu-input-wrapper{
+  width: 12rem;
+}
+
+.flex-center-between{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+// 问卷答案
+.item-title{
+  margin-bottom: .2rem;
+  font-weight: bold;
+  &.must::before{
+    content: '*';
+    color: #ff565a;
+  }
+  &.none-must::before{
+    content: '*';
+    color: transparent;
+  }
+}
+.answer-item{
+  margin: .6rem 0;
+  .empty-text{
+    padding-left: .4rem;
+  }
+  .item-img{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    img{
+      width: 8rem;
+      height: auto;
+    }
+  }
+}
+.answer-title{
+  font-weight: bold;
+  display: block;
+  margin-bottom: .5rem;
+  font-size: 18px;
+}
+
+.check-item{
+  padding: 0 1rem;
+  cursor: pointer;
+}
+// 问卷列表操作按钮
+.btn-container{
+  span:not(:last-child){
+    margin-right: 5px;
+  }
+  .nBtn{
+    color: #999;
+    &.activeBtn{
+      color: #2c3e50;
+      cursor: pointer;
+    }
+  }
+  .eBtn{
+    color: #999;
+    &.activeBtn{
+      color: red;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,6 +1,11 @@
 <!-- 用户列表(会员) -->
 <template>
   <div class="member">
+    <customizeDialog
+      ref="son"
+      v-on:fun="changeColumn"
+      :labels="navigationName"
+    ></customizeDialog>
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-start integral-body" v-show="showScreen">
@@ -542,12 +547,18 @@
 
 <script>
 import { tablepage } from "@/request/mixin";
+import customizeDialog from "../survey/commonComponent/customizeDialog";
 import { Userpage, Userbatch, userListMsg, userEnable } from "@/request/api";
 export default {
+  components: { customizeDialog },
   data() {
     return {
       navigation1: {
         head: "用户列表(会员)"
+      },
+      navigationName: {
+        head: "user/all_member_hy",
+        pageTable: "3"
       },
       batchList: [
         { value: "0", label: "禁用" },
@@ -567,7 +578,7 @@ export default {
       formValidate2: {
         // 群发 站内信
         title: "",
-          msg: "",
+        msg: ""
       },
       ruleValidate2: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
@@ -1097,21 +1108,19 @@ export default {
         ...params
       }).then(res => {
         if (res.code === 200) {
-          this.modal2 = false
+          this.modal2 = false;
           this.formValidate2 = {
-            msg:'',
-            title:''
-          }
+            msg: "",
+            title: ""
+          };
           this.$Message.info("站内信发送成功~");
         } else {
-          this.modal2 = false
-          let str = res.msg
+          this.modal2 = false;
+          let str = res.msg;
           this.$Message.error({
             background: true,
             content: str
           });
-
-          
         }
         setTimeout(() => {
           this.stationFormFlag = true;
@@ -1212,6 +1221,9 @@ export default {
           end: new Date(time2).getTime()
         };
       }
+    },
+    changeColumn(data){
+      this.columns=data; 
     }
   },
   mounted() {

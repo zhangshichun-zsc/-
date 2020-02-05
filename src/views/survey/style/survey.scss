@@ -1,0 +1,445 @@
+// 新增问卷
+.publish-content {
+  background: #ffffff;
+  .active-publish {
+    padding: 6px 0;
+    ul {
+      
+      li {
+        margin: 20px 20px 20px 0;
+        display: flex;
+        align-items: center;
+        &.table-item{
+          margin-top: 0;
+          // padding-left: 4.5rem;
+          width: auto;
+          display: inline-block;
+          position: relative;
+          // 添加题目按钮
+          .add-survey-item{
+            position: absolute;
+            right: 0;
+            top: -2.4rem
+          }
+        }
+        &.list-item{
+          width: auto;
+          &.inline-item{
+            display: inline-block;
+          }
+          &.table-title-item{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            margin-right: 0;
+            flex-wrap: wrap;
+            .add-btn{
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              font-size: 14px;
+              i{
+                margin-right: 5px;
+              }
+            }
+          }
+          &.textarea{
+            display: flex;
+            align-items: flex-start;
+            .ivu-input-wrapper{
+              width:26rem;
+            }
+          }
+        }
+        span.form-item-label{
+          display: inline-block;
+          white-space: nowrap;
+          // width: auto;
+          padding-right: .5rem;
+          box-sizing: border-box;
+          height: 40px;
+          font-size: 14px;
+          line-height: 40px;
+          text-align: right;
+          &:not(.none-required)::before{
+            content: '*';
+            color: #ff565a;
+          }
+          &.none-required::before{
+            content: '*';
+            color: transparent;
+          }
+        }
+        p {
+          text-align: center;
+          display: flex;
+          justify-content: space-around;
+        }
+        .imgs {
+          height: 150px;
+          width: 300px;
+          background: #e4e4e4;
+        }
+        .phone {
+          width: 60px;
+          margin-left: 20px;
+        }
+        .names {
+          width: 35px;
+        }
+
+        .select {
+          margin: 0 15px;
+        }
+        .ivu-radio-default {
+          margin-right: 30px;
+        }
+
+        .adds {
+          width: 600px;
+          text-align: center;
+          a {
+            color: green;
+            font-size: 14px;
+          }
+        }
+
+      }
+      .active-cost{
+        display: flex;
+        align-items: flex-start;
+        .cost{
+          p{
+            margin-top: 5px;
+            font-size: 12px;
+          }
+
+        }
+      }
+
+      .start {
+        display: flex;
+        // justify-content: flex-end;
+        align-items: flex-start;
+      }
+
+      .jobs {
+        flex-direction: column;
+        // justify-content: flex-start;
+        align-items: flex-start;
+        p {
+          width: 600px;
+          border: #e4e4e4 1px solid;
+          .ivu-icon-md-close-circle {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+  .ivu-table-wrapper{
+    width: auto;
+  }
+
+}
+
+.add-option-btn{
+  color: #2d8cf0;
+  cursor: pointer;
+}
+// 选项列表
+.option-item{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  .ivu-input-wrapper{
+    display: inline-block;
+    flex: 1;
+  }
+  .delete-icon{
+    display: inline-block;
+    padding-left: 20px;
+    cursor: pointer;
+    color: #2d8cf0;
+    .ivu-icon{
+      font-size: 18px;
+    }
+  }
+}
+// 问卷调查表哥
+.survey-table{
+  width: 100%;
+  th{
+    height: 2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #f8f8f9;
+  }
+  td,th{
+    border-right: 0.05rem solid #e8eaec;
+    height: 2.4rem;
+    box-sizing: border-box;
+    text-align: center;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    border-bottom: 0.05rem solid #e8eaec;
+  }
+  td{
+    background-color: #fff;
+    transition: background-color .2s ease-in-out;
+    .btn-edit,.btn-delete,.btn-sort{
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background: #2d8cf0;
+      box-sizing: border-box;
+      cursor: pointer;
+      margin-right: 10px;
+      &:last-child{
+        margin-right: 0;
+      }
+      .iconfont{
+        font-size: 16px;
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+    .action-btn{
+      color: #ff565a;
+      cursor: pointer;
+      margin-right: .5rem;
+      &.delete{
+        color: #515a6e;
+      }
+      &.disabled{
+        color: #999;
+        cursor: default;
+      }
+    }
+  }
+  tr:hover td{
+    background-color: #ebf7ff;
+  }
+}
+
+.survey-table{
+  border-top: 0.05rem solid #e8eaec;
+  border-left: 0.05rem solid #e8eaec;
+  .survey-table-head,.table-body-item{
+    width: 100%;
+    display: table;
+    .table-item{
+      // flex: 1;
+      border-right: 0.05rem solid #e8eaec;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      border-bottom: 0.05rem solid #e8eaec;
+      display: table-cell;
+      &.name{
+        width: 20%;
+      }
+      &.type{
+        width: 12%;
+      }
+      &.default{
+        width:15%;
+      }
+      &.isOpt{
+        width: 14%;
+      }
+      &.isMust{
+        width: 12%;
+      }
+      &.order{
+        width: 10%;
+      }
+      &.operate{
+        width: 17%;
+      }
+    }
+  }
+  // .survey-table-head .table-item{
+  //     padding: 12px 6px;
+  //     overflow: hidden;
+  //     background-color: #f8f8f9;
+  // }
+  //   .table-item{
+  //     background-color: #fff;
+  //     transition: background-color .2s ease-in-out;
+  //     .btn-edit,.btn-delete,.btn-sort{
+  //       width: 24px;
+  //       height: 24px;
+  //       border-radius: 50%;
+  //       display: inline-flex;
+  //       justify-content: center;
+  //       align-items: center;
+  //       background: #2d8cf0;
+  //       box-sizing: border-box;
+  //       cursor: pointer;
+  //       margin-right: .5rem;
+  //       &:last-child{
+  //         margin-right: 10px;
+  //       }
+  //       .iconfont{
+  //         font-size: 16px;
+  //         color: #fff;
+  //         font-weight: bold;
+  //       }
+  //     }
+  // }
+}
+
+// 预览
+.preview-wrap{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  .preview-mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: .6;
+  }
+  .preview-container{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -22.5vh;
+    width: 45vh;
+    height: 100vh;
+    font-family: "Helvetica Neue", sans-serif;
+    background: url(../assets/preview.png) no-repeat;
+    background-size: 45vh 100vh;
+  }
+  .preview-content{
+    position: absolute;
+    left: 4vh;
+    top: 14vh;
+    right: 4vh;
+    bottom: 14vh;
+    background: #fff;
+    overflow: auto;
+    .survey-content{
+      padding:0 10px;
+      // font-size: 16px;
+    }
+    .survey-title{
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+    .survey-intro{
+      margin-bottom: 16px;
+    }
+    .survey-item{
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .survey-order{
+      &.isMust:before{
+        content: '*';
+        display: inline-block;
+        margin-right: 0.2rem;
+        line-height: 1;
+        font-family: SimSun;
+        font-size: 0.6rem;
+        color: #ed4014;
+      }
+    }
+    .item-input{
+      width: 100%;
+      height: 30px;
+      // border: 1px solid #dcdee2;
+      // border-radius: 1px;
+    }
+    .item-textarea{
+      height: auto;
+      width: 100%;
+      // border: 1px solid #dcdee2;
+      border-radius: 1px;
+    }
+    .select-item-conatiner{
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+      .circle-line{
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 1px solid #dcdee2;
+        margin-right: 10px;
+      }
+      .rect-line{
+        width: 12px;
+        height: 12px;
+        border-radius: 1px;
+        border:1px solid #dcdee2;
+        margin-right: 10px;
+      }
+    }
+    .richText-container{
+      margin-top: 10px;
+      width: 100%;
+      height: auto;
+      background-size: 100%;
+    }
+    .answer-box{
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+    }
+  }
+}
+
+button.btn-save{
+  background: #2d8cf0;
+  border-color:#2d8cf0;
+  &:hover{
+    background: #2d8cf0;
+  }
+}
+
+// 等级
+.level-input{
+  text-align: center;
+  padding:1px 4px;
+  &.input-num{
+    width: 40%;
+    margin: 0 10px;
+  }
+}
+.btn-wrapper{
+  text-align:center;
+  margin: 20px auto;
+  // button{
+  //   width: 40%
+  // }
+}
+.level-table{
+  thead th,tr td{
+    padding: 10px;
+  }
+}
+
+
+div.ivu-input-wrapper{
+  width: 12rem;
+}

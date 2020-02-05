@@ -13,9 +13,9 @@
           <FormItem label="上传头像">
             <!-- :picMap="picMap" -->
             <UploadImg
-              :full-url.sync="picMap"
               :max="1"
               v-model="picUrl"
+              :full-url.sync="picMap"
               :display-width="120"
               :crop-width="120"
               :crop-height="120"

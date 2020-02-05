@@ -665,3 +665,58 @@ export const programApproval = p => posts("/activity-manage/batch/audit/do", p) 
 
 
 export const deleteFile = p => posts("/org/detail/deleteFile", p) //删除附件
+
+
+
+// 第二期需求
+// 问卷调查
+export const addSurvey = p => posts('/config/add', p)
+export const editSurvey = p => posts('/config/update', p)
+export const getSelectList = p => get('config/getSelectList', p)
+export const surveyDetail = p => get('/config/detail-list', p)
+
+// 会员问卷调查推送人员列表
+// export const getAllConfigUserList = p => posts('config/getAllConfigUserList', p)
+export const getQuestionnaireFeedbackList = p => get('config/list', p)
+export const operateReview = p => get('config/opt', p)
+export const pushSurvey = p => posts('/config/pushConfig', p)
+
+// 问卷调查页,第一个页面的删除操作
+export const answerDetailPageDelete = p => get('config/delete', p)
+// 问卷调查页,第一个页面的弹窗的推送页面的搜索项(会员),仅取会员等级列表和关注类型列表
+// export const getSelectList = p => posts('config/getSelectList', p)
+
+// 问卷调查页,第一个页面的弹窗的推送页面的列表(会员),,,,会员问卷调查推送人员列表
+export const getAllConfigUserList = p => posts('config/getAllConfigUserList', p)
+// 问卷调查页,弹窗的推送页面的列表(志愿者),,,志愿者问卷调查推送人员列表
+export const getVolConfigUserList = p => posts('config/getVolConfigUserList', p)
+
+// 问卷调查页,弹窗的推送操作
+export const answerDetailPagePush = p => posts('config/pushConfig', p)
+// 问卷调查页,,,问卷调查推送人员列表
+export const getCofigUserList = p => posts('config/getCofigUserList', p)
+
+// 问卷反馈明细页
+export const answerDetailPage = p => get('config/answer-detail-page', p)
+// 问卷反馈明细页,,获取反馈答案详情
+export const answerDetail = p => get('config/answer-detail', p)
+
+// manager自定义字段
+export const customizeField = p => get('common/customize', p)
+
+// 等级管理--（志愿者或会员）等级查询
+export const queryLevelList = p => get('/level/queryLevelList', p)
+
+// 志愿者（会员）等级修改
+export const updateLevel = p => posts('/level/updateLevel', p)
+
+// 勋章新增或者修改达成类型查询
+export const queryDicByTypeFlag = p => get('/volunteer-manager/queryDicByTypeFlag', p)
+export const postMedalInfo = p => posts('/medal/updateMedal', p)
+// 勋章查询
+export const queryMedalList = p => posts('/medal/queryMedalList', p)
+// 新增、修改勋章接口
+export const updateMedal = p => posts('medal/updateMedal', p)
+
+// 志愿者问卷调查搜索项
+export const getVolActType = p => get('config/getVolActType', p)

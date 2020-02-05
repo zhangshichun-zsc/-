@@ -1,26 +1,57 @@
 <!-- 用户列表(志愿者) -->
 <template>
   <div class="member">
+    <customizeDialog
+      ref="son"
+      v-on:fun="changeColumn"
+      :labels="navigationName"
+    ></customizeDialog>
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-start integral-body" v-show="showScreen">
         <div class="flex-center-start">
           <span>姓名/手机号/昵称:</span>
-          <Input size="large" placeholder="姓名/手机号/昵称" class="inpt" v-model="info" />
+          <Input
+            size="large"
+            placeholder="姓名/手机号/昵称"
+            class="inpt"
+            v-model="info"
+          />
         </div>
         <div class="flex-center-start">
           <span>组织名称:</span>
-          <Input size="large" placeholder="组织名称" class="inpt" v-model="orgName" />
+          <Input
+            size="large"
+            placeholder="组织名称"
+            class="inpt"
+            v-model="orgName"
+          />
         </div>
         <div class="flex-center-start">
           <span>注册时间段:&nbsp;&nbsp;</span>
-          <DatePicker style="width: 180px" type="date" placeholder="请选择开始时间" v-model="startAt"></DatePicker>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            placeholder="请选择开始时间"
+            v-model="startAt"
+          ></DatePicker>
           <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-          <DatePicker style="width: 180px" type="date" placeholder="请选择结束时间" v-model="endAt"></DatePicker>
+          <DatePicker
+            style="width: 180px"
+            type="date"
+            placeholder="请选择结束时间"
+            v-model="endAt"
+          ></DatePicker>
         </div>
         <div class="flex-center-start">
           <span>标签:</span>
-          <Input disabled size="large" placeholder="标签" class="inpt" v-model="labelName" />
+          <Input
+            disabled
+            size="large"
+            placeholder="标签"
+            class="inpt"
+            v-model="labelName"
+          />
         </div>
         <div class="flex-center-start">
           <a class="btn" href="javascript:;" @click="result">查询</a>
@@ -37,7 +68,12 @@
         <div>
           <!--群发短信-->
           <Modal v-model="modal1" title="群发短信">
-            <Form ref="formValidate1" :model="formValidate1" :rules="ruleValidate1" :label-width="120">
+            <Form
+              ref="formValidate1"
+              :model="formValidate1"
+              :rules="ruleValidate1"
+              :label-width="120"
+            >
               <FormItem label="发送对象：" prop="tag">
                 <p>
                   <span>共</span>
@@ -46,7 +82,11 @@
                 </p>
               </FormItem>
               <FormItem label="短信内容：" prop="Message">
-                <Input v-model="formValidate1.Message" type="textarea" :autosize="{ minRows: 5, maxRows: 8 }"></Input>
+                <Input
+                  v-model="formValidate1.Message"
+                  type="textarea"
+                  :autosize="{ minRows: 5, maxRows: 8 }"
+                ></Input>
                 <p style="font-size: 12px;">
                   内容上限不能超过
                   <span class="red">500</span>字，当前已输入
@@ -69,7 +109,12 @@
           </Button>
           <!--群发站内信-->
           <Modal v-model="modal2" title="群发站内信" :mask-closable="false">
-            <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
+            <Form
+              ref="formValidate2"
+              :model="formValidate2"
+              :rules="ruleValidate2"
+              :label-width="120"
+            >
               <FormItem label="发送对象：" prop="tag">
                 <p class="pitchOn">
                   <span>共</span>
@@ -78,26 +123,51 @@
                 </p>
               </FormItem>
               <FormItem label="标题：" prop="title">
-                <Input style="font-size: 14px;" v-model="formValidate2.title"></Input>
+                <Input
+                  style="font-size: 14px;"
+                  v-model="formValidate2.title"
+                ></Input>
               </FormItem>
               <FormItem label="内容：" prop="msg">
-                <Input style="font-size: 14px;" v-model="formValidate2.msg" type="textarea" :autosize="{ minRows: 5, maxRows: 8 }"></Input>
+                <Input
+                  style="font-size: 14px;"
+                  v-model="formValidate2.msg"
+                  type="textarea"
+                  :autosize="{ minRows: 5, maxRows: 8 }"
+                ></Input>
                 <p style="font-size: 12px;">
                   站内信标题不能超过20个字，内容不能超过100个字。
                 </p>
               </FormItem>
             </Form>
             <div slot="footer">
-              <Button type="error" style="font-size:14px" size="large" @click="onStation">确定</Button>
+              <Button
+                type="error"
+                style="font-size:14px"
+                size="large"
+                @click="onStation"
+                >确定</Button
+              >
             </div>
           </Modal>
 
           <!--微信推送-->
-          <Modal width="200" v-model="modal3" draggable :styles="{ top: '220px' }" footer-hide>
+          <Modal
+            width="200"
+            v-model="modal3"
+            draggable
+            :styles="{ top: '220px' }"
+            footer-hide
+          >
             <ButtonGroup vertical>
               <Button @click="modal3_1 = true">APP推送(链接)</Button>
               <Modal v-model="modal3_1" title="APP推送(链接)">
-                <Form ref="formValidate3" :model="formValidate3" :rules="ruleValidate3" :label-width="120">
+                <Form
+                  ref="formValidate3"
+                  :model="formValidate3"
+                  :rules="ruleValidate3"
+                  :label-width="120"
+                >
                   <FormItem label="推送类型：" prop="PushType">
                     <CheckboxGroup v-model="formValidate3.PushType1">
                       <Checkbox label="options1">
@@ -127,7 +197,12 @@
               </Modal>
               <Button @click="modal3_2 = true">APP推送(专题)</Button>
               <Modal v-model="modal3_2" title="APP推送(专题)">
-                <Form ref="formValidate" :model="formValidate3" :rules="ruleValidate3" :label-width="120">
+                <Form
+                  ref="formValidate"
+                  :model="formValidate3"
+                  :rules="ruleValidate3"
+                  :label-width="120"
+                >
                   <FormItem label="推送类型：" prop="PushType">
                     <CheckboxGroup v-model="formValidate3.PushType2">
                       <Checkbox label="options1">
@@ -145,9 +220,16 @@
                     </CheckboxGroup>
                   </FormItem>
                   <FormItem label="选择资讯" prop="SelectInformation">
-                    <Button type="success" @click="modal3_2_1 = true">选择资讯</Button>
+                    <Button type="success" @click="modal3_2_1 = true"
+                      >选择资讯</Button
+                    >
                     <Modal v-model="modal3_2_1" title="选择资讯" footer-hide>
-                      <Input search enter-button placeholder="名称搜索" style="width: auto" />
+                      <Input
+                        search
+                        enter-button
+                        placeholder="名称搜索"
+                        style="width: auto"
+                      />
                       <Table :columns="columns1" :data="data1"></Table>
                       <Page :total="100" />
                     </Modal>
@@ -165,7 +247,12 @@
               </Modal>
               <Button @click="modal3_3 = true">APP推送(活动)</Button>
               <Modal v-model="modal3_3" title="APP推送(活动)">
-                <Form ref="formValidate" :model="formValidate3" :rules="ruleValidate3" :label-width="120">
+                <Form
+                  ref="formValidate"
+                  :model="formValidate3"
+                  :rules="ruleValidate3"
+                  :label-width="120"
+                >
                   <FormItem label="推送类型：" prop="PushType">
                     <CheckboxGroup v-model="formValidate3.PushType3">
                       <Checkbox label="options1">
@@ -183,9 +270,16 @@
                     </CheckboxGroup>
                   </FormItem>
                   <FormItem label="选择活动" prop="ChoiceActivity">
-                    <Button type="success" @click="modal3_3_1 = true">选择活动</Button>
+                    <Button type="success" @click="modal3_3_1 = true"
+                      >选择活动</Button
+                    >
                     <Modal v-model="modal3_3_1" title="选择活动" footer-hide>
-                      <Input search enter-button placeholder="名称搜索" style="width: auto" />
+                      <Input
+                        search
+                        enter-button
+                        placeholder="名称搜索"
+                        style="width: auto"
+                      />
                       <Table :columns="columns2" :data="data2"></Table>
                       <Page :total="100" />
                     </Modal>
@@ -203,7 +297,12 @@
               </Modal>
               <Button @click="modal3_4 = true">APP推送(商品)</Button>
               <Modal v-model="modal3_4" title="APP推送(商品)">
-                <Form ref="formValidate" :model="formValidate3" :rules="ruleValidate3" :label-width="120">
+                <Form
+                  ref="formValidate"
+                  :model="formValidate3"
+                  :rules="ruleValidate3"
+                  :label-width="120"
+                >
                   <FormItem label="推送类型：" prop="PushType">
                     <CheckboxGroup v-model="formValidate3.PushType4">
                       <Checkbox label="options1">
@@ -221,9 +320,16 @@
                     </CheckboxGroup>
                   </FormItem>
                   <FormItem label="选择商品" prop="ChooseGoods">
-                    <Button type="success" @click="modal3_4_1 = true">选择商品</Button>
+                    <Button type="success" @click="modal3_4_1 = true"
+                      >选择商品</Button
+                    >
                     <Modal v-model="modal3_4_1" title="选择商品" footer-hide>
-                      <Input search enter-button placeholder="名称搜索" style="width: auto" />
+                      <Input
+                        search
+                        enter-button
+                        placeholder="名称搜索"
+                        style="width: auto"
+                      />
                       <Table :columns="columns3" :data="data3"></Table>
                       <Page :total="100" />
                     </Modal>
@@ -253,7 +359,12 @@
           <!-- </Dropdown> -->
           <!--设置标签-->
           <Modal v-model="modal4" title="设置标签">
-            <Checkbox v-for="(item1, index) in label1" :name="item1" :key="index">{{ item1 }}</Checkbox>
+            <Checkbox
+              v-for="(item1, index) in label1"
+              :name="item1"
+              :key="index"
+              >{{ item1 }}</Checkbox
+            >
           </Modal>
           <Button disabled @click="modal4 = true" class="btns">
             设置标签
@@ -263,16 +374,35 @@
           <Dropdown>
             <Button @click="exportData" class="btns">
               导出数据
-
             </Button>
           </Dropdown>
         </div>
         <div>
-          <Select v-model="size" style="width:120px" placeholder="显示条数" class="space">
-            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select
+            v-model="size"
+            style="width:120px"
+            placeholder="显示条数"
+            class="space"
+          >
+            <Option
+              v-for="item in Article"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
-          <Select placeholder="排序方式" class="space" style="width: 120px;" v-model="sort">
-            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select
+            placeholder="排序方式"
+            class="space"
+            style="width: 120px;"
+            v-model="sort"
+          >
+            <Option
+              v-for="item in sorting"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
           <!-- <Icon
             type="ios-cog-outline"
@@ -333,18 +463,29 @@
                 </div>
               </div>
               <div class="foot">
-                <Icon type="ios-cog-outline" size="25" class="table-btn" @click="
+                <Icon
+                  type="ios-cog-outline"
+                  size="25"
+                  class="table-btn"
+                  @click="
                     () => {
                       this.$router.push({ name: 'user_field' });
                     }
-                  " />
+                  "
+                />
                 <a @click="jump1()">自定义扩展字段</a>
               </div>
             </div>
           </Modal>
         </div>
 
-        <Modal title="二维码" v-model="modaQR" style="text-align: center;" :closable="false" class='QRcodemodal'>
+        <Modal
+          title="二维码"
+          v-model="modaQR"
+          style="text-align: center;"
+          :closable="false"
+          class="QRcodemodal"
+        >
           <div class="bg">
             <img :src="QRCode" alt="二维码" />
           </div>
@@ -354,52 +495,86 @@
           </div>
         </Modal>
       </div>
-      <Table ref="volunteerSel" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+      <Table
+        ref="volunteerSel"
+        border
+        :columns="columns"
+        :data="data"
+        @on-selection-change="handleSelectionChange"
+      ></Table>
       <div class="pages">
         <div class="batch">
-
           <Button style="border:0px">
             <Checkbox v-model="ALLINFO"></Checkbox>全选
           </Button>
-          <Select placement="top" placeholder="批量操作" style="width: 150px" v-model="batch">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select
+            placement="top"
+            placeholder="批量操作"
+            style="width: 150px"
+            v-model="batch"
+          >
+            <Option
+              v-for="item in batchList"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
           <a class="btn" href="javascript:;" @click="batches">确定</a>
           <!-- <Button style="margin-left: 10px" @click="batches()"></Button> -->
         </div>
-        <Page :total="dataCount" show-elevator show-total size="small" style="padding-right: 30px;" :page-size="size" @on-change="changepages" />
+        <Page
+          :total="dataCount"
+          show-elevator
+          show-total
+          size="small"
+          style="padding-right: 30px;"
+          :page-size="size"
+          @on-change="changepages"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { tablepage } from '@/request/mixin'
-import { Userpage, Userbatch, userListMsg, userEnable } from '@/request/api'
+import { tablepage } from "@/request/mixin";
+import customizeDialog from "../survey/commonComponent/customizeDialog";
+import { Userpage, Userbatch, userListMsg, userEnable } from "@/request/api";
 export default {
+  components: { customizeDialog },
   data() {
     return {
       navigation1: {
-        head: '用户列表(志愿者)'
+        head: "用户列表(志愿者)"
       },
-      batchList: [{ value: '0', label: '禁用' }, { value: '1', label: '启用' }],
+      navigationName: {
+        head: "user/all_member_zyz_",
+        pageTable: "4"
+      },
+      batchList: [
+        { value: "0", label: "禁用" },
+        { value: "1", label: "启用" }
+      ],
       modal1: false, //群发短信
       formValidate1: {
-        Message: ''
+        Message: ""
       },
       ruleValidate1: {
-        tag: [{ required: true, trigger: 'blur' }],
-        Message: [{ required: true, message: '短信内容不能为空', trigger: 'blur' }]
+        tag: [{ required: true, trigger: "blur" }],
+        Message: [
+          { required: true, message: "短信内容不能为空", trigger: "blur" }
+        ]
       },
       modal2: false, //群发站内信
       formValidate2: {
         // 群发 站内信
-        msg: '',
-        title: ''
+        msg: "",
+        title: ""
       },
       ruleValidate2: {
-        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-        msg: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
+        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        msg: [{ required: true, message: "内容不能为空", trigger: "blur" }]
       },
       modal3: false, //微信推送
       modal3_1: false, //APP推送(链接)
@@ -412,267 +587,281 @@ export default {
       modal4: false,
       modaQR: false,
       formValidate3: {
-        PushType1: ['options1'], //APP推送(链接)推送类型
-        PushType2: ['options2', 'options4'], //APP推送(专题)推送类型
-        PushType3: ['options3', 'options4'], //APP推送(活动)推送类型
-        PushType4: ['options4'], //APP推送(商品)推送类型
-        PushLink: '', //推送链接
-        PushTitle: '', //推送标题
-        PushContent: '' //推送内容
+        PushType1: ["options1"], //APP推送(链接)推送类型
+        PushType2: ["options2", "options4"], //APP推送(专题)推送类型
+        PushType3: ["options3", "options4"], //APP推送(活动)推送类型
+        PushType4: ["options4"], //APP推送(商品)推送类型
+        PushLink: "", //推送链接
+        PushTitle: "", //推送标题
+        PushContent: "" //推送内容
       },
       ruleValidate3: {
-        PushType: [{ required: true, message: '推送类型不能为空', trigger: 'blur' }],
-        PushLink: [{ required: true, message: '推送链接不能为空', trigger: 'blur' }],
-        PushTitle: [{ required: true, message: '推送标题不能为空', trigger: 'blur' }],
-        PushContent: [{ required: true, message: '推送内容不能为空', trigger: 'blur' }],
-        SelectInformation: [{ required: true, message: '选择资讯不能为空', trigger: 'blur' }],
-        ChoiceActivity: [{ required: true, message: '选择活动不能为空', trigger: 'blur' }],
-        ChooseGoods: [{ required: true, message: '选择商品不能为空', trigger: 'blur' }]
+        PushType: [
+          { required: true, message: "推送类型不能为空", trigger: "blur" }
+        ],
+        PushLink: [
+          { required: true, message: "推送链接不能为空", trigger: "blur" }
+        ],
+        PushTitle: [
+          { required: true, message: "推送标题不能为空", trigger: "blur" }
+        ],
+        PushContent: [
+          { required: true, message: "推送内容不能为空", trigger: "blur" }
+        ],
+        SelectInformation: [
+          { required: true, message: "选择资讯不能为空", trigger: "blur" }
+        ],
+        ChoiceActivity: [
+          { required: true, message: "选择活动不能为空", trigger: "blur" }
+        ],
+        ChooseGoods: [
+          { required: true, message: "选择商品不能为空", trigger: "blur" }
+        ]
       },
       data1: [], //资讯
       columns1: [
         {
-          title: '资讯名称',
-          key: 'InformationName',
-          align: 'center'
+          title: "资讯名称",
+          key: "InformationName",
+          align: "center"
         },
         {
-          title: '所属分类',
-          key: 'category',
-          align: 'center'
+          title: "所属分类",
+          key: "category",
+          align: "center"
         },
         {
-          title: '添加时间',
-          key: 'AddTime',
-          align: 'center'
+          title: "添加时间",
+          key: "AddTime",
+          align: "center"
         },
         {
-          title: '操作',
-          key: 'action',
-          align: 'center',
+          title: "操作",
+          key: "action",
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'span',
+                "span",
                 {
                   style: {
-                    color: '#41C5AA'
+                    color: "#41C5AA"
                   },
                   on: {
                     click: () => {
-                      this.$Message.info('你点击了第' + params.index + '列')
+                      this.$Message.info("你点击了第" + params.index + "列");
                     }
                   }
                 },
-                '选择'
+                "选择"
               )
-            ])
+            ]);
           }
         }
       ],
       data2: [], //活动
       columns2: [
         {
-          title: '活动名称',
-          key: 'EventName',
-          align: 'center'
+          title: "活动名称",
+          key: "EventName",
+          align: "center"
         },
         {
-          title: '开始时间',
-          key: 'StartTime',
-          align: 'center'
+          title: "开始时间",
+          key: "StartTime",
+          align: "center"
         },
         {
-          title: '结束时间',
-          key: 'EndTime',
-          align: 'center'
+          title: "结束时间",
+          key: "EndTime",
+          align: "center"
         },
         {
-          title: '操作',
-          key: 'action',
-          align: 'center',
+          title: "操作",
+          key: "action",
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'span',
+                "span",
                 {
                   style: {
-                    color: '#41C5AA'
+                    color: "#41C5AA"
                   },
                   on: {
                     click: () => {
-                      this.$Message.info('你点击了第' + params.index + '列')
+                      this.$Message.info("你点击了第" + params.index + "列");
                     }
                   }
                 },
-                '选择'
+                "选择"
               )
-            ])
+            ]);
           }
         }
       ],
       data3: [], //商品
       columns3: [
         {
-          title: '商品名称',
-          key: 'NameCommodity',
-          align: 'center'
+          title: "商品名称",
+          key: "NameCommodity",
+          align: "center"
         },
         {
-          title: '类型',
-          key: 'type',
-          align: 'center'
+          title: "类型",
+          key: "type",
+          align: "center"
         },
         {
-          title: '兑换量',
-          key: 'ChangeAmount',
-          align: 'center'
+          title: "兑换量",
+          key: "ChangeAmount",
+          align: "center"
         },
         {
-          title: '操作',
-          key: 'action',
-          align: 'center',
+          title: "操作",
+          key: "action",
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'span',
+                "span",
                 {
                   style: {
-                    color: '#41C5AA'
+                    color: "#41C5AA"
                   },
                   on: {
                     click: () => {
-                      this.$Message.info('你点击了第' + params.index + '列')
+                      this.$Message.info("你点击了第" + params.index + "列");
                     }
                   }
                 },
-                '选择'
+                "选择"
               )
-            ])
+            ]);
           }
         }
       ],
       modalBQ: false, //设置标签
       label1: [
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称',
-        '用户标签名称'
+        "用户标签名称",
+        "用户标签名称",
+        "用户标签名称",
+        "用户标签名称",
+        "用户标签名称",
+        "用户标签名称",
+        "用户标签名称",
+        "用户标签名称"
       ],
       columns: [
         {
-          type: 'selection',
+          type: "selection",
           width: 50,
-          align: 'center'
+          align: "center"
         },
         {
-          title: '姓名',
-          key: 'userName',
-          align: 'center',
+          title: "姓名",
+          key: "userName",
+          align: "center",
           width: 180
         },
         {
-          title: '手机号',
-          key: 'tel',
-          align: 'center',
+          title: "手机号",
+          key: "tel",
+          align: "center",
           width: 160
         },
         {
-          title: '用户昵称',
-          key: 'nickname',
-          align: 'center',
+          title: "用户昵称",
+          key: "nickname",
+          align: "center",
           width: 180
         },
         {
-          title: '分类',
-          key: 'roles',
-          align: 'center',
+          title: "分类",
+          key: "roles",
+          align: "center",
           width: 120
         },
         {
-          title: '标签',
-          key: 'labels',
-          align: 'center',
+          title: "标签",
+          key: "labels",
+          align: "center",
           width: 160
         },
         {
-          title: '参与活动数',
-          key: 'voluActNum',
-          align: 'center',
+          title: "参与活动数",
+          key: "voluActNum",
+          align: "center",
           width: 140
         },
         {
-          title: '积分',
-          key: 'voluScore',
-          align: 'center',
+          title: "积分",
+          key: "voluScore",
+          align: "center",
           width: 100
         },
         {
-          title: '账户启用状态',
-          key: 'userEnable',
-          align: 'center',
+          title: "账户启用状态",
+          key: "userEnable",
+          align: "center",
           width: 140,
           render: (h, params) => {
-            return h('div', [
-              h('i-switch', {
+            return h("div", [
+              h("i-switch", {
                 props: {
                   value: params.row.userEnable == 1
                 },
                 on: {
                   input: e => {
-                    this.setUserEnable(params.row.userId, e)
+                    this.setUserEnable(params.row.userId, e);
                   }
                 }
               })
-            ])
+            ]);
           }
         },
         {
-          title: '操作',
-          key: 'action',
+          title: "操作",
+          key: "action",
           width: 160,
-          align: 'center',
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'a',
+                "a",
                 {
-                  clssName: 'action',
+                  clssName: "action",
                   style: {
-                    color: '#FD585E'
+                    color: "#FD585E"
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: 'user_details_zyz',
+                        name: "user_details_zyz",
                         query: { userId: params.row.userId }
-                      })
+                      });
                     }
                   }
                 },
-                '查看'
+                "查看"
               ),
               h(
-                'a',
+                "a",
                 {
                   style: {
-                    marginRight: '5px',
-                    marginLeft: '5px',
+                    marginRight: "5px",
+                    marginLeft: "5px",
 
-                    color: '#FD585E'
+                    color: "#FD585E"
                   },
                   on: {
                     click: () => {
-                      this.modaQR = true
-                      this.QRCode = params.row.qrCodePath
+                      this.modaQR = true;
+                      this.QRCode = params.row.qrCodePath;
                     }
                   }
                 },
-                '二维码'
+                "二维码"
               )
               // h(
               //   "span",
@@ -688,7 +877,7 @@ export default {
               //   },
               //   "删除"
               // )
-            ])
+            ]);
           }
         }
       ],
@@ -698,46 +887,53 @@ export default {
       dataCount: 0,
       arr: [],
       sysType: 2,
-      info: '',
-      nickname: '',
-      registrationTimeStamp: '',
-      labelName: '',
-      account: '',
-      levelId: '',
-      labelId: '',
-      orgName: '',
-      memberType: '',
-      memberPayTimestamp: '',
-      roleId: '',
+      info: "",
+      nickname: "",
+      registrationTimeStamp: "",
+      labelName: "",
+      account: "",
+      levelId: "",
+      labelId: "",
+      orgName: "",
+      memberType: "",
+      memberPayTimestamp: "",
+      roleId: "",
       userEnable: false,
       inviteUserAccountId: 1,
       isShow: false,
       batch: null,
-      basicInformation: ['options1', 'options2', 'options8'],
-      OrganizeInformation: ['options1'],
-      SummaryInformation: ['options1'],
-      OtherInformation: ['options2', 'options4'],
+      basicInformation: ["options1", "options2", "options8"],
+      OrganizeInformation: ["options1"],
+      SummaryInformation: ["options1"],
+      OtherInformation: ["options2", "options4"],
       arrs: [],
-      Article: [{ value: 10, label: 10 }, { value: 15, label: 15 }, { value: 20, label: 20 }],
-      sorting: [{ value: 'asc', label: '正序' }, { value: 'desc', label: '倒序' }],
-      startAt: '',
-      endAt: '',
-      sort: 'asc',
+      Article: [
+        { value: 10, label: 10 },
+        { value: 15, label: 15 },
+        { value: 20, label: 20 }
+      ],
+      sorting: [
+        { value: "asc", label: "正序" },
+        { value: "desc", label: "倒序" }
+      ],
+      startAt: "",
+      endAt: "",
+      sort: "asc",
       showScreen: true,
       Sele2: {
         ON: false,
         ALL: false
       },
       paramsObj: {
-        info: '',
-        orgName: '',
-        labelName: ''
+        info: "",
+        orgName: "",
+        labelName: ""
       },
-      QRCode: '',
+      QRCode: "",
       ALLINFO: false, // 是否全选
       ALLLIST: [], // 选中的人员
       stationFormFlag: true
-    }
+    };
   },
 
   components: {},
@@ -748,20 +944,20 @@ export default {
 
   //事件监听
   watch: {
-    size: 'getUserPage',
-    sort: 'getUserPage',
+    size: "getUserPage",
+    sort: "getUserPage",
     ALLINFO(newVlaue, oldValue) {
       //  全选 and 全不选
       if (newVlaue === true) {
-        this.$refs.volunteerSel.selectAll(true)
+        this.$refs.volunteerSel.selectAll(true);
         let arr = this.data.map(item => {
-          return item.userId
-        })
-        this.ALLLIST = arr
-        console.log(arr)
+          return item.userId;
+        });
+        this.ALLLIST = arr;
+        console.log(arr);
       } else {
-        this.$refs.volunteerSel.selectAll(false)
-        this.ALLLIST = []
+        this.$refs.volunteerSel.selectAll(false);
+        this.ALLLIST = [];
       }
     }
   },
@@ -769,9 +965,9 @@ export default {
   methods: {
     //用户列表
     getUserPage() {
-      let endAt = null
+      let endAt = null;
       if (this.endAt) {
-        endAt = this.util.formatDate_time(this.endAt.getTime()) + ' 23:59:59'
+        endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
       }
 
       //获取用户分页
@@ -782,8 +978,8 @@ export default {
         info: this.info,
         nickname: this.nickname,
         orgName: this.orgName,
-        registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : '',
-        registrationEndTimeStamp: endAt ? new Date(endAt).getTime() : '',
+        registrationStartTimeStamp: this.startAt ? this.startAt.getTime() : "",
+        registrationEndTimeStamp: endAt ? new Date(endAt).getTime() : "",
         labelName: this.labelName,
         account: this.account,
         levelId: this.levelId,
@@ -793,13 +989,13 @@ export default {
         roleId: this.roleId
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list
-          this.dataCount = res.data.totalSize
+          this.data = res.data.list;
+          this.dataCount = res.data.totalSize;
         } else {
-          this.$Message.error(res.msg)
+          this.$Message.error(res.msg);
         }
-        console.log(res)
-      })
+        console.log(res);
+      });
     },
     //批量操作接口
     getUserBatch() {
@@ -808,71 +1004,73 @@ export default {
         enable: this.batch
       }).then(res => {
         if (res.code === 200) {
-          this.batch == '1' ? this.$Message.info('启用成功') : this.$Message.info('禁用成功')
-          this.getUserPage(this.paramsObj)
-          this.ALLLIST = []
-          this.ALLINFO = false
-          this.batch = null
+          this.batch == "1"
+            ? this.$Message.info("启用成功")
+            : this.$Message.info("禁用成功");
+          this.getUserPage(this.paramsObj);
+          this.ALLLIST = [];
+          this.ALLINFO = false;
+          this.batch = null;
         } else {
           this.$Message.error({
             background: true,
-            content: '状态变更失败，请联系管理员查看'
-          })
-          this.getUserPage(this.paramsObj)
+            content: "状态变更失败，请联系管理员查看"
+          });
+          this.getUserPage(this.paramsObj);
         }
-      })
+      });
     },
     formatTime(time) {
-      if (!time) return ''
-      return time.getTime()
+      if (!time) return "";
+      return time.getTime();
     },
     sameday(timeObj) {
-      let { star, end } = timeObj
-      if (!star || !end) return { star: star, end: end }
+      let { star, end } = timeObj;
+      if (!star || !end) return { star: star, end: end };
       if (star === end) {
-        let time1 = this.util.formatDate(star)
-        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        let time1 = this.util.formatDate(star);
+        let time2 = this.util.formatDate(end).split(" ")[0] + " 23:59:59";
         return {
           star: new Date(time1).getTime(),
           end: new Date(time2).getTime()
-        }
+        };
       } else {
-        let time1 = this.util.formatDate(star)
-        let time2 = this.util.formatDate(end).split(' ')[0] + ' 23:59:59'
+        let time1 = this.util.formatDate(star);
+        let time2 = this.util.formatDate(end).split(" ")[0] + " 23:59:59";
         return {
           star: new Date(time1).getTime(),
           end: new Date(time2).getTime()
-        }
+        };
       }
     },
     //分页功能
     changepages(index) {
-      this.page = index
-      console.log(index)
-      this.getUserPage()
+      this.page = index;
+      console.log(index);
+      this.getUserPage();
     },
 
     // 批量操作全选按钮
     batches() {
-      console.log(this.batch)
+      console.log(this.batch);
       if (this.ALLLIST.length < 1) {
-        this.$Message.error('至少选择一个')
+        this.$Message.error("至少选择一个");
       } else if (!this.batch) {
-        this.$Message.error('请选择操作类型')
+        this.$Message.error("请选择操作类型");
       } else {
-        this.getUserBatch()
-        this.userEnable = false
+        this.getUserBatch();
+        this.userEnable = false;
       }
     },
     // 显示站内信模态框
     ismodal2() {
       if (this.ALLLIST.length > 0) {
-        this.modal2 = true
+        this.modal2 = true;
       } else {
         this.$Message.error({
           background: true,
-          content: '请选择要修改的人员'
-        })
+          content: "请选择要修改的人员"
+        });
       }
       // if (this.letters) {
       //   if (this.letters === 'ON') {
@@ -900,23 +1098,23 @@ export default {
       this.Sele2 = {
         ON: false,
         ALL: false
-      }
-      this.Sele2[name] = true
-      this.letters = name
+      };
+      this.Sele2[name] = true;
+      this.letters = name;
     },
     // 发送站内信
     onStation() {
-      if (!this.stationFormFlag) return
+      if (!this.stationFormFlag) return;
 
       this.$refs.formValidate2.validate(valid => {
         if (valid) {
-          this.stationFormFlag = false
-          let ids = this.ALLLIST.toString()
-          this.setsend({ ids, ...this.formValidate2 })
+          this.stationFormFlag = false;
+          let ids = this.ALLLIST.toString();
+          this.setsend({ ids, ...this.formValidate2 });
         } else {
-          this.$Message.error('必填项未填!')
+          this.$Message.error("必填项未填!");
         }
-      })
+      });
       // if (!this.stationFormFlag) return
       // this.stationFormFlag = false
       // let ids = this.ALLLIST
@@ -925,106 +1123,111 @@ export default {
     // 站内信
     setsend(params) {
       userListMsg({
-        sysId: '1',
+        sysId: "1",
         ...params
       }).then(res => {
         if (res.code === 200) {
-          this.modal2 = false
+          this.modal2 = false;
           this.formValidate2 = {
-            msg: '',
-            title: ''
-          }
-          this.$Message.info('站内信发送成功~')
+            msg: "",
+            title: ""
+          };
+          this.$Message.info("站内信发送成功~");
         } else {
-          this.modal2 = false
-          let str = res.msg
+          this.modal2 = false;
+          let str = res.msg;
           this.$Message.error({
             background: true,
             content: str
-          })
+          });
 
-          console.log(res.msg)
+          console.log(res.msg);
         }
         setTimeout(() => {
-          this.stationFormFlag = true
-        })
-      })
+          this.stationFormFlag = true;
+        });
+      });
     },
 
     // 选中 内容
     handleSelectionChange(val) {
       if (val.length === this.data.length) {
-        this.ALLINFO = true
+        this.ALLINFO = true;
       } else if (val.length === 0) {
-        this.ALLINFO = false
-        this.$refs.volunteerSel.selectAll(false)
-        this.ALLLIST = []
+        this.ALLINFO = false;
+        this.$refs.volunteerSel.selectAll(false);
+        this.ALLLIST = [];
       } else {
-        this.ALLINFO = false
+        this.ALLINFO = false;
       }
       let arr = val.map(item => {
-        return item.userId
-      })
-      this.ALLLIST = arr
+        return item.userId;
+      });
+      this.ALLLIST = arr;
     },
     // 单个 用户状态 变更
     setUserEnable(params, type) {
       userEnable({
         userId: [params],
-        enable: type ? '1' : '0'
+        enable: type ? "1" : "0"
       }).then(res => {
         if (res.code === 200) {
-          type ? this.$Message.info('启用成功') : this.$Message.info('禁用成功')
-          this.getUserPage(this.paramsObj)
+          type
+            ? this.$Message.info("启用成功")
+            : this.$Message.info("禁用成功");
+          this.getUserPage(this.paramsObj);
         } else {
           this.$Message.error({
             background: true,
-            content: '状态变更失败，请联系管理员查看'
-          })
-          this.getUserPage(this.paramsObj)
+            content: "状态变更失败，请联系管理员查看"
+          });
+          this.getUserPage(this.paramsObj);
         }
-      })
+      });
     },
     exportData() {
-      this.$Message.info('此功能暂未开放，敬请期待！')
+      this.$Message.info("此功能暂未开放，敬请期待！");
     },
     ok() {
-      this.$Message.info('Clicked ok')
+      this.$Message.info("Clicked ok");
     },
     cancel() {
-      this.$Message.info('Clicked cancel')
+      this.$Message.info("Clicked cancel");
     },
     jump1() {
-      this.$router.push({ name: 'UserFields_hy' })
+      this.$router.push({ name: "UserFields_hy" });
     },
     jump2() {
-      this.$router.push({ name: 'TagList_hy' })
+      this.$router.push({ name: "TagList_hy" });
     },
     // 删除按钮
     remove(id, startid) {
-      console.log(startid)
-      this.arr = id
-      this.batch = startid
-      this.getUserBatch(2)
+      console.log(startid);
+      this.arr = id;
+      this.batch = startid;
+      this.getUserBatch(2);
     },
 
     //查询
     result() {
-      this.page = 1
-      this.getUserPage()
+      this.page = 1;
+      this.getUserPage();
     },
     // 关闭 二维码
     modalCancel() {
-      this.modaQR = false
+      this.modaQR = false;
       setTimeout(() => {
-        this.QRCode = ''
-      }, 500)
+        this.QRCode = "";
+      }, 500);
+    },
+    changeColumn(data) {
+      this.columns = data;
     }
   },
   mounted() {
-    this.getUserPage()
+    this.getUserPage();
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .integral-header {

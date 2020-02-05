@@ -2262,7 +2262,191 @@ const router = new Router({
         import('@/views/permissions/DatabaseManagement.vue')
     }
     ]
+  },
+  {
+    path: '/survey',
+    name: 'survey',
+    meta: {
+      title: '问卷',
+      icon: 'ios-lock'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'member/list',
+        name: 'memberList',
+        meta: {
+          title: '问卷调查(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/list.vue')
+      },
+      {
+        path: 'member/add',
+        name: 'memberAdd',
+        meta: {
+          title: '新建问卷调查(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/add.vue')
+      },
+      {
+        path: 'member/edit',
+        name: 'memberEdit',
+        meta: {
+          title: '编辑问卷调查(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/edit.vue')
+      },
+      {
+        path: 'member/view',
+        name: 'memberView',
+        meta: {
+          title: '查看问卷调查(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/view.vue')
+      },
+      {
+        path: 'member/listPush',
+        name: 'memberListPush',
+        meta: {
+          title: '推送问卷调查(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/listPush.vue')
+      },
+      {
+        path: 'member/listPushList',
+        name: 'memberListPushList',
+        meta: {
+          title: '问卷调查-问卷对象(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/listPushList.vue')
+      },
+      {
+        path: 'member/level',
+        name: 'level',
+        meta: {
+          title: '会员等级设置(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/level.vue')
+      },
+      {
+        path: 'member/feedbackList',
+        name: 'memberFeedbackList',
+        meta: {
+          title: '反馈列表(会员)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/member/feedbackList.vue')
+      },
+      {
+        path: 'volunteer/level',
+        name: 'level',
+        meta: {
+          title: '志愿者等级设置(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/level.vue')
+      },
+      {
+        path: 'medalMember',
+        name: 'medalMember',
+        meta: {
+          title: '会员勋章管理',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/medalMember.vue')
+      },
+
+      {
+        path: 'volunteer/list',
+        name: 'volunteerList',
+        meta: {
+          title: '问卷调查(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/list.vue')
+      },
+      {
+        path: 'volunteer/add',
+        name: 'volunteerAdd',
+        meta: {
+          title: '新建问卷调查(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/add.vue')
+      },
+      {
+        path: 'volunteer/edit',
+        name: 'volunteerEdit',
+        meta: {
+          title: '编辑问卷调查(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/edit.vue')
+      },
+      {
+        path: 'volunteer/view',
+        name: 'volunteerView',
+        meta: {
+          title: '查看问卷调查(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/view.vue')
+      },
+      {
+        path: 'volunteer/listPush',
+        name: 'volunteerListPush',
+        meta: {
+          title: '推送问卷调查(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/listPush.vue')
+      },
+      {
+        path: 'volunteer/listPushList',
+        name: 'volunteerListPushList',
+        meta: {
+          title: '问卷调查-问卷对象(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/listPushList.vue')
+      },
+
+      {
+        path: 'volunteer/feedbackList',
+        name: 'volunteerFeedbackList',
+        meta: {
+          title: '反馈列表(志愿者)',
+          icon: 'ios-navigate'
+        },
+        component: () =>
+          import('@/views/survey/volunteer/feedbackList.vue')
+      }
+    ]
   }
+
   ]
 })
 
