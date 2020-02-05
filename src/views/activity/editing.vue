@@ -61,9 +61,9 @@
                   </div>
                 </div> -->
                 <UploadImg
-                  :picMap="fmPic"
                   :max="1"
                   v-model="fmList"
+                  :full-url.sync="fmPic"
                   :display-width="120"
                   :display-height="120"
                   :crop-width="128"
@@ -85,12 +85,13 @@
                     <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
                 </div> -->
+                
                 <UploadImg
-                  :picMap="ztPic"
+              
                   :max="1"
                   v-model="ztList"
+                  :full-url.sync="ztPic"
                   :display-width="300"
-                  :display-height="300"
                   :crop-width="750"
                   :crop-height="320"
                   ref="refCover"
@@ -371,10 +372,10 @@ export default {
       },
       showZf:false,
       isZf:false,
-      ztList: [],
-      ztPic: {},
-      fmList: [],
-      fmPic: {},
+      ztList: "",
+      ztPic: '',
+      fmList: '',
+      fmPic: '',
     };
   },
 
@@ -475,10 +476,10 @@ export default {
         if(this.batch.releaseTime){
           this.releaseTimeSelf = 1
         }
-        this.fmList = [res.data.actCoverPic];
-        this.fmPic = { [res.data.actCoverPic]: res.data.actCoverShowPic };
-        this.ztList = [res.data.actPic];
-        this.ztPic = { [res.data.actPic]: res.data.actShowPic };
+        this.fmList = res.data.actCoverPic;
+        this.fmPic =  res.data.actCoverShowPic ;
+        this.ztList = res.data.actPic;
+        this.ztPic =  res.data.actShowPic ;
       });
     },
     save() {
