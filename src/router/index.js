@@ -2334,7 +2334,7 @@ const router = new Router({
       },
       {
         path: 'member/level',
-        name: 'level',
+        name: 'vpLevel',
         meta: {
           title: '会员等级设置(会员)',
           icon: 'ios-navigate'
@@ -2354,7 +2354,7 @@ const router = new Router({
       },
       {
         path: 'volunteer/level',
-        name: 'level',
+        name: 'vunLevel',
         meta: {
           title: '志愿者等级设置(志愿者)',
           icon: 'ios-navigate'

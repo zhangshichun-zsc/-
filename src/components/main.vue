@@ -412,9 +412,6 @@ export default {
     this.active = window.sessionStorage.getItem("active");
   },
   beforeRouteLeave(to, from, next) {
-
-    return next()
-    // TODO 方便测试余彤的代码
     
     if (to.name === from.name) return;
     let toName = to.name;
