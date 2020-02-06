@@ -631,8 +631,6 @@ export default {
       activeState: this.$store.state.activeState
     };
   },
-  components: {},
-
   computed: {},
 
   created() {},

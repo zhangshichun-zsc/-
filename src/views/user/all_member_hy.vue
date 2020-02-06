@@ -942,9 +942,6 @@ export default {
       stationFormFlag: true // 节流阀
     };
   },
-
-  components: {},
-
   computed: {},
 
   mixins: [tablepage],

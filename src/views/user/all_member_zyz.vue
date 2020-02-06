@@ -935,9 +935,6 @@ export default {
       stationFormFlag: true
     };
   },
-
-  components: {},
-
   computed: {},
 
   mixins: [tablepage],

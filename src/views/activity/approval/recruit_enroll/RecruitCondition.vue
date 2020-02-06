@@ -124,7 +124,7 @@
           </FormItem>
         </FormItem>
         <FormItem label="限制设置" prop="signRuleList">
-          <Table v-if="form.signRuleList.length" :columns="limitSetColumns" :data="form.signRuleList" />
+          <Table style="overflow: visible" v-if="form.signRuleList.length" :columns="limitSetColumns" :data="form.signRuleList" />
           <CreatePane v-if="!isFormDisabled" text="+新增限制条件" :menus="signLimitsList" dropdownTextField="name" @select="addLimit" />
         </FormItem>
         <FormItem v-if="form.zmType == '2' && form.isAudit == 2" label="优先设置" prop="choiceRuleList">

@@ -108,7 +108,9 @@
                 <li class="start">
                   <span>封面图片</span>
                   <div class="start-wap start-firt">
-    
+                     <!-- :picMap="coverMap"
+                      :disabled="cover && isDisb" 
+                      -->
                     <UploadImg
                       :max="1"
                       v-model="cover"
@@ -117,9 +119,10 @@
                       :display-height="120"
                       :crop-width="128"
                       :crop-height="128"
-                      :disabled="cover && isDisb"
+                      :disabled="cover.length !== 0 && isDisb"
                       ref="refCover"
                     ></UploadImg>
+                   
                   </div>
                 </li>
                 <li class="start">
@@ -133,7 +136,7 @@
                       :display-width="300"
                       :crop-width="750"
                       :crop-height="320"
-                      :disabled="image && isDisb"
+                      :disabled="image.length !== 0 && isDisb"
                       ref="refImags"
                     ></UploadImg>
                   </div>
