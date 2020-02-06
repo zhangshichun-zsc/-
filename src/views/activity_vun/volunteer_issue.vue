@@ -108,7 +108,7 @@
                 <li class="start">
                   <span>封面图片</span>
                   <div class="start-wap start-firt">
-                     <!-- :picMap="coverMap" -->
+    
                     <UploadImg
                       :max="1"
                       v-model="cover"

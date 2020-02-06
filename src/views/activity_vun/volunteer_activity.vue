@@ -112,13 +112,13 @@
 </template>
 
 <script>
-import customizeDialog from '../survey/commonComponent/customizeDialog'
+import customizeDialog from "../survey/commonComponent/customizeDialog";
 import { formatDate } from '@/request/datatime'
 import { actManager, activedown, activecancel, activeclose } from '../../request/api'
 import { SERVER_URl } from '@/request/http.js'
 import { filterNull } from '@/libs/utils'
 export default {
-  components: { customizeDialog },
+   
   data() {
     return {
       navigationName: {
@@ -420,8 +420,7 @@ export default {
       text: ''
     }
   },
-  components: {},
-
+  components: { customizeDialog },
   computed: {},
 
   created() {},
