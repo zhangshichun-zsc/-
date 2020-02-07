@@ -20,7 +20,7 @@
               <XDatePicker type="datetimerange"
                 :value="[form.startT, form.endT]"
                 format="yyyy-MM-dd HH:mm"
-                :options="dateRangeOptions" placeholder="请选择活动有效时间区间"
+                placeholder="请选择活动有效时间区间"
                 @on-change="onDateRangeChange" />
             </FormItem>
           </div>
