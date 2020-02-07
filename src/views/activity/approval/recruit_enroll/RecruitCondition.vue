@@ -145,7 +145,7 @@
         </FormItem>
         <FormItem label="报名时间" prop="enrollTime">
           <XDatePicker :format="format"
-            :options="dateRangeOptions"
+            
             :value="[form.enrollStarttime,form.enrollEndtime]"
             placeholder="请选择报名时间" style="width: 290px"
             type="datetimerange"
