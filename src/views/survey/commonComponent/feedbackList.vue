@@ -84,7 +84,7 @@
         <div v-else-if="item.typeFlag==3">
           <div v-if="item.answer && item.answer.answer">
             <RadioGroup v-model="item.answer.answer || ''">
-              <Radio v-for="optionsItem in item.select" :label="optionsItem.scontent">
+              <Radio v-for="(optionsItem, index ) in item.select" :label="optionsItem.scontent" :key="index">
               </Radio>
             </RadioGroup>
           </div>
@@ -97,7 +97,7 @@
             <template v-if="item.answer && item.answer.answer">
             <CheckboxGroup 
               :value="item.answer.answer.split(',')" >
-              <Checkbox v-for="optionsItem in item.select" :label="optionsItem.scontent">
+              <Checkbox v-for="(optionsItem,index) in item.select" :label="optionsItem.scontent" :key='index'>
               </Checkbox>
             </CheckboxGroup>
             </template>

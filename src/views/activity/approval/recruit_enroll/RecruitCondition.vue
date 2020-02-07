@@ -300,7 +300,7 @@ const form = {
     refundRule: '1',
     refundDays: null
   },
-  isHaveSubsidy: 1,// 是否发放补助,
+  isHaveSubsidy: 2,// 是否发放补助,
   subsidyType: '1',// 补助类型
   subsidyCash: null,// 补助金额
   resourcesId: '',// 补助物资id

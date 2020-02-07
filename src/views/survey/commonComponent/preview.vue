@@ -33,10 +33,7 @@
               <!-- /多行文本 -->
               <!-- 单选问题 -->
               <template v-if="item.typeFlag==3">
-                  <!-- <div class="select-item-conatiner">
-                    <span class="circle-line"></span>
-                    <span>{{optionsItem.scontent}}</span>
-                  </div> -->
+             
                   <div class="answer-box radio-wrapper item-radio">
                     <template v-if="Array.isArray(item.configSelectList)">
                     <RadioGroup v-model="formData.list[index] && formData.list[index].answer">

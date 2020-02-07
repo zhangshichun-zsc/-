@@ -384,7 +384,7 @@ export default {
           validator: (rule, value) => value.every(v => !!v.num),
           message: '请填写物资数量'
         },
-        releaseTime: { required: true, message: '活动发布时间不能为空', trigger: 'blur' }
+        releaseTime: { required: true, message: '活动发布时间不能为空', trigger: 'change' }
       },
       // 新增报名项
       showEnroll: false,
@@ -460,6 +460,7 @@ export default {
     },
     onTemplateChange(activityId) {
       if (activityId) {
+        let time = this.releaseTime
         templateMsg({activityId:activityId}).then(res => {
           if (res.code == 200) {
             Object.assign(this.form, res.data)
@@ -669,6 +670,7 @@ export default {
     },
     async next() {
       const valid = await this.$refs.form.validate()
+   
       if (valid) {
         this.saveCurrentBatch()
         this.$emit('next', this.batches)

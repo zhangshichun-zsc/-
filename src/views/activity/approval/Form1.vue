@@ -16,7 +16,7 @@
             <FormItem label="活动预算" prop="budget">
               <InputNumber v-model="form.budget" placeholder="请输入活动预算金额" />
             </FormItem>
-            <FormItem label="有效期限" prop="startT">
+            <FormItem label="项目周期" prop="startT">
               <XDatePicker type="datetimerange"
                 :value="[form.startT, form.endT]"
                 format="yyyy-MM-dd HH:mm"
