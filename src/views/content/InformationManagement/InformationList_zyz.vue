@@ -377,7 +377,9 @@ export default {
     },
     // 质询类型
     getAddressType() {
-      AddressType({}).then(res => {
+      AddressType({
+        sysType: this.sysType
+      }).then(res => {
         console.log(res);
         if(res.code==200){
 
@@ -506,8 +508,7 @@ html,
 body {
   margin: auto;
 }
-.main {
-}
+
 .content {
   padding: 20px;
   background-color: #ffffff;
