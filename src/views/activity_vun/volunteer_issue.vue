@@ -842,9 +842,10 @@ export default {
           // END
 
           this.add = add;
-          let arr = res.data.address.split("-");
-          let i = res.data.address.indexOf(res.data.addressSup);
-          this.args.address = res.data.address.substr(0, i - 1);
+          if(!!res.data.address&&!!res.data.addressSup){
+            let i = res.data.address.indexOf(res.data.addressSup);
+            this.args.address = res.data.address.substr(0, i - 1);
+          }
           if (this.isEdit === 4) {
             this.args.status = 1;
           }
