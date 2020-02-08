@@ -1,58 +1,40 @@
 <template>
-  <Drawer title="编辑招募报名项" v-model="visible" width="760" transfer :mask-closable="false"
-    @on-close="closeDraw">
+  <Drawer title="编辑招募报名项" v-model="visible" width="760" transfer :mask-closable="false" @on-close="closeDraw">
     <div v-if="visible">
       <Form class="mt-16" ref="reForm" :model="form" :rules="rules" :label-width="96">
         <Row :gutter="16">
           <Col span="12">
-            <FormItem label="招募类型" prop="roleId">
-              <Select v-model="form.roleId" placeholder="请选择招募类型" @on-change="signTypeChange">
-                <Option
-                  v-for="item in signTypeList"
-                  :value="item.roleId"
-                  :key="item.roleId"
-                >{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="招募描述">
-              <Input
-
-                v-model="form.positionComments"
-                type="textarea"
-                :autosize="{minRows: 3,maxRows: 4}"
-                placeholder="请输入描述···"
-              />
-            </FormItem>
+          <FormItem label="招募类型" prop="roleId">
+            <Select v-model="form.roleId" placeholder="请选择招募类型" @on-change="signTypeChange">
+              <Option v-for="item in signTypeList" :value="item.roleId" :key="item.roleId">{{ item.name }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="招募描述">
+            <Input v-model="form.positionComments" type="textarea" :autosize="{minRows: 3,maxRows: 4}" placeholder="请输入描述···" />
+          </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="招募岗位" prop="userPosition">
-              <Select v-model="form.userPosition" placeholder="请选择招募岗位">
-                <Option
-                  v-for="item in signPostList"
-                  :value="item.dicId"
-                  :key="item.name"
-                  @click.native="getPost(item)"
-                >{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="模式" prop="zmType">
-              <RadioGroup size="large" v-model="form.zmType" style="width: 100%">
-                <Row>
-                  <Col span="12">
-                    <Radio :disabled="isFormDisabled" label="1">先到先得</Radio>
-                  </Col>
-                  <Col span="12">
-                    <Radio :disabled="isFormDisabled" label="2">预约型</Radio>
-                  </Col>
-                </Row>
-              </RadioGroup>
-            </FormItem>
+          <FormItem label="招募岗位" prop="userPosition">
+            <Select v-model="form.userPosition" placeholder="请选择招募岗位">
+              <Option v-for="item in signPostList" :value="item.dicId" :key="item.name" @click.native="getPost(item)">{{ item.name }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="模式" prop="zmType">
+            <RadioGroup size="large" v-model="form.zmType" style="width: 100%">
+              <Row>
+                <Col span="12">
+                <Radio :disabled="isFormDisabled" label="1">先到先得</Radio>
+                </Col>
+                <Col span="12">
+                <Radio :disabled="isFormDisabled" label="2">预约型</Radio>
+                </Col>
+              </Row>
+            </RadioGroup>
+          </FormItem>
           </Col>
         </Row>
         <FormItem label="票价" prop="recruitNum">
-          <Table
-            :columns="ticketColumn"
-            :data="[{}]">
+          <Table :columns="ticketColumn" :data="[{}]">
           </Table>
           <div v-if="form.zmType == '2'" class="flex ai-center pane-box">
             <span style="margin-left: 10px">是否审核</span>
@@ -76,7 +58,8 @@
             </Row>
             <Row>
               <Radio label="2">
-                活动开始前&nbsp;<InputNumber :disabled="form.actRefund.refundRule == 1" :min="0" v-model="form.actRefund.refundDays" style="width: 80px" />&nbsp;天可退款
+                活动开始前&nbsp;
+                <InputNumber :disabled="form.actRefund.refundRule == 1" :min="0" v-model="form.actRefund.refundDays" style="width: 80px" />&nbsp;天可退款
               </Radio>
             </Row>
           </RadioGroup>
@@ -85,10 +68,10 @@
           <RadioGroup class="w-260" size="large" v-model="form.isHaveSubsidy">
             <Row>
               <Col span="12">
-                <Radio :label="1">是</Radio>
+              <Radio :label="1">是</Radio>
               </Col>
               <Col span="12">
-                <Radio :label="2">否</Radio>
+              <Radio :label="2">否</Radio>
               </Col>
             </Row>
           </RadioGroup>
@@ -98,10 +81,10 @@
             <RadioGroup class="w-260" size="large" v-model="form.subsidyType">
               <Row>
                 <Col span="12">
-                  <Radio label="1">现金</Radio>
+                <Radio label="1">现金</Radio>
                 </Col>
                 <Col span="12">
-                  <Radio label="2">物资</Radio>
+                <Radio label="2">物资</Radio>
                 </Col>
               </Row>
             </RadioGroup>
@@ -111,13 +94,8 @@
           </FormItem>
           <FormItem v-if="form.subsidyType=='2'" label="物资类型：">
             <div class="flex ai-center">
-              <Select v-model="form.resourcesId" style="width: 140px" :min="0" placeholder="请选择" >
-                <Option
-                  v-for="item in batchItemData.resources"
-                  :value="item.resourcesId"
-                  :key="item.resourcesId"
-                  @click.native="resourcesChange(item)"
-                >{{ item.name }}</Option>
+              <Select v-model="form.resourcesId" style="width: 140px" :min="0" placeholder="请选择">
+                <Option v-for="item in batchItemData.resources" :value="item.resourcesId" :key="item.resourcesId" @click.native="resourcesChange(item)">{{ item.name }}</Option>
               </Select>
               <Input v-model="form.resourcesRemark" style="margin-left: 10px;width: 300px" placeholder="请输入备注" />
             </div>
@@ -135,30 +113,19 @@
           <RadioGroup class="w-260" size="large" v-model="form.isAutoChoose">
             <Row>
               <Col span="12">
-                <Radio :disabled="isFormDisabled" label="0">是</Radio>
+              <Radio :disabled="isFormDisabled" label="0">是</Radio>
               </Col>
               <Col span="12">
-                <Radio :disabled="isFormDisabled" label="1">否</Radio>
+              <Radio :disabled="isFormDisabled" label="1">否</Radio>
               </Col>
             </Row>
           </RadioGroup>
         </FormItem>
         <FormItem label="报名时间" prop="enrollTime">
-          <XDatePicker :format="format"
-            :options="dateRangeOptions"
-            :value="[form.enrollStarttime,form.enrollEndtime]"
-            placeholder="请选择报名时间" style="width: 290px"
-            type="datetimerange"
-            @on-change="enrollTimeChange" />
+          <XDatePicker :format="format" :options="newDateRangeOptions" :value="[form.enrollStarttime,form.enrollEndtime]" placeholder="请选择报名时间" style="width: 290px" type="datetimerange" @on-change="enrollTimeChange" @on-open-change="successOk" />
         </FormItem>
         <FormItem label="集合时间" prop="setTime">
-          <XDatePicker :format="format"
-            :options="dateRangeOptions"
-            :value="form.setTime"
-            placeholder="请选择集合时间"
-            style="width: 290px"
-            type="datetime"
-            @on-change="setTimeChange" />
+          <XDatePicker :format="format" :options="dateRangeOptions" :value="form.setTime" placeholder="请选择集合时间" style="width: 290px" type="datetime" @on-change="setTimeChange" />
         </FormItem>
         <FormItem label="集合地址" prop="setAddr">
           <div class="flex ai-center">
@@ -170,7 +137,8 @@
           <RadioGroup size="large" v-model="form.qxSet" style="width: 100%">
             <Row>
               <Radio label="2">
-                活动开始前&nbsp;<InputNumber :disabled="form.qxSet==1" :min="1" v-model="form.qxDays" style="width: 80px" />&nbsp;天可取消
+                活动开始前&nbsp;
+                <InputNumber :disabled="form.qxSet==1" :min="1" v-model="form.qxDays" style="width: 80px" />&nbsp;天可取消
               </Radio>
             </Row>
             <Row>
@@ -184,31 +152,30 @@
             <CreatePane v-if="!isFormDisabled" text="+新增报名项" style="width: 624px" />
             <DropdownMenu style="width: 200px" slot="list">
               <Dropdown placement="right-start">
-                  <DropdownItem>
-                      常用报名项
-                      <Icon type="ios-arrow-forward"></Icon>
-                  </DropdownItem>
-                  <DropdownMenu slot="list">
-                      <DropdownItem :name="'one'+index" v-for="(item, index) of oftenItemList" v-bind:key="index">{{item.name}}</DropdownItem>
-                  </DropdownMenu>
+                <DropdownItem>
+                  常用报名项
+                  <Icon type="ios-arrow-forward"></Icon>
+                </DropdownItem>
+                <DropdownMenu slot="list">
+                  <DropdownItem :name="'one'+index" v-for="(item, index) of oftenItemList" v-bind:key="index">{{item.name}}</DropdownItem>
+                </DropdownMenu>
               </Dropdown>
             </DropdownMenu>
             <DropdownMenu style="width: 200px" slot="list">
               <Dropdown placement="right-start">
-                  <DropdownItem>
-                    自定义报名项
-                    <Icon type="ios-arrow-forward"></Icon>
-                  </DropdownItem>
-                  <DropdownMenu slot="list">
-                      <DropdownItem :name="'two'+index" v-for="(item, index) of signList" v-bind:key="index">{{item.name}}</DropdownItem>
-                  </DropdownMenu>
+                <DropdownItem>
+                  自定义报名项
+                  <Icon type="ios-arrow-forward"></Icon>
+                </DropdownItem>
+                <DropdownMenu slot="list">
+                  <DropdownItem :name="'two'+index" v-for="(item, index) of signList" v-bind:key="index">{{item.name}}</DropdownItem>
+                </DropdownMenu>
               </Dropdown>
             </DropdownMenu>
           </Dropdown>
         </FormItem>
-        <FormItem  label="群二维码" prop="actCoverPic">
-          <UploadImg :full-url.sync="form.qrCodeShow" :editable="false" :display-width="150" :display-height="150" :max="1" v-model="form.qrCode"
-            placeholder="请上传群二维码图片" />
+        <FormItem label="群二维码" prop="actCoverPic">
+          <UploadImg :full-url.sync="form.qrCodeShow" :editable="false" :display-width="150" :display-height="150" :max="1" v-model="form.qrCode" placeholder="请上传群二维码图片" />
         </FormItem>
         <FormItem label="培训内容">
           <div class="flex ai-center">
@@ -237,17 +204,11 @@
               <Input style="margin-left: 50px" />
             </div>
           </FormItem> -->
-          <div >
+          <div>
 
           </div>
           <FormItem label="反馈简介">
-            <Input
-
-              v-model="form.introductionData.context"
-              type="textarea"
-              :autosize="{minRows: 3,maxRows: 4}"
-              placeholder="请输入描述···"
-            />
+            <Input v-model="form.introductionData.context" type="textarea" :autosize="{minRows: 3,maxRows: 4}" placeholder="请输入描述···" />
           </FormItem>
           <FormItem label="反馈详情" transfer prop="fkDetailList">
             <Table v-if="form.fkDetailList.length" :columns="feedColumns" :data="form.fkDetailList" />
@@ -262,19 +223,19 @@
           <Button type="primary" shape="circle" class="action-btn" @click="submit">完成</Button>
         </div>
       </Form>
-      <adress v-model='showMap' @change='getMap'/>
+      <adress v-model='showMap' @change='getMap' />
     </div>
   </Drawer>
 </template>
 
 <script>
 import CreatePane from '../CreatePane'
-import adress from'_c/map'
+import adress from '_c/map'
 import areaSelect from '_c/selsect'
 import cloneDeep from 'lodash.clonedeep'
 import {
-  signType,// 获取招募类型
-  signPost,// 根据招募类型获取招募岗位
+  signType, // 获取招募类型
+  signPost, // 根据招募类型获取招募岗位
   signLimits, // 常用限制项
   signItems, // 常用报名项
   batchItem, // 批次活动前置信息
@@ -284,28 +245,29 @@ import {
 const today = new Date()
 
 const form = {
-  roleId: '',// 招募类型id
-  roleName: '',// 招募类型名称
-  userPosition: '',// 招募岗位id
-  positionName: '',// 招募岗位名称
-  positionComments: '',// 招募描述
-  zmType: '1',// 模式
-  amount: null,// 票价
-  vipAmount: null,// vip票价
-  apptNum: null,// 可预约数量
-  recruitNum: null,// 数量
-  score: null,// 积分
-  isAudit: 2,// 是否需要审核
-  actRefund: { // 退款设置
+  roleId: '', // 招募类型id
+  roleName: '', // 招募类型名称
+  userPosition: '', // 招募岗位id
+  positionName: '', // 招募岗位名称
+  positionComments: '', // 招募描述
+  zmType: '1', // 模式
+  amount: null, // 票价
+  vipAmount: null, // vip票价
+  apptNum: null, // 可预约数量
+  recruitNum: null, // 数量
+  score: null, // 积分
+  isAudit: 2, // 是否需要审核
+  actRefund: {
+    // 退款设置
     refundRule: '1',
     refundDays: null
   },
-  isHaveSubsidy: 2,// 是否发放补助,
-  subsidyType: '1',// 补助类型
-  subsidyCash: null,// 补助金额
-  resourcesId: '',// 补助物资id
-  resourcesName: '',// 补助物资name
-  resourcesRemark: '',// 补助物资备注
+  isHaveSubsidy: 2, // 是否发放补助,
+  subsidyType: '1', // 补助类型
+  subsidyCash: null, // 补助金额
+  resourcesId: '', // 补助物资id
+  resourcesName: '', // 补助物资name
+  resourcesRemark: '', // 补助物资备注
   signRuleList: [], // 限制条件列表
   choiceRuleList: [], // 优先条件列表
   isAutoChoose: 0, // 是否支持自动筛选替补人员
@@ -318,20 +280,22 @@ const form = {
   xx: '',
   yy: '',
   setAddr: '',
-  addressSup: '',// 详细地址
-  qrCode: '',// 群二维码
+  addressSup: '', // 详细地址
+  qrCode: '', // 群二维码
   qrCodeShow: '',
   itemList: [], // 报名项设置
   isTrain: 2, // 是否含有培训内容
   trainComments: '', // 培训详情
   isTrainMust: 2, // 是否强制培训
-  isFeedback: 2,// 是否带有反馈内容
+  isFeedback: 2, // 是否带有反馈内容
   fkDetailList: [], // 反馈项
-  introductionData: {// 反馈简介
+  introductionData: {
+    // 反馈简介
     type: 0,
     context: ''
   },
-  isUploadData: { // 是否上传图片
+  isUploadData: {
+    // 是否上传图片
     type: 9,
     context: 2
   },
@@ -360,7 +324,7 @@ export default {
         if (v) {
           const data = {}
           const nameData = {}
-          for (let i=0; i< v.length; i ++) {
+          for (let i = 0; i < v.length; i++) {
             if (v[i].data) {
               data[v[i].ruleId] = v[i].data
               nameData[v[i].ruleId] = v[i].name
@@ -379,7 +343,13 @@ export default {
       deep: true,
       handler(v) {
         if (v && v.roleId) {
-          const typeNames = {1: '单行文本', 2: '图片', 3: '单选问题', 4: '多选问题', 6: '多行文本'}
+          const typeNames = {
+            1: '单行文本',
+            2: '图片',
+            3: '单选问题',
+            4: '多选问题',
+            6: '多行文本'
+          }
           const data = cloneDeep(v)
           const itemList = data.itemList || []
           data.itemList = itemList.map(item => {
@@ -421,7 +391,7 @@ export default {
           list.forEach((item, index) => {
             if (item.type == 0) {
               data.introductionData = item
-            } else if(item.type == 9) {
+            } else if (item.type == 9) {
               data.isUploadData = item
             } else {
               item.name = typeNames[item.type]
@@ -444,21 +414,26 @@ export default {
       // 表单数据对象
       form: cloneDeep(form),
       isRefund: false, // 是否支持退款
-      batchItemData: {},// //批次活动前置信息
+      batchItemData: {}, // //批次活动前置信息
       codePicMap: {},
       // 报名项select类型对应data(由于模板不会给data,所以根据接口来做对应关系)
       signLimitsData: {},
       signLimitsName: {},
+      newDateRangeOptions: {
+        disabledDate(v) {
+          return v && v.valueOf() < Date.now() - 86400000
+        }
+      },
       dateRangeOptions: {
-        disabledDate (v) {
+        disabledDate(v) {
           return v < today
         }
       },
-      typeNames: {1: '文字', 2: '图片', 3: '单选题', 4: '多选题', 6: '多行文本'},
+      typeNames: { 1: '文字', 2: '图片', 3: '单选题', 4: '多选题', 6: '多行文本' },
       // 表单验证规则
       rules: {
-        roleId: { required: true, message: '请选择招募类型', type: "number" },
-        userPosition: { required: true, message: '请选择招募岗位', type: "number" },
+        roleId: { required: true, message: '请选择招募类型', type: 'number' },
+        userPosition: { required: true, message: '请选择招募岗位', type: 'number' },
         zmType: { required: true, message: '请选择模式' },
         isAutoChoose: { required: true, message: '请选择是否自动筛选替补人员' },
         qxSet: {
@@ -466,30 +441,31 @@ export default {
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
               if (!this.form.qxSet) {
-                reject("请选择")
+                reject('请选择')
                 return
               }
               if (this.form.qxSet == 1) {
                 resolve()
               } else {
                 if (!this.form.qxDays || this.form.qxDays < 0) {
-                  reject("请输入天数")
+                  reject('请输入天数')
                   return
                 }
-                resolve();
+                resolve()
               }
             })
           }
         },
-        recruitNum: { type: 'number',
+        recruitNum: {
+          type: 'number',
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
               if (!this.form.recruitNum) {
-                reject("请输入数量");
+                reject('请输入数量')
               } else {
-                resolve();
+                resolve()
               }
-            });
+            })
           }
         },
         isHaveSubsidy: { required: true },
@@ -500,13 +476,13 @@ export default {
                 // 现金
                 if (this.form.subsidyType == 1) {
                   if (!this.form.subsidyCash || this.form.subsidyCash < 0) {
-                    reject("请输入金额")
+                    reject('请输入金额')
                     return
                   }
                   // 物资
                 } else {
-                  if (!this.form.resourcesId && this.form.resourcesId !==0 ) {
-                    reject("请选择物资类型")
+                  if (!this.form.resourcesId && this.form.resourcesId !== 0) {
+                    reject('请选择物资类型')
                     return
                   }
                 }
@@ -520,27 +496,27 @@ export default {
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
               if (!this.form.enrollStarttime || !this.form.enrollEndtime) {
-                reject("请完善报名时间");
+                reject('请完善报名时间')
               } else {
-                resolve();
+                resolve()
               }
-            });
+            })
           }
         },
-        setTime: { required: true, type: "string", trigger: "change", message: "请选择集合时间" },
-        setAddr: { required: true, type: "string", trigger: "change", message: "请选择集合地址" },
+        setTime: { required: true, type: 'string', trigger: 'change', message: '请选择集合时间' },
+        setAddr: { required: true, type: 'string', trigger: 'change', message: '请选择集合地址' },
         choiceRuleList: {
-          type: "array",
+          type: 'array',
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
               const choiceRuleList = this.form.choiceRuleList
               if (!choiceRuleList.length) {
-                  resolve()
-                  return
-                }
-              for (let i=0; i < choiceRuleList.length; i++) {
-                if (choiceRuleList[i].object&&!choiceRuleList[i].ruleValueRemark) {
-                  reject(`请补全第${i+1}项信息`)
+                resolve()
+                return
+              }
+              for (let i = 0; i < choiceRuleList.length; i++) {
+                if (choiceRuleList[i].object && !choiceRuleList[i].ruleValueRemark) {
+                  reject(`请补全第${i + 1}项信息`)
                   return
                 }
               }
@@ -549,25 +525,25 @@ export default {
           }
         },
         itemList: {
-          type: "array",
+          type: 'array',
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
-              const typeList = [1,3,4,6]
+              const typeList = [1, 3, 4, 6]
               const itemList = this.form.itemList
               if (!itemList.length) {
                 resolve()
                 return
               }
-              for (let i=0;i<itemList.length;i++) {
+              for (let i = 0; i < itemList.length; i++) {
                 if (typeList.indexOf(itemList[i].type) > -1) {
                   if (!itemList[i].context && !itemList[i].itemName) {
-                    reject(`请补全报名项第${i+1}项信息`)
+                    reject(`请补全报名项第${i + 1}项信息`)
                     return
                   }
-                  if (itemList[i].answer&&itemList[i].answer.length) {
-                    for (let j=0;j<itemList[i].answer.length;j++) {
+                  if (itemList[i].answer && itemList[i].answer.length) {
+                    for (let j = 0; j < itemList[i].answer.length; j++) {
                       if (!itemList[i].answer[j].answer) {
-                        reject(`请补全报名项第${i+1}项信息`)
+                        reject(`请补全报名项第${i + 1}项信息`)
                         return
                       }
                     }
@@ -579,25 +555,25 @@ export default {
           }
         },
         fkDetailList: {
-          type: "array",
+          type: 'array',
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
-              const typeList = [1,3,4,6]
+              const typeList = [1, 3, 4, 6]
               const fkDetailList = this.form.fkDetailList
               if (!fkDetailList.length || this.form.isFeedback == 2) {
                 resolve()
                 return
               }
-              for (let i=0;i<fkDetailList.length;i++) {
+              for (let i = 0; i < fkDetailList.length; i++) {
                 if (typeList.indexOf(fkDetailList[i].type) > -1) {
                   if (!fkDetailList[i].context) {
-                    reject(`请补全反馈项第${i+1}项信息`)
+                    reject(`请补全反馈项第${i + 1}项信息`)
                     return
                   }
-                  if (fkDetailList[i].answer&&fkDetailList[i].answer.length) {
-                    for (let j=0;j<fkDetailList[i].answer.length;j++) {
+                  if (fkDetailList[i].answer && fkDetailList[i].answer.length) {
+                    for (let j = 0; j < fkDetailList[i].answer.length; j++) {
                       if (!fkDetailList[i].answer[j].answer) {
-                        reject(`请补全反馈项第${i+1}项信息`)
+                        reject(`请补全反馈项第${i + 1}项信息`)
                         return
                       }
                     }
@@ -609,7 +585,7 @@ export default {
           }
         },
         signRuleList: {
-          type: "array",
+          type: 'array',
           asyncValidator: (rule, value) => {
             return new Promise((resolve, reject) => {
               const signRuleList = this.form.signRuleList
@@ -618,10 +594,10 @@ export default {
                 return
               }
               const valueList = [4, 8, 9, 22]
-              for (let i=0;i<signRuleList.length;i++) {
+              for (let i = 0; i < signRuleList.length; i++) {
                 if (valueList.indexOf(signRuleList[i].ruleId) === -1) {
                   if (!signRuleList[i].ruleValue) {
-                    reject(`请补全限制条件第${i+1}项信息`)
+                    reject(`请补全限制条件第${i + 1}项信息`)
                     return
                   }
                 }
@@ -643,18 +619,23 @@ export default {
         }
       },
       // 反馈项
-      feedList:[
-        { name: '单行文本', type: 1},
-        { name: '多行文本', type: 6},
-        { name: '单选问题', type: 3, answer: [{ answer: '' }, { answer: '' }]},
-        { name: '多选问题', type: 4, answer: [{ answer: '' }, { answer: '' }, { answer: '' }]}
+      feedList: [
+        { name: '单行文本', type: 1 },
+        { name: '多行文本', type: 6 },
+        { name: '单选问题', type: 3, answer: [{ answer: '' }, { answer: '' }] },
+        { name: '多选问题', type: 4, answer: [{ answer: '' }, { answer: '' }, { answer: '' }] }
       ],
       // 自定义报名项
       signList: [
-        { name: '单行文本', type: 1, isNew:1},
-        { name: '多行文本', type: 6, isNew: 1},
-        { name: '单选问题', type: 3, answer: [{ answer: '' }, { answer: '' }], isNew: 1},
-        { name: '多选问题', type: 4, answer: [{ answer: '' }, { answer: '' }, { answer: '' }], isNew: 1}
+        { name: '单行文本', type: 1, isNew: 1 },
+        { name: '多行文本', type: 6, isNew: 1 },
+        { name: '单选问题', type: 3, answer: [{ answer: '' }, { answer: '' }], isNew: 1 },
+        {
+          name: '多选问题',
+          type: 4,
+          answer: [{ answer: '' }, { answer: '' }, { answer: '' }],
+          isNew: 1
+        }
       ],
       // 常用报名项
       oftenItemList: [],
@@ -674,7 +655,7 @@ export default {
           title: '限制项名称',
           key: 'name',
           align: 'center',
-          render:(h,params) => {
+          render: (h, params) => {
             const data = this.form.signRuleList[params.index]
             return h('span', {}, data.name || this.signLimitsName[data.ruleId])
           }
@@ -684,120 +665,138 @@ export default {
           key: 'condition',
           align: 'center',
           width: 300,
-          render:(h,params) => {
-            let renderDom = [];
+          render: (h, params) => {
+            let renderDom = []
             const index = params.index
             const ruleId = this.form.signRuleList[index].ruleId
             if (ruleId == 3 || ruleId == 21) {
               const signRuleList = this.form.signRuleList[index]
               const inputValue = signRuleList.ruleValue ? signRuleList.ruleValue.split(',') : []
               renderDom = [
-                    h('InputNumber',{
-                      props: {
-                        value: +inputValue[0] || null,
-                        disabled: this.isFormDisabled
-                      },
-                      on: {
-                        'input': (value) => {
-                          const ruleValue = signRuleList.ruleValue
-                          if (ruleValue) {
-                            signRuleList.ruleValue = ruleValue + ',' + ruleValue.split(',')[1]
-                          }else {
-                            signRuleList.ruleValue = ruleValue + ','
-                          }
-                        }
+                h('InputNumber', {
+                  props: {
+                    value: +inputValue[0] || null,
+                    disabled: this.isFormDisabled
+                  },
+                  on: {
+                    input: value => {
+                      const ruleValue = signRuleList.ruleValue
+                      if (ruleValue) {
+                        signRuleList.ruleValue = ruleValue + ',' + ruleValue.split(',')[1]
+                      } else {
+                        signRuleList.ruleValue = ruleValue + ','
                       }
-                    }),
-                    h('span',{},'——'),
-                    h('InputNumber',{
-                      props: {
-                        value: +inputValue[1] || null,
-                        min: +inputValue[0] || null
-                      },
-                      on: {
-                        'input': (value) => {
-                          const ruleValue = signRuleList.ruleValue
-                          if (ruleValue) {
-                            signRuleList.ruleValue = ruleValue.split(',')[0] + ',' + ruleValue
-                          }else {
-                            signRuleList.ruleValue = ',' + ruleValue
-                          }
-                        }
+                    }
+                  }
+                }),
+                h('span', {}, '——'),
+                h('InputNumber', {
+                  props: {
+                    value: +inputValue[1] || null,
+                    min: +inputValue[0] || null
+                  },
+                  on: {
+                    input: value => {
+                      const ruleValue = signRuleList.ruleValue
+                      if (ruleValue) {
+                        signRuleList.ruleValue = ruleValue.split(',')[0] + ',' + ruleValue
+                      } else {
+                        signRuleList.ruleValue = ',' + ruleValue
                       }
-                    })
-                  ]
-            }else if(ruleId == 6 || ruleId == 7 || ruleId == 2 || ruleId == 5) {
+                    }
+                  }
+                })
+              ]
+            } else if (ruleId == 6 || ruleId == 7 || ruleId == 2 || ruleId == 5) {
               let create = this.$createElement
               renderDom = [
-                  create(
-                    'Select',{
-                      style: "max-width: 120px",
-                      ref: 'limitSetColumns_' + index,
-                      props: {
-                        value: +this.form.signRuleList[index].ruleValue,
-                        'label-in-value': true,
-                        transfer: true,
-                        disabled: this.isFormDisabled,
-                        clearable: true
-                      },
-                      on: {
-                        'on-change': (e) => {
-                          if (!e) return
-                          for (let i=0;i<this.form.signRuleList.length;i++) {
-                            if (this.form.signRuleList[i].ruleId == ruleId && this.form.signRuleList[i].ruleValue == e.value) {
-                              this.$Message.warning("已有该项，请勿重复选择")
-                              this.$refs['limitSetColumns_' + index].clearSingleSelect()
-                              this.form.signRuleList[index].ruleValue = null
-                              return
-                            }
+                create(
+                  'Select',
+                  {
+                    style: 'max-width: 120px',
+                    ref: 'limitSetColumns_' + index,
+                    props: {
+                      value: +this.form.signRuleList[index].ruleValue,
+                      'label-in-value': true,
+                      transfer: true,
+                      disabled: this.isFormDisabled,
+                      clearable: true
+                    },
+                    on: {
+                      'on-change': e => {
+                        if (!e) return
+                        for (let i = 0; i < this.form.signRuleList.length; i++) {
+                          if (
+                            this.form.signRuleList[i].ruleId == ruleId &&
+                            this.form.signRuleList[i].ruleValue == e.value
+                          ) {
+                            this.$Message.warning('已有该项，请勿重复选择')
+                            this.$refs['limitSetColumns_' + index].clearSingleSelect()
+                            this.form.signRuleList[index].ruleValue = null
+                            return
                           }
-                          this.form.signRuleList[index].ruleValue = e.value
                         }
+                        this.form.signRuleList[index].ruleValue = e.value
                       }
-                    },
-                    this.form.signRuleList[index].data?
-                    this.form.signRuleList[index].data.map((item, index) => {
-                      return create('Option',{
-                         props: {
-                          value: item.dicId || item.orgId,
-                          key: index
-                         }
-                      }, item.name)
-                    })
-                    :
-                    this.signLimitsData[this.form.signRuleList[index].ruleId]?
-                      this.signLimitsData[this.form.signRuleList[index].ruleId].map((item, index) => {
-                        return create('Option',{
-                          props: {
-                            value: item.dicId || item.orgId,
-                            key: index
-                          }
-                        }, item.name)
+                    }
+                  },
+                  this.form.signRuleList[index].data
+                    ? this.form.signRuleList[index].data.map((item, index) => {
+                        return create(
+                          'Option',
+                          {
+                            props: {
+                              value: item.dicId || item.orgId,
+                              key: index
+                            }
+                          },
+                          item.name
+                        )
                       })
-                    :
-                    []
-                  )
-                ]
-            }else if(ruleId == 8 || ruleId == 9) {
+                    : this.signLimitsData[this.form.signRuleList[index].ruleId]
+                    ? this.signLimitsData[this.form.signRuleList[index].ruleId].map(
+                        (item, index) => {
+                          return create(
+                            'Option',
+                            {
+                              props: {
+                                value: item.dicId || item.orgId,
+                                key: index
+                              }
+                            },
+                            item.name
+                          )
+                        }
+                      )
+                    : []
+                )
+              ]
+            } else if (ruleId == 8 || ruleId == 9) {
               renderDom = [
-                  h(
-                    'RadioGroup',{
-                      props: {
-                        size: 'large',
-                        value: 1
-                      }
-                    },
-                    [
-                      h('Radio',{
+                h(
+                  'RadioGroup',
+                  {
+                    props: {
+                      size: 'large',
+                      value: 1
+                    }
+                  },
+                  [
+                    h(
+                      'Radio',
+                      {
                         props: {
                           label: 1,
                           disabled: this.isFormDisabled
                         }
-                      },'是')
-                    ]
-                  )
-                ]
-            }else if (ruleId === 22 || ruleId == 4) { // 居住地区限制
+                      },
+                      '是'
+                    )
+                  ]
+                )
+              ]
+            } else if (ruleId === 22 || ruleId == 4) {
+              // 居住地区限制
               const ruleValue = this.form.signRuleList[index].ruleValue
               let arr = []
               if (ruleValue) {
@@ -806,32 +805,39 @@ export default {
                 arr = ['1', '1', '1']
                 this.form.signRuleList[index].ruleValue = '1,1,1'
               }
-              renderDom = [h(areaSelect, {
-                staticClass: 'flex ai-center',
-                props: {
-                  arr,
-                  disabled: this.isFormDisabled
-                },
-                on: {
-                  'change': (e) => {
-                    if (!e) return
-                    const value = e.toString()
-                    for (let i=0;i<this.form.signRuleList.length;i++) {
-                      if (this.form.signRuleList[i].ruleId == ruleId && this.form.signRuleList[i].ruleValue == value) {
-                        this.$Message.warning("已有该项，请勿重复选择")
-                        this.form.signRuleList[index].ruleValue = '1,1,1'
-                        return
+              renderDom = [
+                h(areaSelect, {
+                  staticClass: 'flex ai-center',
+                  props: {
+                    arr,
+                    disabled: this.isFormDisabled
+                  },
+                  on: {
+                    change: e => {
+                      if (!e) return
+                      const value = e.toString()
+                      for (let i = 0; i < this.form.signRuleList.length; i++) {
+                        if (
+                          this.form.signRuleList[i].ruleId == ruleId &&
+                          this.form.signRuleList[i].ruleValue == value
+                        ) {
+                          this.$Message.warning('已有该项，请勿重复选择')
+                          this.form.signRuleList[index].ruleValue = '1,1,1'
+                          return
+                        }
                       }
+                      this.form.signRuleList[index].ruleValue = e.toString()
                     }
-                    this.form.signRuleList[index].ruleValue = e.toString()
                   }
-                }
-              })]
+                })
+              ]
             }
             return h(
-              'div',{
+              'div',
+              {
                 staticClass: 'flex ai-center jc-center'
-              },renderDom
+              },
+              renderDom
             )
           }
         },
@@ -839,19 +845,21 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          render:(h,params) => {
-            return this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('Icon',{
-              props: {
-                type: 'ios-close-circle-outline',
-                size: 20
-              },
-              on: {
-                click: () => {
-                  const index = params.index
-                  this.form.signRuleList.splice(index, 1)
-                }
-              }
-            })
+          render: (h, params) => {
+            return this.isFormDisabled
+              ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+              : h('Icon', {
+                  props: {
+                    type: 'ios-close-circle-outline',
+                    size: 20
+                  },
+                  on: {
+                    click: () => {
+                      const index = params.index
+                      this.form.signRuleList.splice(index, 1)
+                    }
+                  }
+                })
           }
         }
       ],
@@ -860,15 +868,16 @@ export default {
           title: '报名项名称',
           key: 'name',
           align: 'center',
-          render:(h,params) => {
+          render: (h, params) => {
             let renderDom = []
             const index = params.index
             let itemList = this.form.itemList
             if (itemList[index].isNew) {
-              if (itemList[index].type == 1 || itemList[index].type == 6) { // 单行或多行文本
+              if (itemList[index].type == 1 || itemList[index].type == 6) {
+                // 单行或多行文本
                 renderDom = [
-                  h('span',{},itemList[index].name+'：'),
-                  h('Input',{
+                  h('span', {}, itemList[index].name + '：'),
+                  h('Input', {
                     style: 'width: 200px;margin: 8px 0',
                     props: {
                       placeholder: '请输入标题文本',
@@ -877,18 +886,19 @@ export default {
                       disabled: this.isFormDisabled
                     },
                     on: {
-                      input: (e) => {
+                      input: e => {
                         itemList[index].itemName = e
                       }
                     }
                   })
                 ]
-              } else { // 单选或者多选问题
+              } else {
+                // 单选或者多选问题
                 renderDom = [
-                  h('div',{ staticClass: 'flex-column' },[
-                    h('div',{ staticClass: 'flex ai-center' },[
-                      h('span',{},itemList[index].name+'：'),
-                      h('Input',{
+                  h('div', { staticClass: 'flex-column' }, [
+                    h('div', { staticClass: 'flex ai-center' }, [
+                      h('span', {}, itemList[index].name + '：'),
+                      h('Input', {
                         style: 'width: 180px;margin: 10px 0',
                         props: {
                           placeholder: '请输入问题',
@@ -896,69 +906,83 @@ export default {
                           disabled: this.isFormDisabled
                         },
                         on: {
-                          input: (e) => {
+                          input: e => {
                             itemList[index].itemName = e
                           }
                         }
                       })
                     ]),
                     itemList[index].answer.map((item, ids) => {
-                      return h('div',{ style:'padding-left: 16px;margin-bottom: 10px',staticClass: 'flex ai-center' },[
-                        h('span',{},'选项'+(ids+1)+'：'),
-                        h('Input',{
-                          style: 'width: 180px',
-                          props: {
-                            placeholder: '请输入选项' + (ids+1),
-                            value: itemList[index].answer[ids].answer,
-
-                          },
-                          on:{
-                            input: (e) => {
-                              itemList[index].answer[ids].answer = e
-                            }
-                          }
-                        }),
-                        this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('Icon',{
-                          style: 'margin-left: 40px',
-                          props: {
-                            type: 'ios-close-circle-outline', size: 20
-                          },
-                          on: {
-                            click: () => {
-                              if (itemList[index].answer.length < 2) {
-                                this.$Message.error({
-                                  content: '至少保留一项'
-                                })
-                                return false
-                              }
-                              itemList[index].answer.splice(ids, 1)
-                            }
-                          }
-                        })
-                      ])
-                    }),
-                    h('div',{style: 'text-align: right;margin-bottom: 10px;margin-right: -4px'},[
-                      this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('Icon',{
-                        style: 'margin-right: 4px',
-                        props: {
-                          type: 'ios-add-circle-outline', size: 20
+                      return h(
+                        'div',
+                        {
+                          style: 'padding-left: 16px;margin-bottom: 10px',
+                          staticClass: 'flex ai-center'
                         },
-                        on: {
-                          click: () => {
-                            itemList[index].answer.push({ answer: '' })
-                          }
-                        }
-                      })
-                    ])
+                        [
+                          h('span', {}, '选项' + (ids + 1) + '：'),
+                          h('Input', {
+                            style: 'width: 180px',
+                            props: {
+                              placeholder: '请输入选项' + (ids + 1),
+                              value: itemList[index].answer[ids].answer
+                            },
+                            on: {
+                              input: e => {
+                                itemList[index].answer[ids].answer = e
+                              }
+                            }
+                          }),
+                          this.isFormDisabled
+                            ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+                            : h('Icon', {
+                                style: 'margin-left: 40px',
+                                props: {
+                                  type: 'ios-close-circle-outline',
+                                  size: 20
+                                },
+                                on: {
+                                  click: () => {
+                                    if (itemList[index].answer.length < 2) {
+                                      this.$Message.error({
+                                        content: '至少保留一项'
+                                      })
+                                      return false
+                                    }
+                                    itemList[index].answer.splice(ids, 1)
+                                  }
+                                }
+                              })
+                        ]
+                      )
+                    }),
+                    h(
+                      'div',
+                      { style: 'text-align: right;margin-bottom: 10px;margin-right: -4px' },
+                      [
+                        this.isFormDisabled
+                          ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+                          : h('Icon', {
+                              style: 'margin-right: 4px',
+                              props: {
+                                type: 'ios-add-circle-outline',
+                                size: 20
+                              },
+                              on: {
+                                click: () => {
+                                  itemList[index].answer.push({ answer: '' })
+                                }
+                              }
+                            })
+                      ]
+                    )
                   ])
                 ]
               }
             } else {
-              renderDom = [
-                h('span',{},itemList[index].itemName)
-              ]
+              renderDom = [h('span', {}, itemList[index].itemName)]
             }
-            return h('div',{ staticClass: 'flex ai-center' },renderDom)
+            return h('div', { staticClass: 'flex ai-center' }, renderDom)
           }
         },
         {
@@ -966,22 +990,26 @@ export default {
           key: 'condition',
           align: 'center',
           width: 140,
-          render:(h,params) => {
+          render: (h, params) => {
             let itemList = this.form.itemList
             const index = params.index
-            return h('Checkbox',{
-              props: {
-                value: itemList[index].isMust,
-                'true-value': 1,
-                'false-value': 0,
-                disabled: this.isFormDisabled
-              },
-              on:{
-                'on-change': (e) => {
-                  itemList[index].isMust = e
+            return h(
+              'Checkbox',
+              {
+                props: {
+                  value: itemList[index].isMust,
+                  'true-value': 1,
+                  'false-value': 0,
+                  disabled: this.isFormDisabled
+                },
+                on: {
+                  'on-change': e => {
+                    itemList[index].isMust = e
+                  }
                 }
-              }
-            },'必填')
+              },
+              '必填'
+            )
           }
         },
         {
@@ -989,19 +1017,21 @@ export default {
           key: 'operation',
           align: 'center',
           width: 140,
-          render:(h,params) => {
-            return this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('Icon',{
-              props: {
-                type: 'ios-close-circle-outline',
-                size: 20
-              },
-              on: {
-                click: () => {
-                  const index = params.index
-                  this.form.itemList.splice(index, 1)
-                }
-              }
-            })
+          render: (h, params) => {
+            return this.isFormDisabled
+              ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+              : h('Icon', {
+                  props: {
+                    type: 'ios-close-circle-outline',
+                    size: 20
+                  },
+                  on: {
+                    click: () => {
+                      const index = params.index
+                      this.form.itemList.splice(index, 1)
+                    }
+                  }
+                })
           }
         }
       ],
@@ -1010,85 +1040,95 @@ export default {
           title: '反馈项名称',
           key: 'name',
           align: 'center',
-          render:(h,params) => {
+          render: (h, params) => {
             let renderDom = []
             const index = params.index
             let fkDetailList = this.form.fkDetailList
-            if (fkDetailList[index].type == 1 || fkDetailList[index].type == 6) { // 单行或多行文本
+            if (fkDetailList[index].type == 1 || fkDetailList[index].type == 6) {
+              // 单行或多行文本
               renderDom = [
-                h('span',{},fkDetailList[index].name+'：'),
-                h('Input',{
+                h('span', {}, fkDetailList[index].name + '：'),
+                h('Input', {
                   style: 'width: 200px;margin: 8px 0',
                   props: {
                     placeholder: '请输入标题文本',
                     value: fkDetailList[index].context,
                     type: fkDetailList[index].type == 6 ? 'textarea' : 'text'
                   },
-                  on:{
-                    input: (e) => {
+                  on: {
+                    input: e => {
                       fkDetailList[index].context = e
                     }
                   }
                 })
               ]
-            } else { // 单选或者多选问题
+            } else {
+              // 单选或者多选问题
               renderDom = [
-                h('div',{ staticClass: 'flex-column' },[
-                  h('div',{ staticClass: 'flex ai-center' },[
-                    h('span',{},fkDetailList[index].name+'：'),
-                    h('Input',{
+                h('div', { staticClass: 'flex-column' }, [
+                  h('div', { staticClass: 'flex ai-center' }, [
+                    h('span', {}, fkDetailList[index].name + '：'),
+                    h('Input', {
                       style: 'width: 180px;margin: 10px 0',
                       props: {
                         placeholder: '请输入问题',
-                        value: fkDetailList[index].context,
+                        value: fkDetailList[index].context
                       },
                       on: {
-                        input: (e) => {
+                        input: e => {
                           fkDetailList[index].context = e
                         }
                       }
                     })
                   ]),
                   fkDetailList[index].answer.map((item, ids) => {
-                    return h('div',{ style:'padding-left: 16px;margin-bottom: 10px',staticClass: 'flex ai-center' },[
-                      h('span',{},'选项'+(ids+1)+'：'),
-                      h('Input',{
-                        style: 'width: 180px',
-                        props: {
-                          placeholder: '请输入选项' + (ids+1),
-                          value: fkDetailList[index].answer[ids].answer,
-
-                        },
-                        on: {
-                          input: (e) => {
-                            fkDetailList[index].answer[ids].answer = e
-                          }
-                        }
-                      }),
-                      h('Icon',{
-                        style: 'margin-left: 40px',
-                        props: {
-                          type: 'ios-close-circle-outline', size: 20
-                        },
-                        on: {
-                          click: () => {
-                            if (fkDetailList[index].answer.length < 2) {
-                              this.$Message.error({
-                                content: '至少保留一项'
-                              })
-                              return false
+                    return h(
+                      'div',
+                      {
+                        style: 'padding-left: 16px;margin-bottom: 10px',
+                        staticClass: 'flex ai-center'
+                      },
+                      [
+                        h('span', {}, '选项' + (ids + 1) + '：'),
+                        h('Input', {
+                          style: 'width: 180px',
+                          props: {
+                            placeholder: '请输入选项' + (ids + 1),
+                            value: fkDetailList[index].answer[ids].answer
+                          },
+                          on: {
+                            input: e => {
+                              fkDetailList[index].answer[ids].answer = e
                             }
-                            fkDetailList[index].answer.splice(ids, 1)
                           }
-                        }
-                      })
-                    ])
+                        }),
+                        h('Icon', {
+                          style: 'margin-left: 40px',
+                          props: {
+                            type: 'ios-close-circle-outline',
+                            size: 20
+                          },
+                          on: {
+                            click: () => {
+                              if (fkDetailList[index].answer.length < 2) {
+                                this.$Message.error({
+                                  content: '至少保留一项'
+                                })
+                                return false
+                              }
+                              fkDetailList[index].answer.splice(ids, 1)
+                            }
+                          }
+                        })
+                      ]
+                    )
                   }),
-                  h('div',{style: 'text-align: right;margin-bottom: 10px;margin-right: -4px'},[
-                    h('Icon',{
+                  h('div', { style: 'text-align: right;margin-bottom: 10px;margin-right: -4px' }, [
+                    h('Icon', {
                       style: 'margin-right: 4px',
                       props: {
-                        type: 'ios-add-circle-outline', size: 20
+                        type: 'ios-add-circle-outline',
+                        size: 20
                       },
                       on: {
                         click: () => {
@@ -1100,7 +1140,7 @@ export default {
                 ])
               ]
             }
-            return h('div',{ staticClass: 'flex ai-center' },renderDom)
+            return h('div', { staticClass: 'flex ai-center' }, renderDom)
           }
         },
         {
@@ -1108,21 +1148,25 @@ export default {
           key: 'condition',
           align: 'center',
           width: 140,
-          render:(h,params) => {
+          render: (h, params) => {
             let fkDetailList = this.form.fkDetailList
             const index = params.index
-            return h('Checkbox',{
-              props: {
-                value: fkDetailList[index].isMust,
-                'true-value': 1,
-                'false-value': 2,
-              },
-              on:{
-                'on-change': (e) => {
-                  fkDetailList[index].isMust = e
+            return h(
+              'Checkbox',
+              {
+                props: {
+                  value: fkDetailList[index].isMust,
+                  'true-value': 1,
+                  'false-value': 2
+                },
+                on: {
+                  'on-change': e => {
+                    fkDetailList[index].isMust = e
+                  }
                 }
-              }
-            },'必填')
+              },
+              '必填'
+            )
           }
         },
         {
@@ -1130,8 +1174,8 @@ export default {
           key: 'operation',
           align: 'center',
           width: 140,
-          render:(h,params) => {
-            return h('Icon',{
+          render: (h, params) => {
+            return h('Icon', {
               props: {
                 type: 'ios-close-circle-outline',
                 size: 20
@@ -1151,67 +1195,74 @@ export default {
           title: '优先级别',
           key: 'index',
           align: 'center',
-          render:(h,params) => {
-            return h('span',{ },params.index + 1)
+          render: (h, params) => {
+            return h('span', {}, params.index + 1)
           }
         },
         {
           title: '优先项',
           key: 'ruleName',
           align: 'center',
-          render: (h,params) => {
+          render: (h, params) => {
             const index = params.index
             const choiceRuleList = this.form.choiceRuleList[index]
-            let renderDom = [h('span',{}, choiceRuleList.ruleName || choiceRuleList.name)];
-            for (let i=0;i<this.firstList.length;i++) {
+            let renderDom = [h('span', {}, choiceRuleList.ruleName || choiceRuleList.name)]
+            for (let i = 0; i < this.firstList.length; i++) {
               if (choiceRuleList.ruleId == this.firstList[i].ruleId) {
                 choiceRuleList.object = this.firstList[i].object
               }
             }
-            if(choiceRuleList.object && choiceRuleList.object.length) {
+            if (choiceRuleList.object && choiceRuleList.object.length) {
               let create = this.$createElement
               renderDom = [
-                  create(
-                    'Select',{
-                      style: "max-width: 120px",
-                      props: {
-                        value: choiceRuleList.ruleValueRemark,
-                        'label-in-value': true,
-                        transfer: true,
-                        disabled: this.isFormDisabled,
-                        clearable: true
-                      },
-                      ref: 'choiceRuleColumns_' + index,
-                      on: {
-                        'on-change': (e) => {
-                          if (!e) return
-                          for (let i=0;i<this.form.choiceRuleList.length;i++) {
-                            if (this.form.choiceRuleList[i].ruleValueRemark === e.value) {
-                              this.$Message.warning("已有该项，请勿重复选择")
-                              this.$refs['choiceRuleColumns_' + index].clearSingleSelect()
-                              choiceRuleList.ruleValueRemark = null
-                              return false
-                            }
-                          }
-                          choiceRuleList.ruleValueRemark = e.value
-                        }
-                      }
+                create(
+                  'Select',
+                  {
+                    style: 'max-width: 120px',
+                    props: {
+                      value: choiceRuleList.ruleValueRemark,
+                      'label-in-value': true,
+                      transfer: true,
+                      disabled: this.isFormDisabled,
+                      clearable: true
                     },
-                    choiceRuleList.object.map((item, index) => {
-                      return create('Option',{
-                         props: {
+                    ref: 'choiceRuleColumns_' + index,
+                    on: {
+                      'on-change': e => {
+                        if (!e) return
+                        for (let i = 0; i < this.form.choiceRuleList.length; i++) {
+                          if (this.form.choiceRuleList[i].ruleValueRemark === e.value) {
+                            this.$Message.warning('已有该项，请勿重复选择')
+                            this.$refs['choiceRuleColumns_' + index].clearSingleSelect()
+                            choiceRuleList.ruleValueRemark = null
+                            return false
+                          }
+                        }
+                        choiceRuleList.ruleValueRemark = e.value
+                      }
+                    }
+                  },
+                  choiceRuleList.object.map((item, index) => {
+                    return create(
+                      'Option',
+                      {
+                        props: {
                           value: item.name,
                           key: index
-                         }
-                      }, item.name)
-                    })
-                  )
-                ]
+                        }
+                      },
+                      item.name
+                    )
+                  })
+                )
+              ]
             }
             return h(
-              'div',{
+              'div',
+              {
                 staticClass: 'flex ai-center jc-center'
-              },renderDom
+              },
+              renderDom
             )
           }
         },
@@ -1219,39 +1270,42 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          render:(h,params) => {
-            return h('div',{ staticClass: 'flex ai-center jc-center' },[
-              this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('Icon',{
-                style: 'margin-right: 30px',
-                props: {
-                  type: 'ios-arrow-round-up',
-                  size: 24
-                },
-                on: {
-                  click: () => {
-                    const index = params.index
-                    if (index) {
-                      const [deleted] = this.form.choiceRuleList.splice(index, 1)
-                      this.form.choiceRuleList.splice(index-1, 0, deleted)
-                    } else {
-                      this.$Message.warning("已在最顶部")
+          render: (h, params) => {
+            return h('div', { staticClass: 'flex ai-center jc-center' }, [
+              this.isFormDisabled
+                ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+                : h('Icon', {
+                    style: 'margin-right: 30px',
+                    props: {
+                      type: 'ios-arrow-round-up',
+                      size: 24
+                    },
+                    on: {
+                      click: () => {
+                        const index = params.index
+                        if (index) {
+                          const [deleted] = this.form.choiceRuleList.splice(index, 1)
+                          this.form.choiceRuleList.splice(index - 1, 0, deleted)
+                        } else {
+                          this.$Message.warning('已在最顶部')
+                        }
+                      }
                     }
-                  }
-                }
-              }),
-              this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('Icon',{
-                props: {
-                  type: 'ios-close-circle-outline',
-                  size: 20
-                },
-                on: {
-                  click: () => {
-                    this.form.choiceRuleList.splice(params.index, 1)
-                  }
-                }
-              })
+                  }),
+              this.isFormDisabled
+                ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+                : h('Icon', {
+                    props: {
+                      type: 'ios-close-circle-outline',
+                      size: 20
+                    },
+                    on: {
+                      click: () => {
+                        this.form.choiceRuleList.splice(params.index, 1)
+                      }
+                    }
+                  })
             ])
-
           }
         }
       ]
@@ -1273,15 +1327,15 @@ export default {
           title: '票价',
           key: 'amount',
           align: 'center',
-          render:(h,params) => {
-            return h('InputNumber',{
+          render: (h, params) => {
+            return h('InputNumber', {
               props: {
                 value: this.form.amount,
                 placeholder: '输入金额',
-                min: 0,
+                min: 0
               },
               on: {
-                'input': (value) => {
+                input: value => {
                   this.form.amount = value
                 }
               }
@@ -1292,15 +1346,15 @@ export default {
           title: 'VIP价',
           key: 'vipAmount',
           align: 'center',
-          render:(h,params) => {
-            return h('InputNumber',{
+          render: (h, params) => {
+            return h('InputNumber', {
               props: {
                 value: this.form.vipAmount,
                 placeholder: '不填则无VIP价',
-                min: 0,
+                min: 0
               },
               on: {
-                'input': (value) => {
+                input: value => {
                   this.form.vipAmount = value
                 }
               }
@@ -1312,14 +1366,14 @@ export default {
           key: 'recruitNum',
           align: 'center',
           className: 'ticket-num',
-          renderHeader:(h, parmas) => {
-            return h('div',{ style: 'flex ai-center' },[
-              h('span',{},'数量'),
-              h('span',{ style: 'color: red' },'*')
+          renderHeader: (h, parmas) => {
+            return h('div', { style: 'flex ai-center' }, [
+              h('span', {}, '数量'),
+              h('span', { style: 'color: red' }, '*')
             ])
           },
-          render:(h,params) => {
-            return h('InputNumber',{
+          render: (h, params) => {
+            return h('InputNumber', {
               props: {
                 value: this.form.recruitNum,
                 placeholder: '输入数量',
@@ -1327,7 +1381,7 @@ export default {
                 disabled: this.isFormDisabled
               },
               on: {
-                'input': (value) => {
+                input: value => {
                   this.form.recruitNum = value
                 }
               }
@@ -1338,8 +1392,8 @@ export default {
           title: '可预约数量',
           key: 'apptNum',
           align: 'center',
-          render:(h,params) => {
-            return h('InputNumber',{
+          render: (h, params) => {
+            return h('InputNumber', {
               props: {
                 value: this.form.apptNum,
                 placeholder: '输入积分',
@@ -1347,7 +1401,7 @@ export default {
                 disabled: this.isFormDisabled
               },
               on: {
-                'input': (value) => {
+                input: value => {
                   this.form.apptNum = value
                 }
               }
@@ -1358,8 +1412,8 @@ export default {
           title: '可获得积分',
           key: 'score',
           align: 'center',
-          render:(h,params) => {
-            return h('InputNumber',{
+          render: (h, params) => {
+            return h('InputNumber', {
               props: {
                 value: this.form.score,
                 placeholder: '输入积分',
@@ -1367,7 +1421,7 @@ export default {
                 disabled: this.isFormDisabled
               },
               on: {
-                'input': (value) => {
+                input: value => {
                   this.form.score = value
                 }
               }
@@ -1378,21 +1432,27 @@ export default {
           title: '操作',
           key: 'clear',
           align: 'center',
-          render:(h,params) => {
-            return this.isFormDisabled ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } }) : h('a',{
-              props: {
-                href: 'javascript:;'
-              },
-              on: {
-                'click': (value) => {
-                  this.form.amount = null
-                  this.form.vipAmount = null
-                  this.form.recruitNum = null
-                  this.form.score = null
-                  this.form.apptNum = null
-                }
-              }
-            }, '清除')
+          render: (h, params) => {
+            return this.isFormDisabled
+              ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
+              : h(
+                  'a',
+                  {
+                    props: {
+                      href: 'javascript:;'
+                    },
+                    on: {
+                      click: value => {
+                        this.form.amount = null
+                        this.form.vipAmount = null
+                        this.form.recruitNum = null
+                        this.form.score = null
+                        this.form.apptNum = null
+                      }
+                    }
+                  },
+                  '清除'
+                )
           }
         }
       ]
@@ -1440,7 +1500,11 @@ export default {
     },
     // 获取常用限制条件项
     async getSignLimits() {
-      const res = await signLimits({ roleId: this.form.roleId, userId: this.userId, sysId: this.sysId })
+      const res = await signLimits({
+        roleId: this.form.roleId,
+        userId: this.userId,
+        sysId: this.sysId
+      })
       const list = res.data || []
       this.signLimitsList = res.data || []
     },
@@ -1451,7 +1515,7 @@ export default {
     },
     //批次活动前置信息查询
     async getBatchItem() {
-      const res = await batchItem({ userId:this.userId })
+      const res = await batchItem({ userId: this.userId })
       this.batchItemData = res.data || {}
     },
     isTrainChange(e) {
@@ -1467,7 +1531,11 @@ export default {
       }
     },
     async getFirstList() {
-      const res = await firstList({ roleId: this.form.roleId, userId: this.userId, sysId: this.sysId})
+      const res = await firstList({
+        roleId: this.form.roleId,
+        userId: this.userId,
+        sysId: this.sysId
+      })
       const list = res.data || []
       this.firstList = list.map(item => {
         return {
@@ -1480,17 +1548,17 @@ export default {
     addLimit(e) {
       const name = e.name
       const ruleId = e.ruleId
-      if (ruleId == 22 || ruleId== 4) {
+      if (ruleId == 22 || ruleId == 4) {
         e.ruleValue = '1,1,1'
       }
-      for (let i=0;i<this.form.signRuleList.length; i++) {
+      for (let i = 0; i < this.form.signRuleList.length; i++) {
         const ruleName = this.form.signRuleList[i].name || this.form.signRuleList[i].ruleName
-        if ((ruleId == 8 || ruleId== 9 || ruleId == 3 || ruleId == 21) && ruleName == name) {
-          this.$Message.warning("已有该项，请勿重复添加")
+        if ((ruleId == 8 || ruleId == 9 || ruleId == 3 || ruleId == 21) && ruleName == name) {
+          this.$Message.warning('已有该项，请勿重复添加')
           return
         }
-        if ((ruleId == 22 || ruleId== 4) && this.form.signRuleList[i].ruleValue == e.ruleValue) {
-          this.$Message.warning("已有该地区限制，请勿重复添加")
+        if ((ruleId == 22 || ruleId == 4) && this.form.signRuleList[i].ruleValue == e.ruleValue) {
+          this.$Message.warning('已有该地区限制，请勿重复添加')
           return
         }
       }
@@ -1503,10 +1571,10 @@ export default {
     // 添加优先条件
     addFirstTerm(e) {
       const name = e.name
-      for (let i=0;i<this.form.choiceRuleList.length; i++) {
+      for (let i = 0; i < this.form.choiceRuleList.length; i++) {
         const ruleName = this.form.choiceRuleList[i].name || this.form.choiceRuleList[i].ruleName
         if (ruleName == name && !this.form.choiceRuleList[i].object) {
-          this.$Message.warning("已有该项，请勿重复添加")
+          this.$Message.warning('已有该项，请勿重复添加')
           return
         }
       }
@@ -1519,17 +1587,18 @@ export default {
       this.form.provinceName = e.province
       this.form.cityName = e.city
       this.form.districtName = e.district
-      this.$set(this.form,'setAddr',e.address)
+      this.$set(this.form, 'setAddr', e.address)
     },
     selectSignItem(e) {
       let index = Number(e.substring(3, e.length))
-      if (e.indexOf('one') > -1) { // 常用项
+      if (e.indexOf('one') > -1) {
+        // 常用项
         const data = cloneDeep(this.oftenItemList[index])
         data.itemName = data.name
         const name = data.itemName
-        for (let i=0;i<this.form.itemList.length; i++) {
+        for (let i = 0; i < this.form.itemList.length; i++) {
           if (this.form.itemList[i].itemName == name) {
-            this.$Message.warning("已有该项，请勿重复添加")
+            this.$Message.warning('已有该项，请勿重复添加')
             return
           }
         }
@@ -1548,14 +1617,26 @@ export default {
       this.form.enrollStarttime = e[0]
       this.form.enrollEndtime = e[1]
     },
+    successOk(e) {
+  
+      if (this.form.enrollStarttime) {
+        let enrollStarttime = new Date(this.form.enrollStarttime).getTime()
+        let newDate = new Date().getTime()
+        if (newDate > enrollStarttime) {
+          this.$Message.warning('招募开始时间要晚于当前时间')
+          this.form.enrollStarttime = null
+          this.form.enrollEndtime = null
+        } 
+      }
+    },
     getPost(val) {
-      this.form.positionName = val.name;
-      this.form.userPosition = val.dicId;
+      this.form.positionName = val.name
+      this.form.userPosition = val.dicId
     },
     //
     resourcesChange(val) {
-      this.form.resourcesName  = val.name;
-      this.form.resourcesId = val.resourcesId;
+      this.form.resourcesName = val.name
+      this.form.resourcesId = val.resourcesId
     },
     async submit() {
       const valid = await this.$refs.reForm.validate()
@@ -1584,7 +1665,7 @@ export default {
         }
         delete data.introductionData
         delete data.isUploadData
-        this.$emit('change',data)
+        this.$emit('change', data)
         this.closeDraw()
       } else {
         this.$Message.error({
@@ -1594,7 +1675,7 @@ export default {
     }
   },
   async mounted() {
-    this.userId = this.$store.state.userId;
+    this.userId = this.$store.state.userId
     // 获取活动招募类型
     this.getSignType()
     //批次活动前置信息查询
@@ -1604,42 +1685,42 @@ export default {
 </script>
 
 <style lang="scss">
-  .flex{
-    display: flex;
+.flex {
+  display: flex;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.ai-center {
+  align-items: center;
+}
+.jc-center {
+  justify-content: center;
+}
+.mr-16 {
+  margin-right: 16px;
+}
+.recruitNum {
+  &::after {
+    content: '*';
+    color: red;
   }
-  .flex-column{
-    display: flex;
-    flex-direction: column;
-  }
-  .ai-center{
-    align-items: center;
-  }
-  .jc-center{
-    justify-content: center;
-  }
-  .mr-16{
-    margin-right: 16px;
-  }
-  .recruitNum{
-    &::after{
-      content: '*';
-      color: red;
-    }
-  }
-  .w-260{
-    width: 260px;
-  }
-  .pane-box{
-    padding: 12px 0;
-    line-height: 1;
-    background: #f8f8f9;
-  }
-  .action-btn{
-    width: 120px;
-    margin-right: 20px;
-  }
-  .flex-end{
-    display: flex;
-    justify-content: flex-end;
-  }
+}
+.w-260 {
+  width: 260px;
+}
+.pane-box {
+  padding: 12px 0;
+  line-height: 1;
+  background: #f8f8f9;
+}
+.action-btn {
+  width: 120px;
+  margin-right: 20px;
+}
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
