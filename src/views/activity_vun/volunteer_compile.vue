@@ -271,12 +271,13 @@
         </i-col>
       </Row>
       <Row>
-        <i-col span='1' push='5'>
-           <Button shape="circle" size='large' @click="success()" style="width:150px;" class="success">完成</Button>
-        </i-col>
-        <i-col  span='1' push='2'>
-          <Button shape="circle" size='large' @click="()=>{this.$router.back()}" style="width:150px;" class="success">返回</Button>
-        </i-col>
+        <i-col span='3' style='visibility: hidden;'>操作</i-col>
+        <i-col span='5'>
+          <div class="success">
+            <Button shape="circle" size='large' @click="()=>{this.$router.back()}" class="success">返回</Button>
+            <Button shape="circle" size='large' @click="success()"  class="success">完成</Button>
+          </div>
+          </i-col>
       </Row>
     </div>
   </div>
@@ -695,6 +696,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .success{
+  display: flex;
+  justify-content: space-around;
+  width: 200px;
+  border-radius: 30px; 
   background: #FF565A !important;
   color: #fff !important;
   border-color:#FF565A !important;
