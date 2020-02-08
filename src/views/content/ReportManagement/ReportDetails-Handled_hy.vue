@@ -59,7 +59,7 @@
           </tr>
           <tr>
             <td class="zt">处理备注</td>
-            <td class="zt">
+            <td class="zt" >
               {{ ReportData.answerContent ? ReportData.answerContent : "" }}
             </td>
           </tr>

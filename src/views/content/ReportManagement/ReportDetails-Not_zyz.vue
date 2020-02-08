@@ -38,7 +38,7 @@
         <table width="100%;">
           <tr>
             <td class="zt">处理备注</td>
-            <td class="zt"><Input size="small" style="width: 8rem" /></td>
+            <td class="zt"><Input size="small" style="width: 12rem;" /></td>
           </tr>
         </table>
         <div class="but">
