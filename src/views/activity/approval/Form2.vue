@@ -384,7 +384,7 @@ export default {
           validator: (rule, value) => value.every(v => !!v.num),
           message: '请填写物资数量'
         },
-        releaseTime: { required: true, message: '活动发布时间不能为空', trigger: 'change' }
+        releaseTime: { required: true, message: '活动发布时间不能为空', trigger: 'blur' }
       },
       // 新增报名项
       showEnroll: false,
@@ -670,7 +670,7 @@ export default {
     },
     async next() {
       const valid = await this.$refs.form.validate()
-   
+      console.log(this.releaseTime)
       if (valid) {
         this.saveCurrentBatch()
         this.$emit('next', this.batches)
