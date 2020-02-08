@@ -96,7 +96,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: '资讯分类管理(会员)'
+        head: '资讯分类管理(志愿者)'
       },
       datas: [],
       modal1:false,
