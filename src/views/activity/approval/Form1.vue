@@ -181,7 +181,8 @@
 import { mapState } from 'vuex'
 import {
   projectItem,
-  partner
+  partner,
+  draftsDetail
 } from '@/request/api'
 import cloneDeep from 'lodash.clonedeep'
 import CreatePane from './CreatePane'
@@ -200,6 +201,7 @@ export default {
     return {
       // 前置数据
       baseData: {},
+      batchId:'',
       form: {
         // 后台
         channel: '3',
@@ -309,6 +311,24 @@ export default {
     }
   },
   methods: {
+    // 当从草稿箱 和 复制过来的
+    editapproval(){
+      if(this.$route.query.batchId){
+      if (this.$route.query.copy !== 1){
+        this.batchId= this.$route.query.batchId
+      }
+      this.getDraftsDetail(this.$route.query.batchId)
+    }
+    },
+    getDraftsDetail(e){
+      draftsDetail({
+        batchId:e, 
+        isTime:this.batchId?2:null
+      }).then(res=>{
+        console.log(res)
+        this.form = res.data
+      })
+    },
     onDateRangeChange(v) {
       this.form.startT = v[0]
       this.form.endT = v[1]
@@ -407,6 +427,7 @@ export default {
     partner().then(res => {
       this.licenseTypes = res.data
     })
+    this.editapproval()
   }
 }
 </script>

@@ -430,18 +430,21 @@ export default {
       this.form = cloneDeep(form)
       this.releaseTime = null
     },
+    // 更新发布时间
+    updateReleaseTimeRadio() {
+      if (this.form.releaseTime) {
+        this.releaseTime = this.form.releaseTime === '0' ? '0' : '1'
+      } else {
+        this.releaseTime = null
+      }
+    },
     onSelectBatch() {
       this.form = cloneDeep(this.batches[this.batchIndex])
       // 活动分类
       if (this.form.actTypeId) {
         this.onSelectActType(this.form.actTypeId, undefined, false)
       }
-      // 发布时间
-      if (this.form.releaseTime) {
-        this.releaseTime = this.form.releaseTime === '0' ? '0' : '1'
-      } else {
-        this.releaseTime = null
-      }
+      this.updateReleaseTimeRadio()
       if (!this.form.workerIdList || !this.form.workerIdList.length) {
         this.form.workerIdList = [{ ownerUserName: '', ownerUserTel: '', ownerUserId: '' }];
       }
@@ -460,10 +463,10 @@ export default {
     },
     onTemplateChange(activityId) {
       if (activityId) {
-        let time = this.releaseTime
         templateMsg({activityId:activityId}).then(res => {
           if (res.code == 200) {
             Object.assign(this.form, res.data)
+            this.updateReleaseTimeRadio()
             this.form.type = '1'
             // this.$refs.form.resetFields()
             if (!this.form.workerIdList || !this.form.workerIdList.length) {
@@ -670,7 +673,6 @@ export default {
     },
     async next() {
       const valid = await this.$refs.form.validate()
-      console.log(this.releaseTime)
       if (valid) {
         this.saveCurrentBatch()
         this.$emit('next', this.batches)

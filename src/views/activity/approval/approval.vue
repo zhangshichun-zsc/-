@@ -16,7 +16,7 @@
 
 <script>
 import cloneDeep from 'lodash.clonedeep'
-import { projectApproval } from '@/request/api'
+import { projectApproval} from '@/request/api'
 export default {
   components: {
     Form1: () => import('./Form1'),

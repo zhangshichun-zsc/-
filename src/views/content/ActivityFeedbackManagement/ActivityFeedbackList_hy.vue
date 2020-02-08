@@ -139,7 +139,7 @@ export default {
         },
         {
           title: "活动分类",
-          key: "categoryName",
+          key: "typeName",
           align: "center",
           width: 300
         },
