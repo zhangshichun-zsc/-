@@ -273,8 +273,8 @@
       <Row>
         <i-col span='3' style='visibility: hidden;'>操作</i-col>
         <i-col span='5'>
-          <div class="success">
-            <Button shape="circle" size='large' @click="()=>{this.$router.back()}" class="success">返回</Button>
+          <div class="successBox">
+            <Button shape="circle" size='large' @click="()=>{this.$router.back()}" style="margin-right:15px;" class="success">返回</Button>
             <Button shape="circle" size='large' @click="success()"  class="success">完成</Button>
           </div>
         </i-col>
@@ -695,10 +695,12 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+  .successBox {
+    display: flex;
+    justify-content: space-around;
+  }
 .success{
-  display: flex;
-  justify-content: space-around;
-  width: 200px;
+  width: 150px;
   border-radius: 30px; 
   background: #FF565A !important;
   color: #fff !important;
