@@ -104,6 +104,9 @@
   margin: 0 20px;
   border: 1px solid #ff565a;
 }
+.ivu-btn:focus {
+  box-shadow: none
+}
 
 .ivu-input,
 .ivu-input-number-input,
