@@ -408,8 +408,9 @@ export default {
     originData: {
       immediate: true,
       handler(v) {
-        if (v) {
-          Object.assign(this.batches, v)
+        if (v.length> 0) {
+          this.batches = [...v]
+          // Object.assign(this.batches, v)
         }
       }
     },
@@ -419,6 +420,8 @@ export default {
         if (!v.length) {
           this.batches.push(cloneDeep(form))
           this.batchIndex = 0
+          this.onSelectBatch()
+        }else{
           this.onSelectBatch()
         }
       }

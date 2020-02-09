@@ -16,7 +16,7 @@
 
 <script>
 import cloneDeep from 'lodash.clonedeep'
-import { projectApproval} from '@/request/api'
+import { projectApproval, draftsDetail } from '@/request/api'
 export default {
   components: {
     Form1: () => import('./Form1'),
@@ -34,6 +34,47 @@ export default {
     }
   },
   methods: {
+    // 当从草稿箱 和 复制过来的
+    editapproval() {
+      if (this.$route.query.batchId) {
+        if (this.$route.query.copy !== 1) {
+          this.batchId = this.$route.query.batchId
+        }
+        this.getDraftsDetail(this.$route.query.batchId)
+      }
+    },
+    getDraftsDetail(e) {
+      draftsDetail({
+        batchId: e,
+        isTime: this.batchId ? 2 : null
+      }).then(res => {
+        let data = res.data
+
+        // 处理三个步骤的数据， 以及多模块的数据结构
+        let from1 = {
+          channel: '3',
+          categoryId: data.categoryId,
+          categoryName: data.categoryName,
+          budget: parseFloat(data.budget) ,
+          startT: data.startT,
+          endT: data.endT,
+          batchName: data.batchName,
+          batchObjective: data.batchObjective,
+          batchPic: data.batchPic,
+          batchPicShow: data.batchPicShow,
+          orgId: data.orgId,
+          orgName: data.orgName,
+          orgType: data.orgType,
+          recruitType: data.recruitType,
+          partnerList: [...data.partnerList]
+        }
+        let from2 = {
+          actInfoList: [...data.actInfoList]
+        }
+        this.form.base = {...from1}
+        this.form.batches = [...data.actInfoList]
+      })
+    },
     toVolunteer() {
       this.$router.push({ name: 'volunteer_apply' })
     },
@@ -136,12 +177,14 @@ export default {
         this.$Message.error(res.msg)
       }
     }
+  },
+  mounted() {
+    this.editapproval()
   }
 }
 </script>
 
 <style lang="scss">
-
 .p-approval {
   .card {
     padding-bottom: 22px;
