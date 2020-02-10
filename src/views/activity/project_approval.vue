@@ -198,9 +198,13 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({
-                        name: "approval_details",
-                        query: { batchId: params.row.batchId,auditId:params.row.auditId,statusText:params.row.status }
+                      // this.$router.push({
+                      //   name: "approval_details",
+                      //   query: { batchId: params.row.batchId,auditId:params.row.auditId,statusText:params.row.status }
+                      // });
+                       this.$router.push({
+                        name: "approval",
+                        query: { batchId: params.row.batchId, currentStep:2}
                       });
                     }
                   }

@@ -41,6 +41,9 @@ export default {
           this.batchId = this.$route.query.batchId
         }
         this.getDraftsDetail(this.$route.query.batchId)
+        if(this.$route.query.currentStep){
+          this.currentStep = this.$route.query.currentStep
+        }
       }
     },
     getDraftsDetail(e) {
