@@ -20,8 +20,8 @@
                     style="cursor: pointer;"
                   />
                 </span>
-
-                <Dropdown prop="transfer:true">
+                <!-- 常用菜单 -->
+                <!-- <Dropdown prop="transfer:true">
                   <span>
                     <Icon title="常用菜单" type="ios-menu-outline" size="26" />
                   </span>
@@ -46,7 +46,7 @@
                       <p @click="member">成员管理</p>
                     </DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown> -->
 
                 <Dropdown prop="transfer:true">
                   <span title="账户信息">
