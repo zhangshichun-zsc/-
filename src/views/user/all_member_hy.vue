@@ -1,11 +1,11 @@
 <!-- 用户列表(会员) -->
 <template>
   <div class="member">
-    <customizeDialog
+    <!-- <customizeDialog
       ref="son"
       v-on:fun="changeColumn"
       :labels="navigationName"
-    ></customizeDialog>
+    ></customizeDialog> -->
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-start integral-body" v-show="showScreen">

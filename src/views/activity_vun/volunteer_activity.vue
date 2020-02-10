@@ -1,7 +1,7 @@
 <!--志愿者活动管理(会员)-->
 <template>
   <div class="integral">
-    <customizeDialog ref="son" v-on:fun="changeColumn" :labels="navigationName"></customizeDialog>
+    <!-- <customizeDialog ref="son" v-on:fun="changeColumn" :labels="navigationName"></customizeDialog> -->
     <Modal v-model="addstate" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <span>下架确定</span>
@@ -325,7 +325,7 @@ export default {
         },
         {
           title: '活动名称',
-          key: 'name',
+          key: 'activityName',
           align: 'center',
           width: 300
         },
@@ -333,13 +333,16 @@ export default {
           title: '活动时间',
           key: 'startTime',
           align: 'center',
-          width: 240
+          width: 240,
+            render: (h, params) => {
+            return h('div', params.row.startTimestamp + '  /  ' + params.row.endAt )
+          }
         },
         {
           title: '活动类型',
-          key: 'typeName',
+          key: 'activityType',
           align: 'center',
-          width: 200
+          width: 200,
         },
         {
           title: '状态',
@@ -347,7 +350,8 @@ export default {
           align: 'center',
           width: 200,
           render: (h, params) => {
-            return h('div', this.activeState[~~params.row.status].name)
+            return h('div', params.row.statusText )
+            // this.activeState[~~params.row.status].name
           }
         },
         {
@@ -361,7 +365,7 @@ export default {
         },
         {
           title: '志愿者报名人数',
-          key: 'num',
+          key: 'volunteerSignUpCount',
           align: 'center',
           width: 200
         },

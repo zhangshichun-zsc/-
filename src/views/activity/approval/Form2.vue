@@ -44,7 +44,8 @@
           <div class="mt-16 card">
             <FormItem label="活动名称" prop="actName">
               <Input v-model="form.actName" placeholder="请输入活动名称"
-                :disabled="isFormDisabled"/>
+                />
+                <!-- :disabled="isFormDisabled" -->
             </FormItem>
             <FormItem label="封面图片" prop="actCoverPic">
               <UploadImg :max="1"
@@ -72,28 +73,30 @@
             <FormItem label="活动地址" prop="actAddress" class="width-auto">
               <Row :gutter="16">
                 <Col span="13">
+                  <!-- :disabled="isFormDisabled" -->
                   <Input v-model="form.actAddress"
                     readonly placeholder="选择活动地址"
-                    :disabled="isFormDisabled"
                     @on-focus="() => addressMapVisible = true">
                     <!-- <Button slot="append" icon="md-pin" @click="() => addressMapVisible = true"></Button> -->
                   </Input>
                 </Col>
                 <Col span="10">
+                <!-- :disabled="isFormDisabled"  -->
                   <Input v-model="form.addressSup" placeholder="请输入详细地址"
-                    :disabled="isFormDisabled" />
+                    />
                 </Col>
               </Row>
             </FormItem>
             <FormItem label="出行方式" prop="vehicleCode" class="width-auto">
               <RadioGroup v-model="form.vehicleCode"
                 @on-change="onVehicleChange">
-                <Radio :disabled="isFormDisabled" label="1">自驾</Radio>
-                <Radio :disabled="isFormDisabled" class="ml-16" label="2">大巴</Radio>
-                <Radio :disabled="isFormDisabled" class="ml-16" label="3">自定义</Radio>
+                <!-- :disabled="isFormDisabled" -->
+                <Radio  label="1">自驾</Radio>
+                <Radio  class="ml-16" label="2">大巴</Radio>
+                <Radio  class="ml-16" label="3">自定义</Radio>
                 <Input v-show="form.vehicleCode==='3'" class="ml-16"
                   v-model="form.actVehicle" placeholder="请输入自定义出行方式"
-                  :disabled="isFormDisabled"
+    
                   style="width:160px" />
               </RadioGroup>
             </FormItem>
@@ -101,8 +104,9 @@
               <Row :gutter="16">
                 <Col span="10">
                   <FormItem label="姓名">
+                    <!-- :disabled="isFormDisabled" -->
                     <AutoComplete v-model="form.ownerUserName" placeholder="联系人姓名"
-                      :disabled="isFormDisabled"
+                      
                       @on-search="searchLeader">
                       <div class="cadidate-wrapper">
                         <Option v-for="p in leaderCandidates" :key="p.tel" :value="p.tel"
@@ -113,8 +117,9 @@
                 </Col>
                 <Col span="10">
                   <FormItem label="联系方式">
+                    <!-- :disabled="isFormDisabled"  -->
                     <Input v-model="form.ownerUserTel" placeholder="联系方式"
-                      :disabled="isFormDisabled" />
+                      />
                   </FormItem>
                 </Col>
               </Row>
@@ -124,8 +129,9 @@
                 :gutter="16">
                 <Col span="10">
                   <FormItem label="姓名">
+                    <!--  :disabled="isFormDisabled" -->
                     <AutoComplete v-model="worker.ownerUserName" placeholder="工作人员姓名"
-                      :disabled="isFormDisabled"
+                     
                       @on-search="searchWorker(worker.ownerUserName)">
                       <div class="cadidate-wrapper">
                         <Option v-for="p in workerCandidates" :key="p.tel" :value="p.tel"
@@ -136,8 +142,9 @@
                 </Col>
                 <Col span="10">
                   <FormItem label="联系方式">
+                    <!--  :disabled="isFormDisabled" -->
                     <Input v-model="worker.ownerUserTel" placeholder="联系方式"
-                      :disabled="isFormDisabled" />
+                      />
                   </FormItem>
                 </Col>
                 <Col span="3">
@@ -151,8 +158,9 @@
               </Row>
             </FormItem>
             <FormItem label="活动标签">
-              <Select v-model="form.actLabelId" placeholder="请选择活动标签"
-                :disabled="isFormDisabled">
+              <!-- :disabled="isFormDisabled" -->
+              <Select v-model="form.actLabelId" placeholder="请选择活动标签">
+                
                 <Option
                   v-for="item in batchData.labels"
                   :value="item.dicId"
@@ -184,6 +192,7 @@
                       <div class="flex-center-start">
                         <a href @click.prevent="showRole(item, index)">详情</a>
                         <Icon type="md-remove-circle" class="ml-16"
+                           v-if="!isFormDisabled"
                           @click.native="removeRole(index)"/>
                       </div>
                     </td>
@@ -205,8 +214,9 @@
                   <tr v-for="(item, index) in form.actResList" :key="index">
                     <td>{{item.resourcesName}}</td>
                     <td width="30%">
+                      <!-- :disabled="isFormDisabled" -->
                       <Input v-model="item.num" placeholder="请输入数量"
-                        :disabled="isFormDisabled" />
+                         />
                     </td>
                     <td class="actions" width="108">
                       <Checkbox v-model="item.isOk" :true-value="1" :false-value="2">已筹</Checkbox>

@@ -5,7 +5,7 @@
         <Row :gutter="16">
           <Col span="12">
           <FormItem label="招募类型" prop="roleId">
-            <Select v-model="form.roleId" placeholder="请选择招募类型" @on-change="signTypeChange">
+            <Select v-model="form.roleId" :disabled="isFormDisabled" placeholder="请选择招募类型" @on-change="signTypeChange">
               <Option v-for="item in signTypeList" :value="item.roleId" :key="item.roleId">{{ item.name }}</Option>
             </Select>
           </FormItem>
@@ -15,7 +15,7 @@
           </Col>
           <Col span="12">
           <FormItem label="招募岗位" prop="userPosition">
-            <Select v-model="form.userPosition" placeholder="请选择招募岗位">
+            <Select :disabled="isFormDisabled" v-model="form.userPosition" placeholder="请选择招募岗位">
               <Option v-for="item in signPostList" :value="item.dicId" :key="item.name" @click.native="getPost(item)">{{ item.name }}</Option>
             </Select>
           </FormItem>
