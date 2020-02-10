@@ -100,15 +100,16 @@
               </FormItem>
               </Col>
               <Col span="3">
-              <Icon v-if="!isFormDisabled&&form.workerIdList.length > 1" type="md-remove-circle" size="18" color="#999" @click.native="removeWorker(index)" />
-              <Icon v-if="!isFormDisabled&&index === form.workerIdList.length - 1" type="md-add-circle" size="18" color="#999" @click.native="addWorker" />
+              <!-- v-if="!isFormDisabled&&form.workerIdList.length > 1" -->
+              <!-- v-if="!isFormDisabled&&index === form.workerIdList.length - 1" -->
+              <Icon v-if="form.workerIdList.length > 1" type="md-remove-circle" size="18" color="#999" @click.native="removeWorker(index)" />
+              <Icon  type="md-add-circle" size="18" color="#999" @click.native="addWorker" />
               </Col>
             </Row>
           </FormItem>
           <FormItem label="活动标签">
             <!-- :disabled="isFormDisabled" -->
             <Select v-model="form.actLabelId" placeholder="请选择活动标签">
-
               <Option v-for="item in batchData.labels" :value="item.dicId" :key="item.name" @click.native="onSelectLabel(item)">{{ item.name }}</Option>
             </Select>
           </FormItem>
@@ -165,7 +166,7 @@
                 <tr class="create">
                   <td colspan="3">
                     <!-- v-if="!isFormDisabled" 可以新增 和删除物资    -->
-                    <CreatePane  text="+新增物资" :menus="batchData.resources" dropdownTextField="name" @select="addResource" />
+                    <CreatePane text="+新增物资" :menus="batchData.resources" dropdownTextField="name" @select="addResource" />
                     <!-- <CreatePane v-if="isFormDisabled&&!form.actResList.length" text="暂无物资" /> -->
                   </td>
                 </tr>

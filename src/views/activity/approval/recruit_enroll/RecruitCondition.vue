@@ -960,9 +960,10 @@ export default {
                       'div',
                       { style: 'text-align: right;margin-bottom: 10px;margin-right: -4px' },
                       [
+                         //  单选，多选 选项超过 6 条不能再选择
                         this.isFormDisabled
                           ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
-                          : h('Icon', {
+                          :(itemList[index].answer.length < 6? h('Icon', {
                               style: 'margin-right: 4px',
                               props: {
                                 type: 'ios-add-circle-outline',
@@ -973,7 +974,7 @@ export default {
                                   itemList[index].answer.push({ answer: '' })
                                 }
                               }
-                            })
+                            }):'') 
                       ]
                     )
                   ])
@@ -1124,7 +1125,8 @@ export default {
                     )
                   }),
                   h('div', { style: 'text-align: right;margin-bottom: 10px;margin-right: -4px' }, [
-                    h('Icon', {
+                  //  单选，多选 选项超过 6 条不能再选择
+                   fkDetailList[index].answer.length<6? h('Icon', {
                       style: 'margin-right: 4px',
                       props: {
                         type: 'ios-add-circle-outline',
@@ -1135,7 +1137,8 @@ export default {
                           fkDetailList[index].answer.push({ answer: '' })
                         }
                       }
-                    })
+                    }): ''
+                 
                   ])
                 ])
               ]
