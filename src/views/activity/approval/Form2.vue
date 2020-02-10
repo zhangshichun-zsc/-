@@ -1,12 +1,7 @@
 <template>
   <div class="approval-form-2">
     <div class="card mt-16">
-      <Tag v-for="(batch, index) in batches" :key="index" :name="index"
-        :type="index === batchIndex ? null : 'border'"
-        :closable="batches.length>1&&!(index === 0 && isIntegrated)"
-        :color="index === batchIndex ? '#ff565a' : '' "
-        @click.native="editBatch(index)"
-        @on-close="onRemoveBatch(index)">第{{index + 1}}批次</Tag>
+      <Tag v-for="(batch, index) in batches" :key="index" :name="index" :type="index === batchIndex ? null : 'border'" :closable="batches.length>1&&!(index === 0 && isIntegrated)" :color="index === batchIndex ? '#ff565a' : '' " @click.native="editBatch(index)" @on-close="onRemoveBatch(index)">第{{index + 1}}批次</Tag>
       <Button class="ml-16" icon="md-add" type="dashed" @click="addBatch()">添加批次</Button>
       <!-- <Tabs v-model="tabName" type="card" closable :animated="false" capture-focus
         @before-remove="beforeTabRemove">
@@ -17,241 +12,177 @@
     <Form class="mt-16" ref="form" :model="form" :rules="rules" :label-width="100">
       <Row :gutter="16">
         <Col span="12">
-          <div class="card">
-            <FormItem label="活动分类" prop="actTypeId">
-              <Select v-model="form.actTypeId" placeholder="请选择活动分类"
-                :disabled="isFormDisabled">
-                <Option
-                  v-for="item in batchData.actTypes"
-                  :value="item.dicId"
-                  :key="item.dicId"
-                  @click.native="onSelectActType(item.dicId, item.name)"
-                >{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="选择模板">
-              <Select v-model="form.mouldActId" placeholder="选择模板可快速填写"
-                :disabled="isFormDisabled"
-                @on-change="onTemplateChange">
-                <Option
-                  v-for="item in templateList"
-                  :value="item.activityId"
-                  :key="item.activityId"
-                >{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-          </div>
-          <div class="mt-16 card">
-            <FormItem label="活动名称" prop="actName">
-              <Input v-model="form.actName" placeholder="请输入活动名称"
-                />
-                <!-- :disabled="isFormDisabled" -->
-            </FormItem>
-            <FormItem label="封面图片" prop="actCoverPic">
-              <UploadImg :max="1"
-                v-model="form.actCoverPic"
-                :full-url.sync="form.actCoverShowPic"
-                placeholder="请上传封面图片"
-                :display-width="160"
-                :crop-width="256" :crop-height="256" />
-            </FormItem>
-            <FormItem label="主题图片" prop="actPic">
-              <UploadImg :max="1"
-                v-model="form.actPic"
-                :full-url.sync="form.actShowPic"
-                placeholder="请上传主题图片"
-                :display-width="320"
-                :crop-width="750" :crop-height="320" />
-            </FormItem>
-            <FormItem label="活动时间" prop="startT">
-              <XDatePicker type="datetimerange"
-                :value="[form.startT, form.endT]"
-                format="yyyy-MM-dd HH:mm"
-                :options="dateRangeOptions" placeholder="请选择活动时间"
-                @on-change="onDateRangeChange" />
-            </FormItem>
-            <FormItem label="活动地址" prop="actAddress" class="width-auto">
-              <Row :gutter="16">
-                <Col span="13">
-                  <!-- :disabled="isFormDisabled" -->
-                  <Input v-model="form.actAddress"
-                    readonly placeholder="选择活动地址"
-                    @on-focus="() => addressMapVisible = true">
-                    <!-- <Button slot="append" icon="md-pin" @click="() => addressMapVisible = true"></Button> -->
-                  </Input>
-                </Col>
-                <Col span="10">
-                <!-- :disabled="isFormDisabled"  -->
-                  <Input v-model="form.addressSup" placeholder="请输入详细地址"
-                    />
-                </Col>
-              </Row>
-            </FormItem>
-            <FormItem label="出行方式" prop="vehicleCode" class="width-auto">
-              <RadioGroup v-model="form.vehicleCode"
-                @on-change="onVehicleChange">
-                <!-- :disabled="isFormDisabled" -->
-                <Radio  label="1">自驾</Radio>
-                <Radio  class="ml-16" label="2">大巴</Radio>
-                <Radio  class="ml-16" label="3">自定义</Radio>
-                <Input v-show="form.vehicleCode==='3'" class="ml-16"
-                  v-model="form.actVehicle" placeholder="请输入自定义出行方式"
-    
-                  style="width:160px" />
-              </RadioGroup>
-            </FormItem>
-            <FormItem label="现场联系人" prop="ownerUserName" class="contacts">
-              <Row :gutter="16">
-                <Col span="10">
-                  <FormItem label="姓名">
-                    <!-- :disabled="isFormDisabled" -->
-                    <AutoComplete v-model="form.ownerUserName" placeholder="联系人姓名"
-                      
-                      @on-search="searchLeader">
-                      <div class="cadidate-wrapper">
-                        <Option v-for="p in leaderCandidates" :key="p.tel" :value="p.tel"
-                          @click.native="selectLeader(p)">{{p.name}}</Option>
-                      </div>
-                    </AutoComplete>
-                  </FormItem>
-                </Col>
-                <Col span="10">
-                  <FormItem label="联系方式">
-                    <!-- :disabled="isFormDisabled"  -->
-                    <Input v-model="form.ownerUserTel" placeholder="联系方式"
-                      />
-                  </FormItem>
-                </Col>
-              </Row>
-            </FormItem>
-            <FormItem label="工作人员" prop="workerIdList" class="contacts">
-              <Row v-for="(worker, index) in form.workerIdList" :key="index"
-                :gutter="16">
-                <Col span="10">
-                  <FormItem label="姓名">
-                    <!--  :disabled="isFormDisabled" -->
-                    <AutoComplete v-model="worker.ownerUserName" placeholder="工作人员姓名"
-                     
-                      @on-search="searchWorker(worker.ownerUserName)">
-                      <div class="cadidate-wrapper">
-                        <Option v-for="p in workerCandidates" :key="p.tel" :value="p.tel"
-                          @click.native="selectWorker(worker, p)">{{p.name}}</Option>
-                      </div>
-                    </AutoComplete>
-                  </FormItem>
-                </Col>
-                <Col span="10">
-                  <FormItem label="联系方式">
-                    <!--  :disabled="isFormDisabled" -->
-                    <Input v-model="worker.ownerUserTel" placeholder="联系方式"
-                      />
-                  </FormItem>
-                </Col>
-                <Col span="3">
-                  <Icon v-if="!isFormDisabled&&form.workerIdList.length > 1"
-                    type="md-remove-circle" size="18" color="#999"
-                    @click.native="removeWorker(index)" />
-                  <Icon v-if="!isFormDisabled&&index === form.workerIdList.length - 1"
-                    type="md-add-circle" size="18" color="#999"
-                    @click.native="addWorker" />
-                </Col>
-              </Row>
-            </FormItem>
-            <FormItem label="活动标签">
+        <div class="card">
+          <FormItem label="活动分类" prop="actTypeId">
+            <Select v-model="form.actTypeId" placeholder="请选择活动分类" :disabled="isFormDisabled">
+              <Option v-for="item in batchData.actTypes" :value="item.dicId" :key="item.dicId" @click.native="onSelectActType(item.dicId, item.name)">{{ item.name }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="选择模板">
+            <Select v-model="form.mouldActId" placeholder="选择模板可快速填写" :disabled="isFormDisabled" @on-change="onTemplateChange">
+              <Option v-for="item in templateList" :value="item.activityId" :key="item.activityId">{{ item.name }}</Option>
+            </Select>
+          </FormItem>
+        </div>
+        <div class="mt-16 card">
+          <FormItem label="活动名称" prop="actName">
+            <Input v-model="form.actName" placeholder="请输入活动名称" />
+            <!-- :disabled="isFormDisabled" -->
+          </FormItem>
+          <FormItem label="封面图片" prop="actCoverPic">
+            <UploadImg :max="1" v-model="form.actCoverPic" :full-url.sync="form.actCoverShowPic" placeholder="请上传封面图片" :display-width="160" :crop-width="256" :crop-height="256" />
+          </FormItem>
+          <FormItem label="主题图片" prop="actPic">
+            <UploadImg :max="1" v-model="form.actPic" :full-url.sync="form.actShowPic" placeholder="请上传主题图片" :display-width="320" :crop-width="750" :crop-height="320" />
+          </FormItem>
+          <FormItem label="活动时间" prop="startT">
+            <XDatePicker type="datetimerange" :value="[form.startT, form.endT]" format="yyyy-MM-dd HH:mm" :options="dateRangeOptions" placeholder="请选择活动时间" @on-change="onDateRangeChange" />
+          </FormItem>
+          <FormItem label="活动地址" prop="actAddress" class="width-auto">
+            <Row :gutter="16">
+              <Col span="13">
               <!-- :disabled="isFormDisabled" -->
-              <Select v-model="form.actLabelId" placeholder="请选择活动标签">
-                
-                <Option
-                  v-for="item in batchData.labels"
-                  :value="item.dicId"
-                  :key="item.name"
-                  @click.native="onSelectLabel(item)"
-                >{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-          </div>
+              <Input v-model="form.actAddress" readonly placeholder="选择活动地址" @on-focus="() => addressMapVisible = true">
+              <!-- <Button slot="append" icon="md-pin" @click="() => addressMapVisible = true"></Button> -->
+              </Input>
+              </Col>
+              <Col span="10">
+              <!-- :disabled="isFormDisabled"  -->
+              <Input v-model="form.addressSup" placeholder="请输入详细地址" />
+              </Col>
+            </Row>
+          </FormItem>
+          <FormItem label="出行方式" prop="vehicleCode" class="width-auto">
+            <RadioGroup v-model="form.vehicleCode" @on-change="onVehicleChange">
+              <!-- :disabled="isFormDisabled" -->
+              <Radio label="1">自驾</Radio>
+              <Radio class="ml-16" label="2">大巴</Radio>
+              <Radio class="ml-16" label="3">自定义</Radio>
+              <Input v-show="form.vehicleCode==='3'" class="ml-16" v-model="form.actVehicle" placeholder="请输入自定义出行方式" style="width:160px" />
+            </RadioGroup>
+          </FormItem>
+          <FormItem label="现场联系人" prop="ownerUserName" class="contacts">
+            <Row :gutter="16">
+              <Col span="10">
+              <FormItem label="姓名">
+                <!-- :disabled="isFormDisabled" -->
+                <AutoComplete v-model="form.ownerUserName" placeholder="联系人姓名" @on-search="searchLeader">
+                  <div class="cadidate-wrapper">
+                    <Option v-for="p in leaderCandidates" :key="p.tel" :value="p.tel" @click.native="selectLeader(p)">{{p.name}}</Option>
+                  </div>
+                </AutoComplete>
+              </FormItem>
+              </Col>
+              <Col span="10">
+              <FormItem label="联系方式">
+                <!-- :disabled="isFormDisabled"  -->
+                <Input v-model="form.ownerUserTel" placeholder="联系方式" />
+              </FormItem>
+              </Col>
+            </Row>
+          </FormItem>
+          <FormItem label="工作人员" prop="workerIdList" class="contacts">
+            <Row v-for="(worker, index) in form.workerIdList" :key="index" :gutter="16">
+              <Col span="10">
+              <FormItem label="姓名">
+                <!--  :disabled="isFormDisabled" -->
+                <AutoComplete v-model="worker.ownerUserName" placeholder="工作人员姓名" @on-search="searchWorker(worker.ownerUserName)">
+                  <div class="cadidate-wrapper">
+                    <Option v-for="p in workerCandidates" :key="p.tel" :value="p.tel" @click.native="selectWorker(worker, p)">{{p.name}}</Option>
+                  </div>
+                </AutoComplete>
+              </FormItem>
+              </Col>
+              <Col span="10">
+              <FormItem label="联系方式">
+                <!--  :disabled="isFormDisabled" -->
+                <Input v-model="worker.ownerUserTel" placeholder="联系方式" />
+              </FormItem>
+              </Col>
+              <Col span="3">
+              <Icon v-if="!isFormDisabled&&form.workerIdList.length > 1" type="md-remove-circle" size="18" color="#999" @click.native="removeWorker(index)" />
+              <Icon v-if="!isFormDisabled&&index === form.workerIdList.length - 1" type="md-add-circle" size="18" color="#999" @click.native="addWorker" />
+              </Col>
+            </Row>
+          </FormItem>
+          <FormItem label="活动标签">
+            <!-- :disabled="isFormDisabled" -->
+            <Select v-model="form.actLabelId" placeholder="请选择活动标签">
+
+              <Option v-for="item in batchData.labels" :value="item.dicId" :key="item.name" @click.native="onSelectLabel(item)">{{ item.name }}</Option>
+            </Select>
+          </FormItem>
+        </div>
         </Col>
         <Col span="12">
-          <div class="card">
+        <div class="card">
+          <!-- <div class="card-title required"></div> -->
+          <FormItem class="column-item" label="活动详情" prop="detail">
+            <wangeditor :labels="form.detail" id="ed1" :disabled="true" @change="onChangeEditorTrain" />
+          </FormItem>
+        </div>
+        <div class="mt-16 card">
+          <div class="list-wrapper">
             <!-- <div class="card-title required"></div> -->
-            <FormItem class="column-item" label="活动详情" prop="detail">
-              <wangeditor :labels="form.detail" id="ed1"
-                :disabled="true"
-                @change="onChangeEditorTrain" />
+            <FormItem class="column-item" label="招募角色" prop="userConfList">
+              <table class="list-table">
+                <tr v-for="(item, index) in form.userConfList" :key="index">
+                  <td>{{item.roleName}}</td>
+                  <td>{{item.recruitNum}}</td>
+                  <td class="actions" width="96">
+                    <div class="flex-center-start">
+                      <a href @click.prevent="showRole(item, index)">详情</a>
+                      <Icon type="md-remove-circle" class="ml-16" v-if="!isFormDisabled" @click.native="removeRole(index)" />
+                    </div>
+                  </td>
+                </tr>
+                <tr v-if="!isFormDisabled" class="create">
+                  <td colspan="3">
+                    <CreatePane text="+新增招募角色" @click="addRole" />
+                  </td>
+                </tr>
+              </table>
             </FormItem>
           </div>
-          <div class="mt-16 card">
-            <div class="list-wrapper">
-              <!-- <div class="card-title required"></div> -->
-              <FormItem class="column-item" label="招募角色" prop="userConfList">
-                <table class="list-table">
-                  <tr v-for="(item, index) in form.userConfList" :key="index">
-                    <td>{{item.roleName}}</td>
-                    <td>{{item.recruitNum}}</td>
-                    <td class="actions" width="96">
-                      <div class="flex-center-start">
-                        <a href @click.prevent="showRole(item, index)">详情</a>
-                        <Icon type="md-remove-circle" class="ml-16"
-                           v-if="!isFormDisabled"
-                          @click.native="removeRole(index)"/>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr v-if="!isFormDisabled" class="create">
-                    <td colspan="3">
-                      <CreatePane text="+新增招募角色" @click="addRole" />
-                    </td>
-                  </tr>
-                </table>
-              </FormItem>
-            </div>
-          </div>
-          <div class="mt-16 card">
-            <div class="list-wrapper">
-              <!-- <div class="list-header"></div> -->
-              <FormItem class="column-item" label="所需物资" prop="actResList">
-                <table class="list-table">
-                  <tr v-for="(item, index) in form.actResList" :key="index">
-                    <td>{{item.resourcesName}}</td>
-                    <td width="30%">
-                      <!-- :disabled="isFormDisabled" -->
-                      <Input v-model="item.num" placeholder="请输入数量"
-                         />
-                    </td>
-                    <td class="actions" width="108">
-                      <Checkbox v-model="item.isOk" :true-value="1" :false-value="2">已筹</Checkbox>
-                      <Icon v-if="!isFormDisabled" type="md-remove-circle" @click="deleteResources(index)"></Icon>
-                    </td>
-                  </tr>
-                  <tr class="create">
-                    <td colspan="3">
-                      <CreatePane v-if="!isFormDisabled"
-                        text="+新增物资" :menus="batchData.resources"
-                        dropdownTextField="name" @select="addResource" />
-                      <CreatePane v-else-if="isFormDisabled&&!form.actResList.length"
-                        text="暂无物资" />
-                    </td>
-                  </tr>
-                </table>
-              </FormItem>
-            </div>
-          </div>
-          <div class="mt-16 card">
-            <!-- <div class="card-title required"></div> -->
-            <FormItem class="column-item release-time" label="发布时间" prop="releaseTime">
-              <RadioGroup v-model="releaseTime"
-                @on-change="onReleaseTimeChange">
-                <Radio label="0">招募开始前一周</Radio>
-                <Radio class="ml-16" label="1">自定义</Radio>
-              </RadioGroup>
-              <XDatePicker v-show="releaseTime==='1'"
-                type="datetime" :editable="false"
-                format="yyyy-MM-dd HH:mm" placeholder="选择日期"
-                :value="form.releaseTime"
-                :disabled="isFormDisabled"
-                @on-change="onCustomReleaseTimeChange" />
+        </div>
+        <div class="mt-16 card">
+          <div class="list-wrapper">
+            <!-- <div class="list-header"></div> -->
+            <FormItem class="column-item" label="所需物资" prop="actResList">
+              <table class="list-table">
+                <tr v-for="(item, index) in form.actResList" :key="index">
+                  <td>{{item.resourcesName}}</td>
+                  <td width="30%">
+                    <!-- :disabled="isFormDisabled" -->
+                    <Input v-model="item.num" placeholder="请输入数量" />
+                  </td>
+                  <td class="actions" width="108">
+                    <Checkbox v-model="item.isOk" :true-value="1" :false-value="2">已筹</Checkbox>
+                    <!--  可以删除 物资v-if="!isFormDisabled"  -->
+                    <Icon type="md-remove-circle" @click="deleteResources(index)"></Icon>
+                  </td>
+                </tr>
+                <tr class="create">
+                  <td colspan="3">
+                    <!-- v-if="!isFormDisabled" 可以新增 和删除物资    -->
+                    <CreatePane  text="+新增物资" :menus="batchData.resources" dropdownTextField="name" @select="addResource" />
+                    <!-- <CreatePane v-if="isFormDisabled&&!form.actResList.length" text="暂无物资" /> -->
+                  </td>
+                </tr>
+              </table>
             </FormItem>
           </div>
+        </div>
+        <div class="mt-16 card">
+          <!-- <div class="card-title required"></div> -->
+          <FormItem class="column-item release-time" label="发布时间" prop="releaseTime">
+            <RadioGroup v-model="releaseTime" @on-change="onReleaseTimeChange">
+              <Radio label="0">招募开始前一周</Radio>
+              <Radio class="ml-16" label="1">自定义</Radio>
+            </RadioGroup>
+            <XDatePicker v-show="releaseTime==='1'" type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" :value="form.releaseTime" :disabled="isFormDisabled" @on-change="onCustomReleaseTimeChange" />
+          </FormItem>
+        </div>
         </Col>
       </Row>
       <div class="mt-16 card flex-column flex-center-center">
@@ -272,14 +203,9 @@ import { mapState } from 'vuex'
 import { debounce } from '@/libs/utils'
 import CreatePane from './CreatePane'
 import RecruitEnroll from './recruit_enroll/RecruitCondition'
-import Address from "_c/map";
+import Address from '_c/map'
 import cloneDeep from 'lodash.clonedeep'
-import {
-  batchItem,
-  leader,
-  chooseTempalte,
-  templateMsg
-} from '@/request/api'
+import { batchItem, leader, chooseTempalte, templateMsg } from '@/request/api'
 
 const today = new Date()
 
@@ -345,7 +271,7 @@ export default {
       roleIndex: null,
       roleData: {},
       dateRangeOptions: {
-        disabledDate (v) {
+        disabledDate(v) {
           return v < today
         }
       },
@@ -367,14 +293,14 @@ export default {
             return new Promise((resolve, reject) => {
               const userConfList = this.form.userConfList || []
               if (!userConfList.length) {
-                reject("招募角色不能为空");
+                reject('招募角色不能为空')
               }
-              for (let i=0;i<userConfList.length;i++) {
+              for (let i = 0; i < userConfList.length; i++) {
                 if (!userConfList[i].enrollStarttime || !userConfList[i].enrollEndtime) {
-                   reject(`请补充第${i+1}条招募信息报名时间`);
+                  reject(`请补充第${i + 1}条招募信息报名时间`)
                 }
               }
-              resolve();
+              resolve()
             })
           }
         },
@@ -411,14 +337,17 @@ export default {
     },
     isFormDisabled() {
       // 整体招募且非第一个批次的表单大部分禁止填写
-      return !this.baseInfo || (this.isIntegrated && this.batchIndex > 0)
+      // return !this.baseInfo || (this.isIntegrated && this.batchIndex > 0)
+
+      // 整体招募 当批次总数超过 1条， 所有的批次表单 大部分禁止填写
+      return !this.baseInfo || (this.isIntegrated && this.batches.length > 1)
     }
   },
   watch: {
     originData: {
       immediate: true,
       handler(v) {
-        if (v.length> 0) {
+        if (v.length > 0) {
           this.batches = [...v]
           // Object.assign(this.batches, v)
         }
@@ -431,7 +360,7 @@ export default {
           this.batches.push(cloneDeep(form))
           this.batchIndex = 0
           this.onSelectBatch()
-        }else{
+        } else {
           this.onSelectBatch()
         }
       }
@@ -459,7 +388,7 @@ export default {
       }
       this.updateReleaseTimeRadio()
       if (!this.form.workerIdList || !this.form.workerIdList.length) {
-        this.form.workerIdList = [{ ownerUserName: '', ownerUserTel: '', ownerUserId: '' }];
+        this.form.workerIdList = [{ ownerUserName: '', ownerUserTel: '', ownerUserId: '' }]
       }
     },
     onSelectActType(actType, actTypeName, resetTemplate = true) {
@@ -471,19 +400,19 @@ export default {
         this.form.mouldActId = ''
       }
       chooseTempalte({ actTypeDicId: actType }).then(res => {
-        this.templateList = res.data;
+        this.templateList = res.data
       })
     },
     onTemplateChange(activityId) {
       if (activityId) {
-        templateMsg({activityId:activityId}).then(res => {
+        templateMsg({ activityId: activityId }).then(res => {
           if (res.code == 200) {
             Object.assign(this.form, res.data)
             this.updateReleaseTimeRadio()
             this.form.type = '1'
             // this.$refs.form.resetFields()
             if (!this.form.workerIdList || !this.form.workerIdList.length) {
-              this.form.workerIdList = [{ ownerUserName: '', ownerUserTel: '', ownerUserId: '' }];
+              this.form.workerIdList = [{ ownerUserName: '', ownerUserTel: '', ownerUserId: '' }]
             }
           }
         })
@@ -558,25 +487,32 @@ export default {
           })
         }
       }
-      // 复制最近一个批次的数据
-      const cloneForm = cloneDeep(this.batches[this.batches.length - 1])
-      // 清空时间数据
-      cloneForm.releaseTime = ''
-      cloneForm.startT = ''
-      cloneForm.endT = ''
-      cloneForm.userConfList.forEach(conf => {
-        conf.setTime = ''
-        conf.enrollStarttime = ''
-        conf.enrollEndtime = ''
+      //  需要用户确认是否新增批次
+      this.$Modal.confirm({
+        title: '提示',
+        content: `新增批次后第1批次部分数据将无法修改，请确认是否新增？`,
+        onOk: () => {
+          // 复制最近一个批次的数据
+          const cloneForm = cloneDeep(this.batches[this.batches.length - 1])
+          // 清空时间数据
+          cloneForm.releaseTime = ''
+          cloneForm.startT = ''
+          cloneForm.endT = ''
+          cloneForm.userConfList.forEach(conf => {
+            conf.setTime = ''
+            conf.enrollStarttime = ''
+            conf.enrollEndtime = ''
+          })
+          this.batches.push(cloneForm)
+          this.batchIndex++
+          this.onSelectBatch()
+          this.leaderCandidates = []
+          this.workerCandidates = []
+          // setTimeout(() => {
+          //   this.$refs.form.resetFields()
+          // }, 100)
+        }
       })
-      this.batches.push(cloneForm)
-      this.batchIndex++
-      this.onSelectBatch()
-      this.leaderCandidates = []
-      this.workerCandidates = []
-      // setTimeout(() => {
-      //   this.$refs.form.resetFields()
-      // }, 100)
     },
     // 编辑批次
     async editBatch(index) {
@@ -586,12 +522,12 @@ export default {
         this.saveCurrentBatch()
         this.batchIndex = index
         this.onSelectBatch()
-        if (this.isFormDisabled && this.batchIndex === 0) {
-          this.$Modal.info({
-            title: '提示',
-            content: '在整体招募时，修改第一个批次后建议删除其它批次重新创建。'
-          })
-        }
+        // if (this.isFormDisabled && this.batchIndex === 0) {
+        //   this.$Modal.info({
+        //     title: '提示',
+        //     content: '在整体招募时，修改第一个批次后建议删除其它批次重新创建。'
+        //   })
+        // }
       } else {
         this.$Message.error({
           content: '请先完成当前批次信息'
@@ -599,7 +535,7 @@ export default {
       }
     },
     // 模糊搜索现场联系人信息
-    searchLeader: debounce(function () {
+    searchLeader: debounce(function() {
       leader({ name: this.form.ownerUserName }).then(res => {
         if (res.code === 200) {
           this.leaderCandidates = (res.data || []).slice(0, 100)
@@ -662,7 +598,7 @@ export default {
     },
     // 删除物资
     deleteResources(i) {
-      this.form.actResList.splice(i, 1);
+      this.form.actResList.splice(i, 1)
     },
     // 添加工作人员
     addWorker() {
@@ -680,7 +616,7 @@ export default {
     },
     saveDraft() {
       this.batches[this.batchIndex] = this.form
-      // 将当前的 批次活动，添加到  batches 中去 
+      // 将当前的 批次活动，添加到  batches 中去
 
       this.$emit('draft', this.batches)
     },
@@ -704,8 +640,8 @@ export default {
     batchItem({
       userId: this.userId
     }).then(res => {
-      this.batchData = res.data;
-    });
+      this.batchData = res.data
+    })
   }
 }
 </script>
