@@ -168,6 +168,7 @@ export default {
         ...this.form.base,
         actInfoList: this.form.batches
       }
+      console.log(body)
       // 第3步修改的
       const clone = cloneDeep(body)
       this.loading = true

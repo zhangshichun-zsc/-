@@ -2,11 +2,11 @@
 
 <template>
   <div class="integral">
-    <customizeDialog
+    <!-- <customizeDialog
       ref="son"
       v-on:fun="changeColumn"
       :labels="navigationName"
-    ></customizeDialog>
+    ></customizeDialog> -->
     <Modal v-model="modal4">
       <p class="head">会员二维码</p>
       <div class="start-wap">

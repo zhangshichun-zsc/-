@@ -669,6 +669,9 @@ export default {
       this.form.workerIdList.splice(index, 1)
     },
     saveDraft() {
+      this.batches[this.batchIndex] = this.form
+      // 将当前的 批次活动，添加到  batches 中去 
+
       this.$emit('draft', this.batches)
     },
     previous() {

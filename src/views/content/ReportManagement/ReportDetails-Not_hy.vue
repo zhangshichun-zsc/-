@@ -50,7 +50,7 @@
               <Input
                 class="zt"
                 size="small"
-                style="width: 12rem;"
+                style="width: 100%;"
                 v-model="reportDetail.answerContent"
               />
             </td>
