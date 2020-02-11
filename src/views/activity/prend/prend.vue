@@ -15,7 +15,7 @@
       </div>
       <div class="select flex-start">
         <span class="select-template">培训图片</span>
-        <div class="start-wap">
+        <!-- <div class="start-wap">
           <div class="upload" v-if='image == null'>
               <div class="file" @click="()=>{ this.$refs.files.click()}">
                 <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()">
@@ -24,7 +24,15 @@
           </div>
           <img class="imgs" v-else :src="image"/>
           <Icon type="ios-trash" v-if='image !== null' class="cancel" @click="cancelImg()" color='#FF565A'/>
-        </div>
+        </div> -->
+        <UploadImg
+              :max="1"
+              v-model="picUrl"
+              :full-url.sync="picMap"
+              :display-width="280"
+              :crop-width="750"
+              :crop-height="240"
+            ></UploadImg>
       </div>
       <div class="select flex-start">
         <span class="select-template">培训详情</span>
@@ -59,9 +67,10 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "维护活动模板(会员)"
+        head: "维护培训模板(会员)"
       },
-      image: null,
+      picUrl: '',
+      picMap:'',
       addstate:false,
       zuo:false,
       ble:1,
@@ -93,25 +102,17 @@ export default {
       this.args.typeDicName = this.$route.query.name
     }
   },
-
+  watch: {
+    picUrl(newValue, oldValue){
+      this.args.picUrl = newValue
+    }
+  },
   mounted() {
 
   },
 
   methods: {
-    uploadFile () {
-      let file = this.$refs.files.files[0]
-        const dataForm = new FormData()
-      dataForm.append('file', file)
-      upload(dataForm).then(res => {
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = (e) => {
-          this.image = e.target.result
-          this.args.picUrl = res.data
-        }
-      })
-    },
+
     getDetail(){
       getActiveFeedBack({actFkMouldId: this.args.actFkMouldId}).then(res => {
         if(res.code == 200){
@@ -120,7 +121,8 @@ export default {
           this.args.typeDicId = res.data.typeDicId
           this.args.picUrl = res.data.picUrl
           this.args.trainComments = res.data.trainComments
-          this.image = res.data.picUrlShow
+          this.picUrl = res.data.picUrl
+          this.picMap=res.data.picUrlShow
         }else{
           this.$Message.error(res.msg)
         }
