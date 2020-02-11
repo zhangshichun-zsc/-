@@ -42,6 +42,7 @@
             <Row :gutter="16">
               <Col span="13">
               <!-- :disabled="isFormDisabled" -->
+              
               <Input v-model="form.actAddress" readonly placeholder="选择活动地址" @on-focus="() => addressMapVisible = true">
               <!-- <Button slot="append" icon="md-pin" @click="() => addressMapVisible = true"></Button> -->
               </Input>

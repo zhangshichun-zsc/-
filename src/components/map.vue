@@ -1,6 +1,6 @@
 <!-- 地图 -->
 <template>
-   <Modal v-model="models" width="360" title='选中地址' :closable='false'>
+   <Modal v-model="models" width="360" title='选中地址' :closable='false' :mask-closable="false">
        <div>
           <iframe id="mapPage" width="100%" height="500px" frameborder=0
             src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=CEIBZ-KTJR3-XOB37-Y5LZ6-ZGMLH-CSF75&referer=myapp">

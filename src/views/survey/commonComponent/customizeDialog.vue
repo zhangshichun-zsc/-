@@ -1,17 +1,6 @@
-// this.columnsFixed,这个是固定的,勾选列和操作列
-
-// list(本地缓存),这个是可变的,所有已选择项,初始时是默认项,defaultFlag为1
-
-// toSelectList,这个是固定的,是所有defaultFlag为0
-
-// fruit(本地缓存),这个是可变的,,是所有已选项
-
-
 <!--组织列表共用-->
 <template>
   <div class="main">
-    <!-- <Navigation :labels="navigation1"></Navigation> -->
-    <!-- <div style="color:red">dddddddddddddddddddddddddddddd</div> -->
     <Modal
       draggable
       ok-text="导出字段"
@@ -35,11 +24,6 @@
               @start="dragging = true"
               @end="dragging = false"
             >
-              <!-- <span
-                    class="list-group-item element.isAlternative==true? 'myclassA':'myclassB'"
-                    v-for="element in list"
-                    :key="element.title"
-              >-->
               <span
                 :class="['list-group-item',{myclassA:element.isAlternative==true}]"
                 v-for="element in list"
@@ -51,7 +35,6 @@
                   v-if="element.isAlternative==true"
                   @click.stop="removeThisField(element)"
                 />
-                <!-- <span class=" close-icon" v-if="element.isAlternative==true">x</span> -->
               </span>
             </draggable>
           </p>
@@ -59,7 +42,6 @@
         <div class="bft">
           <p>备选字段</p>
           <div class="bft-tab">
-            <!-- <CheckboxGroup v-model="fruit" @on-change> -->
             <CheckboxGroup v-model="fruit">
               <Checkbox
                 @change.native="clickCheckboxChange(item)"
@@ -67,8 +49,6 @@
                 :label="item.key"
                 v-bind:key="item.key"
               >{{item.title}}</Checkbox>
-              <!-- <Checkbox label="name">姓名</Checkbox>
-              <Checkbox label="type">障碍类型</Checkbox>-->
             </CheckboxGroup>
           </div>
         </div>
@@ -78,20 +58,6 @@
 </template>
 
 <script>
-// import { myBrowser } from '@/request/Browser';
-// import {
-//   orgpage,
-//   orgtype,
-//   orgbatch,
-//   getSelectList,
-//   getAllConfigUserList,
-//   getQuestionnaireFeedbackList,
-//   operateReview,
-//   answerDetailPageDelete,
-//   answerDetailPagePush,
-//   getCofigUserList
-// } from '@/request/api';
-// import { constants } from 'fs';
 import { formatDate } from "@/request/datatime";
 import {
   activeManager,
@@ -108,7 +74,10 @@ export default {
     return {
       enabled: true,
       columns: [],
-      columnsFixed: [
+      columnsFixed: [],
+
+      // 1：官方活动-活动管理；activity/manager
+      columnsFixed1: [
         {
           type: "selection",
           width: 80,
@@ -301,6 +270,316 @@ export default {
           }
         }
       ],
+
+      // 2：非官方活动-活动管理；activity_vun/volunteer_activity
+      columnsFixed2: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          width: 350,
+          key: "action",
+          align: "center",
+          renderHeader: (h, params) => {
+            return h("div", [
+              h("span", "操作"),
+              h("Icon", {
+                props: {
+                  type: "ios-settings-outline"
+                },
+                style: {
+                  marginLeft: "5px"
+                },
+                on: {
+                  click: () => {
+                    this.$Message.info("此功能暂未开放");
+                    // this.modal3=true
+                  }
+                }
+              })
+            ]);
+          },
+          render: (h, params) => {
+            let signup = "关闭报名";
+            if (params.row.status == "13") {
+              signup = "开启报名";
+            }
+            return h("div", [
+              h(
+                "a",
+                {
+                  clssName: "action",
+                  style: {
+                    color: "#FF565A",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      console.log(params.row.activityId);
+                      if (
+                        params.row.status == 1 ||
+                        params.row.status == 2 ||
+                        params.row.status == 3 ||
+                        params.row.status == 4
+                      ) {
+                        this.$router.push({
+                          name: "volunteer_issue",
+                          query: {
+                            activityId: params.row.activityId,
+                            isEdit: 1,
+                            status: params.row.status
+                          }
+                        });
+                      } else {
+                        this.$Message.warning("该活动状态不可编辑");
+                      }
+                    }
+                  }
+                },
+                "编辑"
+              ),
+              h(
+                "a",
+                {
+                  style: {
+                    marginRight: "10px",
+                    marginLeft: "10px",
+                    color: "#FF565A",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: "profile",
+                        query: {
+                          acitvityId: params.row.activityId,
+                          activityName: params.row.name,
+                          sysId: 2
+                        }
+                      });
+                    }
+                  }
+                },
+                "概况"
+              ),
+              h(
+                "a",
+                {
+                  style: {
+                    marginRight: "10px",
+                    marginLeft: "10px",
+                    color: "#FF565A",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({ path: "activity_share" });
+                    }
+                  }
+                },
+                "分享"
+              ),
+              h(
+                "a",
+                {
+                  style: {
+                    marginRight: "10px",
+                    marginLeft: "10px",
+                    color: "#FF565A",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        path: "volunteer_issue",
+                        query: { activityId: params.row.activityId, isEdit: 4 }
+                      });
+                    }
+                  }
+                },
+                "复制"
+              ),
+              h(
+                "Dropdown",
+                {
+                  props: {
+                    transfer: true
+                  }
+                },
+                [
+                  h(
+                    "a",
+                    {
+                      style: {
+                        color: "#FF565A"
+                      }
+                    },
+                    "更多操作"
+                  ),
+                  h(
+                    "DropdownMenu",
+                    {
+                      slot: "list"
+                    },
+                    [
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+                              this.modal5 = true;
+                              this.activityId = params.row.activityId;
+                            }
+                          }
+                        },
+                        "取消"
+                      ),
+                      h(
+                        "DropdownItem",
+                        {
+                          nativeOn: {
+                            click: name => {
+                              if (signup == "关闭报名") {
+                                this.types = 1;
+                                this.getactiveclose(params.row.activityId);
+                              } else {
+                                this.types = 2;
+                                this.getactiveclose(params.row.activityId);
+                              }
+                            }
+                          }
+                        },
+                        signup
+                      )
+                    ]
+                  )
+                ]
+              )
+            ]);
+          }
+        }
+      ],
+
+      // 3：用户-用户列表（会）user/all_member_hy
+      columnsFixed3: [ {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },{
+          title: "操作",
+          key: "action",
+          width: 140,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "a",
+                {
+                  clssName: "action",
+                  style: {
+                    color: "#FD585E"
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: "user_details_hy",
+                        query: { userId: params.row.userId }
+                      });
+                    }
+                  }
+                },
+                "查看"
+              ),
+              h(
+                "a",
+                {
+                  style: {
+                    marginRight: "5px",
+                    marginLeft: "10px",
+                    color: "#FD585E"
+                  },
+                  on: {
+                    click: () => {
+                      this.modaQR = true;
+                      this.QRCode = params.row.qrCodePath;
+                    }
+                  }
+                },
+                "二维码"
+              )
+            ]);
+          }
+        }],
+
+      // 4：用户-用户列表（志）user/all_member_zyz
+
+      columnsFixed4: [{
+          type: "selection",
+          width: 60,
+          align: "center"
+        }, {
+          title: '操作',
+          key: 'action',
+          width: 160,
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h(
+                'a',
+                {
+                  clssName: 'action',
+                  style: {
+                    color: '#FD585E'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        name: 'user_details_zyz',
+                        query: { userId: params.row.userId }
+                      })
+                    }
+                  }
+                },
+                '查看'
+              ),
+              h(
+                'a',
+                {
+                  style: {
+                    marginRight: '5px',
+                    marginLeft: '5px',
+
+                    color: '#FD585E'
+                  },
+                  on: {
+                    click: () => {
+                      this.modaQR = true
+                      this.QRCode = params.row.qrCodePath
+                    }
+                  }
+                },
+                '二维码'
+              )
+              // h(
+              //   "span",
+              //   {
+              //     style: {
+              //       color: "green"
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.remove(params.row.userId, 2);
+              //       }
+              //     }
+              //   },
+              //   "删除"
+              // )
+            ])
+          }
+        }],
+
       modelCustomizeDialog: false,
       list: [],
       toSelectList: [],
@@ -310,7 +589,6 @@ export default {
 
   props: {
     // 之后根据实际来定义
-    // navigation1:Object
     labels: Object,
     required: true
   },
@@ -398,7 +676,7 @@ export default {
         align: "center"
       };
       // 如果是活动时间
-      if (list.key == "startTimestamp" && this.labels.pageTable=='1') {
+      if (list.key == "startTimestamp" && this.labels.pageTable == "1") {
         temp = {
           width: 300,
           title: list.title,
@@ -586,15 +864,6 @@ export default {
 
             this.columns = this.columnsFixed.concat(templist);
           }
-
-          // console.log(
-          //   "11111111",
-          //   this.list,
-          //   this.toSelectList,
-          //   this.fruit,
-          //   this.columns
-          // );
-
           // 设置父组件的值
           this.changeParent(this.columns);
         }
@@ -610,8 +879,26 @@ export default {
 
   // 事件监听
   watch: {},
+
   mounted() {
     this.getCustomizeField();
+
+    // 根据不同的页面设置操作栏
+    if (this.labels.pageTable == "1") {
+      // 1：官方活动-活动管理；activity/manager
+      this.columnsFixed = this.columnsFixed1;
+    } else if (this.labels.pageTable == "2") {
+      // 2：非官方活动-活动管理；activity_vun/volunteer_activity
+      this.columnsFixed = this.columnsFixed2;
+    } else if (this.labels.pageTable == "3") {
+      // 3：用户-用户列表（会）user/all_member_hy
+      this.columnsFixed = this.columnsFixed3;
+    } else if (this.labels.pageTable == "4") {
+      // 4：用户-用户列表（志）user/all_member_zyz
+      this.columnsFixed = this.columnsFixed4;
+    }
+
+
   }
 };
 </script>

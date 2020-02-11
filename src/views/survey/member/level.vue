@@ -481,7 +481,7 @@ tr > td > input {
 // }
 
 tr > td > .inputNum {
-  width: 50px;
+  width: 120px;
 }
 
 .contentBox {

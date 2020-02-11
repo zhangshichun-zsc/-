@@ -33,63 +33,38 @@
       </div>
       <div class="integral-right" v-if="!show">
         <div class="top">
-          <p :class="i===1?'active':'default'">
-            <a href="javascript:;" @click="showUpload(1)">更换LOGO</a>
+          <p :class="i===1?'active':'default'" @click="showUpload(1)">
+            <a href="javascript:;" >更换LOGO</a>
           </p>
-          <p :class="i===2?'active':'default'">
-            <a href="javascript:;" @click="showUpload(2)">更换页尾</a>
+          <p :class="i===2?'active':'default'" @click="showUpload(2)">
+            <a href="javascript:;" >更换页尾</a>
           </p>
         </div>
-        <div class="bottom">
-          <!-- <div class="textimg">
-          </div>
-          <h5>图片最大为*</h5>-->
-          <div class="box" v-show="i == 1">
-            <div class="uploads" v-if="headimg == null">
-              <div class="file" @click="()=>{ this.$refs.files.click()}">
-                <input
-                  type="file"
-                  style=" display:none;"
-                  accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                  ref="files"
-                  @change="uploadFile('headimg','logoPic',$event)"
-                />
-                <Icon type="md-cloud-upload" :size="50" color="#FF565A" />
-              </div>
-            </div>
-            <img class="imgs" style="width:300px;margin:0 auto;" v-else :src="headimg" />
-            <Icon
-              type="ios-trash"
-              color="#FF565A"
-              v-if="!show && headimg != null"
-              size="24"
-              class="cancel"
-              @click="cancelImg('logoPic')"
-            />
-          </div>
-          <div class="box" v-show="i == 2">
-            <div class="upload" v-if="footimg == null">
-              <div class="file" @click="()=>{ this.$refs.filess.click()}">
-                <input
-                  type="file"
-                  style=" display:none;"
-                  accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP"
-                  ref="filess"
-                  @change="uploadFile('footimg','officeSealPic',$event)"
-                />
-                <Icon type="md-cloud-upload" color="#FF565A" :size="50" />
-              </div>
-            </div>
-            <img class="imgs" style="width:300px;margin:0 auto;" v-else :src="footimg" />
-            <Icon
-              type="ios-trash"
-              color="#FF565A"
-              v-if="!show && footimg != null"
-              size="24"
-              class="cancel"
-              @click="cancelImg('officeSealPic')"
-            />
-          </div>
+        <div class="bottom" style="display: flex;">
+
+
+       <UploadImg
+          v-show="i==1"
+              :max="1"
+              ref="logo"
+              v-model="logoPicUrl"
+              :full-url.sync="logoPicMap"
+              :display-width="280"
+              :crop-width="700"
+              :crop-height="230"
+              style="justify-content: center;"
+            ></UploadImg>
+          <UploadImg
+              v-show="i==2"
+              :max="1"
+              ref="foot"
+              v-model="footPicUrl"
+              :full-url.sync="footPicMap"
+              :display-width="280"
+              :crop-width="700"
+              :crop-height="230"
+              style="justify-content: center;"
+            ></UploadImg>
         </div>
 
         <p class="btn">
@@ -103,56 +78,7 @@
         </p>
       </div>
 
-      <!-- <Row>
-      <Col span="12">
-        <div class="show">
-          <img :src="headimg" alt="" class="head">
-          <p>志愿服务证明</p>
-          <p>CERTIFICATE OF VOLUNTEER SERVICE</p>
-        </div>
-        <p>  感谢 </p>
-        <p>   于    年    月      日至    年    月    日</p>
-        <p>
-为融爱融乐的心智障碍者融合服务提供了珍贵的       小时的志愿支持。
-    感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见
-          生命的多元，让我们的社会更平等、文明、融合。
-  期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！
-        </p>
-        <Row>
-          <Col span="6" push="18">
-            <p>[*志愿机构*]</p>
-            <img :src="footimg" alt="" class="fot">
-          </Col>
-        </Row>
-      </Col>
-      <Col span="12">
-        <p>
-          <a href="javascript:;" @click="showUpload(1)">更换LOGO</a>
-          <a href="javascript:;" @click="showUpload(2)">更换页尾</a>
-        </p>
-        <div class="box" v-show='i == 0'>
-            <div class="upload" v-if='headimg == null'>
-                <div class="file" @click="()=>{ this.$refs.files.click()}">
-                  <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile('headimg','logoPic',$event)">
-                  <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
-                </div>
-            </div>
-            <img class="imgs" v-else :src="headimg"/>
-            <Icon type="ios-trash" v-if='!show && headimg !== null' class="cancel" @click="cancelImg('logoPic')"/>
-        </div>
-        <div class="box" v-show='i == 2'>
-            <div class="upload" v-if='footimg == null'>
-                <div class="file" @click="()=>{ this.$refs.filess.click()}">
-                  <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile('footimg','officeSealPic',$event)" >
-                  <Icon type="md-cloud-upload" :size='36' color="#2d8cf0"/>
-                </div>
-            </div>
-            <img class="imgs" v-else :src="footimg"/>
-            <Icon type="ios-trash" v-if='!show && footimg !== null' class="cancel" @click="cancelImg('officeSealPic')"/>
-        </div>
-        <Button type="primary" icon="ios-cloud-saved-outline" @click="location" v-if='show'>保存图片</Button>
-      </Col>
-      </Row>-->
+     
     </div>
   </div>
 </template>
@@ -177,7 +103,11 @@ export default {
       value8: "",
       value6:
         "   感谢 [*姓名*]于    年    月      日至    年    月    日为[*   *] 的心智障碍者融合服务提供了珍贵的【*志愿服务时长*】小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！",
-      loading: false
+      loading: false,
+      logoPicUrl: "",
+      logoPicMap:'',
+      footPicUrl:'',
+      footPicMap:''
     };
   },
   created() {
@@ -190,6 +120,25 @@ export default {
       this.getList();
     }
   },
+  watch:{
+    logoPicUrl(newValue){
+      if(newValue){
+         this.headimg = this.logoPicMap
+      }else {
+        this.headimg = null
+      }
+    },
+     footPicUrl(newValue){
+      if(newValue){
+     
+         this.footimg = this.footPicMap
+        
+        //  this.footimg = this.$refs.foot.uploadList[1].previewUrl
+      }else {
+        this.footimg = null
+      }
+     }
+  },
   methods: {
     getList() {
       getBooksDetails({ certMouldId: this.certMouldId }).then(res => {
@@ -197,6 +146,11 @@ export default {
         this.logoPic = res.data.logoPic;
         this.footimg = res.data.officeSealPicPath;
         this.officeSealPic = res.data.officeSealPic;
+
+        this.logoPicUrl =res.data.logoPic
+        this.logoPicMap =  res.data.logoPicPath
+        this.footPicUrl=res.data.officeSealPic
+        this.footPicMap =  res.data.officeSealPicPath
       });
     },
     showUpload(e) {
@@ -229,15 +183,15 @@ export default {
     },
     location() {
       // console.log(this.logoPic, this.officeSealPic);
-      if (!this.logoPic || !this.officeSealPic) {
+      if (!this.logoPicUrl || !this.footPicUrl) {
         this.$Message.warning("logo或者尾部照片没有选择");
         return;
       }
       this.loading = true;
       let args = {
         certMouldId: this.certMouldId,
-        logoPic: this.logoPic,
-        officeSealPic: this.officeSealPic
+        logoPic: this.logoPicUrl,
+        officeSealPic: this.footPicUrl
       };
       updateBooks(args).then(res => {
         //防止重复提交
