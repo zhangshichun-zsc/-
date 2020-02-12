@@ -68,7 +68,7 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "span",
+                "a",
                 {
                   clssName: "action",
                   style: {
@@ -84,31 +84,42 @@ export default {
                 },
                 "编辑"
               ),
-              // h(
-              //   "span",
-              //   {
-              //     style: {
-              //       marginRight: "2px",
-              //       marginLeft: "2px",
-              //       color: "#FF566A",
-              //       cursor: "pointer"
-              //     },
-              //     on: {
-              //       click: () => {
-              //         this.$router.push({ path: "profile" });
-              //       }
-              //     }
-              //   },
-              //   "发布"
-              // )
+               h(
+                "a",
+                {
+                  clssName: "action",
+                  style: {
+                    color: "#FF566A",
+                    cursor: "pointer",
+                    marginRight:"10px"
+                  },
+                  on: {
+                    click: () => {
+                       this.$Modal.confirm({
+                        title: '提示',
+                        content: `是否确认删除？`,
+                        onOk: () => {
+                          // TODO 删除
+
+                          // TODO 重新拉取数据
+                          this.getDraftList()
+                          }
+                      })
+
+                      
+                      // this.$router.push({ path: "approval",query:{batchId:params.row.batchId} });
+                    }
+                  }
+                },
+                "删除"
+              ),
             ]);
           }
         }
       ],
       datax: [
-
       ],
-      top:[{name:'活动名称',type:'input',value:''}],
+      top:[{name:'立项名称',type:'input',value:''}],
       arrs:''
     };
   },
@@ -126,12 +137,10 @@ export default {
         userId:this.$store.state.userId,
         name:this.name
       }).then(res=>{
-        console.log(res)
         this.datax = res.data
       })
     },
     query(e){
-      console.log(e)
       this.name = e[0].value
       this.getDraftList()
     },
