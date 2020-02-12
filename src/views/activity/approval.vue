@@ -1,12 +1,60 @@
 <!--活动立项(会员)-->
 <template>
   <div class="lx-content">
+     <Modal v-model="adds" title="新增物资">
+      <div class="wap">
+         <Button v-for="(item,index) in batchItemList.resources" @click="chooseResource(item)" class="btn font" :key='index'>{{item.name}}</Button>
+      </div>
+      <div slot="footer"></div>
+    </Modal>
+    <Modal v-model="rule" title="融爱融乐之家活动发布规则" width='500' scrollable>
+      <div class="textp">
+        <p>欢迎您使用“融爱融乐之家”系统（以下简称“本系统”）及服务！</p>
+        <p>活动发布规则（以下简称“规则”）系家长小组或其他在本系统成功注册的会员就本系统活动发布规则的说明。</p>
+        <p>本规则为《会员系统用户协议》的组成部分，与《会员系统用户协议》具有同等的法律效力。</p>
+        <p>除非您已阅读并接受本规则及融爱融乐的相关协议、规则等所有条款，否则您无权使用活动信息发布功能。您使用活动信息发布功能，即视为您已阅读并同意上述协议、规则等的约束。</p>
+        <p>1.本说明下的活动发布规则主要指融爱融乐的工作人员或者家长小组在本系统发布融合活动所应遵守的内容和条款。</p>
+        <p>2.家长小组是由心智障碍家庭家长自发组成的互助小组。小组旨在通过培养核心家长，发挥家长的组织领导和社会倡导力，成为行动者，以此改善社区及社会对心智障碍人士的认知。</p>
+        <p>3.您必须是成功在本系统成功注册的家长小组或其他系统授予发布活动权限的会员。您需要按活动立项页面的引导填写信息，包括但不限于立项名称、立项目的、小组归属、招募类型、活动申请预算、有效期限，阅读并同意《活动发布规则》且完成全部立项程序，经本系统审核通过后方能发布信息。</p>
+        <p>4.审核的时间通常为5个工作日。但本系统有权根据特殊情况对审核时间进行调整。</p>
+        <p>5.您特此保证，您发布的任何信息，不存在以下任何一种违反法律法规规定的情形：</p>
+        <p>(1)反对宪法所确定的基本原则；</p>
+        <p>(2)危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一；</p>
+        <p>(3)损害国家荣誉和利益；</p>
+        <p>(4)煽动民族仇恨、民族歧视、破坏民族团结；</p>
+        <p>(5)破坏国家宗教政策，宣扬邪教和封建迷信；</p>
+        <p>(6)散布谣言，扰乱社会秩序，破坏社会稳定；</p>
+        <p>(7)宣扬淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪；</p>
+        <p>(8)煽动非法集会、结社、游行、示威、聚众扰乱社会秩序；</p>
+        <p>(9)诽谤他人，泄露他人隐私，侵害他人合法权益；</p>
+        <p>(10)含有法律、行政法规、政策禁止的其他内容的信息。</p>
+        <p>6.您特此保证，您发布的任何信息，不存在以下任一不友善的行为：</p>
+        <p>(1)捏造、散布虚假事实，损害他人名誉；</p>
+        <p>(2)以不友好的方式激怒他人，意图使对方对自己的言论作出回应，蓄意制造事端；</p>
+        <p>(3)贬低他人的能力、行为、生理或身份特征，让对方难堪；</p>
+        <p>(4)以不文明的语言对他人进行负面评价；</p>
+        <p>(5)针对他人的民族、种族、宗教、性取向、性别、年龄、地域、生理特征等身份或者归类的攻击；</p>
+        <p>(6)许诺以不良的后果来迫使他人服从自己的意志。</p>
+        <p>(7.您特此保证，您发布的任何信息，不存在以下任一侵犯第三方权益的情形：</p>
+        <p>(1)任何侵害他人名誉权、肖像权、知识产权、商业秘密等合法权利的内容；</p>
+        <p>(2)任何涉及他人隐私、个人信息或资料的内容；</p>
+        <p>(3)任何混淆行为，擅自使用包括但不限于社会组织名称（包括简称等）、企业名称（包括简称、字号等）、姓名（保留笔名、艺名、译名等）、域名主体部分、网站名称、网页等引人误认为是他人单位与他人存在特定联系的内容。</p>
+        <p>(8.您在发布信息时还应遵守以下条款：</p>
+        <p>(1)保证不发布与本平台志愿服务目的无关之信息；</p>
+        <p>(2)保证所发布的全部信息均为真实、有效的，没有任何虚假信息；</p>
+        <p>(3)保证不违反任何与您发布的信息相关的、与任何第三方（包括但不限于与投资者）之间的约定或承诺；</p>
+        <p>(4)保证不违反您所在机构或公司的规章制度。</p>
+        <p>9.您理解并同意，本系统仅为网络服务提供者，为您提供的是信息分享、传播及获取的平台，您必须为自己注册账户下的一切行为负责，包括您所发布的任何内容、活动及由此产生的任何后果。</p>
+        <p>10.您理解并同意，若您出现任何违反本规则及《会员服务协议》的行为的，本系统有权自行删除您发布的全部信息，无需另行事先通知，并有权采取冻结账户，要求您赔偿损失等措施。</p>
+        <p>11.本系统有权随时根据法律、法规的变化以及融爱融乐经营策略的调整等修改本规则。修改后的规则将会通过适当的方式将进行公示。如您在本规则后修订后仍继续使用本系统的，则视为您接收本规则的修订。</p>
+      </div>
+    </Modal>
     <adress :value="adr" @change="getMap" />
     <Navigation :labels="navigation1"></Navigation>
     <div class="lx-cont">
       <p class>
         <span class="first-span">新增活动立项</span>
-        <Button class @click="set">设置常用报名项</Button>
+        <Button class @click="set" disabled>设置常用报名项</Button>
       </p>
       <div class='lx-jd'>
         <div class>
@@ -35,7 +83,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动预算</span>
-                <Input v-model="projectMsg.budget" placeholder="请输入活动预算金额" style="width: 300px"></Input>
+                <Input v-model="projectMsg.budget" type="number" placeholder="请输入活动预算金额" style="width: 300px"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">有效期限</span>
@@ -50,6 +98,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -63,6 +112,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
@@ -81,18 +131,28 @@
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
-                  <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
+                <!-- <div>
+                  <div class="first-pic" v-if='!projectMsg.batchPicShow'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                       </div>
                   </div>
-                  <div class="first-pic" v-else>
+                  <div class="first-pic" style="border:none" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
-                    <span v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()">X</span>
+                    <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  style="width: auto;"
+                  :picMap="proPic"
+                  :max="1"
+                  v-model="proList"
+                  :display-width="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refCover"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">小组归属</span>
@@ -108,8 +168,8 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="2">批次招募</Radio>
-                  <Radio label="1" disabled>整体招募</Radio>
+                  <Radio :label="2">批次招募</Radio>
+                  <Radio :label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>
@@ -165,37 +225,58 @@
               </li>
               <li class="first-li">
                 <span class="first-span">封面图片</span>
-                <div>
-                  <div class="first-picfm" v-if='batch.actCoverShowPic == null'>
+                <!-- <div>
+                  <div class="first-picfm" v-if='!batch.actCoverShowPic'>
                     <div class="" @click="()=>{ this.$refs.filefm.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filefm" @change="uploadActFmFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-picfm" v-else>
-                    <img class="imgs" style="width:200px;height:200px" :src="batch.actCoverShowPic"/>
-                    <span v-if='batch.actCoverShowPic' class="cancel" @click="cancelActFmImg()">X</span>
+                  <div class="first-picfm" style="border:none" v-else>
+                    <img style="width:100%;height:100%" :src="batch.actCoverShowPic"/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelActFmImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  style="width: auto;"
+                  :picMap="fmPic"
+                  :max="1"
+                  v-model="fmList"
+                  :display-width="120"
+                  :display-height="120"
+                  :crop-width="128"
+                  :crop-height="128"
+                  ref="refFm"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
-                  <div class="first-pic" v-if='batch.actShowPic == null'>
+                <!-- <div>
+                  <div class="first-pic" v-if='!batch.actShowPic'>
                     <div class="" @click="()=>{ this.$refs.filezt.click()}">
                       <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
                       <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
                     </div>
                   </div>
-                  <div class="first-pic" v-else>
-                    <img class="imgs" style="width:283px;height:188px" :src="batch.actShowPic"/>
-                    <span v-if='batch.actShowPic' class="cancel" @click="cancelActImg()">X</span>
+                  <div class="first-pic" style="border:none" v-else>
+                    <img style="width:100%;height:100%" :src="batch.actShowPic"/>
+                    <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  style="width: auto;"
+                  :picMap="ztPic"
+                  :max="1"
+                  v-model="ztList"
+                  :display-width="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refZt"
+                ></UploadImg>
               </li>
             </ul>
           </Col>
-          <Col span='10'>
+          <Col span='14'>
             <ul>
               <li class="first-li">
                 <span class="first-span">活动时间</span>
@@ -207,9 +288,10 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动开始时间"
-                      style="width: 140px"
+                      style="width: 200px"
                       :editable="false"
                       @on-change="getBatchStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -220,65 +302,74 @@
                       format="yyyy-MM-dd HH:mm"
                       placement="bottom-end"
                       placeholder="选择活动结束时间"
-                      style="width: 140px"
+                      style="width: 200px"
                       :editable="false"
                       @on-change="getBatchEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
               </li>
               <li class="first-li">
                 <span class="first-span">活动地址</span>
-                <span @click="getAdr()">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</span>
+                <div style="flex:1">
+                   <Button @click="getAdr()">{{ batch.actAddress == null?"选择活动地址":batch.actAddress}}</Button>
+                </div>
+              </li>
+              <li class="first-li">
+                <span class="first-span">详细地址</span>
+                <Input v-model="batch.addressSup" placeholder="请输入详细地址" style="width:300px;"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
-                <RadioGroup v-model="batch.actVehicle" @on-change='tripMode'>
-                  <Radio label="自驾">自驾</Radio>
-                  <Radio label="大巴">大巴</Radio>
-                  <Radio label="自定义" :true-value='tripSelf'>自定义</Radio>
+                <RadioGroup v-model="batch.vehicleCode" @on-change='tripMode'>
+                  <Radio label="1">自驾</Radio>
+                  <Radio label="2">大巴</Radio>
+                  <Radio label="3">自定义</Radio>
                 </RadioGroup>
               </li>
-              <li v-if="tripSelf">
+              <li v-if="batch.vehicleCode=='3'">
                 <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
               </li>
-              <li class="li-flex-between">
-                <span class="first-span">现场联系人</span>
-                <span class="first-span">姓名</span>
-                <Input v-model="batch.ownerUserName" style="width: 150px" class="same-staff" @on-change='getLeaderList'></Input>
-                <span class="first-span">联系方式</span>
-                <Input v-model="batch.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
-              </li>
-              <li v-if='addLeader'>
-                <Select style="width:300px" placeholder="请选择现场联系人">
-                  <Option
-                    v-for="(item,idx) in leaderList"
-                    :value="item.name"
-                    :key="idx"
-                    @click.native="getLeader(item)"
-                  >{{ item.name }} {{item.tel}}</Option>
-                </Select>
-              </li>
               <li class="first-li">
+                <span class="first-span">现场负责人</span>
+                <div class="flex-center-start" style="flex:1">
+                  <span class="tit">姓名</span>
+                  <Input v-model="batch.ownerUserName" style="width: 150px" class="same-staff" @on-change='getLeaderList' placeholder="输入姓名"></Input>
+                  <span class="twoT">联系方式</span>
+                  <Input v-model="batch.ownerUserTel" style="width: 150px" class="same-staff" disabled></Input>
+                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场负责人" v-if='addLeader'>
+                    <Option
+                      v-for="(item,idx) in leaderList"
+                      :value="item.name"
+                      :key="idx"
+                      @click.native="getLeader(item)"
+                    >{{ item.name }} {{item.tel}}</Option>
+                  </Select>
+                </div>
+              </li>
+              <li class="first-li start">
                 <span class="first-span">工作人员</span>
-                <Button @click="addWorkers">添加</Button>
-              </li>
-              <li v-for="(item,index) in batch.workerIdList" class="li-flex-around">
-                <span>姓名</span>
-                <Input v-model="item.ownerUserName" style="width: 200px" class="same-staff" @on-change='getWorkerList(item,index)'></Input>
-                <span>联系方式</span>
-                <Input v-model="item.ownerUserTel" style="width: 200px" class="same-staff" disabled></Input>
-                <span @click="deleteWorker(index)">删除</span>
-              </li>
-              <li v-if='addWorker'>
-                <Select style="width:300px" placeholder="请选择工作人员">
-                  <Option
-                    v-for="(i,idx) in workerList"
-                    :value="i.name"
-                    :key="idx"
-                    @click.native="getWorker(i)"
-                  >{{ i.name }} {{i.tel}}</Option>
-                </Select>
+                <div>
+                  <div><Button @click="addWorkers" class="font">添加</Button></div>
+                  <div v-for="(item,index) in batch.workerIdList" class="li-flex-around" :key='index'>
+                    <span class="tit">姓名</span>
+                    <Input v-model="item.ownerUserName" style="width:150px" class="same-staff" @on-change='getWorkerList(item,index)' placeholder="输入姓名"></Input>
+                    <span class="twoT">联系方式</span>
+                    <Input v-model="item.ownerUserTel" style="width:150px" class="same-staff" disabled></Input>
+                     <Icon type="ios-trash"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
+                  </div>
+                  <div v-if='addWorker'>
+                    <Select style="width:300px" placeholder="请选择工作人员">
+                      <Option
+                        v-for="(i,idx) in workerList"
+                        :value="i.name"
+                        :key="idx"
+                        @click.native="getWorker(i)"
+                      >{{ i.name }} {{i.tel}}</Option>
+                    </Select>
+                  </div>
+                </div>
               </li>
               <li class="first-li">
                 <span class="first-span">活动标签</span>
@@ -291,49 +382,52 @@
                   >{{ item.name }}</Option>
                 </Select>
               </li>
-              <li class="first-li">招募角色</li>
-              <li>
-                <p v-for="(item,i) in batch.userConfList" class="li-flex-around lx-resource">
-                  <span>{{item.roleName}}</span>
-                  <span>{{item.recruitNum}}</span>
-                  <span @click="changeRoles(i)">详情</span>
-                  <span @click="deleteRole(i)">删除</span>
-                </p>
+              <li class="first-li start">
+                <span class="first-span">招募角色</span>
+                <div style="flex:1">
+                  <div class="flex-center-center"><Button @click="addRoles()" class="font">+新增招募角色</Button></div>
+                  <div>
+                    <Row type="flex" justify="space-between" v-for="(item,i) in batch.userConfList" class-name="li-flex-around lx-resource" :key='i'>
+                      <i-col span='5'>{{item.roleName}}</i-col>
+                      <i-col span='3'>{{item.recruitNum}}</i-col>
+                      <i-col span='5'><Button @click="changeRoles(i)" class="font">详情</Button></i-col>
+                      <i-col span='3'><Icon type="ios-trash"   @click="deleteRole(i)" color='#FF565A' size='28'/></i-col>
+                    </Row>
+                  </div>
+                </div>
               </li>
-              <li class="lx-flex-center">
-                <Button @click="addRoles()">+新增招募角色</Button>
-              </li>
-              <li class="first-li">所需物资</li>
-              <li>
-                <p v-for="(item,i) in batch.actResList" class="li-flex-around lx-resource">
-                  <span>{{item.resourcesName}}</span>
-                  <Input v-model="item.num" style="width: 200px" placeholder="请输入数量"></Input>
-                  <span>
-                    <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
-                    <Icon type="ios-close" @click="deleteResources(i)"></Icon>
-                  </span>
-                </p>
-              </li>
-              <li class="lx-flex-center">
-                <Button @click="addResources">+新增物质</Button>
-              </li>
-              <li v-if="adds">
-                <Button v-for="item in batchItemList.resources" @click="chooseResource(item)">{{item.name}}</Button>
+              <li class="first-li start">
+                <span class="first-span">所需物资</span>
+                <div  style="flex:1">
+                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px"    class="font">+新增物资</Button></div>
+                  <div>
+                    <Row v-for="(item,i) in batch.actResList" class-name="li-flex-around lx-resource" :key='i' type="flex" justify="space-between">
+                      <i-col span='4'>{{item.resourcesName}}</i-col>
+                      <i-col span='8'>
+                        <Input v-model="item.num" placeholder="请输入数量"  class="twoT"></Input>
+                      </i-col>
+                      <i-col span='4'>
+                        <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
+                        <Icon type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
+                      </i-col>
+                    </Row>
+                  </div>
+                </div>
               </li>
               <li class="first-li">
                 <span class="first-span">发布时间</span>
-                <RadioGroup v-model="batch.releaseTime" @on-change='releaseTime'>
-                  <Radio label="0">活动开始前一个月自动发布</Radio>
-                  <Radio label="1" :true-value='releaseTimeSelf'>自定义</Radio>
+                <RadioGroup v-model="releaseTimeSelf" @on-change='releaseTime'>
+                  <Radio :label="0">活动开始前一个月自动发布</Radio>
+                  <Radio :label="1">自定义</Radio>
                 </RadioGroup>
-                <Date-picker :value="batch.releaseTime" v-if='releaseTimeSelf' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
+                <Date-picker :value="batch.releaseTime" :options="options" v-if='~~releaseTimeSelf==1' type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" style="width: 200px" @on-change="getReleaseTime"></Date-picker>
               </li>
             </ul>
           </Col>
         </Row>
         <Row style="margin-top:40px">
-          <Col style="margin-bottom:10px;">活动详情</Col>
-          <Col>
+          <Col style="margin-bottom:10px;"><span>活动详情</span></Col>
+          <Col span='12'>
             <wangeditor :labels="batch.detail" id="ed1" @change="changeEditorTrain"></wangeditor>
           </Col>
         </Row>
@@ -356,7 +450,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">活动预算</span>
-                <Input v-model="projectMsg.budget" placeholder="请输入活动预算金额" style="width: 300px"></Input>
+                <Input v-model="projectMsg.budget" type="number" placeholder="请输入活动预算金额" style="width: 300px"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">有效期限</span>
@@ -371,6 +465,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getStartDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                   <Col span="2" class="wave">~</Col>
@@ -384,6 +479,7 @@
                       style="width: 140px"
                       :editable="false"
                       @on-change="getEndDate"
+                      :options="options" 
                     ></Date-picker>
                   </Col>
                 </Row>
@@ -402,8 +498,8 @@
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <div>
-                  <div class="first-pic" v-if='projectMsg.batchPicShow == null'>
+                <!-- <div>
+                  <div class="first-pic" v-if='!projectMsg.batchPicShow'>
                       <div class="" @click="()=>{ this.$refs.files.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -411,9 +507,19 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="projectMsg.batchPicShow"/>
-                    <span v-if='projectMsg.batchPicShow' class="cancel" @click="cancelImg()">X</span>
+                    <Icon type="ios-trash" class="cancel" @click="cancelImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  style="width: auto;"
+                  :picMap="proPic"
+                  :max="1"
+                  v-model="proList"
+                  :display-width="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refCover"
+                ></UploadImg>
               </li>
               <li class="first-li">
                 <span class="first-span">小组归属</span>
@@ -429,17 +535,17 @@
               <li class="first-li">
                 <span class="first-span">招募类型</span>
                 <RadioGroup v-model="projectMsg.recruitType">
-                  <Radio label="1">整体招募</Radio>
-                  <Radio label="2">批次招募</Radio>
+                  <Radio :label="2">批次招募</Radio>
+                  <Radio :label="1" disabled>整体招募</Radio>
                 </RadioGroup>
               </li>
             </ul>
           </Col>
           <Col span="10">
-            <p class="active-head">
+            <div class="active-head">
               <span>活动立项批次</span>
-            </p>
-            <div class="first-li" style="width:100%" v-for="(item,i) in projectMsg.actInfoList">
+            </div>
+            <div class="first-li" style="width:100%" v-for="(item,i) in projectMsg.actInfoList" :key='i'>
               <img style="width:200px;height:150px" :src='item.actShowPic' />
               <ul style="margin-left:20px;width:60%">
                 <li class="first-li">
@@ -452,28 +558,35 @@
                   <span>活动日期：{{item.startT}}至{{item.endT}}</span>
                 </li>
                 <li class="li-flex-around">
-                  <Button @click.native="changePc(i)">修改</Button>
-                  <Button @click.native="deletePc(i)">删除</Button>
+                  <Button @click.native="changePc(i)" class="font">修改</Button>
+                  <Button @click.native="deletePc(i)" class="font">删除</Button>
                 </li>
               </ul>
+            </div>
+            <div class="lx-flex-center">
+              <Button @click="addBatch" class="font">新增批次</Button>
             </div>
           </Col>
         </Row>
       </div>
 
       <div v-if="selects" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-next" @click.native="nextOne()">下一步</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-next" @click.native="nextOne()" :disabled='disSubmit'>下一步</Button>
       </div>
 
       <div v-if="two" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-next" @click.native="nextTwo()">下一步</Button>
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-next" @click.native="nextTwo()" :disabled='disSubmit'>下一步</Button>
       </div>
 
       <div v-if="three" class="lx-flex-center lx-btn">
-        <Button class="lx-draft" @click="draft">存为草稿</Button>
-        <Button class="lx-submit" @click.native="submit()">提交审核</Button>
+        <Checkbox v-model="isAgree">我同意</Checkbox><a @click="rule = true">《活动发布规则》</a>
+      </div>
+
+      <div v-if="three" class="lx-flex-center lx-btn">
+        <Button class="lx-draft" @click="draft" :disabled='disSubmit'>存为草稿</Button>
+        <Button class="lx-submit" @click.native="submit()" :disabled='disSubmit'>提交审核</Button>
       </div>
 
       <!-- 弹出框 -->
@@ -483,16 +596,16 @@
           <ul>
             <li class="first-li">
               <span class="first-span">合作方</span>
-              <Input v-model="partner.partName" placeholder="请输入合作方名称" style="width: 300px;margin-left:15px"></Input>
+              <Input v-model="partner.partName" placeholder="请输入合作方名称" style="width: 300px;"></Input>
             </li>
             <li class="first-li">
               <span class="first-span">介绍</span>
-              <Input type="textarea" v-model="partner.description" placeholder="请输入合作方介绍" style="width: 300px;margin-left: 30px;" :rows='5'></Input>
+              <Input type="textarea" v-model="partner.description" placeholder="请输入合作方介绍" style="width: 300px;" :rows='5'></Input>
             </li>
             <li class="first-li">
                 <span class="first-span">图片</span>
-                <div style="margin-left: 30px;">
-                  <div class="first-pic" v-if='partner.partPicShow == null'>
+                <!-- <div>
+                  <div class="first-pic" v-if='!partner.partPicShow'>
                       <div class="" @click="()=>{ this.$refs.filepar.click()}">
                         <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filepar" @change="uploadPartnerFile()" style="display:none" >
                         <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
@@ -500,14 +613,24 @@
                   </div>
                   <div class="first-pic" v-else>
                     <img class="imgs" style="width:283px;height:188px" :src="partner.partPicShow"/>
-                    <span v-if='partner.partPicShow' class="cancel" @click="cancelPartnerImg()">X</span>
+                    <Icon type="ios-trash" class="cancel" @click="cancelPartnerImg()" color='#FF565A' size='26'/>
                   </div>
-                </div>
+                </div> -->
+                <UploadImg
+                  style="width: auto;"
+                  :picMap="hzPic"
+                  :max="1"
+                  v-model="hzList"
+                  :display-width="300"
+                  :crop-width="750"
+                  :crop-height="320"
+                  ref="refHz"
+                ></UploadImg>
               </li>
             <li>
               <p style="padding:10px 0">协议</p>
               <div>
-                <ul v-for="(item,index) in partner.agrees">
+                <ul v-for="(item,index) in partner.agrees" :key='index'>
                   <li class="first-li">
                     <span class="first-span">协议名称</span>
                     <Input v-model="item.agreeName" placeholder="请输入协议名称" style="width: 300px"></Input>
@@ -525,11 +648,11 @@
                   </li>
                   <li class="first-li">
                     <span class="first-span">甲方</span>
-                    <Input v-model="item.partA" placeholder="请输入甲方名称" style="width: 300px;margin-left: 30px"></Input>
+                    <Input v-model="item.partA" placeholder="请输入甲方名称" style="width: 300px;"></Input>
                   </li>
                   <li class="first-li">
                     <span class="first-span">乙方</span>
-                    <Input v-model="item.partB" placeholder="请输入乙方名称" style="width: 300px;margin-left: 30px"></Input>
+                    <Input v-model="item.partB" placeholder="请输入乙方名称" style="width: 300px;"></Input>
                   </li>
                 </ul>
               </div>
@@ -537,20 +660,20 @@
           </ul>
         </div>
         <p class="add-deal">
-          <Button @click="addAgrees">+新增协议</Button>
+          <Button @click="addAgrees" class="font" style="margin-left:200px">+新增协议</Button>
         </p>
         <!-- <div class="upload">
           <span>上传附件</span>
         </div> -->
         <div class="lx-flex-center" style="width:80%">
           <div class="li-flex-around" style="width:40%">
-            <Button class="table-btn" @click="off()">取消</Button>
-            <Button class="table-btn active" @click="save()">保存</Button>
+            <Button class="lx-draft" @click="off()">取消</Button>
+            <Button class="lx-submit" @click="save()">保存</Button>
           </div>
         </div>
       </div>
       <div class="" v-if="isAddRole">
-        <role :oneRole="oneRole" @cancelEdit="cancelRole" @oneRole='getRole'></role>
+        <role :oneRoles="oneRole" @cancelEdit="cancelRole" @oneRoleMsg='getRole'></role>
       </div>
 
     </div>
@@ -571,16 +694,17 @@ import {
 
 import role from "./compile_beneficiary.vue";
 import adress from "_c/map";
-import { orgimg } from "@/request/http";
-import { upload } from "@/request/http";
+import { upload,uploadCopy } from "@/request/http";
 
 export default {
   data() {
     return {
+      disSubmit:false,
       projectMsg: {
         partnerList: [],
         actInfoList: []
       },
+      rule:false,
       partner: {
         partName: "",
         description: "",
@@ -608,37 +732,32 @@ export default {
         actResList: [],
         workerIdList: [{}]
       },
-      itemsList: [],
+      itemsList: {
+        org:{
+          propagandaTitle:'',
+          propagandaText:'',
+        }
+      },
       part: [],
       batchItemList: [],
-      editorContent1: "",
       navigation1: {
         head: "活动立项"
       },
       current: 0,
-      single: false,
-      model1: "",
-      value: "",
-      value2: "",
-      animal: "批次招募",
       add: false,
       selects: true,
       two: false,
       three: false,
       adds: false,
       addbtns: true,
-      tripSelf: false,
       addLeader: false,
       addWorker: false,
-      releaseTimeSelf: false,
+      releaseTimeSelf: '',
       isAddRole: false,
-      editor1: "",
-      orgimg: "",
       userId: 1,
-      image: "",
       oneRole: {},
       roleMsg: {
-        fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
+        fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
         refund: {},
         signRuleList: [],
         itemList: [],
@@ -648,17 +767,74 @@ export default {
       adr: false,
       pcNum: 0,
       templateList: [],
+      options: {
+        disabledDate (date) {
+          return  date && date.valueOf() < Date.now() - 86400000
+        }
+      },
+      isAgree:false,
+      proList: [],
+      proPic: {},
+      ztList: [],
+      ztPic: {},
+      fmList: [],
+      fmPic: {},
+      hzList: [],
+      hzPic: {},
     };
   },
 
   components: { role, adress },
+  watch: {
+    proList: {
+      handler(newValue, oldValue) {
+        this.projectMsg.batchPic = newValue[0] || null;
+        console.log(this.projectMsg)
+        if (this.$refs.refCover.imgList.length > 0) {
+          this.projectMsg.batchPicShow = this.$refs.refCover.imgList[0].previewUrl;
+          this.projectMsg.batchPic = this.$refs.refCover.imgList[0].url;
+        }
+      },
+      deep: true
+    },
+    ztList: {
+      handler(newValue, oldValue) {
+        this.batch.actPic = newValue[0] || null;
+        if (this.$refs.refZt.imgList.length > 0) {
+          this.batch.actShowPic = this.$refs.refZt.imgList[0].previewUrl;
+          this.batch.actPic = this.$refs.refZt.imgList[0].url;
+        }
+      },
+      deep: true
+    },
+    fmList: {
+      handler(newValue, oldValue) {
+        this.batch.actCoverPic = newValue[0] || null;
+        if (this.$refs.refFm.imgList.length > 0) {
+          this.batch.actCoverShowPic = this.$refs.refFm.imgList[0].previewUrl;
+          this.batch.actCoverPic = this.$refs.refFm.imgList[0].url;
+        }
+      },
+      deep: true
+    },
+    hzList: {
+      handler(newValue, oldValue) {
+        this.partner.partPic = newValue[0] || null;
+        if (this.$refs.refHz.imgList.length > 0) {
+          this.partner.partPicShow = this.$refs.refHz.imgList[0].previewUrl;
+          this.partner.partPic = this.$refs.refHz.imgList[0].url;
+        }
+      },
+      deep: true
+    }
+  },
 
   computed: {},
 
   created() {
     this.userId = this.$store.state.userId;
     if(this.$route.query.batchId){
-      if (this.$route.query.copy != 1){
+      if (this.$route.query.copy !== 1){
         this.batchId= this.$route.query.batchId
       }
       this.getDraftsDetail(this.$route.query.batchId)
@@ -668,17 +844,19 @@ export default {
     this.getBatchItem();
   },
   mounted() {
-    this.orgimg = orgimg;
-  },
+
+},
 
   methods: {
     getDraftsDetail(e){
       draftsDetail({
-        batchId:e,
+        batchId:e, 
         isTime:this.batchId?2:null
       }).then(res=>{
         console.log(res)
         this.projectMsg = res.data
+        this.proList = [this.projectMsg.batchPic];
+        this.proPic = { [this.projectMsg.batchPic]: this.projectMsg.batchPicShow };
       })
     },
     //立项前置项查询
@@ -711,6 +889,8 @@ export default {
       if (e >= 0) {
         this.partnerIndex = e;
         this.partner = this.projectMsg.partnerList[e];
+        this.hzList = [this.partner.partPic];
+        this.hzPic = { [this.partner.partPic]: this.partner.partPicShow };
       } else {
         let p = {
           partName: "",
@@ -780,7 +960,15 @@ export default {
     nextTwo() {
       console.log(this.batch);
       console.log(this.pcNum);
+      if(~~this.releaseTimeSelf==0){
+        this.batch.releaseTime = 0
+      }else if(~~this.releaseTimeSelf==1 && !this.batch.releaseTime){
+        this.$Message.warning('请选择发布时间')
+        return
+      }
       this.projectMsg.actInfoList[this.pcNum] = this.batch;
+      this.proList = [this.projectMsg.batchPic];
+      this.proPic = { [this.projectMsg.batchPic]: this.projectMsg.batchPicShow };
       console.log(this.projectMsg);
       this.two = false;
       this.three = true;
@@ -859,11 +1047,11 @@ export default {
     },
     //出行方式
     tripMode(e) {
-      if (e == "自驾" || e == "大巴") {
-        this.tripSelf = false;
-        this.batch.actVehicle = e;
-      } else {
-        this.tripSelf = true;
+      if (e == "1") {
+        this.batch.actVehicle = "自驾"
+      }else if(e == "2"){
+        this.batch.actVehicle = "自驾"
+      }else {
         this.batch.actVehicle = "";
       }
     },
@@ -924,7 +1112,7 @@ export default {
     //新增招募角色
     addRoles() {
       let r = {
-        fdList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
+        fkDetailList: [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }],
         actRefund: {},
         signRuleList: [],
         itemList: [],
@@ -1010,12 +1198,10 @@ export default {
     //发布时间
     releaseTime(e) {
       console.log(e);
-      if (e == 1) {
-        this.releaseTimeSelf = true;
-      } else {
-        this.releaseTimeSelf = false;
+      if (~~e == 0) {
+        delete this.batch.releaseTime
       }
-      this.batch.releaseTime = e;
+      this.releaseTimeSelf = e;
     },
     //自定义发布时间
     getReleaseTime(e) {
@@ -1027,7 +1213,6 @@ export default {
       let b = {
         userConfList: [],
         actResList: [],
-        actShowPic: "",
         workerIdList: [{}]
       };
       this.batch = b;
@@ -1041,33 +1226,127 @@ export default {
     changePc(e) {
       this.pcNum = e;
       this.batch = this.projectMsg.actInfoList[e];
+      this.fmList = [this.batch.actCoverPic];
+      this.fmPic = { [this.batch.actCoverPic]: this.batch.actCoverShowPic };
+      this.ztList = [this.batch.actPic];
+      this.ztPic = { [this.batch.actPic]: this.batch.actShowPic };
       this.two = true;
       this.three = false;
       this.current = 1;
     },
+    deepClone(obj){
+      let _obj = JSON.stringify(obj),
+      objClone = JSON.parse(_obj);
+      return objClone
+    },  
+    addBatch(){
+      let p = this.deepClone(this.projectMsg)
+      this.pcNum = p.actInfoList.length
+      this.batch = p.actInfoList[p.actInfoList.length-1]
+      delete this.batch.startT
+      delete this.batch.endT
+      delete this.batch.releaseTime
+      this.uploadActFmFilefz(this.batch.actCoverPic)
+      this.uploadActFilefz(this.batch.actPic)
+      for(let oi in this.batch.userConfList){
+        delete this.batch.userConfList[oi].enrollStarttime
+        delete this.batch.userConfList[oi].enrollEndtime
+        delete this.batch.userConfList[oi].outrollStarttime
+        delete this.batch.userConfList[oi].outrollEndtime
+        delete this.batch.userConfList[oi].setTime
+        delete this.batch.userConfList[oi].qrCodeShow
+        delete this.batch.userConfList[oi].qrCode
+      }
+      this.two = true;
+      this.three = false;
+      this.current = 1;
+      console.log(this.projectMsg.actInfoList)
+    },
 
     //提交
     submit() {
+      this.disSubmit = true
       console.log(this.projectMsg);
-      this.projectMsg.userId = this.userId;
-      this.projectMsg.is_draft = 2;
-      projectApproval(this.projectMsg).then(res => {
-        console.log(res);
-        if (res.code == 200) {
-          this.$Message.success(res.msg);
-          this.$router.push({path: "manager"});
-        } else {
-          this.$Message.error(res.msg);
+      if(this.isAgree){
+        this.projectMsg.userId = this.userId;
+        this.projectMsg.is_draft = 2;
+        if (this.$route.query.copy === 1){
+          this.projectMsg.batchId = ''
+          delete this.projectMsg.batchId
         }
-      });
+        projectApproval({
+          actInfoList: this.projectMsg.actInfoList,
+          batchName: this.projectMsg.batchName,
+          batchId:this.projectMsg.batchId,
+          batchObjective: this.projectMsg.batchObjective,
+          batchPic: this.projectMsg.batchPic,
+          budget: this.projectMsg.budget,
+          categoryId: this.projectMsg.categoryId,
+          categoryName: this.projectMsg.categoryName,
+          channel: 1,
+          endT: this.projectMsg.endT,
+          is_draft: this.projectMsg.is_draft,
+          orgId: this.projectMsg.orgId,
+          orgName: this.projectMsg.orgName,
+          orgType: this.projectMsg.orgType,
+          partnerList: this.projectMsg.partnerList,
+          recruitType: this.projectMsg.recruitType,
+          startT: this.projectMsg.startT,
+          userId: this.projectMsg.userId
+        }).then(res => {
+          console.log(res);
+          if (res.code == 200) {
+            this.$Message.success(res.msg);
+            this.$router.back()
+            this.disSubmit = false
+          } else {
+            this.$Message.error(res.msg);
+            this.disSubmit = false
+          }
+        });
+      }else{
+        this.$Message.warning('请先同意活动发布规则')
+        this.disSubmit = false
+      }
     },
     //提交
     draft() {
+      this.disSubmit = true
       console.log(this.projectMsg);
       this.projectMsg.userId = this.userId;
       this.projectMsg.is_draft = 1;
-      projectApproval(this.projectMsg).then(res => {
-        console.log(res);
+      if (this.$route.query.copy === 1){
+        this.projectMsg.batchId = ''
+        delete this.projectMsg.batchId
+      }
+      projectApproval({
+        actInfoList: this.projectMsg.actInfoList,
+        batchName: this.projectMsg.batchName,
+        batchId:this.projectMsg.batchId,
+        batchObjective: this.projectMsg.batchObjective,
+        batchPic: this.projectMsg.batchPic,
+        budget: this.projectMsg.budget,
+        categoryId: this.projectMsg.categoryId,
+        categoryName: this.projectMsg.categoryName,
+        channel: 1,
+        endT: this.projectMsg.endT,
+        is_draft: this.projectMsg.is_draft,
+        orgId: this.projectMsg.orgId,
+        orgName: this.projectMsg.orgName,
+        orgType: this.projectMsg.orgType,
+        partnerList: this.projectMsg.partnerList,
+        recruitType: this.projectMsg.recruitType,
+        startT: this.projectMsg.startT,
+        userId: this.projectMsg.userId
+      }).then(res => {
+        if (res.code == 200) {
+          this.$Message.success(res.msg);
+          this.$router.back()
+          this.disSubmit = false
+        } else {
+          this.$Message.error(res.msg);
+          this.disSubmit = false
+        }
       });
     },
     uploadFile() {
@@ -1126,6 +1405,14 @@ export default {
         };
       });
     },
+    uploadActFmFilefz(path) {
+      uploadCopy({path:path}).then(res => {
+        this.$set(this.batch, "actCoverShowPic", res.data.relPath);
+        this.$set(this.batch, "actCoverPic", res.data.path);
+        this.fmList = [this.batch.actCoverPic];
+        this.fmPic = { [this.batch.actCoverPic]: this.batch.actCoverShowPic };
+      });
+    },
     cancelActFmImg() {
       orgimgdel({ path: this.batch.actPic }).then(res => {
         this.batch.actCoverShowPic = null;
@@ -1144,7 +1431,15 @@ export default {
           console.log(e);
           this.$set(this.batch, "actShowPic", e.target.result);
           this.$set(this.batch, "actPic", res.data);
+          this.ztList = [this.batch.actPic];
+          this.ztPic = { [this.batch.actPic]: this.batch.actShowPic };
         };
+      });
+    },
+    uploadActFilefz(path) {
+      uploadCopy({path:path}).then(res => {
+        this.$set(this.batch, "actShowPic", res.data.relPath);
+        this.$set(this.batch, "actPic", res.data.path);
       });
     },
     cancelActImg() {
@@ -1158,29 +1453,50 @@ export default {
       this.batch.detail = e;
     },
     getMap(e) {
+      console.log(e);
       this.batch.actXx = e.xx;
       this.batch.actYy = e.yy;
-      // this.batch.actAddress = e.address
+      this.batch.provinceName = e.province;
+      this.batch.cityName = e.city;
+      this.batch.districtName = e.district;
       this.$set(this.batch, "actAddress", e.address);
-      console.log(e);
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.lx-content {
-  background-color: #fff;
+.font{
+  font-size: 16px;
+}
+.start{
+   align-items: flex-start !important;
+}
+.btn{
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+}
+.tit{
+  margin-right: 15px;
+}
+.twoT{
+  margin: 0 15px;
 }
 .lx-cont{
-  padding: 20px;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 20px;
 }
 .first-li{
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 0;
+  .ivu-radio-wrapper{
+    font-size: 16px !important;
+  }
 }
 .first-span{
-  margin-right: 10px;
+  width: 120px !important;
+  margin-right: 30px;
 }
 .wave{
   display: flex;
@@ -1194,21 +1510,23 @@ export default {
   height: 200px;
   text-align: center;
   line-height: 200px;
-  border: 1px solid;
+  border: 1px dashed #FF565A;
   position: relative;
+  cursor: pointer;
 }
 .first-picfm{
   width: 200px;
   height: 200px;
   text-align: center;
   line-height: 200px;
-  border: 1px solid;
+  border: 1px dashed #FF565A;
   position: relative;
+  cursor: pointer;
 }
 .cancel{
   position: absolute;
-  top: -82px;
-  right: 8px;
+  top: 0;
+  right: -30px;
 }
 .par-col{
   display: flex;
@@ -1248,13 +1566,15 @@ export default {
 .lx-next{
   background: #FF565A;
   border-radius: 15px;
+  border-color: #FF565A;
   color: #FFF;
   width: 110px;
 }
 .lx-submit{
-  background: #00FF7F;
+  background: #FF565A;
   border-radius: 15px;
   width: 110px;
+  color: #fff;
 }
 .li-flex-around{
   display: flex;
@@ -1277,5 +1597,15 @@ export default {
 .lx-jd{
   height: 80px;
   padding-top: 30px;
+}
+.padd{
+  padding-left: 150px;
+}
+.textp p{
+  text-indent: 10px;
+}
+.textp {
+  height: 500px;
+  overflow-y: auto;
 }
 </style>

@@ -18,9 +18,9 @@
                 <span class="first-span">活动分类</span>
                 <Select v-model="batch.actTypeName" style="width:300px">
                   <Option
-                    v-for="item in batchItemList.actTypes"
+                    v-for="(item, index) in batchItemList.actTypes"
                     :value="item.name"
-                    :key="item.name"
+                    :key="index"
                     @click.native="getActiveTypeId(item)"
                     >{{ item.name }}</Option
                   >
@@ -30,9 +30,9 @@
                 <span class="first-span">选择模板</span>
                 <Select style="width:300px">
                   <Option
-                    v-for="item in templateList"
+                    v-for="(item, index) in templateList"
                     :value="item.name"
-                    :key="item.name"
+                    :key="index"
                     @click.native="getTemplateDetail(item)"
                     >{{ item.name }}</Option
                   >
@@ -227,9 +227,9 @@
                   placeholder="请选择活动标签"
                 >
                   <Option
-                    v-for="item in batchItemList.labels"
+                    v-for="(item, index) in batchItemList.labels"
                     :value="item.name"
-                    :key="item.name"
+                    :key="index"
                     @click.native="getActiveLabels(item)"
                     >{{ item.name }}</Option
                   >

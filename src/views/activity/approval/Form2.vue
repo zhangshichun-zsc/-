@@ -69,7 +69,7 @@
                 <!-- :disabled="isFormDisabled" -->
                 <AutoComplete v-model="form.ownerUserName" placeholder="联系人姓名" @on-search="searchLeader">
                   <div class="cadidate-wrapper">
-                    <Option v-for="p in leaderCandidates" :key="p.tel" :value="p.tel" @click.native="selectLeader(p)">{{p.name}}</Option>
+                    <Option v-for="(p, index) in leaderCandidates" :key="index" :value="p.tel" @click.native="selectLeader(p)">{{p.name}}</Option>
                   </div>
                 </AutoComplete>
               </FormItem>
@@ -89,7 +89,7 @@
                 <!--  :disabled="isFormDisabled" -->
                 <AutoComplete v-model="worker.ownerUserName" placeholder="工作人员姓名" @on-search="searchWorker(worker.ownerUserName)">
                   <div class="cadidate-wrapper">
-                    <Option v-for="p in workerCandidates" :key="p.tel" :value="p.tel" @click.native="selectWorker(worker, p)">{{p.name}}</Option>
+                    <Option v-for="(p, index) in workerCandidates" :key="index" :value="p.tel" @click.native="selectWorker(worker, p)">{{p.name}}</Option>
                   </div>
                 </AutoComplete>
               </FormItem>
@@ -111,7 +111,7 @@
           <FormItem label="活动标签">
             <!-- :disabled="isFormDisabled" -->
             <Select v-model="form.actLabelId" placeholder="请选择活动标签">
-              <Option v-for="item in batchData.labels" :value="item.dicId" :key="item.name" @click.native="onSelectLabel(item)">{{ item.name }}</Option>
+              <Option v-for="(item, index) in batchData.labels" :value="item.dicId" :key="index" @click.native="onSelectLabel(item)">{{ item.name }}</Option>
             </Select>
           </FormItem>
         </div>

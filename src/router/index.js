@@ -1011,7 +1011,9 @@ const router = new Router({
         icon: 'ios-navigate'
       },
       component: () =>
-        import('@/views/activity/approval/approval.vue')
+      // TODO 新立项
+        // import('@/views/activity/approval.vue')
+      import('@/views/activity/approval/approval.vue')
     },
     // 常用报名管理
     {
@@ -2157,7 +2159,8 @@ const router = new Router({
         import('@/views/statistical/Volunteer-team.vue')
     }
     ]
-  }, {
+  },
+  {
     path: '/permissions',
     name: 'permissions',
     meta: {
@@ -2445,8 +2448,18 @@ const router = new Router({
           import('@/views/survey/volunteer/feedbackList.vue')
       }
     ]
-  }
+  },
+  {
+    path: "*",
+    name:'NotFound',
+    meta: {
+      title: 'Not found',
+      icon: 'ios-navigate',
 
+    },
+    // 异常处理页面， 
+    component: () => import('@/views/notfound/index.vue')
+  }
   ]
 })
 
