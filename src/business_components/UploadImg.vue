@@ -75,6 +75,7 @@
   </div>
 </template>
 <script>
+import cloneDeep from 'lodash.clonedeep'
 import router from "@/router/index"
 import { upload } from "@/request/http"
 import { uploadMixin } from './mixins'
@@ -198,17 +199,26 @@ export default {
   },
   methods: {
     handleRemove(url) {
-      // 删除图片
-      this.imgList.forEach(item => {
-        if (item.url === url) {
-          item.status = "remove"
-          const index = this.listValue.indexOf(url)
-          let value = this.listValue
-          value.splice(index, 1)
-          this.$emit("input", this.max === 1 ? value[0] : value)
-          this.$emit('update:fullUrl', '')
-        }
-      })
+      if (this.max === 1) {
+        this.$emit('input', '')
+        this.$emit('update:fullUrl', '')
+      } else {
+        // 删除图片
+        const index = this.imgList.findIndex(item => item.url === url)
+        const newList = cloneDeep(this.listValue)
+        newList.splice(index, 1)
+        this.$emit('input', newList)
+      }
+      // this.imgList.forEach(item => {
+      //   if (item.url === url) {
+      //     item.status = "remove"
+      //     const index = this.listValue.indexOf(url)
+      //     let value = this.listValue
+      //     value.splice(index, 1)
+      //     this.$emit("input", this.max === 1 ? value[0] : value)
+      //     this.$emit('update:fullUrl', '')
+      //   }
+      // })
     },
     // 上传成功（未用到）
     handleSuccess(res, file, fileList) {
@@ -302,7 +312,9 @@ export default {
           let value = this.listValue || []
           value.push(res.data.path)
           this.$emit("input", this.max === 1 ? value[0] : value)
-          this.$emit('update:fullUrl', res.data.relPath)
+          if (this.max === 1) {
+            this.$emit('update:fullUrl', res.data.relPath)
+          }
         } else {
           fileInfo.status = "remove"
         }
