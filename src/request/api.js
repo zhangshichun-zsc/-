@@ -666,7 +666,16 @@ export const programApproval = p => posts("/activity-manage/batch/audit/do", p) 
 
 export const deleteFile = p => posts("/org/detail/deleteFile", p) //删除附件
 
+/**
+ * 
+ * @param {2020/02/13 } 草稿箱新增删除功能
+ */
 
+export const validVun = p => posts("/volunteer-manager/valid/set", p) //志愿者草稿箱
+
+export const validVip = p => posts("/activity-manage/draft/valid/update", p) //会员草稿箱
+
+// end
 
 // 第二期需求
 // 问卷调查

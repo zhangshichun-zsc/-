@@ -36,7 +36,8 @@
 <script>
 import { formatDate } from "../../request/datatime";
 import {
- getDraft
+ getDraft,
+ validVun
 } from "../../request/api";
 import { SERVER_URl } from '@/request/http.js'
 import { constants } from 'fs';
@@ -103,7 +104,36 @@ export default {
                   }
                 },
                 "编辑"
-              )
+              ),
+               h(
+                "a",
+                {
+                  clssName: "action",
+                  style: {
+                    color: "#FF566A",
+                    cursor: "pointer",
+                    marginLeft:"10px"
+                  },
+                  on: {
+                    click: () => {
+                       this.$Modal.confirm({
+                        title: '提示',
+                        content: `是否确认删除？`,
+                        onOk: () => {
+                          this.validVun({
+                            activityId: params.row.activityId,
+                            valid:'0'
+                            // 0 删除 1恢复
+                          })
+                         
+                          }
+                      })
+
+                    }
+                  }
+                },
+                "删除"
+              ),
             ]);
           }
         },
@@ -148,6 +178,14 @@ export default {
           this.datax = res.data.list;
         }
       });
+    },
+    validVun(obj){
+      validVun(obj)
+      .then(res=>{
+        this.$Message.success('删除成功！')
+         // TODO 重新拉取数据
+        this.getDraftList()
+      }) 
     },
     changepages(e){
       this.page = e

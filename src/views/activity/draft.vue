@@ -4,14 +4,9 @@
     <Tophead :navigation1=navigation1 :top=top @query="query"></Tophead>
     <div class="integral-table">
       <div class="table">
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="datax"
-        ></Table>
+        <Table ref="selection" border :columns="columns" :data="datax"></Table>
         <div class="set">
-          <Icon type="ios-settings-outline" @click="modal1 = true"/>
+          <Icon type="ios-settings-outline" @click="modal1 = true" />
         </div>
       </div>
     </div>
@@ -19,109 +14,108 @@
 </template>
 
 <script>
-import {draftDetail} from "@/request/api"
+import { draftDetail, validVip } from '@/request/api'
 export default {
   data() {
     return {
       single1: false,
       modal1: false,
-      fruit: ["苹果"],
+      fruit: ['苹果'],
       navigation1: {
-        head: "草稿箱(会员)"
+        head: '草稿箱(会员)'
       },
       columns: [
         {
-          title: "立项名称",
-          key: "name",
-          align: "center"
+          title: '立项名称',
+          key: 'name',
+          align: 'center'
         },
         {
-          title: "项目预算",
-          key: "budget",
-          align: "center"
+          title: '项目预算',
+          key: 'budget',
+          align: 'center'
         },
         {
-          title: "创建人",
-          key: "userName",
-          align: "center"
+          title: '创建人',
+          key: 'userName',
+          align: 'center'
         },
         {
-          title: "身份",
-          key: "orgType",
-          align: "center"
+          title: '身份',
+          key: 'orgType',
+          align: 'center'
         },
         {
-          title: "活动所属项目",
-          key: "categoryName",
-          align: "center"
+          title: '活动所属项目',
+          key: 'categoryName',
+          align: 'center'
         },
         {
-          title: "小组归属",
-          key: "orgName",
-          align: "center"
+          title: '小组归属',
+          key: 'orgName',
+          align: 'center'
         },
         {
           width: 200,
-          title: "操作",
-          key: "action",
-          align: "center",
+          title: '操作',
+          key: 'action',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#FF566A",
-                    cursor: "pointer",
-                    marginRight:"10px"
+                    color: '#FF566A',
+                    cursor: 'pointer',
+                    marginRight: '10px'
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "approval",query:{batchId:params.row.batchId} });
+                      this.$router.push({
+                        path: 'approval',
+                        query: { batchId: params.row.batchId }
+                      })
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
-               h(
-                "a",
+              h(
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#FF566A",
-                    cursor: "pointer",
-                    marginRight:"10px"
+                    color: '#FF566A',
+                    cursor: 'pointer',
+                    marginLeft: '10px'
                   },
                   on: {
                     click: () => {
-                       this.$Modal.confirm({
+                      this.$Modal.confirm({
                         title: '提示',
                         content: `是否确认删除？`,
                         onOk: () => {
-                          // TODO 删除
-
-                          // TODO 重新拉取数据
-                          this.getDraftList()
-                          }
+                          this.validVip({
+                            batchId: params.row.batchId,
+                            valid: '0'
+                          })
+                        }
                       })
-
-                      
-                      // this.$router.push({ path: "approval",query:{batchId:params.row.batchId} });
                     }
                   }
                 },
-                "删除"
-              ),
-            ]);
+                '删除'
+              )
+            ])
           }
         }
       ],
-      datax: [
-      ],
-      top:[{name:'立项名称',type:'input',value:''}],
-      arrs:''
-    };
+      datax: [],
+      top: [{ name: '立项名称', type: 'input', value: '' }],
+      arrs: ''
+    }
   },
   components: {},
 
@@ -132,35 +126,41 @@ export default {
   },
 
   methods: {
-    getDraftList(){
+    getDraftList() {
       draftDetail({
-        userId:this.$store.state.userId,
-        name:this.name
-      }).then(res=>{
+        userId: this.$store.state.userId,
+        name: this.name
+      }).then(res => {
         this.datax = res.data
       })
     },
-    query(e){
+    query(e) {
       this.name = e[0].value
       this.getDraftList()
     },
-    addaction(){
-      this.$router.push({name:'approval'})
+    addaction() {
+      this.$router.push({ name: 'approval' })
     },
     //导出数据
-   exportData(){
-    if (this.arrs.length == 0) {
-      this.arrs = this.datax
+    exportData() {
+      if (this.arrs.length == 0) {
+        this.arrs = this.datax
+      }
+      this.$refs.selection.exportCsv({
+        filename: this.navigation1.head,
+        columns: this.columns.filter((col, index) => index > 0),
+        data: this.datax
+      })
+    },
+    validVip(obj) {
+      validVip(obj).then(res => {
+         this.$Message.success('删除成功！')
+        // TODO 重新拉取数据
+        this.getDraftList()
+      })
     }
-    this.$refs.selection.exportCsv({
-      filename: this.navigation1.head,
-      columns: this.columns.filter((col, index) => index > 0),
-      data: this.datax
-    });
-
-  },
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .integral-header {
@@ -206,13 +206,13 @@ export default {
   display: flex;
 }
 
-.popup{
+.popup {
   background: #ffffff;
-  .popup-head{
+  .popup-head {
     height: 20px;
     line-height: 20px;
     margin-bottom: 10px;
-    .popup-head-tit{
+    .popup-head-tit {
       display: inline-block;
       // width: 140px;
       border: black solid 1px;
@@ -220,10 +220,10 @@ export default {
       margin-left: 20px;
     }
   }
-  .popup-content{
+  .popup-content {
     margin-bottom: 20px;
-    p{
-      span{
+    p {
+      span {
         display: inline-block;
         padding: 0 8px;
         line-height: 20px;
@@ -233,18 +233,18 @@ export default {
       }
     }
   }
-  .bft{
-    .bft-tab{
+  .bft {
+    .bft-tab {
       padding: 15px;
       background: #e4e4e4;
       height: 150px;
     }
   }
 }
-.table{
+.table {
   position: relative;
 }
-.set{
+.set {
   position: absolute;
   top: 12px;
   right: 50px;
