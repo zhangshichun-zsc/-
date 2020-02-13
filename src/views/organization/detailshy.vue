@@ -17,7 +17,7 @@
       <div class="header">
         <img
           :src="arr.orgPicPath"
-          style="height:80px;width:80px; margin-top: 5px;"
+          style="height:90px;width:220px; margin-top: 5px;"
         />
         <p>
           组织名称：
@@ -157,9 +157,9 @@
                 :max="1"
                 v-model="BasicDate.picUrl"
                 :full-url.sync="picMap"
-                :display-width="120"
-                :crop-width="120"
-                :crop-height="120"
+                :display-width="220"
+                :crop-width="750"
+                :crop-height="320"
               ></UploadImg>
             </FormItem>
             <FormItem label="详情:" prop="orgName">
@@ -831,7 +831,7 @@ export default {
   box-shadow: 0 3px 4px 0 rgba(188, 188, 188, 0.21);
   border-radius: 12px;
   height: 162px;
-  padding: 20px 30px;
+  padding: 10px 30px;
   .title {
     padding: 0;
     font-weight: 800;

@@ -200,7 +200,7 @@ export default {
 }
 .item-img {
   width: 400px;
-  height: 400px;
+  height: 170px;
   background-size: contain;
   vertical-align: middle;
 }

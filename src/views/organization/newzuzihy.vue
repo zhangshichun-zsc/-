@@ -66,9 +66,9 @@
                 :full-url.sync="picMap"
                 :max="1"
                 v-model="formValidate.picUrl"
-                :display-width="120"
-                :crop-width="120"
-                :crop-height="120"
+                :display-width="220"
+                :crop-width="750"
+                :crop-height="320"
               ></UploadImg>
             </FormItem>
             <FormItem label="详情:" prop="description">
