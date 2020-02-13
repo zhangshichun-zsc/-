@@ -18,7 +18,8 @@ const SERVICE_URL = {
     "http://192.168.0.11:8084/rhzg-web", // 竺文聪 4
     "http://192.168.0.11:8083/rhzg-app-server", // 竺文聪 5 //图片上传
     "http://192.168.0.7:8084/rhzg-web", // 王盛 6
-    "https://rhzghyuat.co-inclusion.org/rhzg-web"  //  UAT 环境
+    "https://rhzg.co-inclusion.org/rhzg-web",  //7 生产环境
+    "https://rhzguat.co-inclusion.org/rhzg-web"  //8 UAT环境
   ],
   API_INDEX: 0
 }
