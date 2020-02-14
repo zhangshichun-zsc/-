@@ -153,29 +153,29 @@ export default {
       navigation1: {
         head: "志愿者活动管理(志愿者)"
       },
-      columns: [
+       columns: [
         {
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center"
+          align: 'center'
         },
         {
           width: 350,
-          key: "action",
-          align: "center",
-          renderHeader:(h,params)=>{
-            return h('div',[
-              h('span','操作'),
-              h('Icon',{
-                props:{
-                  type:'ios-settings-outline'
+          key: 'action',
+          align: 'center',
+          renderHeader: (h, params) => {
+            return h('div', [
+              h('span', '操作'),
+              h('Icon', {
+                props: {
+                  type: 'ios-settings-outline'
                 },
-                style:{
-                  marginLeft:'5px'
+                style: {
+                  marginLeft: '5px'
                 },
-                on:{
-                  click:()=>{
-                     this.$Message.info("此功能暂未开放")
+                on: {
+                  click: () => {
+                    this.$Message.info('此功能暂未开放')
                     // this.modal3=true
                   }
                 }
@@ -183,22 +183,22 @@ export default {
             ])
           },
           render: (h, params) => {
-             let signup = "关闭报名";
-            if (params.row.status == "13") {
-              signup = "开启报名";
+            let signup = '关闭报名'
+            if (params.row.status == '13') {
+              signup = '开启报名'
             }
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.activityId);
+                      console.log(params.row.activityId)
                       if (
                         params.row.status == 1 ||
                         params.row.status == 2 ||
@@ -206,193 +206,200 @@ export default {
                         params.row.status == 4
                       ) {
                         this.$router.push({
-                          name: "volunteer_issue",
+                          name: 'volunteer_issue',
                           query: {
                             activityId: params.row.activityId,
                             isEdit: 1,
                             status: params.row.status
                           }
-                        });
+                        })
                       } else {
-                        this.$Message.warning("该活动状态不可编辑");
+                        this.$Message.warning('该活动状态不可编辑')
                       }
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "profile",
-                        query: { acitvityId: params.row.activityId,activityName: params.row.name,sysId:2 }
-                      });
-                    }
-                  }
-                },
-                "概况"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({ path: "activity_share" });
-                    }
-                  }
-                },
-                "分享"
-              ),
-              h(
-                "a",
-                {
-                  style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push({
-                        path: "volunteer_issue",
-                        query: { activityId: params.row.activityId,isEdit:4 }
-                      });
-                    }
-                  }
-                },
-                "复制"
-              ),
-              h(
-                  "Dropdown",
-                  {
-                    props: {
-                      transfer: true
-                    }
-                  },
-                  [
-                    h(
-                      "a",
-                      {
-                        style: {
-                          color: "#FF565A"
+                        name: 'profile',
+                        query: {
+                          acitvityId: params.row.activityId,
+                          activityName: params.row.name,
+                          sysId: 2
                         }
-                      },
-                      "更多操作"
-                    ),
-                    h(
-                      "DropdownMenu",
-                      {
-                        slot: "list"
-                      },
-                      [
-                        h(
-                          "DropdownItem",
-                          {
-                            nativeOn: {
-                              click: name => {
-                                this.modal5 = true;
-                                this.activityId = params.row.activityId;
+                      })
+                    }
+                  }
+                },
+                '概况'
+              ),
+              h(
+                'a',
+                {
+                  style: {
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({ path: 'activity_share' })
+                    }
+                  }
+                },
+                '分享'
+              ),
+              h(
+                'a',
+                {
+                  style: {
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({
+                        path: 'volunteer_issue',
+                        query: { activityId: params.row.activityId, isEdit: 4 }
+                      })
+                    }
+                  }
+                },
+                '复制'
+              ),
+              h(
+                'Dropdown',
+                {
+                  props: {
+                    transfer: true
+                  }
+                },
+                [
+                  h(
+                    'a',
+                    {
+                      style: {
+                        color: '#FF565A'
+                      }
+                    },
+                    '更多操作'
+                  ),
+                  h(
+                    'DropdownMenu',
+                    {
+                      slot: 'list'
+                    },
+                    [
+                      h(
+                        'DropdownItem',
+                        {
+                          nativeOn: {
+                            click: name => {
+                              this.modal5 = true
+                              this.activityId = params.row.activityId
+                            }
+                          }
+                        },
+                        '取消'
+                      ),
+                      h(
+                        'DropdownItem',
+                        {
+                          nativeOn: {
+                            click: name => {
+                              if (signup == '关闭报名') {
+                                this.types = 1
+                                this.getactiveclose(params.row.activityId)
+                              } else {
+                                this.types = 2
+                                this.getactiveclose(params.row.activityId)
                               }
                             }
-                          },
-                          "取消"
-                        ),
-                        h(
-                          "DropdownItem",
-                          {
-                            nativeOn: {
-                              click: name => {
-
-                                if (signup == "关闭报名") {
-                                  this.types = 1;
-                                  this.getactiveclose(params.row.activityId);
-                                } else {
-                                  this.types = 2;
-                                  this.getactiveclose(params.row.activityId);
-                                }
-                              }
-                            }
-                          },
-                          signup
-                        )
-                      ]
-                    )
-                  ]
-                )
-              ]);
+                          }
+                        },
+                        signup
+                      )
+                    ]
+                  )
+                ]
+              )
+            ])
           }
         },
         {
-          title: "活动名称",
-          key: "name",
-          align: "center",
-          width:300,
+          title: '活动名称',
+          key: 'activityName',
+          align: 'center',
+          width: 300
         },
         {
-          title: "活动时间",
-          key: "startTime",
-          align:'center',
-          width:240,
-        },
-        {
-          title: "活动类型",
-          key: "typeName",
-          align: "center",
-          width:200,
-        },
-        {
-          title: "状态",
-          key: "status",
-          align: "center",
-          width:200,
-          render: (h, params) => {
-            return h("div", this.activeState[~~params.row.status].name)
+          title: '活动时间',
+          key: 'startTime',
+          align: 'center',
+          width: 240,
+            render: (h, params) => {
+            return h('div', params.row.startTimestamp + '  /  ' + params.row.endAt )
           }
         },
         {
-          title: "是否显示主办方小站",
-          key: "isShowHolder",
-          align: "center",
-          width:200,
+          title: '活动类型',
+          key: 'activityType',
+          align: 'center',
+          width: 200,
+        },
+        {
+          title: '状态',
+          key: 'status',
+          align: 'center',
+          width: 200,
           render: (h, params) => {
-            return h("div", params.row.isShowHolder==1?"是":"否");
+            return h('div', params.row.statusText )
+            // this.activeState[~~params.row.status].name
           }
         },
         {
-          title: "志愿者报名人数",
-          key: "num",
-          align: "center",
-          width:200,
+          title: '是否显示主办方小站',
+          key: 'isShowHolder',
+          align: 'center',
+          width: 200,
+          render: (h, params) => {
+            return h('div', params.row.isShowHolder == 1 ? '是' : '否')
+          }
         },
         {
-          title: "是否下架",
-          key: "statue",
-          align: "center",
-          width:240,
+          title: '志愿者报名人数',
+          key: 'volunteerSignUpCount',
+          align: 'center',
+          width: 200
+        },
+        {
+          title: '是否下架',
+          key: 'statue',
+          align: 'center',
+          width: 240,
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
+            return h('div', [
+              h('i-switch', {
                 props: {
                   value: ~~params.row.status !== 10,
-                  disabled: params.row.status!="10"?false: true
+                  disabled: params.row.status != '10' ? false : true
                 },
-                'on':{
+                on: {
                   'on-change': e => {
                     this.activityId = params.row.activityId
                     this.addstate = true
@@ -400,10 +407,261 @@ export default {
                   }
                 }
               })
-            ]);
+            ])
           }
         }
       ],
+      // columns: [
+      //   {
+      //     type: "selection",
+      //     width: 60,
+      //     align: "center"
+      //   },
+      //   {
+      //     width: 350,
+      //     key: "action",
+      //     align: "center",
+      //     renderHeader:(h,params)=>{
+      //       return h('div',[
+      //         h('span','操作'),
+      //         h('Icon',{
+      //           props:{
+      //             type:'ios-settings-outline'
+      //           },
+      //           style:{
+      //             marginLeft:'5px'
+      //           },
+      //           on:{
+      //             click:()=>{
+      //                this.$Message.info("此功能暂未开放")
+      //               // this.modal3=true
+      //             }
+      //           }
+      //         })
+      //       ])
+      //     },
+      //     render: (h, params) => {
+      //        let signup = "关闭报名";
+      //       if (params.row.status == "13") {
+      //         signup = "开启报名";
+      //       }
+      //       return h("div", [
+      //         h(
+      //           "a",
+      //           {
+      //             clssName: "action",
+      //             style: {
+      //               color: "#FF565A",
+      //               cursor: "pointer"
+      //             },
+      //             on: {
+      //               click: () => {
+      //                 console.log(params.row.activityId);
+      //                 if (
+      //                   params.row.status == 1 ||
+      //                   params.row.status == 2 ||
+      //                   params.row.status == 3 ||
+      //                   params.row.status == 4
+      //                 ) {
+      //                   this.$router.push({
+      //                     name: "volunteer_issue",
+      //                     query: {
+      //                       activityId: params.row.activityId,
+      //                       isEdit: 1,
+      //                       status: params.row.status
+      //                     }
+      //                   });
+      //                 } else {
+      //                   this.$Message.warning("该活动状态不可编辑");
+      //                 }
+      //               }
+      //             }
+      //           },
+      //           "编辑"
+      //         ),
+      //         h(
+      //           "a",
+      //           {
+      //             style: {
+      //               marginRight: "10px",
+      //               marginLeft: "10px",
+      //               color: "#FF565A",
+      //               cursor: "pointer"
+      //             },
+      //             on: {
+      //               click: () => {
+      //                 this.$router.push({
+      //                   name: "profile",
+      //                   query: { acitvityId: params.row.activityId,activityName: params.row.name,sysId:2 }
+      //                 });
+      //               }
+      //             }
+      //           },
+      //           "概况"
+      //         ),
+      //         h(
+      //           "a",
+      //           {
+      //             style: {
+      //               marginRight: "10px",
+      //               marginLeft: "10px",
+      //               color: "#FF565A",
+      //               cursor: "pointer"
+      //             },
+      //             on: {
+      //               click: () => {
+      //                 this.$router.push({ path: "activity_share" });
+      //               }
+      //             }
+      //           },
+      //           "分享"
+      //         ),
+      //         h(
+      //           "a",
+      //           {
+      //             style: {
+      //               marginRight: "10px",
+      //               marginLeft: "10px",
+      //               color: "#FF565A",
+      //               cursor: "pointer"
+      //             },
+      //             on: {
+      //               click: () => {
+      //                 this.$router.push({
+      //                   path: "volunteer_issue",
+      //                   query: { activityId: params.row.activityId,isEdit:4 }
+      //                 });
+      //               }
+      //             }
+      //           },
+      //           "复制"
+      //         ),
+      //         h(
+      //             "Dropdown",
+      //             {
+      //               props: {
+      //                 transfer: true
+      //               }
+      //             },
+      //             [
+      //               h(
+      //                 "a",
+      //                 {
+      //                   style: {
+      //                     color: "#FF565A"
+      //                   }
+      //                 },
+      //                 "更多操作"
+      //               ),
+      //               h(
+      //                 "DropdownMenu",
+      //                 {
+      //                   slot: "list"
+      //                 },
+      //                 [
+      //                   h(
+      //                     "DropdownItem",
+      //                     {
+      //                       nativeOn: {
+      //                         click: name => {
+      //                           this.modal5 = true;
+      //                           this.activityId = params.row.activityId;
+      //                         }
+      //                       }
+      //                     },
+      //                     "取消"
+      //                   ),
+      //                   h(
+      //                     "DropdownItem",
+      //                     {
+      //                       nativeOn: {
+      //                         click: name => {
+
+      //                           if (signup == "关闭报名") {
+      //                             this.types = 1;
+      //                             this.getactiveclose(params.row.activityId);
+      //                           } else {
+      //                             this.types = 2;
+      //                             this.getactiveclose(params.row.activityId);
+      //                           }
+      //                         }
+      //                       }
+      //                     },
+      //                     signup
+      //                   )
+      //                 ]
+      //               )
+      //             ]
+      //           )
+      //         ]);
+      //     }
+      //   },
+      //   {
+      //     title: "活动名称",
+      //     key: "name",
+      //     align: "center",
+      //     width:300,
+      //   },
+      //   {
+      //     title: "活动时间",
+      //     key: "startTime",
+      //     align:'center',
+      //     width:240,
+      //   },
+      //   {
+      //     title: "活动类型",
+      //     key: "typeName",
+      //     align: "center",
+      //     width:200,
+      //   },
+      //   {
+      //     title: "状态",
+      //     key: "status",
+      //     align: "center",
+      //     width:200,
+      //     render: (h, params) => {
+      //       return h("div", this.activeState[~~params.row.status].name)
+      //     }
+      //   },
+      //   {
+      //     title: "是否显示主办方小站",
+      //     key: "isShowHolder",
+      //     align: "center",
+      //     width:200,
+      //     render: (h, params) => {
+      //       return h("div", params.row.isShowHolder==1?"是":"否");
+      //     }
+      //   },
+      //   {
+      //     title: "志愿者报名人数",
+      //     key: "num",
+      //     align: "center",
+      //     width:200,
+      //   },
+      //   {
+      //     title: "是否下架",
+      //     key: "statue",
+      //     align: "center",
+      //     width:240,
+      //     render: (h, params) => {
+      //       return h("div", [
+      //         h("i-switch", {
+      //           props: {
+      //             value: ~~params.row.status !== 10,
+      //             disabled: params.row.status!="10"?false: true
+      //           },
+      //           'on':{
+      //             'on-change': e => {
+      //               this.activityId = params.row.activityId
+      //               this.addstate = true
+      //               this.index = params.index
+      //             }
+      //           }
+      //         })
+      //       ]);
+      //     }
+      //   }
+      // ],
       Article: [
         { value: 10, label: 10 },
         { value: 15, label: 15 },
