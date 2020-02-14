@@ -238,28 +238,15 @@
             </li>
             <li class="first-li">
               <span class="first-span">群二维码</span>
-              <!-- <div>
-                <div class="first-pic" v-if='!oneRole.qrCodeShow'>
-                  <div class="" @click="()=>{ this.$refs.filezt.click()}">
-                    <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
-                    <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
-                  </div>
-                </div>
-                <div class="first-pic" style="border:none" v-else>
-                  <img class="imgs" style="width:283px;height:188px" :src="oneRole.qrCodeShow"/>
-                  <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
-                </div>
-              </div> -->
-              <UploadImg
-                :picMap="qrPic"
-                :max="1"
-                v-model="qrList"
-                :display-width="300"
-                :display-height="300"
-                :crop-width="750"
-                :crop-height="320"
-                ref="refCover"
-              ></UploadImg>
+              <UploadImg 
+               v-model="qrList"
+              :full-url.sync="qrPic" 
+              :editable="false" 
+              :display-width="150" 
+              :display-height="150" 
+              :max="1" 
+              ref="refCover"
+              placeholder="请上传群二维码图片" />
             </li>
             <li class="first-li">
               <span class="first-span">退款设置</span>
@@ -627,8 +614,8 @@ export default {
       region:[],
       teamList:[],
       tcList:[],
-      qrList:[],
-      qrPic:{}
+      qrList:'',
+      qrPic: ''
     };
   },
   mounted() {
@@ -659,8 +646,8 @@ export default {
         this.oneRole.fkDetailList = [{ name: '反馈简介', type: 0},{ name: '上传图片', type: 9, context: 2 }]
       }
     }
-    this.qrList = [this.oneRole.qrCode];
-    this.qrPic = { [this.oneRole.qrCode]: this.oneRole.qrCodeShow };
+    this.qrList = this.oneRole.qrCode;
+    this.qrPic = this.oneRole.qrCodeShow ;
     this.getSignType();
     this.getBatchItem();
   },

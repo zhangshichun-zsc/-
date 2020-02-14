@@ -57,7 +57,7 @@
     </Row>
     <div class="mt-16 card">
       <div class="accept-rule">
-        <Radio v-model="accept" />
+        <Checkbox  v-model="accept" />
         <span>我同意</span>
         <span class="rule-link" @click="() => ruleVisible = true">《活动发布规则》</span>
       </div>

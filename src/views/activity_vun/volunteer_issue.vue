@@ -570,11 +570,16 @@
           <Row class-name="row20">
             <i-col span="3">受益群体人数</i-col>
             <i-col span="5" push="2">
+            
               <Input
-                v-model="args.memberGroupNum"
+                type="number"
+                @on-blur='isNumber'
+                v-model='args.memberGroupNum'
+                
                 placeholder="输入受益群体人数"
                 :disabled="isDisb"
               />
+  
             </i-col>
           </Row>
           <Row
@@ -583,10 +588,10 @@
             justify="center"
             v-if="isEdit == 1 || isEdit == 2 || isEdit == 4"
           >
-            <Radio v-model="single">
+            <Checkbox v-model="single" >
               我同意
               <a @click="showRule">《活动发布规则》</a>
-            </Radio>
+            </Checkbox>
           </Row>
         </i-col>
       </Row>
@@ -780,7 +785,18 @@ export default {
         this.args.pic = newValue || null;
       },
       deep: true
-    }
+    },
+    // 'args.memberGroupNum': {
+    //   handler(newValue, oldValue) {
+    //     console.log(newValue)
+    //     if(newValue < 1 && oldValue!==null){
+    //       console.log(newValue);
+          
+    //       this.args.memberGroupNum = null
+    //     }
+    //   },
+    //   deep: true
+    // },
   },
   created() {
     let isEdit = ~~this.$route.query.isEdit || 2;
@@ -1331,7 +1347,21 @@ export default {
     },
     apply() {
       this.$router.push({ name: "volunteer_apply", params: { sysId: "2,3" } });
-    }
+    },
+    isNumber(){
+     let reg = new RegExp(/^\+?[1-9][0-9]*$/);
+     let value = this.args.memberGroupNum
+      if( value.toString().includes(".")|| 0 > value){
+        this.$Message.error({
+            background: true,
+            content: '请输入大于0的整数！'
+        });   
+        this.args.memberGroupNum = ""
+      }
+    },
+    checkRad(){
+      console.log(this.single)
+    },
   }
 };
 </script>
