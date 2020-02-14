@@ -30,36 +30,19 @@
             <div class="ls-item" v-else-if="item.typeFlag == 3">
               <span class="left">单选</span>
               <RadioGroup v-model="radioactive">
-                <Radio
-                  style="font-size: 14px;"
-                  v-for="(key, index) in radiolist"
-                  disabled
-                  :label="key"
-                  :key="index"
-                ></Radio>
+                <Radio style="font-size: 14px;" v-for="(key, index) in answer" v-if="item[key]" disabled :label="item[key]" :key="index"></Radio>
               </RadioGroup>
             </div>
             <div class="ls-item" v-else-if="item.typeFlag == 4">
               <span class="left">多选</span>
               <CheckboxGroup v-model="checkactive">
-                <Checkbox
-                  disabled
-                  v-for="(key, index) in checklist"
-                  :key="index"
-                  :label="key"
-                ></Checkbox>
+                <Checkbox disabled v-for="(key, index) in answer" v-if="item[key]" :key="index" :label="item[key]"></Checkbox>
               </CheckboxGroup>
             </div>
           </div>
         </div>
         <div style="display: flex;justify-content: center;">
-          <a
-            href="javascript:;"
-            class="queryBtn"
-            style="margin-top: 10px"
-            @click="returnUrl"
-            >确定</a
-          >
+          <a href="javascript:;" class="queryBtn" style="margin-top: 10px" @click="returnUrl">确定</a>
         </div>
       </div>
     </div>
@@ -67,41 +50,41 @@
 </template>
 
 <script>
-import Button from "iview/src/components/button/button";
-import { getFeedDetail } from "@/request/api";
+import Button from 'iview/src/components/button/button'
+import { getFeedDetail } from '@/request/api'
 export default {
   components: { Button },
   data() {
     return {
       navigation1: {
-        head: "活动反馈"
+        head: '活动反馈'
       },
       activityId: null,
       isDisb: true,
-      answer: ["aa", "ab", "ac", "ad", "ae", "af"],
-      sub: ["A", "B", "C", "D", "E", "F"],
+      answer: ['aa', 'ab', 'ac', 'ad', 'ae', 'af'],
+      sub: ['A', 'B', 'C', 'D', 'E', 'F'],
       feed: [],
-      radioactive: "",
+      radioactive: '',
       checkactive: [],
       radiolist: [],
       checklist: []
-    };
+    }
   },
   computed: {
     sign() {
       return (val, i) => {
-        return this.answer.indexOf(i) > -1 && !!val;
-      };
+        return this.answer.indexOf(i) > -1 && !!val
+      }
     },
     setVal() {
       return val => {
-        return val.substr(-1, 1).toUpperCase();
-      };
+        return val.substr(-1, 1).toUpperCase()
+      }
     }
   },
   created() {
-    this.activityId = this.$route.query.activityId;
-    this.getDetail();
+    this.activityId = this.$route.query.activityId
+    this.getDetail()
   },
   methods: {
     returnUrl() {
@@ -110,42 +93,48 @@ export default {
           name: this.$route.query.formURL
         },
         1000
-      );
+      )
     },
     getDetail() {
       getFeedDetail({ activityId: this.activityId }).then(res => {
         if (res.code == 200) {
-          this.feed = res.data;
-          let arr1 = [];
-          let arr2 = [];
-          if (res.data.length == 0) return;
-          res.data[1].forEach(item => {
-            if (item.typeFlag == 3) {
-              // 单选
-              this.answer.forEach(key => {
-                if (item[key]) {
-                  arr1.push(item[key]);
-                }
-              });
-            }
-            if (item.typeFlag == 4) {
-              // 多选
-              this.answer.forEach(key => {
-                if (item[key]) {
-                  arr2.push(item[key]);
-                }
-              });
-            }
-          });
-          this.radiolist = arr1;
-          this.checklist = arr2;
+          this.feed = res.data
+          // let arr1 = []
+          // let arr2 = []
+          // if (res.data.length == 0) return
+          // let data = res.data
+
+          // console.log( JSON.stringify(data));
+
+          // data.map(key => {
+          //   key.forEach(item => {
+          //     if (item.typeFlag == 3) {
+          //       // 单选
+          //       this.answer.forEach(key => {
+          //         if (item[key]) {
+          //           arr1.push(item[key])
+          //         }
+          //       })
+          //     }
+          //     if (item.typeFlag == 4) {
+          //       // 多选
+          //       this.answer.forEach(key => {
+          //         if (item[key]) {
+          //           arr2.push(item[key])
+          //         }
+          //       })
+          //     }
+          //   })
+          // })
+          // this.radiolist = arr1
+          // this.checklist = arr2
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .con {
