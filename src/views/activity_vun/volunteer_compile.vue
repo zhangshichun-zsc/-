@@ -553,13 +553,16 @@ export default {
     dealData(){
        this.i =  this.$route.query.i
        let data = JSON.parse(sessionStorage.getItem("data"))
+
        this.isDisb = data.isDisb
        this.isEdit = data.isEdit
-       if(this.i !== -1){
+       if(this.i != -1){
           let args = Object.assign(this.args,data.args.coActivityUserConfParamList[this.i])
           this.args = args
           this.forList()
           this.signItem()
+       } else {
+         this.args.coActivityItemList = [...data.args.coActivityItemList]
        }
     },
     forDisable(name,list,nms,arr){

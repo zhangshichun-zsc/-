@@ -16,7 +16,7 @@
           <Col span="12">
           <FormItem label="招募岗位" prop="userPosition">
             <Select :disabled="isFormDisabled" v-model="form.userPosition" placeholder="请选择招募岗位">
-              <Option v-for="item in signPostList" :value="item.dicId" :key="item.name" @click.native="getPost(item)">{{ item.name }}</Option>
+              <Option v-for="(item, index) in signPostList" :value="item.dicId" :key="item.dicId" @click.native="getPost(item)">{{ item.name }}</Option>
             </Select>
           </FormItem>
           <FormItem label="模式" prop="zmType">

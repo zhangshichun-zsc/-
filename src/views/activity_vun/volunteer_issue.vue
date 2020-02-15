@@ -773,9 +773,7 @@ export default {
   components: { wangeditor, adress, XDatePicker },
   watch: {
     cover: {
-      handler(newValue, oldValue) {
-        console.log(newValue);
-        
+      handler(newValue, oldValue) { 
         this.args.coverPic = newValue || null;
       },
       deep: true
@@ -786,17 +784,6 @@ export default {
       },
       deep: true
     },
-    // 'args.memberGroupNum': {
-    //   handler(newValue, oldValue) {
-    //     console.log(newValue)
-    //     if(newValue < 1 && oldValue!==null){
-    //       console.log(newValue);
-          
-    //       this.args.memberGroupNum = null
-    //     }
-    //   },
-    //   deep: true
-    // },
   },
   created() {
     let isEdit = ~~this.$route.query.isEdit || 2;
@@ -841,7 +828,11 @@ export default {
       if (!this.activityId || !!data) return;
       getActiveRelse({ activityId: this.activityId }).then(res => {
         if (res.code == 200) {
-          let args = Object.assign(this.args, res.data);
+          let args ={
+            ...this.args,
+            ...res.data
+          } 
+          // Object.assign(this.args, res.data);
           let add = !!args.memberGroupNum ? true : false;
           this.args = args;
           this.args.startAt =
@@ -849,9 +840,9 @@ export default {
           this.args.endAt = this.isEdit == 4 ? null : res.data.endAt + ":00";
 
           this.zhaStart =
-            this.isEdit == 4 ? null : res.data.enrollStarttime + ":00" || null;
+            this.isEdit == 4 ? null : (res.data.enrollStarttime?res.data.enrollStarttime+":00": null ) ;
           this.zhaEnd =
-            this.isEdit == 4 ? null : res.data.enrollEndtime + ":00" || null;
+            this.isEdit == 4 ? null : (res.data.enrollEndtime? res.data.enrollEndtime + ":00" : null);
           this.judge = res.data.result || "";
           this.isFeedback = ~~res.data.isFeedback || 0;
           this.isTrain = ~~res.data.isTrain || 0;
@@ -865,9 +856,16 @@ export default {
           // END
 
           this.add = add;
-          let arr = res.data.address.split("-");
-          let i = res.data.address.indexOf(res.data.addressSup);
-          this.args.address = res.data.address.substr(0, i - 1);
+
+          // 地址
+
+          if(res.data.address) {
+            let address = res.data.address
+            let str = address.indexOf("-")? address.split("-")[0]: res.data.address
+            this.args.address = str
+          }
+       
+
           if (this.isEdit === 4) {
             this.args.status = 1;
           }
@@ -909,13 +907,18 @@ export default {
     },
     separation() {
       let args = this.args;
-      (this.train = args.trainComments || null),
-        (this.feed = args.coDetailList);
+      this.train = args.trainComments || null
+      this.feed = []
+      if(args.coDetailList){
+        this.feed = [...args.coDetailList]
+      }
+   
       this.spliced();
     },
     spliced() {
       if (this.isEdit !== 2) {
         let itemList = this.feed;
+        if(!itemList) return
         for (let item of itemList) {
           if (
             (~~item.targetType === 3 || ~~item.targetType === 4) &&
@@ -1292,6 +1295,8 @@ export default {
       if (this.isEdit == 4) delete item.activityId;
       let obj = filterNull(item);
       obj.title = obj.name;
+
+      console.log(obj)
       saveActive(obj).then(res => {
         this.once = false;
         if (res.code == 200) {

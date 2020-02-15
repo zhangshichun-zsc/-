@@ -346,7 +346,7 @@ export default {
         },
         {
           title: '状态',
-          key: 'status',
+          key: 'statusText',
           align: 'center',
           width: 200,
           render: (h, params) => {
@@ -370,16 +370,16 @@ export default {
           width: 200
         },
         {
-          title: '是否下架',
-          key: 'statue',
+          title: '是否上架',
+          key: 'statusText',
           align: 'center',
           width: 240,
           render: (h, params) => {
             return h('div', [
               h('i-switch', {
                 props: {
-                  value: ~~params.row.status !== 10,
-                  disabled: params.row.status != '10' ? false : true
+                  value: params.row.statusText !== '下架',
+                  disabled: params.row.statusText == '下架' ? true : false
                 },
                 on: {
                   'on-change': e => {

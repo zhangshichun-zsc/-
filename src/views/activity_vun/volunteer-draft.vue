@@ -184,7 +184,7 @@ export default {
       .then(res=>{
         this.$Message.success('删除成功！')
          // TODO 重新拉取数据
-        this.getDraftList()
+        this.getactiveManager()
       }) 
     },
     changepages(e){
