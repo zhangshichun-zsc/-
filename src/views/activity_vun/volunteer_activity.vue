@@ -180,19 +180,30 @@ export default {
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.activityId)
-                      if (
-                        params.row.status == 1 ||
-                        params.row.status == 2 ||
-                        params.row.status == 3 ||
-                        params.row.status == 4
-                      ) {
+                     
+                     let arr =[
+                       "待招募",
+                       "待审核", 
+                     ]
+                     let arr2 =[
+                       "招募中",
+                       "待开始"
+                     ]
+                      let status = null
+                      let statusText = params.row.statusText
+                      if( arr.includes(statusText)){
+                        status = 1
+                      }else if(arr2.includes(statusText)) {
+                        status = 3
+                      }
+                      if (status ) {
+                       
                         this.$router.push({
                           name: 'volunteer_issue',
                           query: {
                             activityId: params.row.activityId,
-                            isEdit: 1,
-                            status: params.row.status
+                            isEdit: 1,// 所有可修改
+                            status: status
                           }
                         })
                       } else {

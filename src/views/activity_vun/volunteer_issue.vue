@@ -458,7 +458,7 @@
                       :disabled="isDisb"
                       :true-value="1"
                       :false-value="0"
-                      v-model="item.detailText"
+                      v-model="~~item.detailText"
                     />
                   </i-col>
                 </Row>
@@ -542,13 +542,14 @@
                   </Row>
                   <Row>
                     <i-col push="8" span="2">
-                      <Button
+                    
+                       <Button
                         type="primary"
                         ghost
                         @click="addSignIput(index)"
-                        v-if="!isDisb"
-                        >+</Button
-                      >
+                        v-if="item.arr.length <6 && !isDisb"
+                        >+</Button>
+
                     </i-col>
                   </Row>
                 </Row>
@@ -603,7 +604,7 @@
               shape="circle"
               size="large"
               class="left"
-              v-if="isEdit == 2 || isEdit == 3"
+              v-if="isEdit == 2 || isEdit == 3 || isEdit == 4"
               >存为草稿</Button
             >
             <Button
@@ -770,6 +771,7 @@ export default {
     if (to.name !== "volunteer_compile") sessionStorage.removeItem("data");
     next();
   },
+
   components: { wangeditor, adress, XDatePicker },
   watch: {
     cover: {
@@ -784,6 +786,11 @@ export default {
       },
       deep: true
     },
+    // $route(to,from){
+    //   if(to.path==from.path && from.query.activityId){
+    //     sessionStorage.removeItem("data");  
+    //   }
+    // } 
   },
   created() {
     let isEdit = ~~this.$route.query.isEdit || 2;
@@ -801,9 +808,7 @@ export default {
     this.initData();
     this.getRelse();
   },
-  beforeDestroy() {
-    console.log(111);
-  },
+
   methods: {
     changeTeam(e) {
       this.args.ownerUserId = null;
@@ -861,7 +866,7 @@ export default {
 
           if(res.data.address) {
             let address = res.data.address
-            let str = address.indexOf("-")? address.split("-")[0]: res.data.address
+            let str = address.indexOf("-")?( address.split("-")[0]=="null"? null :address.split("-")[0]): res.data.address
             this.args.address = str
           }
        

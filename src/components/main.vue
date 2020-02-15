@@ -362,7 +362,7 @@
           </Sider>
           <Layout>
             <Content class="main-content">
-              <router-view />
+              <router-view  :key="$route.fullPath"/>
             </Content>
           </Layout>
         </Layout>
