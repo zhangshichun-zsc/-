@@ -94,15 +94,16 @@ export default {
            * ! 将数据保存在vux中
            */
           this.$store.commit("setToken", { ...res.data });
-          this.gethomepage(res.data.userId);
+          this.gethomepage(res.data.userId, res.data.token);
         } else {
           this.$Message.info("密码或账号不正确!");
         }
       });
     },
-    gethomepage(userId) {
+    gethomepage(userId, token) {
       homepage({
-        userId
+        userId,
+        token
       }).then(res => {
         if (res.code == 200) {
           if (res.data.length > 0) {

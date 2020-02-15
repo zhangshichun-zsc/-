@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       navigation1: {
-        head: "草稿箱(会员)"
+        head: "草稿箱(志愿者)"
       },
       columns: [
         {

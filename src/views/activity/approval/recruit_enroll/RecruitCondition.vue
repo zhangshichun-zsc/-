@@ -1495,6 +1495,8 @@ export default {
     // 获取招募岗位
     async getSignPost() {
       const res = await signPost({ roleId: this.form.roleId, name: this.form.roleName })
+      console.log(res.data.voluJobs);
+      
       this.signPostList = res.data.voluJobs || []
       if (this.signPostList.length) {
         this.form.userPosition = this.signPostList[0].dicId

@@ -119,7 +119,7 @@
                       :display-height="120"
                       :crop-width="128"
                       :crop-height="128"
-                      :disabled="cover.length !== 0 && isDisb"
+                      :disabled=" isDisb"
                       ref="refCover"
                     ></UploadImg>
                    
@@ -136,7 +136,7 @@
                       :display-width="300"
                       :crop-width="750"
                       :crop-height="320"
-                      :disabled="image.length !== 0 && isDisb"
+                      :disabled="isDisb"
                       ref="refImags"
                     ></UploadImg>
                   </div>
@@ -174,18 +174,7 @@
                     @on-open-change="successOk(0, $event)"
                     format="yyyy-MM-dd HH:mm"
                   ></XDatePicker>
-                  <!-- <DatePicker
-                    :value="args.startAt"
-                    type="datetime"
-                    :options="options"
-                    placeholder="开始时间"
-                    :disabled="isDisb"
-                    confirm
-                    style="width: 150px"
-                    @on-change="handleChange(0, 'startAt', $event)"
-                    @on-open-change="successOk(0, $event)"
-                    format="yyyy-MM-dd HH:mm"
-                  /> -->
+                  
                   <i>&nbsp;~&nbsp;</i>
                   <XDatePicker
                     :value="args.endAt"
@@ -194,6 +183,7 @@
                     @on-change="handleChange(0, 'endAt', $event)"
                     @on-open-change="successOk(1, $event)"
                     confirm
+                    :disabled="isDisb"
                     style="width: 170px"
                     format="yyyy-MM-dd HH:mm"
                   ></XDatePicker>
@@ -458,7 +448,7 @@
                       :disabled="isDisb"
                       :true-value="1"
                       :false-value="0"
-                      v-model="~~item.detailText"
+                      v-model="item.detailText"
                     />
                   </i-col>
                 </Row>
@@ -786,6 +776,33 @@ export default {
       },
       deep: true
     },
+    isFeedback(newValu, oldValue){
+      if(newValu==1 && this.feed.length<1){
+        // 编辑状态下进来，没有任何数据
+        let arr = [
+          {
+            detailText:null,
+            isMust:2,
+            sort:1,
+            sysId:2,
+            targetType:3,
+            typeFlag:0,
+
+          },
+          {
+          detailText:0,
+          isMust:2,
+          sort:2,
+          sysId:2,
+          targetType:3,
+          typeFlag:9,
+
+          }
+
+        ]
+        this.feed=[...arr]
+      }
+    }
     // $route(to,from){
     //   if(to.path==from.path && from.query.activityId){
     //     sessionStorage.removeItem("data");  
