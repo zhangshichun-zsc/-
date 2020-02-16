@@ -422,9 +422,11 @@ export default {
                               if (signup == "关闭报名") {
                                 this.types = 1;
                                 this.getactiveclose(params.row.acitvityId);
+                           
                               } else {
                                 this.types = 2;
                                 this.getactiveclose(params.row.acitvityId);
+                                
                               }
                             }
                           }
@@ -758,6 +760,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
+        this.getactiveManager();
       });
     },
     // 设置模板

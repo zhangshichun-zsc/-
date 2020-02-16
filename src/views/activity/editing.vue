@@ -62,8 +62,8 @@
                 </div> -->
                 <UploadImg
                   :max="1"
-                  v-model="fmList"
-                  :full-url.sync="fmPic"
+                  v-model="batch.actCoverPic"
+                  :full-url.sync="batch.actCoverShowPic"
                   :display-width="120"
                   :display-height="120"
                   :crop-width="128"
@@ -73,24 +73,10 @@
               </li>
               <li class="first-li">
                 <span class="first-span">主题图片</span>
-                <!-- <div>
-                  <div class="first-pic" v-if='!batch.actShowPic'>
-                    <div class="" @click="()=>{ this.$refs.filezt.click()}">
-                      <input type="file"  accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filezt" @change="uploadActFile()" style="display:none" >
-                      <Icon type="md-cloud-upload" :size='36' color="#FF565A"/>
-                    </div>
-                  </div>
-                  <div class="first-pic" style="border:none" v-else>
-                    <img style="width:100%;height:100%" :src="batch.actShowPic"/>
-                    <Icon type="ios-trash" class="cancel" @click="cancelActImg()" color='#FF565A' size='26'/>
-                  </div>
-                </div> -->
-                
                 <UploadImg
-              
                   :max="1"
-                  v-model="ztList"
-                  :full-url.sync="ztPic"
+                  v-model="batch.actPic"
+                  :full-url.sync="batch.actShowPic"
                   :display-width="300"
                   :crop-width="750"
                   :crop-height="320"
@@ -461,8 +447,6 @@ export default {
           delete this.batch.startT
           delete this.batch.endT
           delete this.batch.releaseTime
-          this.uploadActFmFilefz(this.batch.actCoverPic)
-          this.uploadActFilefz(this.batch.actPic)
           for(let oi in this.batch.userConfList){
             delete this.batch.userConfList[oi].enrollStarttime
             delete this.batch.userConfList[oi].enrollEndtime
@@ -509,6 +493,7 @@ export default {
             }
           });
         }else{
+
           this.batch.type = this.$route.query.type
           projectEdit(this.batch).then(res => {
             console.log(res);
@@ -551,60 +536,8 @@ export default {
         }
       });
     },
-    uploadActFmFile() {
-      let file = this.$refs.filefm.files[0];
-      const dataForm = new FormData();
-      dataForm.append("file", file);
-      upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          console.log(e);
-          this.$set(this.batch, "actCoverShowPic", e.target.result);
-          this.$set(this.batch, "actCoverPic", res.data);
-        };
-      });
-    },
-    uploadActFmFilefz(path) {
-      uploadCopy({path:path}).then(res => {
-        this.$set(this.batch, "actCoverShowPic", res.data.relPath);
-        this.$set(this.batch, "actCoverPic", res.data.path);
-      });
-    },
-    cancelActFmImg() {
-      orgimgdel({ path: this.batch.actPic }).then(res => {
-        this.batch.actCoverShowPic = null;
-        this.batch.actCoverPic = null;
-        this.$Message.success("删除成功");
-      });
-    },
-    uploadActFile() {
-      let file = this.$refs.filezt.files[0];
-      const dataForm = new FormData();
-      dataForm.append("file", file);
-      upload(dataForm).then(res => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          console.log(e);
-          this.$set(this.batch, "actShowPic", e.target.result);
-          this.$set(this.batch, "actPic", res.data);
-        };
-      });
-    },
-    uploadActFilefz(path) {
-      uploadCopy({path:path}).then(res => {
-        this.$set(this.batch, "actShowPic", res.data.relPath);
-        this.$set(this.batch, "actPic", res.data.path);
-      });
-    },
-    cancelActImg() {
-      orgimgdel({ path: this.batch.actPic }).then(res => {
-        this.batch.actShowPic = null;
-        this.batch.actPic = null;
-        this.$Message.success("删除成功");
-      });
-    },
+
+
     //现场负责人列表
     getLeaderList(e) {
       console.log(this.batch.ownerUserName);

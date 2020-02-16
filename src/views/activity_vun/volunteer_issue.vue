@@ -1205,7 +1205,7 @@ export default {
             !!this.zhaStart &&
             new Date(this.zhaStart).getTime() >= new Date(this.zhaEnd).getTime()
           ) {
-            this.$Message.warning("活动开始时间要早于活动结束时间");
+            this.$Message.warning("招募开始时间要早于招募结束时间");
             this.zhaEnd = "";
           } else if (
             !!this.args.startAt &&

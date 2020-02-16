@@ -37,9 +37,9 @@
           <div class="flex-center-start">
             <span class="names">活动日期:</span>
             <div>
-              <Date-picker type="date" placeholder="选择日期" style="width: 200px" @on-change="handleChange('startT',$event)"></Date-picker>
+              <Date-picker type="date" format="yyyy-MM-dd" placeholder="选择日期" style="width: 200px" @on-change="handleChange('startT',$event)"></Date-picker>
               <span>~</span>
-              <Date-picker type="date" placeholder="选择日期" style="width: 200px" @on-change="handleChange('endT',$event)"></Date-picker>
+              <Date-picker type="date" format="yyyy-MM-dd" placeholder="选择日期" style="width: 200px" @on-change="handleChange('endT',$event)"></Date-picker>
             </div>
           </div>
           <div class="flex-center-start">
@@ -573,11 +573,11 @@ export default {
           this.$Message.info('开始时间应该小于结束时间')
           return
         } else if (new Date(this.query.startT).getTime() == new Date(this.query.endT).getTime()) {
-          this.startT = new Date(this.query.startT + ' 00:00:00').getTime()
-          this.endT = new Date(this.query.endT + ' 23:59:59').getTime()
+          this.startT = this.query.startT + ' 00:00:00'
+          this.endT = this.query.endT + ' 23:59:59'
         } else {
-          this.startT = new Date(this.query.startT).getTime()
-          this.endT = new Date(this.query.endT).getTime()
+           this.startT = this.query.startT + ' 00:00:00'
+          this.endT = this.query.endT + ' 23:59:59'
         }
       } else if (
         (!!this.query.startT && !this.query.endT) ||
