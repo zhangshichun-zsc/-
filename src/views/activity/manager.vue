@@ -505,7 +505,9 @@ export default {
           align: "center",
           width: 300,
           render: (h, params) => {
-            return h("div", formatDate(params.row.startTimestamp));
+            let startTimestamp = formatDate(params.row.startTimestamp)
+            let endAt = params.row.endAt
+            return h("div",startTimestamp + ' / '+ endAt );
           }
         },
         {

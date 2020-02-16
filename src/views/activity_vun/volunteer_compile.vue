@@ -55,7 +55,7 @@
       <Row class-name="row">
         <i-col span='3'><span>招募数量：</span></i-col>
         <i-col span='4'>
-          <i-input v-model="args.recruitNum" type="number" :disabled="isDisb" />
+          <i-input v-model="args.recruitNum" type="number" :disabled="isDisb" @on-blur='isNumber' @change="isNumber"/>
         </i-col>
       </Row>
       <Row class-name="row" v-if='args.zmType==2'>
@@ -271,6 +271,7 @@ import { constants, truncate } from 'fs'
 export default {
   data() {
     return {
+      TimeId:null,
       navigation1: {
         head: '志愿者编辑招募报名项(志愿者)'
       },
@@ -622,6 +623,17 @@ export default {
         }
       }
     },
+    isNumber(){
+      // 招募数量
+     let value = this.args.recruitNum
+      if( value.toString().includes(".")|| 0 > value){
+        this.$Message.error({
+            background: true,
+            content: '请输入大于0的整数！'
+        });   
+        this.args.recruitNum = ""
+      }
+    },
     getMap(e) {
       this.args.provinceId = e.provinceId
       this.args.cityId = e.cityId
@@ -631,9 +643,16 @@ export default {
       this.$set(this.args, 'setAddr', e.address)
     },
     success() {
+      // 节流阀
+      if(this.timeId) return
+      this.timeId = true
+      setTimeout(()=>{
+        this.timeId = false
+      },2000)
+      // end
       let args = this.args
       if (!args.userPosition) {
-        this.$Message.warning('岗位或没填')
+        this.$Message.warning('岗位没填')
         return
       } else if (!args.zmType) {
         this.$Message.warning('模式没填')

@@ -166,7 +166,7 @@ export default {
           },
           render: (h, params) => {
             let signup = '关闭报名'
-            if (params.row.status == '13') {
+            if (params.row.statusText == '关闭报名') {
               signup = '开启报名'
             }
             return h('div', [
@@ -477,7 +477,12 @@ export default {
         channel: 2
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info('关闭成功')
+          if(this.types == 1){
+             this.$Message.info('关闭成功')
+          }else{
+            this.$Message.info('开启成功')
+          }
+         this.getactiveManager()
         } else {
           this.$Message.error(res.msg)
         }
