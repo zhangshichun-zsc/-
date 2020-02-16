@@ -83,10 +83,7 @@ export default {
       },
       formValidate: {
         name: "",
-        number:
-          this.$store.state.tel && this.$store.state.tel !== "undefined"
-            ? this.$store.state.tel
-            : "",
+        number:"",
 
         oldPassword: "",
         newPassword: "",
@@ -129,6 +126,7 @@ export default {
       }
       queryUserDetail({ userId: userId }).then(res => {
         this.formValidate.name = res.data.userName;
+        this.formValidate.number = res.data.tel;
         this.picMap =  res.data.avatarPath ;
         this.picUrl = res.data.avatar;
       });
