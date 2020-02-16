@@ -24,6 +24,8 @@
             <InputNumber
               v-model="form.budget"
               placeholder="请输入活动预算金额"
+              :min='0'
+              @on-blur="isNumber"
             />
           </FormItem>
           <FormItem label="项目周期" prop="startT">
@@ -449,6 +451,16 @@ export default {
         } else {
           this.form.partnerList.push(clone);
         }
+      }
+    },
+    isNumber() {
+      let value = this.form.budget
+      if (value.toString().includes('.') || 0 > value) {
+        this.$Message.error({
+          background: true,
+          content: '请输入大于0的整数！'
+        })
+        this.form.budget = 0
       }
     },
     // 弹框

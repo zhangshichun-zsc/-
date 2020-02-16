@@ -349,7 +349,7 @@
 
             </i-col>
           </Row>
-          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2 || isEdit == 4">
+          <Row class-name="row20" type="flex" justify="center" v-if="isEdit == 1 || isEdit == 2 || isEdit == 3 || isEdit == 4">
             <Checkbox v-model="single"></Checkbox>
               <span>我同意</span>
               <a @click="showRule">《活动发布规则》</a>
@@ -551,11 +551,6 @@ export default {
         this.feed = [...arr]
       }
     }
-    // $route(to,from){
-    //   if(to.path==from.path && from.query.activityId){
-    //     sessionStorage.removeItem("data");
-    //   }
-    // }
   },
   created() {
     let isEdit = ~~this.$route.query.isEdit || 2
@@ -1000,16 +995,6 @@ export default {
       }, 2000)
       // end
   
-      let value = this.args.memberGroupNum
-      if (value.toString().includes('.') || 0 > value) {
-        this.$Message.error({
-          background: true,
-          content: '请输入大于0的整数！'
-        })
-        this.args.memberGroupNum = ''
-        return
-      }
-   
 
       let item = this.args
       if (i == 1) {

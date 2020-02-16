@@ -131,6 +131,7 @@ import {
   auditCreateCoOrg,
   orggetAuditList
 } from "@/request/api";
+
 export default {
   data() {
     return {
@@ -442,6 +443,16 @@ export default {
   methods: {
     //标签分页
     getorgpage() {
+      
+      let startAt =''
+      let endAt =''
+      if(this.startAt) {
+        startAt = this.startAt.getTime()
+      }
+      if(this.endAt){
+        let str = this.util.formatDate_time(this.endAt.getTime())+" 23:59:59"
+        endAt = new Date(str).getTime()
+      }
       let fromobj = this.util.remove({
         page: {
           page: this.page,
@@ -449,8 +460,8 @@ export default {
         },
         userId: this.userId,
         orgName: this.orgName,
-        startAt: this.startAt ? this.startAt.getTime() : "",
-        endAt: this.endAt ? this.endAt.getTime() : ""
+        startAt: startAt,
+        endAt: endAt 
       });
       if (this.navigation1.name === "parent") {
         let status = "";
@@ -458,6 +469,8 @@ export default {
           status = "";
         } else if (this.orgStatus === "0,3") {
           status = "0";
+        }else {
+          status = this.orgStatus
         }
 
         orggetAuditList(this.util.remove({ ...fromobj, status: status })).then(
