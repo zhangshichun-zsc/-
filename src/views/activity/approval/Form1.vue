@@ -46,21 +46,14 @@
             <Input v-model="form.batchObjective" placeholder="请输入活动目的" />
           </FormItem>
           <FormItem label="主题图片" prop="batchPic">
-            <!-- <UploadImg :max="1"
-              v-model="form.batchPic"
-              :full-url.sync="form.batchPicShow"
-              placeholder="请上传主题图片"
-              :display-width="320"
-              :ratio="868/240"
-              resizable /> -->
             <UploadImg
               :max="1"
               v-model="form.batchPic"
               :full-url.sync="form.batchPicShow"
               placeholder="请上传主题图片"
-              :display-width="320"
-              :crop-width="750"
-              :crop-height="320"
+              :display-width="160" 
+              :crop-width="256"
+              :crop-height="256"
             />
           </FormItem>
           <FormItem label="小组归属" prop="orgId">
@@ -481,6 +474,7 @@ export default {
     // 前置数据
     projectItem({ userId: this.userId }).then(res => {
       this.baseData = res.data;
+      console.log(res.data)
     });
     // 协议类型
     partner().then(res => {
