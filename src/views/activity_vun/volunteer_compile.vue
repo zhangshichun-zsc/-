@@ -159,7 +159,7 @@
       <Row class-name="row">
         <i-col span='3'>岗位职责</i-col>
         <i-col span='12'>
-          <i-input placeholder="请输入岗位职责" v-model="args.positionComments" :disabled="isDisb" type='textarea' :rows='4' />
+          <i-input placeholder="请输入岗位职责" :autosize="{minRows: 4,maxRows: 4}" v-model="args.positionComments" :disabled="isDisb" type='textarea' :rows='4' />
         </i-col>
       </Row>
       <Row class-name="row">
@@ -245,8 +245,8 @@
       <Row class-name="row">
         <i-col span='3'><span>集合地址</span></i-col>
         <i-col span='4'>
-          <Button @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
-          <Input v-model="args.addressSup" placeholder="请输入详细地址" :disabled="isDisb" />
+          <Button  :disabled="onlineFlag==0? true:false" @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+          <Input  v-model="args.addressSup" placeholder="请输入详细地址" :disabled="isDisb||onlineFlag==0? true:false" />
         </i-col>
       </Row>
       <Row>
@@ -299,6 +299,7 @@ export default {
         { name: '多选问题', type: 4 }
       ],
       array: [],
+      onlineFlag:null,
       args: {
         userPositionName: null,
         userPosition: null,
@@ -540,6 +541,7 @@ export default {
 
       this.isDisb = data.isDisb
       this.isEdit = data.isEdit
+      this.onlineFlag = data.args.onlineFlag
       if (this.i != -1) {
         let args = Object.assign(this.args, data.args.coActivityUserConfParamList[this.i])
         this.args = args

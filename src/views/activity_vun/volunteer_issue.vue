@@ -229,6 +229,21 @@
                     format="yyyy-MM-dd HH:mm"
                   ></XDatePicker>
                 </li>
+                <li class="flex-start">
+                  <span>活动方式</span>
+                  <div class="tipsBox">
+                     <div>
+                          <RadioGroup vertical v-model="args.onlineFlag">
+                          <Radio label="0" :disabled="isDisb">线上活动</Radio>
+                          <Radio label="1" :disabled="isDisb">线下活动</Radio>
+                        </RadioGroup>
+                      </div>
+                      <div class='tips'>
+                          <p>通过网络举办的活动！</p>
+                          <p>在某个地理位置举办的活动！</p>
+                      </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -240,13 +255,14 @@
                 <li class="flex-start">
                   <span>活动地址</span>
                   <div>
-                    <Button @click="getAdr" class="adr">{{
+                    <Button @click="getAdr" class="adr" :disabled="args.onlineFlag==0? true:false">{{
                       args.address == null ? "点击选中地址" : args.address
-                    }}</Button>
+                    }}
+                    </Button>
                     <Input
                       v-model="args.addressSup"
                       placeholder="请输入详细地址"
-                      :disabled="isDisb"
+                      :disabled="isDisb || args.onlineFlag==0? true:false"
                     />
                   </div>
                 </li>
@@ -709,6 +725,7 @@ export default {
         "Q"
       ],
       args: {
+        onlineFlag: null,
         isNeedCertMould: null,
         name: null,
         pic: null,
@@ -1191,6 +1208,8 @@ export default {
           ) {
             this.$Message.warning("活动开始时间要晚于招募结束时间");
             this.$set(this.args, "startAt", "");
+          } else if(!this.args.onlineFlag){
+            this.$Message.warning("请选择活动方式");
           }
         } else if (m == 1 && !!this.args.endAt) {
           if (new Date(this.args.endAt).getTime() < new Date().getTime()) {
@@ -1442,6 +1461,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .tipsBox{
+    display: flex;
+  }
+  .tips{
+      display: flex;
+      flex-direction: column;
+      align-items: baseline;
+      justify-content: space-around;
+  }
 .content {
   background: #fff;
   padding: 20px 0;
@@ -1458,6 +1486,8 @@ export default {
       margin-left: 10px;
     }
   }
+
+
   //活动发布内容
   .publish-content {
     background: #ffffff;
