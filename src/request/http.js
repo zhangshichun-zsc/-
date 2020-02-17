@@ -21,7 +21,7 @@ const SERVICE_URL = {
     "https://rhzg.co-inclusion.org/rhzg-web",  //7 生产环境
     "https://rhzguat.co-inclusion.org/rhzg-web"  //8 UAT环境
   ],
-  API_INDEX: 0
+  API_INDEX: 7
 }
 
 export const SERVER_URl = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX]
