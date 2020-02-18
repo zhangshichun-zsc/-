@@ -380,8 +380,9 @@ export default {
 
     //协议分页列表
     getAgreementList() {
-      AgreementList({}).then(res => {
-        // console.log(res);
+      AgreementList({
+        sysType:1
+      }).then(res => {
         if (res.code == 200) {
           this.locations = res.data;
         }

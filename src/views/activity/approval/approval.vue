@@ -42,7 +42,7 @@ export default {
         }
         this.getDraftsDetail(this.$route.query.batchId)
         if(this.$route.query.currentStep){
-          this.currentStep = this.$route.query.currentStep
+          this.currentStep = ~~this.$route.query.currentStep
         }
       }
     },

@@ -730,7 +730,9 @@ export default {
         }
       });
     },
-
+     handleChange(name, e) {
+      this.query[name] = e
+    },
     //取消
     getactivecancel() {
       activecancel({
@@ -851,7 +853,7 @@ export default {
           this.endT = new Date(this.query.endT + " 23:59:59").getTime();
         } else {
           this.startT = new Date(this.query.startT).getTime();
-          this.endT = new Date(this.query.endT).getTime();
+          this.endT = new Date(this.query.endT + " 23:59:59").getTime();
         }
       } else if (
         (!!this.query.startT && !this.query.endT) ||
