@@ -449,9 +449,10 @@
                 <p
                   style="padding:0; width:70%;"
                   class="disorderTypelist-item "
-                  v-for="item in parameOBJ.memInfo.childsInfo.length > 0
+                  v-for="(item, index) in parameOBJ.memInfo.childsInfo.length > 0
                     ? (parameOBJ.memInfo.childsInfo[0].disorderType?parameOBJ.memInfo.childsInfo[0].disorderType.split(','):'')
                     : ['暂无']"
+                    :key=""
                 >
                   {{ item }}
                 </p>
@@ -503,6 +504,7 @@
             <div v-show="moreChildren">
               <Form
                 v-for="(item, index) in parameOBJ.memInfo.childsInfo"
+                :key="index"
                 :label-width="140"
                 style="padding: 0.5rem"
                 label-position="left"
@@ -540,9 +542,10 @@
                         0
                     "
                     class="disorderTypelist-item "
-                    v-for="item in parameOBJ.memInfo.childsInfo[
+                    v-for="(item,index) in parameOBJ.memInfo.childsInfo[
                       index
                     ].disorderType.split(',')"
+                    :key="index"
                     >{{ item }}</span
                   >
                   <span v-else class="disorderTypelist-item">无</span>

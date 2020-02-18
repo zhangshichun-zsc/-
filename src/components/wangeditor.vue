@@ -157,9 +157,9 @@ export default {
 
     // 获取富文本内容
     this.editor.txt.html(this.labels)
-
+    
     if(this.disabled){
-      this.editor.textElem.attr('contenteditable', false)
+      this.editor.$textElem.attr('contenteditable', false)
     }
   },
   methods: {

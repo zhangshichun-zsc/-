@@ -300,7 +300,7 @@
           <Col style="margin-bottom:10px;">活动详情</Col>
           <Col>
             <wangeditor
-              :disabled="true"
+              :disabled="status && status ===3"
               :labels="batch.detail"
               id="ed1"
               @change="changeEditorTrain"
