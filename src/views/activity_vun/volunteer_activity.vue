@@ -197,7 +197,6 @@ export default {
                         status = 3
                       }
                       if (status ) {
-                       
                         this.$router.push({
                           name: 'volunteer_issue',
                           query: {

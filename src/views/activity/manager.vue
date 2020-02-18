@@ -11,76 +11,39 @@
       <p class="head">会员二维码</p>
       <div class="start-wap">
         <div class="upload shae" v-if="memQrCodeShow == null">
-          <div
-            class="file "
-            @click="
+          <div class="file " @click="
               () => {
                 this.$refs.filess.click();
               }
-            "
-          >
-            <input
-              type="file"
-              accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP"
-              ref="filess"
-              @change="uploadFile(0, $event)"
-            />
+            ">
+            <input type="file" accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="filess" @change="uploadFile(0, $event)" />
             <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
           </div>
         </div>
         <img class="imgss" v-else :src="memQrCodeShow" />
-        <Icon
-          type="ios-trash"
-          v-if="memQrCodeShow !== null"
-          class="cancel"
-          @click="cancelImg(0)"
-          color="#FF565A"
-          size="28"
-        />
+        <Icon type="ios-trash" v-if="memQrCodeShow !== null" class="cancel" @click="cancelImg(0)" color="#FF565A" size="28" />
       </div>
       <p class="head">志愿者二维码</p>
       <div class="start-wap">
         <div class="upload shae" v-if="voluQrCodeShow == null">
-          <div
-            class="file "
-            @click="
+          <div class="file " @click="
               () => {
                 this.$refs.files.click();
               }
-            "
-          >
-            <input
-              type="file"
-              accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP"
-              ref="files"
-              @change="uploadFile(1, $event)"
-            />
+            ">
+            <input type="file" accept=".jpg,.JPG,.gif,.GIF,.png,.PNG,.bmp,.BMP" ref="files" @change="uploadFile(1, $event)" />
             <Icon type="md-cloud-upload" :size="36" color="#FF565A" />
           </div>
         </div>
         <img class="imgss" v-else :src="voluQrCodeShow" />
-        <Icon
-          type="ios-trash"
-          v-if="voluQrCodeShow !== null"
-          class="cancel"
-          @click="cancelImg(1)"
-          color="#FF565A"
-          size="28"
-        />
+        <Icon type="ios-trash" v-if="voluQrCodeShow !== null" class="cancel" @click="cancelImg(1)" color="#FF565A" size="28" />
       </div>
       <div slot="footer">
-        <Button type="error" size="large" @click="updateQrcodeEvent"
-          >确定</Button
-        >
+        <Button type="error" size="large" @click="updateQrcodeEvent">确定</Button>
       </div>
     </Modal>
     <Modal v-model="modal5" title="取消理由" @on-cancel="cancel">
-      <i-input
-        placeholder="请输入取消理由"
-        v-model="text"
-        type="textarea"
-        :row="4"
-      />
+      <i-input placeholder="请输入取消理由" v-model="text" type="textarea" :row="4" />
       <div slot="footer">
         <Button type="error" size="large" @click="modalOk">确定</Button>
       </div>
@@ -91,42 +54,20 @@
         <div class="flex-start">
           <div class="flex-center-start">
             <span>活动名称:</span>
-            <Input
-              size="large"
-              placeholder="活动名称"
-              class="inpt"
-              v-model="query.name"
-            />
+            <Input size="large" placeholder="活动名称" class="inpt" v-model="query.name" />
           </div>
           <div class="flex-center-start">
             <span>活动状态:</span>
             <Select v-model="query.state" size="large" class="inpt">
-              <Option
-                v-for="item in activeState"
-                :value="item.id"
-                :key="item.id"
-                >{{ item.name }}</Option
-              >
+              <Option v-for="item in activeState" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="flex-center-start">
             <span>活动日期:</span>
             <div>
-              <Date-picker
-                size="large"
-                type="date"
-                placeholder="选择日期"
-                class="inpt"
-                @on-change="handleChange('startT', $event)"
-              ></Date-picker>
+              <Date-picker size="large" type="date" placeholder="选择日期" class="inpt" @on-change="handleChange('startT', $event)"></Date-picker>
               <i style="margin:0 10px;">~</i>
-              <Date-picker
-                type="date"
-                size="large"
-                placeholder="选择日期"
-                class="inpt"
-                @on-change="handleChange('endT', $event)"
-              ></Date-picker>
+              <Date-picker type="date" size="large" placeholder="选择日期" class="inpt" @on-change="handleChange('endT', $event)"></Date-picker>
             </div>
           </div>
         </div>
@@ -140,51 +81,19 @@
         </Button>
         <div>
           <Button class="table-btn">导出</Button>
-          <Button class="table-btn" @click="exportData(1)"
-            >导出受益方签到表</Button
-          >
-          <Button class="table-btn" @click="exportData(2)"
-            >导出志愿者签到表</Button
-          >
+          <Button class="table-btn" @click="exportData(1)">导出受益方签到表</Button>
+          <Button class="table-btn" @click="exportData(2)">导出志愿者签到表</Button>
           <!-- <Button class="table-btn" @click="addaction">添加活动</Button> -->
-          <Select
-            size="large"
-            v-model="size"
-            style="width:150px"
-            placeholder="显示条数"
-            class="table-btn"
-          >
-            <Option
-              v-for="item in Article"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.label }}</Option
-            >
+          <Select size="large" v-model="size" style="width:150px" placeholder="显示条数" class="table-btn">
+            <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Select
-            size="large"
-            placeholder="排序方式"
-            class="table-btn"
-            style="width: 150px;"
-            v-model="sort"
-          >
-            <Option
-              v-for="item in sorting"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.label }}</Option
-            >
+          <Select size="large" placeholder="排序方式" class="table-btn" style="width: 150px;" v-model="sort">
+            <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
       </div>
       <div class="table">
-        <Table
-          ref="selection"
-          border
-          :columns="columns"
-          :data="datax"
-          @on-selection-change="handleSelectionChange"
-        ></Table>
+        <Table ref="selection" border :columns="columns" :data="datax" @on-selection-change="handleSelectionChange"></Table>
         <Modal draggable ok-text="导出" v-model="modal3" title="自定义展示字段">
           <div class="popup">
             <p class="popup-head">
@@ -234,22 +143,14 @@
           <Button type="success" @click="modalOkdel">确定</Button>
         </div>
       </Modal>
-      <Page
-        :total="dataCount"
-        show-elevator
-        show-total
-        size="small"
-        class="pages"
-        :page-size="size"
-        @on-change="changepages"
-      />
+      <Page :total="dataCount" show-elevator show-total size="small" class="pages" :page-size="size" @on-change="changepages" />
     </div>
   </div>
 </template>
 
 <script>
-import { formatDate } from "../../request/datatime";
-import customizeDialog from "../survey/commonComponent/customizeDialog";
+import { formatDate } from '../../request/datatime'
+import customizeDialog from '../survey/commonComponent/customizeDialog'
 import {
   activeManager,
   activeAddManager,
@@ -259,18 +160,18 @@ import {
   activedown,
   updateQrCode,
   orgimgdel
-} from "../../request/api";
-import { upload } from "@/request/http";
-import { SERVER_URl } from "@/request/http.js";
-import { constants } from "fs";
+} from '../../request/api'
+import { upload } from '@/request/http'
+import { SERVER_URl } from '@/request/http.js'
+import { constants } from 'fs'
 export default {
-  inject: ["reload"],
+  inject: ['reload'],
   components: { customizeDialog },
   data() {
     return {
       navigationName: {
-        head: "activity/manager_",
-        pageTable: "1"
+        head: 'activity/manager_',
+        pageTable: '1'
       },
       status: false,
       modal1: false,
@@ -281,106 +182,126 @@ export default {
       voluQrCode: null,
       memQrCodeShow: null,
       voluQrCodeShow: null,
-      fruit: ["苹果"],
+      fruit: ['苹果'],
       navigation1: {
-        head: "活动管理(会员)"
+        head: '活动管理(会员)'
       },
       columns: [
         {
-          type: "selection",
+          type: 'selection',
           width: 80,
-          align: "center"
+          align: 'center'
         },
         {
           width: 300,
-          key: "action",
+          key: 'action',
           renderHeader: (h, params) => {
-            return h("div", [
-              h("span", "操作"),
-              h("Icon", {
+            return h('div', [
+              h('span', '操作'),
+              h('Icon', {
                 props: {
-                  type: "ios-settings-outline"
+                  type: 'ios-settings-outline'
                 },
                 style: {
-                  marginLeft: "5px"
+                  marginLeft: '5px'
                 },
                 on: {
                   click: () => {
-                    this.$Message.info("此功能暂未开放");
+                    this.$Message.info('此功能暂未开放')
                     // this.modal3=true
                   }
                 }
               })
-            ]);
+            ])
           },
-          align: "center",
+          align: 'center',
           render: (h, params) => {
-            let signup = "关闭报名";
-            if (params.row.statusText == "13") {
-              signup = "开启报名";
+            let signup = '关闭报名'
+            if (params.row.statusText == '13') {
+              signup = '开启报名'
             }
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.$router.push({
-                        path: "editing",
-                        query: { id: params.row.acitvityId, type: 2 }
-                      });
+                      let status = null
+                      let statusText = params.row.statusText
+                      if (statusText == 1 || statusText == 2) {
+                        //所有都可以修改
+                        status = 1
+                      } else if (statusText == 3) {
+                        // 活动详情、工作人员可编辑
+                        status = 2
+                      } else if (statusText == 4) {
+                        // 活动详情可编辑
+                        status = 3
+                      }
+                      if (status) {
+                        this.$router.push({
+                          path: 'editing',
+                          query: {
+                            id: params.row.acitvityId,
+                            type: 2,
+                            status
+                          }
+                        })
+                      } else {
+                        this.$Message.warning('该活动状态不可编辑')
+                      }
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        path: "profile",
+                        path: 'profile',
                         query: {
                           acitvityId: params.row.acitvityId,
                           activityName: params.row.activityName,
                           sysId: 1
                         }
-                      });
+                      })
                     }
                   }
                 },
-                "概况"
+                '概况'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "activity_share" });
+                      this.$router.push({ path: 'activity_share' })
                     }
                   }
                 },
-                "分享"
+                '分享'
               ),
               h(
-                "Dropdown",
+                'Dropdown',
                 {
                   props: {
                     transfer: true
@@ -388,45 +309,43 @@ export default {
                 },
                 [
                   h(
-                    "a",
+                    'a',
                     {
                       style: {
-                        color: "#FF565A"
+                        color: '#FF565A'
                       }
                     },
-                    "更多操作"
+                    '更多操作'
                   ),
                   h(
-                    "DropdownMenu",
+                    'DropdownMenu',
                     {
-                      slot: "list"
+                      slot: 'list'
                     },
                     [
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              this.modal5 = true;
-                              this.activityId = params.row.acitvityId;
+                              this.modal5 = true
+                              this.activityId = params.row.acitvityId
                             }
                           }
                         },
-                        "取消"
+                        '取消'
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              if (signup == "关闭报名") {
-                                this.types = 1;
-                                this.getactiveclose(params.row.acitvityId);
-                           
+                              if (signup == '关闭报名') {
+                                this.types = 1
+                                this.getactiveclose(params.row.acitvityId)
                               } else {
-                                this.types = 2;
-                                this.getactiveclose(params.row.acitvityId);
-                                
+                                this.types = 2
+                                this.getactiveclose(params.row.acitvityId)
                               }
                             }
                           }
@@ -434,168 +353,164 @@ export default {
                         signup
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              let status = this.activeState[
-                                Number(params.row.statusText)
-                              ].name;
-                              if (status == "已结束") {
+                              let status = this.activeState[Number(params.row.statusText)].name
+                              if (status == '已结束') {
                                 this.$router.push({
-                                  name: "summarize",
+                                  name: 'summarize',
                                   query: {
                                     acitvityId: params.row.acitvityId,
                                     activityName: params.row.activityName
                                   }
-                                });
+                                })
                               } else {
-                                this.$Message.warning(
-                                  "只有已结束的活动才可进行活动总结"
-                                );
+                                this.$Message.warning('只有已结束的活动才可进行活动总结')
                               }
                             }
                           }
                         },
-                        "活动总结"
+                        '活动总结'
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              this.getactiveset(params.row.acitvityId);
+                              this.getactiveset(params.row.acitvityId)
                             }
                           }
                         },
-                        "设为新活动模板"
+                        '设为新活动模板'
                       )
                     ]
                   )
                 ]
               )
-            ]);
+            ])
           }
         },
         {
-          title: "活动名称",
-          key: "activityName",
-          align: "center",
+          title: '活动名称',
+          key: 'activityName',
+          align: 'center',
           width: 500,
           ellipsis: true,
           tooltip: true
         },
         {
-          title: "立项名称",
-          key: "batchName",
-          align: "center",
+          title: '立项名称',
+          key: 'batchName',
+          align: 'center',
           width: 300,
           ellipsis: true,
           tooltip: true
         },
         {
-          title: "项目名称",
-          key: "categoryName",
-          align: "center",
+          title: '项目名称',
+          key: 'categoryName',
+          align: 'center',
           width: 250
         },
         {
-          title: "活动时间",
-          key: "startTimestamp",
-          align: "center",
+          title: '活动时间',
+          key: 'startTimestamp',
+          align: 'center',
           width: 300,
           render: (h, params) => {
             let startTimestamp = formatDate(params.row.startTimestamp)
             let endAt = params.row.endAt
-            return h("div",startTimestamp + ' / '+ endAt );
+            return h('div', startTimestamp + ' / ' + endAt)
           }
         },
         {
-          title: "活动类型",
+          title: '活动类型',
           width: 200,
-          key: "activityType",
-          align: "center"
+          key: 'activityType',
+          align: 'center'
         },
         {
-          title: "状态",
+          title: '状态',
           width: 200,
-          key: "statusText",
-          align: "center",
+          key: 'statusText',
+          align: 'center',
           render: (h, params) => {
-            return h("div", this.activeState[~~params.row.statusText].name);
+            return h('div', this.activeState[~~params.row.statusText].name)
           }
         },
         {
-          title: "活动分类",
+          title: '活动分类',
           width: 200,
-          key: "activityClass",
-          align: "center"
+          key: 'activityClass',
+          align: 'center'
         },
         {
-          title: "会员报名人数",
+          title: '会员报名人数',
           width: 180,
-          key: "memberSignUpCount",
-          align: "center"
+          key: 'memberSignUpCount',
+          align: 'center'
         },
         {
-          title: "志愿者报名人数",
+          title: '志愿者报名人数',
           width: 160,
-          key: "volunteerSignUpCount",
-          align: "center"
+          key: 'volunteerSignUpCount',
+          align: 'center'
         },
         {
-          title: "其他角色报名人数",
+          title: '其他角色报名人数',
           width: 180,
-          key: "otherSignUpCount",
-          align: "center"
+          key: 'otherSignUpCount',
+          align: 'center'
         },
         {
-          title: "群二维码",
+          title: '群二维码',
           width: 150,
-          key: "activityQrCode",
-          align: "center",
+          key: 'activityQrCode',
+          align: 'center',
           render: (h, params) => {
-            return h("Icon", {
+            return h('Icon', {
               props: {
-                type: "md-images"
+                type: 'md-images'
               },
               on: {
                 click: () => {
-                  this.modal4 = true;
-                  this.memQrCode = params.row.memQrCode || null;
-                  this.voluQrCode = params.row.voluQrCode || null;
-                  this.activityId = params.row.acitvityId;
-                  this.memQrCodeShow = params.row.memQrCodeShow || null;
-                  this.voluQrCodeShow = params.row.voluQrCodeShow || null;
+                  this.modal4 = true
+                  this.memQrCode = params.row.memQrCode || null
+                  this.voluQrCode = params.row.voluQrCode || null
+                  this.activityId = params.row.acitvityId
+                  this.memQrCodeShow = params.row.memQrCodeShow || null
+                  this.voluQrCodeShow = params.row.voluQrCodeShow || null
                 }
               }
-            });
+            })
           }
         },
         {
-          title: "是否上架",
+          title: '是否上架',
           width: 140,
-          key: "statue",
-          align: "center",
+          key: 'statue',
+          align: 'center',
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
+            return h('div', [
+              h('i-switch', {
                 props: {
                   value: ~~params.row.statusText !== 10,
-                  disabled: params.row.statusText != "10" ? false : true
+                  disabled: params.row.statusText != '10' ? false : true
                 },
                 on: {
-                  "on-change": e => {
-                    if (params.row.statusText == "10") {
+                  'on-change': e => {
+                    if (params.row.statusText == '10') {
                     } else {
-                      this.activityId = params.row.acitvityId;
-                      this.addstate = true;
-                      this.index = params.index;
+                      this.activityId = params.row.acitvityId
+                      this.addstate = true
+                      this.index = params.index
                     }
                   }
                 }
               })
-            ]);
+            ])
           }
         }
       ],
@@ -605,46 +520,46 @@ export default {
         { value: 20, label: 20 }
       ],
       sorting: [
-        { value: "asc", label: "正序" },
-        { value: "desc", label: "倒序" }
+        { value: 'asc', label: '正序' },
+        { value: 'desc', label: '倒序' }
       ],
-      sort: "asc",
+      sort: 'asc',
       datax: [],
       sysType: 1,
       page: 1,
       size: 10,
       dataCount: 0,
-      name: "",
-      state: "",
-      startT: "",
-      endT: "",
+      name: '',
+      state: '',
+      startT: '',
+      endT: '',
       arr: [],
       activeList: [],
-      activityId: "",
-      text: "",
-      types: "",
+      activityId: '',
+      text: '',
+      types: '',
       modal5: false,
       addstate: false,
       index: -1,
       query: {
-        state: "",
-        name: "",
-        startT: "",
-        endT: ""
+        state: '',
+        name: '',
+        startT: '',
+        endT: ''
       },
       activeState: this.$store.state.activeState
-    };
+    }
   },
   computed: {},
 
   created() {},
   mounted() {
-    this.getactiveManager();
+    this.getactiveManager()
   },
   //事件监听
   watch: {
-    size: "getactiveManager",
-    sort: "getactiveManager"
+    size: 'getactiveManager',
+    sort: 'getactiveManager'
   },
 
   methods: {
@@ -655,58 +570,58 @@ export default {
         voluQrCode: this.voluQrCode
       }).then(res => {
         if (res.code == 200) {
-          this.modal4 = false;
-          this.$Message.success("修改成功");
-          this.getactiveManager();
+          this.modal4 = false
+          this.$Message.success('修改成功')
+          this.getactiveManager()
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-      });
+      })
     },
     uploadFile(i, e) {
-      let file = e.target.files[0];
-      const dataForm = new FormData();
-      dataForm.append("file", file);
+      let file = e.target.files[0]
+      const dataForm = new FormData()
+      dataForm.append('file', file)
       upload(dataForm).then(res => {
         if (res.code == 200) {
-          var reader = new FileReader();
-          reader.readAsDataURL(file);
+          var reader = new FileReader()
+          reader.readAsDataURL(file)
           reader.onload = e => {
             if (i === 0) {
-              this.memQrCodeShow = e.target.result;
-              this.memQrCode = res.data;
+              this.memQrCodeShow = e.target.result
+              this.memQrCode = res.data
             } else {
-              this.voluQrCodeShow = e.target.result;
-              this.voluQrCode = res.data;
+              this.voluQrCodeShow = e.target.result
+              this.voluQrCode = res.data
             }
-          };
+          }
         } else {
-          this.$Message.warning(res.msg);
+          this.$Message.warning(res.msg)
         }
-      });
+      })
     },
     cancelImg(i) {
-      let path = i == 0 ? this.memQrCode : this.voluQrCode;
+      let path = i == 0 ? this.memQrCode : this.voluQrCode
       orgimgdel({ path }).then(res => {
         if (res.code == 200) {
           if (i === 0) {
-            this.memQrCodeShow = null;
-            this.memQrCode = null;
+            this.memQrCodeShow = null
+            this.memQrCode = null
           } else {
-            this.voluQrCodeShow = null;
-            this.voluQrCode = null;
+            this.voluQrCodeShow = null
+            this.voluQrCode = null
           }
-          this.$Message.success("删除成功");
+          this.$Message.success('删除成功')
         } else {
-          this.$Message.warning(res.msg);
+          this.$Message.warning(res.msg)
         }
-      });
+      })
     },
     changeSwitch(e) {
-      if (params.row.statusText !== "10") {
-        this.activityId = params.row.acitvityId;
-        this.addstate = true;
-        this.index = params.index;
+      if (params.row.statusText !== '10') {
+        this.activityId = params.row.acitvityId
+        this.addstate = true
+        this.index = params.index
       }
     },
     //列表和分页
@@ -715,22 +630,22 @@ export default {
         page: {
           page: this.page,
           size: this.size,
-          sort: "createAt" + " " + this.sort
+          sort: 'createAt' + ' ' + this.sort
         },
         name: this.name,
         sysType: this.sysType,
-        activityStatus: this.state,
+        activityStatus: this.state === 'ALL' ? '' : this.state,
         activityTimestampFrom: this.startT,
         activityTimestampTo: this.endT
       }).then(res => {
-        this.$refs.selection.selectAll(false);
+        this.$refs.selection.selectAll(false)
         if (res.code == 200) {
-          this.dataCount = res.data.totalSize;
-          this.datax = res.data.list;
+          this.dataCount = res.data.totalSize
+          this.datax = res.data.list
         }
-      });
+      })
     },
-     handleChange(name, e) {
+    handleChange(name, e) {
       this.query[name] = e
     },
     //取消
@@ -742,14 +657,14 @@ export default {
         channel: 2
       }).then(res => {
         if (res.code == 200) {
-          this.modal5 = false;
-          this.text = "";
-          this.getactiveManager();
-          this.$Message.info("取消成功");
+          this.modal5 = false
+          this.text = ''
+          this.getactiveManager()
+          this.$Message.info('取消成功')
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-      });
+      })
     },
     //关闭
     getactiveclose(ids) {
@@ -760,12 +675,16 @@ export default {
         channel: 2
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("关闭成功");
+          if (this.types == 1) {
+            this.$Message.info('关闭成功')
+          } else {
+            this.$Message.info('开启成功')
+          }
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-        this.getactiveManager();
-      });
+        this.getactiveManager()
+      })
     },
     // 设置模板
     getactiveset(ids) {
@@ -773,46 +692,46 @@ export default {
         activityId: ids
       }).then(res => {
         if (res.code == 200) {
-          this.$Message.info("设置成功");
+          this.$Message.info('设置成功')
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-      });
+      })
     },
     // 活动下架
     getactivedown(ids) {
-      ids = Array.of(ids);
+      ids = Array.of(ids)
       activedown({
         activityId: ids
       }).then(res => {
         if (res.code == 200) {
-          this.addstate = false;
-          this.getactiveManager();
-          this.$Message.info("下架成功");
+          this.addstate = false
+          this.getactiveManager()
+          this.$Message.info('下架成功')
         } else {
-          this.$Message.error(res.msg);
+          this.$Message.error(res.msg)
         }
-      });
+      })
     },
 
     //拒绝理由
     modalOk() {
-      this.getactivecancel();
+      this.getactivecancel()
     },
     cancel() {
-      this.modal5 = false;
+      this.modal5 = false
     },
 
     //取消
     modalCancel() {
-      this.datax = [];
-      this.getactiveManager();
-      this.addstate = false;
+      this.datax = []
+      this.getactiveManager()
+      this.addstate = false
     },
 
     //确定
     modalOkdel() {
-      this.getactivedown(this.activityId);
+      this.getactivedown(this.activityId)
     },
 
     //选择内容
@@ -821,79 +740,73 @@ export default {
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
       ) {
-        this.status = true;
+        this.status = true
       } else {
-        this.status = false;
+        this.status = false
       }
       this.arr = val.map(v => {
-        return { activityId: v.acitvityId, activityName: v.activityName };
-      });
+        return { activityId: v.acitvityId, activityName: v.activityName }
+      })
     },
 
     //分页功能
     changepages(index) {
-      this.page = index;
-      this.getactiveManager();
+      this.page = index
+      this.getactiveManager()
     },
 
     //查询
     result() {
       if (!!this.query.startT && !!this.query.endT) {
-        if (
-          new Date(this.query.startT).getTime() >
-          new Date(this.query.endT).getTime()
-        ) {
-          this.$Message.info("开始时间应该小于结束时间");
-          return;
-        } else if (
-          new Date(this.query.startT).getTime() ==
-          new Date(this.query.endT).getTime()
-        ) {
-          this.startT = new Date(this.query.startT + " 00:00:00").getTime();
-          this.endT = new Date(this.query.endT + " 23:59:59").getTime();
+        if (new Date(this.query.startT).getTime() > new Date(this.query.endT).getTime()) {
+          this.$Message.info('开始时间应该小于结束时间')
+          return
+        } else if (new Date(this.query.startT).getTime() == new Date(this.query.endT).getTime()) {
+          this.startT = new Date(this.query.startT + ' 00:00:00').getTime()
+          this.endT = new Date(this.query.endT + ' 23:59:59').getTime()
         } else {
-          this.startT = new Date(this.query.startT).getTime();
-          this.endT = new Date(this.query.endT + " 23:59:59").getTime();
+          this.startT = new Date(this.query.startT).getTime()
+          this.endT = new Date(this.query.endT + ' 23:59:59').getTime()
         }
       } else if (
         (!!this.query.startT && !this.query.endT) ||
         (!!this.query.endT && !this.query.startT)
       ) {
-        this.$Message.warning("时间段缺少");
-        return;
+        this.$Message.warning('时间段缺少')
+        return
       } else {
-        this.startT = "";
-        this.endT = "";
+        this.startT = ''
+        this.endT = ''
       }
-      this.name = this.query.name;
-      this.state = this.query.state;
-      this.page = 1;
-      this.getactiveManager();
+      this.name = this.query.name
+      this.state = this.query.state
+      this.page = 1
+      this.getactiveManager()
     },
 
     addaction() {
-      this.$router.push({ name: "approval" });
+      this.$router.push({ name: 'approval' })
     },
     exportData(i) {
       if (this.arr.length == 0) {
-        this.$Message.error("没有选择");
-        return;
+        this.$Message.error('没有选择')
+        return
       }
       for (let item of this.arr) {
         window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=${i}&activityName=
-         ${item.activityName}`);
+         ${item.activityName}`)
       }
     },
     //全选按钮
     chackall() {
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
+      this.status = !this.status
+      this.$refs.selection.selectAll(this.status)
     },
-    changeColumn(data){
-      this.columns=data; 
+    changeColumn(data) {
+      this.columns = data
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .head {

@@ -16,7 +16,7 @@
             <ul>
               <li class="first-li">
                 <span class="first-span">活动分类</span>
-                <Select v-model="batch.actTypeName" style="width:300px">
+                <Select :disabled='status && status !=1' v-model="batch.actTypeName" style="width:300px">
                   <Option
                     v-for="(item, index) in batchItemList.actTypes"
                     :value="item.name"
@@ -28,7 +28,7 @@
               </li>
               <li class="first-li">
                 <span class="first-span">选择模板</span>
-                <Select style="width:300px">
+                <Select :disabled='status && status !=1' v-model="batch.mouldActId" style="width:300px">
                   <Option
                     v-for="(item, index) in templateList"
                     :value="item.name"
@@ -41,6 +41,7 @@
               <li class="first-li">
                 <span class="first-span">活动名称</span>
                 <Input
+                  :disabled='status && status !=1'
                   placeholder="请输入活动名称"
                   v-model="batch.actName"
                   style="width:300px"
@@ -62,6 +63,7 @@
                 </div> -->
                 <UploadImg
                   :max="1"
+                  :disabled='status && status !=1'
                   v-model="batch.actCoverPic"
                   :full-url.sync="batch.actCoverShowPic"
                   :display-width="120"
@@ -75,6 +77,7 @@
                 <span class="first-span">主题图片</span>
                 <UploadImg
                   :max="1"
+                  :disabled='status && status !=1'
                   v-model="batch.actPic"
                   :full-url.sync="batch.actShowPic"
                   :display-width="300"
@@ -92,6 +95,7 @@
                 <Row>
                   <Col span="11">
                     <Date-picker
+                      :disabled='status && status !=1'
                       type="datetime"
                       :value="batch.startT"
                       format="yyyy-MM-dd HH:mm"
@@ -106,6 +110,7 @@
                   <Col span="2" class="wave">~</Col>
                   <Col span="11">
                     <Date-picker
+                      :disabled='status && status !=1'
                       type="datetime"
                       :value="batch.endT"
                       format="yyyy-MM-dd HH:mm"
@@ -123,6 +128,7 @@
                 <span class="first-span">活动地址</span>
                 <div style="flex:1">
                   <Button
+                  :disabled='status && status !=1'
                   @click="getAdr()"
                   lang
                   >{{
@@ -132,24 +138,25 @@
               </li>
               <li class="first-li">
                 <span class="first-span">详细地址</span>
-                <Input v-model="batch.addressSup" placeholder="请输入详细地址"></Input>
+                <Input :disabled='status && status !=1' v-model="batch.addressSup" placeholder="请输入详细地址"></Input>
               </li>
               <li class="first-li">
                 <span class="first-span">出行方式</span>
                 <RadioGroup v-model="batch.vehicleCode" @on-change='tripMode'>
-                  <Radio label="1">自驾</Radio>
-                  <Radio label="2">大巴</Radio>
-                  <Radio label="3">自定义</Radio>
+                  <Radio :disabled='status && status !=1' label="1">自驾</Radio>
+                  <Radio :disabled='status && status !=1' label="2">大巴</Radio>
+                  <Radio :disabled='status && status !=1' label="3">自定义</Radio>
                 </RadioGroup>
               </li>
               <li v-if="batch.vehicleCode=='3'">
-                <Input v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
+                <Input :disabled='status && status !=1' v-model="batch.actVehicle" placeholder="请输入出行方式"></Input>
               </li>
               <li class="li-flex-between">
                 <span class="first-span">现场负责人</span>
                 <div class="flex-center-start" style="flex:1">
                   <span class="tit">姓名</span>
                   <Input
+                    :disabled='status && status !=1'
                     v-model="batch.ownerUserName"
                     style="width: 150px"
                     class="same-staff"
@@ -157,12 +164,12 @@
                   />
                   <span class="twoT">联系方式</span>
                   <Input
+                    :disabled='status && status !=1'
                     v-model="batch.ownerUserTel"
                     style="width: 150px"
                     class="same-staff"
-                    disabled
                   />
-                  <Select style="width:200px;margin-left:15px;" placeholder="请选择现场负责人" v-if="addLeader">
+                  <Select  :disabled='status && status !=1' style="width:200px;margin-left:15px;" placeholder="请选择现场负责人" v-if="addLeader">
                     <Option
                       v-for="(item, idx) in leaderList"
                       :value="item.name"
@@ -176,24 +183,28 @@
               <li class="first-li start">
                 <span class="first-span">工作人员</span>
                 <div>
-                  <div class="flex-center-center"><Button @click="addWorkers" class="font">添加</Button></div>
+                  <div v-if="status &&  status != 3"   class="flex-center-center"><Button @click="addWorkers" class="font">添加</Button></div>
                   <div v-for="(item, index) in batch.workerIdList" :key="index" class="li-flex-around">
                     <span class="tit">姓名</span>
                     <Input
+                     :disabled='status && status == 3'
                       v-model="item.ownerUserName"
                       class="same-staff lw"
                       @on-change="getWorkerList(item, index)"
                     />
                     <span class="twoT">联系方式</span>
                     <Input
+                     :disabled='status && status == 3'
                       v-model="item.ownerUserTel"
                       class="same-staff lw"
-                      disabled
                     />
-                     <Icon type="ios-trash"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
+                     <Icon type="ios-trash" v-if="status && status !=3"   @click="deleteWorker(index)" style="margin-left:15px;" color='#FF565A' size='28'/>
+                  </div>
+                   <div v-if="(status && status==3)  && !batch.workerIdList.length"  class="li-flex-around">
+                    <span>暂无工作人员</span>
                   </div>
                   <div v-if="addWorker">
-                    <Select class="lw" placeholder="请选择工作人员">
+                    <Select  :disabled='status && status !=1' class="lw" placeholder="请选择工作人员">
                       <Option
                         v-for="(i, idx) in workerList"
                         :value="i.name"
@@ -208,6 +219,7 @@
               <li class="first-li">
                 <span class="first-span">活动标签</span>
                 <Select
+                  :disabled='status && status !=1'
                   v-model="batch.actLabelName"
                   style="width:300px"
                   placeholder="请选择活动标签"
@@ -224,13 +236,16 @@
               <li class="first-li start">
                 <span class="first-span">招募角色</span>
                 <div style="flex:1">
-                  <div class="flex-center-center" style="margin-bottom:20px"><Button @click="addRoles()" class="font">+新增招募角色</Button></div>
+                  <div v-if="status && status ==1" class="flex-center-center" style="margin-bottom:20px"><Button @click="addRoles()" class="font">+新增招募角色</Button></div>
                   <div>
                     <Row type="flex" justify="space-between" v-for="(item,i) in batch.userConfList" class-name="li-flex-around lx-resource" :key='i'>
                       <i-col span='5'>{{item.roleName}}</i-col>
                       <i-col span='3'>{{item.recruitNum}}</i-col>
                       <i-col span='5'><Button @click="changeRoles(i)" class="font">详情</Button></i-col>
-                      <i-col span='3'><Icon type="ios-trash"   @click="deleteRole(i)" color='#FF565A' size='28'/></i-col>
+                      <i-col span='3'><Icon type="ios-trash" v-if="status && status ==1"  @click="deleteRole(i)" color='#FF565A' size='28'/></i-col>
+                    </Row>
+                    <Row v-if="(status && status !=1) && !batch.userConfList.length" >
+                      <i-col span='3'>暂无角色</i-col>
                     </Row>
                   </div>
                 </div>
@@ -238,17 +253,20 @@
                <li class="first-li start">
                 <span class="first-span">所需物资</span>
                 <div style="flex:1">
-                  <div class="flex-center-center"><Button @click="addResources" style="marginBottom:20px" class="font">+新增物资</Button></div>
+                  <div v-if="status && status ==1" class="flex-center-center"><Button @click="addResources" style="marginBottom:20px" class="font">+新增物资</Button></div>
                   <div>
                     <Row v-for="(item,i) in batch.actResList" class-name="li-flex-around lx-resource" :key='i' type="flex" justify="space-between">
                       <i-col span='4'>{{item.resourcesName}}</i-col>
                       <i-col span='8'>
-                        <Input v-model="item.num" placeholder="请输入数量"  class="twoT"></Input>
+                        <Input  :disabled='status && status !=1' v-model="item.num" placeholder="请输入数量"  class="twoT"></Input>
                       </i-col>
                       <i-col span='4'>
-                        <Checkbox v-model="item.isOk" :true-value='1'>已筹</Checkbox>
-                        <Icon type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
+                        <Checkbox  :disabled='status && status !=1' v-model="item.isOk" :true-value='1'>已筹</Checkbox>
+                        <Icon  v-if="status && status ==1"  type="ios-trash"  @click="deleteResources(i)" color='#FF565A' size='28'/>
                       </i-col>
+                    </Row>
+                    <Row v-if="(status && status !=1) && !batch.actResList.length" >
+                      <i-col span='3'>暂无物资</i-col>
                     </Row>
                   </div>
                 </div>
@@ -259,10 +277,11 @@
                   v-model="releaseTimeSelf"
                   @on-change="releaseTime"
                 >
-                  <Radio :label="0">活动开始前一个月自动发布</Radio>
-                  <Radio :label="1">自定义</Radio>
+                  <Radio :disabled='status && status !=1' :label="0">活动开始前一个月自动发布</Radio>
+                  <Radio :disabled='status && status !=1' :label="1">自定义</Radio>
                 </RadioGroup>
                 <Date-picker
+                 :disabled='status && status !=1'
                   :value="batch.releaseTime"
                   v-if="~~releaseTimeSelf==1"
                   type="datetime"
@@ -281,6 +300,7 @@
           <Col style="margin-bottom:10px;">活动详情</Col>
           <Col>
             <wangeditor
+              :disabled="true"
               :labels="batch.detail"
               id="ed1"
               @change="changeEditorTrain"
@@ -291,6 +311,7 @@
 
       <div class="" v-if="isAddRole">
         <role
+          :disabled="status"
           :oneRoles="oneRole"
           @cancelEdit="cancelRole"
           @oneRoleMsg="getRole"
@@ -299,7 +320,7 @@
 
       <div v-if="two" class="lx-flex-center" style="margin-top:80px;">
         <Button v-if="showZf" @click="zf" shape="circle" size='large' class="btn">作废</Button>
-        <Button @click="save()" shape="circle" size='large' class="btn">保存</Button>
+        <Button  @click="save()" shape="circle" size='large' class="btn">保存</Button>
       </div>
 
       <Modal v-model="isZf" title="作废模板" @on-ok='sureZf'>
@@ -332,6 +353,7 @@ export default {
   name: "editor",
   data() {
     return {
+      status: ~~this.$route.query.status,
       adr: false,
       two: true,
       batch: {

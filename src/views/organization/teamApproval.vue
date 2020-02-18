@@ -622,12 +622,12 @@ export default {
         };
         auditCreateCoOrg(paramsObj).then(res => {
           if (res.code === 200) {
-            this.$Message.info("审批成功");
+            this.$Message.info("拒绝成功");
             this.getorgpage();
           } else {
             this.$Message.error({
               background: true,
-              content: "审批失败"
+              content: "拒绝成功"
             });
           }
         });
@@ -641,12 +641,12 @@ export default {
         };
         orgSetStatus(paramsObj).then(res => {
           if (res.code === 200) {
-            this.$Message.info("审批成功");
+            this.$Message.info("拒绝成功");
             this.getorgpage();
           } else {
             this.$Message.error({
               background: true,
-              content: "审批失败"
+              content: "拒绝成功"
             });
           }
           this.removeaudutId();
@@ -684,12 +684,12 @@ export default {
         auditCreateCoOrg(paramsObj).then(res => {
           console.log(res);
           if (res.code === 200) {
-            this.$Message.info("审批成功");
+            this.$Message.info("拒绝成功");
             this.getorgpage();
           } else {
             this.$Message.error({
               background: true,
-              content: "审批失败"
+              content: "拒绝成功"
             });
           }
         });
@@ -720,12 +720,12 @@ export default {
 
         orgSetStatus(paramsObj).then(res => {
           if (res.code === 200) {
-            this.$Message.info("审批成功");
+            this.$Message.info("拒绝成功");
             this.getorgpage();
           } else {
             this.$Message.error({
               background: true,
-              content: "审批失败"
+              content: "拒绝成功"
             });
           }
           this.removeaudutId();

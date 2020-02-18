@@ -77,7 +77,7 @@ export default {
         }, 500);
         if(res.code==200){
           // this.getintegralrule()
-           this.$router.push({name:'vun_integral'})
+           this.$router.push({name:'integral'})
           this.$Message.info('设置成功')
         }else{
           this.$Message.error(res.msg)

@@ -205,7 +205,7 @@
                   <XDatePicker
                     :value="zhaStart"
                     type="datetime"
-                    :options="options"
+                    :options="optionsStart"
                     :disabled="isDisb"
                     placeholder="开始时间"
                     confirm
@@ -653,6 +653,11 @@ export default {
     return {
       timeId: null,
       options: {
+        disabledDate(date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      },
+      optionsStart:{
         disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;
         }
@@ -1280,7 +1285,20 @@ export default {
               );
             }
           };
-        } else {
+        }
+          else if(name == "zhaEnd"){
+            this.optionsStart = {
+              disabledDate(date) {
+                return ( new Date(date).getTime() > new Date(timeObj.zhaEnd).getTime()) 
+            }
+            }
+          }
+        else {
+          this.optionsStart  = {
+             disabledDate(date) {
+              return date && date.valueOf() < Date.now() - 86400000;
+            }
+          }
           this.optionsEnd = {
             disabledDate(date) {
               return date && date.valueOf() < Date.now() - 86400000;

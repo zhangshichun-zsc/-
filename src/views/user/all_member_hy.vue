@@ -548,7 +548,7 @@
 <script>
 import { tablepage } from "@/request/mixin";
 import customizeDialog from "../survey/commonComponent/customizeDialog";
-import { Userpage, Userbatch, userListMsg, userEnable } from "@/request/api";
+import { Userpage, Userbatch, userListMsg, Setsend, userEnable } from "@/request/api";
 export default {
   components: { customizeDialog },
   data() {
@@ -1100,7 +1100,11 @@ export default {
     },
     // 站内信
     setsend(params) {
-      userListMsg({
+      //  userListMsg({
+      //   sysId: "1",
+      //   ...params
+      // })
+      Setsend({
         sysId: "1",
         ...params
       }).then(res => {
