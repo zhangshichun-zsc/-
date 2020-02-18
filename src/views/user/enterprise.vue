@@ -291,7 +291,7 @@
             title="设置标签"
             @on-ok="ok"
             @on-cancel="cancel">
-            <Checkbox v-for="item1 in label1" :name="item1">{{item1}}</Checkbox>
+            <Checkbox v-for="(item1,index) in label1" :name="item1" :key="index">{{item1}}</Checkbox>
           </Modal>
           <Dropdown>
             <Button @click="modal4 = true">

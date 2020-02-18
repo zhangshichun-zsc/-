@@ -317,7 +317,14 @@ export default {
   },
 
   components: { adress, selsect },
-
+  watch:{
+    onlineFlag(newVal, oldVal){
+        if(newVal == 0){
+          this.args.setAddr = '点击选中地址'
+          this.args.addressSup = ''
+        }
+    },
+  },
   computed: {},
 
   created() {

@@ -9,14 +9,14 @@
       </Steps>
     </div>
     <Form1 v-show="currentStep === 0" ref="form1" :origin-data="form.base" @change-org="onChangeOrg" @change-recruit-type="onRecruitTypeChange" @draft="saveDraft" @next="next" />
-    <Form2 ref="form2" v-show="currentStep === 1" :base-info="form.base" :origin-data="form.batches" @draft="saveDraft" @next="next" @previous="previous" />
+    <Form2 ref="form2" v-show="currentStep === 1" :base-info="form.base" :origin-data="form.batches" @draft="saveDraft"  @next="next" @previous="previous" @submit="form => addSubmit(false, form)" />
     <Form3 v-show="currentStep === 2" :origin-data="form" :loading="loading" @add-batch="addBatch" @edit-batch="editBatch" @draft="saveDraft" @previous="previous" @submit="form => submit(false, form)" />
   </PageHeaderWrapper>
 </template>
 
 <script>
 import cloneDeep from 'lodash.clonedeep'
-import { projectApproval, draftsDetail } from '@/request/api'
+import { projectApproval, draftsDetail, projectEdit } from '@/request/api'
 export default {
   components: {
     Form1: () => import('./Form1'),
@@ -148,10 +148,14 @@ export default {
     saveDraft(form) {
       if (!this.currentStep) {
         this.form.base = form
-      } else {
+      } else if(this.currentStep ==2){
+        //第三步的 保存草稿
+        Object.assign(this.form.base, form)
+      }else {
         this.form.batches = form
       }
       if (this.form.base.batchName && this.form.base.orgId) {
+   
         this.submit(true)
       } else {
         this.$Message.error('立项名称和小组归属必须提供')
@@ -162,6 +166,17 @@ export default {
       if (form) {
         Object.assign(this.form.base, form)
       }
+
+      // 从立项管理详情过来的
+      if(this.$route.query.isEdit && this.form.batches.length >1){
+        let actInfoList = this.form.batches
+        actInfoList.forEach(item=>{
+          item.activityId = ''
+          item.batchId = ''
+        })
+        this.form.batches = actInfoList
+      }
+
       const body = {
         userId: this.$store.state.userId,
         is_draft: isDraft ? 1 : 2,
@@ -169,6 +184,9 @@ export default {
         actInfoList: this.form.batches
       }
       console.log(body)
+
+
+      
       // 第3步修改的
       const clone = cloneDeep(body)
       this.loading = true
@@ -177,6 +195,28 @@ export default {
       if (res.code == 200) {
         this.$Message.success(res.msg)
         this.$router.push({ name: 'manager' })
+      } else {
+        this.$Message.error(res.msg)
+      }
+    },
+    async addSubmit(isDraft = false, obj){
+  
+      // 新增的时候 去掉 activityId  
+      let { form, batches} = obj
+      const body = {
+        ...form,
+        type: form.activityId?2:1
+        // 有值是修改， 没值是新增
+      }
+      this.form.batches = batches
+      // 第3步修改的
+      const clone = cloneDeep(body)
+      this.loading = true
+      const res = await projectEdit(clone)
+      this.loading = false
+      if (res.code == 200) {
+        this.$Message.success(res.msg)
+        this.currentStep = 2
       } else {
         this.$Message.error(res.msg)
       }

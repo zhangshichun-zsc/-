@@ -789,6 +789,12 @@ export default {
 
   components: { wangeditor, adress, XDatePicker },
   watch: {
+    "args.onlineFlag"(newVal, oldVal){
+        if(newVal == 0){
+          this.args.address = '点击选中地址'
+          this.args.addressSup = ''
+        }
+    },
     cover: {
       handler(newValue, oldValue) {
         this.args.coverPic = newValue || null;

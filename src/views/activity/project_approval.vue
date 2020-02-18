@@ -198,13 +198,12 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.$router.push({
-                      //   name: "approval_details",
-                      //   query: { batchId: params.row.batchId,auditId:params.row.auditId,statusText:params.row.status }
-                      // });
+  
+                      // let isEdit = false
+                      // 所有从立项过来的 活动
                        this.$router.push({
                         name: "approval",
-                        query: { batchId: params.row.batchId, currentStep:2}
+                        query: { batchId: params.row.batchId, currentStep:2, isEdit:true}
                       });
                     }
                   }

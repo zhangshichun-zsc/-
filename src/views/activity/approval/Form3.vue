@@ -5,27 +5,30 @@
         <div class="card">
           <FormItem label="项目">{{originData.base.categoryName}}</FormItem>
           <FormItem label="活动预算" prop="budget">
-            <InputNumber v-model="form.budget" placeholder="请输入活动预算金额" />
+            <InputNumber :disabled='isEdit' v-model="form.budget" placeholder="请输入活动预算金额" />
           </FormItem>
           <FormItem label="项目周期" prop="startT">
-            <XDatePicker type="datetimerange"
+            <XDatePicker
+              :disabled='isEdit'
+              type="datetimerange"
               :value="[form.startT, form.endT]"
               format="yyyy-MM-dd HH:mm"
-               placeholder="请选择活动有效时间区间"
+              placeholder="请选择活动有效时间区间"
               @on-change="onDateRangeChange" />
           </FormItem>
         </div>
         <div class="card mt-16 card2">
           <FormItem label="立项名称" prop="batchName">
-            <Input v-model="form.batchName" placeholder="请输入立项名称" />
+            <Input :disabled='isEdit' v-model="form.batchName" placeholder="请输入立项名称" />
           </FormItem>
           <FormItem label="立项目的" prop="batchObjective">
-            <Input v-model="form.batchObjective" placeholder="请输入活动目的" />
+            <Input :disabled='isEdit' v-model="form.batchObjective" placeholder="请输入活动目的" />
           </FormItem>
           <FormItem label="小组归属">{{originData.base.orgName}}</FormItem>
           <FormItem label="招募类型">{{originData.base.recruitType === '1' ? '整体招募' : '批次招募'}}</FormItem>
           <FormItem label="主题图片" prop="batchPic">
             <UploadImg :max="1"
+              :disabled='isEdit'
               v-model="form.batchPic"
               :full-url.sync="form.batchPicShow"
               placeholder="请上传主题图片"
@@ -57,7 +60,7 @@
       </Col>
     </Row>
     <div class="mt-16 card">
-      <div class="accept-rule">
+      <div class="accept-rule" v-if="!isEdit">
         <Checkbox  v-model="accept" />
         <span>我同意</span>
         <span class="rule-link" @click="() => ruleVisible = true">《活动发布规则》</span>
@@ -66,8 +69,12 @@
         <Button shape="circle" class="action-btn"
           :loading="loading"
           @click="saveDraft">存为草稿</Button>
-        <Button shape="circle" class="action-btn" @click="previous">上一步</Button>
-        <Button type="primary" shape="circle" class="action-btn"
+        <Button v-if="!isEdit" shape="circle" class="action-btn" @click="previous">上一步</Button>
+        <Button 
+          v-if="!isEdit"
+          type="primary" 
+          shape="circle" 
+          class="action-btn"
           :disabled="!accept"
           :loading="loading"
           @click="submit">提交审核</Button>
@@ -157,7 +164,10 @@ export default {
           return v < today
         }
       },
-    }
+      // 是否从立项管理详情过来的  true, 是 false 不是 禁用 提交按钮，第一第三步，新增第二部 保存按钮
+      isEdit: this.$route.query.isEdit?true:false
+
+   }
   },
   watch: {
     'originData.base': {

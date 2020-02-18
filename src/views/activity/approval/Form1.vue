@@ -10,7 +10,7 @@
       <Col span="12">
         <div class="card">
           <FormItem label="选择项目" prop="categoryId">
-            <Select v-model="form.categoryId" placeholder="请选择项目">
+            <Select :disabled='isEdit' v-model="form.categoryId" placeholder="请选择项目">
               <Option
                 v-for="category in baseData.categorys"
                 :value="category.categoryId"
@@ -22,6 +22,7 @@
           </FormItem>
           <FormItem label="活动预算" prop="budget">
             <InputNumber
+              :disabled='isEdit'
               v-model="form.budget"
               placeholder="请输入活动预算金额"
               :min='0'
@@ -30,6 +31,7 @@
           </FormItem>
           <FormItem label="项目周期" prop="startT">
             <XDatePicker
+              :disabled='isEdit'
               type="datetimerange"
               :value="[form.startT, form.endT]"
               format="yyyy-MM-dd HH:mm"
@@ -40,13 +42,14 @@
         </div>
         <div class="card mt-16">
           <FormItem label="立项名称" prop="batchName">
-            <Input v-model="form.batchName" placeholder="请输入立项名称" />
+            <Input :disabled='isEdit' v-model="form.batchName" placeholder="请输入立项名称" />
           </FormItem>
           <FormItem label="立项目的" prop="batchObjective">
-            <Input v-model="form.batchObjective" placeholder="请输入活动目的" />
+            <Input :disabled='isEdit' v-model="form.batchObjective" placeholder="请输入活动目的" />
           </FormItem>
           <FormItem label="主题图片" prop="batchPic">
             <UploadImg
+              :disabled='isEdit'
               :max="1"
               v-model="form.batchPic"
               :full-url.sync="form.batchPicShow"
@@ -57,7 +60,7 @@
             />
           </FormItem>
           <FormItem label="小组归属" prop="orgId">
-            <Select v-model="form.orgId" placeholder="请选择小组归属">
+            <Select :disabled='isEdit' v-model="form.orgId" placeholder="请选择小组归属">
               <Option
                 v-for="org in baseData.org1s"
                 :value="org.orgId"
@@ -69,8 +72,8 @@
           </FormItem>
           <FormItem label="招募类型" prop="recruitType">
             <RadioGroup v-model="form.recruitType">
-              <Radio label="1">整体招募</Radio>
-              <Radio class="ml-16" label="2">批次招募</Radio>
+              <Radio :disabled='isEdit' label="1">整体招募</Radio>
+              <Radio :disabled='isEdit' class="ml-16" label="2">批次招募</Radio>
             </RadioGroup>
           </FormItem>
         </div>
@@ -89,14 +92,20 @@
                       <Icon
                         type="md-remove-circle"
                         class="ml-16"
+                        v-if="!isEdit"
                         @click.native="removePartner(index)"
                       />
                     </div>
                   </td>
                 </tr>
+                <tr class="create" v-if="isEdit && form.partnerList.length==0 "> 
+                  <td colspan="2">
+                    <CreatePane text="暂无合作方" />
+                  </td>
+                </tr>
                 <tr class="create">
                   <td colspan="2">
-                    <CreatePane text="+新增合作方" @click="addPartner" />
+                    <CreatePane v-if="!isEdit" text="+新增合作方" @click="addPartner" />
                   </td>
                 </tr>
               </table>
@@ -314,7 +323,10 @@ export default {
       // orgId是否回滚过
       orgIdReverted: false,
       // 招募类型是否回滚过
-      recruitTypeReverted: false
+      recruitTypeReverted: false,
+      // 是否从立项管理详情过来的  true, 是 false 不是 禁用 提交按钮，第一第三步，新增第二部 保存按钮
+      isEdit: this.$route.query.isEdit?true:false
+
     };
   },
   computed: {

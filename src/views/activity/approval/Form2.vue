@@ -1,6 +1,8 @@
 <template>
   <div class="approval-form-2">
-    <div class="card mt-16">
+    <div class="card mt-16"  v-if='!isEdit' >
+      <!-- -->
+      <!-- 从立项管理进来 不展示 table -->
       <Tag v-for="(batch, index) in batches" :key="index" :name="index" :type="index === batchIndex ? null : 'border'" :closable="batches.length>1&&!(index === 0 && isIntegrated)" :color="index === batchIndex ? '#ff565a' : '' " @click.native="editBatch(index)" @on-close="onRemoveBatch(index)">第{{index + 1}}批次</Tag>
       <Button class="ml-16" icon="md-add" type="dashed" @click="addBatch()">添加批次</Button>
       <!-- <Tabs v-model="tabName" type="card" closable :animated="false" capture-focus
@@ -190,8 +192,15 @@
       <div class="mt-16 card flex-column flex-center-center">
         <div class="flex-center-center">
           <Button shape="circle" class="action-btn" :loading="loading" @click="saveDraft">存为草稿</Button>
-          <Button shape="circle" class="action-btn" @click="previous">上一步</Button>
-          <Button type="primary" shape="circle" class="action-btn" @click="next">下一步</Button>
+          <Button 
+          v-if="isEdit"
+          type="primary" 
+          shape="circle" 
+          class="action-btn"
+          :loading="loading"
+          @click="submit">保存活动</Button>
+          <Button v-if="!isEdit" shape="circle" class="action-btn" @click="previous">上一步</Button>
+          <Button v-if="!isEdit" type="primary" shape="circle" class="action-btn" @click="next">下一步</Button>
         </div>
       </div>
     </Form>
@@ -328,8 +337,9 @@ export default {
       showEnroll: false,
       leaderCandidates: [],
       workerCandidates: [],
-      addressMapVisible: false
-    }
+      addressMapVisible: false,
+      isEdit: this.$route.query.isEdit?true:false
+   }
   },
   computed: {
     ...mapState(['userId']),
@@ -496,6 +506,7 @@ export default {
         onOk: () => {
           // 复制最近一个批次的数据
           const cloneForm = cloneDeep(this.batches[this.batches.length - 1])
+          cloneForm.activityId = ''
           // 清空时间数据
           cloneForm.releaseTime = ''
           cloneForm.startT = ''
@@ -506,7 +517,7 @@ export default {
             conf.enrollEndtime = ''
           })
           this.batches.push(cloneForm)
-          this.batchIndex++
+          this.batchIndex = this.batches.length - 1
           this.onSelectBatch()
           this.leaderCandidates = []
           this.workerCandidates = []
@@ -635,7 +646,23 @@ export default {
           content: '请完成当前信息'
         })
       }
+    },
+    async submit() {
+      const valid = await this.$refs.form.validate()
+      if (valid) {
+        this.$emit('submit', {
+          form: this.form,
+          batches: this.batches
+          }
+          )
+      } else {
+        this.$Message.error({
+          content: '请完成当前信息'
+        })
+      }
     }
+  
+  
   },
   mounted() {
     // 批次活动前置信息查询
