@@ -1271,6 +1271,8 @@ export default {
     getVipUserInfo(parame) {
       Public.getVipUserInfo(parame).then(res => {
         if (res.code === 200) {
+          let info = res.data
+
           let data = res.data.memInfo.vipotherInfo;
 
           this.userRole =this.splitArr(res.data.titleInfo.userRole);
@@ -1291,31 +1293,44 @@ export default {
           this.insuranceType = this.splitArr(data.insuranceType);
           this.interestType = this.splitArr(data.interestType);
           this.specialType = this.splitArr(data.specialType);
-          this.voluSpeciality = this.splitArr(res.data.volInfo.info.voluSpeciality)
-          this.speciality = this.splitArr(res.data.volInfo.info.speciality)
-          this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
+
+
+
+
+          if(res.data.volInfo){
+            // 增加判断条件
+            if(res.data.volInfo.info){
+              this.voluSpeciality = this.splitArr(res.data.volInfo.info.voluSpeciality)
+              this.speciality = this.splitArr(res.data.volInfo.info.speciality)
+              this.actTypeLike = this.splitArr(res.data.volInfo.info.actTypeLike)
+            }
+          }else{
+            // 为空的数据，增加为空的数据
+            // info.volInfo = {
+            //     speciality: [], // 用户的特长类型
+            //     volSpeciality: [], // 志愿者的特长
+            //     volServerType: [], // 活动种类
+            //     education: [], // 教育程度
+            //     info: {} // 用户信息
+            //   }
+          }
+       
           this.rehabilitationType = this.splitArr(res.data.memInfo.vipotherInfo.rehabilitationType)
           this.clothingSize = res.data.memInfo.userInfo.clothingSize
 
-          
+
           // end
 
           this.userLabel = res.data.titleInfo.userLabel.map(item => {
             return item.labelId;
           });
 
-
           this.province = res.data.basicInfo.info.proviceId;
           this.city = res.data.basicInfo.info.cityId;
           this.county = res.data.basicInfo.info.districtId;
 
-          // this.getcitiesArr(res.data.basicInfo.info.proviceId)
-          // this.getcountyArr(res.data.basicInfo.info.cityId)
-
-          this.parameOBJ = res.data;
+          this.parameOBJ =   Object.assign(this.parameOBJ,res.data)
         }
-
-        // console.log(JSON.stringify(res.data))
       });
     },
     setUpdata() {

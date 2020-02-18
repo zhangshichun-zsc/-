@@ -369,8 +369,12 @@ export default {
                   },
                   on: {
                     click: () => {
+                      let path = "/user/user_details_hy"
+                      if(this.$route.query.status == 1){
+                        path = "/user/user_details_zyz"
+                      }
                       this.$router.push({
-                        path: "/user/user_details_hy",
+                        path ,
                         query: { userId: params.row.userId }
                       });
                     }

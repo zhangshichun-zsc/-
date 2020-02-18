@@ -1208,9 +1208,8 @@ export default {
           ) {
             this.$Message.warning("活动开始时间要晚于招募结束时间");
             this.$set(this.args, "startAt", "");
-          } else if(!this.args.onlineFlag){
-            this.$Message.warning("请选择活动方式");
-          }
+          } 
+        
         } else if (m == 1 && !!this.args.endAt) {
           if (new Date(this.args.endAt).getTime() < new Date().getTime()) {
             this.$Message.warning("活动结束时间要晚于当前时间");
@@ -1298,7 +1297,9 @@ export default {
         if (this.single == false) {
           this.$Message.warning("你没有同意发布规则");
           return;
-        } else if (
+        } 
+        
+        else if (
           item.name == null ||
           item.coverPic == null ||
           item.pic == null ||
@@ -1307,7 +1308,6 @@ export default {
           item.endAt == null ||
           this.zhaStart == null ||
           this.zhaEnd == null ||
-          item.address == null ||
           item.coActivityUserConfParamList.length == 0 ||
           item.isInsurance == null ||
           item.flyFlag == null ||
@@ -1318,7 +1318,12 @@ export default {
         ) {
           this.$Message.warning("活动内容填写不完整");
           return;
-        } else if (item.ownerUserId == null) {
+        }else if(!item.onlineFlag){
+           this.$Message.warning("请选择活动方式");
+         
+        }else if(item.onlineFlag == 1 &&  item.address == null){
+           this.$Message.warning("请选择活动地址");
+        }else if (item.ownerUserId == null) {
           this.$Message.warning("请选择现场负责人");
           return;
         } else if (this.isFeedback == 1) {

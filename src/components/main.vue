@@ -420,6 +420,7 @@ export default {
       "login",
       "profile",
       "user_details_hy",
+      "user_details_zyz",
       "detailshy",
       "personnel_details",
       "feedDetail",

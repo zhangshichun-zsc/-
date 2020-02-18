@@ -82,13 +82,7 @@
             <Button class="table-btn" disabled size='large'>
             <Icon type="md-cloud-upload" />导出
           </Button>
-          <!-- <Dropdown style="margin-left: 0.2rem;width:5rem;">
-            <Button><Icon type="md-cloud-upload" />更多操作</Button>
-            <DropdownMenu slot="list">
-              <DropdownItem>添加参与人员</DropdownItem>
-              <DropdownItem>导入参与人员</DropdownItem>
-            </DropdownMenu>
-          </Dropdown> -->
+
           <Button @click="sendInfos"  class="table-btn" size='large'>发送站内信</Button>
           </div>
         </div>
@@ -426,7 +420,7 @@ export default {
       })
     },
     changePage(e){
-      this.page = index;
+      this.page = e;
       this.getMemberList();
     }
   }

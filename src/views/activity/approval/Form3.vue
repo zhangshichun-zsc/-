@@ -29,8 +29,9 @@
               v-model="form.batchPic"
               :full-url.sync="form.batchPicShow"
               placeholder="请上传主题图片"
-              :display-width="320"
-              :crop-width="750" :crop-height="320" />
+             :display-width="160" 
+              :crop-width="256"
+              :crop-height="256"/>
           </FormItem>
         </div>
       </Col>
