@@ -96,7 +96,7 @@ export default {
           this.$store.commit("setToken", { ...res.data });
           this.gethomepage(res.data.userId, res.data.token);
         } else {
-          this.$Message.info("密码或账号不正确!");
+          this.$Message.info(res.msg);
         }
       });
     },

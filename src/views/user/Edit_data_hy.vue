@@ -87,6 +87,7 @@
                     type="text"
                     placeholder="点击输入"
                     style="width: 224px;"
+                    @on-blur='isCard'
                     v-model="parameOBJ.basicInfo.info.idCard"
                   ></Input>
                 </FormItem>
@@ -1024,11 +1025,13 @@
 
 <script>
 import Public from "./config/index";
+import isCardNo from "./config/RegExp.js"
 import Selsect from "@/components/selsect";
 export default {
   components: { Selsect },
   data() {
     return {
+      keep: false,
       stationFormFlag: true,
       navigation1: {
         head: "编辑资料(会员)"
@@ -1250,7 +1253,26 @@ export default {
   created() {
     this.getVipUserInfo(this.getOBJ);
   },
-  watch: {},
+  watch: {
+      'parameOBJ.basicInfo.info.idcardType'(newValue){
+        // 校验身份类型
+      if(newValue){
+        if(!this.parameOBJ.basicInfo.info.idCard) return
+        let str =""
+         this.parameOBJ.basicInfo.idCardType.forEach(item=>{
+          if(item.dicId === newValue){
+            str =item.dicName
+          }
+          })
+        let idCard = this.parameOBJ.basicInfo.info.idCard
+       if(!isCardNo(idCard,str)) {
+         this.keep = true
+         this.$Message.error("当前证件号码不符合证件类型")
+       }
+
+      }
+    }
+  },
   methods: {
     // 获取省市区信息
     init() {
@@ -1338,6 +1360,11 @@ export default {
     },
     setUpdata() {
       // 将多选题剔除保设置
+
+      if(this.keep){
+        return this.$Message.error("当前证件号码不符合所选证件类型")
+      }
+
       if(!this.stationFormFlag) return
       this.stationFormFlag = false
       let _basicInfo = this.parameOBJ.basicInfo.info;
@@ -1418,7 +1445,7 @@ export default {
           this.$Message.info("修改成功");
           this.getVipUserInfo(this.getOBJ);
         } else {
-          this.$Message.error("操作失败");
+          this.$Message.error(res.msg);
         }
         this.showBenefitModelFlag = false;
 
@@ -1576,6 +1603,20 @@ export default {
           userId: this.$route.query.userId
         }
       });
+    },
+    isCard(val){
+      if(!this.parameOBJ.basicInfo.info.idCard) return
+        let str =""
+         this.parameOBJ.basicInfo.idCardType.forEach(item=>{
+          if(item.dicId === this.parameOBJ.basicInfo.info.idcardType){
+            str =item.dicName
+          }
+          })
+        let idCard = this.parameOBJ.basicInfo.info.idCard
+       if(!isCardNo(idCard,str)) {
+         this.keep = true
+         this.$Message.error("当前证件号码不符合证件类型")
+       }
     },
     Log() {
       this.$router.push({

@@ -87,6 +87,7 @@
                     type="text"
                     placeholder="点击输入"
                     style="width: 224px;"
+                    @on-blur='isCard'
                     v-model="parameOBJ.basicInfo.info.idCard"
                   ></Input>
                 </FormItem>
@@ -228,7 +229,7 @@
     </div>
 
     <div class="btn-box">
-      <a href="javascript:;" @click="setUpdata" class="btn">保存</a>
+      <a href="javascript:;"  @click="setUpdata" class="btn">保存</a>
     </div>
     <!-- 弹窗 -->
 
@@ -247,11 +248,14 @@
 
 <script>
 import Public from "./config/index";
+import isCardNo from "./config/RegExp.js"
 import Selsect from "@/components/selsect";
+import { zfmb } from '../../request/api';
 export default {
   components: { Selsect },
   data() {
     return {
+      isSave: false,
       stationFormFlag: true,
       navigation1: {
         head: "编辑资料(志愿者)"
@@ -490,6 +494,13 @@ export default {
     },
     city(newValue) {
       this.getcountyArr(newValue);
+    },
+    'parameOBJ.basicInfo.info.idcardType'(newValue){
+      if(newValue){
+
+       this.isSave = true
+        console.log(newValue);
+      }
     }
   },
   mounted() {
@@ -537,23 +548,23 @@ export default {
       });
     },
     setUpdata() {
+      
+    if(this.keep){
+        return this.$Message.error("当前证件号码不符合所选证件类型")
+      }
+
+
       // 将多选题剔除保设置
+     
       if (!this.stationFormFlag) return;
+    
+
       this.stationFormFlag = false;
       let _basicInfo = this.parameOBJ.basicInfo.info;
       let _volInfo = this.parameOBJ.volInfo.info;
       let birthDay = this.util.formatDateYMD(
         new Date(_basicInfo.birthDay).getTime()
       );
-      /**
-         * actTypeLike
-
-volSpeciality
-
-voluSpeciality
-         * 
-         */
-
       let obj = {
         userId: this.$route.query.userId,
         basicInfo: {
@@ -583,7 +594,7 @@ voluSpeciality
           this.$Message.info("修改成功");
           this.getVipUserInfo(this.getOBJ);
         } else {
-          this.$Message.error("操作失败");
+          this.$Message.error(res.msg);
         }
         setTimeout(() => {
           this.stationFormFlag = true;
@@ -715,6 +726,20 @@ voluSpeciality
           userId: this.$route.query.userId
         }
       });
+    },
+    isCard(val){
+      if(!this.parameOBJ.basicInfo.info.idCard) return
+        let str =""
+         this.parameOBJ.basicInfo.idCardType.forEach(item=>{
+          if(item.dicId === this.parameOBJ.basicInfo.info.idcardType){
+            str =item.dicName
+          }
+          })
+        let idCard = this.parameOBJ.basicInfo.info.idCard
+       if(!isCardNo(idCard,str)) {
+         this.keep = true
+         this.$Message.error("当前证件号码不符合证件类型")
+       }
     },
     Log() {
       this.$router.push({

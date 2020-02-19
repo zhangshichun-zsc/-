@@ -640,7 +640,7 @@ import adress from "_c/map";
 import { upload } from "@/request/http";
 import { filterNull } from "@/libs/utils";
 import { stat, constants } from "fs";
-import { isDate } from "util";
+import { isDate, log } from "util";
 import XDatePicker from "@/business_components/XDatePicker.vue";
 
 const timeObj = {
@@ -1280,8 +1280,10 @@ export default {
         if (name == "zhaStart") {
           this.optionsEnd = {
             disabledDate(date) {
+              
               return (
-                new Date(date).getTime() < new Date(timeObj.zhaStart).getTime()
+                
+                new Date(date).getTime() <= new Date(timeObj.zhaStart).getTime()- 86400000
               );
             }
           };
@@ -1289,7 +1291,7 @@ export default {
           else if(name == "zhaEnd"){
             this.optionsStart = {
               disabledDate(date) {
-                return ( new Date(date).getTime() > new Date(timeObj.zhaEnd).getTime()) 
+                return ( new Date(date).getTime() >= new Date(timeObj.zhaEnd).getTime()- 86400000) 
             }
             }
           }

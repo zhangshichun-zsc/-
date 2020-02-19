@@ -82,10 +82,12 @@ export default {
   },
   components: {},
 
-  computed: {},
+  computed: {
+  },
 
   created() {
-    console.log(this.$props.arr);
+    // 解决不主动触发的问题
+    this.showArea(this.$props.arr);
   },
 
   methods: {

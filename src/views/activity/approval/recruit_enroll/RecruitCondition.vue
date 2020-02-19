@@ -657,7 +657,8 @@ export default {
           align: 'center',
           render: (h, params) => {
             const data = this.form.signRuleList[params.index]
-            return h('span', {}, data.name || this.signLimitsName[data.ruleId])
+            let name = data.name || data.ruleName
+            return h('span', {}, name || this.signLimitsName[data.ruleId])
           }
         },
         {
@@ -669,6 +670,8 @@ export default {
             let renderDom = []
             const index = params.index
             const ruleId = this.form.signRuleList[index].ruleId
+      
+
             if (ruleId == 3 || ruleId == 21) {
               const signRuleList = this.form.signRuleList[index]
               const inputValue = signRuleList.ruleValue ? signRuleList.ruleValue.split(',') : []
@@ -682,9 +685,9 @@ export default {
                     input: value => {
                       const ruleValue = signRuleList.ruleValue
                       if (ruleValue) {
-                        signRuleList.ruleValue = ruleValue + ',' + ruleValue.split(',')[1]
+                        signRuleList.ruleValue = value + ',' + ruleValue.split(',')[1]
                       } else {
-                        signRuleList.ruleValue = ruleValue + ','
+                        signRuleList.ruleValue = value + ','
                       }
                     }
                   }
@@ -699,9 +702,9 @@ export default {
                     input: value => {
                       const ruleValue = signRuleList.ruleValue
                       if (ruleValue) {
-                        signRuleList.ruleValue = ruleValue.split(',')[0] + ',' + ruleValue
+                        signRuleList.ruleValue = ruleValue.split(',')[0] + ',' + value
                       } else {
-                        signRuleList.ruleValue = ',' + ruleValue
+                        signRuleList.ruleValue = ',' + value
                       }
                     }
                   }
@@ -1495,8 +1498,6 @@ export default {
     // 获取招募岗位
     async getSignPost() {
       const res = await signPost({ roleId: this.form.roleId, name: this.form.roleName })
-      console.log(res.data.voluJobs);
-      
       this.signPostList = res.data.voluJobs || []
       if (this.signPostList.length) {
         this.form.userPosition = this.signPostList[0].dicId
@@ -1670,6 +1671,14 @@ export default {
         }
         delete data.introductionData
         delete data.isUploadData
+
+        let signRuleList = data.signRuleList
+        signRuleList.forEach(item=>{
+          item.ruleName = item.ruleName ? item.ruleName: item.name
+          // delete item.name
+        })
+
+        console.log(data)
         this.$emit('change', data)
         this.closeDraw()
       } else {
@@ -1679,6 +1688,7 @@ export default {
       }
     }
   },
+
   async mounted() {
     this.userId = this.$store.state.userId
     // 获取活动招募类型

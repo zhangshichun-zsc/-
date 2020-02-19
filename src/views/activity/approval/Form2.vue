@@ -1,6 +1,6 @@
 <template>
   <div class="approval-form-2">
-    <div class="card mt-16"  v-if='!isEdit' >
+    <div class="card mt-16" v-if='!isEdit'>
       <!-- -->
       <!-- 从立项管理进来 不展示 table -->
       <Tag v-for="(batch, index) in batches" :key="index" :name="index" :type="index === batchIndex ? null : 'border'" :closable="batches.length>1&&!(index === 0 && isIntegrated)" :color="index === batchIndex ? '#ff565a' : '' " @click.native="editBatch(index)" @on-close="onRemoveBatch(index)">第{{index + 1}}批次</Tag>
@@ -44,7 +44,7 @@
             <Row :gutter="16">
               <Col span="13">
               <!-- :disabled="isFormDisabled" -->
-              
+
               <Input v-model="form.actAddress" readonly placeholder="选择活动地址" @on-focus="() => addressMapVisible = true">
               <!-- <Button slot="append" icon="md-pin" @click="() => addressMapVisible = true"></Button> -->
               </Input>
@@ -106,7 +106,7 @@
               <!-- v-if="!isFormDisabled&&form.workerIdList.length > 1" -->
               <!-- v-if="!isFormDisabled&&index === form.workerIdList.length - 1" -->
               <Icon v-if="form.workerIdList.length > 1" type="md-remove-circle" size="18" color="#999" @click.native="removeWorker(index)" />
-              <Icon  type="md-add-circle" size="18" color="#999" @click.native="addWorker" />
+              <Icon type="md-add-circle" size="18" color="#999" @click.native="addWorker" />
               </Col>
             </Row>
           </FormItem>
@@ -122,7 +122,7 @@
         <div class="card">
           <!-- <div class="card-title required"></div> -->
           <FormItem class="column-item" label="活动详情" prop="detail">
-            <wangeditor :labels="form.detail" id="ed1" :disabled="true" @change="onChangeEditorTrain" />
+            <wangeditor :labels="form.detail" id="ed1" @change="onChangeEditorTrain" />
           </FormItem>
         </div>
         <div class="mt-16 card">
@@ -192,13 +192,7 @@
       <div class="mt-16 card flex-column flex-center-center">
         <div class="flex-center-center">
           <Button shape="circle" class="action-btn" :loading="loading" @click="saveDraft">存为草稿</Button>
-          <Button 
-          v-if="isEdit"
-          type="primary" 
-          shape="circle" 
-          class="action-btn"
-          :loading="loading"
-          @click="submit">保存活动</Button>
+          <Button v-if="isEdit" type="primary" shape="circle" class="action-btn" :loading="loading" @click="submit">保存活动</Button>
           <Button v-if="!isEdit" shape="circle" class="action-btn" @click="previous">上一步</Button>
           <Button v-if="!isEdit" type="primary" shape="circle" class="action-btn" @click="next">下一步</Button>
         </div>
@@ -338,8 +332,8 @@ export default {
       leaderCandidates: [],
       workerCandidates: [],
       addressMapVisible: false,
-      isEdit: this.$route.query.isEdit?true:false
-   }
+      isEdit: this.$route.query.isEdit ? true : false
+    }
   },
   computed: {
     ...mapState(['userId']),
@@ -500,32 +494,36 @@ export default {
         }
       }
       //  需要用户确认是否新增批次
-      this.$Modal.confirm({
-        title: '提示',
-        content: `新增批次后第1批次部分数据将无法修改，请确认是否新增？`,
-        onOk: () => {
-          // 复制最近一个批次的数据
-          const cloneForm = cloneDeep(this.batches[this.batches.length - 1])
-          cloneForm.activityId = ''
-          // 清空时间数据
-          cloneForm.releaseTime = ''
-          cloneForm.startT = ''
-          cloneForm.endT = ''
-          cloneForm.userConfList.forEach(conf => {
-            conf.setTime = ''
-            conf.enrollStarttime = ''
-            conf.enrollEndtime = ''
-          })
-          this.batches.push(cloneForm)
-          this.batchIndex = this.batches.length - 1
-          this.onSelectBatch()
-          this.leaderCandidates = []
-          this.workerCandidates = []
-          // setTimeout(() => {
-          //   this.$refs.form.resetFields()
-          // }, 100)
-        }
+      if (this.isIntegrated) {
+        this.$Modal.confirm({
+          title: '提示',
+          content: `新增批次后第1批次部分数据将无法修改，请确认是否新增？`,
+          onOk: () => {
+            this.copyForm()
+          }
+        })
+      } else {
+        this.copyForm()
+      }
+    },
+    copyForm() {
+      // 复制批次
+      const cloneForm = cloneDeep(this.batches[this.batches.length - 1])
+      cloneForm.activityId = ''
+      // 清空时间数据
+      cloneForm.releaseTime = ''
+      cloneForm.startT = ''
+      cloneForm.endT = ''
+      cloneForm.userConfList.forEach(conf => {
+        conf.setTime = ''
+        conf.enrollStarttime = ''
+        conf.enrollEndtime = ''
       })
+      this.batches.push(cloneForm)
+      this.batchIndex = this.batches.length - 1
+      this.onSelectBatch()
+      this.leaderCandidates = []
+      this.workerCandidates = []
     },
     // 编辑批次
     async editBatch(index) {
@@ -653,16 +651,13 @@ export default {
         this.$emit('submit', {
           form: this.form,
           batches: this.batches
-          }
-          )
+        })
       } else {
         this.$Message.error({
           content: '请完成当前信息'
         })
       }
     }
-  
-  
   },
   mounted() {
     // 批次活动前置信息查询
