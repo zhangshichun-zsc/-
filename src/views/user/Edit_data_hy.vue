@@ -450,10 +450,11 @@
                 <p
                   style="padding:0; width:70%;"
                   class="disorderTypelist-item "
+                  v-if="!parameOBJ.memInfo.childsInfo"
                   v-for="(item, index) in parameOBJ.memInfo.childsInfo.length > 0
-                    ? (parameOBJ.memInfo.childsInfo[0].disorderType?parameOBJ.memInfo.childsInfo[0].disorderType.split(','):'')
+                    ? (parameOBJ.memInfo.childsInfo[0].disorderType?parameOBJ.memInfo.childsInfo[0].diseaseDicIds.split(','):'')
                     : ['暂无']"
-                    :key=""
+                    :key="index"
                 >
                   {{ item }}
                 </p>
@@ -539,13 +540,11 @@
                   <p>是否患有其他疾病</p>
                   <span
                     v-if="
-                      parameOBJ.memInfo.childsInfo[index].disorderType.length >
-                        0
+                      !parameOBJ.memInfo.childsInfo[index].diseaseDicIds
                     "
                     class="disorderTypelist-item "
-                    v-for="(item,index) in parameOBJ.memInfo.childsInfo[
-                      index
-                    ].disorderType.split(',')"
+                    v-for="(item,index) in 
+                    parameOBJ.memInfo.childsInfo[index].diseaseDicIds?parameOBJ.memInfo.childsInfo[index].diseaseDicIds.spilt(','):''"
                     :key="index"
                     >{{ item }}</span
                   >
@@ -1301,7 +1300,7 @@ export default {
           let data = res.data.memInfo.vipotherInfo;
 
           this.userRole =this.splitArr(res.data.titleInfo.userRole);
-  
+
 
           // 将 多选框的数据保存起来
           this.securityType = this.splitArr(data.securityType);

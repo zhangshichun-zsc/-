@@ -1,7 +1,7 @@
 <template>
   <div class="approval-form-2">
-    <div class="card mt-16" v-if='!isEdit'>
-      <!-- -->
+    <div class="card mt-16" >
+      <!--v-if='!isEdit' -->
       <!-- 从立项管理进来 不展示 table -->
       <Tag v-for="(batch, index) in batches" :key="index" :name="index" :type="index === batchIndex ? null : 'border'" :closable="batches.length>1&&!(index === 0 && isIntegrated)" :color="index === batchIndex ? '#ff565a' : '' " @click.native="editBatch(index)" @on-close="onRemoveBatch(index)">第{{index + 1}}批次</Tag>
       <Button class="ml-16" icon="md-add" type="dashed" @click="addBatch()">添加批次</Button>
@@ -648,6 +648,8 @@ export default {
     async submit() {
       const valid = await this.$refs.form.validate()
       if (valid) {
+        // 保存当前的批次
+        this.saveCurrentBatch()
         this.$emit('submit', {
           form: this.form,
           batches: this.batches

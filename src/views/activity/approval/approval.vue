@@ -1,6 +1,6 @@
 <template>
   <PageHeaderWrapper class="p-approval" title="新增活动立项">
-    <template #titleSuffix><Button class="ml-16" type="default" style="width:120px" @click="toVolunteer">设置常用报名项</Button></template>
+    <template disabled="true" #titleSuffix><Button class="ml-16" type="default" style="width:120px" @click="toVolunteer">设置常用报名项</Button></template>
     <div class="card">
       <Steps class="steps" :current="currentStep">
         <Step title="基本项"></Step>
@@ -183,10 +183,6 @@ export default {
         ...this.form.base,
         actInfoList: this.form.batches
       }
-      console.log(body)
-
-
-      
       // 第3步修改的
       const clone = cloneDeep(body)
       this.loading = true
@@ -208,7 +204,9 @@ export default {
         type: form.activityId?2:1
         // 有值是修改， 没值是新增
       }
-      this.form.batches = batches
+      // 保存当前的 批次到 自己身上
+       this.form.batches = batches
+      
       // 第3步修改的
       const clone = cloneDeep(body)
       this.loading = true

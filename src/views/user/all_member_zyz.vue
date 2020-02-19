@@ -1120,7 +1120,7 @@ export default {
     // 站内信
     setsend(params) {
       Setsend({
-        sysId: "1",
+        sysId: "2",
         ...params
       }).then(res => {
         if (res.code === 200) {

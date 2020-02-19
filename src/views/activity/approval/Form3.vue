@@ -69,6 +69,12 @@
         <Button shape="circle" class="action-btn"
           :loading="loading"
           @click="saveDraft">存为草稿</Button>
+           <Button 
+          v-if="isEdit"
+          type="primary" 
+          shape="circle" 
+          class="action-btn"
+          >保存活动</Button>
         <Button v-if="!isEdit" shape="circle" class="action-btn" @click="previous">上一步</Button>
         <Button 
           v-if="!isEdit"

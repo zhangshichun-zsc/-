@@ -23,7 +23,7 @@
               <span class="left">单行文本</span>
               <span class="right">{{ item.detailText }}</span>
             </div>
-            <div class="ls-item" v-else-if="item.typeFlag == 2">
+            <div class="ls-item" v-else-if="item.typeFlag == 6">
               <span class="left">多行文本</span>
               <span class="right">{{ item.detailText }}</span>
             </div>

@@ -3,8 +3,8 @@ const path = require('path')
 const resolve = dir => {
     return path.join(__dirname, dir)
 }
-
-
+const Timestamp = new Date().getTime();
+const VUE_APP_Version = "1.1"
 module.exports = {
     publicPath: './',
     assetsDir: 'static',
@@ -40,7 +40,12 @@ module.exports = {
             assetFilter: function (assetFilename) {
                 return assetFilename.endsWith('.js');
             }
+        },
+        output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+            filename: `[name].${VUE_APP_Version}.${Timestamp}.js`,
+            chunkFilename: `[name].${VUE_APP_Version}.${Timestamp}.js`
         }
+
     },
   //   devServer: {
   //     // 设置代理
@@ -56,3 +61,4 @@ module.exports = {
   //     }
   // }
 }
+
