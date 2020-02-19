@@ -64,6 +64,9 @@ div.basis {
   .table-header{
     margin-bottom: .1rem;
   }
+  button.ivu-btn{
+    font-size: .8rem;
+  }
 }
 
 //
@@ -173,5 +176,20 @@ div.ivu-input-wrapper{
       color: red;
       cursor: pointer;
     }
+  }
+}
+
+// 时间输入框
+.ivu-date-picker{
+  .ivu-input-wrapper{
+    width: 20rem;
+  }
+}
+.ivu-modal-header .ivu-modal-header-inner{
+  font-size: .8rem;
+}
+.ivu-modal-footer{
+  button.ivu-btn{
+    font-size: .8rem;
   }
 }

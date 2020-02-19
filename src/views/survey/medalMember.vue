@@ -69,11 +69,11 @@
         <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
-    <!-- 新增问卷对象的弹框页 -->
-    <Modal v-model="modal.visible" :title="modal.title" @on-visible-change="onVisibleChange" width="600" class-name="add-modal">
+    <!-- 新增/编辑问卷对象的弹框页 -->
+    <Modal v-model="modal.visible" :title="modal.title" @on-visible-change="onVisibleChange" width="800" class-name="add-modal">
       <!-- 添加key是为了保证div组件内容重新渲染，防止一个组件出现两张图片的情况 -->
       <div :key="formData.index">
-        <Form :model="formData" :label-width="80" :rules="ruleValidate" ref="medalFormRef">
+        <Form :model="formData" :label-width="100" :rules="ruleValidate" ref="medalFormRef">
           <FormItem label="勋章图片" prop="medalPic">
             <UploadImg :max="1" v-model="formData.medalPic" :full-url.sync="picMap" :display-width="100" :crop-width="80" :crop-height="80"></UploadImg>
           </FormItem>
@@ -96,60 +96,6 @@
             </span>
           </FormItem>
         </Form>
-        <!-- <div class="insertLine">
-        <span class="insertPart1">*</span>
-        <span class="insertPartText">勋章图片</span>
-        <span class="insertPart3" style>
-          <UploadImg
-            :picMap="picMap"
-            :max="1"
-            v-model="formData.medalPic"
-            :display-width="100"
-            :crop-width="80"
-            :crop-height="80"
-          ></UploadImg>
-        </span>
-      </div>
-      <div class="insertLine">
-        <span class="insertPart1" style>*</span>
-        <span class="insertPartText" style>勋章名称</span>
-        <span class="insertPart3">
-          <Input v-model="formData.medalName" placeholder="请输入勋章名称" style/>
-        </span>
-      </div>
-
-      <div class="insertLine">
-        <span class="insertPart1">*</span>
-        <span class="insertPartText">规则</span>
-        <span class="insertPart3">
-          <span>
-            <Select v-model="formData.ruleName" style="width:40%">
-              <Option
-                v-for="item in ruleList"
-                :value="item.name"
-                :key="item.dicId"
-                @click.native="getSelectedRuleItem(item)"
-              >{{ item.name }}</Option>
-            </Select>
-          </span>
-
-          <span>
-            <span class="insertPartText">满</span>
-            <span>
-              <Input v-model="formData.conditions" placeholder="请输入" style="width:30%"/>
-            </span>
-            <span class="insertPartText">{{selectedRuleData.unit}}</span>
-          </span>
-        </span>
-      </div>
-
-      <div class="insertLine">
-        <span class="insertPart1">*</span>
-        <span class="insertPartText">说明</span>
-        <span class="insertPart3" style="width: 80%">
-          <Input v-model="formData.remarks" placeholder/>
-        </span>
-      </div> -->
       </div>
       <div slot="footer">
         <Button type="default" @click="modal.visible = false" style="margin-right:1rem;">取消</Button>
@@ -192,8 +138,11 @@ export default {
   components: {},
   data() {
     let validConditions = (rule, value, callback) => {
+      let reg = /^\d+(\.\d+)?$/;
       if (this.formData.ruleName && !value) {
         return callback(new Error('请输入' + this.formData.ruleName + '的满足条件值'))
+      } else if(!reg.test(value)){
+        return callback(new Error('仅支持数字'))
       } else {
         callback()
       }
@@ -222,13 +171,12 @@ export default {
           title: '勋章图片',
           slot: 'medalPicPath',
           align: 'center',
-          width: 100
+          width:120
         },
         {
           title: '勋章名称',
           slot: 'medalName',
-          align: 'center',
-          width: 300
+          align: 'center'
         },
         // {
         //   title: '规则名称',
@@ -238,32 +186,30 @@ export default {
         {
           title: '规则',
           slot: 'ruleName',
-          align: 'center',
-          width: 300
+          align: 'center'
         },
         {
           title: '创建时间',
           slot: 'createAt',
-          align: 'center',
-          width: 200
+          align: 'center'
         },
         {
           title: '所获人数',
           slot: 'obtainNum',
           align: 'center',
-          width: 120
+          width:150
         },
         {
           title: '有效状态',
           slot: 'validFlag',
           align: 'center',
-          width: 180
+          width:120
         },
         {
           title: '操作',
           slot: 'action',
           align: 'center',
-          width: '100'
+          width:120
         }
       ],
       Article: [
@@ -315,7 +261,7 @@ export default {
         medalPic: [{ required: true, message: '请上传图片', trigger: 'blur' }],
         medalName: [{ required: true, message: '请输入勋章名称', trigger: 'blur' }],
         ruleName: [{ required: true, message: '选择规则', trigger: 'change' }],
-        conditions: [{ required: true, validator: validConditions }],
+        conditions: [{ required: true, validator: validConditions,trigger: 'blur' }],
         remarks: [{ required: true, message: '请输入说明', trigger: 'blur' }]
       }
     }
@@ -490,6 +436,11 @@ export default {
 
         if (!this.formData.conditions) {
           this.$Message.error('请输入' + this.formData.ruleName + '的满足条件值')
+          return
+        }
+        let reg = /^\d+(\.\d+)?$/;
+        if (!reg.test(this.formData.conditions)) {
+          this.$Message.error(this.formData.ruleName + '的满足条件值仅支持数字')
           return
         }
         let formDataList = []

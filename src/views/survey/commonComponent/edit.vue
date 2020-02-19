@@ -115,8 +115,8 @@
     <!-- 添加问卷题目弹框 -->
     <Modal v-model="surveyModal.visible"
         draggable scrollable :title="surveyModal.title"
-        class-name="survey-modal">
-        <Form ref="formOptions" :model="formData" :rules="ruleValidate" :label-width="100">
+        class-name="survey-modal" width="650">
+        <Form ref="formOptions" :model="formData" :rules="ruleValidate" :label-width="140">
           <FormItem label="标题" prop="configTitle">
               <Input v-model="formData.configTitle"></Input>
           </FormItem>
@@ -252,48 +252,42 @@ export default {
       columns: [
         {
           title: "标题",
-          slot: "configTitle",
-          width: 240
+          slot: "configTitle"
         },
         {
           title: "类型",
-          slot: "typeFlag",
-          width: 100
+          slot: "typeFlag"
         },
         {
           title: "枚举值",
-          slot: "configSelectList",
-          width: 200
+          slot: "configSelectList"
         },
         {
           title: "默认值",
-          slot: "defaultValue",
-          width: 200
+          slot: "defaultValue"
         },
         {
           title: "是否可编辑",
           slot: "isOpt",
           align: "center",
-          width: 100
+          width:150
         },
         {
           title: "是否必填",
           slot: "isMust",
           align: "center",
-          width: 80
+          width:120
         },
         {
           title: "排序",
           slot: "sort",
           align: "center",
-          width: 80
+          width:80
         },
         {
           title: "操作",
           slot: "action",
-          width: 200,
-          align: "center",
-          width: 300
+          align: "center"
         }
       ],
       // 问卷题目数据

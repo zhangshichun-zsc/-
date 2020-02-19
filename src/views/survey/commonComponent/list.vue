@@ -5,11 +5,11 @@
     <div class="top flex-center-start btn-wrapper">
       <div class="btn-box">
         <span class="label">反馈人:</span>
-        <Input v-model="answerUserName" size="small" placeholder="反馈人" style="width: 160px"/>
+        <Input v-model="answerUserName" size="small" placeholder="反馈人" />
       </div>
       <div class="btn-box">
         <span class="label">问卷名称:</span>
-        <Input v-model="configName" size="small" placeholder="问卷名称" style="width: 160px"/>
+        <Input v-model="configName" size="small" placeholder="问卷名称"/>
       </div>
       <div class="btn-box">
         <span class="label">反馈时间:</span>
@@ -19,7 +19,6 @@
           @on-change="handleChange"
           placement="bottom-end"
           placeholder="反馈时间"
-          style="width:300px"
         ></DatePicker>
       </div>
       <Button @click="query" shape="circle" size="large" class="search" style="margin-left:10px;">查询</Button>
