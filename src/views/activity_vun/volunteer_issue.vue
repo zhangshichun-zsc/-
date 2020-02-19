@@ -1323,24 +1323,22 @@ export default {
         if (this.single == false) {
           this.$Message.warning("你没有同意发布规则");
           return;
-        } 
-        
-        else if (
-          item.name == null ||
-          item.coverPic == null ||
-          item.pic == null ||
-          item.orgId == null ||
-          item.startAt == null ||
-          item.endAt == null ||
-          this.zhaStart == null ||
-          this.zhaEnd == null ||
-          item.coActivityUserConfParamList.length == 0 ||
-          item.isInsurance == null ||
-          item.flyFlag == null ||
-          item.isNeedCertMould == null ||
-          item.isShowHolder == null ||
-          item.coActCatTypeList[0].typeDicId == null ||
-          item.detail == null
+        }else if (
+          !item.name  ||
+          !item.coverPic ||
+          !item.pic  ||
+          !item.orgId  ||
+          !item.startAt ||
+          !item.endAt ||
+          !this.zhaStart ||
+          !this.zhaEnd  ||
+          !item.coActivityUserConfParamList.length == 0 ||
+          !item.isInsurance  ||
+          !item.flyFlag  ||
+          !item.isNeedCertMould  ||
+          !item.isShowHolder  ||
+          !item.coActCatTypeList[0].typeDicId ||
+          !item.detail 
         ) {
           this.$Message.warning("活动内容填写不完整");
           return;

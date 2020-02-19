@@ -74,6 +74,9 @@
           type="primary" 
           shape="circle" 
           class="action-btn"
+          @click="$router.push({
+            name:'project_approval'
+          });"
           >保存活动</Button>
         <Button v-if="!isEdit" shape="circle" class="action-btn" @click="previous">上一步</Button>
         <Button 
