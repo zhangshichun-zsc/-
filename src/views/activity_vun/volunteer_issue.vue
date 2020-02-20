@@ -464,7 +464,7 @@
                       :disabled="isDisb"
                       :true-value="1"
                       :false-value="0"
-                      v-model="item.detailText"
+                      v-model="item.isMust"
                     />
                   </i-col>
                 </Row>
@@ -684,7 +684,7 @@ export default {
         {
           sysId: 2,
           typeFlag: 0,
-          targetType: 3,
+          targetType: 5,
           detailText: null,
           isMust: 2,
           sort: 1
@@ -692,7 +692,7 @@ export default {
         {
           sysId: 2,
           typeFlag: 9,
-          targetType: 3,
+          targetType: 5,
           detailText: 0,
           isMust: 2,
           sort: 2
@@ -821,7 +821,7 @@ export default {
             isMust: 2,
             sort: 1,
             sysId: 2,
-            targetType: 3,
+            targetType: 5,
             typeFlag: 0
           },
           {
@@ -829,7 +829,7 @@ export default {
             isMust: 2,
             sort: 2,
             sysId: 2,
-            targetType: 3,
+            targetType: 5,
             typeFlag: 9
           }
         ];
@@ -991,7 +991,7 @@ export default {
         if (!itemList) return;
         for (let item of itemList) {
           if (
-            (~~item.targetType === 3 || ~~item.targetType === 4) &&
+            (~~item.targetType === 3 || ~~item.targetType === 4 || ~~item.targetType === 5) &&
             typeof item.arr[0] !== "object"
           ) {
             let arr = [];
@@ -1073,7 +1073,7 @@ export default {
       let args = {
         sysId: 2,
         typeFlag: type,
-        targetType: 3,
+        targetType: 5,
         detailText: null,
         sort: feed.length + 1,
         isMust: 0

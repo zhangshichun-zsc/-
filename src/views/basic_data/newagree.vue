@@ -372,9 +372,8 @@ export default {
           } else {
             this.getAgreementadd();
           }
-        } else {
-          this.$Message.error("提交失败！");
-        }
+        } 
+         
       });
     },
 
