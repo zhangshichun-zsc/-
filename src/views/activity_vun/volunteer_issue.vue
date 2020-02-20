@@ -1320,6 +1320,8 @@ export default {
 
       let item = this.args;
       if (i == 1) {
+        
+        console.log(JSON.stringify(item))
         if (this.single == false) {
           this.$Message.warning("你没有同意发布规则");
           return;
@@ -1332,7 +1334,7 @@ export default {
           !item.endAt ||
           !this.zhaStart ||
           !this.zhaEnd  ||
-          !item.coActivityUserConfParamList.length == 0 ||
+          item.coActivityUserConfParamList.length == 0 ||
           !item.isInsurance  ||
           !item.flyFlag  ||
           !item.isNeedCertMould  ||

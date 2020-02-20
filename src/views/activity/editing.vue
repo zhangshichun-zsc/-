@@ -562,7 +562,7 @@ export default {
       if (e) {
         this.optionsEnd = {
           disabledDate(date) {
-            return new Date(date).getTime() <= new Date(e).getTime() - 86400000;
+             return date && new Date(e).getTime()- 86400000  >= new Date(date).getTime() ;
           }
         };
       } else {
@@ -578,7 +578,7 @@ export default {
       if (e) {
         this.optionsStart = {
           disabledDate(date) {
-            return new Date(date).getTime() >= new Date(e).getTime();
+            return date && new Date(date).getTime() >= new Date(e).getTime();
           }
         };
       } else {
@@ -610,9 +610,9 @@ export default {
             this.$Message.warning("活动结束时间要晚于当前时间");
             this.batch.endT = ''
           }else if(
-            new Date(this.batch.endT).getTime() >= new Date(this.batch.startT ).getTime()
+            new Date(this.batch.endT).getTime() < new Date(this.batch.startT ).getTime()
           ){
-            this.$Message.warning("活动开始时间要早于活动结束时间");
+            this.$Message.warning("活动结束时间要早于活动开始时间");
             this.batch.endT = ''
           }
         }
