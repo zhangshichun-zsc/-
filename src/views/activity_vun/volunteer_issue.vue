@@ -1107,7 +1107,8 @@ export default {
         // END
         this.isFeedback = data.isFeedback;
         this.isTrain = data.isTrain;
-        (this.train = data.train), (this.feed = data.feed);
+        this.train = data.train
+        this.feed = data.feed
       }
       getOrgTeam({}).then(res => {
         this.orgList = res.data;

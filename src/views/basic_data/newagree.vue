@@ -400,36 +400,31 @@ export default {
       this.namebID = this.list2.find(item => {
         return item.orgName == this.formInline.partB;
       });
-      this.formInline.agTime = this.Times;
       let actTypeDicId = this.formInline.actTypeDicId.toString();
       let params = {
         sysId: this.sysId,
-        // name: this.name,
         targetType: this.targetType,
         typeDicId: this.formInline.typeDicId,
         typeDicName: name.dataValue,
-
         actTypeDicId: this.actTypeDicId,
         batchId: this.batchId,
         actTypeDicId: actTypeDicId,
         partA: this.nameaID.orgId,
         partB: this.namebID.orgId,
-        agTime: this.formInline.agTime,
-
+        agTime: this.Times,
         agPicA: this.formInline.agPicA,
         agPicB: this.formInline.agPicB,
         agPicC: this.formInline.agPicC,
-
         nameA: this.formInline.nameA,
         nameB: this.formInline.nameB,
         nameC: this.formInline.nameC
       };
-      this.params = this.util.remove(params);
-      Agreementadd(params).then(res => {
+
+      Agreementadd(this.util.remove(params)).then(res => {
         //防止重复提交
         setTimeout(() => {
           this.loading = false;
-        }, 500);
+        }, 800);
         console.log(11);
         if (res.code == 200) {
           this.$Message.success("添加成功!");
@@ -439,7 +434,6 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        // console.log(res);
       });
     },
 
@@ -499,7 +493,7 @@ export default {
         //防止重复提交
         setTimeout(() => {
           this.loading = false;
-        }, 500);
+        }, 800);
         if (res.code == 200) {
           this.$Message.success("编辑成功!");
           this.$router.push({
