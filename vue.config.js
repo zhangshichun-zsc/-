@@ -42,11 +42,14 @@ module.exports = {
             }
         },
         output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
-            filename: `[name].${VUE_APP_Version}.${Timestamp}.js`,
-            chunkFilename: `[name].${VUE_APP_Version}.${Timestamp}.js`
-        }
+            // path: path.resolve(__dirname,'dist/static/js'),
+            filename: `static/js/[name].${VUE_APP_Version}.${Timestamp}.js`,
+            chunkFilename: `static/js/[name].${VUE_APP_Version}.${Timestamp}.js`
+        },
 
-    },
+
+    }
+    
   //   devServer: {
   //     // 设置代理
   //     proxy: {
