@@ -497,9 +497,24 @@ export default {
     },
     'parameOBJ.basicInfo.info.idcardType'(newValue){
       if(newValue){
+         // 校验身份类型
+      if(newValue){
+        if(!this.parameOBJ.basicInfo.info.idCard) return
+        let str =""
+         this.parameOBJ.basicInfo.idCardType.forEach(item=>{
+          if(item.dicId === newValue){
+            str =item.dicName
+          }
+          })
+        let idCard = this.parameOBJ.basicInfo.info.idCard
+        console.log(isCardNo(idCard,str));
+        
+       if(!isCardNo(idCard,str)) {
+         this.keep = true
+         this.$Message.error("当前证件号码不符合证件类型")
+       }
 
-       this.isSave = true
-        console.log(newValue);
+      }
       }
     }
   },

@@ -543,9 +543,8 @@
                       !parameOBJ.memInfo.childsInfo[index].diseaseDicIds
                     "
                     class="disorderTypelist-item "
-                    v-for="(item,index) in 
-                    parameOBJ.memInfo.childsInfo[index].diseaseDicIds?parameOBJ.memInfo.childsInfo[index].diseaseDicIds.spilt(','):''"
-                    :key="index"
+                    v-for="item in parameOBJ.memInfo.childsInfo[index].diseaseDicIds"
+                    :key="item"
                     >{{ item }}</span
                   >
                   <span v-else class="disorderTypelist-item">无</span>
