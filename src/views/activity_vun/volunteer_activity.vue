@@ -529,7 +529,7 @@ export default {
       actManager(
         filterNull({
           name: this.name,
-          status: this.status,
+          status: this.status ==="ALL"?"": this.status,
           startT: this.startT,
           endT: this.endT,
           sysType: 2,
