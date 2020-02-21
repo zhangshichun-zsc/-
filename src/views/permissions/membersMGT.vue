@@ -118,6 +118,7 @@ export default {
         {
           title: "邮箱地址",
           key: "email",
+          minWidth: 200,
           align: "center"
         },
         {

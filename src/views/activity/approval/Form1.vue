@@ -199,7 +199,7 @@
                 </Select>
               </FormItem>
               <Row :gutter="20">
-                <Col span="12">
+                <Col span="24">
                   <FormItem
                     label="甲方"
                     :prop="'agrees.' + index + '.partA'"
@@ -211,7 +211,7 @@
                     />
                   </FormItem>
                 </Col>
-                <Col span="12">
+                <Col span="24">
                   <FormItem
                     label="乙方"
                     :prop="'agrees.' + index + '.partB'"

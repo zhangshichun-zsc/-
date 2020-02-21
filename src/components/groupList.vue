@@ -18,7 +18,7 @@
               style="width: 160px;"
             ></DatePicker>
 
-            <span class="po">~</span>
+            <span class="po" :span='1'>~</span>
 
             <DatePicker
               type="date"

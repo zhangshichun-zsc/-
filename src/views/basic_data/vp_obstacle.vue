@@ -55,7 +55,7 @@ export default {
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "志愿者特长不能为空", trigger: "blur" }
+          { required: true, message: "障碍类型不能为空", trigger: "null" }
         ]
       },
       title: "新增类型",
@@ -302,9 +302,7 @@ export default {
           } else {
             this.getBasicbatch(0);
           }
-        } else {
-          this.$Message.error("必填项不能为空!");
-        }
+        } 
       });
     },
 

@@ -16,40 +16,23 @@
         </div>
         <div class="flex-center-start">
           <span>创建时间段:</span>
-          <DatePicker
+          <XDatePicker
             class="inpt"
             style="width: 180px"
             type="date"
             @on-change="startTimeChange"
             placeholder="请选择开始时间"
             v-model="args.startAt"
-          ></DatePicker>
+          ></XDatePicker>
           <span class="po">~</span>
-          <DatePicker
+          <XDatePicker
             style="width: 180px"
             type="date"
             @on-change="endTimeChange"
             placeholder="请选择结束时间"
             v-model="args.endAt"
-          ></DatePicker>
+          ></XDatePicker>
         </div>
-        <!-- <div class="flex-center-start">
-          <span>创建时间</span>
-          <Row>
-            <DatePicker
-              :open="open"
-              confirm
-              type="daterange"
-              @on-change="handleChange"
-              @on-ok="successOk"
-            >
-              <a href="javascript:void(0)" @click="open = true">
-                <Icon type="ios-calendar-outline"></Icon>
-                <template>{{ time }}</template>
-              </a>
-            </DatePicker>
-          </Row>
-        </div>-->
         <div class="flex-center-start">
           <Button class="search" @click="query()">查询</Button>
         </div>
@@ -69,20 +52,21 @@
                 <Input v-model.trim="params.title" />
               </FormItem>
               <FormItem label="生效日期:" prop="effectiveAt">
-                <Date-picker
+                <XDatePicker
                   placement="bottom-end"
                   placeholder="选择日期:"
                   style="width: 200px"
                   type="datetime"
                   v-model="params.effectiveAt"
                   @on-change="changeDate"
+                  @on-open-change="isDate($event)"
                   :options="options"
-                ></Date-picker>
+                ></XDatePicker>
               </FormItem>
             </Form>
             <div slot="footer">
               <Button size="large" @click="modal1=false">取消</Button>
-              <Button type="error" size="large" @click="success" :loading="loading">确定</Button>
+              <Button type="error" size="large" @click="success" :loading="loading">保存</Button>
             </div>
           </Modal>
         </div>
@@ -134,6 +118,7 @@
 <script>
 import { getBooks, getVolunteer, updateBooks } from "@/request/api";
 import { filterNull } from "@/libs/utils";
+import XDatePicker from "@/business_components/XDatePicker.vue"
 export default {
   data() {
     return {
@@ -156,7 +141,7 @@ export default {
           { required: true, message: "模板名称不能为空", trigger: "blur" }
         ],
         effectiveAt: [
-          { required: true, message: "有效日期不能为空", trigger: "blur" }
+          { required: true, message: "生效日期不能为空",  }
         ]
       },
       params: {
@@ -273,7 +258,7 @@ export default {
     };
   },
 
-  components: {},
+  components: {XDatePicker},
 
   computed: {},
 
@@ -332,28 +317,7 @@ export default {
       }
 
     },
-    // successOk() {
-    //   if (!this.args.startAt && !this.args.endAt) {
-    //     this.time = "请选择时间段";
-    //   }
-    //   this.open = false;
-    // },
-    // handleChange(e) {
-    //   let start = e[0];
-    //   let end = e[1];
-    //   this.time = e[0] + "-" + e[1];
-    //   if (start && end) {
-    //     if (start === end) {
-    //       start = start + " 00:00:00";
-    //       end = end + " 23:59:59";
-    //     } else {
-    //       start = start + " 00:00:00";
-    //       end = end + " 00:00:00";
-    //     }
-    //   }
-    //   this.args.startAt = start;
-    //   this.args.endAt = end;
-    // },
+
 
     changePage(e) {
       this.page = e;
@@ -377,10 +341,18 @@ export default {
               this.$Message.error(res.msg);
             }
           });
-        } else {
-          this.$Message.error("没有填写完整");
-        }
+        } 
       });
+    },
+    isDate(e){
+      if(e) return
+      let val = this.params.effectiveAt
+      if(new Date(val)<new Date()){
+         this.params.effectiveAt = ""
+        this.$Message.error("生效时间要早于当前时间")
+        return
+      }  
+    
     },
     changeDate(e) {
       this.params.effectiveAt = e;

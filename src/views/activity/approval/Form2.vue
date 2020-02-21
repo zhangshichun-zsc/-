@@ -289,7 +289,7 @@ export default {
         startT: { required: true, message: '活动时间不能为空' },
         actAddress: { required: true, message: '活动地址不能为空', trigger: 'change' },
         vehicleCode: { required: true, message: '出行方式不能为空', trigger: 'blur' },
-        ownerUserName: { required: true, message: '现场负责人信息不能为空' },
+        ownerUserName: { required: true, message: '现场联系人信息不能为空' },
         detail: { required: true, message: '活动详情不能为空' },
         userConfList: {
           type: 'array',
