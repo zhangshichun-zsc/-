@@ -158,7 +158,12 @@
                   <td>{{item.resourcesName}}</td>
                   <td width="30%">
                     <!-- :disabled="isFormDisabled" -->
-                    <Input v-model="item.num" placeholder="请输入数量" />
+                    <InputNumber 
+                    :ref="`num${index}`"
+                    :value="item.num" 
+                    placeholder="请输入数量" 
+                    @on-change="isNumber($event,`num${index}`, index)"
+                     />
                   </td>
                   <td class="actions" width="108">
                     <Checkbox v-model="item.isOk" :true-value="1" :false-value="2">已筹</Checkbox>
@@ -323,6 +328,7 @@ export default {
         actResList: {
           type: 'array',
           validator: (rule, value) => value.every(v => !!v.num),
+          // validator: (rule, value) => value.every(v => !!v.num),
           message: '请填写物资数量'
         },
         releaseTime: { required: true, message: '活动发布时间不能为空', trigger: 'blur' }
@@ -677,7 +683,17 @@ export default {
           content: '请完成当前信息'
         })
       }
-    }
+    },
+    isNumber(e, name, i) { 
+    if (!this.util.isNumber(e)) {
+          this.$Message.error('请输入大于0的整数')
+          this.form.actResList[i].num=''
+          // 数字的形式取找的， 所以 +  [0]
+          this.$refs[name][0].currentValue = ""  
+        } else{ 
+          this.form.actResList[i].num = e
+        }
+    },
   },
   mounted() {
     // 批次活动前置信息查询

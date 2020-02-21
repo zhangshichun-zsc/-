@@ -125,7 +125,7 @@
           <XDatePicker :format="format" :options="newDateRangeOptions" :value="[form.enrollStarttime,form.enrollEndtime]" placeholder="请选择报名时间" style="width: 290px" type="datetimerange" @on-change="enrollTimeChange" @on-open-change="successOk" />
         </FormItem>
         <FormItem label="集合时间" prop="setTime">
-          <XDatePicker :format="format" :options="dateRangeOptions" :value="form.setTime" placeholder="请选择集合时间" style="width: 290px" type="datetime" @on-change="setTimeChange"  @on-open-change="isDate($event)"/>
+          <XDatePicker :format="format" :options="dateRangeOptions" :value="form.setTime" placeholder="请选择集合时间" style="width: 290px" type="datetime" @on-change="setTimeChange" @on-open-change="isDate($event)" />
         </FormItem>
         <FormItem label="集合地址" prop="setAddr">
           <div class="flex ai-center">
@@ -670,7 +670,6 @@ export default {
             let renderDom = []
             const index = params.index
             const ruleId = this.form.signRuleList[index].ruleId
-      
 
             if (ruleId == 3 || ruleId == 21) {
               const signRuleList = this.form.signRuleList[index]
@@ -963,10 +962,11 @@ export default {
                       'div',
                       { style: 'text-align: right;margin-bottom: 10px;margin-right: -4px' },
                       [
-                         //  单选，多选 选项超过 6 条不能再选择
+                        //  单选，多选 选项超过 6 条不能再选择
                         this.isFormDisabled
                           ? h('Icon', { props: { type: 'ios-lock-outline', size: 20 } })
-                          :(itemList[index].answer.length < 6? h('Icon', {
+                          : itemList[index].answer.length < 6
+                          ? h('Icon', {
                               style: 'margin-right: 4px',
                               props: {
                                 type: 'ios-add-circle-outline',
@@ -977,7 +977,8 @@ export default {
                                   itemList[index].answer.push({ answer: '' })
                                 }
                               }
-                            }):'') 
+                            })
+                          : ''
                       ]
                     )
                   ])
@@ -1128,20 +1129,21 @@ export default {
                     )
                   }),
                   h('div', { style: 'text-align: right;margin-bottom: 10px;margin-right: -4px' }, [
-                  //  单选，多选 选项超过 6 条不能再选择
-                   fkDetailList[index].answer.length<6? h('Icon', {
-                      style: 'margin-right: 4px',
-                      props: {
-                        type: 'ios-add-circle-outline',
-                        size: 20
-                      },
-                      on: {
-                        click: () => {
-                          fkDetailList[index].answer.push({ answer: '' })
-                        }
-                      }
-                    }): ''
-                 
+                    //  单选，多选 选项超过 6 条不能再选择
+                    fkDetailList[index].answer.length < 6
+                      ? h('Icon', {
+                          style: 'margin-right: 4px',
+                          props: {
+                            type: 'ios-add-circle-outline',
+                            size: 20
+                          },
+                          on: {
+                            click: () => {
+                              fkDetailList[index].answer.push({ answer: '' })
+                            }
+                          }
+                        })
+                      : ''
                   ])
                 ])
               ]
@@ -1334,7 +1336,8 @@ export default {
           key: 'amount',
           align: 'center',
           render: (h, params) => {
-            return h('InputNumber', {
+            return this.$createElement('InputNumber', {
+              ref: 'amout',
               props: {
                 value: this.form.amount,
                 placeholder: '输入金额',
@@ -1342,7 +1345,13 @@ export default {
               },
               on: {
                 input: value => {
-                  this.form.amount = value
+                  if (!this.util.isNumber(value)) {
+                    this.$Message.error('请输入大于0的整数')
+                    this.form.amount = ''
+                    this.$refs.amout.currentValue = ''
+                  } else {
+                    this.form.amount = value
+                  }
                 }
               }
             })
@@ -1353,7 +1362,8 @@ export default {
           key: 'vipAmount',
           align: 'center',
           render: (h, params) => {
-            return h('InputNumber', {
+            return this.$createElement('InputNumber', {
+              ref: 'vipAmount',
               props: {
                 value: this.form.vipAmount,
                 placeholder: '不填则无VIP价',
@@ -1361,7 +1371,13 @@ export default {
               },
               on: {
                 input: value => {
-                  this.form.vipAmount = value
+                  if (!this.util.isNumber(value)) {
+                    this.$Message.error('请输入大于0的整数')
+                    this.form.vipAmount = ''
+                    this.$refs.vipAmount.currentValue = ''
+                  } else {
+                    this.form.vipAmount = value
+                  }
                 }
               }
             })
@@ -1379,7 +1395,8 @@ export default {
             ])
           },
           render: (h, params) => {
-            return h('InputNumber', {
+            return this.$createElement('InputNumber', {
+              ref: 'recruitNum',
               props: {
                 value: this.form.recruitNum,
                 placeholder: '输入数量',
@@ -1388,7 +1405,13 @@ export default {
               },
               on: {
                 input: value => {
-                  this.form.recruitNum = value
+                  if (!this.util.isNumber(value)) {
+                    this.$Message.error('请输入大于0的整数')
+                    this.form.recruitNum = ''
+                    this.$refs.recruitNum.currentValue = ''
+                  } else {
+                    this.form.recruitNum = value
+                  }
                 }
               }
             })
@@ -1399,7 +1422,8 @@ export default {
           key: 'apptNum',
           align: 'center',
           render: (h, params) => {
-            return h('InputNumber', {
+            return this.$createElement('InputNumber', {
+              ref: 'apptNum',
               props: {
                 value: this.form.apptNum,
                 placeholder: '输入积分',
@@ -1408,7 +1432,13 @@ export default {
               },
               on: {
                 input: value => {
-                  this.form.apptNum = value
+                  if (!this.util.isNumber(value)) {
+                    this.$Message.error('请输入大于0的整数')
+                    this.form.apptNum = ''
+                    this.$refs.apptNum.currentValue = ''
+                  } else {
+                    this.form.apptNum = value
+                  }
                 }
               }
             })
@@ -1419,7 +1449,8 @@ export default {
           key: 'score',
           align: 'center',
           render: (h, params) => {
-            return h('InputNumber', {
+            return this.$createElement('InputNumber', {
+              ref: 'score',
               props: {
                 value: this.form.score,
                 placeholder: '输入积分',
@@ -1428,7 +1459,13 @@ export default {
               },
               on: {
                 input: value => {
-                  this.form.score = value
+                  if (!this.util.isNumber(value)) {
+                    this.$Message.error('请输入大于0的整数')
+                    this.form.score = ''
+                    this.$refs.score.currentValue = ''
+                  } else {
+                    this.form.score = value
+                  }
                 }
               }
             })
@@ -1527,13 +1564,13 @@ export default {
     isDate(e) {
       if (e) return
       let startT = this.form.setTime
-    
+
       //
       if (new Date(startT).getTime() < new Date().getTime()) {
         this.$Message.error('集合时间不能早于当前时间！')
-        this.form.setTime =""
+        this.form.setTime = ''
         return
-      } 
+      }
     },
     isTrainChange(e) {
       this.form.isTrain = e
@@ -1635,7 +1672,6 @@ export default {
       this.form.enrollEndtime = e[1]
     },
     successOk(e) {
-  
       if (this.form.enrollStarttime) {
         let enrollStarttime = new Date(this.form.enrollStarttime).getTime()
         let newDate = new Date().getTime()
@@ -1643,7 +1679,7 @@ export default {
           this.$Message.warning('招募开始时间要晚于当前时间')
           this.form.enrollStarttime = null
           this.form.enrollEndtime = null
-        } 
+        }
       }
     },
     getPost(val) {
@@ -1684,8 +1720,8 @@ export default {
         delete data.isUploadData
 
         let signRuleList = data.signRuleList
-        signRuleList.forEach(item=>{
-          item.ruleName = item.ruleName ? item.ruleName: item.name
+        signRuleList.forEach(item => {
+          item.ruleName = item.ruleName ? item.ruleName : item.name
           // delete item.name
         })
 

@@ -146,15 +146,28 @@ export default {
     document.onkeydown = null
     return false
   },
-  isNumber(e){
-    console.log(e);
-    
-    if(!e) return false
+  //   keyUp 时间
+  keyUpNumber(e,val){
     let key = e.key
-    if(key == "." || key == "-"){
-      return true
+    let reg1 = /^[1-9]\d*$/
+    let reg2 = /^[0-9]\d*$/
+    if(`${val}`.length<2){
+      return reg1.test(key)
+    }else{
+      return reg2.test(key)
+    }
+  },
+  //  校验 数字
+  isNumber(v, l){
+    let reg1 = /^[1-9]\d*$/
+    let reg2 = /^[0-9]\d*$/
+    if(`${l}`.length<2){
+      return reg1.test(v)
+    }else{
+      return reg2.test(v)
     }
   }
+
 
 
 }

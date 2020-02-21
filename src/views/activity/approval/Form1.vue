@@ -21,13 +21,12 @@
             </Select>
           </FormItem>
           <FormItem label="活动预算" prop="budget">
-            <InputNumber
+            <InputNumber 
+              ref="budget"
               :disabled='isEdit'
-              v-model="form.budget"
+              :value="form.budget"
               placeholder="请输入活动预算金额"
-              :min='0'
-              @on-blur="isNumber"
-            />
+              @on-change="isNumber" />
           </FormItem>
           <FormItem label="项目周期" prop="startT">
             <XDatePicker
@@ -287,7 +286,7 @@ export default {
       },
       rules: {
         categoryId: { required: true, message: "项目名称不能为空" },
-        budget: { required: true, message: "活动预算不能为空" },
+        budget: { required: true, message: "活动预算不能为空"},
         startT: { required: true, message: "活动有效时间区间不能为空" },
         batchName: { required: true, message: "立项名称不能为空" },
         batchObjective: { required: true, message: "活动目的不能为空" },
@@ -458,15 +457,14 @@ export default {
         }
       }
     },
-    isNumber() {
-      let value = this.form.budget
-      if (value.toString().includes('.') || 0 > value) {
-        this.$Message.error({
-          background: true,
-          content: '请输入大于0的整数！'
-        })
-        this.form.budget = 0
-      }
+    isNumber(e) {
+      if (!this.util.isNumber(e)) {
+          this.$Message.error('请输入大于0的整数')
+          this.form.budget = ''
+          this.$refs.budget.currentValue = ''
+        } else{
+         this.form.budget = e
+        }
     },
     // 弹框
     modalCancel() {

@@ -64,7 +64,13 @@
               </RadioGroup>
             </FormItem>
              <FormItem label="数值：" prop="addScore">
-               <InputNumber :min="1" size="large" v-model="formItem.addScore"  @on-change="numbers" style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
+               <InputNumber 
+               ref="addScore"
+               :min="1" 
+               size="large" 
+               :vlaue="formItem.addScore"  
+               @on-change="isNumber" 
+               style="width: 160px;" placeholder="请输入大于0的整数"></InputNumber>
                    <Button type="error" >分</Button>
             </FormItem>
             <FormItem label="备注信息：" prop="remark">
@@ -303,13 +309,14 @@ export default {
   },
   methods: {
 
-     numbers(e){
-      if(e==0){
-        this.formItem.addScore=1
-      }else{
-        this.formItem.addScore=e
-      }
-      // console.log(e)
+    isNumber(e){
+        if (!this.util.isNumber(e)) {
+          this.$Message.error('请输入大于0的整数')
+           this.formItem.addScore= ""
+          this.$refs.addScore.currentValue = ''
+        } else{
+          this.formItem.addScore = e
+        }
     },
     //积分管理--积分分页
     getintegralpage() {

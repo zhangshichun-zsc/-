@@ -62,13 +62,13 @@
             </FormItem>
             <FormItem label="数值：" prop="addScore">
               <InputNumber
+                ref="addScore"
                 :min="1"
-
                 size="large"
                 v-model="formItem.addScore"
                 style="width: 160px;"
                 placeholder="请输入大于0的整数"
-                @on-change="numbers"
+               @on-change="isNumber"
               ></InputNumber>
               <Button type="error">分</Button>
             </FormItem>
@@ -304,13 +304,14 @@ export default {
     sort: "getintegralpage"
   },
   methods: {
-    numbers(e){
-      if(e==0){
-        this.formItem.addScore=1
-      }else{
-        this.formItem.addScore=e
-      }
-      console.log(e)
+    isNumber(e){
+        if (!this.util.isNumber(e)) {
+          this.$Message.error('请输入大于0的整数')
+           this.formItem.addScore= ""
+          this.$refs.addScore.currentValue = ''
+        } else{
+          this.formItem.addScore = e
+        }
     },
     //积分管理--积分分页
     getintegralpage() {
