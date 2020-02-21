@@ -21,7 +21,7 @@
           <Select v-model="orgStatus" class="inpt">
             <Option value="0,1,2">全部</Option>
             <Option value="0,3">待审核</Option>
-            <Option value="1">已通过</Option>
+            <Option value="1">已审核</Option>
             <Option value="2">已拒绝</Option>
           </Select>
         </div>
@@ -334,10 +334,10 @@ export default {
         { value: 20, label: '20' }
       ],
       sorting: [
-        { value: 'asc', label: '正序' },
-        { value: 'desc', label: '倒序' }
+         { value: "create_at asc", label: "正序" },
+        { value: "create_at desc", label: "倒序" }
       ],
-      sort: 'asc',
+      sort: "create_at desc",
       page: 1,
       size: 10,
       dataCount: 0,
@@ -378,7 +378,14 @@ export default {
 
     this.getorgpage()
   },
-  watch: {},
+  watch: {
+    sort(newVlue) {
+      this.getorgpage();
+    },
+    size(newVlue){
+      this.getorgpage();
+    }
+  },
   methods: {
     //标签分页
     getorgpage() {
@@ -394,7 +401,8 @@ export default {
       let fromobj = this.util.remove({
         page: {
           page: this.page,
-          size: this.size
+          size: this.size,
+          sort: this.sort
         },
         userId: this.userId,
         orgName: this.orgName,

@@ -234,7 +234,7 @@
                         placeholder="名称搜索"
                         style="width: auto"
                       />
-                      <Table :columns="columns1" :data="data1"></Table>
+                      <Table :loading="loading" :columns="columns1" :data="data1"></Table>
                       <Page :total="100" />
                     </Modal>
                   </FormItem>
@@ -385,7 +385,7 @@
           </Dropdown>
         </div>
         <div>
-          <Select
+          <!-- <Select
             v-model="size"
             style="width:120px"
             placeholder="显示条数"
@@ -397,7 +397,7 @@
               :key="item.value"
               >{{ item.label }}</Option
             >
-          </Select>
+          </Select> -->
           <Select
             placeholder="排序方式"
             class="space"
@@ -539,6 +539,8 @@
           style="padding-right: 30px;"
           :page-size="size"
           @on-change="changepages"
+          @on-page-size-change='setSize'
+          show-sizer
         />
       </div>
     </div>
@@ -553,6 +555,7 @@ export default {
   components: { customizeDialog },
   data() {
     return {
+      loading:false,
       navigation1: {
         head: "用户列表(会员)"
       },
@@ -948,7 +951,11 @@ export default {
 
   //事件监听
   watch: {
-    size: "getUserPage",
+    page(newValue){
+      this.$nextTick(()=>{
+        this.getUserPage()
+      })
+    },
     sort: "getUserPage",
     ALLINFO(newVlaue, oldValue) {
       //  全选 and 全不选
@@ -967,9 +974,15 @@ export default {
   },
 
   methods: {
+    // 使用 page 自带的 size 控件来选择条数,不然 page 出现问题
+    setSize(n){
+      this.size = n
+      this.getUserPage()
+    },
     //用户列表
     getUserPage() {
       //获取用户分页
+      this.loading = true
       let endAt = null;
       if (this.endAt) {
         endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
@@ -998,6 +1011,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
+        this.loading = false
         console.log(res);
       });
     },

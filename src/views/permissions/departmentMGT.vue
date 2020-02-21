@@ -36,6 +36,7 @@
                   />
                 </FormItem>
                 <FormItem label="上级部门:" prop="parentId">
+                  
                   <Select
                     v-model="AddDate.parentId"
                     :disabled="isdispabled"
@@ -755,10 +756,11 @@ export default {
     // 查询所有上级部门名称
     getdepartmentSup() {
       departmentSup({
-        parentId: this.AddDate.parentId
+        deptId: this.AddDate.parentId
       }).then(res => {
         if (res.code == 200) {
           this.deplist = res.data;
+          this.AddDate.parentId = res.data[0].deptId
           this.$store.commit("deplist", res.data);
         }
         console.log(res);

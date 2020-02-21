@@ -590,16 +590,14 @@ export default {
         districtId: this.county,
         fileList: file.toString() === "" ? "" : file.toString()
       };
-      console.log(obj);
-
-      // orgemod(obj).then(res => {
-      //   if (res.code == 200) {
-      //     this.$Message.success("编辑成功");
-      //   } else {
-      //     this.$Message.error(res.msg);
-      //   }
-      //   console.log(res);
-      // });
+      orgemod(obj).then(res => {
+        if (res.code == 200) {
+          this.$Message.success("编辑成功");
+        } else {
+          this.$Message.error(res.msg);
+        }
+        console.log(res);
+      });
     },
 
     //省市区

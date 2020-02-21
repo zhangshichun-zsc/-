@@ -301,6 +301,9 @@ export default {
   watch: {
     sort(newVlue) {
       this.getorgpage();
+    },
+    size(newVlue){
+      this.getorgpage()
     }
   },
   methods: {

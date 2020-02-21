@@ -231,7 +231,7 @@
                         style="width: auto"
                       />
                       <Table :columns="columns1" :data="data1"></Table>
-                      <Page :total="100" />
+                      <Page :total="100"/>
                     </Modal>
                   </FormItem>
                   <FormItem label="推送标题" prop="PushLink">
@@ -378,7 +378,7 @@
           </Dropdown>
         </div>
         <div>
-          <Select
+          <!-- <Select
             v-model="size"
             style="width:120px"
             placeholder="显示条数"
@@ -390,7 +390,7 @@
               :key="item.value"
               >{{ item.label }}</Option
             >
-          </Select>
+          </Select> -->
           <Select
             placeholder="排序方式"
             class="space"
@@ -527,10 +527,12 @@
           :total="dataCount"
           show-elevator
           show-total
+          show-sizer
           size="small"
           style="padding-right: 30px;"
           :page-size="size"
           @on-change="changepages"
+          @on-page-size-change='setSize'
         />
       </div>
     </div>
@@ -941,7 +943,6 @@ export default {
 
   //事件监听
   watch: {
-    size: "getUserPage",
     sort: "getUserPage",
     ALLINFO(newVlaue, oldValue) {
       //  全选 and 全不选
@@ -960,6 +961,10 @@ export default {
   },
 
   methods: {
+    setSize(n){
+      this.size = n
+      this.getUserPage()
+    },
     //用户列表
     getUserPage() {
       let endAt = null;
@@ -1191,6 +1196,7 @@ export default {
     cancel() {
       this.$Message.info("Clicked cancel");
     },
+
     jump1() {
       this.$router.push({ name: "UserFields_hy" });
     },

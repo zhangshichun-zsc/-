@@ -145,6 +145,15 @@ export default {
   removekeydow() {
     document.onkeydown = null
     return false
+  },
+  isNumber(e){
+    console.log(e);
+    
+    if(!e) return false
+    let key = e.key
+    if(key == "." || key == "-"){
+      return true
+    }
   }
 
 
