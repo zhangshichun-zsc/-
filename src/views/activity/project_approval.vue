@@ -57,7 +57,7 @@
             <Checkbox v-model="status" :disabled='allD'>全选</Checkbox>
           </Button>
           <Button class="table-btn" @click="operation(2)">通过</Button>
-          <Button class="table-btn" @click="modal1 = true">拒绝</Button>
+          <Button class="table-btn" @click="operation(4)">拒绝</Button>
         </div>
         <div>
           <Button @click="approval" class="table-btn" >新建立项</Button>
@@ -296,6 +296,7 @@ export default {
     },
     // 活动立项审批--批量审批
     getpendingApp(e) {
+      if(!this.arr.length) return this.$Message.info("请至少选择一项！")
       pendingApp({
         userId: this.$store.state.userId,
         auditId: this.arr,
@@ -390,7 +391,13 @@ export default {
 
     //操作
     operation(e){
-      this.getpendingApp(e)
+      if(e==4){
+        if(!this.arr.length) return this.$Message.info("请至少选择一项！")
+        this.modal1 = true
+      }else{
+        this.getpendingApp(e)
+      }
+     
     },
 
     approval() {

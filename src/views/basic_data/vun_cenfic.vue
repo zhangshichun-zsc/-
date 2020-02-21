@@ -3,19 +3,6 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <!-- <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-
-        </div>
-      </div>-->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start">
           <span>组织:</span>
@@ -23,40 +10,23 @@
         </div>
         <div class="flex-center-start">
           <span>创建时间段:</span>
-          <DatePicker
+          <XDatePicker
             class="inpt"
             style="width: 180px"
             type="date"
             @on-change="startTimeChange"
             placeholder="请选择开始时间"
             v-model="args.startAt"
-          ></DatePicker>
+          ></XDatePicker>
           <span class="po">~</span>
-          <DatePicker
+          <XDatePicker
             style="width: 180px"
             type="date"
             @on-change="endTimeChange"
             placeholder="请选择结束时间"
             v-model="args.endAt"
-          ></DatePicker>
+          ></XDatePicker>
         </div>
-        <!-- <div class="flex-center-start">
-          <span>创建时间:</span>
-          <Row>
-            <DatePicker
-              :open="open"
-              confirm
-              type="daterange"
-              @on-change="handleChange"
-              @on-ok="successOk"
-            >
-              <a href="javascript:void(0)" @click="open = true">
-                <Icon type="ios-calendar-outline"></Icon>
-                <template>{{ time }}</template>
-              </a>
-            </DatePicker>
-          </Row>
-        </div>-->
         <div class="flex-center-end">
           <Button class="search" @click="query()">查询</Button>
           <Modal v-model="modal1" title="新增证书模板" @on-cancel="cancel">
@@ -74,15 +44,16 @@
                 <Input v-model.trim="params.title" :maxlength="30" />
               </FormItem>
               <FormItem label="生效日期" prop="effectiveAt">
-                <Date-picker
+                <XDatePicker
                   placement="bottom-end"
                   placeholder="选择日期"
                   style="width: 200px"
                   type="datetime"
                   v-model="params.effectiveAt"
                   @on-change="changeDate"
+                  @on-open-change="isDate($event)"
                   :options="options"
-                ></Date-picker>
+                ></XDatePicker>
               </FormItem>
             </Form>
             <div slot="footer">
@@ -101,7 +72,6 @@
         <div class="flex-center-end">
           <Select
             class="inpt sort"
-
             placeholder="显示条数"
             v-model="size"
             @on-change="changeNum"
@@ -142,6 +112,7 @@
 <script>
 import { getBooks, getVolunteer, updateBooks } from "@/request/api";
 import { filterNull } from "@/libs/utils";
+import XDatePicker from "@/business_components/XDatePicker.vue"
 export default {
   data() {
     return {
@@ -171,7 +142,7 @@ export default {
           { required: true, message: "模板名称不能为空", trigger: "blur" }
         ],
         effectiveAt: [
-          { required: true, message: "有效日期不能为空", trigger: "change" }
+          { required: true, message: "有效日期不能为空" }
         ]
       },
       modal1: false,
@@ -280,7 +251,7 @@ export default {
     };
   },
 
-  components: {},
+  components: {XDatePicker},
 
   computed: {},
 
@@ -314,7 +285,15 @@ export default {
         this.volun = res.data;
       });
     },
-
+    isDate(e){
+      if(e) return
+      let val = this.params.effectiveAt
+      if(new Date(val)<new Date()){
+         this.params.effectiveAt = ""
+        this.$Message.error("生效时间要早于当前时间")
+        return
+      }  
+    },
     query() {
       if (this.args.startAt && this.args.endAt) {
         if (this.args.startAt <= this.args.endAt) {
@@ -328,12 +307,6 @@ export default {
       this.getList(this.args);
     },
 
-    // successOk() {
-    //   if (!this.args.startAt && !this.args.endAt) {
-    //     this.time = "请选择时间段";
-    //   }
-    //   this.open = false;
-    // },
     startTimeChange(e) {
        if(e){
         this.args.startAt = e+ " 00:00:00";

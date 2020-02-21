@@ -185,18 +185,14 @@ export default {
         ],
         startAt: [
           {
-            required: true,
-            type: "date",
+            required: true, 
             message: "开始日期不能为空",
-            trigger: "change"
           }
         ],
         endAt: [
           {
             required: true,
-            type: "date",
             message: "结束日期不能为空",
-            trigger: "change"
           }
         ]
       },
@@ -235,8 +231,8 @@ export default {
     },
     //添加广告
     getadd() {
-      this.data1 = this.formValidate.startAt.getTime();
-      this.data2 = this.formValidate.endAt.getTime();
+      this.data1 = new Date(this.formValidate.startAt).getTime();
+      this.data2 = new Date(this.formValidate.endAt).getTime();
 
       let obj = {
         sysId: this.sysid,
@@ -302,7 +298,7 @@ export default {
           }
         });
       } else {
-        this.$Message.info("日期结束时间不正确");
+        this.$Message.info("结束时间不能早于开始时间！");
       }
     },
 
