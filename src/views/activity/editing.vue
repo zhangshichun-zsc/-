@@ -391,7 +391,7 @@
                 <span class="first-span">发布时间</span>
                 <RadioGroup v-model="releaseTimeSelf" @on-change="releaseTime">
                   <Radio :disabled="status && status != 1" :label="0"
-                    >活动开始前一个月自动发布</Radio
+                    >招募开始前一周</Radio
                   >
                   <Radio :disabled="status && status != 1" :label="1"
                     >自定义</Radio

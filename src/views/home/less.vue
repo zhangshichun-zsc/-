@@ -162,9 +162,7 @@ export default {
         if (valid) {
           this.formFlag = false;
           this.getSetup();
-        } else {
-          this.$Message.error("必填项未填!");
-        }
+        } 
       });
     },
     handleReset(name) {

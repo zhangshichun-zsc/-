@@ -125,7 +125,7 @@
           <XDatePicker :format="format" :options="newDateRangeOptions" :value="[form.enrollStarttime,form.enrollEndtime]" placeholder="请选择报名时间" style="width: 290px" type="datetimerange" @on-change="enrollTimeChange" @on-open-change="successOk" />
         </FormItem>
         <FormItem label="集合时间" prop="setTime">
-          <XDatePicker :format="format" :options="dateRangeOptions" :value="form.setTime" placeholder="请选择集合时间" style="width: 290px" type="datetime" @on-change="setTimeChange" />
+          <XDatePicker :format="format" :options="dateRangeOptions" :value="form.setTime" placeholder="请选择集合时间" style="width: 290px" type="datetime" @on-change="setTimeChange"  @on-open-change="isDate($event)"/>
         </FormItem>
         <FormItem label="集合地址" prop="setAddr">
           <div class="flex ai-center">
@@ -426,7 +426,7 @@ export default {
       },
       dateRangeOptions: {
         disabledDate(v) {
-          return v < today
+          return v && v.valueOf() < Date.now() - 86400000
         }
       },
       typeNames: { 1: '文字', 2: '图片', 3: '单选题', 4: '多选题', 6: '多行文本' },
@@ -1523,6 +1523,17 @@ export default {
     async getBatchItem() {
       const res = await batchItem({ userId: this.userId })
       this.batchItemData = res.data || {}
+    },
+    isDate(e) {
+      if (e) return
+      let startT = this.form.setTime
+    
+      //
+      if (new Date(startT).getTime() < new Date().getTime()) {
+        this.$Message.error('集合时间不能早于当前时间！')
+        this.form.setTime =""
+        return
+      } 
     },
     isTrainChange(e) {
       this.form.isTrain = e

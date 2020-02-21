@@ -306,6 +306,8 @@ export default {
         if(res.code==200){
           this.$Message.info("操作成功");
           this.getapprovalpage()
+        }else{
+          this.$Message.error(res.msg)
         }
       });
     },

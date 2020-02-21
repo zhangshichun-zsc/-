@@ -176,12 +176,13 @@ export default {
         })
         this.form.batches = actInfoList
       }
-
+      let batchId  = this.$route.query.batchId 
       const body = {
         userId: this.$store.state.userId,
         is_draft: isDraft ? 1 : 2,
         ...this.form.base,
-        actInfoList: this.form.batches
+        actInfoList: this.form.batches,
+        batchId
       }
       // 第3步修改的
       const clone = cloneDeep(body)

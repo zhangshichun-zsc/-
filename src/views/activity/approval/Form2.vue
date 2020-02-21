@@ -1,6 +1,6 @@
 <template>
   <div class="approval-form-2">
-    <div class="card mt-16" >
+    <div class="card mt-16">
       <!--v-if='!isEdit' -->
       <!-- 从立项管理进来 不展示 table -->
       <Tag v-for="(batch, index) in batches" :key="index" :name="index" :type="index === batchIndex ? null : 'border'" :closable="batches.length>1&&!(index === 0 && isIntegrated)" :color="index === batchIndex ? '#ff565a' : '' " @click.native="editBatch(index)" @on-close="onRemoveBatch(index)">第{{index + 1}}批次</Tag>
@@ -38,7 +38,7 @@
             <UploadImg :max="1" v-model="form.actPic" :full-url.sync="form.actShowPic" placeholder="请上传主题图片" :display-width="320" :crop-width="750" :crop-height="320" />
           </FormItem>
           <FormItem label="活动时间" prop="startT">
-            <XDatePicker type="datetimerange" :value="[form.startT, form.endT]" format="yyyy-MM-dd HH:mm" :options="dateRangeOptions" placeholder="请选择活动时间" @on-change="onDateRangeChange" />
+            <XDatePicker type="datetimerange" :value="[form.startT, form.endT]" format="yyyy-MM-dd HH:mm" :options="dateRangeOptions" placeholder="请选择活动时间" @on-change="onDateRangeChange" @on-open-change="isDate($event)" />
           </FormItem>
           <FormItem label="活动地址" prop="actAddress" class="width-auto">
             <Row :gutter="16">
@@ -277,7 +277,7 @@ export default {
       roleData: {},
       dateRangeOptions: {
         disabledDate(v) {
-          return v < today
+          return v && v.valueOf() < Date.now() - 86400000
         }
       },
       form: cloneDeep(form),
@@ -585,6 +585,24 @@ export default {
         this.form.userConfList[this.roleIndex] = e
       } else {
         this.form.userConfList.push(e)
+      }
+    },
+    // 判断当前时间是否有问题
+    isDate(e) {
+      if (e) return
+      let startT = this.form.startT
+      let endT = this.form.endT
+      //
+      if (new Date(startT).getTime() < new Date().getTime()) {
+        this.$Message.error('活动开始时间不能早于当前时间！')
+        this.form.startT = ''
+        this.form.endT = ''
+        return
+      } else if (new Date(endT).getTime() < new Date(startT).getTime()) {
+        this.$Message.error('活动结束时间不能早于活动开始时间！')
+        this.form.startT = ''
+        this.form.endT = ''
+        return
       }
     },
     // 显示招募角色详情
