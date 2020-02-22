@@ -62,10 +62,10 @@
         <div>
           <Button @click="approval" class="table-btn" >新建立项</Button>
           <Button class="table-btn" @click="draft">草稿箱</Button>
-          <Button class="table-btn">导出</Button>
-          <Select v-model="size" class="table-btn" placeholder="显示条数" size='large' style="width: 150px;">
+          <Button class="table-btn" >导出</Button>
+          <!-- <Select v-model="size" class="table-btn" placeholder="显示条数" size='large' style="width: 150px;">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+          </Select> -->
           <Select placeholder="排序方式" style="width: 150px;" v-model="sort" class="table-btn"  size='large'>
             <Option :value="'create_at desc'">倒序</Option>
             <Option :value="'create_at asc'">正序</Option>
@@ -81,12 +81,14 @@
       ></Table>
       <div class="pages">
         <Page
+          show-sizer
+          placement='top'
           :total="dataCount"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
-          :page-size="size"
+          @on-page-size-change ="setSize"
           @on-change="changepages"
         />
       </div>
@@ -267,7 +269,6 @@ export default {
   },
    //事件监听
   watch: {
-    size: "getapprovalpage",
     sort: "getapprovalpage"
   },
 
@@ -363,6 +364,11 @@ export default {
     },
     handleChange(name,e){
       this.query[name] = e
+    },
+    // 切换页数
+    setSize(size){
+      this.size = size
+      this.getapprovalpage();
     },
     //分页功能
     changepages(index) {

@@ -3,19 +3,6 @@
   <div class="integral">
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
-      <!-- <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-
-        </div>
-      </div>-->
       <div class="flex-center-start integral-body">
         <div class="flex-center-start name">
           <span>名称:</span>
@@ -72,7 +59,7 @@
         </div>
       </div>
       <div class="min-height">
-        <Table ref="selection" border :columns="columns" :data="data"></Table>
+        <Table :loading="loading1" ref="selection" border :columns="columns" :data="data"></Table>
       </div>
 
       <div class="pages">
@@ -265,6 +252,7 @@ export default {
       text: "",
       actTypelist: [{ name: "家长", value: 1 }, { name: "孩子", value: 2 }],
       loading:false,
+      loading1:true
     };
   },
 
@@ -280,11 +268,13 @@ export default {
   methods: {
     // -获取官方活动分页
     getOffactivities() {
+      this.loading1 = true
       if (this.createTimestamp != "") {
         this.statsdata = this.createTimestamp.getTime();
       } else {
         this.statsdata = "";
       }
+       this.data=[]
       Offactivities({
         page: { page: this.page, size: this.size },
         dicName: this.dicName,
@@ -292,12 +282,12 @@ export default {
         createTimestamp: this.statsdata
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
         } else {
           this.$Message.error(res.msg);
         }
-        // console.log(res);
+        this.loading1 = true
       });
     },
 

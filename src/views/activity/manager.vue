@@ -84,9 +84,9 @@
           <Button class="table-btn" @click="exportData(1)">导出受益方签到表</Button>
           <Button class="table-btn" @click="exportData(2)">导出志愿者签到表</Button>
           <!-- <Button class="table-btn" @click="addaction">添加活动</Button> -->
-          <Select size="large" v-model="size" style="width:150px" placeholder="显示条数" class="table-btn">
+          <!-- <Select size="large" v-model="size" style="width:150px" placeholder="显示条数" class="table-btn">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+          </Select> -->
           <Select size="large" placeholder="排序方式" class="table-btn" style="width: 150px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -143,7 +143,7 @@
           <Button type="success" @click="modalOkdel">确定</Button>
         </div>
       </Modal>
-      <Page :total="dataCount" show-elevator show-total size="small" class="pages" :page-size="size" @on-change="changepages" />
+      <Page :total="dataCount" show-elevator show-total size="small" class="pages" @on-page-size-change="setSize" placement='top' show-sizer @on-change="changepages" />
     </div>
   </div>
 </template>
@@ -558,7 +558,6 @@ export default {
   },
   //事件监听
   watch: {
-    size: 'getactiveManager',
     sort: 'getactiveManager'
   },
 
@@ -748,7 +747,11 @@ export default {
         return { activityId: v.acitvityId, activityName: v.activityName }
       })
     },
-
+    // 切换页数
+    setSize(size) {
+      this.size = size
+      this.getapprovalpage()
+    },
     //分页功能
     changepages(index) {
       this.page = index
@@ -792,7 +795,7 @@ export default {
         this.$Message.error('没有选择')
         return
       }
-      if(i===3) return this.$Message.error('该功能暂未开放')
+      if (i === 3) return this.$Message.error('该功能暂未开放')
       for (let item of this.arr) {
         window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=${i}&activityName=
          ${item.activityName}`)

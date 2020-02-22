@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="min-height">
-        <Table ref="selection" border :columns="columns" :data="data"></Table>
+        <Table :loading="loading1"  ref="selection" border :columns="columns" :data="data"></Table>
       </div>
 
       <div class="pages">
@@ -192,6 +192,7 @@ export default {
       states: "",
       id: 0,
       loading:false,
+      loading1:true
     };
   },
 
@@ -206,6 +207,7 @@ export default {
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {
+      this.loading1 = true
       let params = {
         page: {
           page: this.page,
@@ -219,13 +221,15 @@ export default {
         endAt: this.endAt
       };
       this.params = this.util.remove(params);
+      this.data= []
       Basicsearch(this.params).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }
         // console.log(res);
+        this.loading1 = false
       });
     },
 

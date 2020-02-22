@@ -49,9 +49,9 @@
             </Dropdown>
             <div class="flex-center-start">
               <!-- <Button class="table-btn" @click="add">添加活动</Button> -->
-              <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
+              <!-- <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
                 <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select>
+              </Select> -->
               <Select class="table-btn" placeholder="排序方式" style="width: 150px;" v-model="sort" size="large">
                 <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
@@ -72,7 +72,9 @@
           show-total
           size="small"
           class="pages"
-          :page-size="size"
+           placement='top' 
+          show-sizer
+          @on-page-size-change="setSize" 
           @on-change="changepages"
         />
       </div>
@@ -204,7 +206,6 @@ export default {
   },
    //事件监听
   watch: {
-    size: "getactiveAddManager",
     sort: "getactiveAddManager"
   },
 
@@ -266,7 +267,11 @@ export default {
         data: this.arrs
       });
     },
-    
+      // 切换页数
+    setSize(size) {
+      this.size = size
+      this.getapprovalpage()
+    },
     //分页功能
     changepages(index) {
       this.page = index;

@@ -529,8 +529,8 @@
           show-total
           show-sizer
           size="small"
+          placement='top'
           style="padding-right: 30px;"
-          :page-size="size"
           @on-change="changepages"
           @on-page-size-change='setSize'
         />
