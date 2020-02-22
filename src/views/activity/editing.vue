@@ -528,7 +528,6 @@ export default {
   computed: {},
 
   created() {
-    console.log(this.$route.query);
     this.userId = this.$store.state.userId;
     this.getBatchItem();
     if (this.$route.query.dicId) {
@@ -640,7 +639,6 @@ export default {
       this.$set(this.batch, "actAddress", e.address);
     },
     cancelRole(e) {
-      console.log(e);
       this.isAddRole = false;
       this.two = true;
     },
