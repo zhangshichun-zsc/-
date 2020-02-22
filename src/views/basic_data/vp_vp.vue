@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="min-height">
-      <Table ref="selection" border :columns="columns" :data="data1"></Table>
+      <Table :loading="loading" ref="selection" border :columns="columns" :data="data1"></Table>
       </div>
       <div class="pages">
         <Page
@@ -45,6 +45,7 @@ import basicdata from "@/components/basicdata";
 export default {
   data() {
     return {
+      loading: true,
       navigation1: {
         head: "会员特长管理"
       },
@@ -206,6 +207,7 @@ export default {
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {
+       this.loading = true
       let params = {
         page: {
           page: this.page,
@@ -219,12 +221,15 @@ export default {
         endAt: this.endAt
       };
       this.params = this.util.remove(params);
+      
       Basicsearch(this.params).then(res => {
+        this.data1 = []
         if (res.code == 200) {
-          this.data1 = res.data.list;
+          this.data1 = [...res.data.list];
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }
+        this.loading = false
         // console.log(res);
       });
     },

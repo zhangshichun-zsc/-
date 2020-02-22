@@ -340,7 +340,7 @@ export default {
       });
     },
     space() {
-      console.log(this.type)
+      if(!this.arr.length) return this.$Message.error("请选择至少一条未处理的数据");
       if (this.type == 0) {
         this.arr = this.arr
           .map(item => {
@@ -349,9 +349,8 @@ export default {
           .toString();
         this.getReportdeles();
       } else if (this.type != 0) {
-
         if (this.arr.length == 0 || this.arrs == "") {
-          this.$Message.error("暂无可操作数据");
+          this.$Message.error("请选择至少一条未处理的数据");
         } else {
           this.arr = this.arrs;
           this.getReportdeles();

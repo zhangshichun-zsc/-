@@ -191,7 +191,7 @@ export default {
       this.loading = false
       if (res.code == 200) {
         this.$Message.success(res.msg)
-        this.$router.push({ name: 'manager' })
+        this.$router.push({ name: 'project_approval' })
       } else {
         this.$Message.error(res.msg)
       }

@@ -381,9 +381,7 @@ export default {
             this.EditFormFlag = false;
             this.getroleedit();
           }
-        } else {
-          this.$Message.error("必填项未填!");
-        }
+        } 
       });
     }
   },

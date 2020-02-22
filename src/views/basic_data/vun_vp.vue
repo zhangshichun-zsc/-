@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="min-height">
-      <Table ref="selection" border :columns="columns" :data="data"></Table>
+      <Table :loading="loading" ref="selection" border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
         <Page
@@ -45,6 +45,7 @@ import basicdata from "@/components/basicdata";
 export default {
   data() {
     return {
+      loading: true,
       navigation1: {
         head: "志愿者特长管理"
       },
@@ -204,6 +205,7 @@ export default {
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {
+      this.loading =true
       let params = {
         page: {
           page: this.page,
@@ -217,12 +219,15 @@ export default {
         endAt: this.endAt
       };
       this.params = this.util.remove(params);
+      this.data = []
       Basicsearch(this.params).then(res => {
+      
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }
+          this.loading = false
         // console.log(res);
       });
     },
@@ -264,7 +269,7 @@ export default {
         }, 500);
 
         if (res.code == 200) {
-          this.getBasicsearch();
+          if(e  != 2)  this.getBasicsearch();
           this.modal1 = false;
           if (e == 0) {
             this.$Message.info("添加成功");
@@ -285,16 +290,6 @@ export default {
       this.targetName = e.dicName;
       this.startAt = e.createTimestamp[0];
       this.endAt = e.createTimestamp[1];
-      // if (e.createTimestamp == "") {
-      // this.startAt = '';
-      // this.endAt = '';
-      // } else if (new Date() > e.createTimestamp) {
-      //   this.startAt = e.createTimestamp;
-      //   this.endAt = new Date();
-      // } else {
-      //   this.startAt = new Date();
-      //   this.endAt = e.createTimestamp;
-      // }
       this.getBasicsearch();
     },
 

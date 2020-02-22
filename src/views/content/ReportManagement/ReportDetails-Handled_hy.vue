@@ -38,9 +38,13 @@
             <td class="zt" style="position:relative">
               <div style="position:absolute;right:27px;">举报图片</div>
             </td>
-            <td class="tp">
+            <td class="tp" v-if="picList.length">
               <img class="oneTp" v-for='(item,index) in picList' :key="index" :src="item.picPath"></img>
+
             </td>
+             <td class="zt" v-else>
+                无
+             </td>
           </tr>
         </table>
 

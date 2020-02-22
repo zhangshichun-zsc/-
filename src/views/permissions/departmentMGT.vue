@@ -760,19 +760,24 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.deplist = res.data;
-          this.AddDate.parentId = res.data[0].deptId
+          if(res.data.length>0){
+            this.AddDate.parentId = res.data[0].deptId
+          }
           this.$store.commit("deplist", res.data);
         }
-        console.log(res);
       });
     },
     //  查询 当前部门的活动类型
     getName(deptId) {
+       this.AddDate.ssproject = []
       editfindDicName({ deptId: deptId }).then(res => {
         let arr = res.data.map(item => {
           return item.dicId;
         });
-        this.AddDate.ssproject = arr;
+        this.$nextTick(()=>{
+          this.AddDate.ssproject = [...arr];
+        })
+        
       });
     },
 

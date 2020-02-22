@@ -2,51 +2,6 @@
 <template>
   <div>
     <div class="integral-header">
-      <!-- <Navigation :labels="navigation1"></Navigation> -->
-      <!-- <div class="flex-center-between integral-top">
-        <div>
-          <Icon type="ios-search-outline" />
-          <span>筛选查询</span>
-        </div>
-        <div class="flex-center-end">
-          <div class="integral-center">
-            <Icon type="ios-arrow-down" />
-            <span>收起筛选</span>
-          </div>
-
-        </div>
-      </div>-->
-      <!-- <div class="flex-center-start integral-body">
-        <div class="flex-center-start name">
-          <span>名称:</span>
-          <Input size="large" placeholder="基金名称" class="inpt" v-model="query.name" />
-        </div>
-        <div class="flex-center-start name">
-          <span>有效状态:</span>
-          <Select  class="inpt" v-model="query.validFlag" style="width: 150px;margin-right:10px">
-             <Option value="-1">全部</Option>
-            <Option value="1">有效</Option>
-            <Option value="0">无效</Option>
-          </Select>
-        </div>
-        <div class="flex-center-start name">
-          <span>创建时间:</span>
-          <Row>
-             <DatePicker
-              :open="open"
-              confirm
-              type="daterange"
-              @on-change="handleChange"
-              @on-ok="successOk">
-              <a href="javascript:void(0)" @click="open = true">
-                  <Icon type="ios-calendar-outline"></Icon>
-                  <template>{{ time }}</template>
-              </a>
-            </DatePicker>
-          </Row>
-        </div>
-         <Button class="table-btns" @click="queryMet()">查询结果</Button>
-      </div>-->
       <basicdata :navigation1="navigation1" @query="queryMet"></basicdata>
     </div>
     <div class="integral-table">
@@ -67,7 +22,7 @@
         </div>
       </div>
       <div class="min-height">
-        <Table ref="selection" border :columns="columns" :data="data1"></Table>
+        <Table :loading="loading" ref="selection" border :columns="columns" :data="data1"></Table>
       </div>
 
       <div class="pages">
@@ -94,6 +49,7 @@ import { filterNull } from "@/libs/utils";
 export default {
   data() {
     return {
+      loading: true,
       open: false,
       time: "请选择时间段",
       navigation1: {
@@ -153,35 +109,7 @@ export default {
             ]);
           }
         },
-        // {
-        //   title: "操作",
-        //   key: "action",
-        //   align: "center",
-        //   width: 180,
 
-        //   render: (h, params) => {
-        //     return h("div", [
-        //       h(
-        //         "a",
-        //         {
-        //           clssName: "action",
-        //           style: {
-        //             color: "red"
-        //           },
-        //           on: {
-        //             click: () => {
-        //               this.args.name = params.row.name;
-        //               this.args.dicId = params.row.dicId;
-        //               this.args.validFlag = params.row.validFlag;
-        //               this.modal1 = true;
-        //             }
-        //           }
-        //         },
-        //         "编辑"
-        //       )
-        //     ]);
-        //   }
-        // }
       ],
       query: {
         name: null,
@@ -220,14 +148,17 @@ export default {
 
   methods: {
     getList() {
+  
       getCard(filterNull(this.params)).then(res => {
+        this.data1 = []
         if (res.code == 200) {
-          this.data1 = res.data.list;
+          this.data1 = [...res.data.list];
           this.sumSize = res.data.totalSize;
           this.sumPage = res.data.totalNum;
         } else {
           this.$Message.error(res.msg);
         }
+        this.loading = false
       });
     },
     update() {
@@ -267,6 +198,7 @@ export default {
       this.query.name = e.dicName;
       this.params = Object.assign(this.params, this.query);
       this.$set(this.params.page, "page", 1);
+      this.loading = true
       this.getList();
     }
   }
