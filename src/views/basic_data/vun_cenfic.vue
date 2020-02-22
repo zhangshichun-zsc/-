@@ -49,10 +49,12 @@
                   placeholder="选择日期"
                   style="width: 200px"
                   type="datetime"
-                  v-model="params.effectiveAt"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  :value="params.effectiveAt"
                   @on-change="changeDate"
                   @on-open-change="isDate($event)"
                   :options="options"
+                   :editable='false'
                 ></XDatePicker>
               </FormItem>
             </Form>

@@ -661,8 +661,6 @@ export default {
       projectDetail({
         activityId: this.$route.query.id
       }).then(res => {
-        console.log(res);
-        console.log(this.$route.query.type);
         this.batch = res.data;
         if (this.$route.query.type === 1) {
           delete this.batch.startT;
@@ -688,10 +686,16 @@ export default {
       });
     },
     save() {
+      console.log(this.batch.userConfList);
+      
       if (~~this.releaseTimeSelf == 0) {
         this.batch.releaseTime = 0;
       } else if (~~this.releaseTimeSelf == 1 && !this.batch.releaseTime) {
         this.$Message.warning("请选择发布时间");
+        return;
+      }
+     if(!this.batch.userConfList.length){
+        this.$Message.warning("请维护招募角色");
         return;
       }
       if (this.$route.query.dicId) {

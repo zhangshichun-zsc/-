@@ -411,7 +411,7 @@ export default {
       })
       if (this.navigation1.name === 'parent') {
         let status = ''
-        if (this.orgStatus === '0,1,2,3') {
+        if (this.orgStatus === '0,1,2,3'|| this.orgStatus === '0,1,2') {
           status = ''
         } else if (this.orgStatus === '0,3') {
           status = '0'

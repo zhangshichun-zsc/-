@@ -57,11 +57,14 @@
                   placeholder="选择日期:"
                   style="width: 200px"
                   type="datetime"
-                  v-model="params.effectiveAt"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  :value="params.effectiveAt"
                   @on-change="changeDate"
                   @on-open-change="isDate($event)"
                   :options="options"
+                  :editable='false'
                 ></XDatePicker>
+               
               </FormItem>
             </Form>
             <div slot="footer">
@@ -141,7 +144,7 @@ export default {
           { required: true, message: "模板名称不能为空", trigger: "blur" }
         ],
         effectiveAt: [
-          { required: true, message: "生效日期不能为空",  }
+          { required: true, message: "生效日期不能为空" }
         ]
       },
       params: {
@@ -326,6 +329,8 @@ export default {
     success() {
       this.$refs.formValidate.validate(valid => {
         if (valid) {
+          console.log(this.params.effectiveAt);
+          
           this.loading = true;
           updateBooks(this.params).then(res => {
             //防止重复提交

@@ -245,6 +245,7 @@ export default {
   created() {
     this.userId = this.$store.state.userId;
     this.getActivitypage();
+    this.getType()
   },
   methods: {
     getType() {
