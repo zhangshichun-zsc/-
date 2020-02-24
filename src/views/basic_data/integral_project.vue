@@ -55,6 +55,7 @@
 
       <div class="pages">
         <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total
@@ -237,7 +238,13 @@ export default {
   components: { basicdata },
 
   computed: {},
-
+watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},  
   created() {},
   mounted() {
     this.getprojectsetlist();

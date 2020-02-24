@@ -36,6 +36,7 @@
         </div>
         <div class="pages">
           <Page
+            :current='page'
             :total="dataCount"
             show-elevator
             show-total
@@ -65,7 +66,7 @@ export default {
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "职业名称不能为空", trigger: "blur" }
+          { required: true, message: "职业名称不能为空", trigger: "change" }
         ]
       },
       title: "家长职业类型",
@@ -202,7 +203,13 @@ export default {
   created() {
     this.getBasicsearch();
   },
-
+  watch:{
+      modal1(newValue) {
+      if (!newValue) {
+        this.$refs.formValidate.resetFields()
+      }
+    }
+  },
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {
@@ -307,9 +314,7 @@ export default {
           } else {
             this.getBasicbatch(0);
           }
-        } else {
-          this.$Message.error("名称不能为空!");
-        }
+        } 
       });
     },
 

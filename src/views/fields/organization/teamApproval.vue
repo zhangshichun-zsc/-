@@ -113,6 +113,7 @@
         @on-selection-change="handleSelectionChange"
       ></Table>
       <Page
+      :current='page'
         :total="dataCount"
         show-elevator
         show-total

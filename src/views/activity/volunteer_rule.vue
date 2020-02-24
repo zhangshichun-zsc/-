@@ -26,7 +26,7 @@
           </div>
         </div>
          <div class="pages">
-           <Page :total="100" show-elevator show-total size="small" />
+           <Page :current='page' :total="100" show-elevator show-total size="small" />
         </div>
       </div>
      

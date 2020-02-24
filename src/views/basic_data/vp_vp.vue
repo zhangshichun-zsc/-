@@ -7,8 +7,8 @@
         <div>
           <!-- <span>已选择{{arr.length}}</span> -->
           <Button class="table-btns" @click="btn">{{title}}</Button>
-          <Modal v-model="modal1" :title="text" class-name="vertical-center-modal">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+          <Modal v-model="modal1"   :title="text" class-name="vertical-center-modal">
+            <Form  ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
               <FormItem label="特长名称" prop="dicName">
                 <Input v-model.trim="formValidate.dicName" :maxlength=30 />
               </FormItem>
@@ -25,12 +25,14 @@
       </div>
       <div class="pages">
         <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
           :page-size="size"
+          
           @on-change="changepages"
         />
       </div>
@@ -54,7 +56,7 @@ export default {
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "特长名称不能为空", trigger: "blur" }
+          { required: true, message: "特长名称不能为空",trigger: 'change' }
         ]
       },
       title: "新增特长",
@@ -203,7 +205,13 @@ export default {
   created() {
     this.getBasicsearch();
   },
-
+watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {
@@ -322,9 +330,8 @@ export default {
           } else {
             this.getBasicbatch(0);
           }
-        } else {
-          this.$Message.error("名称不能为空");
-        }
+        
+        } 
       });
     },
 

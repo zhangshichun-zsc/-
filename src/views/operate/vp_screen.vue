@@ -207,7 +207,7 @@
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
-        <Page :total="dataCount" show-elevator show-total size="small" :page-size="pageSize"
+        <Page  :current='page' :total="dataCount" show-elevator show-total size="small" :page-size="pageSize"
           @on-change="changepages" />
       </div>
     </div>

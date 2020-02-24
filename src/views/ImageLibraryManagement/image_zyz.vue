@@ -39,7 +39,7 @@
         <Table border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
-        <Page :total="100" show-elevator show-total size='small' style="margin: auto"/>
+        <Page :current='page' :total="100" show-elevator show-total size='small' style="margin: auto"/>
       </div>
     </div>
   </div>

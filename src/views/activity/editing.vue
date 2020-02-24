@@ -259,7 +259,7 @@
                   </div>
                   <div v-if="addWorker">
                     <Select
-                      :disabled="status && status != 1"
+                      :disabled="status && status ==3 "
                       class="lw"
                       placeholder="请选择工作人员"
                     >
@@ -417,7 +417,7 @@
           <Col style="margin-bottom:10px;">活动详情</Col>
           <Col>
             <wangeditor
-              :disabled="status && status === 3"
+              
               :labels="batch.detail"
               id="ed1"
               @change="changeEditorTrain"

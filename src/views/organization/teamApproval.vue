@@ -62,7 +62,7 @@
           <a href="javascript:;" style="margin-left:10px;" class="queryBtn" @click="batchAdopt">通过</a>
           <a href="javascript:;" style="margin-left:10px;" class="queryBtn" @click="showBatch">拒绝</a>
         </div>
-        <Page :total="dataCount" show-elevator show-total size="small" :page-size="size" @on-change="changepages" />
+        <Page :current='page' :total="dataCount" show-elevator show-total size="small" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>

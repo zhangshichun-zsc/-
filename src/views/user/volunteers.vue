@@ -368,7 +368,7 @@
           <a href="javascript:;" class='btn' @click="batchOperation">确定</a>
 
         </div>
-        <Page :total="totalSize" @on-change="onPage" show-elevator show-total size="small" />
+        <Page :current='page' :total="totalSize" @on-change="onPage" show-elevator show-total size="small" />
       </div>
     </div>
 

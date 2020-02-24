@@ -69,6 +69,7 @@
       </div>
       <div class="pages">
          <Page
+          :current='page'
           :total="sumSize"
           show-elevator
           show-total
@@ -264,7 +265,13 @@ export default {
   created() {
     this.getList()
   },
-
+watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},
   methods: {
 
      //新建基金

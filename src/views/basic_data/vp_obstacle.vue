@@ -27,6 +27,7 @@
       </div>
       <div class="pages">
         <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total
@@ -55,7 +56,7 @@ export default {
       },
       ruleValidate: {
         dicName: [
-          { required: true, message: "障碍类型不能为空", trigger: "null" }
+          { required: true, message: "障碍类型不能为空", trigger: "change" }
         ]
       },
       title: "新增类型",
@@ -198,7 +199,13 @@ export default {
   created() {
     this.getBasicsearch();
   },
-
+  watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+  },
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {

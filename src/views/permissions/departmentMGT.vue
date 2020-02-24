@@ -124,6 +124,7 @@
       </div>
       <div class="pages">
         <Page
+        :current='page'
           :total="datalistCount"
           show-elevator
           show-total

@@ -80,6 +80,7 @@
           <Button class="space" @click="space">确定</Button>
         </div>
         <div><Page
+        :current='page'
           :total="dataCount"
           show-elevator
           show-total

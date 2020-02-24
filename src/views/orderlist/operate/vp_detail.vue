@@ -23,6 +23,7 @@
       <Table ref="selection" border :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
        <Page
+       :current='page'
           :total="dataCount"
           show-elevator
           show-total

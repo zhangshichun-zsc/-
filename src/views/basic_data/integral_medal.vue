@@ -85,6 +85,7 @@
       </div>
       <div class="pages">
         <Page
+          :current='page'
           :total="sumSize"
           show-elevator
           show-total

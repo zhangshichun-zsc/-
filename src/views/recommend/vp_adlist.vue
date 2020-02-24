@@ -104,7 +104,9 @@
           </Select>
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
-        <div style="margin-right:20px;"><Page
+        <div style="margin-right:20px;">
+          <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total

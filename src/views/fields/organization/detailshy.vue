@@ -69,6 +69,7 @@
       <i-table border :columns="columns1" :data="data1"></i-table>
       <div class="pages">
         <Page
+        :current='page'
           :total="dataCount"
           show-elevator
           show-total

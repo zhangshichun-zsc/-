@@ -53,7 +53,7 @@
       <Table border :columns="columns" :data="data"></Table>
       <div class="pages">
         <div class="page">
-          <Page :total="100" show-elevator show-total size="small" />
+          <Page :current='page' :total="100" show-elevator show-total size="small" />
         </div>
       </div>
     </div>

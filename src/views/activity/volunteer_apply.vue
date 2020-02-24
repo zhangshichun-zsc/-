@@ -68,7 +68,7 @@
       <Table border :columns="columns" :data="datax"></Table>
       <div class="pages">
         <span>共{{sumPage}}页/{{sumSize}}条数据</span>
-        <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
+        <Page  :current='page' :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
       </div>
     </div>
   </div>

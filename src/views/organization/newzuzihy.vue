@@ -180,7 +180,7 @@
 </template>
 <script>
 import Selsect from "@/components/selsect";
-import { upload } from "../../request/http";
+import { uploadFile } from "../../request/http";
 import { queryUserDetail } from "../../request/api";
 import {
   orgtype,
@@ -397,7 +397,7 @@ export default {
       }
       let dataForm = new FormData();
       dataForm.append("file", file);
-      upload(dataForm).then(res => {
+      uploadFile(dataForm).then(res => {
         if (res.code === 200) {
           var reader = new FileReader();
           reader.readAsDataURL(file);
@@ -421,6 +421,8 @@ export default {
             }
           };
         }
+      }).catch(function (error) {
+        console.log(error);
       });
     }
   },

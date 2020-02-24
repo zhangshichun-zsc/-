@@ -56,7 +56,7 @@
           <Button>批量上架</Button>
           <Button>批量下架</Button>
         </div>
-        <Page :total="100" show-elevator show-total size='small'/>
+        <Page :current='page' :total="100" show-elevator show-total size='small'/>
       </div>
     </div>
   </div>

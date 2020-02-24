@@ -36,6 +36,7 @@
       </Modal>
       <div class="pages">
         <Page
+        :current='page'
           :total="dataCount"
           show-elevator
           show-total

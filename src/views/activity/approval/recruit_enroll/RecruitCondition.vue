@@ -113,10 +113,10 @@
           <RadioGroup class="w-260" size="large" v-model="form.isAutoChoose">
             <Row>
               <Col span="12">
-              <Radio :disabled="isFormDisabled" label="0">是</Radio>
+              <Radio :disabled="isFormDisabled" :label="0">是</Radio>
               </Col>
               <Col span="12">
-              <Radio :disabled="isFormDisabled" label="1">否</Radio>
+              <Radio :disabled="isFormDisabled" :label="1">否</Radio>
               </Col>
             </Row>
           </RadioGroup>

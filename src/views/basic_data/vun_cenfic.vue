@@ -98,6 +98,7 @@
       </div>
       <div class="pages">
         <Page
+          :current='page'
           :total="sumSize"
           show-elevator
           show-total
@@ -256,7 +257,13 @@ export default {
   components: {XDatePicker},
 
   computed: {},
-
+watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},
   created() {
     this.getList({});
     this.getVoteer();

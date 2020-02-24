@@ -237,6 +237,23 @@ export const upload = (p, url = '/pic/upload') => {
   });
 };
 
+export const uploadFile = (p, url = '/file/upload') => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, p, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data);
+      });
+  });
+};
+
 export const uploadCopy = (params, url = '/pic/copy-pic') => {
   return new Promise((resolve, reject) => {
     axios

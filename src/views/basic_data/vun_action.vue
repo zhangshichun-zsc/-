@@ -26,6 +26,7 @@
 
       <div class="pages">
         <Page
+           :current='page'
           :total="dataCount"
           show-elevator
           show-total
@@ -203,7 +204,13 @@ export default {
   created() {
     this.getBasicsearch();
   },
-
+watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {

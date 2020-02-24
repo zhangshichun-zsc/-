@@ -66,7 +66,7 @@
         </Table>
       </div>
       <div class="pages flex-center-between">
-        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
+        <Page :current='page' :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
     <!-- 新增/编辑问卷对象的弹框页 -->

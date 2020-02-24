@@ -64,6 +64,7 @@
 
       <div class="pages">
         <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total
@@ -259,7 +260,13 @@ export default {
   components: {},
 
   computed: {},
-
+  watch:{
+  modal2(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},
   created() {},
   mounted() {
     this.getOffactivities();
@@ -287,7 +294,7 @@ export default {
         } else {
           this.$Message.error(res.msg);
         }
-        this.loading1 = true
+        this.loading1 = false
       });
     },
 

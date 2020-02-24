@@ -25,6 +25,7 @@
         <p>{{obj.comments}}</p>
       </Modal>
       <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total

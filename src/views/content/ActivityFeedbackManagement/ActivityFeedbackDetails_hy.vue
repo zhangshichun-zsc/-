@@ -68,6 +68,7 @@
       <Table border :columns="columns" :data="data"></Table>
       <div class="pages">
         <Page
+          :current='page'
           :total="dataCount"
           show-elevator
           show-total

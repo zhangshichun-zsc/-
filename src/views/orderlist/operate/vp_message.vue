@@ -39,6 +39,7 @@
 
       <div class="pages flex-center-between">
         <Page
+        :current='page'
           :total="dataCount"
           show-elevator
           show-total

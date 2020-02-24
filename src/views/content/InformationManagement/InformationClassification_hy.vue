@@ -102,6 +102,7 @@
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
         <div><Page
+        :current='page'
           :total="dataCount"
           show-elevator
           show-total

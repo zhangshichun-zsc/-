@@ -62,6 +62,7 @@
 
       <div class="pages">
         <Page
+         :current='page'
           :total="dataCount"
           show-elevator
           show-total
@@ -98,7 +99,7 @@ export default {
       },
       ruleValidate: {
         name: [
-          { required: true, message: "会费名称不能为空", trigger: "blur" }
+          { required: true, message: "会费名称不能为空", trigger: "change" }
         ],
         packageFlag:[{
           required: true,  trigger: "change"
@@ -277,7 +278,13 @@ export default {
   computed: {},
 
   created() {},
-
+watch:{
+  modal1(newValue){
+    if(!newValue){
+       this.$refs.formValidate.resetFields()
+    }
+  }
+},
   mounted() {
     this.getCostlist();
   },

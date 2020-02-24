@@ -21,121 +21,111 @@
         </div>
       </div>
       <div class="min-height">
-      <Table :loading="loading" ref="selection" border :columns="columns" :data="data"></Table>
+        <Table :loading="loading" ref="selection" border :columns="columns" :data="data"></Table>
       </div>
       <div class="pages">
-        <Page
-          :total="dataCount"
-          show-elevator
-          show-total
-          size="small"
-          style="margin: auto"
-          :page-size="size"
-          @on-change="changepages"
-        />
+        <Page :current='page' :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Basicsearch, Basicbatch } from "@/request/api";
-import { formatDate } from "@/request/datatime";
-import basicdata from "@/components/basicdata";
+import { Basicsearch, Basicbatch } from '@/request/api'
+import { formatDate } from '@/request/datatime'
+import basicdata from '@/components/basicdata'
 export default {
   data() {
     return {
       loading: true,
       navigation1: {
-        head: "志愿者特长管理"
+        head: '志愿者特长管理'
       },
       formValidate: {
-        dicName: ""
+        dicName: ''
       },
       ruleValidate: {
-        dicName: [
-          { required: true, message: "特长名称不能为空", trigger: "blur" }
-        ]
+        dicName: [{ required: true, message: '特长名称不能为空', trigger: 'change' }]
       },
-      title: "新增特长",
+      title: '新增特长',
       columns: [
         {
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center"
+          align: 'center'
         },
         {
-          title: "特长名称",
-          key: "dicName",
-          align: "center",
-          width:340
-        },
-
-        {
-          title: "创建时间",
-          key: "creatAt",
-           align: "center",
-           width: 240,
-        },
-        {
-          title: "创建人",
-          key: "userName",
-           width: 300,
-           align: "center",
+          title: '特长名称',
+          key: 'dicName',
+          align: 'center',
+          width: 340
         },
 
         {
-          title: "有效状态",
-          key: "status",
-          align: "center",
-           width: 180,
+          title: '创建时间',
+          key: 'creatAt',
+          align: 'center',
+          width: 240
+        },
+        {
+          title: '创建人',
+          key: 'userName',
+          width: 300,
+          align: 'center'
+        },
+
+        {
+          title: '有效状态',
+          key: 'status',
+          align: 'center',
+          width: 180,
           render: (h, params) => {
-            return h("div", [
-              h("i-switch", {
+            return h('div', [
+              h('i-switch', {
                 props: {
                   value: params.row.validFlag == 1
                 },
                 on: {
                   input: e => {
-                    this.dicId=params.row.dicId
+                    this.dicId = params.row.dicId
                     if (e) {
-                      this.states = 1;
-                      this.getBasicbatch(2);
+                      this.states = 1
+                      this.getBasicbatch(2)
                     } else {
-                      this.states = 0;
-                      this.getBasicbatch(2);
+                      this.states = 0
+                      this.getBasicbatch(2)
                     }
                   }
                 }
               })
-            ]);
+            ])
           }
         },
         {
-          title: "操作",
-          key: "action",
-          align: "center",
-          width:180,
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          width: 180,
           render: (h, params) => {
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "red"
+                    color: 'red'
                   },
                   on: {
                     click: () => {
-                      this.modal1 = true;
-                      this.dicId = params.row.dicId;
-                      this.text = "编辑特长";
-                      this.id = 0;
-                      this.formValidate.dicName = params.row.dicName;
+                      this.modal1 = true
+                      this.dicId = params.row.dicId
+                      this.text = '编辑特长'
+                      this.id = 0
+                      this.formValidate.dicName = params.row.dicName
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               )
               // h(
               //   "a",
@@ -151,7 +141,7 @@ export default {
               //   },
               //   "删除"
               // )
-            ]);
+            ])
           }
         }
       ],
@@ -159,19 +149,19 @@ export default {
       modal1: false,
       top: [
         {
-          name: "名称",
-          type: "input",
-          value: ""
+          name: '名称',
+          type: 'input',
+          value: ''
         },
         {
-          name: "有效日期",
-          type: "select",
+          name: '有效日期',
+          type: 'select',
           list: [
-            { dataKey: "", dataValue: "全部" },
-            { dataKey: "0", dataValue: "无效" },
-            { dataKey: "1", dataValue: "有效" }
+            { dataKey: '', dataValue: '全部' },
+            { dataKey: '0', dataValue: '无效' },
+            { dataKey: '1', dataValue: '有效' }
           ],
-          value: ""
+          value: ''
         }
       ],
 
@@ -180,18 +170,18 @@ export default {
       dataCount: 0,
       sysId: 2,
       typeFlag: 37, //每个页面写死
-      startAt: "",
-      endAt: "",
-      validFlag: "",
-      params: "",
+      startAt: '',
+      endAt: '',
+      validFlag: '',
+      params: '',
       dicCode: 0,
 
       list: [],
-      text: "添加特长",
-      states: "",
+      text: '添加特长',
+      states: '',
       id: 0,
-      loading:false,
-    };
+      loading: false
+    }
   },
 
   components: { basicdata },
@@ -199,13 +189,19 @@ export default {
   computed: {},
 
   created() {
-    this.getBasicsearch();
+    this.getBasicsearch()
   },
-
+  watch: {
+    modal1(newValue) {
+      if (!newValue) {
+        this.$refs.formValidate.resetFields()
+      }
+    }
+  },
   methods: {
     //查询 typeFlag =1，targetName名称，validFlag 有效是1无效是0，startAt开始时间，endAt结束时间sysId=1
     getBasicsearch() {
-      this.loading =true
+      this.loading = true
       let params = {
         page: {
           page: this.page,
@@ -217,19 +213,18 @@ export default {
         validFlag: this.validFlag,
         startAt: this.startAt,
         endAt: this.endAt
-      };
-      this.params = this.util.remove(params);
+      }
+      this.params = this.util.remove(params)
       this.data = []
       Basicsearch(this.params).then(res => {
-      
         if (res.code == 200) {
-          this.data = [...res.data.list];
-          this.dataCount = res.data.totalSize;
-          this.dicCode = this.dataCount + 1;
+          this.data = [...res.data.list]
+          this.dataCount = res.data.totalSize
+          this.dicCode = this.dataCount + 1
         }
-          this.loading = false
+        this.loading = false
         // console.log(res);
-      });
+      })
     },
 
     // 批量操作"list": [{"orgId": "70", "validFlag": "0"}]
@@ -246,90 +241,87 @@ export default {
             dicCode: this.dicCode,
             orgId: 1
           }
-        ];
+        ]
       } else if (e == 1) {
         this.list = [
           {
             dicId: this.dicId,
             dicName: this.formValidate.dicName
           }
-        ];
+        ]
       } else if (e == 2) {
         this.list = [
           {
             dicId: this.dicId,
             validFlag: this.states
           }
-        ];
+        ]
       }
       Basicbatch({ list: this.list }).then(res => {
-         //防止重复提交
+        //防止重复提交
         setTimeout(() => {
-          this.loading = false;
-        }, 500);
+          this.loading = false
+        }, 500)
 
         if (res.code == 200) {
-          if(e  != 2)  this.getBasicsearch();
-          this.modal1 = false;
+          if (e != 2) this.getBasicsearch()
+          this.modal1 = false
           if (e == 0) {
-            this.$Message.info("添加成功");
+            this.$Message.info('添加成功')
           } else if (e == 1) {
-            this.$Message.info("编辑成功");
+            this.$Message.info('编辑成功')
           } else if (e == 2) {
-            this.$Message.info("操作成功");
+            this.$Message.info('操作成功')
           }
         }
         // console.log(res);
-      });
+      })
     },
 
     //查询
     query(e) {
-      this.page = 1;
-      this.validFlag = e.validFlag;
-      this.targetName = e.dicName;
-      this.startAt = e.createTimestamp[0];
-      this.endAt = e.createTimestamp[1];
-      this.getBasicsearch();
+      this.page = 1
+      this.validFlag = e.validFlag
+      this.targetName = e.dicName
+      this.startAt = e.createTimestamp[0]
+      this.endAt = e.createTimestamp[1]
+      this.getBasicsearch()
     },
 
     //取消
     modalCancel() {
-      this.modal1 = false;
-      this.formValidate.dicName = "";
+      this.modal1 = false
+      this.formValidate.dicName = ''
     },
     //确定
     modalOk(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.loading=true
+          this.loading = true
           if (this.id == 0) {
-            this.getBasicbatch(1);
+            this.getBasicbatch(1)
           } else {
-            this.getBasicbatch(0);
+            this.getBasicbatch(0)
           }
-        } else {
-          this.$Message.error("名称不能为空");
         }
-      });
+      })
     },
 
     //弹出框
     btn() {
-      this.text='新增特长'
-      this.id = 1;
-      this.modal1 = true;
-      this.formValidate.dicName = "";
+      this.text = '新增特长'
+      this.id = 1
+      this.modal1 = true
+      this.formValidate.dicName = ''
     },
 
     //分页功能
     changepages(index) {
-      this.page = index;
-      this.getBasicsearch();
+      this.page = index
+      this.getBasicsearch()
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
-
 </style>

@@ -23,6 +23,7 @@
         <p v-for="(item,index) in obj" :key="index">{{item.pName}}</p>
       </Modal>
       <Page
+      :current='page'
           :total="dataCount"
           show-elevator
           show-total

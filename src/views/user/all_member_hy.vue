@@ -532,6 +532,7 @@
           <!-- <Button style="margin-left: 10px" @click="batches()"></Button> -->
         </div>
         <Page
+        :current='page'
           :total="dataCount"
           show-elevator
           show-total
