@@ -1173,8 +1173,11 @@ export default {
           this.$Message.warning("反馈内容有必填项尚未填写")
           return
         }
+      } 
+      if(!this.oneRole.setAddr){
+        this.$Message.warning("集合地址不能为空")
+        return          
       }
-      console.log(this.oneRole)
       this.$emit("oneRoleMsg",this.oneRole)
     },
     changeEditorTrain(e){

@@ -34,7 +34,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
         Prd
 
             Prd_0216 志愿者模块上线
-            Prd_022 志愿者3期上线，修复优先级为1 的bug
+            Prd_0222 志愿者3期上线，修复优先级为1 的bug
+            Prd_0223 会员系统上线
         Ft
 
             Ft_0205  官方活动立项， 非官方活动立项，会员等级，志愿者等级，证书管理
