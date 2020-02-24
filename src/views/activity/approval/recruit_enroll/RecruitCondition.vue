@@ -1426,7 +1426,7 @@ export default {
               ref: 'apptNum',
               props: {
                 value: this.form.apptNum,
-                placeholder: '输入积分',
+                placeholder: '输入可预约数量',
                 min: 0,
                 disabled: this.isFormDisabled
               },
@@ -1438,6 +1438,16 @@ export default {
                     this.$refs.apptNum.currentValue = ''
                   } else {
                     this.form.apptNum = value
+                  }
+                },
+                'on-blur': value=>{
+                  //  可预约数量必选小于 数量
+                  if(this.form.apptNum >=this.form.recruitNum){
+                  console.log(this.form.apptNum)
+                  }else{
+                    this.$Message.error('请输入大于0的整数')
+                    this.form.apptNum = ''
+                    this.$refs.apptNum.currentValue = ''
                   }
                 }
               }
