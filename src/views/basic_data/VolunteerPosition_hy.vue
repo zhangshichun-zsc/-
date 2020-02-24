@@ -145,7 +145,7 @@ export default {
       data1: [],
       modal1: false,
       arr: [],
-       page: 1,
+      page: 1,
       size: 10,
       dataCount: 0,
       pageSize: 10,

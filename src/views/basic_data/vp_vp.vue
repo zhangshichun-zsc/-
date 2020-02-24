@@ -229,9 +229,8 @@ watch:{
         endAt: this.endAt
       };
       this.params = this.util.remove(params);
-      
+      this.data1 = []
       Basicsearch(this.params).then(res => {
-        this.data1 = []
         if (res.code == 200) {
           this.data1 = [...res.data.list];
           this.dataCount = res.data.totalSize;

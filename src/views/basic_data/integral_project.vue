@@ -252,6 +252,7 @@ watch:{
   methods: {
     //基础资料--获取项目分页
     getprojectsetlist() {
+      this.data=[]
       let params = {
         page: { page: this.page, size: this.size },
         targetName: this.targetName,
@@ -262,7 +263,7 @@ watch:{
       this.params = this.util.remove(params);
       projectsetlist(this.params).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
         } else {
           this.$Message.error(res.msg);

@@ -16,7 +16,7 @@
         <Table border :columns="DackupColumns" :data="DackupData"></Table>
       </div>
       <div class="pages">
-        <Page :current='page' :total="100" show-elevator show-total size='small' style="margin: auto" />
+        <Page :total="100" show-elevator show-total size='small' style="margin: auto" />
       </div>
     </div>
   </div>

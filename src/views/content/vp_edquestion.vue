@@ -48,7 +48,7 @@
             </Form>
       </div>
       <div class="pages">
-        <Page :current='page' :total="100" show-elevator show-total size="small" />
+        <Page  :total="100" show-elevator show-total size="small" />
       </div>
     </div>
   </div>

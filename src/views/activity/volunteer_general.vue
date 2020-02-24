@@ -94,7 +94,7 @@
     </div>
     <div class="pages">
       <span>共10页/100条数据</span>
-      <Page :current='page' :total="100" show-elevator></Page>
+      <Page :total="100" show-elevator></Page>
     </div>
   </div>
 </template>

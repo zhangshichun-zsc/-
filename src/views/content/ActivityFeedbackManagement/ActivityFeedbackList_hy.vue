@@ -74,14 +74,8 @@
         </div>
         <div class="pages">
           <div class="batch">
-            <Checkbox v-model="status">全选</Checkbox>
-            <!-- <Button @click="chackall()">
-              <Checkbox v-model="status" style="border:0px;">全选</Checkbox>
-            </Button> -->
-            <!-- <Select placeholder="批量操作" style="width: 150px" v-model="batch">
-              <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Button style="margin-left: 10px" @click="batches()">确定</Button> -->
+             <Checkbox :value="isALL"  @on-change='setALL'>全选</Checkbox>
+           
           </div>
           <Page
           :current='page'
@@ -123,7 +117,7 @@ export default {
       categoryId: null,
       arr: [],
       batch: null,
-      status: false,
+      isALL: false,
       columns: [
         {
           type: "selection",
@@ -322,24 +316,19 @@ export default {
       this.page = index;
       this.getActivitypage();
     },
-
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      console.log(this.status, this.$refs.selection);
-      this.$refs.selection.selectAll(this.status);
+    setALL(v){
+      this.$refs.selection.selectAll(v);
     },
     //每条数据单选框的状态
     tablechange(selection) {
-      this.arr = selection;
-      if (
-        (this.arr.length == this.dataCount && this.dataCount != 0) ||
-        this.arr.length == this.size
-      ) {
-        this.status = true;
-      } else {
-        this.status = false;
+       if(selection.length == this.data.length){
+        this.isALL= true
+      }else{
+          this.isALL= false
       }
+
+      this.arr = selection;
+     
     }
 
     //批量操作

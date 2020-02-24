@@ -270,7 +270,7 @@ export default {
           render: (h, params) => {
             return h("div", [
               h(
-                "span",
+                "a",
                 {
                   clssName: "action",
                   style: {

@@ -64,7 +64,7 @@
           </Select>
           <Button style="margin-left: 10px">确定</Button>
         </div>
-        <Page  :current='page' :total="100" show-elevator show-total size="small" />
+        <Page :total="100" show-elevator show-total size="small" />
       </div>
     </div>
   </div>

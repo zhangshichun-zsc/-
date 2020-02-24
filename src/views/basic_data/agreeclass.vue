@@ -144,8 +144,8 @@ export default {
                     if (e) {
                       this.valids = 2;
                     } else {
-                      this.valids = 1;
-                    }
+                      this.valids = 3;
+                    } 
                     this.getAgreementclassstats(params.row.dicId);
                   }
                 }

@@ -301,10 +301,11 @@ watch:{
         startAt: this.startAt,
         endAt: this.endAt
       };
+      this.data =[]
       this.params = this.util.remove(params);
       Costlist(this.params).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
         }
         // console.log(res);

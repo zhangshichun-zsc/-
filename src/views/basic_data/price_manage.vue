@@ -69,13 +69,13 @@
       </div>
       <div class="pages">
          <Page
-          :current='page'
+          :current='args.page.page'
           :total="sumSize"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
-          :page-size="args.size"
+          :page-size="args.page.size"
           @on-change="changePage"
         />
 
@@ -290,9 +290,10 @@ watch:{
     },
     getList(){
       let args = filterNull(this.args)
+      this.data = []
       getfund(args).then(res => {
         this.sumSize = res.data.totalSize
-        this.data = res.data.list
+        this.data = [...res.data.list]
         this.sumPage = res.data.totalNum
       })
     },

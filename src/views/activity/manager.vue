@@ -80,7 +80,7 @@
           <Checkbox v-model="status">全选</Checkbox>
         </Button>
         <div>
-          <Button class="table-btn" @change="exportData(3)">导出</Button>
+          <Button class="table-btn" @click="exportData(3)">导出</Button>
           <Button class="table-btn" @click="exportData(1)">导出受益方签到表</Button>
           <Button class="table-btn" @click="exportData(2)">导出志愿者签到表</Button>
           <!-- <Button class="table-btn" @click="addaction">添加活动</Button> -->
@@ -164,6 +164,7 @@ import {
 import { upload } from '@/request/http'
 import { SERVER_URl } from '@/request/http.js'
 import { constants } from 'fs'
+import { log } from 'util'
 export default {
   inject: ['reload'],
   components: { customizeDialog },
@@ -791,11 +792,11 @@ export default {
       this.$router.push({ name: 'approval' })
     },
     exportData(i) {
+      if (i == 3) return this.$Message.error('该功能暂未开放')
       if (this.arr.length == 0) {
         this.$Message.error('没有选择')
         return
       }
-      if (i === 3) return this.$Message.error('该功能暂未开放')
       for (let item of this.arr) {
         window.open(`${SERVER_URl}/activity-manage/export?activityId=${item.activityId}&userType=${i}&activityName=
          ${item.activityName}`)

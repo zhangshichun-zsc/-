@@ -27,7 +27,7 @@
 
       <div class="pages">
         <Page
-          :current='page'
+          :current='params.page.page'
           :total="sumSize"
           show-elevator
           show-total
@@ -149,13 +149,16 @@ export default {
 
   methods: {
     getList() {
-  
+      this.data1 = []
       getCard(filterNull(this.params)).then(res => {
-        this.data1 = []
+     
         if (res.code == 200) {
-          this.data1 = [...res.data.list];
-          this.sumSize = res.data.totalSize;
-          this.sumPage = res.data.totalNum;
+          this.$nextTick(()=>{
+            this.data1 = [...res.data.list];
+            this.sumSize = res.data.totalSize;
+            this.sumPage = res.data.totalNum;
+          })
+       
         } else {
           this.$Message.error(res.msg);
         }

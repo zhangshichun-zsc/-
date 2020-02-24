@@ -225,10 +225,11 @@ export default {
         startAt: this.startAt,
         endAt: this.endAt
       };
+       this.data1 = []
       this.params = this.util.remove(params);
       Basicsearch(this.params).then(res => {
         if (res.code == 200) {
-          this.data1 = res.data.list;
+          this.data1 = [...res.data.list];
           this.dataCount = res.data.totalSize;
           this.dicCode = this.dataCount + 1;
         }

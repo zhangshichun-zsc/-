@@ -57,7 +57,7 @@
         <div class="inquire flex-between">
           <div class="flex-center-start">
             <span>姓名：</span>
-            <i-input v-model="query.userName" size='large' class="input"  placeholder="输入名称"></i-input>
+            <i-input v-model="query.userName" size='large' class="input"  placeholder="输入名称/手机号"></i-input>
             <span v-if="sysId == 1">报名类型:</span>
             <Select v-model="query.roleId" size='large' class="input"  v-if="sysId == 1">
               <Option :value="''">全部</Option>
@@ -74,7 +74,8 @@
       <div class="check">
         <div class="flex-between">
           <div class="flex-start">
-            <Checkbox :checked.sync="xuan" style="font-size: 16px;" class="span">全选</Checkbox>
+            <!--:checked.sync="xuan" -->
+            <Checkbox  :value="isALL"  @on-change="setALL"  style="font-size: 16px;" class="span">全选</Checkbox>
             <span >已选择</span>
             <span>{{arr.length}}</span>
           </div>
@@ -86,12 +87,11 @@
           <Button @click="sendInfos"  class="table-btn" size='large'>发送站内信</Button>
           </div>
         </div>
-        <Table border :columns="columns" :data="memberlist"  @on-selection-change="handleSelectionChange"></Table>
+        <Table ref="selection" border :columns="columns" :data="memberlist"  @on-selection-change="handleSelectionChange"></Table>
       </div>
     </div>
     <div class="pages">
-      <!-- <span>共10页/100条数据</span> -->
-      <Page :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
+      <Page :current='page' :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
     </div>
   </div>
 </template>
@@ -100,11 +100,13 @@
 import { Activitysummary, actMemberlist,getActiveIdType,activeReson,sendInfo } from "../../request/api"
 import { filterNull } from '@/libs/utils'
 import { constants } from 'fs';
+import { log } from 'util';
 export default {
   data() {
     return {
       arr: [],
       value: "",
+      isALL: false,
       xuan: false,
       navigation1: {
         head: "活动概况"
@@ -319,7 +321,12 @@ export default {
     this.getMemberList()
     this.typeList()
   },
-
+watch:{
+  // isALL(newValue, oldValue){
+  //     console.log(newValue)
+  //      this.$refs.selection.selectAll(newValue);
+  // }
+},
   methods: {
     sendInfos(){
       if(this.arr.length == 0){
@@ -352,7 +359,13 @@ export default {
     },
         //每条数据单选框的状态
     handleSelectionChange(val) {
+      console.log(val)
       this.arr = val;
+      if(val.length == this.memberlist.length){
+        this.isALL = true
+      }else{
+        this.isALL = false
+      }
       if (
         (this.arr.length == this.dataCount && this.dataCount != 0) ||
         this.arr.length == this.size
@@ -422,6 +435,9 @@ export default {
     changePage(e){
       this.page = e;
       this.getMemberList();
+    },
+    setALL(v){
+      this.$refs.selection.selectAll(v);
     }
   }
 }

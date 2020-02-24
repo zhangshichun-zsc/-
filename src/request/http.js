@@ -41,7 +41,7 @@ axios.defaults.baseURL = SERVICE_URL.API_URL[SERVICE_URL.API_INDEX];
 // axios.defaults.withCredentials = true  //让ajax携带cookie
 
 // 请求超时时间
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 60000;
 
 // post请求头
 axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
@@ -237,7 +237,7 @@ export const upload = (p, url = '/pic/upload') => {
   });
 };
 
-export const uploadFile = (p, url = '/file/upload') => {
+export const uploadFile = (p, url = '/pic/file/upload') => {
   return new Promise((resolve, reject) => {
     axios
       .post(url, p, {

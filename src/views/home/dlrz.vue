@@ -9,7 +9,7 @@
     <Table ref="demo" border :columns="columns1" :data="data1"></Table>
     <div class="pages">
       <!-- <span>共10页/100条数据</span> -->
-      <Page  :current='page' :total="100" show-elevator show-total />
+      <Page  :total="100" show-elevator show-total />
     </div>
   </div>
 </template>
