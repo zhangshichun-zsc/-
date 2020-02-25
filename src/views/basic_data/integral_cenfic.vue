@@ -27,7 +27,7 @@
 
       <div class="pages">
         <Page
-          :current='params.page.page'
+          :current.sync='params.page.page'
           :total="sumSize"
           show-elevator
           show-total

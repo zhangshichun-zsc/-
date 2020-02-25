@@ -88,6 +88,7 @@
           show-total
           size="small"
           style="margin: auto"
+          :current.sync="page"
           @on-page-size-change ="setSize"
           @on-change="changepages"
         />
@@ -314,6 +315,7 @@ export default {
     },
     // 活动立项审批--活动立项审批分页
     getapprovalpage() {
+      this.datax = []
       approvalpage(filterNull({
         page: { page: this.page, size: this.size, sort: this.sort },
         name: this.batchName,
@@ -332,7 +334,7 @@ export default {
           }
           console.log(len,num)
           this.allD = len == num?true:false
-          this.datax = data
+          this.datax = [...data]
         }
       });
     },
@@ -359,7 +361,10 @@ export default {
       }
       this.batchName = this.query.batchName
       this.statu = this.query.statu
-      this.page = 1
+      this.$nextTick(()=>{
+        this.page = 1
+      })
+      
       this.getapprovalpage();
     },
     handleChange(name,e){

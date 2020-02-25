@@ -32,7 +32,7 @@
       ></Table>
       <div class="pages">
         <Page
-          :current='page'
+          :curren.synct='page'
           :total="dataCount"
           show-elevator
           show-total

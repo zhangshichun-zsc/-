@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="pages">
-        <Page :current='page' :total="100" show-elevator show-total size='small'/>
+        <Page :current.sync='page' :total="100" show-elevator show-total size='small'/>
       </div>
     </div>
   </div>

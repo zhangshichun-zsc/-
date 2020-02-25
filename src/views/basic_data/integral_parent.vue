@@ -36,7 +36,7 @@
         </div>
         <div class="pages">
           <Page
-            :current='page'
+            :current.sync='page'
             :total="dataCount"
             show-elevator
             show-total

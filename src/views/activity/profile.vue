@@ -91,7 +91,7 @@
       </div>
     </div>
     <div class="pages">
-      <Page :current='page' :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
+      <Page :current.sync='page' :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
     </div>
   </div>
 </template>

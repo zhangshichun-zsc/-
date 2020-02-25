@@ -98,7 +98,7 @@
       </div>
       <div class="pages">
         <Page
-          :current='page'
+          :current.sync='page'
           :total="sumSize"
           show-elevator
           show-total

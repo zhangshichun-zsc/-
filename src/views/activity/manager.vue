@@ -131,7 +131,7 @@
           </div>
         </Modal>
       </div>
-      <Modal v-model="addstate" width="360">
+      <Modal v-model="addstate" width="360" :mask-closable='false' :closable='false'>
         <p slot="header" style="color:#f60;text-align:center">
           <span>下架确定</span>
         </p>
@@ -143,7 +143,7 @@
           <Button type="success" @click="modalOkdel">确定</Button>
         </div>
       </Modal>
-      <Page :total="dataCount" show-elevator show-total size="small" class="pages" @on-page-size-change="setSize" placement='top' show-sizer @on-change="changepages" />
+      <Page :current.sync='page' :total="dataCount" show-elevator show-total size="small" class="pages" @on-page-size-change="setSize" placement='top' show-sizer @on-change="changepages" />
     </div>
   </div>
 </template>
@@ -626,6 +626,7 @@ export default {
     },
     //列表和分页
     getactiveManager() {
+       this.datax  = []
       activeManager({
         page: {
           page: this.page,
@@ -641,7 +642,7 @@ export default {
         this.$refs.selection.selectAll(false)
         if (res.code == 200) {
           this.dataCount = res.data.totalSize
-          this.datax = res.data.list
+          this.datax = [...res.data.list]
         }
       })
     },

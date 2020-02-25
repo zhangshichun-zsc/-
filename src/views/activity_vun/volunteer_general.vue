@@ -97,7 +97,7 @@
     </div>
     <div class="pages">
       <!-- <span>共10页/100条数据</span> -->
-      <Page :current='page' :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
+      <Page :current.sync='page' :total="sumSize" show-elevator @on-change='changePage' :page-size='size'/>
     </div>
   </div>
 </template>

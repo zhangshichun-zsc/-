@@ -124,7 +124,7 @@
       </div>
       <div class="pages">
         <Page
-        :current='page'
+        :current.sync='page'
           :total="datalistCount"
           show-elevator
           show-total

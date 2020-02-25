@@ -430,7 +430,7 @@
           <a href="javascript:;" class='btn' @click='batchOperation'>确定</a>
           <!-- <Button style="margin-left: 10px" @click='batchOperation'></Button> -->
         </div>
-        <Page  :current='page' :total="totalSize" show-elevator show-total size='small' @on-change='setPage' />
+        <Page  :current.sync='page' :total="totalSize" show-elevator show-total size='small' @on-change='setPage' />
       </div>
     </div>
     <Modal title="二维码" v-model="modal4" class='QRcodemodal' style='text-align: center;'>

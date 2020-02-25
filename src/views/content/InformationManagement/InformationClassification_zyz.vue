@@ -69,7 +69,7 @@
           <Button style="margin-left: 10px" @click="batches()">确定</Button>
         </div>
         <div><Page
-        :current='page'
+        :current.sync='page'
           :total="dataCount"
           show-elevator
           show-total

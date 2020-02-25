@@ -67,7 +67,7 @@
         </Modal>
       </div>
       <div class="pages">
-        <Page :current='page' :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
+        <Page :.sync='page' :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
   </div>

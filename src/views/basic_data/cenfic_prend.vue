@@ -4,28 +4,28 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-box">
       <div class="integral-header">
-        <div class="top" style="height:92px">
-          <p v-if="show&& !logoPicMap" class="noImg" style="line-height: 92px;">暂未上传</p>
-          <UploadImg v-if='!show' :max="1" ref="logo" v-model="logoPicUrl" :full-url.sync="logoPicMap" :display-width="280" :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg>
-          <UploadImg v-else :disabled="true" :max="1" ref="logo" v-model="logoPicUrl" :full-url.sync="logoPicMap" :display-width="280" :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg>
+        <div class="top" style="height:120px">
+          <!-- <UploadImg v-if='!show' :max="1" ref="logo" v-model="logoPicUrl" :full-url.sync="logoPicMap" :display-width="356"
+          :display-height="146"
+           :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg> -->
         </div>
         <div class="center">
-
-          <h1>感谢 [*姓名*]</h1>
-          <h2>于__年__月__日至__年__月__日</h2>
-          <p>为[*组织名称*] 的心智障碍者融合服务提供了珍贵的【*志愿服务时长*】小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p>
+          <h1>志愿服务证明</h1>
+          <h3>CERTIFICATE</h3>
+          <h3>OF VOLUNTEER SERVICE</h3>
+          <h2>感谢</h2> 
+          <h4>于__年__月___日至__年__月___日</h4>
+          <p>为融爱融乐的心智障碍者融合服务提供了珍贵的________小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p>
         </div>
-        <div class="bottom" style="height:92px">
-          <p v-if="show && !footPicMap" class="noImg" style="line-height: 92px;">暂未上传</p>
+        <div class="bottom" style="height:120px">
           <UploadImg v-if='!show' :max="1" ref="foot" v-model="footPicUrl" :full-url.sync="footPicMap" :display-width="280" :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg>
-          <UploadImg v-else :max="1" ref="foot" :disabled="true" v-model="footPicUrl" :full-url.sync="footPicMap" :display-width="280" :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg>
         </div>
-        <div class="footBtn">
+       <!-- <div class="footBtn">
           <Button style="justify-content: center;" type="error" icon="ios-cloud-saved-outline" @click="location" v-if="!show" :loading="loading">保存图片</Button>
-        </div>
+      </div> -->
 
       </div>
-
+      
     </div>
   </div>
 </template>
@@ -104,7 +104,10 @@ export default {
   box-sizing: border-box;
 }
 .integral-header {
-  width: 350px;
+  width: 450px;
+  background-image:url("../../assets/images/prend/title.png") ;
+  background-repeat:no-repeat;
+  background-size:100%; 
   .top,
   .bottom {
     .noImg {
@@ -112,35 +115,43 @@ export default {
       color: #f70000;
     }
     // height: 115px;
-    background-color: #eee;
+    // background-color: #eee;
     border-radius: 10px;
   }
-  .footBtn {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-  }
+
   .center {
-    padding-top: 15px;
+    padding: 40px;
+    padding-top: 40px;
     padding-bottom: 30px;
     text-align: center;
     h1 {
       font-weight: 600;
       font-size: 22px;
       line-height: 52px;
+      color: #07913c;
     }
     h2 {
+      font-weight: 600;
       font-size: 18px;
-      color: #80c515;
+      color: #000;
       line-height: 52px;
     }
-
+    h3{
+      color: #0000008f;
+      font-weight: 600;
+      font-size: 18px;
+    }
     p {
       line-height: 36px;
       font-size: 18px;
       text-align: left;
       text-indent: 2em;
     }
+  }
+    .footBtn {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

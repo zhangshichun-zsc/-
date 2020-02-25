@@ -71,7 +71,7 @@
             </Select>
             <Button class="space" @click="batches()">确定</Button>
           </div>
-          <Page :current='page' :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="pageSize" @on-change="changepages" />
+          <Page :current.sync='page' :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="pageSize" @on-change="changepages" />
         </div>
       </div>
     </div>

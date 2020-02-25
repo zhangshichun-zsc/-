@@ -94,7 +94,7 @@
         show-total
         size="small"
         class="pages"
-        :current='page'
+        :current.sync='page'
         style="margin: auto"
         :page-size="size"
         @on-change="changepages"

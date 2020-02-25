@@ -43,7 +43,7 @@
           >
 
         </div> -->
-        <Page :current='page' :total="dataCount" show-elevator show-total size="small" style="margin:0 auto" :page-size="size" @on-change="changepages" />
+        <Page :current.sync='page' :total="dataCount" show-elevator show-total size="small" style="margin:0 auto" :page-size="size" @on-change="changepages" />
       </div>
     </div>
 

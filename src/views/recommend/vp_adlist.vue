@@ -106,7 +106,7 @@
         </div>
         <div style="margin-right:20px;">
           <Page
-          :current='page'
+          :.sync='page'
           :total="dataCount"
           show-elevator
           show-total
