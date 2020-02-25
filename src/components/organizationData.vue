@@ -85,7 +85,7 @@
                     >
                   </Dropdown>
                 </div>
-                <Select
+                <!-- <Select
                   v-model="size"
                   style="width:80px;margin-right:10px"
                   placeholder="显示条数"
@@ -96,7 +96,7 @@
                     :key="item.value"
                     >{{ item.label }}</Option
                   >
-                </Select>
+                </Select> -->
                 <Select
                   placeholder="排序方式"
                   style="width: 80px;"
@@ -116,6 +116,7 @@
         <div class="flex-center-end"></div>
 
         <Table
+          :loading='loading'
           ref="selection"
           border
           :columns="columns"
@@ -125,9 +126,9 @@
         ></Table>
         <div class="pages">
           <div class="batch">
-            <Button @click="chackall()" style="border:0px;">
-              <Checkbox v-model="status"></Checkbox>全选
-            </Button>
+            
+              <Checkbox @on-change='setALL' :value="status" ></Checkbox>全选
+         
             <Select
               placeholder="批量操作"
               placement="top"
@@ -150,12 +151,15 @@
             >
           </div>
           <Page
+            :current.sync='page'
             :total="dataCount"
             show-elevator
             show-total
+            placement='top'
             size="small"
-            :page-size="size"
+             show-sizer
             @on-change="changepages"
+            @on-page-size-change='setSize'
           />
         </div>
       </div>
@@ -204,6 +208,7 @@ import { orgpage, orgtype, orgbatch } from "../request/api";
 export default {
   data() {
     return {
+      loading:false,
       formInline: {
         OrganizationName: "",
         GroupAddress: "",
@@ -384,12 +389,12 @@ export default {
       orgbatch({
         orgId: this.arr,
         userId: this.userId,
-        type: this.types
+        type: this.type
       }).then(res => {
         if (res.code == 200) {
           this.getorgpage();
           this.$Message.info("操作成功");
-          this.$refs.selection.selectAll(false);
+         
         } else {
           this.$Message.error(res.msg);
         }
@@ -399,6 +404,8 @@ export default {
 
     //标签分页
     getorgpage() {
+      this.loading = true
+       this.data =[]
       let orgTypes;
       if (this.orgType == 0) {
         orgTypes = "";
@@ -420,9 +427,9 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.dataCount = res.data.totalSize;
-          this.data = res.data.list;
+          this.data = [...res.data.list];
         }
-        console.log(res);
+       this.loading = false
       });
     },
 
@@ -435,23 +442,37 @@ export default {
       this.page = 1;
       this.getorgpage();
     },
-    //全选按钮
-    chackall() {
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
-    },
+  
     //批量操作
     batch() {
-      if (this.arr == "") {
+      if (!this.arrs.length) {
         this.$Message.error("至少选择一个");
       } else if (this.type == "") {
         this.$Message.error("请先选择操作类型");
       } else {
-        this.types = this.type;
-        this.arr = this.arrs.map(item => {
-          return item.orgId;
-        });
-        this.getorgbatch();
+       
+        
+  
+        let typeFlag= this.type==2?0:this.type
+        console.log(typeFlag);
+        
+        let userList = this.arrs
+        let arr = []
+        userList.forEach(item=>{
+          if(item.validFlag != typeFlag){
+            arr.push(item.orgId)
+          }
+        })
+        console.log(arr);
+        
+        if(arr.length !=0){
+           this.arr = arr
+           this.getorgbatch();
+        }else{
+           this.$Message.info("当前选中的组织无需此操作");
+           return
+        }
+       
       }
     },
 
@@ -460,34 +481,27 @@ export default {
       this.page = index;
       this.getorgpage();
     },
+     setALL(v){
+      this.$refs.selection.selectAll(v);
+    },
+    setSize(n){
+      this.size = n
+      this.getorgpage();
+    },
     //选择内容
     handleSelectionChange(val) {
       this.arrs = val;
-      if (
-        (val.length == this.dataCount && this.dataCount != 0) ||
-        val.length == this.size
-      ) {
+      if (val.length == this.size) {
         this.status = true;
       } else {
         this.status = false;
       }
-      this.arr = val.map(item => {
-        return item.orgId;
-      });
-      console.log(this.arr);
     },
 
     //导出数据
     exportData() {
       this.$Message.error("此功能暂未开放！");
-      // if (this.arrs.length == 0) {
-      //   this.arrs = this.data
-      // }
-      // this.$refs.selection.exportCsv({
-      //   filename: this.navigation1.head,
-      //   columns: this.columns.filter((col, index) => index > 0),
-      //   data: this.arrs
-      // })
+
     },
 
     //新建组织
@@ -507,7 +521,6 @@ export default {
 
   //事件监听
   watch: {
-    size: "getorgpage",
     sort: "getorgpage"
   },
   props: ["navigation1"],

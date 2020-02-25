@@ -352,9 +352,9 @@
           <Button style="margin-left:10px;" class="integral-rig btns" @click="setup">会费设置</Button>
         </div>
         <div>
-          <Select v-model="size" style="width:120px; margin-left:10px;" placeholder="显示条数" class="space">
+          <!-- <Select v-model="size" style="width:120px; margin-left:10px;" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+          </Select> -->
           <Select placeholder="排序方式" class="space" style="width: 120px;  margin-left:10px;" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -419,18 +419,25 @@
           </Modal>
         </div>
       </div>
-      <Table border ref="volunteerSel" :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+      <Table :loading="loading" border ref="volunteerSel" :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
       <div class="pages">
         <div class="batch">
-          <!-- <Checkbox @click="setALL">全选</Checkbox> -->
-          <Checkbox @click="setALL" v-model="ALLINFO">全选</Checkbox>
+         
+          <Checkbox @on-change='setALL'  :vakue="ALLINFO">全选</Checkbox>
           <Select placeholder="批量操作" placement="top" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <a href="javascript:;" class='btn' @click='batchOperation'>确定</a>
           <!-- <Button style="margin-left: 10px" @click='batchOperation'></Button> -->
         </div>
-        <Page  :current.sync='page' :total="totalSize" show-elevator show-total size='small' @on-change='setPage' />
+        <Page  
+        :current.sync='page' 
+        :total="totalSize" show-elevator
+        show-sizer
+        show-total 
+        size='small'
+        @on-change='setPage'
+        @on-page-size-change='setSize' />
       </div>
     </div>
     <Modal title="二维码" v-model="modal4" class='QRcodemodal' style='text-align: center;'>
@@ -504,6 +511,7 @@ import Public from './config/index'
 export default {
   data() {
     return {
+      loading:false,
       navigation1: {
         head: '受益方(会员)'
       },
@@ -882,31 +890,7 @@ export default {
       this.ALLINFO = false
       this.getUsetList(this.paramsObj)
     },
-    size(newVlaue, oldValue) {
-      this.ALLINFO = false
-      if (newVlaue === oldValue) return
-      this.getUsetList(this.paramsObj)
-    },
-    page(newVlaue, oldValue) {
-      this.ALLINFO = false
-      if (newVlaue === oldValue) return
-      this.getUsetList(this.paramsObj)
-    },
-    ALLINFO(newVlaue, oldValue) {
-      //  全选 and 全不选
-      console.log(newVlaue)
 
-      if (newVlaue === true) {
-        this.$refs.volunteerSel.selectAll(true)
-        let arr = this.data.map(item => {
-          return item.userId
-        })
-        this.ALLLIST = arr
-      } else {
-        this.$refs.volunteerSel.selectAll(false)
-        this.ALLLIST = []
-      }
-    }
   },
   created() {
     // this.userId = localStorage.getItem('userId' | '')
@@ -914,8 +898,14 @@ export default {
     this.getLabels()
   },
   methods: {
+    setSize(n){
+      this.size = n
+     this.getUsetList(this.paramsObj)
+    },
     // 获取列表数据
     getUsetList(paramsObj, flag) {
+      this.loading =true
+      this.data=[]
       let time = {}
       if (flag) {
         let registration = this.sameday({
@@ -952,10 +942,11 @@ export default {
 
       Public.getUserList(obj).then(res => {
         if (res.code === 200) {
-          this.data = res.data.list
+          this.data = [...res.data.list]
           this.totalSize = res.data.totalSize
         } else {
         }
+         this.loading =false
       })
     },
 
@@ -1054,7 +1045,7 @@ export default {
         if (res.code === 200) {
           type ? this.$Message.info('启用成功') : this.$Message.info('禁用成功')
           if (this.batchState) {
-            this.getUsetList(this.paramsObj)
+             this.getUsetList(this.paramsObj)
             this.batchState = ''
           }
         } else {
@@ -1189,17 +1180,17 @@ export default {
         }
       })
     },
+     setALL(v){
+      this.$refs.volunteerSel.selectAll(v);
+    },
     // 选中内容
     handleSelectionChange(val) {
-      if (val.length === this.data.length) {
-        this.ALLINFO = true
-      } else {
-        this.ALLINFO = false
+      if(val.length==this.data.length){
+        this.isALL = true
+      }else{
+         this.isALL = false
       }
-      let arr = val.map(item => {
-        return item.userId
-      })
-      this.ALLLIST = arr
+      this.ALLLIST = val
     },
     // 选中站内信菜单
     isALL(name) {
@@ -1271,9 +1262,23 @@ export default {
     // 批量修改状态
     batchOperation() {
       if (this.batchState) {
-        this.setUserEnable(this.ALLLIST, this.batchState == 1 ? true : false, () => {
+        let userList = this.ALLLIST
+        let arr = []
+        userList.forEach(element => {
+          if(element.userEnable != this.batchState){
+            arr.push(element.userId)
+          }
+        });
+        if(arr.length<=0){
+           this.$Message.info("当前选中的账号无需此操作");
+           return
+        }else{
+          this.ALLLIST = arr
+          this.setUserEnable(this.ALLLIST, this.batchState == 1 ? true : false, () => {
           this.getUsetList(this.paramsObj)
         })
+        }
+       
       } else {
         this.$Message.error({
           background: true,
@@ -1306,13 +1311,10 @@ export default {
         }
       }
     },
-
-    setALL() {
-      console.log(this.ALLINFO)
-    },
     // 选中页码
     setPage(res) {
       this.page = res
+      this.getUsetList(this.paramsObj)
     },
     toExamine() {
       this.optTime()

@@ -503,6 +503,7 @@
         </Modal>
       </div>
       <Table
+        :loading='loading'
         ref="volunteerSel"
         border
         :columns="columns"
@@ -513,7 +514,7 @@
         <div class="batch">
           <!--  @click="chackall()" -->
           <Button style="border:0px">
-            <Checkbox v-model="ALLINFO"></Checkbox>全选
+            <Checkbox  @on-change='setALL' :value="ALLINFO"></Checkbox>全选
           </Button>
           <Select
             placement="top"
@@ -953,26 +954,7 @@ export default {
 
   //事件监听
   watch: {
-    page(newValue){
-      this.$nextTick(()=>{
-        this.getUserPage()
-      })
-    },
     sort: "getUserPage",
-    ALLINFO(newVlaue, oldValue) {
-      //  全选 and 全不选
-      if (newVlaue === true) {
-        this.$refs.volunteerSel.selectAll(true);
-        let arr = this.data.map(item => {
-          return item.userId;
-        });
-        this.ALLLIST = arr;
-        console.log(arr);
-      } else {
-        this.$refs.volunteerSel.selectAll(false);
-        this.ALLLIST = [];
-      }
-    }
   },
 
   methods: {
@@ -989,7 +971,7 @@ export default {
       if (this.endAt) {
         endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
       }
-
+      this.data =[]
       Userpage({
         page: this.page,
         size: this.size,
@@ -1008,7 +990,7 @@ export default {
         registrationEndTimeStamp: endAt ? new Date(endAt).getTime() : ""
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
         } else {
           this.$Message.error(res.msg);
@@ -1056,8 +1038,21 @@ export default {
       } else if (!this.batch) {
         this.$Message.error("请选择操作类型");
       } else {
-        this.getUserBatch();
-        this.userEnable = false;
+        let userList = this.ALLLIST
+        let arr = []
+        userList.forEach(element => {
+          if(element.userEnable != this.batch){
+            arr.push(element.userId)
+          }
+        });
+        if(arr.length<=0){
+           this.$Message.info("当前选中的账号无需此操作");
+           return
+        }else{
+            this.ALLLIST = arr
+            this.getUserBatch();
+            this.userEnable = false;
+        }
       }
     },
     // 显示站内信模态框
@@ -1103,7 +1098,6 @@ export default {
     // 发送站内信
     onStation() {
       if (!this.stationFormFlag) return;
-
       this.$refs.formValidate2.validate(valid => {
         if (valid) {
           this.stationFormFlag = false;
@@ -1144,22 +1138,17 @@ export default {
         });
       });
     },
-
+    setALL(v){
+      this.$refs.volunteerSel.selectAll(v);
+    },
     // 选中 内容
     handleSelectionChange(val) {
-      if (val.length === this.data.length) {
+   if(val.length == this.data.length){
         this.ALLINFO = true;
-      } else if (val.length === 0) {
-        this.ALLINFO = false;
-        this.$refs.volunteerSel.selectAll(false);
-        this.ALLLIST = [];
-      } else {
-        this.ALLINFO = false;
+      }else{
+         this.ALLINFO = false;
       }
-      let arr = val.map(item => {
-        return item.userId;
-      });
-      this.ALLLIST = arr;
+      this.ALLLIST = val;
     },
     // 单个 用户状态 变更
     setUserEnable(params, type) {

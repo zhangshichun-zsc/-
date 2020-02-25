@@ -437,7 +437,29 @@
         </i-col>
       </Row>
       <Row class-name="row20">
-        <i-col span="12" push="1">
+        <i-col span="12"push='1'>
+          <Row class-name="row20">
+             <Row class-name="row10">
+            <i-col span="3">报名须知</i-col>
+            <i-col span="3" push="2">
+                <i-switch
+                  v-model="isHaveSignNotice"
+                  :true-value="0"
+                  :false-value="1"
+                  :disabled="isDisb"
+                />
+            </i-col>
+          </Row>
+          <Row v-if="isHaveSignNotice == 0">
+            <wangeditor
+              :labels="signNotice"
+              id="ed2"
+              @change="changeEditorSigNotice"
+              :disabled="isDisb"
+            />
+          </Row>
+          </Row>
+          
           <Row class-name="row20">
             <Row class-name="row10">
               <i-col span="3">
@@ -617,8 +639,7 @@
           </Row>
           <Row class-name="row20">
             <i-col span="3">受益群体人数</i-col>
-            <i-col span="5" push="2">   
-              <!--  @on-keyup='isNumber' -->
+            <i-col span="5" push="2">  
               <InputNumber
                 style="width:130px"
                 ref="memberGroupNum"
@@ -741,9 +762,11 @@ export default {
           sort: 2
         }
       ],
+      signNotice:null, // 报名须知详情
       train: null,
       isFeedback: 0,
       isTrain: 0,
+      isHaveSignNotice: 1, // 0 存在 1 不存在
       actveType: "",
       array: [],
       judge: "",
@@ -956,6 +979,10 @@ export default {
           this.judge = res.data.result || "";
           this.isFeedback = ~~res.data.isFeedback || 0;
           this.isTrain = ~~res.data.isTrain || 0;
+          this.isHaveSignNotice = ~~res.data.isHaveSignNotice;
+
+          console.log(res.data.isHaveSignNotice);
+          
           this.orgName = res.data.orgName;
 
           // TODo 图片赋值
@@ -1021,6 +1048,7 @@ export default {
     separation() {
       let args = this.args;
       this.train = args.trainComments || null;
+      this.signNotice = args.signNotice || null;
       this.feed = [];
       if (args.coDetailList) {
         this.feed = [...args.coDetailList];
@@ -1069,6 +1097,7 @@ export default {
       let data = {
         isFeedback: this.isFeedback,
         isTrain: this.isTrain,
+        isHaveSignNotice: this.isHaveSignNotice,
         zhaEnd: this.zhaEnd,
         zhaStart: this.zhaStart,
         isDisb: this.isDisb,
@@ -1076,6 +1105,7 @@ export default {
         args: this.args,
         judge: this.judge,
         train: this.train,
+        signNotice: this.signNotice,
         feed: this.feed,
         // TODO 图片
         coverPicPath,
@@ -1133,6 +1163,10 @@ export default {
     changeEditorTrain(html) {
       this.train = html;
     },
+    changeEditorSigNotice(html) {
+      this.signNotice = html
+    },
+    
     initData() {
       this.userId = localStorage.getItem("userId");
       let data = JSON.parse(sessionStorage.getItem("data"));
@@ -1150,7 +1184,9 @@ export default {
         // END
         this.isFeedback = data.isFeedback;
         this.isTrain = data.isTrain;
+        this.isHaveSignNotice = data.isHaveSignNotice;
         this.train = data.train
+        this.signNotice = data.signNotice
         this.feed = data.feed
       }
       getOrgTeam({}).then(res => {
@@ -1412,8 +1448,14 @@ export default {
           }
         } else if (this.isTrain == 1) {
           if (!this.train) {
-            this.$Message.warning("你已经勾选培训，必须完善");
+            this.$Message.warning("你已经勾选培训，请完善");
             return;
+          }
+        }else if(this.isHaveSignNotice==0){
+          if(!this.signNotice){
+             this.$Message.warning("你已经勾选报名须知，请完善");
+            return;
+        
           }
         }
       } else {
@@ -1455,6 +1497,8 @@ export default {
       if (this.isEdit == 4) delete item.activityId;
       let obj = filterNull(item);
       obj.title = obj.name;
+      obj.isHaveSignNotice = this.isHaveSignNotice
+      obj.signNotice=this.signNotice==null?"":this.signNotice
 
       console.log(obj);
       saveActive(obj).then(res => {

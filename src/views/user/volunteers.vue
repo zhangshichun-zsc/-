@@ -285,9 +285,9 @@
           </Dropdown>
         </div>
         <div>
-          <Select v-model="size" style="width:120px; margin-left: 10px;" placeholder="显示条数" class="space">
+          <!-- <Select v-model="size" style="width:120px; margin-left: 10px;" placeholder="显示条数" class="space">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+          </Select> -->
           <Select style="margin-left: 10px; width: 120px;" placeholder="排序方式" class="space" v-model="sort">
             <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
@@ -358,17 +358,33 @@
         </Modal>
         <!-- </div> -->
       </div>
-      <Table border ref="volunteerSel" :columns="columns" :data="data" @on-selection-change="handleSelectionChange"></Table>
+      <Table
+       border 
+       ref="volunteerSel" 
+       :columns="columns" 
+       :data="data" 
+       :loading="loading"
+       @on-selection-change="handleSelectionChange"
+       ></Table>
       <div class="pages">
         <div class="batch">
-          <Checkbox v-model="ALLINFO">全选</Checkbox>
+          <Checkbox :value="ALLINFO" @on-change="setALL">全选</Checkbox>
           <Select placement='top' placeholder="批量操作" style="width: 150px" v-model="batchState">
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
           <a href="javascript:;" class='btn' @click="batchOperation">确定</a>
 
         </div>
-        <Page :current.sync='page' :total="totalSize" @on-change="onPage" show-elevator show-total size="small" />
+        <Page
+         show-sizer 
+        :current.sync='page' 
+        :total="totalSize"
+         show-elevator 
+         show-total 
+         size="small"
+        @on-change="onPage"
+        @on-page-size-change='setSize' 
+          />
       </div>
     </div>
 
@@ -447,6 +463,7 @@ import { UserList } from '@/request/api'
 export default {
   data() {
     return {
+      loading: false,
       navigation1: {
         head: '志愿者(共用)'
       },
@@ -794,36 +811,17 @@ export default {
   },
 
   watch: {
-    size(newVlaue, oldValue) {
-      this.ALLINFO = false
-      if (newVlaue === oldValue) return
-      this.getUsetList(this.paramsObj)
-    },
-    page(newVlaue, oldValue) {
-      this.ALLINFO = false
-      if (newVlaue === oldValue) return
-      this.getUsetList(this.paramsObj)
-    },
     sort(newVlaue) {
       this.ALLINFO = false
       this.getUsetList(this.paramsObj)
     },
-    ALLINFO(newVlaue, oldValue) {
-      //  全选 and 全不选
-      if (newVlaue === true) {
-        this.$refs.volunteerSel.selectAll(true)
-        let arr = this.data.map(item => {
-          return item.userId
-        })
-        this.ALLLIST = arr
-      } else {
-        this.$refs.volunteerSel.selectAll(false)
-        this.ALLLIST = []
-      }
-    }
   },
 
   methods: {
+    setSize(n){
+      this.size = n
+     this.getUsetList(this.paramsObj)
+    },
     // 初始化
     init() {
       this.getUsetList()
@@ -832,6 +830,8 @@ export default {
     },
     //  获取用户列表
     getUsetList(paramsObj, flag) {
+      this.loading = true
+      this.data=[]
       let time = {}
       if (flag) {
         // let endAt = null
@@ -862,13 +862,14 @@ export default {
         ...paramsObj
       })
       Public.getUserList(obj).then(res => {
-        console.log(res)
+        
         if (res.code === 200) {
-          this.data = res.data.list
+          this.data = [...res.data.list]
           this.totalSize = res.data.totalSize
           this.isSenior = flag
         } else {
         }
+          this.loading = false
       })
     },
     // 用户状态 变更
@@ -1051,6 +1052,10 @@ export default {
     // 点击页码
     onPage(page) {
       this.page = page
+      this.getUsetList(this.paramsObj)
+    },
+    setALL(v){
+      this.$refs.volunteerSel.selectAll(v);
     },
     // 选中 内容
     handleSelectionChange(val) {
@@ -1059,17 +1064,30 @@ export default {
       } else {
         this.ALLINFO = false
       }
-      let arr = val.map(item => {
-        return item.userId
-      })
-      this.ALLLIST = arr
+      this.ALLLIST = val
     },
     // 批量修改状态
     batchOperation() {
       if (this.batchState) {
-        this.setUserEnable(this.ALLLIST, this.batchState == 1 ? true : false, () => {
+
+        let userList = this.ALLLIST
+        let arr = []
+        userList.forEach(element => {
+          if(element.userEnable != this.batchState){
+            arr.push(element.userId)
+          }
+        });
+        if(arr.length<=0){
+           this.$Message.info("当前选中的账号无需此操作");
+           return
+        }else{
+          this.ALLLIST = arr
+          this.setUserEnable(this.ALLLIST, this.batchState == 1 ? true : false, () => {
           this.getUsetList(this.paramsObj)
         })
+        }
+
+      
       } else {
         this.$Message.error({
           background: true,

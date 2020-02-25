@@ -496,6 +496,7 @@
         </Modal>
       </div>
       <Table
+        :loading='loading'
         ref="volunteerSel"
         border
         :columns="columns"
@@ -505,7 +506,7 @@
       <div class="pages">
         <div class="batch">
           <Button style="border:0px">
-            <Checkbox v-model="ALLINFO"></Checkbox>全选
+            <Checkbox :value="ALLINFO" @on-change='setALL'></Checkbox>全选
           </Button>
           <Select
             placement="top"
@@ -524,7 +525,7 @@
           <!-- <Button style="margin-left: 10px" @click="batches()"></Button> -->
         </div>
         <Page
-        :current.sync='page'
+          :current.sync='page'
           :total="dataCount"
           show-elevator
           show-total
@@ -935,7 +936,8 @@ export default {
       QRCode: "",
       ALLINFO: false, // 是否全选
       ALLLIST: [], // 选中的人员
-      stationFormFlag: true
+      stationFormFlag: true,
+      loading:false
     };
   },
   computed: {},
@@ -945,20 +947,6 @@ export default {
   //事件监听
   watch: {
     sort: "getUserPage",
-    ALLINFO(newVlaue, oldValue) {
-      //  全选 and 全不选
-      if (newVlaue === true) {
-        this.$refs.volunteerSel.selectAll(true);
-        let arr = this.data.map(item => {
-          return item.userId;
-        });
-        this.ALLLIST = arr;
-        console.log(arr);
-      } else {
-        this.$refs.volunteerSel.selectAll(false);
-        this.ALLLIST = [];
-      }
-    }
   },
 
   methods: {
@@ -968,11 +956,12 @@ export default {
     },
     //用户列表
     getUserPage() {
+       this.loading = true
       let endAt = null;
       if (this.endAt) {
         endAt = this.util.formatDate_time(this.endAt.getTime()) + " 23:59:59";
       }
-
+      this.data =[]
       //获取用户分页
       Userpage({
         page: this.page,
@@ -992,11 +981,12 @@ export default {
         roleId: this.roleId
       }).then(res => {
         if (res.code == 200) {
-          this.data = res.data.list;
+          this.data = [...res.data.list];
           this.dataCount = res.data.totalSize;
         } else {
           this.$Message.error(res.msg);
         }
+         this.loading = false
         console.log(res);
       });
     },
@@ -1017,7 +1007,7 @@ export default {
         } else {
           this.$Message.error({
             background: true,
-            content: "状态变更失败，请联系管理员查看"
+            content: res.msg
           });
           this.getUserPage(this.paramsObj);
         }
@@ -1055,14 +1045,30 @@ export default {
 
     // 批量操作全选按钮
     batches() {
-      console.log(this.batch);
       if (this.ALLLIST.length < 1) {
         this.$Message.error("至少选择一个");
+        return
       } else if (!this.batch) {
         this.$Message.error("请选择操作类型");
+        return
       } else {
-        this.getUserBatch();
-        this.userEnable = false;
+        // 循环整个数据，跟当前状态不一致的  有一条就不管他 否则 不调用接口
+        let userList = this.ALLLIST
+        let arr = []
+        userList.forEach(element => {
+          if(element.userEnable != this.batch){
+            arr.push(element.userId)
+          }
+        });
+        if(arr.length<=0){
+           this.$Message.info("当前选中的账号无需此操作");
+           return
+        }else{
+            this.ALLLIST = arr
+            this.getUserBatch();
+            this.userEnable = false;
+        }
+        
       }
     },
     // 显示站内信模态框
@@ -1151,22 +1157,17 @@ export default {
         });
       });
     },
-
+    setALL(v){
+      this.$refs.volunteerSel.selectAll(v);
+    },
     // 选中 内容
     handleSelectionChange(val) {
-      if (val.length === this.data.length) {
+      if(val.length == this.data.length){
         this.ALLINFO = true;
-      } else if (val.length === 0) {
-        this.ALLINFO = false;
-        this.$refs.volunteerSel.selectAll(false);
-        this.ALLLIST = [];
-      } else {
-        this.ALLINFO = false;
+      }else{
+         this.ALLINFO = false;
       }
-      let arr = val.map(item => {
-        return item.userId;
-      });
-      this.ALLLIST = arr;
+      this.ALLLIST = val;
     },
     // 单个 用户状态 变更
     setUserEnable(params, type) {

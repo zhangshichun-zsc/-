@@ -23,8 +23,8 @@
           <span>手机号:</span>
           <i-input :value.sync="value" placeholder="手机号" style="width: 180px" v-model="userTel"></i-input>
           <span>受益方:</span>
-          <Select v-model="types" style="width:180px">
-            <Option v-for="item in users" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select v-model="userType" style="width:180px">
+            <Option v-for="item in users" :value="item.roleId" :key="item.roleId">{{ item.roleName }}</Option>
           </Select>
         </div>
         <Button class="button-red" @click="query">查询</Button>
@@ -84,7 +84,7 @@
 
 <script>
 import { formatDate } from "@/request/datatime";
-import { activeAddManager } from "@/request/api";
+import { activeAddManager,getRoleType } from "@/request/api";
 export default {
   data() {
     return {
@@ -203,6 +203,7 @@ export default {
   created() {},
   mounted() {
     this.getactiveAddManager();
+    this.getuserTypeList()
   },
    //事件监听
   watch: {
@@ -212,6 +213,11 @@ export default {
   methods: {
     add() {
       this.$router.push({ name: "approval" });
+    },
+    getuserTypeList(){
+        getRoleType().then(res=>{
+          this.users = res.data
+        })
     },
     onall(index) {
       this.num = index;

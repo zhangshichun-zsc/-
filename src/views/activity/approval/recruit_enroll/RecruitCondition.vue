@@ -1445,7 +1445,7 @@ export default {
                   if(this.form.apptNum >=this.form.recruitNum){
                   console.log(this.form.apptNum)
                   }else{
-                    this.$Message.error('请输入大于0的整数')
+                    this.$Message.error('可预约数量需大于招募人数')
                     this.form.apptNum = ''
                     this.$refs.apptNum.currentValue = ''
                   }

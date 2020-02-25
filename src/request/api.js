@@ -134,6 +134,8 @@ export const Activerule = p => post('/activity-manage/batch-opr-activity-rule', 
 
 export const Activerulepage = p => get('/activity-manage/get-activity-rule-page', p) //活动规则池--获取活动规则分页
 
+export const getRoleType = p => get('/activity-manage/role/list') //活动参与列表受益方类型
+
 
 
 // 基础资料

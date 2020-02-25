@@ -452,7 +452,7 @@
                   class="disorderTypelist-item "
                   v-if="!parameOBJ.memInfo.childsInfo"
                   v-for="(item, index) in parameOBJ.memInfo.childsInfo.length > 0
-                    ? (parameOBJ.memInfo.childsInfo[0].disorderType?parameOBJ.memInfo.childsInfo[0].diseaseDicIds.split(','):'')
+                    ? (parameOBJ.memInfo.childsInfo[0].diseaseDicIds?parameOBJ.memInfo.childsInfo[0].diseaseDicIds.split(','):'')
                     : ['暂无']"
                     :key="index"
                 >
