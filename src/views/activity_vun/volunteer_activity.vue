@@ -180,15 +180,22 @@ export default {
                   },
                   on: {
                     click: () => {
-                     
+                    //  都可编辑
                      let arr =[
+                       "待审核",
+                       "待发布",
                        "待招募",
-                       "待审核", 
-                     ]
-                     let arr2 =[
                        "招募中",
-                       "待开始"
+                       "关闭报名"
                      ]
+                    //  活动详情，活动反馈
+                     let arr2 =[
+                       "待开始",
+                       "进行中",
+                       '已结束'
+                     ]
+                
+
                       let status = null
                       let statusText = params.row.statusText
                       if( arr.includes(statusText)){
@@ -206,7 +213,16 @@ export default {
                           }
                         })
                       } else {
-                        this.$Message.warning('该活动状态不可编辑')
+                        this.$router.push({
+                          name: 'volunteer_issue',
+                          query: {
+                            activityId: params.row.activityId,
+                            isEdit: 1,
+                            // 不可以修改
+                            status: 4 
+                          }
+                        })
+                       
                       }
                     }
                   }

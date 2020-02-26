@@ -189,7 +189,8 @@
               <Radio label="0">招募开始前一周</Radio>
               <Radio class="ml-16" label="1">自定义</Radio>
             </RadioGroup>
-            <XDatePicker v-show="releaseTime==='1'" type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" :value="form.releaseTime" :disabled="isFormDisabled" @on-change="onCustomReleaseTimeChange" />
+            <!-- :disabled="isFormDisabled" -->
+            <XDatePicker v-show="releaseTime==='1'" type="datetime" :editable="false" format="yyyy-MM-dd HH:mm" placeholder="选择日期" :value="form.releaseTime"  @on-change="onCustomReleaseTimeChange" />
           </FormItem>
         </div>
         </Col>

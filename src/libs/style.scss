@@ -139,7 +139,9 @@ html ::-webkit-scrollbar-thumb {
     top: 0;
   }
 }
-
+.ivu-btn:hover{
+  border-color: transparent !important; 
+}
 .out-modal {
   display: flex;
   align-items: center;

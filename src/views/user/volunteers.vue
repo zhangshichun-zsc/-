@@ -1026,28 +1026,6 @@ export default {
           content: '请选择要修改的人员'
         })
       }
-
-
-      // if (this.letters) {
-      //   if (this.letters === 'ON') {
-      //     if (this.ALLLIST.length > 0) {
-      //       this.modal2 = true
-      //     } else {
-      //       this.$Message.error({
-      //         background: true,
-      //         content: '请选择要修改的人员'
-      //       })
-      //     }
-      //   } else {
-      //     this.ALLINFO = true
-      //     this.modal2 = true
-      //   }
-      // } else {
-      //   this.$Message.error({
-      //     background: true,
-      //     content: '请选择全部用户or选中用户'
-      //   })
-      // }
     },
     // 点击页码
     onPage(page) {

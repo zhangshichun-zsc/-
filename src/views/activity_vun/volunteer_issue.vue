@@ -297,15 +297,28 @@
                 <li class="flex-start">
                   <span>活动地址</span>
                   <div>
-                    <Button @click="getAdr" class="adr" :disabled="args.onlineFlag==0? true:false">{{
+                    <Button v-if="!isDisb" @click="getAdr" class="adr" :disabled="args.onlineFlag==0? true:false">{{
+                      args.address == null ? "点击选中地址" : args.address
+                    }}
+                    </Button>
+                     <Button v-else   :disabled="isDisb">{{
                       args.address == null ? "点击选中地址" : args.address
                     }}
                     </Button>
                     <Input
+                      v-if="!isDisb"
                       v-model="args.addressSup"
                       placeholder="请输入详细地址"
-                      :disabled="isDisb || args.onlineFlag==0? true:false"
+                      :disabled="args.onlineFlag==0? true:false"
                     />
+                    <Input
+                      v-else
+                      v-model="args.addressSup"
+                      placeholder="请输入详细地址"
+                      :disabled="isDisb"
+                    />
+
+
                   </div>
                 </li>
                 <li>
@@ -432,8 +445,10 @@
             id="wange"
             :labels="args.detail"
             @change="changeEditor"
-            :disabled="status == 3 || status == 4 ? false : isDisb"
+            :disabled="isDisb && status==4"
+           
           />
+          <!--  :disabled="status == 3 || status == 4 ? false : isDisb" -->
         </i-col>
       </Row>
       <Row class-name="row20">
@@ -493,7 +508,7 @@
                   v-model="isFeedback"
                   :true-value="1"
                   :false-value="2"
-                  :disabled="isDisb"
+                  :disabled="isDisb && status==4"
                 />
               </i-col>
             </Row>
@@ -511,7 +526,7 @@
                       placeholder="请输入反馈内容"
                       v-model="item.detailText"
                       type="textarea"
-                      :disabled="isDisb"
+                      :disabled="isDisb && status==4"
                       :row="4"
                     />
                   </i-col>
@@ -525,7 +540,7 @@
                   <i-col span="5">是否上传图片</i-col>
                   <i-col span="16">
                     <i-switch
-                      :disabled="isDisb"
+                      :disabled="isDisb && status==4"
                       :true-value="1"
                       :false-value="0"
                       v-model="item.isMust"
@@ -542,12 +557,12 @@
                     <i-input
                       placeholder="标题"
                       v-model="item.detailText"
-                      :disabled="isDisb"
+                      :disabled="isDisb && status==4"
                     />
                   </i-col>
                   <i-col span="4">
                     <i-switch
-                      :disabled="isDisb"
+                      :disabled="isDisb && status==4"
                       :true-value="1"
                       :false-value="0"
                       v-model="item.isMust"
@@ -558,7 +573,7 @@
                     <Icon
                       type="ios-trash"
                       @click="deleItem(index, null)"
-                      v-if="!isDisb"
+                      v-if="!isDisb && status !=4"
                       color="#FF565A"
                       size="28"
                     />
@@ -570,12 +585,12 @@
                       <i-input
                         placeholder="请输入标题"
                         v-model="item.detailText"
-                        :disabled="isDisb"
+                        :disabled="isDisb && status==4"
                       />
                     </i-col>
                     <i-col span="4">
                       <i-switch
-                        :disabled="isDisb"
+                       :disabled="isDisb && status==4"
                         :true-value="1"
                         :false-value="0"
                         v-model="item.isMust"
@@ -586,7 +601,7 @@
                       <Icon
                         type="ios-trash"
                         @click="deleItem(index, null)"
-                        v-if="!isDisb"
+                        v-if="!isDisb && status!=4"
                         color="#FF565A"
                         size="28"
                       />
@@ -597,14 +612,14 @@
                       <i-input
                         :placeholder="`输入选项${i + 1}`"
                         v-model="val.value"
-                        :disabled="isDisb"
+                        :disabled="isDisb && status==4"
                       />
                     </i-col>
                     <i-col span="2" push="2">
                       <Icon
                         type="ios-trash"
                         @click="deleItem(index, i)"
-                        v-if="!isDisb"
+                        v-if="!isDisb && status!=4"
                         color="#FF565A"
                         size="28"
                       />
@@ -623,7 +638,7 @@
                   </Row>
                 </Row>
               </Row>
-              <Row v-if="!isDisb">
+              <Row v-if="!isDisb && status!=4">
                 <i-col span="3">新增反馈项</i-col>
                 <i-col span="19" push="2">
                   <Button
@@ -979,7 +994,14 @@ export default {
           this.judge = res.data.result || "";
           this.isFeedback = ~~res.data.isFeedback || 0;
           this.isTrain = ~~res.data.isTrain || 0;
-          this.isHaveSignNotice = ~~res.data.isHaveSignNotice;
+          if(res.data.isHaveSignNotice){
+            console.log(1);
+            
+             this.isHaveSignNotice = ~~res.data.isHaveSignNotice;
+          }else{
+            this.isHaveSignNotice  = 1
+          }
+         
 
           console.log(res.data.isHaveSignNotice);
           

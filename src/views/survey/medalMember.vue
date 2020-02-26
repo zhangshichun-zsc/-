@@ -9,13 +9,15 @@
       </div>
       <div class="btn-box">
         <span class="label">规则名称:</span>
-        <Select v-model="ruleNameModal" clearable>
-          <Option v-for="item in ruleList" :value="item.name" :key="item.dicCode" @click.native="getSelectedRuleItem1(item)">{{ item.name }}</Option>
+        <Select v-model="ruleNameModal" clearable @on-change="setRule">
+          <Option v-for="item in ruleList" :value="item.dicId" :key="item.dicId" >{{ item.name }}</Option>
+          <!-- @click.native="getSelectedRuleItem1(item)" -->
         </Select>
       </div>
       <div class="btn-box">
         <span class="label">创建时间:</span>
-        <DatePicker type="datetimerange" v-model="surveyDate" format="yyyy-MM-dd HH:mm" placeholder="创建时间"></DatePicker>
+        <!-- v-model="surveyDate" -->
+        <DatePicker type="daterange" @on-change='formTime'  format="yyyy-MM-dd" placeholder="创建时间"></DatePicker>
       </div>
       <Button @click="query" shape="circle" size='large' class="search" style="margin-left:10px;">查询</Button>
     </div>
@@ -299,22 +301,23 @@ export default {
     },
     // 查询结果
     query() {
-      // console.log("this.surveyDate[0])", this.surveyDate[0]);
+
       this.isInit = false
       let submitData = {}
       let oldSubmkitData = {
         page: { page: this.page, size: this.size, sort: 'createAt asc' },
         typeFlag: '1',
         medalName: this.medalNameModel,
-        ruleId: this.selectedRuleData1.dicId,
-        startAt: this.surveyDate[0],
-        endAt: this.surveyDate[1]
+        ruleId: this.ruleNameModal,
+        startAt:this.surveyDate[0],
+        endAt:this.surveyDate[1]
       }
       for (let i in oldSubmkitData) {
         if (oldSubmkitData[i]) {
           submitData[i] = oldSubmkitData[i]
         }
       }
+      
       console.log('obj', submitData)
       // 最后调用接口，传入的参数是obj
       queryMedalList(submitData).then(res => {
@@ -327,7 +330,12 @@ export default {
 
       // console.log("query22222222surveyDate",this.surveyDate)
     },
-
+    setRule(v){
+      this.ruleNameModal = v
+    },
+    formTime(v, o){
+        this.surveyDate = v
+    },
     // 点击切换页码功能
     changepages(index) {
       this.page = index
@@ -486,7 +494,10 @@ export default {
         typeFlag: '60'
       }).then(res => {
         console.log('res queryDicByTypeFlag', res.data)
-        this.ruleList = res.data
+        this.ruleList = [{
+        name: "全部",
+        dicId: ""
+        },...res.data]
         // // 在数组的开头添加一个选项,所有规则
         // var allrules = {
         //   name:"所有规则",

@@ -253,6 +253,12 @@ export default {
           }
         },
         {
+          title: "创建时间",
+          key: "createAt",
+          width: 200,
+          align: "center"
+        },
+        {
           title: "负责人",
           key: "userName",
           align: "center",

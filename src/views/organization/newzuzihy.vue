@@ -397,18 +397,18 @@ export default {
       }
       let dataForm = new FormData();
       dataForm.append("file", file);
+      console.log(this.formInline)
       uploadFile(dataForm).then(res => {
         if (res.code === 200) {
           var reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = e => {
             this.texturl = e.target.result;
-            // this.formInline.agPicA = res.data;
-            if (this.formInline.agPicA == null) {
+            if (this.formInline.agPicA == null ) {
               this.formInline.agPicA = res.data;
               this.numA = 100;
               return;
-            } else if (this.formInline.agPicB == null) {
+            } else if (this.formInline.agPicB == null ) {
               this.formInline.agPicB = res.data;
               this.numB = 100;
               return;

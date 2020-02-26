@@ -245,7 +245,8 @@
       <Row class-name="row">
         <i-col span='3'><span>集合地址</span></i-col>
         <i-col span='4'>
-          <Button  :disabled="onlineFlag==0? true:false" @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+          <Button  v-if="!isDisb" :disabled="onlineFlag==0? true:false" @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
+          <Button v-else :disabled="isDisb" @click="getAdr" size='large' style="margin-bottom:20px;">{{ args.setAddr?args.setAddr:"点击选中地址"}}</Button>
           <Input  v-model="args.addressSup" placeholder="请输入详细地址" :disabled="isDisb||onlineFlag==0? true:false" />
         </i-col>
       </Row>
@@ -407,6 +408,8 @@ export default {
     },
     selectDrap(index, arr, m, e) {
       let id = arr[index].ruleId
+    console.log(1);
+    
       if (id == 2 || id == 5 || (m == 1 && id == 23)) {
         arr.forEach((val, i) => {
           if (val.ruleId == id && val.ruleValue == e && index !== i) {
@@ -437,6 +440,8 @@ export default {
       this.args.coActivityItemList = itemList
     },
     deleItem(i, m, fors) {
+      console.log(2);
+      
       let items = this.args.coActivityItemList
       if (m !== null) {
         let arr = items[i].arr
@@ -458,12 +463,16 @@ export default {
       this.args.coActivityItemList = items
     },
     addSignIput(i) {
+      console.log(3);
+      
       let items = this.args.coActivityItemList
       let arr = items[i].arr
       arr.push({ value: null })
       this.args.coActivityItemList = items
     },
     deleLimitItem(m, fors) {
+      console.log(4);
+      
       let limit = this.limit
       limit.splice(m, 1)
       for (let i = 0, len = limit.length; i < len; i++) {
@@ -490,6 +499,8 @@ export default {
       this.limit = limit
     },
     ranktab(i) {
+      console.log(5);
+      
       let good = this.good
       let emp = good[i]
       good.splice(i, 1)
@@ -500,6 +511,8 @@ export default {
       this.good = good
     },
     deleGoodItem(i, fors) {
+      console.log(6);
+      
       let good = this.good
       good.splice(i, 1)
       for (let i = 0, len = good.length; i < len; i++) {
@@ -543,6 +556,8 @@ export default {
       })
     },
     dealData() {
+      console.log(7);
+      
       this.i = this.$route.query.i
       let data = JSON.parse(sessionStorage.getItem('data'))
 
@@ -572,7 +587,7 @@ export default {
       let limit = []
       let good = []
       if (list.length > 0) {
-        list.forEach(item => {
+        list.forEach((item, i) => {
           if (item.ruleType == 1) {
             if (item.ruleId == 3) {
               item.data = item.ruleValue.split(',')
