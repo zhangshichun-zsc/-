@@ -660,27 +660,30 @@ export default {
     },
     // 删除附件
     canceltxt(pic, name) {
-      deleteFile({ fileUrl: pic }).then(res => {
-        if (res.code == 200) {
+      // deleteFile({ fileUrl: pic }).then(res => {
+        // if (res.code == 200) {
           this.$Message.success("删除成功");
           if (name == this.formInline.nameA) {
-            (this.formInline.nameA = null), (this.formInline.agPicA = null);
+            this.formInline.nameA = null 
+            this.formInline.agPicA = null
             this.numA = 0;
             return;
           } else if (name == this.formInline.nameB) {
-            (this.formInline.nameB = null), (this.formInline.agPicB = null);
+            this.formInline.nameB = null
+            this.formInline.agPicB = null
             this.numB = 0;
             return;
           } else if ((name = this.formInline.nameC)) {
-            (this.formInline.nameC = null), (this.formInline.agPicC = null);
+            this.formInline.nameC = null
+            this.formInline.agPicC = null
             this.numC = 0;
             return;
           }
           this.texturl = null;
-        } else {
-          this.$Message.success(res.msg);
-        }
-      });
+        // } else {
+        //   this.$Message.success(res.msg);
+        // }
+      // });
     },
 
     //下载

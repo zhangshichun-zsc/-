@@ -984,9 +984,13 @@ export default {
       } else {
         adjustValue = this.formVip.adjustValue
       }
-
+      let userIds = this.ALLLIST.map(item=>{
+        return item.userId
+      })
+      
+      
       let obj = this.util.remove({
-        userIds: this.ALLLIST.toString(),
+        userIds: userIds.toString(),
         userId: this.userId,
         adjustValue: adjustValue,
         remark: this.formVip.remark
@@ -1147,7 +1151,10 @@ export default {
     // 设置标签按钮
     onLabel() {
       if (this.ALLLIST.length === 1) {
-        this.getLabels({ userId: this.ALLLIST.toString() })
+         let userIds = this.ALLLIST.map(item=>{
+            return item.userId
+        })
+        this.getLabels({ userId: userIds.toString() })
         this.modallable = true
       } else if (this.ALLLIST.length > 1) {
         this.$Message.error({
@@ -1163,8 +1170,11 @@ export default {
     },
     // 设置标签 确定按钮
     onSetLabel() {
+       let userIds = this.ALLLIST.map(item=>{
+            return item.userId
+        })
       Public.SetUserLabel({
-        userId: this.ALLLIST.toString(),
+        userId: userIds.toString(),
         labelIds: this.labelcheckout.toString(),
         sysType: '1'
       }).then(res => {
@@ -1214,11 +1224,12 @@ export default {
       if (!this.stationFormFlag) return
       this.$refs.formValidate2.validate(valid => {
         if (valid) {
+          let userIds = this.ALLLIST.map(item=>{
+            return item.userId
+          })
           this.stationFormFlag = false
-          let ids = this.ALLLIST.toString()
+          let ids = userIds.toString()
           this.setsend({ ids, ...this.formValidate2 })
-        } else {
-          this.$Message.error('必填项未填!')
         }
       })
     },

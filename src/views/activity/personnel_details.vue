@@ -82,7 +82,7 @@
               <tr>
                 <td>{{ msg.feedStatus==1?"已反馈":"未反馈"}}</td>
                 <td>{{msg.feedAt}}</td>
-                <td @click="jump" style="cursor:'pointer'">详情</td>
+                <td @click="jump" style="cursor: pointer;color: red;">详情</td>
               </tr>
             </table>
           </li>
@@ -103,7 +103,6 @@ export default {
       },
       actUserId:1,
       msg:{},
-      activeState: this.$store.state.activeState,
       activityName: this.$route.query.activityName,
       signStatus: ["未签到","未反馈","迟到"],
       trainStatus: ["未阅读","已阅读","已确认"]
@@ -112,7 +111,11 @@ export default {
 
   components: {  },
 
-  computed: {},
+  computed: {
+    activeState(){
+      return this.$store.state.activeState
+    }
+  },
 
   created() {
     this.actUserId = this.$route.query.actUserId

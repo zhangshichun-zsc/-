@@ -59,7 +59,7 @@
             <Row>
               <Radio label="2">
                 活动开始前&nbsp;
-                <InputNumber :disabled="form.actRefund.refundRule == 1" :min="0" v-model="form.actRefund.refundDays" style="width: 80px" />&nbsp;天可退款
+                <InputNumber :disabled="form.actRefund.refundRule == 1" :min="0" @on-blur="isNumberDec('refundDays')" v-model="form.actRefund.refundDays" ref='refundDays' style="width: 80px" />&nbsp;天可退款
               </Radio>
             </Row>
           </RadioGroup>
@@ -138,7 +138,7 @@
             <Row>
               <Radio label="2">
                 活动开始前&nbsp;
-                <InputNumber :disabled="form.qxSet==1" :min="1" v-model="form.qxDays" style="width: 80px" />&nbsp;天可取消
+                <InputNumber :disabled="form.qxSet==1" :min="1" v-model="form.qxDays" @on-blur="isNumberDec('qxDays')" ref="qxDays" style="width: 80px" />&nbsp;天可取消
               </Radio>
             </Row>
             <Row>
@@ -1345,13 +1345,14 @@ export default {
               },
               on: {
                 input: value => {
-                  if (!this.util.isNumber(value)) {
-                    this.$Message.error('请输入大于0的整数')
+                  this.form.amount = value  
+                },
+                  'on-blur': value=>{
+                  if(this.form.amount.toString().includes("-")){
+                    this.$Message.error('请输入大于0的数')
                     this.form.amount = ''
-                    this.$refs.amout.currentValue = ''
-                  } else {
-                    this.form.amount = value
-                  }
+                    this.$refs.amount.currentValue = ''
+                  }  
                 }
               }
             })
@@ -1371,13 +1372,14 @@ export default {
               },
               on: {
                 input: value => {
-                  if (!this.util.isNumber(value)) {
-                    this.$Message.error('请输入大于0的整数')
+                  this.form.vipAmount = value
+                },
+                 'on-blur': value=>{
+                  if(this.form.vipAmount.toString().includes("-")){
+                    this.$Message.error('请输入大于0的数')
                     this.form.vipAmount = ''
                     this.$refs.vipAmount.currentValue = ''
-                  } else {
-                    this.form.vipAmount = value
-                  }
+                  }  
                 }
               }
             })
@@ -1593,6 +1595,24 @@ export default {
       if (e == 1) {
         this.form.isTrain = 1
       }
+    },
+    isNumberDec(name){
+      let value = ''
+      if(name == 'refundDays') {
+        value  = this.form.actRefund.refundDays
+      }else{
+        value = this.form.qxDays
+      } 
+      if (!this.util.isNumber(value)) {
+          this.$Message.error('请输入大于0的整数')
+          if(name == 'refundDays'){
+             this.form.actRefund.refundDays = ''
+            this.$refs.refundDays.currentValue = ''
+          }else{
+            this.form.qxDays =''
+            this.$refs.qxDays.currentValue = ''
+          }
+        }
     },
     async getFirstList() {
       const res = await firstList({

@@ -356,12 +356,15 @@
                     >
                       <i-col span="4">{{ item.resourcesName }}</i-col>
                       <i-col span="8">
-                        <Input
+                        <InputNumber
                           :disabled="status && status != 1"
-                          v-model="item.num"
+                          :value="item.num"
                           placeholder="请输入数量"
                           class="twoT"
-                        ></Input>
+                          :ref="`num${i}`"
+                          style="width:140px"
+                          @on-change="isNumber($event,`num${i}`, i)"
+                        ></InputNumber>
                       </i-col>
                       <i-col span="4">
                         <Checkbox
@@ -935,7 +938,24 @@ export default {
           this.$router.back();
         }
       });
-    }
+    },
+    isNumber(e, name, i) { 
+      console.log(e);
+      console.log(name);
+      console.log(i);
+      
+      
+      
+        if (!this.util.isNumber(e)) {
+          this.$Message.error('请输入大于0的整数')
+           this.batch.actResList[i].num=''
+          // 数字的形式取找的， 所以 +  [0]
+          this.$refs[name][0].currentValue = ""  
+        } else{ 
+          this.batch.actResList[i].num = e
+        }
+    },
+    
   }
 };
 </script>

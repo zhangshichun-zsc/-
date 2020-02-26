@@ -1,6 +1,6 @@
 <template>
   <PageHeaderWrapper class="p-approval" title="新增活动立项">
-    <template #titleSuffix><Button  disabled="true" class="ml-16" type="default" style="width:120px" @click="toVolunteer">设置常用报名项</Button></template>
+    <template #titleSuffix><Button  :disabled="true" class="ml-16" type="default" style="width:120px" @click="toVolunteer">设置常用报名项</Button></template>
     <div class="card">
       <Steps class="steps" :current="currentStep">
         <Step title="基本项"></Step>

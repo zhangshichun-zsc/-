@@ -22,7 +22,7 @@
           <i-input :value.sync="value" placeholder="姓名" style="width: 180px" v-model="userName"></i-input>
           <span>手机号:</span>
           <i-input :value.sync="value" placeholder="手机号" style="width: 180px" v-model="userTel"></i-input>
-          <span>受益方:</span>
+          <span>用户类型:</span>
           <Select v-model="userType" style="width:180px">
             <Option v-for="item in users" :value="item.roleId" :key="item.roleId">{{ item.roleName }}</Option>
           </Select>

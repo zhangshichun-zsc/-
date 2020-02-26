@@ -1077,7 +1077,10 @@ export default {
     onStation() {
       this.$refs.formValidate2.validate(valid => {
         if (valid) {
-          let ids = this.ALLLIST.toString()
+           let userIds = this.ALLLIST.map(item=>{
+            return item.userId
+          })
+          let ids = userIds.toString()
           this.setsend({ ids, ...this.formValidate2 })
         } else {
           this.$Message.error('必填项未填!')
@@ -1101,7 +1104,10 @@ export default {
     // 设置标签按钮
     onLabel() {
       if (this.ALLLIST.length === 1) {
-        this.getLabels({ userId: this.ALLLIST.toString() })
+         let userIds = this.ALLLIST.map(item=>{
+            return item.userId
+          })
+        this.getLabels({ userId: userIds.toString() })
         this.modal5 = true
       } else if (this.ALLLIST.length > 1) {
         this.$Message.error({
@@ -1117,8 +1123,11 @@ export default {
     },
     // 设置标签 确定按钮
     onSetLabel() {
+      let userIds = this.ALLLIST.map(item=>{
+            return item.userId
+      })
       Public.SetUserLabel({
-        userId: this.ALLLIST.toString(),
+        userId: userIds.toString(),
         labelIds: this.labelcheckout.toString(),
         sysType: '2'
       }).then(res => {

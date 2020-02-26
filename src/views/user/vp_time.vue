@@ -289,9 +289,7 @@ export default {
   methods: {
     // 选中的 具体项
     handleSelectionChange(val) {
-      this.isALLLIST = val.map(item => {
-        return item.auditId
-      })
+      this.isALLLIST = val
     },
     //分页功能
     changepages(index) {
@@ -328,11 +326,19 @@ export default {
     },
     // 拒绝按钮
     refuse(props) {
-      // props && (this.isALLLIST = props); 这都是哪个辣鸡写的代码 wdf
-      if (this.isALLLIST.length < 1) {
-        this.$Message.error('请至少选择一项')
-        return
+
+        let status = [ '审核通过', '审核不通过',  '审核拒绝' ]    
+        let arr = []         
+        this.isALLLIST.forEach(item => {
+          if(!status.includes(item.status)){
+          arr.push(item.auditId) 
+          } 
+        })
+      if(arr.length==0) {
+        this.$Message.error('请至少选择一项未审批的数据')
+           return
       }
+     
       this.refusemodel = true
     },
     // 确定
@@ -353,10 +359,22 @@ export default {
       if (this.isALLLIST.length < 1) {
         this.$Message.error('请至少选择一项')
       } else {
+        let status = [ '审核通过', '审核不通过',  '审核拒绝' ]
+              
+        let arr = []         
+        this.isALLLIST.forEach(item => {
+          if(!status.includes(item.status)){
+          arr.push(item.auditId) 
+          } 
+        })
+        if(arr.length==0) {
+           this.$Message.info("当前选中的账号无需此操作");
+           return
+        }
         Public.vipApproval(
           this.util.remove({
             optType: optType,
-            auditIds: this.isALLLIST.toString(),
+            auditIds: arr.toString(),
             userId: this.paramsObj.userId,
             remark: this.refuseValue
           })
