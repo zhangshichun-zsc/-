@@ -1,4 +1,4 @@
-<!--资讯分类管理(会员)-->
+<!--资讯分类管理(志愿者)-->
 <template>
   <div class="main">
     <Modal
@@ -13,30 +13,18 @@
           <Icon type="ios-list" />
           <span>数据列表</span>
         </p>
-        <!-- <div class="but">
-          <Button @click="add">添加</Button>
-        </div> -->
       </div>
-      <Table ref="selection" border :columns="columns" :data="datas" @on-selection-change="handleSelectionChange"></Table>
+      <Table :loading='loading' ref="selection" border :columns="columns" :data="datas" @on-selection-change="handleSelectionChange"></Table>
       <Modal v-model="modalEditor" title="添加分类">
-        <Form class="bd" ref="AddDate" :model="AddData" :rules="ruleValidate" :show-message="false" :label-width="120">
+        <Form class="bd" ref="AddDate" :model="AddData" :rules="ruleValidate"  :label-width="120">
           <FormItem label="类型名称:" prop="name">
             <Input style="width: 10rem" v-model="AddData.name" />
           </FormItem>
           <FormItem label="类型图标:" prop="picPath">
-            <div class="start-wap">
-              <div class="upload" v-if="AddData.picPath == null">
-                <div class="file" @click="()=>{ this.$refs.files.click()}">
-                  <input style=" display:none;" type="file" accept=".jpg, .JPG, .gif, .GIF, .png, .PNG, .bmp, .BMP" ref="files" @change="uploadFile()" multiple />
-                  <Icon type="md-cloud-upload" :size="36" color="#2d8cf0" />
-                </div>
-              </div>
-              <img class="imgs" style="height:50px;width:50px;"  v-if="AddData.picPath != null" :src="AddData.picPath" />
-              <Icon type="ios-trash" v-if="AddData.picPath != null" class="cancel" :size="26" @click="cancelImg()" />
-            </div>
+            <UploadImg :full-url.sync="AddData.picPath" :editable="false" :display-width="150" :display-height="150" :max="1" v-model="AddData.pic" placeholder="请上传图标" />
           </FormItem>
           <FormItem label="是否显示:" prop="WhetherShown">
-            <i-switch v-model="WhetherShown" />
+            <i-switch key='forSwitch' v-model="WhetherShown" />
           </FormItem>
           <FormItem></FormItem>
         </Form>
@@ -46,36 +34,21 @@
           <Button type="primary" size="large" @click="modalOk('AddData')">确定</Button>
         </div>
       </Modal>
-      <!-- <div class="pages">
-        <div class="batch">
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="types">
-            <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-          <Button style="margin-left: 10px" @click="batch">确定</Button>
-        </div>
-        <Page :total="dataCount" show-elevator show-total size="small" style="margin: auto" :page-size="size" @on-change="changepages" />
-      </div> -->
       <div class="row">
         <div>
-          <Button @click="chackall()" style="border:0px;">
-            <Checkbox v-model="status"></Checkbox>全选
-          </Button>
-          <Select placeholder="批量操作" style="width: 150px" v-model="batch" placement='top'>
+          <Checkbox v-model="status" @on-change='chackall'>全选</Checkbox>
+          <Select placeholder="批量操作" style="width: 150px" v-model="types" placement='top'>
             <Option v-for="item in batchList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
-          <Button style="margin-left: 10px" @click="batches()">确定</Button>
+          <Button style="margin-left: 10px" @click="batches">确定</Button>
         </div>
         <div><Page
-        :current.sync='page'
+          :current.sync='page'
           :total="dataCount"
           show-elevator
           show-total
           size="small"
           style="margin: auto"
-          :page-size="size"
           @on-change="changepages"
         /></div>
       </div>
@@ -144,7 +117,8 @@ export default {
             return h('div', [
               h('i-switch', {
                 props: {
-                  value: params.row.validFlag == 1
+                  value: params.row.validFlag == 1,
+                  key: params.row.dicId
                 },
                 on: {
                   input: e => {
@@ -199,21 +173,7 @@ export default {
                   },
                   '编辑'
                 ),
-                h(
-                  'a',
-                  {
-                    style: {
-                      color: '#FF565A'
-                    },
-                    on: {
-                      click: () => {
-                        this.ids = params.row.dicId
-                        this.getinquirydel()
-                      }
-                    }
-                  },
-                  '删除'
-                )
+ 
               ]
             )
           }
@@ -231,19 +191,16 @@ export default {
       },
       batchList: [
         {
-          value: '0',
-          label: '设为隐藏'
+          value: 0,
+          label: '停用'
         },
         {
-          value: '1',
-          label: '设为显示'
+          value: 1,
+          label: '启用'
         },
-        {
-          value: '2',
-          label: '删除'
-        }
+       
       ],
-
+      loading:false,
       page: 1,
       size: 10,
       dataCount: 0,
@@ -252,7 +209,7 @@ export default {
       arr: '',
       ids: '',
       validFlag: '',
-      types: '',
+      types: "",
       batchss: '',
       file: ''
     }
@@ -263,21 +220,24 @@ export default {
   methods: {
     //资讯分类管理列表
     getinquirytype() {
+      this.loading = true
+      this.data=[]
       inquirytype({
         sysId: this.sysId,
         page: { page: this.page, size: this.size }
       }).then(res => {
         if (res.code == 200) {
-          this.datas = res.data.list
+          this.datas =[...res.data.list]
           this.dataCount = res.data.totalSize
           this.status = false
         }
-        console.log(res)
+         this.loading = false
       })
     },
 
     //批量操作启用
     getinquirybatch() {
+      console.log(this.ids)
       inquirybatch({
         userId: this.$store.state.userId,
         ids: this.ids,
@@ -321,9 +281,11 @@ export default {
           this.$Message.info(res.msg)
           this.modalEditor = false
           this.getinquirytype()
-        } else if (res.code == 500) {
-          this.$Message.error('类型已存在')
+        } else {
+          this.getinquirytype()
+          this.$Message.error(res.msg)
         }
+        this.modalEditor = false
         console.log(res)
       })
     },
@@ -347,6 +309,7 @@ export default {
         console.log(res)
       })
     },
+    // 批量操作
 
     //图片上传
     uploadFile() {
@@ -378,18 +341,25 @@ export default {
     },
 
     //批量操作
-    batch() {
+    batches() {
       if (this.arr == '') {
         this.$Message.error('至少选择一个')
       } else if (this.type == '') {
         this.$Message.error('请先选择操作类型')
       } else {
         this.validFlag = this.types
-        this.ids = this.arr
-          .map(item => {
-            return item.dicId
+        // 处理 当前的辣鸡代码
+        let arr = []
+         this.arr.forEach(item => {
+            if(item.validFlag !=  this.types){
+              arr.push(item.dicId)
+            } 
           })
-          .toString()
+          if(arr.length==0){
+            this.$Message.error('选中的分类无需此操作')
+            return
+          }
+          this.ids = arr.toString()
         if (this.types == 0 || this.types == 1) {
           this.getinquirybatch()
         } else if (this.types == 2) {
@@ -449,9 +419,8 @@ export default {
     },
 
     //全选按钮
-    chackall() {
-      this.status = !this.status
-      this.$refs.selection.selectAll(this.status)
+    chackall(v) {
+      this.$refs.selection.selectAll(v)
     },
 
     //清楚

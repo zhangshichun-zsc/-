@@ -95,7 +95,7 @@
               <FormItem label="发送对象：" prop="tag">
                 <p class="pitchOn">
                   <span>共</span>
-                  <span class="red">{{this.ALLLIST.length}}</span>
+                  <span class="red">{{ALLLIST.length}}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
@@ -1080,27 +1080,6 @@ export default {
           content: '请选择要修改的人员'
         })
       }
-      // if (this.letters) {
-      //   if (this.letters === 'ON') {
-      //     if (this.ALLLIST.length > 0) {
-      //       this.modal2 = true
-      //     } else {
-      //       this.$Message.error({
-      //         background: true,
-      //         content: '请选择要修改的人员'
-      //       })
-      //     }
-      //   } else {
-      //     this.ALLINFO = true
-
-      //     this.modal2 = true
-      //   }
-      // } else {
-      //   this.$Message.error({
-      //     background: true,
-      //     content: '请选择全部用户or选中用户'
-      //   })
-      // }
     },
 
     //  修改vip 时间弹窗

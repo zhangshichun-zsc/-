@@ -306,7 +306,7 @@ export default {
         reason: this.reason
       }).then(res => {
         if(res.code==200){
-          this.$Message.info("操作成功");
+          this.$Message.info(res.msg);
           this.getapprovalpage()
         }else{
           this.$Message.error(res.msg)

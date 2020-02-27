@@ -31,27 +31,37 @@
       </div>
       <div class="integral-table">
         <div class="table-header flex-between" style="display:flex">
-            <Button @click="chackall()" style="border:0px;">
-              <Checkbox v-model="status"></Checkbox>全选
-            </Button>
+              <Checkbox v-model="status" @on-change="chackall">全选</Checkbox>
           <div class="flex-center-end">
             <Button class="table-btn" @click="exportData">导出</Button>
-            <Dropdown style="margin-left: 10px">
-              <Button class="table-btn">
-                群发消息
-                <Icon type="ios-arrow-down"></Icon>
+      
+              <Button class="table-btn" @click="ismodal2" style="margin-left: 10px">
+                群发站内信 
               </Button>
-              <DropdownMenu slot="list">
-                <DropdownItem>微信消息</DropdownItem>
-                <DropdownItem>短信</DropdownItem>
-                <DropdownItem>站内信</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+         
+              <Modal v-model="modal2" title="群发站内信" class='QRcodemodal' :mask-closable="false">
+            <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" :label-width="120">
+              <FormItem label="发送对象：" prop="tag">
+                <p class="pitchOn">
+                  <span>共</span>
+                  <!-- <span class="red">{{arr.length}}</span> -->
+                  <span>个用户</span>
+                </p>
+              </FormItem>
+              <FormItem label="标题" prop="title">
+                <Input v-model="formValidate2.title"></Input>
+              </FormItem>
+              <FormItem label="内容：" prop="msg">
+                <Input v-model="formValidate2.msg" type="textarea" :autosize="{minRows: 5,maxRows: 8}"></Input>
+                <p style="font-size: 12px;">站内信标题不能超过20个字，内容不能超过100个字。</p>
+              </FormItem>
+            </Form>
+
+            <div slot="footer">
+              <Button type="error" style="font-size:14px" size="large" @click="onStation">确定</Button>
+            </div>
+          </Modal>
             <div class="flex-center-start">
-              <!-- <Button class="table-btn" @click="add">添加活动</Button> -->
-              <!-- <Select class="table-btn" v-model="size" style="width:150px" placeholder="显示条数" size="large">
-                <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select> -->
               <Select class="table-btn" placeholder="排序方式" style="width: 150px;" v-model="sort" size="large">
                 <Option v-for="item in sorting" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
@@ -84,7 +94,7 @@
 
 <script>
 import { formatDate } from "@/request/datatime";
-import { activeAddManager,getRoleType } from "@/request/api";
+import { activeAddManager,getRoleType,Setsend } from "@/request/api";
 export default {
   data() {
     return {
@@ -92,6 +102,7 @@ export default {
         head: "活动参与列表(会员)"
       },
       users: [],
+      modal2: false, //群发站内信
       types: "quanbu",
       value: "",
       list: ["全部", "待审核", "报名成功", "已违约", "已取消"],
@@ -192,7 +203,17 @@ export default {
       userName: "",
       activityName: "",
       signUpStatus: "",
-      status: false
+      status: false,
+      stationFormFlag: true,
+      arr:[],
+      formValidate2: {
+        title: '',
+        msg: ''
+      },
+        ruleValidate2: {
+        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+        msg: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
+      },
     };
   },
 
@@ -261,7 +282,56 @@ export default {
       this.page=1
       this.getactiveAddManager()
     },
-    
+    ismodal2(){
+      console.log(this.arr);
+      if (this.arr.length > 0) {
+        this.modal2 = true
+      } else {
+        this.$Message.error({
+          background: true,
+          content: '请选择要发送站内信的用户'
+        })
+      }
+    },
+    onStation() {
+      if (!this.stationFormFlag) return
+      this.$refs.formValidate2.validate(valid => {
+        if (valid) {
+          let userIds = this.arr.map(item=>{
+            return item.userId
+          })
+          this.stationFormFlag = false
+          let ids = userIds.toString()
+          this.setsend({ ids, ...this.formValidate2 })
+        }
+      })
+    },
+        // 站内信
+    setsend(params) {
+      Setsend({
+        sysId: '3',
+        ...params
+      }).then(res => {
+        if (res.code === 200) {
+          this.modal2 = false
+          this.formValidate2 = {
+            msg: '',
+            title: ''
+          }
+          this.$Message.info('站内信发送成功~')
+        } else {
+          this.modal2 = false
+          let str = res.msg
+          this.$Message.error({
+            background: true,
+            content: str
+          })
+        }
+        setTimeout(() => {
+          this.stationFormFlag = true
+        }, 500)
+      })
+    },
     //导出数据
     exportData() {
       if(this.arr.length==0){
@@ -299,9 +369,8 @@ export default {
     },
     
     //全选按钮
-    chackall() {
-      this.status = !this.status;
-      this.$refs.selection.selectAll(this.status);
+    chackall(v) {
+      this.$refs.selection.selectAll(v);
     }
 
   }

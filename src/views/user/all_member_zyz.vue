@@ -118,7 +118,7 @@
               <FormItem label="发送对象：" prop="tag">
                 <p class="pitchOn">
                   <span>共</span>
-                  <span class="red">{{ this.ALLLIST.length }}</span>
+                  <span class="red">{{ ALLLIST.length }}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>

@@ -10,6 +10,7 @@
       <div class="btn-box">
         <span class="label">规则名称:</span>
         <Select v-model="ruleNameModal" clearable @on-change="setRule">
+          <Option value="" key="ALL" >全部</Option>
           <Option v-for="item in ruleList" :value="item.dicId" :key="item.dicId" >{{ item.name }}</Option>
           <!-- @click.native="getSelectedRuleItem1(item)" -->
         </Select>
@@ -285,7 +286,7 @@ export default {
       // this.page = index;
       if (this.isInit) {
         queryMedalList({
-          page: { page: this.page, size: this.size, sort: 'createAt asc' },
+          page: { page: this.page, size: this.size, sort:`createAt ${this.sort }`  },
           typeFlag: '1'
         }).then(res => {
           if (res.code == 200) {
@@ -303,13 +304,17 @@ export default {
 
       this.isInit = false
       let submitData = {}
+      let endAt =''
+      if(this.surveyDate[1]){
+          endAt =`${this.surveyDate[1]} 23:59:59`
+      }
       let oldSubmkitData = {
-        page: { page: this.page, size: this.size, sort: 'createAt asc' },
+        page: { page: this.page, size: this.size, sort: `createAt ${this.sort}` },
         typeFlag: '1',
         medalName: this.medalNameModel,
         ruleId: this.ruleNameModal,
         startAt:this.surveyDate[0],
-        endAt:this.surveyDate[1]
+        endAt 
       }
       for (let i in oldSubmkitData) {
         if (oldSubmkitData[i]) {
@@ -493,13 +498,10 @@ export default {
         typeFlag: '60'
       }).then(res => {
         console.log('res queryDicByTypeFlag', res.data)
-        this.ruleList = [{
-        name: "全部",
-        dicId: ""
-        },...res.data]
+        this.ruleList = res.data
         // // 在数组的开头添加一个选项,所有规则
         // var allrules = {
-        //   name:"所有规则",
+        //   name:"所有规则",<Navigation :labels="navigation1"></Navigation>
         //   dicId:null
         // }
         // this.ruleList.unshift(allrules)

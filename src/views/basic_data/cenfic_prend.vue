@@ -4,21 +4,21 @@
     <Navigation :labels="navigation1"></Navigation>
     <div class="integral-box">
       <div class="integral-header">
-        <div class="top" style="height:120px">
+        <div class="top" >
           <!-- <UploadImg v-if='!show' :max="1" ref="logo" v-model="logoPicUrl" :full-url.sync="logoPicMap" :display-width="356"
           :display-height="146"
            :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg> -->
         </div>
         <div class="center">
-          <h1>志愿服务证明</h1>
+          <!-- <h1>志愿服务证明</h1>
           <h3>CERTIFICATE</h3>
           <h3>OF VOLUNTEER SERVICE</h3>
           <h2>感谢</h2> 
           <h4>于__年__月___日至__年__月___日</h4>
-          <p>为融爱融乐的心智障碍者融合服务提供了珍贵的________小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p>
+          <p>为融爱融乐的心智障碍者融合服务提供了珍贵的________小时的志愿支持。感谢您的诚恳用心和专业态度，与我们一起协助心智障碍者更好的融入和参与社会，提升他们的生活品质。给我们信心与力量，让更多人看见生命的多元，让我们的社会更平等、文明、融合。期待未来与您继续携手前行，谨此表达最诚挚的感谢与祝福！</p> -->
         </div>
-        <div class="bottom" style="height:120px">
-          <UploadImg v-if='!show' :max="1" ref="foot" v-model="footPicUrl" :full-url.sync="footPicMap" :display-width="280" :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg>
+        <div class="bottom" >
+          <!-- <UploadImg v-if='!show' :max="1" ref="foot" v-model="footPicUrl" :full-url.sync="footPicMap" :display-width="280" :crop-width="700" :crop-height="230" style="justify-content: center;"></UploadImg> -->
         </div>
        <!-- <div class="footBtn">
           <Button style="justify-content: center;" type="error" icon="ios-cloud-saved-outline" @click="location" v-if="!show" :loading="loading">保存图片</Button>
@@ -105,6 +105,7 @@ export default {
 }
 .integral-header {
   width: 450px;
+  height: 650px;
   background-image:url("../../assets/images/prend/title.png") ;
   background-repeat:no-repeat;
   background-size:100%; 
