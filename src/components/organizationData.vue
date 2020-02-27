@@ -392,6 +392,7 @@ export default {
     },
     //批量操作
     getorgbatch() {
+      // （1启用  2停用  3删除
       orgbatch({
         orgId: this.arr,
         userId: this.userId,

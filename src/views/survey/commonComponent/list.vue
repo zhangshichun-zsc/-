@@ -110,9 +110,7 @@ import "../style/index.scss";
 import {
   orgpage,
   orgtype,
-  orgbatch,
   getSelectList,
-  // getAllConfigUserList,
   getQuestionnaireFeedbackList,
   operateReview,
   answerDetailPageDelete,

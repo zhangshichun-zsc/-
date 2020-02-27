@@ -296,7 +296,7 @@ export default {
       if(this.select.length==0){
         this.$Message.error("请先选择")
       }else if(this.arrs==''){
-       this.$Message.error("暂无权限审批")
+       this.$Message.error("选中的用户无需此操作")
        }else{
         this.modal1=true
       }
@@ -321,8 +321,9 @@ export default {
     handleSelectionChange(val) {
       this.select=val
       let a = val.filter(
-        item => item.auditStatus == 0
+        item => item.auditStatus == 0 || item.auditStatus == 3
       );
+
       this.arrs=a.map(item=>{
         return item.auditId
       }).toString()

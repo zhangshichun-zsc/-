@@ -125,7 +125,7 @@
                 style="width: 220px"
               />
             </FormItem>
-            <FormItem label="联系人:" prop="orgName">
+            <FormItem label="联系人:" prop="contactUserName">
               <Input
                 v-model="BasicDate.contactUserName"
                 placeholder="自动带出"
@@ -139,7 +139,7 @@
                 @change="idsactive"
               ></Selsect>
             </FormItem>
-            <FormItem label="联系方式:" prop="orgName">
+            <FormItem label="联系方式:" prop="contactUserPhone">
               <Input
                 v-model="BasicDate.contactUserPhone"
                 style="width: 220px"
@@ -152,7 +152,7 @@
                 style="width: 220px"
               />
             </FormItem>
-            <FormItem label="图片:" prop="orgPicShow">
+            <FormItem label="图片:" prop="picUrl">
               <!-- :picMap="picMap" -->
               <UploadImg
                 :max="1"
@@ -163,7 +163,7 @@
                 :crop-height="320"
               ></UploadImg>
             </FormItem>
-            <FormItem label="详情:" prop="orgName">
+            <FormItem label="详情:" prop="contactUserPhone">
               <Input
                 v-model="BasicDate.description"
                 type="textarea"
@@ -314,6 +314,7 @@ import {
   orgimgdel
 } from "@/request/api";
 export default {
+  inject:["reload"],
   data() {
     return {
       navigation1: {
@@ -415,18 +416,24 @@ export default {
       numC: 0,
       ruleValidate: {
         orgName: [
+          { required: true, message: "团队名称不能为空", trigger: "blur" }
+        ],
+        contactUserName: [
+          { required: true, message: "联系人不能为空", trigger: "blur" }
+        ],
+        picUrl: [
           {
             required: true,
-            message: "必填项不能为空",
-            trigger: "blur"
+            message: "图片不能为空",
+            trigger: "blur",
+            type: "string"
           }
         ],
-        orgPicShow: [
-          {
-            required: true,
-            message: "必填项不能为空",
-            trigger: "blur"
-          }
+        contactUserPhone: [
+          { required: true, message: "联系电话不能为空", trigger: "blur" }
+        ],
+        description: [
+          { required: true, message: "详情不能为空", trigger: "blur" }
         ]
       },
       BasicDate: {
@@ -519,7 +526,7 @@ export default {
         }
       });
     },
-    //编辑组织资料
+    // 获取组织资料详情
     getorgedit() {
       orgedit({
         orgId: this.$route.query.orgId
@@ -581,7 +588,7 @@ export default {
         orgName: this.BasicDate.orgName,
         address: this.BasicDate.address,
         remark: this.BasicDate.remark,
-        orgPic: this.picUrl ? this.picUrl : this.BasicDate.orgPic,
+        orgPic: this.BasicDate.picUrl,
         ownerUserName: this.BasicDate.contactUserName,
         ownerUserPhone: this.BasicDate.contactUserPhone,
         description: this.BasicDate.description,
@@ -594,10 +601,12 @@ export default {
       orgemod(obj).then(res => {
         if (res.code == 200) {
           this.$Message.success("编辑成功");
+          console.log(12);
+          this.reload()
         } else {
           this.$Message.error(res.msg);
         }
-        console.log(res);
+    
       });
     },
 

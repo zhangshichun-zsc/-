@@ -52,7 +52,6 @@ import { myBrowser } from "@/request/Browser";
 import {
   orgpage,
   orgtype,
-  orgbatch,
   getSelectList,
   getAllConfigUserList,
   getQuestionnaireFeedbackList,

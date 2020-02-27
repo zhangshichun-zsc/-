@@ -319,8 +319,8 @@ export default {
         { value: "1", label: "删除" },
         { value: "2", label: "上线" },
         { value: "3", label: "下线" },
-        { value: "4", label: "置顶" },
-        { value: "5", label: "取消置顶" }
+        // { value: "4", label: "置顶" },
+        // { value: "5", label: "取消置顶" }
       ],
        Article: [{ value: 10,label: 10 },{ value: 15,label: 15 },{ value: 20,label: 20 }],
       sorting: [{ value: "asc", label: "正序" },{ value: "desc", label: "倒序" }],

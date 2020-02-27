@@ -925,11 +925,19 @@ export default {
           star: this.formatTime(this.startAt),
           end: this.formatTime(this.endAt)
         })
+        // memberPayStartTimestamp vip缴费开始
+        // memberPayEndTimestamp vip缴费结束
+        // registrationStartTimeStamp 注册时间开始
+        // registrationEndTimeStamp 注册时间结束 
+        // durationStart 服务时长开始
+        // durationEnd 服务时长结束
         time = {
           memberPayStartTimestamp: memberPay.star,
           memberPayEndTimestamp: memberPay.end,
-          durationStart: dueation.star,
-          durationEnd: dueation.end
+          registrationStartTimeStamp:dueation.star,
+          registrationEndTimeStamp:dueation.end
+          // durationStart: dueation.star,
+          // durationEnd: dueation.end
         }
       }
       let obj = this.util.remove({
