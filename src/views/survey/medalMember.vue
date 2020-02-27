@@ -73,7 +73,8 @@
       </div>
     </div>
     <!-- 新增/编辑问卷对象的弹框页 -->
-    <Modal v-model="modal.visible" :title="modal.title" @on-visible-change="onVisibleChange" width="800" class-name="add-modal">
+    <!-- @on-cancel='cancel' -->
+    <Modal v-model="modal.visible" :title="modal.title" @on-visible-change="onVisibleChange"   width="800" class-name="add-modal">
       <!-- 添加key是为了保证div组件内容重新渲染，防止一个组件出现两张图片的情况 -->
       <div :key="formData.index">
         <Form :model="formData" :label-width="100" :rules="ruleValidate" ref="medalFormRef">
@@ -135,6 +136,7 @@ import {
 } from '@/request/api'
 import { constants } from 'fs'
 import './style/index.scss'
+import { log } from 'util'
 export default {
   name: 'surveyList',
   components: {},
@@ -374,20 +376,28 @@ export default {
       this.formData.ruleId = item.dicId
       console.log('item', item)
     },
+ 
     onVisibleChange(status) {
-      console.log('status', status)
-      // this.picMap = Object.assign({},this.picMap,{
-      //   [this.formData.medalPic]:null
-      // })
       if (!status) {
         // 关闭弹框
+        this.$refs.ruleValidate.resetFields()
         this.formData = Object.assign({}, this.formData, {
-          medalName: '',
-          ruleName: '',
-          ruleId: '',
-          conditions: '',
-          remarks: '',
-          medalPic: ''
+        conditions:"",
+        createAt:"",
+        index:"",
+        medalCode:"",
+        medalId:"",
+        medalName:"",
+        medalPic:"",
+        medalPicPath:"",
+        obtainNum: "",
+        remarks:"",
+        ruleId: "",
+        ruleName:"",
+        sysId:"",
+        typeFlag:"",
+        unit:"",
+        validFlag:"",
         })
       } else {
         // this.formData = Object.assign({},this.formData,{
