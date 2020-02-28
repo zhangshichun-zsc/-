@@ -79,7 +79,7 @@
       <div :key="formData.index">
         <Form :model="formData" :label-width="100" :rules="ruleValidate" ref="medalFormRef">
           <FormItem label="勋章图片" prop="medalPic">
-            <UploadImg :max="1" v-model="formData.medalPic" :full-url.sync="picMap" :display-width="100" :crop-width="80" :crop-height="80"></UploadImg>
+            <UploadImg :max="1" v-model="formData.medalPic" :full-url.sync="picMap" :display-width="100" :crop-width="190" :crop-height="190"></UploadImg>
           </FormItem>
           <FormItem label="勋章名称" prop="medalName">
             <span class="insertPart3">
