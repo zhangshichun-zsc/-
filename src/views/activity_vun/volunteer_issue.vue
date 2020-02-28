@@ -3,8 +3,8 @@
   <div>
     <adress v-model="adr" @change="getMap" />
     <Modal v-model="rule" title="发布规则" width="50">
-       <h1 style="font-size: 18px;text-align: center;">志益行活动发布规则</h1>
-      <pre style="padding:0 12px;white-space: pre-wrap;font-size: 14px" >
+      <h1 style="font-size: 18px;text-align: center;">志益行活动发布规则</h1>
+      <pre style="padding:0 12px;white-space: pre-wrap;font-size: 14px">
 欢迎您使用“志益行”系统（以下简称“本系统”）及服务！ 
 
 活动发布规则（以下简称“规则”）系在本系统成功注册的志愿者或志愿者团体就本系统活动发布规则的说明。
@@ -155,15 +155,12 @@
                     v-model="args.name"
                     placeholder="请输入名称"
                     style="width: 300px"
-                    :disabled="isDisb"
+                    :disabled="isDisb && status != 5"
                   />
                 </li>
                 <li class="start">
                   <span>封面图片</span>
                   <div class="start-wap start-firt">
-                    <!-- :picMap="coverMap"
-                      :disabled="cover && isDisb" 
-                      -->
                     <UploadImg
                       :max="1"
                       v-model="cover"
@@ -172,7 +169,7 @@
                       :display-height="120"
                       :crop-width="128"
                       :crop-height="128"
-                      :disabled="isDisb"
+                      :disabled="isDisb && status != 5"
                       ref="refCover"
                     ></UploadImg>
                   </div>
@@ -188,7 +185,7 @@
                       :display-width="300"
                       :crop-width="750"
                       :crop-height="320"
-                      :disabled="isDisb"
+                      :disabled="isDisb && status != 5"
                       ref="refImags"
                     ></UploadImg>
                   </div>
@@ -219,7 +216,7 @@
                     type="datetime"
                     :options="options"
                     placeholder="开始时间"
-                    :disabled="isDisb"
+                    :disabled="isDisb && status != 5"
                     confirm
                     style="width: 170px"
                     @on-change="handleChange(0, 'startAt', $event)"
@@ -235,11 +232,10 @@
                     @on-change="handleChange(0, 'endAt', $event)"
                     @on-open-change="successOk(1, $event)"
                     confirm
-                    :disabled="isDisb"
+                    :disabled="isDisb && status != 5"
                     style="width: 170px"
                     format="yyyy-MM-dd HH:mm"
                   ></XDatePicker>
-
                 </li>
                 <li class="flex-start">
                   <span>招募时间</span>
@@ -271,21 +267,21 @@
                     format="yyyy-MM-dd HH:mm"
                   ></XDatePicker>
                 </li>
-                <li class="flex-start">
-                  <span>活动方式</span>
-                  <div class="tipsBox">
-                     <div>
-                          <RadioGroup vertical v-model="args.onlineFlag">
-                          <Radio label="0" :disabled="isDisb">线上活动</Radio>
-                          <Radio label="1" :disabled="isDisb">线下活动</Radio>
-                        </RadioGroup>
-                      </div>
-                      <div class='tips'>
-                          <p>通过网络举办的活动</p>
-                          <p>在某个地理位置举办的活动</p>
-                      </div>
-                  </div>
-                </li>
+                <li class="flex-start">
+                  <span>活动方式</span>
+                  <div class="tipsBox">
+                    <div>
+                      <RadioGroup vertical v-model="args.onlineFlag">
+                        <Radio label="0" :disabled="isDisb">线上活动</Radio>
+                        <Radio label="1" :disabled="isDisb">线下活动</Radio>
+                      </RadioGroup>
+                    </div>
+                    <div class="tips">
+                      <p>通过网络举办的活动</p>
+                      <p>在某个地理位置举办的活动</p>
+                    </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -297,19 +293,25 @@
                 <li class="flex-start">
                   <span>活动地址</span>
                   <div>
-                    <Button v-if="!isDisb" @click="getAdr" class="adr" :disabled="args.onlineFlag==0? true:false">{{
-                      args.address == null ? "点击选中地址" : args.address
-                    }}
+                    <Button
+                      v-if="!isDisb"
+                      @click="getAdr"
+                      class="adr"
+                      :disabled="args.onlineFlag == 0 ? true : false"
+                      >{{
+                        args.address == null ? "点击选中地址" : args.address
+                      }}
                     </Button>
-                     <Button v-else   :disabled="isDisb">{{
-                      args.address == null ? "点击选中地址" : args.address
-                    }}
+                    <Button v-else :disabled="isDisb"
+                      >{{
+                        args.address == null ? "点击选中地址" : args.address
+                      }}
                     </Button>
                     <Input
                       v-if="!isDisb"
                       v-model="args.addressSup"
                       placeholder="请输入详细地址"
-                      :disabled="args.onlineFlag==0? true:false"
+                      :disabled="args.onlineFlag == 0 ? true : false"
                     />
                     <Input
                       v-else
@@ -317,8 +319,6 @@
                       placeholder="请输入详细地址"
                       :disabled="isDisb"
                     />
-
-
                   </div>
                 </li>
                 <li>
@@ -376,29 +376,45 @@
                 <li>
                   <span>是否交保险</span>
                   <RadioGroup v-model="args.isInsurance">
-                    <Radio label="1" :disabled="isDisb">是</Radio>
-                    <Radio label="2" :disabled="isDisb">否</Radio>
+                    <Radio label="1" :disabled="isDisb && status != 5"
+                      >是</Radio
+                    >
+                    <Radio label="2" :disabled="isDisb && status != 5"
+                      >否</Radio
+                    >
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否允许空降</span>
                   <RadioGroup v-model="args.flyFlag">
-                    <Radio :label="1" :disabled="isDisb">是</Radio>
-                    <Radio :label="2" :disabled="isDisb">否</Radio>
+                    <Radio :label="1" :disabled="isDisb && status != 5"
+                      >是</Radio
+                    >
+                    <Radio :label="2" :disabled="isDisb && status != 5"
+                      >否</Radio
+                    >
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否发放证书</span>
                   <RadioGroup v-model="args.isNeedCertMould">
-                    <Radio :label="1" :disabled="isDisb">是</Radio>
-                    <Radio :label="2" :disabled="isDisb">否</Radio>
+                    <Radio :label="1" :disabled="isDisb && status != 5"
+                      >是</Radio
+                    >
+                    <Radio :label="2" :disabled="isDisb && status != 5"
+                      >否</Radio
+                    >
                   </RadioGroup>
                 </li>
                 <li>
                   <span>是否显示主办方小站</span>
                   <RadioGroup v-model="args.isShowHolder">
-                    <Radio :label="1" :disabled="isDisb">是</Radio>
-                    <Radio :label="2" :disabled="isDisb">否</Radio>
+                    <Radio :label="1" :disabled="isDisb && status != 5"
+                      >是</Radio
+                    >
+                    <Radio :label="2" :disabled="isDisb && status != 5"
+                      >否</Radio
+                    >
                   </RadioGroup>
                 </li>
                 <li>
@@ -426,7 +442,7 @@
                       placeholder="请输入"
                       style="width: 300px"
                       type="number"
-                      :disabled="isDisb"
+                      :disabled="isDisb && status != 5"
                     />
                     <p>此活动费用仅供参考，无需缴费</p>
                   </div>
@@ -445,36 +461,35 @@
             id="wange"
             :labels="args.detail"
             @change="changeEditor"
-            :disabled="isDisb && status==4"
-           
+            :disabled="isDisb && status == 4"
           />
           <!--  :disabled="status == 3 || status == 4 ? false : isDisb" -->
         </i-col>
       </Row>
       <Row class-name="row20">
-        <i-col span="12"push='1'>
+        <i-col span="12" push="1">
           <Row class-name="row20">
-             <Row class-name="row10">
-            <i-col span="3">报名须知</i-col>
-            <i-col span="3" push="2">
+            <Row class-name="row10">
+              <i-col span="3">报名须知</i-col>
+              <i-col span="3" push="2">
                 <i-switch
                   v-model="isHaveSignNotice"
                   :true-value="0"
                   :false-value="1"
-                  :disabled="isDisb"
+                  :disabled="isDisb && status != 5"
                 />
-            </i-col>
+              </i-col>
+            </Row>
+            <Row v-if="isHaveSignNotice == 0">
+              <wangeditor
+                :labels="signNotice"
+                id="ed2"
+                @change="changeEditorSigNotice"
+                :disabled="isDisb && status != 5"
+              />
+            </Row>
           </Row>
-          <Row v-if="isHaveSignNotice == 0">
-            <wangeditor
-              :labels="signNotice"
-              id="ed2"
-              @change="changeEditorSigNotice"
-              :disabled="isDisb"
-            />
-          </Row>
-          </Row>
-          
+
           <Row class-name="row20">
             <Row class-name="row10">
               <i-col span="3">
@@ -485,7 +500,7 @@
                   v-model="isTrain"
                   :true-value="1"
                   :false-value="2"
-                  :disabled="isDisb"
+                  :disabled="isDisb && status != 5"
                 />
               </i-col>
             </Row>
@@ -494,7 +509,7 @@
                 :labels="train"
                 id="ed1"
                 @change="changeEditorTrain"
-                :disabled="isDisb"
+                :disabled="isDisb && status != 5"
               />
             </Row>
           </Row>
@@ -508,7 +523,7 @@
                   v-model="isFeedback"
                   :true-value="1"
                   :false-value="2"
-                  :disabled="isDisb && status==4"
+                  :disabled="isDisb && status == 4"
                 />
               </i-col>
             </Row>
@@ -526,7 +541,7 @@
                       placeholder="请输入反馈内容"
                       v-model="item.detailText"
                       type="textarea"
-                      :disabled="isDisb && status==4"
+                      :disabled="isDisb && status == 4"
                       :row="4"
                     />
                   </i-col>
@@ -540,7 +555,7 @@
                   <i-col span="5">是否上传图片</i-col>
                   <i-col span="16">
                     <i-switch
-                      :disabled="isDisb && status==4"
+                      :disabled="isDisb && status == 4"
                       :true-value="1"
                       :false-value="0"
                       v-model="item.isMust"
@@ -557,12 +572,12 @@
                     <i-input
                       placeholder="标题"
                       v-model="item.detailText"
-                      :disabled="isDisb && status==4"
+                      :disabled="isDisb && status == 4"
                     />
                   </i-col>
                   <i-col span="4">
                     <i-switch
-                      :disabled="isDisb && status==4"
+                      :disabled="isDisb && status == 4"
                       :true-value="1"
                       :false-value="0"
                       v-model="item.isMust"
@@ -573,7 +588,7 @@
                     <Icon
                       type="ios-trash"
                       @click="deleItem(index, null)"
-                      v-if="!isDisb && status !=4"
+                      v-if="!isDisb && status != 4"
                       color="#FF565A"
                       size="28"
                     />
@@ -585,12 +600,12 @@
                       <i-input
                         placeholder="请输入标题"
                         v-model="item.detailText"
-                        :disabled="isDisb && status==4"
+                        :disabled="isDisb && status == 4"
                       />
                     </i-col>
                     <i-col span="4">
                       <i-switch
-                       :disabled="isDisb && status==4"
+                        :disabled="isDisb && status == 4"
                         :true-value="1"
                         :false-value="0"
                         v-model="item.isMust"
@@ -601,7 +616,7 @@
                       <Icon
                         type="ios-trash"
                         @click="deleItem(index, null)"
-                        v-if="!isDisb && status!=4"
+                        v-if="!isDisb && status != 4"
                         color="#FF565A"
                         size="28"
                       />
@@ -612,14 +627,14 @@
                       <i-input
                         :placeholder="`输入选项${i + 1}`"
                         v-model="val.value"
-                        :disabled="isDisb && status==4"
+                        :disabled="isDisb && status == 4"
                       />
                     </i-col>
                     <i-col span="2" push="2">
                       <Icon
                         type="ios-trash"
                         @click="deleItem(index, i)"
-                        v-if="!isDisb && status!=4"
+                        v-if="!isDisb && status != 4"
                         color="#FF565A"
                         size="28"
                       />
@@ -638,7 +653,7 @@
                   </Row>
                 </Row>
               </Row>
-              <Row v-if="!isDisb && status!=4">
+              <Row v-if="!isDisb && status != 4">
                 <i-col span="3">新增反馈项</i-col>
                 <i-col span="19" push="2">
                   <Button
@@ -654,14 +669,14 @@
           </Row>
           <Row class-name="row20">
             <i-col span="3">受益群体人数</i-col>
-            <i-col span="5" push="2">  
+            <i-col span="5" push="2">
               <InputNumber
                 style="width:130px"
                 ref="memberGroupNum"
                 :value="args.memberGroupNum"
-                @on-change="isNumber" 
+                @on-change="isNumber"
                 placeholder="输入受益群体人数"
-                :disabled="isDisb"
+                :disabled="isDisb && status != 5"
               />
             </i-col>
           </Row>
@@ -711,7 +726,8 @@ import {
   getOrgId,
   orgimgdel,
   saveActive,
-  getActiveRelse
+  getActiveRelse,
+  setRecruiteding
 } from "@/request/api";
 import { getAdressId } from "@/libs/utils";
 import wangeditor from "_c/wangeditor";
@@ -736,7 +752,7 @@ export default {
           return date && date.valueOf() < Date.now() - 86400000;
         }
       },
-      optionsStart:{
+      optionsStart: {
         disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;
         }
@@ -777,7 +793,7 @@ export default {
           sort: 2
         }
       ],
-      signNotice:null, // 报名须知详情
+      signNotice: null, // 报名须知详情
       train: null,
       isFeedback: 0,
       isTrain: 0,
@@ -875,11 +891,11 @@ export default {
 
   components: { wangeditor, adress, XDatePicker },
   watch: {
-    "args.onlineFlag"(newVal, oldVal){
-        if(newVal == 0){
-          this.args.address = '点击选中地址'
-          this.args.addressSup = ''
-        }
+    "args.onlineFlag"(newVal, oldVal) {
+      if (newVal == 0) {
+        this.args.address = "点击选中地址";
+        this.args.addressSup = "";
+      }
     },
     cover: {
       handler(newValue, oldValue) {
@@ -924,7 +940,8 @@ export default {
     let isDisb =
       Number(isEdit) === 0 ||
       Number(isEdit) === -1 ||
-      (Number(isEdit) === 1 && (Number(status) === 3 || Number(status) === 4))
+      (Number(isEdit) === 1 &&
+        (Number(status) === 3 || Number(status) === 4 || Number(status) === 5))
         ? true
         : false;
     this.isEdit = isEdit;
@@ -994,17 +1011,16 @@ export default {
           this.judge = res.data.result || "";
           this.isFeedback = ~~res.data.isFeedback || 0;
           this.isTrain = ~~res.data.isTrain || 0;
-          if(res.data.isHaveSignNotice){
+          if (res.data.isHaveSignNotice) {
             console.log(1);
-            
-             this.isHaveSignNotice = ~~res.data.isHaveSignNotice;
-          }else{
-            this.isHaveSignNotice  = 1
+
+            this.isHaveSignNotice = ~~res.data.isHaveSignNotice;
+          } else {
+            this.isHaveSignNotice = 1;
           }
-         
 
           console.log(res.data.isHaveSignNotice);
-          
+
           this.orgName = res.data.orgName;
 
           // TODo 图片赋值
@@ -1084,7 +1100,9 @@ export default {
         if (!itemList) return;
         for (let item of itemList) {
           if (
-            (~~item.targetType === 3 || ~~item.targetType === 4 || ~~item.targetType === 5) &&
+            (~~item.targetType === 3 ||
+              ~~item.targetType === 4 ||
+              ~~item.targetType === 5) &&
             typeof item.arr[0] !== "object"
           ) {
             let arr = [];
@@ -1116,13 +1134,18 @@ export default {
         picPath = this.$refs.refImags.imgList[0].previewUrl;
         image = this.$refs.refImags.imgList[0].url;
       }
+
+      let isDisb = this.isDisb;
+      if (this.status == 5) {
+        isDisb = false;
+      }
       let data = {
         isFeedback: this.isFeedback,
         isTrain: this.isTrain,
         isHaveSignNotice: this.isHaveSignNotice,
         zhaEnd: this.zhaEnd,
         zhaStart: this.zhaStart,
-        isDisb: this.isDisb,
+        isDisb: isDisb,
         isEdit: this.isEdit,
         args: this.args,
         judge: this.judge,
@@ -1137,7 +1160,10 @@ export default {
         // END
       };
       sessionStorage.setItem("data", JSON.stringify(data));
-      this.$router.push({ name: "volunteer_compile", query: { i } });
+      this.$router.push({
+        name: "volunteer_compile",
+        query: { i, status: this.$route.query.status }
+      });
     },
     deleItem(i, m) {
       let feed = this.feed;
@@ -1186,9 +1212,9 @@ export default {
       this.train = html;
     },
     changeEditorSigNotice(html) {
-      this.signNotice = html
+      this.signNotice = html;
     },
-    
+
     initData() {
       this.userId = localStorage.getItem("userId");
       let data = JSON.parse(sessionStorage.getItem("data"));
@@ -1207,9 +1233,9 @@ export default {
         this.isFeedback = data.isFeedback;
         this.isTrain = data.isTrain;
         this.isHaveSignNotice = data.isHaveSignNotice;
-        this.train = data.train
-        this.signNotice = data.signNotice
-        this.feed = data.feed
+        this.train = data.train;
+        this.signNotice = data.signNotice;
+        this.feed = data.feed;
       }
       getOrgTeam({}).then(res => {
         this.orgList = res.data;
@@ -1321,8 +1347,7 @@ export default {
           ) {
             this.$Message.warning("活动开始时间要晚于招募结束时间");
             this.$set(this.args, "startAt", "");
-          } 
-        
+          }
         } else if (m == 1 && !!this.args.endAt) {
           if (new Date(this.args.endAt).getTime() < new Date().getTime()) {
             this.$Message.warning("活动结束时间要晚于当前时间");
@@ -1382,27 +1407,27 @@ export default {
         if (name == "zhaStart") {
           this.optionsEnd = {
             disabledDate(date) {
-              
               return (
-                
-                new Date(date).getTime() <= new Date(timeObj.zhaStart).getTime()- 86400000
+                new Date(date).getTime() <=
+                new Date(timeObj.zhaStart).getTime() - 86400000
               );
             }
           };
-        }
-          else if(name == "zhaEnd"){
-            this.optionsStart = {
-              disabledDate(date) {
-                return ( new Date(date).getTime() >= new Date(timeObj.zhaEnd).getTime()- 86400000) 
+        } else if (name == "zhaEnd") {
+          this.optionsStart = {
+            disabledDate(date) {
+              return (
+                new Date(date).getTime() >=
+                new Date(timeObj.zhaEnd).getTime() - 86400000
+              );
             }
-            }
-          }
-        else {
-          this.optionsStart  = {
-             disabledDate(date) {
+          };
+        } else {
+          this.optionsStart = {
+            disabledDate(date) {
               return date && date.valueOf() < Date.now() - 86400000;
             }
-          }
+          };
           this.optionsEnd = {
             disabledDate(date) {
               return date && date.valueOf() < Date.now() - 86400000;
@@ -1422,36 +1447,34 @@ export default {
 
       let item = this.args;
       if (i == 1) {
-        
-        console.log(JSON.stringify(item))
+        console.log(JSON.stringify(item));
         if (this.single == false) {
           this.$Message.warning("你没有同意发布规则");
           return;
-        }else if (
-          !item.name  ||
+        } else if (
+          !item.name ||
           !item.coverPic ||
-          !item.pic  ||
-          !item.orgId  ||
+          !item.pic ||
+          !item.orgId ||
           !item.startAt ||
           !item.endAt ||
           !this.zhaStart ||
-          !this.zhaEnd  ||
+          !this.zhaEnd ||
           item.coActivityUserConfParamList.length == 0 ||
-          !item.isInsurance  ||
-          !item.flyFlag  ||
-          !item.isNeedCertMould  ||
-          !item.isShowHolder  ||
+          !item.isInsurance ||
+          !item.flyFlag ||
+          !item.isNeedCertMould ||
+          !item.isShowHolder ||
           !item.coActCatTypeList[0].typeDicId ||
-          !item.detail 
+          !item.detail
         ) {
           this.$Message.warning("活动内容填写不完整");
           return;
-        }else if(!item.onlineFlag){
-           this.$Message.warning("请选择活动方式");
-         
-        }else if(item.onlineFlag == 1 &&  item.address == null){
-           this.$Message.warning("请选择活动地址");
-        }else if (item.ownerUserId == null) {
+        } else if (!item.onlineFlag) {
+          this.$Message.warning("请选择活动方式");
+        } else if (item.onlineFlag == 1 && item.address == null) {
+          this.$Message.warning("请选择活动地址");
+        } else if (item.ownerUserId == null) {
           this.$Message.warning("请选择现场负责人");
           return;
         } else if (this.isFeedback == 1) {
@@ -1473,11 +1496,10 @@ export default {
             this.$Message.warning("你已经勾选培训，请完善");
             return;
           }
-        }else if(this.isHaveSignNotice==0){
-          if(!this.signNotice){
-             this.$Message.warning("你已经勾选报名须知，请完善");
+        } else if (this.isHaveSignNotice == 0) {
+          if (!this.signNotice) {
+            this.$Message.warning("你已经勾选报名须知，请完善");
             return;
-        
           }
         }
       } else {
@@ -1519,20 +1541,36 @@ export default {
       if (this.isEdit == 4) delete item.activityId;
       let obj = filterNull(item);
       obj.title = obj.name;
-      obj.isHaveSignNotice = this.isHaveSignNotice
-      obj.signNotice=this.signNotice==null?"":this.signNotice
+      obj.isHaveSignNotice = this.isHaveSignNotice;
+      obj.signNotice = this.signNotice == null ? "" : this.signNotice;
 
       console.log(obj);
-      saveActive(obj).then(res => {
-        this.once = false;
-        if (res.code == 200) {
-          this.$router.replace({ name: "volunteer_activity" });
-          sessionStorage.removeItem("data");
-          this.$Message.success("发布成功");
-        } else {
-          this.$Message.warning(res.msg);
-        }
-      });
+
+      if (this.status == 5) {
+        // 第3种活动状态 调用新接口
+
+        setRecruiteding(obj).then(res => {
+          this.once = false;
+          if (res.code == 200) {
+            this.$router.replace({ name: "volunteer_activity" });
+            sessionStorage.removeItem("data");
+            this.$Message.success("发布成功");
+          } else {
+            this.$Message.warning(res.msg);
+          }
+        });
+      } else {
+        saveActive(obj).then(res => {
+          this.once = false;
+          if (res.code == 200) {
+            this.$router.replace({ name: "volunteer_activity" });
+            sessionStorage.removeItem("data");
+            this.$Message.success("发布成功");
+          } else {
+            this.$Message.warning(res.msg);
+          }
+        });
+      }
     },
     dealData(list, startAt) {
       let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : [];
@@ -1580,13 +1618,13 @@ export default {
       this.$router.push({ name: "volunteer_apply", params: { sysId: "2,3" } });
     },
     isNumber(e) {
-     if (!this.util.isNumber(e)) {
-          this.$Message.error('请输入大于0的整数')
-           this.args.memberGroupNum = "";
-          this.$refs.memberGroupNum.currentValue = ''
-        } else{
-          this.args.memberGroupNum =e
-        }
+      if (!this.util.isNumber(e)) {
+        this.$Message.error("请输入大于0的整数");
+        this.args.memberGroupNum = "";
+        this.$refs.memberGroupNum.currentValue = "";
+      } else {
+        this.args.memberGroupNum = e;
+      }
       // let value = this.args.memberGroupNum;
       // if (value.toString().includes(".") || 0 > value) {
       //     this.$Message.error({
@@ -1597,7 +1635,6 @@ export default {
       //         this.args.memberGroupNum = "";
       //      })
       //   }
-      
     },
     checkRad() {
       console.log(this.single);
@@ -1606,15 +1643,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .tipsBox{
-    display: flex;
-  }
-  .tips{
-      display: flex;
-      flex-direction: column;
-      align-items: baseline;
-      justify-content: space-around;
-  }
+.tipsBox {
+  display: flex;
+}
+.tips {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: space-around;
+}
 .content {
   background: #fff;
   padding: 20px 0;
@@ -1631,7 +1668,6 @@ export default {
       margin-left: 10px;
     }
   }
-
 
   //活动发布内容
   .publish-content {

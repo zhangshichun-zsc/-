@@ -731,3 +731,7 @@ export const updateMedal = p => posts('medal/updateMedal', p)
 
 // 志愿者问卷调查搜索项
 export const getVolActType = p => get('config/getVolActType', p)
+
+// Ft_0222 非官方活动第3种状态新增的 接口
+
+export const setRecruiteding = p => posts('/volunteer-manager/update/recruiteding', p)

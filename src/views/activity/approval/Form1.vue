@@ -190,7 +190,7 @@
                 >
                   <Option
                     v-for="item in licenseTypes"
-                    :value="item.dicId"
+                    :value="item.dicId +''"
                     :key="item.value"
                     @click="onSelectAgreeType(license, item)"
                     >{{ item.name }}</Option
@@ -234,7 +234,7 @@
             </div>
             <Button type="error" @click="removeLicense(index)">删除</Button>
           </div>
-          <CreatePane text="+新增协议" @click="addLicense" />
+          <CreatePane text="+新增协议" v-if='dialogForm.agrees.length<3' @click="addLicense" />
         </FormItem>
       </Form>
       <div slot="footer">

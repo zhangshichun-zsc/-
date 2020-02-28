@@ -185,23 +185,29 @@ export default {
                        "待审核",
                        "待发布",
                        "待招募",
-                       "招募中",
-                       "关闭报名"
                      ]
-                    //  活动详情，活动反馈
+                    
+                    //  活动详情，活动反馈 可修改
                      let arr2 =[
                        "待开始",
                        "进行中",
                        '已结束'
                      ]
-                
 
+                    // 新状态
+                    let arr3 =[
+                      "招募中",
+                      "关闭报名"
+                    ]
+                
                       let status = null
                       let statusText = params.row.statusText
                       if( arr.includes(statusText)){
                         status = 1
                       }else if(arr2.includes(statusText)) {
                         status = 3
+                      }else if(arr3.includes(statusText)){
+                        status = 5
                       }
                       if (status ) {
                         this.$router.push({

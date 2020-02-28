@@ -193,7 +193,8 @@ export default {
 .item-right {
   font-size: 16px;
   width: 400px;
-  height: 40px;
+  // height: 40px;
+  min-height: 40px;
   line-height: 40px;
   border: 1px solid #ccc;
   padding: 0 5px;
@@ -209,9 +210,7 @@ export default {
   text-align: left;
   line-height: 60px;
 }
-.textarea {
-  height: 100px;
-}
+
 .btn {
   width: 250px;
   height: 40px;
@@ -250,7 +249,7 @@ export default {
   line-height: 24px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
+  // -webkit-line-clamp: 4;
+  // overflow: hidden;
 }
 </style>

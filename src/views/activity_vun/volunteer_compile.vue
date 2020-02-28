@@ -38,7 +38,8 @@
       <Row class-name="row">
         <i-col span='3'><span>招募类型</span></i-col>
         <i-col span='4'>
-          <Select v-model="args.userPosition" @on-change='changePos' :label-in-value='true' :disabled="isDisb">
+          <Select v-model="args.userPosition" @on-change='changePos' :label-in-value='true' 
+          :disabled="isDisb || status==5">
             <Option v-for="(item,index) in array" :value="item.dicId" :key="index">{{ item.name }}</Option>
           </Select>
         </i-col>
@@ -47,8 +48,8 @@
         <i-col span='3'><span>模式</span></i-col>
         <i-col span='4'>
           <RadioGroup v-model="args.zmType" @on-change='changeTeam'>
-            <Radio label="1" :disabled='isDisb'>先到先得</Radio>
-            <Radio label="2" :disabled='isDisb'>预约型</Radio>
+            <Radio label="1" :disabled="isDisb || status==5">先到先得</Radio>
+            <Radio label="2" :disabled="isDisb || status==5">预约型</Radio>
           </RadioGroup>
         </i-col>
       </Row>
@@ -67,7 +68,10 @@
       <Row class-name="row" v-if='args.zmType==2'>
         <i-col span='3'><span>是否审核：</span></i-col>
         <i-col span='4'>
-          <i-switch v-model="args.isAudit" :true-value='1' :false-value='2' :disabled="isDisb || good.length !== 0" />
+          <i-switch v-model="args.isAudit" :true-value='1' :false-value='2' 
+          :disabled="isDisb ||  good.length !== 0 || status==5 "
+           />
+           <!-- :disabled="isDisb || good.length !== 0" -->
         </i-col>
       </Row>
       <Row class-name="row">
@@ -286,6 +290,7 @@ export default {
       modal: false,
       adr: false,
       i: null,
+      status:'',
       userId: null,
       goodList: [],
       good: [],
@@ -329,6 +334,11 @@ export default {
   computed: {},
 
   created() {
+    if(this.$route.query.status){
+      this.status = this.$route.query.status
+
+    }
+    
     this.initData()
     this.dealData()
   },

@@ -169,8 +169,6 @@
         <div class="item flex-between">
           <span>是否匿名</span>
           <i-switch
-            true-color="#ff4949"
-            false-color="#ff4949"
             disabled
             v-model="item.isAnonymous"
             :true-value="1"
