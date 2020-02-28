@@ -395,7 +395,7 @@ export default {
                       // 邀请函
                       // this.$router.push({ path: 'activity_share' })
 
-                      this.shareQR(params.row);
+                      this.shareQR(params.row.acitvityId);
                     }
                   }
                 },
@@ -922,19 +922,16 @@ export default {
       this.columns = data;
     },
     // 分享二维码
-    shareQR(data) {
-
-      // createQrCode({
-      //   sysType:1,
-      //   scene:
-      // })
-
-
-      this.$Modal.confirm({
+    shareQR(id) {
+      createQrCode({
+        sysType:1,
+        scene: `page=1&activityId=${id}`
+      }).then(res=>{
+        this.$Modal.confirm({
         render: h => {
-          return h("img", {
-            props: {
-              src: ""
+          return [h("img", {
+            attrs: {
+              src: `data:image/png;base64,${res}`
             },
             style: {
               width: "180px",
@@ -942,9 +939,14 @@ export default {
               margin: "0 auto",
               display: "flex"
             },
-          });
+          }),
+          ]
         }
       });
+      })
+
+
+
     }
   }
 };

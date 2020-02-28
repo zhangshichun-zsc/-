@@ -114,7 +114,7 @@
 <script>
 import customizeDialog from "../survey/commonComponent/customizeDialog";
 import { formatDate } from '@/request/datatime'
-import { actManager, activedown, activecancel, activeclose } from '../../request/api'
+import { actManager, activedown, activecancel, activeclose,createQrCode } from '../../request/api'
 import { SERVER_URl } from '@/request/http.js'
 import { filterNull } from '@/libs/utils'
 export default {
@@ -264,7 +264,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: 'activity_share' })
+                      // 邀请函
+                      // this.$router.push({ path: 'activity_share' })
+                      this.shareQR(params.row.acitvityId);
+
                     }
                   }
                 },
@@ -637,6 +640,29 @@ export default {
     },
     changeColumn(data){
       this.columns=data; 
+    },
+        shareQR(id) {
+      createQrCode({
+        sysType:2,
+        scene: `page=1&activityId=${id}`
+      }).then(res=>{
+        this.$Modal.confirm({
+        render: h => {
+          return [h("img", {
+            attrs: {
+              src: `data:image/png;base64,${res}`
+            },
+            style: {
+              width: "180px",
+              height: "180px",
+              margin: "0 auto",
+              display: "flex"
+            },
+          }),
+          ]
+        }
+      });
+      })
     }
   }
 }
