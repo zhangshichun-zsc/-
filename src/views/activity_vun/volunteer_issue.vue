@@ -196,9 +196,7 @@
                     v-model="args.orgId"
                     style="width:300px"
                     placement="bottom"
-                    :disabled="
-                      isDisb || (!isDisb && (status === 1 || status === 2))
-                    "
+                    :disabled="isDisb && status != 1"
                     @on-change="changeTeam"
                   >
                     <Option
@@ -588,7 +586,7 @@
                     <Icon
                       type="ios-trash"
                       @click="deleItem(index, null)"
-                      v-if="!isDisb && status != 4"
+                     v-if="status == 1 || status == 3 || status == 5 "
                       color="#FF565A"
                       size="28"
                     />
@@ -616,7 +614,7 @@
                       <Icon
                         type="ios-trash"
                         @click="deleItem(index, null)"
-                        v-if="!isDisb && status != 4"
+                       v-if="status == 1 || status == 3 || status == 5 "
                         color="#FF565A"
                         size="28"
                       />
@@ -634,7 +632,7 @@
                       <Icon
                         type="ios-trash"
                         @click="deleItem(index, i)"
-                        v-if="!isDisb && status != 4"
+                        v-if="status == 1 || status == 3 || status == 5 "
                         color="#FF565A"
                         size="28"
                       />
@@ -653,7 +651,8 @@
                   </Row>
                 </Row>
               </Row>
-              <Row v-if="!isDisb && status != 4">
+
+               <Row v-if="status == 1 || status == 3 || status == 5 ">
                 <i-col span="3">新增反馈项</i-col>
                 <i-col span="19" push="2">
                   <Button
@@ -1136,9 +1135,7 @@ export default {
       }
 
       let isDisb = this.isDisb;
-      if (this.status == 5) {
-        isDisb = false;
-      }
+
       let data = {
         isFeedback: this.isFeedback,
         isTrain: this.isTrain,

@@ -90,7 +90,7 @@
                 <span>必填</span>
               </i-col>
               <i-col span='2'>
-                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb' color='#FF565A' size='28' />
+                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb && status!=5' color='#FF565A' size='28' />
               </i-col>
             </Row>
             <Row v-else-if=' ~~item.itemType  === 1 ' type="flex" justify="space-between" class-name="row10">
@@ -102,7 +102,7 @@
                 <span>必填</span>
               </i-col>
               <i-col span='2'>
-                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb' color='#FF565A' size='28' />
+                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb && status!=5'color='#FF565A' size='28' />
               </i-col>
             </Row>
             <Row v-else-if=' ~~item.itemType  === 6 ' type="flex" justify="space-between" class-name="row10">
@@ -114,7 +114,7 @@
                 <span>必填</span>
               </i-col>
               <i-col span='2'>
-                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb' color='#FF565A' size='28' />
+                <Icon type="ios-trash" @click="deleItem(index,null,item.fors)" v-if='!isDisb && status!=5' color='#FF565A' size='28' />
               </i-col>
             </Row>
             <Row v-else class-name="row10">
@@ -127,7 +127,7 @@
                   <span>必填</span>
                 </i-col>
                 <i-col span='2'>
-                  <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28' />
+                  <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb && status!=5' color='#FF565A' size='28' />
                 </i-col>
               </Row>
               <Row v-else>
@@ -140,7 +140,7 @@
                     <span>必填</span>
                   </i-col>
                   <i-col span='2'>
-                    <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb' color='#FF565A' size='28' />
+                    <Icon type="ios-trash" @click="deleItem(index,null)" v-if='!isDisb && status!=5' color='#FF565A' size='28' />
                   </i-col>
                 </Row>
                 <Row v-for="(val,i) in item.arr" :key='i' type="flex" justify="space-between">
@@ -148,7 +148,7 @@
                     <i-input :placeholder="`输入选项${i+1}`" v-model="val.value" :disabled="isDisb" />
                   </i-col>
                   <i-col span='2'>
-                    <Icon type="ios-trash" @click="deleItem(index,i)" v-if='!isDisb' color='#FF565A' size='28' />
+                    <Icon type="ios-trash" @click="deleItem(index,i)" v-if='!isDisb && status!=5' color='#FF565A' size='28' />
                   </i-col>
                 </Row>
                 <Button type="primary" ghost @click="addSignIput(index)" v-if=' item.arr.length <6 && !isDisb'>+</Button>
@@ -188,10 +188,10 @@
               </Row>
             </i-col>
             <i-col span='14' v-else-if='item.ruleId == 4'>
-              <selsect @change="changeCity(index,$event)" :arr='item.data' :styles="150" />
+              <selsect :disabled_s="isDisb" @change="changeCity(index,$event)" :arr='item.data' :styles="150" />
             </i-col>
             <i-col span='9' v-else>
-              <Select v-model="item.ruleValue" @on-change='selectDrap(index,limit,0,$event)'>
+              <Select v-model="item.ruleValue" :disabled="isDisb"  @on-change='selectDrap(index,limit,0,$event)'>
                 <Option v-for="(val,i) in item.data" :value="item.ruleId==5?val.orgId:val.dicId" :key="i">{{ val.name }}</Option>
               </Select>
             </i-col>
@@ -571,7 +571,12 @@ export default {
       this.i = this.$route.query.i
       let data = JSON.parse(sessionStorage.getItem('data'))
 
-      this.isDisb = data.isDisb
+     
+      if (this.status == 5) {
+        this.isDisb = false;
+      }else{
+         this.isDisb = data.isDisb
+      }
       this.isEdit = data.isEdit
       this.onlineFlag = data.args.onlineFlag
       if (this.i != -1) {
