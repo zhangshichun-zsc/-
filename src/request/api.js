@@ -731,3 +731,10 @@ export const updateMedal = p => posts('medal/updateMedal', p)
 
 // 志愿者问卷调查搜索项
 export const getVolActType = p => get('config/getVolActType', p)
+
+
+// Ft_0228
+
+//活动分享二维码  sysType scene
+export const createQrCode = p => get('/qrcode/createQrCode', p) 
+ 
