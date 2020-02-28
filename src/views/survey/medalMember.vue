@@ -380,34 +380,20 @@ export default {
     onVisibleChange(status) {
       if (!status) {
         // 关闭弹框
-        this.$refs.ruleValidate.resetFields()
-        this.formData = Object.assign({}, this.formData, {
-        conditions:"",
-        createAt:"",
-        index:"",
-        medalCode:"",
-        medalId:"",
-        medalName:"",
-        medalPic:"",
-        medalPicPath:"",
-        obtainNum: "",
-        remarks:"",
-        ruleId: "",
-        ruleName:"",
-        sysId:"",
-        typeFlag:"",
-        unit:"",
-        validFlag:"",
-        })
+         if(this.formData.medalId){
+          delete this.formData.medalId
+        }
+        this.$refs.medalFormRef.resetFields()
+        this.formData = {
+          medalName: '',
+          ruleName: '',
+          ruleId: '',
+          conditions: '',
+          remarks: '',
+          medalPic: ''
+        } 
       } else {
-        // this.formData = Object.assign({},this.formData,{
-        //   medalName: '',
-        //   ruleName: '',
-        //   ruleId:'',
-        //   conditions: '',
-        //   remarks: '',
-        //   medalPic: []
-        // })
+
       }
     },
 
@@ -435,6 +421,7 @@ export default {
           index: Math.random().toFixed(5)
         })
       } else {
+         this.selectedRuleData = item
         this.formData.index = Math.random().toFixed(5)
         this.picMap = item.medalPicPath
 
@@ -460,7 +447,7 @@ export default {
           this.$Message.error('请输入' + this.formData.ruleName + '的满足条件值')
           return
         }
-        let reg = /^\d+(\.\d+)?$/;
+        let reg = /^[0-9]*$/;
         if (!reg.test(this.formData.conditions)) {
           this.$Message.error(this.formData.ruleName + '的满足条件值仅支持数字')
           return
@@ -476,12 +463,15 @@ export default {
         postMedalInfo({
           list: formDataList
         }).then(res => {
-          this.modal.visible = false
-          this.isInit = true
-          console.log('post medal', res)
+          
           if (res.code == 200) {
             // 新增或修改成功
+            this.modal.visible = false
+            this.isInit = true
             this.getorgpage()
+          }else{
+            let msg = res.msg;
+            this.$Message.error(msg)
           }
         })
       })

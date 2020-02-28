@@ -44,7 +44,7 @@
               <FormItem label="发送对象：" prop="tag">
                 <p class="pitchOn">
                   <span>共</span>
-                  <!-- <span class="red">{{arr.length}}</span> -->
+                  <span class="red">{{arr.length}}</span>
                   <span>个用户</span>
                 </p>
               </FormItem>
