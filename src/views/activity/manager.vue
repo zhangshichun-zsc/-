@@ -318,6 +318,7 @@ export default {
             if (params.row.statusText == "13") {
               signup = "开启报名";
             }
+            let id = params.row.acitvityId
             return h("div", [
               h(
                 "a",
@@ -395,7 +396,7 @@ export default {
                       // 邀请函
                       // this.$router.push({ path: 'activity_share' })
 
-                      this.shareQR(params.row.acitvityId);
+                      this.shareQR(id);
                     }
                   }
                 },
