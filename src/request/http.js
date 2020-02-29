@@ -168,6 +168,7 @@ export function get(url, params) {
 export function post(url, params) {
   // url = `${url}?token=${token}`
   return new Promise((resolve, reject) => {
+    // QS.stringify(params)
     axios
       .post(url, QS.stringify(params))
       .then(res => {

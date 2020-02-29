@@ -652,7 +652,7 @@
                 </Row>
               </Row>
 
-               <Row v-if="status == 1 || status == 3 || status == 5 ">
+               <Row v-if="status == 1 || status == 3 || status == 5 || !status">
                 <i-col span="3">新增反馈项</i-col>
                 <i-col span="19" push="2">
                   <Button
@@ -975,6 +975,7 @@ export default {
       if (!this.activityId || !!data) return;
       getActiveRelse({ activityId: this.activityId }).then(res => {
         if (res.code == 200) {
+
           let args = {
             ...this.args,
             ...res.data
@@ -1011,7 +1012,7 @@ export default {
           this.isFeedback = ~~res.data.isFeedback || 0;
           this.isTrain = ~~res.data.isTrain || 0;
           if (res.data.isHaveSignNotice) {
-            console.log(1);
+
 
             this.isHaveSignNotice = ~~res.data.isHaveSignNotice;
           } else {
@@ -1119,6 +1120,7 @@ export default {
       this.$delete(this.args.coActivityUserConfParamList, i);
     },
     jump(i) {
+        sessionStorage.removeItem("data")
       // TODO 图片
       let coverPicPath = "";
       let cover = "";
@@ -1215,6 +1217,7 @@ export default {
     initData() {
       this.userId = localStorage.getItem("userId");
       let data = JSON.parse(sessionStorage.getItem("data"));
+
       if (data) {
         this.args = data.args;
         this.isDisb = data.isDisb;
@@ -1324,9 +1327,6 @@ export default {
       if (e) return;
       if (m == 0 || m == 1) {
         if (m == 0 && !!this.args.startAt) {
-          console.log(
-            new Date(this.args.startAt).getTime() >= new Date().getTime()
-          );
           if (new Date(this.args.startAt).getTime() < new Date().getTime()) {
             this.$Message.warning("活动开始时间要晚于当前时间");
             this.$set(this.args, "startAt", "");
@@ -1444,7 +1444,6 @@ export default {
 
       let item = this.args;
       if (i == 1) {
-        console.log(JSON.stringify(item));
         if (this.single == false) {
           this.$Message.warning("你没有同意发布规则");
           return;
@@ -1540,8 +1539,8 @@ export default {
       obj.title = obj.name;
       obj.isHaveSignNotice = this.isHaveSignNotice;
       obj.signNotice = this.signNotice == null ? "" : this.signNotice;
+      obj.sysId = "2"
 
-      console.log(obj);
 
       if (this.status == 5) {
         // 第3种活动状态 调用新接口
@@ -1569,11 +1568,12 @@ export default {
         });
       }
     },
-    dealData(list, startAt) {
+    dealData(arr, startAt) {
       let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : [];
       let train = this.isTrain == 1 ? this.train : null;
       let zhaStart = this.zhaStart;
       let zhaEnd = this.zhaEnd;
+      let list = arr
       for (let i = 0, len = list.length; i < len; i++) {
         list[i].isFeedback = this.isFeedback;
         list[i].isTrain = this.isTrain;
@@ -1583,7 +1583,11 @@ export default {
         list[i].enrollStarttime = zhaStart;
         list[i].outrollStarttime = zhaStart;
         list[i].outrollEndtime = startAt;
+        list[i].coActivityRuleParamList.forEach(item=>{
+          delete item.data
+        })
       }
+
     },
     dealSelect(list) {
       if (list.length !== 0) {

@@ -219,7 +219,7 @@
                 <i-col :span=' ~~item.ruleId == 23?8:24'>{{ item.ruleName }}</i-col>
                 <i-col span='12' push='2' v-if=' ~~item.ruleId == 23'>
                   <Select v-model="item.ruleValue" @on-change='selectDrap(index,good,1,$event)' :disabled="isDisb">
-                    <Option v-for="(val,i) in item.data" :value="val.dicId" :key="i">{{ val.name }}</Option>
+                    <Option v-for="(val,i) in speciality" :value="val.dicId+''" :key="i">{{ val.name }}</Option>
                   </Select>
                 </i-col>
               </Row>
@@ -305,6 +305,7 @@ export default {
         { name: '多选问题', type: 4 }
       ],
       array: [],
+      speciality:[],
       onlineFlag:null,
       args: {
         userPositionName: null,
@@ -418,7 +419,6 @@ export default {
     },
     selectDrap(index, arr, m, e) {
       let id = arr[index].ruleId
-    console.log(1);
     
       if (id == 2 || id == 5 || (m == 1 && id == 23)) {
         arr.forEach((val, i) => {
@@ -562,7 +562,13 @@ export default {
         this.items = res.data
       })
       getGood({ roleId: 2, sysId: 2, userId }).then(res => {
-        this.goodList = res.data
+        this.goodList = res.data 
+        // object
+         res.data.forEach(item=>{
+            if( item.ruleId == 23){
+              return  this.speciality =[...item.object]
+            }
+        })
       })
     },
     dealData() {
@@ -696,7 +702,11 @@ export default {
       } else if (!args.zmType) {
         this.$Message.warning('模式没填')
         return
-      } else if (!args.recruitNum || args.recruitNum == 0) {
+      }else if(!args.setTime){
+         this.$Message.warning('模式没填')
+         return
+      }
+       else if (!args.recruitNum || args.recruitNum == 0) {
         this.$Message.warning('招募数量没填写')
         return
       } else if (~~args.zmType == 2 && !!args.apptNum && ~~args.recruitNum > ~~args.apptNum) {
@@ -764,6 +774,7 @@ export default {
         data.args.coActivityUserConfParamList = arr
       }
       sessionStorage.setItem('data', JSON.stringify(data))
+
       this.$router.back()
     }
   }
