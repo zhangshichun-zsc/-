@@ -1468,8 +1468,10 @@ export default {
           return;
         } else if (!item.onlineFlag) {
           this.$Message.warning("请选择活动方式");
+          return
         } else if (item.onlineFlag == 1 && item.address == null) {
           this.$Message.warning("请选择活动地址");
+          return
         } else if (item.ownerUserId == null) {
           this.$Message.warning("请选择现场负责人");
           return;
@@ -1523,6 +1525,11 @@ export default {
           list[i].coActivityItemList
         );
       }
+  
+      if(this.isFeedback == 2){
+        item.isFeedback=2
+        item.coDetailList = []
+      }
       this.dealData(list, item.startAt);
       item.coActivityUserConfParamList = list;
       if (this.isEdit !== 1) {
@@ -1542,6 +1549,8 @@ export default {
       obj.sysId = "2"
 
 
+      console.log(obj);
+      
       if (this.status == 5) {
         // 第3种活动状态 调用新接口
 
@@ -1569,7 +1578,10 @@ export default {
       }
     },
     dealData(arr, startAt) {
-      let ls = this.isFeedback == 1 ? this.dealSelect(this.feed) : [];
+      let ls = [];
+      if(this.isFeedback == 1){
+        ls = this.dealSelect(this.feed)
+      }
       let train = this.isTrain == 1 ? this.train : null;
       let zhaStart = this.zhaStart;
       let zhaEnd = this.zhaEnd;

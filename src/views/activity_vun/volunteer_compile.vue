@@ -705,10 +705,12 @@ export default {
         
         this.$Message.warning('模式没填')
         return
-      }else if(!args.setTime){
-         this.$Message.warning('集合时间没填')
-         return
       }
+      // 杨诗雨要求 集合时间非必填
+      // else if(!args.setTime){
+      //    this.$Message.warning('集合时间没填')
+      //    return
+      // }
        else if (!args.recruitNum || args.recruitNum == 0) {
         this.$Message.warning('招募数量没填写')
         return
