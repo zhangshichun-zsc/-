@@ -96,7 +96,11 @@ export default {
           this.$store.commit("setToken", { ...res.data });
           this.gethomepage(res.data.userId, res.data.token);
         } else {
-          this.$Message.info(res.msg);
+           this.$Message.info({
+                content: res.msg,
+                duration: 6
+            });
+        
         }
       });
     },

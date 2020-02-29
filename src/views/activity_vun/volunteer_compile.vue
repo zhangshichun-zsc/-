@@ -273,6 +273,7 @@ import { getAdressId, getAreaAdress } from '@/libs/utils'
 import adress from '_c/map'
 import selsect from '_c/selsect'
 import { constants, truncate } from 'fs'
+import { log } from 'util'
 export default {
   data() {
     return {
@@ -700,10 +701,12 @@ export default {
         this.$Message.warning('岗位没填')
         return
       } else if (!args.zmType) {
+        console.log(this.args.zmType);
+        
         this.$Message.warning('模式没填')
         return
       }else if(!args.setTime){
-         this.$Message.warning('模式没填')
+         this.$Message.warning('集合时间没填')
          return
       }
        else if (!args.recruitNum || args.recruitNum == 0) {
