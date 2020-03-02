@@ -1,11 +1,13 @@
 <!-- 用户列表(志愿者) -->
 <template>
   <div class="member">
-    <!-- <customizeDialog
+    <customizeDialog
       ref="son"
       v-on:fun="changeColumn"
       :labels="navigationName"
-    ></customizeDialog> -->
+       @showQR="showQR"
+      @setUserEnable='setUserEnable'
+    ></customizeDialog>
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-start integral-body" v-show="showScreen">
@@ -1124,10 +1126,7 @@ export default {
           this.$Message.error("必填项未填!");
         }
       });
-      // if (!this.stationFormFlag) return
-      // this.stationFormFlag = false
-      // let ids = this.ALLLIST
-      // this.setsend({ ids, ...this.formValidate2 })
+    
     },
     // 站内信
     setsend(params) {
@@ -1170,20 +1169,20 @@ export default {
       this.ALLLIST = val;
     },
     // 单个 用户状态 变更
-    setUserEnable(params, type) {
+    setUserEnable(userId, e) {
       userEnable({
-        userId: [params],
-        enable: type ? "1" : "0"
+        userId: [userId],
+        enable: e ? "1" : "0"
       }).then(res => {
         if (res.code === 200) {
-          type
+          e
             ? this.$Message.info("启用成功")
             : this.$Message.info("禁用成功");
           this.getUserPage(this.paramsObj);
         } else {
           this.$Message.error({
             background: true,
-            content: "状态变更失败，请联系管理员查看"
+            content: res.msg
           });
           this.getUserPage(this.paramsObj);
         }
@@ -1227,6 +1226,10 @@ export default {
     },
     changeColumn(data) {
       this.columns = data;
+    },
+    showQR(QRurl){
+      this.modaQR = true;
+      this.QRCode = QRurl 
     }
   },
   mounted() {

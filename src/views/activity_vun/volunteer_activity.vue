@@ -1,7 +1,13 @@
 <!--志愿者活动管理(会员)-->
 <template>
   <div class="integral">
-    <!-- <customizeDialog ref="son" v-on:fun="changeColumn" :labels="navigationName"></customizeDialog> -->
+    <customizeDialog 
+     ref="son"
+     v-on:fun="changeColumn" 
+     :labels="navigationName"
+     @getactiveclose='getactiveclose'
+     @cancel='cancelShow'
+     ></customizeDialog>
     <Modal v-model="addstate" width="360">
       <p slot="header" style="color:#f60;text-align:center">
         <span>下架确定</span>
@@ -490,7 +496,10 @@ export default {
       })
     },
     //关闭
-    getactiveclose(ids) {
+    getactiveclose(type,ids) {
+      console.log(type);
+      this.types = type
+      
       activeclose({
         userId: this.$store.state.userId,
         activityId: ids,
@@ -642,7 +651,12 @@ export default {
       this.$refs.selection.selectAll(this.state)
     },
     changeColumn(data){
-      this.columns=data; 
+      this.columns= data; 
+    },
+    // 取消理由
+    cancelShow(id){
+      this.modal5 = true
+      this.activityId = id
     }
   }
 }

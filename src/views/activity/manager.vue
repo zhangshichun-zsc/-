@@ -2,11 +2,16 @@
 
 <template>
   <div class="integral">
-    <!-- <customizeDialog
+    <customizeDialog
       ref="son"
       v-on:fun="changeColumn"
       :labels="navigationName"
-    ></customizeDialog> -->
+      @getactiveset='getactiveset'
+      @getactiveclose='getactiveclose'
+      @showQR="showQR"
+      @cancel='cancelShow'
+      @lowerShelf='lowerShelf'
+    ></customizeDialog>
     <Modal v-model="modal4">
       <p class="head">会员二维码</p>
       <div class="start-wap">
@@ -668,7 +673,8 @@ export default {
       })
     },
     //关闭
-    getactiveclose(ids) {
+    getactiveclose(type, ids) {
+      this.types = type
       activeclose({
         userId: this.$store.state.userId,
         activityId: ids,
@@ -810,6 +816,28 @@ export default {
     },
     changeColumn(data) {
       this.columns = data
+      console.log(JSON.stringify(data));
+      
+    },
+    // 取消理由
+    cancelShow(id){
+      this.modal5 = true
+      this.activityId = id
+    },
+    // 展示二维码
+    showQR(info){
+      this.modal4 = true
+      this.memQrCode = info.memQrCode || null
+      this.voluQrCode = info.voluQrCode || null
+      this.activityId = info.acitvityId
+      this.memQrCodeShow = info.memQrCodeShow || null
+      this.voluQrCodeShow =info.voluQrCodeShow || null
+    },
+    // 下架操作
+    lowerShelf(info){
+      this.activityId = info.activityId
+      this.index = info.index
+      this.addstate = true
     }
   }
 }

@@ -1,11 +1,13 @@
 <!-- 用户列表(会员) -->
 <template>
   <div class="member">
-    <!-- <customizeDialog
+    <customizeDialog
       ref="son"
       v-on:fun="changeColumn"
       :labels="navigationName"
-    ></customizeDialog> -->
+      @showQR="showQR"
+      @setUserEnable='setUserEnable'
+    ></customizeDialog>
     <div class="integral-header">
       <Navigation :labels="navigation1"></Navigation>
       <div class="flex-center-start integral-body" v-show="showScreen">
@@ -1142,7 +1144,7 @@ export default {
       this.$refs.volunteerSel.selectAll(v);
     },
     // 选中 内容
-    handleSelectionChange(val) {
+  handleSelectionChange(val) {
    if(val.length == this.data.length){
         this.ALLINFO = true;
       }else{
@@ -1151,13 +1153,13 @@ export default {
       this.ALLLIST = val;
     },
     // 单个 用户状态 变更
-    setUserEnable(params, type) {
+    setUserEnable(userId, e) {
       userEnable({
-        userId: [params],
-        enable: type ? "1" : "0"
+        userId: [userId],
+        enable: e ? "1" : "0"
       }).then(res => {
         if (res.code === 200) {
-          type
+          e
             ? this.$Message.info("启用成功")
             : this.$Message.info("禁用成功");
           this.getUserPage(this.paramsObj);
@@ -1228,8 +1230,12 @@ export default {
         };
       }
     },
-    changeColumn(data){
+  changeColumn(data){
       this.columns=data; 
+    },
+    showQR(QRurl){
+      this.modaQR = true;
+      this.QRCode = QRurl 
     }
   },
   mounted() {

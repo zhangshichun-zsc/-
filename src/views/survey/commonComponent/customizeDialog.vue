@@ -100,7 +100,6 @@ export default {
                   click: () => {
                     // this.$Message.info("此功能暂未开放")
                     // 自定义弹窗-Wyatt
-                    console.log("custom", this.$refs);
                     this.modelCustomizeDialog = true;
                   }
                 }
@@ -109,72 +108,92 @@ export default {
           },
           align: "center",
           render: (h, params) => {
-            let signup = "关闭报名";
-            if (params.row.statusText == "13") {
-              signup = "开启报名";
+            let signup = '关闭报名'
+            if (params.row.statusText == '13') {
+              signup = '开启报名'
             }
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.$router.push({
-                        path: "editing",
-                        query: { id: params.row.acitvityId, type: 2 }
-                      });
+                      let status = null
+                      let statusText = params.row.statusText
+                      if (statusText == 1 || statusText == 2) {
+                        //所有都可以修改
+                        status = 1
+                      } else if (statusText == 3) {
+                        // 活动详情、工作人员可编辑
+                        status = 2
+                      } else if (statusText == 4) {
+                        // 活动详情可编辑
+                        status = 3
+                      }
+                      if (status) {
+                        this.$router.push({
+                          path: 'editing',
+                          query: {
+                            id: params.row.acitvityId,
+                            type: 2,
+                            status
+                          }
+                        })
+                      } else {
+                        this.$Message.warning('该活动状态不可编辑')
+                      }
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        path: "profile",
+                        path: 'profile',
                         query: {
                           acitvityId: params.row.acitvityId,
                           activityName: params.row.activityName,
                           sysId: 1
                         }
-                      });
+                      })
                     }
                   }
                 },
-                "概况"
+                '概况'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "activity_share" });
+                      this.$router.push({ path: 'activity_share' })
                     }
                   }
                 },
-                "分享"
+                '分享'
               ),
               h(
-                "Dropdown",
+                'Dropdown',
                 {
                   props: {
                     transfer: true
@@ -182,43 +201,40 @@ export default {
                 },
                 [
                   h(
-                    "a",
+                    'a',
                     {
                       style: {
-                        color: "#FF565A"
+                        color: '#FF565A'
                       }
                     },
-                    "更多操作"
+                    '更多操作'
                   ),
                   h(
-                    "DropdownMenu",
+                    'DropdownMenu',
                     {
-                      slot: "list"
+                      slot: 'list'
                     },
                     [
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              this.modal5 = true;
-                              this.activityId = params.row.acitvityId;
+                              this.$emit("cancel", params.row.acitvityId)
                             }
                           }
                         },
-                        "取消"
+                        '取消'
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              if (signup == "关闭报名") {
-                                this.types = 1;
-                                this.getactiveclose(params.row.acitvityId);
+                              if (signup == '关闭报名') {
+                                this.$emit("getactiveclose", 1, params.row.acitvityId)
                               } else {
-                                this.types = 2;
-                                this.getactiveclose(params.row.acitvityId);
+                               this.$emit("getactiveclose", 2, params.row.acitvityId)
                               }
                             }
                           }
@@ -226,47 +242,43 @@ export default {
                         signup
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              let status = this.activeState[
-                                Number(params.row.statusText)
-                              ].name;
-                              if (status == "已结束") {
+                              let status = this.$store.state.activeState[Number(params.row.statusText)].name
+                              if (status == '已结束') {
                                 this.$router.push({
-                                  name: "summarize",
+                                  name: 'summarize',
                                   query: {
                                     acitvityId: params.row.acitvityId,
                                     activityName: params.row.activityName
                                   }
-                                });
+                                })
                               } else {
-                                this.$Message.warning(
-                                  "只有已结束的活动才可进行活动总结"
-                                );
+                                this.$Message.warning('只有已结束的活动才可进行活动总结')
                               }
                             }
                           }
                         },
-                        "活动总结"
+                        '活动总结'
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              this.getactiveset(params.row.acitvityId);
+                              this.$emit("getactiveset",params.row.acitvityId )
                             }
                           }
                         },
-                        "设为新活动模板"
+                        '设为新活动模板'
                       )
                     ]
                   )
                 ]
               )
-            ]);
+            ])
           }
         }
       ],
@@ -294,115 +306,147 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$Message.info("此功能暂未开放");
-                    // this.modal3=true
+                    
+                    this.modelCustomizeDialog = true;
                   }
                 }
               })
             ]);
           },
-          render: (h, params) => {
-            let signup = "关闭报名";
-            if (params.row.status == "13") {
-              signup = "开启报名";
+            render: (h, params) => {
+            let signup = '关闭报名'
+            if (params.row.statusText == '关闭报名') {
+              signup = '开启报名'
             }
-            return h("div", [
+            return h('div', [
               h(
-                "a",
+                'a',
                 {
-                  clssName: "action",
+                  clssName: 'action',
                   style: {
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      console.log(params.row.activityId);
-                      if (
-                        params.row.status == 1 ||
-                        params.row.status == 2 ||
-                        params.row.status == 3 ||
-                        params.row.status == 4
-                      ) {
+                    //  都可编辑
+                     let arr =[
+                       "待审核",
+                       "待发布",
+                       "待招募",
+                     ]
+                    
+                    //  活动详情，活动反馈 可修改
+                     let arr2 =[
+                       "待开始",
+                       "进行中",
+                       '已结束'
+                     ]
+
+                    // 新状态
+                    let arr3 =[
+                      "招募中",
+                      "关闭报名"
+                    ]
+                
+                      let status = null
+                      let statusText = params.row.statusText
+                      if( arr.includes(statusText)){
+                        status = 1
+                      }else if(arr2.includes(statusText)) {
+                        status = 3
+                      }else if(arr3.includes(statusText)){
+                        status = 5
+                      }
+                      if (status ) {
                         this.$router.push({
-                          name: "volunteer_issue",
+                          name: 'volunteer_issue',
+                          query: {
+                            activityId: params.row.activityId,
+                            isEdit: 1,// 所有可修改
+                            status: status
+                          }
+                        })
+                      } else {
+                        this.$router.push({
+                          name: 'volunteer_issue',
                           query: {
                             activityId: params.row.activityId,
                             isEdit: 1,
-                            status: params.row.status
+                            // 不可以修改
+                            status: 4 
                           }
-                        });
-                      } else {
-                        this.$Message.warning("该活动状态不可编辑");
+                        })
+                       
                       }
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        name: "profile",
+                        name: 'profile',
                         query: {
                           acitvityId: params.row.activityId,
                           activityName: params.row.name,
                           sysId: 2
                         }
-                      });
+                      })
                     }
                   }
                 },
-                "概况"
+                '概况'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
-                      this.$router.push({ path: "activity_share" });
+                      this.$router.push({ path: 'activity_share' })
                     }
                   }
                 },
-                "分享"
+                '分享'
               ),
               h(
-                "a",
+                'a',
                 {
                   style: {
-                    marginRight: "10px",
-                    marginLeft: "10px",
-                    color: "#FF565A",
-                    cursor: "pointer"
+                    marginRight: '10px',
+                    marginLeft: '10px',
+                    color: '#FF565A',
+                    cursor: 'pointer'
                   },
                   on: {
                     click: () => {
                       this.$router.push({
-                        path: "volunteer_issue",
+                        path: 'volunteer_issue',
                         query: { activityId: params.row.activityId, isEdit: 4 }
-                      });
+                      })
                     }
                   }
                 },
-                "复制"
+                '复制'
               ),
               h(
-                "Dropdown",
+                'Dropdown',
                 {
                   props: {
                     transfer: true
@@ -410,43 +454,41 @@ export default {
                 },
                 [
                   h(
-                    "a",
+                    'a',
                     {
                       style: {
-                        color: "#FF565A"
+                        color: '#FF565A'
                       }
                     },
-                    "更多操作"
+                    '更多操作'
                   ),
                   h(
-                    "DropdownMenu",
+                    'DropdownMenu',
                     {
-                      slot: "list"
+                      slot: 'list'
                     },
                     [
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              this.modal5 = true;
-                              this.activityId = params.row.activityId;
+                              this.$emit("cancel", params.row.activityId)
                             }
                           }
                         },
-                        "取消"
+                        '取消'
                       ),
                       h(
-                        "DropdownItem",
+                        'DropdownItem',
                         {
                           nativeOn: {
                             click: name => {
-                              if (signup == "关闭报名") {
-                                this.types = 1;
-                                this.getactiveclose(params.row.activityId);
+                              if (signup == '关闭报名') {
+                                this.$emit("getactiveclose",1, params.row.activityId)
                               } else {
-                                this.types = 2;
-                                this.getactiveclose(params.row.activityId);
+                                this.$emit("getactiveclose", 2, params.row.activityId)
+                            
                               }
                             }
                           }
@@ -457,9 +499,10 @@ export default {
                   )
                 ]
               )
-            ]);
+            ])
           }
-        }
+        },
+        
       ],
 
       // 3：用户-用户列表（会）user/all_member_hy
@@ -467,10 +510,31 @@ export default {
           type: "selection",
           width: 60,
           align: "center"
-        },{
+        },
+        {
           title: "操作",
           key: "action",
           width: 140,
+          renderHeader: (h, params) => {
+            return h("div", [
+              h("span", "操作"),
+              h("Icon", {
+                props: {
+                  type: "ios-settings-outline"
+                },
+                style: {
+                  marginLeft: "5px"
+                },
+                on: {
+                  click: () => {
+                    // this.$Message.info("此功能暂未开放")
+                    // 自定义弹窗-Wyatt
+                    this.modelCustomizeDialog = true;
+                  }
+                }
+              })
+            ]);
+          },
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -502,8 +566,8 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.modaQR = true;
-                      this.QRCode = params.row.qrCodePath;
+                      this.$emit("showQR", params.row.qrCodePath)
+
                     }
                   }
                 },
@@ -513,6 +577,7 @@ export default {
           }
         }],
 
+      
       // 4：用户-用户列表（志）user/all_member_zyz
 
       columnsFixed4: [{
@@ -603,7 +668,7 @@ export default {
         if (res.code == 200) {
           this.typelist = res.data;
         }
-        console.log(res);
+  
       });
     },
     // 拖拽顺序
@@ -628,19 +693,15 @@ export default {
           }
         }
       }
-
-      console.log("this.fruit", this.fruit);
-      console.log("this.list", this.list);
     },
 
     // // 点击导出按钮的操作:
     changeTableTitle() {
       // // 处理选中的列表
-      console.log("this.list", this.list);
+
       // 将原来的列表,先进行删除
       this.columns.splice(2);
       // 添加新的列表
-      console.log("this.columns", this.columns);
       for (var i = 0; i < this.list.length; i++) {
         // ----
         // 封装为用于字段显示的对象
@@ -675,6 +736,35 @@ export default {
         isAlternative: list.defaultFlag == 1 ? false : true,
         align: "center"
       };
+
+      // 如果是活动名称
+    if (list.key == "activityName") {
+        temp = {
+          width: 300,
+          title: list.title,
+          key: list.key,
+          align: "center",
+        };
+      }
+      // 如果是活动名称
+    if (list.key == "orgName") {
+        temp = {
+          width: 300,
+          title: list.title,
+          key: list.key,
+          align: "center",
+        };
+      }
+      // 如果是活动地址
+    if (list.key == "address") {
+        temp = {
+          width: 300,
+          title: list.title,
+          key: list.key,
+          align: "center",
+        };
+      }
+
       // 如果是活动时间
       if (list.key == "startTimestamp" && this.labels.pageTable == "1") {
         temp = {
@@ -685,11 +775,10 @@ export default {
           align: "center",
           render: (h, params) => {
             return h("div", formatDate(params.row.startTimestamp));
-            // return h("div", formatDate(1580659200000));
-            // return h("div", 'test2');
           }
         };
       }
+
       // 如果是会员报名人数
       if (list.key == "memberSignUpCount") {
         temp = {
@@ -705,62 +794,121 @@ export default {
       }
 
       // 如果是群二维码
-      if (list.key == "activityQrCode") {
+      if (list.key == "qrCode") {
         temp = {
           width: 300,
           title: list.title,
           key: list.key,
-          isAlternative: list.defaultFlag == 1 ? false : true,
-          align: "center",
+          align: 'center',
           render: (h, params) => {
-            return h("img", {
-              attrs: {
-                src: params.row.activityQrCode
+            return h('Icon', {
+              props: {
+                type: 'md-images'
               },
-              style: {
-                width: "4rem",
-                height: "4rem"
+              on: {
+                click: () => {
+                  this.$emit("showQR", {
+                    acitvityId: params.row.acitvityId,
+                    memQrCode:params.row.memQrCode,
+                    voluQrCode:params.row.voluQrCode,
+                    memQrCodeShow:params.row.memQrCodeShow,
+                    voluQrCodeShow:params.row.voluQrCodeShow
+                  })
+                  
+                }
               }
-            });
+            })
           }
         };
       }
 
-      // 如果是上架/下架
-      if (list.key == "statue") {
+      // 如果是下架
+      if (list.key == "shelfFlag") {
         temp = {
           width: 300,
           title: list.title,
           key: list.key,
-          isAlternative: list.defaultFlag == 1 ? false : true,
+          align: "center",
+          render: (h, params) => {
+            return h('div', [
+              h('i-switch', {
+                props: {
+                  value: ~~params.row.statusText !== 10,
+                  disabled: params.row.statusText != '10' ? false : true
+                },
+                on: {
+                  'on-change': e => {
+                    if (params.row.statusText != '10') {
+                      this.$emit("lowerShelf", {
+                        acitvityId: params.row.acitvityId,
+                        index: params.index
+                      })
+                    }
+                  }
+                }
+              })
+            ])
+          }
+        };
+      }
+
+      // 如果是 是否显示主办方小站
+      if(list.key == 'isShowHolder'){
+        temp = {
+          width: 200,
+          title: list.title,
+          key: list.key,
+          align: "center",
+          render: (h, params) => {
+            return h('div', params.row.isShowHolder == 1 ? '是' : '否')
+          }
+        };
+      }
+
+      // 如果是 账号启用禁用
+      if(list.key == "userEnable"){
+          temp = {
+          title: "账户启用状态",
+          key: "userEnable",
+          width: 140,
           align: "center",
           render: (h, params) => {
             return h("div", [
               h("i-switch", {
                 props: {
-                  value: params.row.activityQrCode == 1
+                  value: params.row.userEnable == 1
                 },
                 on: {
-                  input: e => {}
+                  input: e => {
+                    this.$emit('setUserEnable', {
+                      userId:params.row.userId,
+                      e:e
+                    })
+                   
+                  }
                 }
               })
             ]);
           }
-        };
+        }
       }
+
 
       return temp;
     },
 
     // 修改父组件的值
     changeParent(list) {
+      console.log(list.length);
+
+      
+
       this.$emit("fun", list);
     },
 
     // 点击字段右上角的删除按钮
     removeThisField(item) {
       // 点击删除后,该字段从list中删除
-      console.log("test close", item.key);
       for (var i = 0; i < this.list.length; i++) {
         if (item.key == this.list[i].key) {
           this.list.splice(i, 1); // 将使后面的元素依次前移，数组长度减1
@@ -781,8 +929,9 @@ export default {
       // var data = res.data;
       var data = data;
       var keyMap = { columnName: "title", columnCode: "key" };
-      console.log("Object.keys(data)", Object.keys(data), data);
+      // console.log("Object.keys(data)", Object.keys(data), data);
       let objs = data.map(item => {
+      
         return Object.keys(item).reduce((newData, key) => {
           let newKey = keyMap[key] || key;
           newData[newKey] = item[key];
@@ -798,8 +947,9 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           let returnStatus = res.result;
-          console.log("res.data,res.data", res.data);
 
+          console.log(res.data.length);
+          
           // 将数据格式进行处理,替换对象数组的key值
           let objs = this.changeDataKey(res.data);
 
@@ -865,6 +1015,8 @@ export default {
             this.columns = this.columnsFixed.concat(templist);
           }
           // 设置父组件的值
+          
+          console.log(this.columns.length);
           this.changeParent(this.columns);
         }
       });
@@ -874,7 +1026,7 @@ export default {
       return new Date(parseInt(nS) * 1000)
         .toLocaleString()
         .replace(/:\d{1,2}$/, " ");
-    }
+    },
   },
 
   // 事件监听

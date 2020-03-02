@@ -43,6 +43,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
             Ft_0216  bug 2501
             Ft_0217  活动方式 
             Ft_0222  bug优先级为2  志愿者活动 2月4周目
+            Ft_0302  3月一周目
         dev
 
             dev_0216 修复 Prd_0216bug
