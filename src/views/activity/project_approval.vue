@@ -62,7 +62,7 @@
         <div>
           <Button @click="approval" class="table-btn" >新建立项</Button>
           <Button class="table-btn" @click="draft">草稿箱</Button>
-          <Button class="table-btn" >导出</Button>
+          <Button class="table-btn" @click="listExport">导出</Button>
           <!-- <Select v-model="size" class="table-btn" placeholder="显示条数" size='large' style="width: 150px;">
             <Option v-for="item in Article" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select> -->
@@ -102,7 +102,8 @@ import { formatDate } from "../../request/datatime";
 import {date1} from '@/request/datatime.js'
 import { pendingApp, approvalpage } from "@/request/api";
 import { filterNull } from '@/libs/utils'
-import { constants } from 'fs';
+import { listExport } from "@/request/http";
+
 export default {
   data() {
     return {
@@ -322,7 +323,7 @@ export default {
         type: this.statu,
         startT: this.rom,
         endT: this.tos,
-        userId:this.$store.state.userId
+        userId: this.$store.state.userId
       })).then(res => {
         if(res.code==200){
           this.dataCount = res.data.totalSize;
@@ -416,7 +417,27 @@ export default {
     approval() {
       this.$router.push({ name: "approval" });
     },
-
+    // 导出方法
+    listExport(){
+      let obj={
+      userId : this.$store.state.userId,
+      name: this.batchName,
+        type: this.statu,
+        startT: this.rom,
+        endT: this.tos,
+         page : {
+          page : 1,
+          size : this.dataCount
+        },
+      }
+      listExport(
+        '/activity-manage/bg/batch/audit/list-export',
+        '立项审批.xls', 
+        this.util.remove(obj)
+      ).catch(err=>{
+        this.$Message.error("导出失败")
+      })
+    },
     mounted() {
       this.getapprovalpage();
     }

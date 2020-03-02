@@ -95,6 +95,7 @@
 <script>
 import { formatDate } from "@/request/datatime";
 import { activeAddManager,getRoleType,Setsend } from "@/request/api";
+import { listExport } from "@/request/http";
 export default {
   data() {
     return {
@@ -334,14 +335,32 @@ export default {
     },
     //导出数据
     exportData() {
-      if(this.arr.length==0){
-        this.arr=this.data
+      // if(this.arr.length==0){
+      //   this.arr=this.data
+      // }
+      // this.$refs.selection.exportCsv({
+      //   filename: this.navigation1.head,
+      //   columns: this.columns.filter((col, index) => index > 0),
+      //   data: this.arrs
+      // });
+
+      let obj = {
+        page:` { 
+                page: ${this.page}, 
+                size: ${this.dataCount},
+                sort: "createAt" + " " +${this.sort}
+                }`,
+        activityName: this.activityName,
+        sysType: this.sysType,
+        signUpStatus: this.signUpStatus,
+        userName: this.userName,
+        userTel: this.userTel,
+        userType: this.userType
       }
-      this.$refs.selection.exportCsv({
-        filename: this.navigation1.head,
-        columns: this.columns.filter((col, index) => index > 0),
-        data: this.arrs
-      });
+      this.util.userExprot('/activity-manage/get-activity-join-page-export', this.util.remove(obj))
+      
+      // listExport('/activity-manage/get-activity-join-page-export', '活动参与列表.xls', this.util.remove(obj))
+
     },
       // 切换页数
     setSize(size) {

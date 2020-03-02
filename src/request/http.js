@@ -272,3 +272,40 @@ export const uploadCopy = (params, url = '/pic/copy-pic') => {
 export function getFileUploadUrl() {
   return `${SERVER_URl}/pic/upload?token=${store.state.token}`
 }
+
+
+// post 导出公共方法
+export const listExport = (url, fileName, params ) => {
+  return new Promise((resolve, reject) => {
+    axios({
+      method: 'post',
+      url: `${SERVER_URl}${url}`, // 请求地址
+      data: params, // 参数
+      responseType: 'blob', // 表明返回服务器返回的数据类型
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      if(res.headers['content-disposition']){
+        const contentDisposition = res.headers['content-disposition'];
+        fileName = decodeURI(contentDisposition.split('fileName=')[1] || contentDisposition.split('filename=')[1]);
+      }
+      exporDownload(res.data, fileName)
+    }).catch(err => {
+      reject(err);
+    });
+  })
+
+};
+// 生成 a 标签下载
+function exporDownload(response, fileName ){
+  let blob = new Blob([response ]);
+  let eLink = document.createElement('a');
+  eLink.download = fileName ;
+  eLink.style.display = 'none';
+  eLink.href = URL.createObjectURL(blob);
+  document.body.appendChild(eLink);
+  eLink.click();
+  URL.revokeObjectURL(eLink.href); // 释放URL 对象
+  document.body.removeChild(eLink);
+}

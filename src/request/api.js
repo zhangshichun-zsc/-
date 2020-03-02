@@ -735,3 +735,28 @@ export const getVolActType = p => get('config/getVolActType', p)
 // Ft_0222 非官方活动第3种状态新增的 接口
 
 export const setRecruiteding = p => posts('/volunteer-manager/update/recruiteding', p)
+
+// 活动立项审批导出
+// export const listExport = p => posts('/activity-manage/bg/batch/audit/list-export', p){
+//     return request({
+//         url: '/export',
+//         method: 'post',
+//         data: params,
+//         responseType: 'blob'
+//       })
+// }
+// export const   listExport =  p => posts("/activity-manage/bg/batch/audit/list-export",{
+//     headers: {
+//     'Content-Type': 'application/json;',
+//   },
+//   responseType: "blob"
+// })
+
+// export const   listExport =  p => posts( '/activity-manage/bg/batch/audit/list-export',{
+ 
+//    data: p, // 参数
+//        responseType: 'blob', // 表明返回服务器返回的数据类型
+//        headers: {
+//          'Content-Type': 'application/json'
+//        }
+//     })
